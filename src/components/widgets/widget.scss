@@ -1,0 +1,47 @@
+.widget {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    padding: 10px;
+    -webkit-box-shadow:2px 4px 10px 1px rgba(0,0,0,0.47);
+    box-shadow: 2px 4px 10px 1px rgba(201,201, 201, 0.47);
+    border-radius: 10px;
+    height: 110px;
+    padding-top: 20px;
+    margin-top: -10px;
+
+    .right{
+        margin-top: 50px;
+        font-size: 11px;
+        padding: 4px;
+        
+        .percentage{
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+
+            &.positive{
+                color: #027A48;
+            }
+            &.negative{
+                color: red;
+            }
+           
+        }
+    }
+
+    .estimate-card {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 500;
+        font-size: 14px;
+
+    }
+    .card-num{
+        font-size: 28px;
+        font-weight: 700;
+        padding: 10px;
+    }
+
+}

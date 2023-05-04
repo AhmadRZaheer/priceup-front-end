@@ -1,0 +1,16 @@
+.Defaults{
+    display: flex;
+    width: 100%;
+    .defaultsConatiner{
+        flex:6;
+    }
+    .title{
+        font-size: 25px;
+        font-weight: 500;
+        color: #101828;
+        padding: 20px;
+    }
+    .box{
+        padding: 20px;
+    }
+}

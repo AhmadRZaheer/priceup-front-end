@@ -1,0 +1,14 @@
+.reset-info {
+    margin-top: -22px;
+  
+  }
+  .pass-reset{
+    background-color: #8477DA;
+    padding: 10px 18px;
+    gap: 8px;
+    border: 1px solid #7F56D9;
+    border-radius: 8px;
+    color: white;
+    margin-top: 10px;
+  
+  }
