@@ -96,6 +96,15 @@
             margin-left: 5px;
         }
     }
-
+    .link {
+        text-decoration: none;
+        color: inherit;
+      }
+      .active {
+        font-weight: bold;
+        color: blue;
+        /* Add any other styles you want for the active link */
+      }
 
 }
+

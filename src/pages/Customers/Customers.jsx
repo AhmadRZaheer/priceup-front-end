@@ -1,17 +1,17 @@
-import React from 'react'
-import "./customers.scss"
-import Sidebar from '../../components/Sidebar/Sidebar'
-import Customertable from '../../components/CustomerTable/Customertable'
+import React from "react";
+import "./customers.scss";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import Customertable from "../../components/CustomerTable/Customertable";
 
 const Customers = () => {
   return (
     <div className="Customers">
-      <Sidebar/>
+      <Sidebar />
       <div className="customersContainer">
-        <Customertable/>
+        <Customertable />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Customers
+export default Customers;
