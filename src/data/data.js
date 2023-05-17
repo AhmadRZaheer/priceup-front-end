@@ -1,0 +1,17 @@
+export const types = [
+  "Finishes",
+  "Handles",
+  "Hinges",
+  "Finishes",
+  "Handles",
+  "Hinges",
+  "Finishes",
+  "Handles",
+  "Hinges",
+  "Finishes",
+  "Handles",
+  "Hinges",
+  "Finishes",
+  "Handles",
+  "Hinges",
+];

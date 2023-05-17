@@ -82,6 +82,7 @@ const TableHeader = ({ types }) => {
       <Slider {...settings}>
         {types.map((type, index) => (
           <div
+            onClick={() => console.log("Hello World")}
             key={index}
             style={{
               padding: "10px",
@@ -92,6 +93,7 @@ const TableHeader = ({ types }) => {
           >
             {type}
           </div>
+          
         ))}
       </Slider>
     </div>

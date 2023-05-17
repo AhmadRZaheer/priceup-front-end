@@ -16,27 +16,15 @@ import { IconButton } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
-export const types = [
-  "Finishes",
-  "Handles",
-  "Hinges",
-  "Finishes",
-  "Handles",
-  "Hinges",
-  "Finishes",
-  "Handles",
-  "Hinges",
-  "Finishes",
-  "Handles",
-  "Hinges",
-  "Finishes",
-  "Handles",
-  "Hinges",
-];
+import { types } from "../../data/data";
+import BasicModal from "../Model/Model";
+
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
-
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
     console.log(id, "clicked deleted button");
 
@@ -65,10 +53,31 @@ const HardwareTable = () => {
     dispatch(addHardware(newHardware));
   };
 
+  const handleHeaderClick = (selectedImage) => {
+    console.log("handleHeaderClick Edit button");
+    const newId = Date.now() % 10000;
+    const newHardware = {
+      id: newId,
+      name: "new ",
+      img: userImg,
+      username: "New",
+      PartNumber: "",
+      Cost: "",
+      Price: "",
+      Status: "",
+    };
+
+    dispatch(addHardware(newHardware));
+  };
+
   const actionColumn = [
     {
       field: "actions",
-      headerName: <img src={plus} alt="Add More" />,
+      headerName: (
+        <div onClick={handleOpen}>
+          <img src={plus} alt="Add More" />
+        </div>
+      ),
       width: 200,
       renderCell: (params) => {
         const id = params.row.id;
@@ -102,6 +111,12 @@ const HardwareTable = () => {
         <div style={{ padding: "15px" }}>
           <Header types={types} />
         </div>
+
+        <BasicModal
+          open={open}
+          close={handleClose}
+          handleHeaderClick={handleHeaderClick}
+        />
 
         <DataGrid
           rows={hardwareData}
