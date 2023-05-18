@@ -148,7 +148,7 @@ const HardwareTable = () => {
             <>
               {" "}
               <HardWareComponentHeader />
-              <HardWareComponent /> <HardWareComponent />
+              <HardWareComponent />
             </>
           )}
           {showNext == "six" && (
