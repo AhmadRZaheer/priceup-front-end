@@ -49,55 +49,144 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
+import { Button, IconButton } from "@mui/material";
 
 const PrevArrow = ({ onClick }) => (
-  <button className="slick-arrow slick-prev" onClick={onClick}>
+  <Button className="slick-arrow slick-prev" onClick={onClick}>
     <FontAwesomeIcon icon={faChevronLeft} />
-  </button>
+  </Button>
 );
 
 const NextArrow = ({ onClick }) => (
-  <button
-    className="slick-arrow slick-next"
-    onClick={onClick}
-    style={{ color: "red" }}
-  >
+  <Button className="slick-arrow slick-next" onClick={onClick}>
     <FontAwesomeIcon icon={faChevronRight} />
-  </button>
+  </Button>
 );
 
-const settings = {
-  speed: 500,
-  slidesToShow: 8,
-  slidesToScroll: 3,
-  vertical: false,
-  arrows: true,
-  prevArrow: <PrevArrow />,
-  nextArrow: <NextArrow />,
-};
+// const settings = {
+//   speed: 500,
+//   slidesToShow: 8,
+//   slidesToScroll: 3,
+//   vertical: false,
+//   arrows: true,
+//   prevArrow: <PrevArrow />,
+//   nextArrow: <NextArrow />,
+// };
 
-const TableHeader = ({ types }) => {
+// const TableHeader = ({ types, showMore }) => {
+//   return (
+//     <div
+//       style={{
+//         maxWidth: "80vw",
+//         margin: "0 auto",
+//         backgroundColor: "green",
+//         cursor: "pointer",
+//       }}
+//     >
+//       <Slider {...settings}>
+//         <div
+//           onClick={() => showMore("one")}
+//           style={{
+//             padding: "10px",
+//             minWidth: "200px",
+//             background: "green",
+//           }}
+//         >
+//           Finishes
+//         </div>
+//         <div
+//           onClick={() => showMore("two")}
+//           style={{
+//             padding: "10px",
+//             minWidth: "200px",
+//             background: "green",
+//           }}
+//         >
+//           Handles
+//         </div>
+//         <div
+//           onClick={() => showMore("three")}
+//           style={{
+//             padding: "10px",
+//             minWidth: "200px",
+//             background: "green",
+//           }}
+//         >
+//           Hinges
+//         </div>
+//         <div
+//           onClick={() => showMore("four")}
+//           style={{
+//             padding: "10px",
+//             minWidth: "200px",
+//             background: "green",
+//           }}
+//         >
+//           Finishes
+//         </div>
+//         <div
+//           onClick={() => showMore("five")}
+//           style={{
+//             padding: "10px",
+//             minWidth: "200px",
+//             background: "green",
+//           }}
+//         >
+//           Handles
+//         </div>
+//       </Slider>
+//     </div>
+//   );
+// };
+
+const TableHeader = ({ showMore }) => {
+  const sliderSettings = {
+    // infinite: true,
+    speed: 500,
+    arrows: true,
+    prevArrow: <PrevArrow />,
+    nextArrow: <NextArrow />,
+    slidesToShow: 3,
+    vertical: false,
+    slidesToScroll: 1,
+  };
+
+  const renderSliderItem = (title, option) => (
+    <div
+      onClick={() => showMore(option)}
+      style={{
+        padding: "10px",
+        minWidth: "200px",
+        backgroundColor: "green",
+        cursor: "pointer",
+      }}
+    >
+      {title}
+    </div>
+  );
+
   return (
-    <div style={{ maxWidth: "80vw", margin: "0 auto" }}>
-      <Slider {...settings}>
-        {types.map((type, index) => (
-          <div
-            onClick={() => console.log("Hello World")}
-            key={index}
-            style={{
-              padding: "10px",
-              minWidth: "200px",
-              background: "green",
-              cursor: "pointer",
-            }}
-          >
-            {type}
-          </div>
-          
-        ))}
+    <div
+      style={{
+        maxWidth: "80vw",
+        margin: "0 auto",
+      }}
+    >
+      <Slider {...sliderSettings}>
+        {renderSliderItem("Finishes", "one")}
+        {renderSliderItem("Handles", "two")}
+        {renderSliderItem("Hinges", "three")}
+        {renderSliderItem("Finishes", "four")}
+        {renderSliderItem("Handles", "five")}
+        {renderSliderItem("Handles", "six")}
+        {renderSliderItem("Finishes", "one")}
+        {renderSliderItem("Handles", "two")}
+        {renderSliderItem("Hinges", "three")}
+        {renderSliderItem("Finishes", "four")}
+        {renderSliderItem("Handles", "five")}
+        {renderSliderItem("Handles", "six")}
       </Slider>
     </div>
   );
 };
-
 export default TableHeader;

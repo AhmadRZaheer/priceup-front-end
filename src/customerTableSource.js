@@ -1,5 +1,6 @@
 //temporary data
 import userImg from "./Assets/username1.svg";
+import wheel from "./Assets/wheel.svg";
 
 import "./components/table/table.scss";
 
@@ -128,10 +129,10 @@ export const userColumnsHardware = [
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
-          <div className="customerImg">
+          <div className="hardwareImg">
             <img className="cellImg" src={params.row.img} alt="" />
           </div>
-          <div className="customerNameTable">
+          <div className="hardwareNameTable">
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
           </div>
@@ -197,5 +198,72 @@ export const userRowsHardware = [
     Cost: "",
     Price: "",
     Status: "",
+  },
+];
+//handles table data
+export const columnsHardwareHandle = [
+  // {
+  //   field: "id",
+  //   headerName: "ID",
+  //   width: 70,
+  // },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 230,
+    renderCell: (params) => {
+      return (
+        <div className="cellWrapper">
+          <div className="hardwareImg">
+            <img className="cellImg" src={params.row.img} alt="" />
+          </div>
+          <div className="hardwareNameTable">{params.row.name}</div>
+        </div>
+      );
+    },
+  },
+  { field: "PartNumber", headerName: "Part number", width: 330 },
+  {
+    field: "Cost",
+    headerName: "Cost",
+    width: 120,
+  },
+  {
+    field: "Price",
+    headerName: "Price",
+    width: 180,
+  },
+  {
+    field: "Status",
+    headerName: "Status",
+    width: 80,
+  },
+  // {
+  //   field: "addMore",
+  //   headerName: <img src={plus} alt="Last Quoted On" />,
+  //   width: 180,
+  //   renderCell: (params) => {
+  //     const handleAddMoreClick = () => {
+  //       console.log(params);
+  //     };
+  //   },
+  // },
+];
+
+export const rowsHardwareHandle = [
+  {
+    id: 1,
+    name: "8 x 8 RM Pull ",
+    img: wheel,
+   
+    PartNumber: "",
+    Cost: "",
+    Price: "",
+    Status: "",
+    item: [
+      {
+        
+      }
+    ]
   },
 ];

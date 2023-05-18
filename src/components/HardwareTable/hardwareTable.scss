@@ -1,14 +1,14 @@
-.CustomerTable{
+.hardwareTable{
     // height: 450px;
-    padding: 20px;
+    
     .cellWrapper{
         display: flex;
         align-items: center;
 
-        .customerImg{
+        .hardwareImg{
             margin-right: 10px;
         }
-        .customerNameTable{
+        .hardwareNameTable{
             font-weight: 500;
 
             .userNameTable{

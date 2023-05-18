@@ -1,6 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import "./hardwareTable.scss";
-import { userColumnsHardware } from "../../customerTableSource";
+import {
+  columnsHardwareHandle,
+  rowsHardwareHandle,
+  userColumnsHardware,
+} from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -11,18 +15,23 @@ import {
   deleteHardware,
   editHardware,
 } from "../../redux/hardwareSlice";
-import { Add, ContentCopy } from "@mui/icons-material";
-import { IconButton } from "@mui/material";
+import { ContentCopy } from "@mui/icons-material";
+import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
 import { types } from "../../data/data";
 import BasicModal from "../Model/Model";
+import { InputLabel, Select } from "@material-ui/core";
+import HardWareComponent from "./HardWareComponent";
+import HardWareComponentHeader from "./HardwareComponentHeader";
 
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
+  const [showNext, SetShowNext] = React.useState("five");
+
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
@@ -97,34 +106,63 @@ const HardwareTable = () => {
       },
     },
   ];
+
   return (
     <>
       <div className="page-title">
         <h2>Hardware</h2>
-        <div>
-          <IconButton onClick={handleAddClick}>
-            <Add style={{ color: "Black" }} />
-          </IconButton>
-        </div>
       </div>
-      <div className="CustomerTable">
-        <div style={{ padding: "15px" }}>
-          <Header types={types} />
+      <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
+        <div style={{ padding: "10px" }}>
+          <Header types={types} showMore={SetShowNext} />
         </div>
+        <div className="hardwareTable">
+          {showNext == "one" && (
+            <DataGrid
+              rows={hardwareData}
+              columns={userColumnsHardware.concat(actionColumn)}
+              paginationModel={{ page: 0, pageSize: 8 }}
+              // checkboxSelection
+            />
+          )}
+          {showNext == "two" && (
+            <DataGrid
+              rows={rowsHardwareHandle}
+              columns={columnsHardwareHandle.concat(actionColumn)}
+              paginationModel={{ page: 0, pageSize: 8 }}
+              // checkboxSelection
+            />
+          )}
+          {showNext == "three" && (
+            <Box
+              style={{ width: "500px", height: "500px", background: "blue" }}
+            ></Box>
+          )}
 
-        <BasicModal
-          open={open}
-          close={handleClose}
-          handleHeaderClick={handleHeaderClick}
-        />
-
-        <DataGrid
-          rows={hardwareData}
-          columns={userColumnsHardware.concat(actionColumn)}
-          paginationModel={{ page: 0, pageSize: 8 }}
-          checkboxSelection
-        />
-      </div>
+          {showNext == "four" && (
+            <Box
+              style={{ width: "500px", height: "500px", background: "red" }}
+            ></Box>
+          )}
+          {showNext == "five" && (
+            <>
+              {" "}
+              <HardWareComponentHeader />
+              <HardWareComponent /> <HardWareComponent />
+            </>
+          )}
+          {showNext == "six" && (
+            <Box
+              style={{ width: "500px", height: "500px", background: "yellow" }}
+            ></Box>
+          )}
+        </div>
+      </Box>
+      <BasicModal
+        open={open}
+        close={handleClose}
+        handleHeaderClick={handleHeaderClick}
+      />
     </>
   );
 };
