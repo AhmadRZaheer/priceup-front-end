@@ -14,8 +14,12 @@ import {
 import { Add } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { addFormEntry } from "../../redux/formSlice";
 
 const HardWareComponent = () => {
+  const dispatch = useDispatch();
+  const formEntries = useSelector((state) => state.form.entries);
   const options = [
     { value: "option1", label: "Option 1" },
     { value: "option2", label: "Option 2" },
@@ -48,6 +52,18 @@ const HardWareComponent = () => {
       console.log(values);
     },
   });
+  const handleAddFormEntry = () => {
+    dispatch(
+      addFormEntry({
+        additionalFinishType: formik.values.additionalFinishType,
+        hardwarePartNumber: formik.values.hardwarePartNumber,
+        cost: formik.values.cost,
+        price: formik.values.price,
+        isChecked: formik.values.isChecked,
+        thickness: formik.values.thickness,
+      })
+    );
+  };
   return (
     <div
       style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}
@@ -62,143 +78,149 @@ const HardWareComponent = () => {
           </div>
         </div>
       </div>
-      <form onSubmit={formik.handleSubmit}>
-        <div
-          style={{
-            display: "flex",
-            gap: 4,
-            alignContent: "center",
-            paddingTop: 4,
-            paddingBottom: 4,
-          }}
-        >
-          <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-            <FormControl style={{ width: "100%" }}>
-              {/* <InputLabel> Add Additional Finish Type</InputLabel> */}
-              <Typography>Add Additional Finish Type</Typography>
 
-              <Select
-                variant="outlined"
-                value={formik.values.additionalFinishType}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                name="additionalFinishType"
-                style={{ width: "100%" }}
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {formik.touched.additionalFinishType &&
-              formik.errors.additionalFinishType && (
-                <div style={{ color: "red" }}>
-                  {formik.errors.additionalFinishType}
-                </div>
-              )}
-          </div>
+      {formEntries.map((entry, index) => (
+        <div key={index}>
+          <form onSubmit={formik.handleSubmit}>
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                alignContent: "center",
+                paddingTop: 4,
+                paddingBottom: 4,
+              }}
+            >
+              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+                <FormControl style={{ width: "100%" }}>
+                  {/* <InputLabel> Add Additional Finish Type</InputLabel> */}
+                  <Typography>Add Additional Finish Type</Typography>
 
-          <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-            <Typography>Hardware Part Number </Typography>
-            <TextField
-              variant="outlined"
-              name="hardwarePartNumber"
-              value={formik.values.hardwarePartNumber}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Hardware Part Number"
-              style={{ width: "100%" }}
-            />
-            {formik.touched.hardwarePartNumber &&
-              formik.errors.hardwarePartNumber && (
-                <div style={{ color: "red" }}>
-                  {formik.errors.hardwarePartNumber}
-                </div>
-              )}
-          </div>
+                  <Select
+                    variant="outlined"
+                    value={entry.additionalFinishType}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    name="additionalFinishType"
+                    style={{ width: "100%" }}
+                  >
+                    {options.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                {formik.touched.additionalFinishType &&
+                  formik.errors.additionalFinishType && (
+                    <div style={{ color: "red" }}>
+                      {formik.errors.additionalFinishType}
+                    </div>
+                  )}
+              </div>
 
-          <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-            <Typography>Cost</Typography>
-            <TextField
-              variant="outlined"
-              name="cost"
-              value={formik.values.cost}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Cost"
-              style={{ width: "100%" }}
-            />
-            {formik.touched.cost && formik.errors.cost && (
-              <div style={{ color: "red" }}>{formik.errors.cost}</div>
-            )}
-          </div>
-
-          <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-            <Typography>Price</Typography>
-            <TextField
-              variant="outlined"
-              name="price"
-              value={formik.values.price}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              placeholder="Price"
-              style={{ width: "100%" }}
-            />
-            {formik.touched.price && formik.errors.price && (
-              <div style={{ color: "red" }}>{formik.errors.price}</div>
-            )}
-          </div>
-
-          <div
-            style={{
-              maxWidth: "400px",
-              padding: 4,
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <FormControlLabel
-              //   style={{ marginTop: 18 }}
-              control={
-                <Checkbox
-                  checked={formik.values.isChecked}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  name="isChecked"
-                  color="primary"
-                />
-              }
-              label="Price by sqft"
-            />
-
-            <div style={{ width: "150px", padding: 4, alignItems: "center" }}>
-              <FormControl style={{ width: "100%" }}>
-                <Typography>Thickness</Typography>
-                <Select
+              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+                <Typography>Hardware Part Number </Typography>
+                <TextField
                   variant="outlined"
-                  value={formik.values.thickness}
+                  name="hardwarePartNumber"
+                  value={entry.hardwarePartNumber}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  name="thickness"
+                  placeholder="Hardware Part Number"
                   style={{ width: "100%" }}
-                >
-                  {options.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </div>
+                />
+                {formik.touched.hardwarePartNumber &&
+                  formik.errors.hardwarePartNumber && (
+                    <div style={{ color: "red" }}>
+                      {formik.errors.hardwarePartNumber}
+                    </div>
+                  )}
+              </div>
 
-            <IconButton type="submit">
-              <Add style={{ color: "rgb(65, 106, 238)" }} />
-            </IconButton>
-          </div>
+              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+                <Typography>Cost</Typography>
+                <TextField
+                  variant="outlined"
+                  name="cost"
+                  value={entry.cost}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Cost"
+                  style={{ width: "100%" }}
+                />
+                {formik.touched.cost && formik.errors.cost && (
+                  <div style={{ color: "red" }}>{formik.errors.cost}</div>
+                )}
+              </div>
+
+              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+                <Typography>Price</Typography>
+                <TextField
+                  variant="outlined"
+                  name="price"
+                  value={entry.price}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  placeholder="Price"
+                  style={{ width: "100%" }}
+                />
+                {formik.touched.price && formik.errors.price && (
+                  <div style={{ color: "red" }}>{formik.errors.price}</div>
+                )}
+              </div>
+
+              <div
+                style={{
+                  maxWidth: "400px",
+                  padding: 4,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formik.values.isChecked}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="isChecked"
+                      color="primary"
+                    />
+                  }
+                  label="Price by sqft"
+                />
+
+                <div
+                  style={{ width: "150px", padding: 4, alignItems: "center" }}
+                >
+                  <FormControl style={{ width: "100%" }}>
+                    <Typography>Thickness</Typography>
+                    <Select
+                      variant="outlined"
+                      value={entry.thikness}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="thickness"
+                      style={{ width: "100%" }}
+                    >
+                      {options.map((option) => (
+                        <MenuItem key={option.value} value={option.value}>
+                          {option.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </div>
+
+                <IconButton type="submit" onClick={handleAddFormEntry}>
+                  <Add style={{ color: "rgb(65, 106, 238)" }} />
+                </IconButton>
+              </div>
+            </div>
+          </form>
         </div>
-      </form>
+      ))}
     </div>
   );
 };

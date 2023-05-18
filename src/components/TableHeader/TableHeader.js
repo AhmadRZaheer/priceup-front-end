@@ -49,104 +49,37 @@ import "slick-carousel/slick/slick-theme.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { faChevronRight } from "@fortawesome/free-solid-svg-icons";
-import { Button, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 
 const PrevArrow = ({ onClick }) => (
-  <Button className="slick-arrow slick-prev" onClick={onClick}>
+  <Button
+    style={{ zIndex: 5 }}
+    className="slick-arrow slick-prev"
+    onClick={onClick}
+  >
     <FontAwesomeIcon icon={faChevronLeft} />
   </Button>
 );
 
 const NextArrow = ({ onClick }) => (
-  <Button className="slick-arrow slick-next" onClick={onClick}>
+  <Button
+    style={{ zIndex: 5 }}
+    className="slick-arrow slick-next"
+    onClick={onClick}
+  >
     <FontAwesomeIcon icon={faChevronRight} />
   </Button>
 );
 
-// const settings = {
-//   speed: 500,
-//   slidesToShow: 8,
-//   slidesToScroll: 3,
-//   vertical: false,
-//   arrows: true,
-//   prevArrow: <PrevArrow />,
-//   nextArrow: <NextArrow />,
-// };
-
-// const TableHeader = ({ types, showMore }) => {
-//   return (
-//     <div
-//       style={{
-//         maxWidth: "80vw",
-//         margin: "0 auto",
-//         backgroundColor: "green",
-//         cursor: "pointer",
-//       }}
-//     >
-//       <Slider {...settings}>
-//         <div
-//           onClick={() => showMore("one")}
-//           style={{
-//             padding: "10px",
-//             minWidth: "200px",
-//             background: "green",
-//           }}
-//         >
-//           Finishes
-//         </div>
-//         <div
-//           onClick={() => showMore("two")}
-//           style={{
-//             padding: "10px",
-//             minWidth: "200px",
-//             background: "green",
-//           }}
-//         >
-//           Handles
-//         </div>
-//         <div
-//           onClick={() => showMore("three")}
-//           style={{
-//             padding: "10px",
-//             minWidth: "200px",
-//             background: "green",
-//           }}
-//         >
-//           Hinges
-//         </div>
-//         <div
-//           onClick={() => showMore("four")}
-//           style={{
-//             padding: "10px",
-//             minWidth: "200px",
-//             background: "green",
-//           }}
-//         >
-//           Finishes
-//         </div>
-//         <div
-//           onClick={() => showMore("five")}
-//           style={{
-//             padding: "10px",
-//             minWidth: "200px",
-//             background: "green",
-//           }}
-//         >
-//           Handles
-//         </div>
-//       </Slider>
-//     </div>
-//   );
-// };
-
 const TableHeader = ({ showMore }) => {
   const sliderSettings = {
-    // infinite: true,
+    infinite: true,
+    scroll: NextArrow,
     speed: 500,
     arrows: true,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
-    slidesToShow: 3,
+    slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
   };
@@ -155,13 +88,20 @@ const TableHeader = ({ showMore }) => {
     <div
       onClick={() => showMore(option)}
       style={{
-        padding: "10px",
+        paddingTop: "20px",
+        paddingBottom: "20px",
         minWidth: "200px",
-        backgroundColor: "green",
+        backgroundColor: "gray",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         cursor: "pointer",
+        width: "fit-content", // Set the width to fit the content
+        margin: "0 auto", // Center the item horizontally
+        borderRadius: "4px", // Add border radius for a rounded look
       }}
     >
-      {title}
+      <h3>{title}</h3>
     </div>
   );
 
@@ -173,18 +113,22 @@ const TableHeader = ({ showMore }) => {
       }}
     >
       <Slider {...sliderSettings}>
-        {renderSliderItem("Finishes", "one")}
-        {renderSliderItem("Handles", "two")}
-        {renderSliderItem("Hinges", "three")}
-        {renderSliderItem("Finishes", "four")}
-        {renderSliderItem("Handles", "five")}
-        {renderSliderItem("Handles", "six")}
-        {renderSliderItem("Finishes", "one")}
-        {renderSliderItem("Handles", "two")}
-        {renderSliderItem("Hinges", "three")}
-        {renderSliderItem("Finishes", "four")}
-        {renderSliderItem("Handles", "five")}
-        {renderSliderItem("Handles", "six")}
+        <div style={{}}>{renderSliderItem("Finishes", "one")}</div>
+        <div style={{}}> {renderSliderItem("Handles", "two")}</div>
+        <div style={{}}> {renderSliderItem("Hinges", "three")}</div>
+
+        <div style={{}}> {renderSliderItem("Finishes", "four")}</div>
+
+        <div style={{}}> {renderSliderItem("Handles", "five")}</div>
+        <div style={{}}> {renderSliderItem("Handles", "six")}</div>
+        <div style={{}}>{renderSliderItem("Finishes", "one")}</div>
+        <div style={{}}> {renderSliderItem("Handles", "two")}</div>
+        <div style={{}}> {renderSliderItem("Hinges", "three")}</div>
+
+        <div style={{}}> {renderSliderItem("Finishes", "four")}</div>
+
+        <div style={{}}> {renderSliderItem("Handles", "five")}</div>
+        <div style={{}}> {renderSliderItem("Handles", "six")}</div>
       </Slider>
     </div>
   );

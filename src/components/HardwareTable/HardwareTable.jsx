@@ -1,10 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import "./hardwareTable.scss";
-import {
-  columnsHardwareHandle,
-  rowsHardwareHandle,
-  userColumnsHardware,
-} from "../../customerTableSource";
+import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -22,7 +18,6 @@ import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
 import { types } from "../../data/data";
 import BasicModal from "../Model/Model";
-import { InputLabel, Select } from "@material-ui/core";
 import HardWareComponent from "./HardWareComponent";
 import HardWareComponentHeader from "./HardwareComponentHeader";
 
@@ -30,7 +25,7 @@ const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [showNext, SetShowNext] = React.useState("five");
+  const [showNext, SetShowNext] = React.useState("two");
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -125,36 +120,12 @@ const HardwareTable = () => {
               // checkboxSelection
             />
           )}
-          {showNext == "two" && (
-            <DataGrid
-              rows={rowsHardwareHandle}
-              columns={columnsHardwareHandle.concat(actionColumn)}
-              paginationModel={{ page: 0, pageSize: 8 }}
-              // checkboxSelection
-            />
-          )}
-          {showNext == "three" && (
-            <Box
-              style={{ width: "500px", height: "500px", background: "blue" }}
-            ></Box>
-          )}
 
-          {showNext == "four" && (
-            <Box
-              style={{ width: "500px", height: "500px", background: "red" }}
-            ></Box>
-          )}
-          {showNext == "five" && (
+          {showNext == "two" && (
             <>
-              {" "}
-              <HardWareComponentHeader />
+              <HardWareComponentHeader type={"Handles"} />
               <HardWareComponent />
             </>
-          )}
-          {showNext == "six" && (
-            <Box
-              style={{ width: "500px", height: "500px", background: "yellow" }}
-            ></Box>
           )}
         </div>
       </Box>
