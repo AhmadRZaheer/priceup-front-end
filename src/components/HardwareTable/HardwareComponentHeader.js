@@ -1,7 +1,26 @@
 import { Add } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
+import { addFormEntry } from "../../redux/formSlice";
+import { useDispatch } from "react-redux";
 
 const HardWareComponentHeader = ({ type }) => {
+  const dispatch = useDispatch();
+  const handleAddFormEntry = () => {
+    dispatch(
+      addFormEntry({
+        id: Date.now() % 10000,
+        img: "",
+        title: "",
+        additionalFinishType: "",
+        hardwarePartNumber: "",
+        cost: "",
+        price: "",
+        isChecked: "",
+        thickness: "",
+        items: [],
+      })
+    );
+  };
   return (
     <>
       <div
@@ -31,7 +50,7 @@ const HardWareComponentHeader = ({ type }) => {
             padding: 4,
           }}
         >
-          <IconButton>
+          <IconButton onClick={handleAddFormEntry}>
             <Add style={{ color: "rgb(65, 106, 238)" }} />
           </IconButton>
         </div>{" "}

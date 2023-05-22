@@ -1,5 +1,4 @@
-import React from "react";
-import { Select } from "@material-ui/core";
+import React, { useState } from "react";
 import wheel from "../../Assets/wheel.svg";
 
 import {
@@ -11,77 +10,185 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import { Add, ToggleOff, ToggleOn } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { addFormEntry } from "../../redux/formSlice";
+import { addItems } from "../../redux/formSlice";
 
 const HardWareComponent = () => {
   const dispatch = useDispatch();
+  const [toggle, setToggle] = useState(false);
   const formEntries = useSelector((state) => state.form.entries);
+
   const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-    { value: "option4", label: "Option 4" },
+    { value: "1/2", label: "1/2" },
+    { value: "2/4", label: "2/4" },
   ];
 
-  const validationSchema = Yup.object({
-    hardwarePartNumber: Yup.string().required(
-      "Hardware Part Number is required"
-    ),
-
-    thickness: Yup.string().required("thickness is required"),
-
-    cost: Yup.number().required("Cost is required"),
-
-    price: Yup.number().required("Price is required"),
-  });
-  const formik = useFormik({
-    initialValues: {
-      additionalFinishType: "option1",
-      hardwarePartNumber: "",
-      cost: "5",
-      price: "",
-      isChecked: false,
-      thickness: "optionsrr",
-    },
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
-  const handleAddFormEntry = () => {
+  const handleAddFormEntryItems = (id) => {
     dispatch(
-      addFormEntry({
-        additionalFinishType: formik.values.additionalFinishType,
-        hardwarePartNumber: formik.values.hardwarePartNumber,
-        cost: formik.values.cost,
-        price: formik.values.price,
-        isChecked: formik.values.isChecked,
-        thickness: formik.values.thickness,
+      addItems({
+        id: id,
+        data: {
+          id: Date.now() % 10000,
+          additionalFinishType: "",
+          hardwarePartNumber: "",
+          cost: "",
+          price: "",
+          isChecked: "",
+          thickness: "",
+        },
       })
     );
+  };
+  const handleToggle = (id) => {
+    console.log(id, "id for delete");
+
+    dispatch(handleToggle(id));
   };
   return (
     <div
       style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}
     >
-      <div className="cellWrapper" style={{ padding: "8px" }}>
-        <div className="customerImg">
-          <img className="cellImg" src={wheel} alt="" />
-        </div>
-        <div className="customerNameTable">
-          <div className="userNameTable" style={{ marginLeft: "8px" }}>
-            8 x 8 MT Pull-1
+      {formEntries.map((entry, mainIndex) => (
+        <div style={{ borderBottom: "2px solid gray" }} key={mainIndex}>
+          <div className="cellWrapper" style={{ padding: "8px" }}>
+            <div className="customerImg">
+              <img className="cellImg" src={wheel} alt="" />
+            </div>
+            <div className="customerNameTable">
+              <div className="userNameTable" style={{ marginLeft: "8px" }}>
+                8 x 8 MT Pull-1
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          {entry.items?.map((entry, index) => (
+            <div key={index}>
+              <form>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: 4,
+                    alignContent: "center",
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                  }}
+                >
+                  <div
+                    style={{ width: "250px", padding: 4, alignItems: "center" }}
+                  >
+                    <Typography>Finish Type</Typography>
+                    <Typography variant="h6">Finish Type Name</Typography>
+                  </div>
 
-      {formEntries.map((entry, index) => (
-        <div key={index}>
-          <form onSubmit={formik.handleSubmit}>
+                  <div
+                    style={{ width: "250px", padding: 4, alignItems: "center" }}
+                  >
+                    <Typography>Hardware Part Number</Typography>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      name="hardwarePartNumber"
+                      placeholder="Hardware Part Number"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div
+                    style={{ width: "250px", padding: 4, alignItems: "center" }}
+                  >
+                    <Typography>Cost</Typography>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      name="cost"
+                      placeholder="Cost"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div
+                    style={{ width: "250px", padding: 4, alignItems: "center" }}
+                  >
+                    <Typography>Price</Typography>
+                    <TextField
+                      size="small"
+                      variant="outlined"
+                      name="price"
+                      placeholder="Price"
+                      style={{ width: "100%" }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      maxWidth: "400px",
+                      padding: 4,
+                      display: "flex",
+                      alignItems: "center",
+                      // background: "red",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <div style={{ marginTop: "18px" }}>
+                      <FormControlLabel
+                        control={<Checkbox color="primary" name="isChecked" />}
+                        label="Price by sqft"
+                      />
+                    </div>
+                    <div
+                      style={{
+                        width: "150px",
+                        padding: 4,
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <FormControl style={{ width: "100%" }} size="small">
+                        <Typography>Thickness</Typography>
+                        <TextField
+                          select
+                          size="small"
+                          variant="outlined"
+                          name="thickness"
+                          style={{ width: "100%" }}
+                        >
+                          {options.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                              {option.label}
+                            </MenuItem>
+                          ))}
+                        </TextField>
+                      </FormControl>
+                    </div>
+
+                    <div style={{ marginTop: "18px" }}>
+                      <IconButton onClick={() => setToggle(!toggle)}>
+                        {toggle ? (
+                          <ToggleOn
+                            style={{
+                              width: "45px",
+                              height: "45px",
+                              color: "rgb(65, 106, 238)",
+                            }}
+                          />
+                        ) : (
+                          <ToggleOff
+                            style={{
+                              width: "45px",
+                              height: "45px",
+                              color: "rgb(65, 106, 238)",
+                            }}
+                          />
+                        )}
+                      </IconButton>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          ))}
+
+          <form>
             <div
               style={{
                 display: "flex",
@@ -92,82 +199,41 @@ const HardWareComponent = () => {
               }}
             >
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <FormControl style={{ width: "100%" }}>
-                  {/* <InputLabel> Add Additional Finish Type</InputLabel> */}
-                  <Typography>Add Additional Finish Type</Typography>
-
-                  <Select
-                    variant="outlined"
-                    value={entry.additionalFinishType}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name="additionalFinishType"
-                    style={{ width: "100%" }}
-                  >
-                    {options.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-                {formik.touched.additionalFinishType &&
-                  formik.errors.additionalFinishType && (
-                    <div style={{ color: "red" }}>
-                      {formik.errors.additionalFinishType}
-                    </div>
-                  )}
+                <Typography>Finish Type</Typography>
+                <Typography variant="h6">Finish Type Name</Typography>
               </div>
 
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <Typography>Hardware Part Number </Typography>
+                <Typography>Hardware Part Number</Typography>
                 <TextField
+                  size="small"
                   variant="outlined"
                   name="hardwarePartNumber"
-                  value={entry.hardwarePartNumber}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   placeholder="Hardware Part Number"
                   style={{ width: "100%" }}
                 />
-                {formik.touched.hardwarePartNumber &&
-                  formik.errors.hardwarePartNumber && (
-                    <div style={{ color: "red" }}>
-                      {formik.errors.hardwarePartNumber}
-                    </div>
-                  )}
               </div>
 
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
                 <Typography>Cost</Typography>
                 <TextField
+                  size="small"
                   variant="outlined"
                   name="cost"
-                  value={entry.cost}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   placeholder="Cost"
                   style={{ width: "100%" }}
                 />
-                {formik.touched.cost && formik.errors.cost && (
-                  <div style={{ color: "red" }}>{formik.errors.cost}</div>
-                )}
               </div>
 
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
                 <Typography>Price</Typography>
                 <TextField
+                  size="small"
                   variant="outlined"
                   name="price"
-                  value={entry.price}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
                   placeholder="Price"
                   style={{ width: "100%" }}
                 />
-                {formik.touched.price && formik.errors.price && (
-                  <div style={{ color: "red" }}>{formik.errors.price}</div>
-                )}
               </div>
 
               <div
@@ -178,29 +244,22 @@ const HardWareComponent = () => {
                   alignItems: "center",
                 }}
               >
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={formik.values.isChecked}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      name="isChecked"
-                      color="primary"
-                    />
-                  }
-                  label="Price by sqft"
-                />
+                <div style={{ marginTop: "18px" }}>
+                  <FormControlLabel
+                    control={<Checkbox color="primary" name="isChecked" />}
+                    label="Price by sqft"
+                  />
+                </div>
 
                 <div
                   style={{ width: "150px", padding: 4, alignItems: "center" }}
                 >
-                  <FormControl style={{ width: "100%" }}>
+                  <FormControl style={{ width: "100%" }} size="small">
                     <Typography>Thickness</Typography>
-                    <Select
+                    <TextField
+                      select
+                      size="small"
                       variant="outlined"
-                      value={entry.thikness}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
                       name="thickness"
                       style={{ width: "100%" }}
                     >
@@ -209,13 +268,14 @@ const HardWareComponent = () => {
                           {option.label}
                         </MenuItem>
                       ))}
-                    </Select>
+                    </TextField>
                   </FormControl>
                 </div>
-
-                <IconButton type="submit" onClick={handleAddFormEntry}>
-                  <Add style={{ color: "rgb(65, 106, 238)" }} />
-                </IconButton>
+                <div style={{ marginTop: "18px" }}>
+                  <IconButton onClick={() => handleAddFormEntryItems(entry.id)}>
+                    <Add style={{ color: "rgb(65, 106, 238)" }} />
+                  </IconButton>
+                </div>
               </div>
             </div>
           </form>
