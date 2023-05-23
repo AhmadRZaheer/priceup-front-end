@@ -19,12 +19,18 @@ const HardWareComponent = () => {
   const [toggle, setToggle] = useState(false);
   const formEntries = useSelector((state) => state.form.entries);
 
+  const finishTypeOptions = [
+    { value: "one", label: "one" },
+    { value: "two", label: "two" },
+    { value: "three", label: "three" },
+    { value: "four", label: "four" },
+    { value: "five", label: "five" },
+  ];
   const options = [
     { value: "1/2", label: "1/2" },
     { value: "2/4", label: "2/4" },
   ];
-
-  const handleAddFormEntryItems = (id) => {
+  const handleAddFormEntryItems = (id, event) => {
     dispatch(
       addItems({
         id: id,
@@ -199,8 +205,22 @@ const HardWareComponent = () => {
               }}
             >
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <Typography>Finish Type</Typography>
-                <Typography variant="h6">Finish Type Name</Typography>
+                <FormControl style={{ width: "100%" }}>
+                  <Typography>Finish Type</Typography>
+                  <TextField
+                    select
+                    size="small"
+                    variant="outlined"
+                    name="finishType"
+                    style={{ width: "100%" }}
+                  >
+                    {finishTypeOptions.map((option) => (
+                      <MenuItem key={option.value} value={option.value}>
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </FormControl>
               </div>
 
               <div style={{ width: "250px", padding: 4, alignItems: "center" }}>

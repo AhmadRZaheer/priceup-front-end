@@ -112,7 +112,7 @@ const HardwareTable = () => {
           <Header types={types} showMore={SetShowNext} />
         </div>
         <div className="hardwareTable">
-          {showNext == "one" && (
+          {showNext === "one" && (
             <DataGrid
               rows={hardwareData}
               columns={userColumnsHardware.concat(actionColumn)}
@@ -121,7 +121,7 @@ const HardwareTable = () => {
             />
           )}
 
-          {showNext == "two" && (
+          {showNext === "two" && (
             <>
               <HardWareComponentHeader type={"Handles"} />
               <HardWareComponent />
