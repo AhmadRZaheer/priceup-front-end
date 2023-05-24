@@ -9,14 +9,14 @@ const hardwareSlice = createSlice({
       const id = action.payload;
       return state.filter((hardware) => hardware.id !== id);
     },
+ 
+
     editHardware: (state, action) => {
+      console.log(action, "action in edit reducer");
       const updatedHardware = action.payload;
-      const index = state.findIndex(
-        (hardware) => hardware.id === updatedHardware.id
+      return state.map((hardware) =>
+        hardware.id === updatedHardware.id ? updatedHardware : hardware
       );
-      if (index !== -1) {
-        state[index] = updatedHardware;
-      }
     },
     addHardware: (state, action) => {
       const newHardware = action.payload;

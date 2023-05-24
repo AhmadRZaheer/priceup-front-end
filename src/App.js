@@ -10,6 +10,7 @@ import Hardware from "./pages/Hardware/Hardware";
 import Defaults from "./pages/Layouts/Defaults";
 import Single from "./pages/singlle/Single";
 import New from "./pages/new/New";
+import Finishes from "./pages/Finishes/Finishes";
 
 function App() {
   const [CurrentForm, setCurrentForm] = useState("login");
@@ -31,6 +32,8 @@ function App() {
             </Route>
             <Route path="Team" element={<Team />} />
             <Route path="Hardware" element={<Hardware />} />
+            <Route path="Finishes" element={<Finishes />} />
+
             <Route path="Defaults" element={<Defaults />} />
           </Route>
         </Routes>

@@ -81,6 +81,12 @@ const Sidebar = () => {
             </NavLink>
           </li>
           <li>
+            <NavLink to="/finishes" activeClassName="active" className="link">
+              <AddBoxOutlinedIcon className="icon" />
+              <span>Finishes</span>
+            </NavLink>
+          </li>
+          <li>
             <NavLink to="/Defaults" activeClassName="active" className="link">
               <AddBoxOutlinedIcon className="icon" />
               <span>Default</span>

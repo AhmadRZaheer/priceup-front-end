@@ -123,24 +123,27 @@ export const userColumnsHardware = [
   //   width: 70,
   // },
   {
-    field: "name",
+    hardwareLabel: "",
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
           <div className="hardwareImg">
-            <img className="cellImg" src={params.row.img} alt="" />
+            <img className="cellImg" src={params.row.image} alt="" />
           </div>
           <div className="hardwareNameTable">
-            {params.row.name}
-            <div className="userNameTable">{params.row.username}</div>
+            {params.row.hardwareLabel}
+            {/* <div className="userNameTable">{params.row.username}</div> */}
           </div>
         </div>
       );
     },
   },
+  { field: "Thickness", headerName: "Thickness ", width: 330 },
+
   { field: "PartNumber", headerName: "Part number", width: 330 },
+
   {
     field: "Cost",
     headerName: "Cost",
@@ -169,36 +172,16 @@ export const userColumnsHardware = [
 ];
 
 export const userRowsHardware = [
-  {
-    id: 1,
-    name: "Maya ",
-    img: userImg,
-    username: "MayaAli",
-    PartNumber: "",
-    Cost: "",
-    Price: "",
-    Status: "",
-  },
-  {
-    id: 2,
-    name: "Mona ",
-    img: userImg,
-    username: "Liza",
-    PartNumber: "",
-    Cost: "",
-    Price: "",
-    Status: "",
-  },
-  {
-    id: 3,
-    name: "Emma",
-    img: userImg,
-    username: "Watson",
-    PartNumber: "",
-    Cost: "",
-    Price: "",
-    Status: "",
-  },
+  // {
+  //   id: 1,
+  //   hardwareLabel: "maya",
+  //   image: userImg,
+  //   Thickness: "",
+  //   PartNumber: "",
+  //   Cost: "",
+  //   Price: "",
+  //   Status: "",
+  // },
 ];
 //handles table data
 export const columnsHardwareHandle = [
@@ -255,15 +238,11 @@ export const rowsHardwareHandle = [
     id: 1,
     name: "8 x 8 RM Pull ",
     img: wheel,
-   
+
     PartNumber: "",
     Cost: "",
     Price: "",
     Status: "",
-    item: [
-      {
-        
-      }
-    ]
+    item: [{}],
   },
 ];
