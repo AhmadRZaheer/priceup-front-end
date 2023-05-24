@@ -56,7 +56,10 @@ const HardWareComponent = () => {
       style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}
     >
       {formEntries.map((entry, mainIndex) => (
-        <div style={{ borderBottom: "2px solid gray" }} key={mainIndex}>
+        <div
+          style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
+          key={mainIndex}
+        >
           <div className="cellWrapper" style={{ padding: "8px" }}>
             <div className="customerImg">
               <img className="cellImg" src={wheel} alt="" />

@@ -107,10 +107,16 @@ const HardwareTable = () => {
       <div className="page-title">
         <h2>Hardware</h2>
       </div>
-      <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
-        <div style={{ padding: "10px" }}>
-          <Header types={types} showMore={SetShowNext} />
-        </div>
+      <div style={{ padding: "10px" }}>
+        <Header types={types} showMore={SetShowNext} />
+      </div>
+      <Box
+        sx={{
+          border: "1px solid rgb(232, 232, 232)",
+          margin: 2,
+          // background: "rgb(232, 232, 232)",
+        }}
+      >
         <div className="hardwareTable">
           {showNext === "one" && (
             <DataGrid

@@ -8,19 +8,24 @@
 }
 
 
-button{
+button {
   cursor: pointer;
 }
-.auth-form-container, .login-form, .reset-form{
+
+.auth-form-container,
+.login-form,
+.reset-form {
   display: flex;
   flex-direction: column;
   margin-top: -22px;
 }
+
 label {
   text-align: left;
   padding: 0;
   font-size: 14px;
 }
+
 input {
   margin: 0.5rem 0;
   background: #FFFFFF;
@@ -32,7 +37,7 @@ input {
 
 }
 
- 
+
 .auth-form-container {
   padding: 26px 24px 24px;
   gap: 32px;
@@ -41,7 +46,9 @@ input {
   border-radius: 12px;
   width: 300px;
 }
-.cancel, .forget-pass{
+
+.cancel,
+.forget-pass {
   background-color: white;
   border: none;
   color: #8477DA;
@@ -57,3 +64,8 @@ input {
 
 
 }
+
+/* 
+body {
+  background-color: floralwhite;
+} */
