@@ -1,8 +1,9 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { items } from "../../data/data";
 
-const TableHeader = ({ showMore }) => {
+const TableHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     return items.map((item, index) => (
       <div key={index}>{renderSliderItem(item.title, item.option)}</div>
@@ -13,8 +14,8 @@ const TableHeader = ({ showMore }) => {
     <div
       onClick={() => showMore(option)}
       style={{
-        paddingTop: "10px",
-        paddingBottom: "10px",
+        padding: "10px",
+        minHeight: "50px",
         minWidth: "150px",
         backgroundColor: "rgb(232, 232, 232)",
         display: "flex",
@@ -65,24 +66,6 @@ const TableHeader = ({ showMore }) => {
     nextArrow: <CustomNextArrow />, // Replace default nextArrow with a custom one
   };
 
-  const items = [
-    { title: "Finishes", option: "one" },
-    { title: "Handles", option: "two" },
-    { title: "Hinges", option: "three" },
-    { title: "Finishes", option: "four" },
-    { title: "Handles", option: "five" },
-    { title: "Handles", option: "six" },
-    { title: "Finishes", option: "one" },
-    { title: "Handles", option: "two" },
-    { title: "Hinges", option: "three" },
-    { title: "Finishes", option: "four" },
-    { title: "Handles", option: "five" },
-    { title: "Handles", option: "six" },
-    { title: "Finishes", option: "four" },
-    { title: "Handles", option: "five" },
-    { title: "Handles", option: "six" },
-  ];
-
   return (
     <div
       style={{
@@ -91,7 +74,7 @@ const TableHeader = ({ showMore }) => {
         // backgroundColor: "rgb(232, 232, 232)",
       }}
     >
-      <Slider {...sliderSettings}>{renderSliderItems(items)}</Slider>
+      <Slider {...sliderSettings}>{renderSliderItems(types)}</Slider>
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from "react";
 import "./defaults.scss";
 
 import Sidebar from "../../components/Sidebar/Sidebar";
+import DefaultSection from "../../components/DefaultSection/DefaultSection";
 
 const Defaults = (Props) => {
   return (
@@ -9,9 +10,8 @@ const Defaults = (Props) => {
       <div className="Defaults">
         <Sidebar />
         <div className="defaultsConatiner">
-          <h1 className="title">Defaults</h1>
+          <DefaultSection />
         </div>
-        {/* <DefaultsCom /> */}
       </div>
     </>
   );

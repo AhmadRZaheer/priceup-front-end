@@ -1,10 +1,8 @@
 import React from "react";
 import "./hardwareTable.scss";
-import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addHardware,
@@ -16,12 +14,13 @@ import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
-import { items } from "../../data/data";
+import { categories } from "../../data/data";
 import BasicModal from "../Model/Model";
-import HardWareComponent from "./HardWareComponent";
-import HardWareComponentHeader from "./HardwareComponentHeader";
 
-const HardwareTable = () => {
+import DefaultComponentHeader from "./DefaultComponentHeader";
+import DefaultComponent from "./DefaultComponent";
+
+const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -102,10 +101,10 @@ const HardwareTable = () => {
   return (
     <>
       <div className="page-title">
-        <h2>Hardware</h2>
+        <h2>Default</h2>
       </div>
       <div style={{ padding: "10px" }}>
-        <Header types={items} showMore={SetShowNext} />
+        <Header types={categories} showMore={SetShowNext} />
       </div>
       <Box
         sx={{
@@ -115,19 +114,10 @@ const HardwareTable = () => {
         }}
       >
         <div className="hardwareTable">
-          {/* {showNext === "one" && (
-            <DataGrid
-              rows={hardwareData}
-              columns={userColumnsHardware.concat(actionColumn)}
-              paginationModel={{ page: 0, pageSize: 8 }}
-              // checkboxSelection
-            />
-          )} */}
-
           {showNext === "two" && (
             <>
-              <HardWareComponentHeader type={"Handles"} />
-              <HardWareComponent />
+              <DefaultComponentHeader type={"LayOut:Door"} />
+              <DefaultComponent />
             </>
           )}
         </div>
@@ -140,4 +130,4 @@ const HardwareTable = () => {
     </>
   );
 };
-export default HardwareTable;
+export default DefaultSection;
