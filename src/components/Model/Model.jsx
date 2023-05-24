@@ -137,7 +137,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
               alignItems: "baseline",
             }}
           >
-            <Typography>{data ? "Edit Finishes" : "Add Finishes"}</Typography>
+            <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
             <IconButton onClick={close}>
               <Close />
             </IconButton>

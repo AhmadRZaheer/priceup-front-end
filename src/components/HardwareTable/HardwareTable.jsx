@@ -26,15 +26,12 @@ const HardwareTable = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [showNext, SetShowNext] = React.useState("two");
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
     console.log(id, "clicked deleted button");
-
     dispatch(deleteHardware(id));
   };
-
   const handleEdit = (updatedHardware) => {
     console.log(updatedHardware, "clicked Edit button");
 
@@ -118,14 +115,14 @@ const HardwareTable = () => {
         }}
       >
         <div className="hardwareTable">
-          {showNext === "one" && (
+          {/* {showNext === "one" && (
             <DataGrid
               rows={hardwareData}
               columns={userColumnsHardware.concat(actionColumn)}
               paginationModel={{ page: 0, pageSize: 8 }}
               // checkboxSelection
             />
-          )}
+          )} */}
 
           {showNext === "two" && (
             <>
@@ -143,5 +140,4 @@ const HardwareTable = () => {
     </>
   );
 };
-
 export default HardwareTable;
