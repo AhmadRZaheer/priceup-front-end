@@ -35,33 +35,34 @@ export const Handles = [
   { value: "4 by 4 D-Pull", label: "4 by 4 D-Pull " },
 ];
 
-export const Hinges = [
+export const hinges = [
   { value: "STD Bevel", label: "STD Bevel" },
   { value: "STD", label: "STD" },
 ];
 
-export const PivotHingeOption = [
+export const pivotHingeOption = [
   { value: "HVY Pivot Bevel", label: "HVY Pivot Bevel" },
   { value: "HVY Pivot", label: "HVY Pivot" },
 ];
 
-export const HeavyDutyOption = [
+export const heavyDutyOption = [
   { value: "HVY Square", label: "HVY Square" },
   { value: "HVY circle", label: "HVY circle" },
 ];
 
-export const HeavyPivotOption = [
+export const heavyPivotOption = [
   { value: "HVY Sq", label: "HVY S" },
   { value: "HVY cle", label: "HVY ccle" },
 ];
 
-export const ChannelorClamps = [
+export const channelorClamps = [
   { value: "Clamps", label: "Clamps" },
   { value: "Channel", label: "Channel" },
 ];
-export const MountingChannel = [
-  { value: "U-Channel", label: "U-Channel" },
-  { value: "v-Channel", label: "v-Channel" },
+export const mountingChannel = [
+  { value: "UChannel", label: "UChannel" },
+  { value: "vChannel", label: "vChannel" },
+  { value: "", label: "" },
 ];
 
 export const Clamps = [
@@ -69,11 +70,11 @@ export const Clamps = [
   { value: "v-Beveled Wall Clamps", label: "v-Beveled Wall Clamps" },
 ];
 
-export const GlassType = [
+export const glassType = [
   { value: "Clear", label: "Clear" },
   { value: "v-Clear", label: "v-Clear" },
 ];
-export const GlassTypeCount = [
+export const glassTypeCount = [
   { value: "3/8", label: "3/8" },
   { value: "4/8", label: "4/8" },
 ];
