@@ -1,50 +1,30 @@
 import React, { useState } from "react";
 import door from "../../Assets/door.png";
 
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  IconButton,
-  MenuItem,
-  TextField,
-} from "@mui/material";
+import { Button, MenuItem, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDropzone } from "react-dropzone";
+import {
+  ChannelorClamps,
+  Clamps,
+  GlassType,
+  GlassTypeCount,
+  Handles,
+  HeavyDutyOption,
+  HeavyPivotOption,
+  Hinges,
+  MountingChannel,
+  PivotHingeOption,
+  hardwareFinishes,
+  options,
+} from "../../data/data";
 
 const DefaultComponent = () => {
-  const finishTypeOptions = [
-    { value: "one", label: "one" },
-    { value: "two", label: "two" },
-    { value: "three", label: "three" },
-    { value: "four", label: "four" },
-    { value: "five", label: "five" },
-  ];
-  const options = [
-    { value: "option1", label: "Option 1" },
-    { value: "option2", label: "Option 2" },
-    { value: "option3", label: "Option 3" },
-    // Add more options as needed
-  ];
-  const hardwareOptionsSetting = [
-    "Hardware Finishes",
-    "Hinges",
-    "Pivot Hinge Option",
-    "Heavy Duty Option",
-    "Heavy Pivot Option",
-    "Channel or Clamps",
-    "Mounting Channel",
-    "Clamps",
-    "Mounting Channel",
-  ];
   const [selectedImage, setSelectedImage] = useState(null);
-
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     // setFieldValue("image", acceptedFiles[0]);
   };
-
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   return (
@@ -52,8 +32,6 @@ const DefaultComponent = () => {
       style={{
         display: "flex",
         marginTop: 4,
-        // padding: 10,
-        // backgroundColor: "pink",
       }}
     >
       {/* image */}
@@ -204,7 +182,7 @@ const DefaultComponent = () => {
                   style={{ width: "100%" }}
                   defaultValue={options[0].value}
                 >
-                  {options.map((option) => (
+                  {hardwareFinishes.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -249,7 +227,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Handles
             </div>{" "}
             <div
               style={{
@@ -264,9 +242,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={Handles[0].value}
                 >
-                  {options.map((option) => (
+                  {Handles.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -292,8 +270,7 @@ const DefaultComponent = () => {
                   marginX: 1,
                 }}
               >
-                {" "}
-                Door & Notched panel
+                1
               </Box>
             </Box>{" "}
           </div>
@@ -326,7 +303,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Hinges
             </div>{" "}
             <div
               style={{
@@ -341,9 +318,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={Hinges[0].value}
                 >
-                  {options.map((option) => (
+                  {Hinges.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -370,7 +347,7 @@ const DefaultComponent = () => {
                 }}
               >
                 {" "}
-                Door & Notched panel
+                2
               </Box>
             </Box>{" "}
           </div>
@@ -404,7 +381,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Pivot Hinge Option
             </div>{" "}
             <div
               style={{
@@ -419,9 +396,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={PivotHingeOption[0].value}
                 >
-                  {options.map((option) => (
+                  {PivotHingeOption.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -448,7 +425,7 @@ const DefaultComponent = () => {
                 }}
               >
                 {" "}
-                Door & Notched panel
+                2
               </Box>
             </Box>{" "}
           </div>
@@ -481,7 +458,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Heavy Duty Option
             </div>{" "}
             <div
               style={{
@@ -496,9 +473,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={HeavyDutyOption[0].value}
                 >
-                  {options.map((option) => (
+                  {HeavyDutyOption.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -573,7 +550,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Heavy Pivot Option
             </div>{" "}
             <div
               style={{
@@ -588,9 +565,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={HeavyPivotOption[0].value}
                 >
-                  {options.map((option) => (
+                  {HeavyPivotOption.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -668,7 +645,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Channel or Clamps
             </div>{" "}
             <div
               style={{
@@ -683,9 +660,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={ChannelorClamps[0].value}
                 >
-                  {options.map((option) => (
+                  {ChannelorClamps.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -732,7 +709,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Mounting Channel
             </div>{" "}
             <div
               style={{
@@ -747,9 +724,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={MountingChannel[0].value}
                 >
-                  {options.map((option) => (
+                  {MountingChannel.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -790,11 +767,13 @@ const DefaultComponent = () => {
             <div
               style={{
                 width: "250px",
-
+                display: "flex",
                 padding: 4,
+                justifyContent: "space-between",
               }}
             >
-              Hardware Finishes
+              <div>Clamps</div>
+              <div> Wall Clamps</div>
             </div>{" "}
             <div
               style={{
@@ -809,9 +788,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={Clamps[0].value}
                 >
-                  {options.map((option) => (
+                  {Clamps.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -867,11 +846,11 @@ const DefaultComponent = () => {
             <div
               style={{
                 width: "250px",
-
+                textAlign: "right",
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Sleeve Over
             </div>{" "}
             <div
               style={{
@@ -944,11 +923,11 @@ const DefaultComponent = () => {
             <div
               style={{
                 width: "250px",
-
+                textAlign: "right",
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Glass to Glass
             </div>{" "}
             <div
               style={{
@@ -1025,7 +1004,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Hardware Finishes
+              Glass Type
             </div>{" "}
             <div
               style={{
@@ -1040,9 +1019,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={GlassType[0].value}
                 >
-                  {options.map((option) => (
+                  {GlassType.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
@@ -1065,9 +1044,9 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="thickness"
                   style={{ width: "100%" }}
-                  defaultValue={options[0].value}
+                  defaultValue={GlassTypeCount[0].value}
                 >
-                  {options.map((option) => (
+                  {GlassTypeCount.map((option) => (
                     <MenuItem key={option.value} value={option.value}>
                       {option.label}
                     </MenuItem>
