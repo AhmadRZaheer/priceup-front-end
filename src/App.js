@@ -14,6 +14,7 @@ import Hardware from "./pages/Hardware/Hardware";
 import Defaults from "./pages/Layouts/Defaults";
 import Single from "./pages/singlle/Single";
 import New from "./pages/new/New";
+import Settings from "./pages/settings/Settings";
 
 function App() {
   const [CurrentForm, setCurrentForm] = useState('login');
@@ -36,7 +37,7 @@ function App() {
             <Route path="Team" element={<Team/>}/>
             <Route path="Hardware" element={<Hardware/>}/>
             <Route path="Defaults" element={<Defaults/>}/>
-
+            <Route path= "Settings" element= {<Settings/>}/>
           </Route>
          
         </Routes>

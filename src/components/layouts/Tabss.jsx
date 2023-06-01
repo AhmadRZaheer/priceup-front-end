@@ -94,7 +94,7 @@ const Tabss = () => {
         <AntTab label="Tab 2" />
         <AntTab label="Tab 3" />
       </AntTabs>
-      <Box sx={{ p: 3 }} />
+      <Box sx={{ p: 2 }} />
     </Box>
     <Box sx={{ bgcolor: '#2e1534' }}>
       <StyledTabs
@@ -111,5 +111,6 @@ const Tabss = () => {
   </Box>
   )
 }
+
 
 export default Tabss
