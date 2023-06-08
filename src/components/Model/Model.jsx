@@ -39,7 +39,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
     formik.setFieldValue("image", acceptedFiles[0]);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+  const { getInputProps } = useDropzone({ onDrop });
 
   const handleHeaderClick = (props) => {
     // console.log(props, "handleHeaderClick Edit button");

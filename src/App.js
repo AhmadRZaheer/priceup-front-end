@@ -11,6 +11,7 @@ import Defaults from "./pages/Layouts/Defaults";
 import Single from "./pages/singlle/Single";
 import New from "./pages/new/New";
 import Finishes from "./pages/Finishes/Finishes";
+import Estimates from "./pages/Estimates/Extimates";
 
 function App() {
   const [CurrentForm, setCurrentForm] = useState("login");
@@ -25,6 +26,8 @@ function App() {
           <Route path="/">
             <Route index element={<Overview />} />
             <Route path="login" element={<Login />} />
+            <Route path="Extimates" element={<Estimates />} />
+
             <Route path="Customers">
               <Route index element={<Customers />} />
               <Route path=":userId" element={<Single />} />

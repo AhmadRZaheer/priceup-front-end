@@ -458,9 +458,7 @@ const DefaultComponent = () => {
               />
             </Box>
           </div>
-
           {/* Pivot Hinge Option */}
-
           <div
             style={{
               display: "flex",
@@ -856,7 +854,7 @@ const DefaultComponent = () => {
 
           {/*  clamps ends here*/}
 
-          {/* Glass To Glass */}
+          {/* Glass cl Glass */}
           <div
             style={{
               display: "flex",

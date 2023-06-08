@@ -1,7 +1,6 @@
 import React from "react";
 import "./sidebar.scss";
 import Logo from "../../Assets/purplelogo.svg";
-import HomeIcon from "@mui/icons-material/Home";
 import LeaderboardSharpIcon from "@mui/icons-material/LeaderboardSharp";
 import AdjustIcon from "@mui/icons-material/Adjust";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
@@ -10,7 +9,7 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import UserIcon from "../../Assets/username1.svg";
 import Logout from "../../Assets/logout.svg";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
   return (
@@ -59,8 +58,10 @@ const Sidebar = () => {
         </ul> */}
         <ul>
           <li className="estimates">
-            <LeaderboardSharpIcon className="icon" />
-            <span>Estimates</span>
+            <NavLink to="/Extimates" activeClassName="active" className="link">
+              <LeaderboardSharpIcon className="icon" />
+              <span>Estimates</span>
+            </NavLink>
           </li>
           <li>
             <NavLink to="/Customers" activeClassName="active" className="link">
