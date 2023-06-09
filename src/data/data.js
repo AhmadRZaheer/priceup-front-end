@@ -1,3 +1,12 @@
+import layout1 from "../Assets/estimates/layout1.svg";
+import layout2 from "../Assets/estimates/layout2.svg";
+import layout3 from "../Assets/estimates/layout3.svg";
+import layout4 from "../Assets/estimates/layout4.svg";
+import layout5 from "../Assets/estimates/layout5.svg";
+import layout6 from "../Assets/estimates/layout6.svg";
+import layout7 from "../Assets/estimates/layout7.svg";
+import door from "../Assets/door.png";
+
 export const categories = [
   { title: "Layout: Door", option: "one" },
   { title: "Layout: Door Panel & Return", option: "two" },
@@ -81,4 +90,63 @@ export const glassTypeCount = [
 export const options = [
   { value: "Select options", label: "Select options" },
   { value: "Polished", label: "Polished " },
+];
+
+export const layouts = [
+  {
+    id: 1,
+    imageSrc: layout1,
+    title: "Layout 1",
+  },
+  {
+    id: 2,
+    imageSrc: layout2,
+    title: "Layout 2",
+  },
+  {
+    id: 3,
+    imageSrc: layout3,
+    title: "Layout 3",
+  },
+  {
+    id: 4,
+    imageSrc: layout4,
+    title: "Layout 4",
+  },
+  {
+    id: 5,
+    imageSrc: layout5,
+    title: "Layout 5",
+  },
+
+  {
+    id: 6,
+    imageSrc: layout6,
+    title: "Layout 6",
+  },
+  {
+    id: 7,
+    imageSrc: layout7,
+    title: "Layout 7",
+  },
+];
+export const menuOptions = [
+  {
+    id: 1,
+    image: door,
+    name: "Polish Chrome",
+    price: "$1.00",
+  },
+  {
+    id: 2,
+    image: door,
+    name: "Polish Chrome",
+    price: "$1.00",
+  },
+  {
+    id: 3,
+    image: door,
+    name: "Polish Chrome",
+    price: "$1.00",
+  },
 ];

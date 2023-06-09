@@ -1,234 +1,124 @@
-import { Box, Grid, Typography } from "@mui/material";
-import React from "react";
-import layout1 from "../../Assets/estimates/layout1.svg";
-import layout2 from "../../Assets/estimates/layout2.svg";
-
-import layout3 from "../../Assets/estimates/layout3.svg";
-import layout4 from "../../Assets/estimates/layout4.svg";
-import layout5 from "../../Assets/estimates/layout5.svg";
-import layout6 from "../../Assets/estimates/layout6.svg";
-import layout7 from "../../Assets/estimates/layout7.svg";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { layouts } from "../../data/data";
+import ClientDetailsModel from "./Model";
+import LayoutMeasurements from "./layoutMeasurements";
+import LayoutReview from "./LayoutReview";
 
 const Index = () => {
+  const boxStyles = {
+    minHeight: "182px",
+    minWidth: "180px",
+    margin: "auto",
+    borderRadius: "12px",
+    boxShadow:
+      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+    border: "1px solid #EAECF0",
+    p: 2,
+    background: "#D9D9D9",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 3,
+    flexDirection: "column",
+    cursor: "pointer",
+  };
+  const [clientDetailOpen, setClientDetailOpen] = useState(false);
+  const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
+
   return (
-    <Box
-      sx={{
-        // minHeight: "100vh",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-        flexDirection: "column",
-        background: "yellow",
-        paddingY: 4,
-      }}
-    >
+    <>
       <Box
         sx={{
-          width: "70%",
-          margin: "auto",
-
+          width: "100%",
           display: "flex",
           alignItems: "center",
-          background: "blue",
-          marginTop: 15,
           flexDirection: "column",
-          p: 2,
+          background: "yellow",
+          height: "93.3vh",
+          overflowY: "scroll",
+          paddingY: 4,
         }}
       >
-        <Typography textAlign={"center"} variant="h4">
-          Create New Qoute
-        </Typography>
+        {!layoutMeasurementsOpen ? (
+          <Box
+            sx={{
+              width: "70%",
+              margin: "auto",
 
-        <Box
-          sx={{
-            width: "94%",
-            margin: "auto",
-            borderRadius: "12px",
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: "1px solid #EAECF0",
-            p: 2,
-            background: "green",
-          }}
-        >
-          <Typography sx={{ font: "18px" }}>Select Layout</Typography>
-          <Typography sx={{ color: "#667085", font: "14px" }}>
-            Your new project has been created. Invite colleagues to collaborate
-            on this project.
-          </Typography>
-
-          <Grid container gap={4}>
+              display: "flex",
+              alignItems: "center",
+              //   background: "blue",
+              marginTop: 15,
+              flexDirection: "column",
+              p: 2,
+              gap: 4,
+            }}
+          >
+            <Typography textAlign={"center"} variant="h4">
+              Create New Qoute
+            </Typography>
             <Box
               sx={{
-                minHeight: "182px",
-                minWidth: "180px",
+                width: "94%",
                 margin: "auto",
                 borderRadius: "12px",
                 boxShadow:
                   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                 border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
+                paddingX: 2,
+                paddingY: 4,
+                rowGap: 4,
+                // background: "green",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
                 flexDirection: "column",
               }}
             >
-              <img src={layout1} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 1</Typography>
+              <Box>
+                <Typography sx={{ font: "18px" }}>Slect Layout</Typography>
+                <Typography sx={{ color: "#667085", font: "14px" }}>
+                  Your new project has been created. Invite colleagues to
+                  collaborate on this project.
+                </Typography>
+              </Box>
+              <Grid container gap={4}>
+                {layouts.map((layout) => (
+                  <Box key={layout.id} sx={boxStyles}>
+                    <img src={layout.imageSrc} alt="Selected" />
+                    <Typography sx={{ font: "18px" }}>
+                      {layout.title}
+                    </Typography>
+                  </Box>
+                ))}
+                <Box sx={boxStyles}>
+                  <Typography sx={{ font: "18px" }}>Custom</Typography>
+                </Box>
+              </Grid>
+              <Box sx={{ display: "flex", justifyContent: "end" }}>
+                <Box sx={{ width: "150px" }}>
+                  <Button
+                    onClick={() => setClientDetailOpen(true)}
+                    fullWidth
+                    variant="contained"
+                  >
+                    {" "}
+                    Next
+                  </Button>
+                </Box>
+              </Box>
             </Box>
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout2} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 2</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout3} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 3</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout4} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 4</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout5} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 5</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout6} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 6</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <img src={layout7} alt="Selected" />
-              <Typography sx={{ font: "18px" }}> Layout 7</Typography>
-            </Box>{" "}
-            <Box
-              sx={{
-                minHeight: "182px",
-                minWidth: "180px",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                p: 2,
-                background: "#D9D9D9",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 3,
-                flexDirection: "column",
-              }}
-            >
-              <Typography sx={{ font: "18px" }}>Custom</Typography>
-            </Box>{" "}
-          </Grid>
-        </Box>
+          </Box>
+        ) : (
+          //   <LayoutMeasurements />
+          <LayoutReview />
+        )}
       </Box>
-    </Box>
+      <ClientDetailsModel
+        open={clientDetailOpen}
+        handleCancel={() => setClientDetailOpen(false)}
+        SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
+      />
+    </>
   );
 };
 
