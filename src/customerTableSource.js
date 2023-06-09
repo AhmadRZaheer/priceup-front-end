@@ -3,6 +3,7 @@ import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 
 import "./components/table/table.scss";
+import { backendURL } from "./utiles/common";
 
 export const userColumns = [
   {
@@ -123,24 +124,31 @@ export const userColumnsHardware = [
   //   width: 70,
   // },
   {
-    hardwareLabel: "",
+    field: "name",
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
           <div className="hardwareImg">
-            <img className="cellImg" src={params.row.image} alt="" />
+            <img
+              className="cellImg"
+              src={`${backendURL}/${params.row.image}`}
+              alt=""
+            />
           </div>
           <div className="hardwareNameTable">
-            {params.row.hardwareLabel}
+            {params.row.name}
+            {/* {`${backendURL}/${params.row.image}`} */}
             {/* <div className="userNameTable">{params.row.username}</div> */}
           </div>
         </div>
       );
     },
   },
-  { field: "Thickness", headerName: "Thickness ", width: 330 },
+  // { field: "name", headerName: "Name ", width: 330 },
+
+  // { field: "Thickness", headerName: "Thickness ", width: 330 },
 
   { field: "PartNumber", headerName: "Part number", width: 330 },
 
@@ -172,16 +180,16 @@ export const userColumnsHardware = [
 ];
 
 export const userRowsHardware = [
-  // {
-  //   id: 1,
-  //   hardwareLabel: "maya",
-  //   image: userImg,
-  //   Thickness: "",
-  //   PartNumber: "",
-  //   Cost: "",
-  //   Price: "",
-  //   Status: "",
-  // },
+  {
+    _id: 1,
+    hardwareLabel: "maya",
+    image: userImg,
+    Thickness: "",
+    PartNumber: "",
+    Cost: "",
+    Price: "",
+    Status: "",
+  },
 ];
 //handles table data
 export const columnsHardwareHandle = [

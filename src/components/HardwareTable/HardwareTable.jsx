@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
@@ -20,6 +20,8 @@ import { items } from "../../data/data";
 import BasicModal from "../Model/Model";
 import HardWareComponent from "./HardWareComponent";
 import HardWareComponentHeader from "./HardwareComponentHeader";
+import axios from "axios";
+import { backendURL } from "../../utiles/common";
 
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
@@ -53,7 +55,6 @@ const HardwareTable = () => {
 
     dispatch(addHardware(newHardware));
   };
-
   const handleHeaderClick = (selectedImage) => {
     console.log("handleHeaderClick Edit button");
     const newId = Date.now() % 10000;
@@ -70,7 +71,6 @@ const HardwareTable = () => {
 
     dispatch(addHardware(newHardware));
   };
-
   const actionColumn = [
     {
       field: "actions",
@@ -99,13 +99,41 @@ const HardwareTable = () => {
     },
   ];
 
+  //get header data from api
+  const [headerTitle, setHeaderTitle] = React.useState([]);
+  const [hardwareDetail, setHardwareDetail] = React.useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/hardwareCategory`);
+        console.log(response, "response form api");
+
+        if (response.status === 200) {
+          setHeaderTitle(response.data.data);
+          setHardwareDetail(response.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(headerTitle, "data form api");
+  console.log(hardwareDetail, "hardwareDetail form api");
+
   return (
     <>
       <div className="page-title">
         <h2>Hardware</h2>
       </div>
       <div style={{ padding: "10px" }}>
-        <Header types={items} showMore={SetShowNext} />
+        <Header types={headerTitle} showMore={SetShowNext} />
       </div>
       <Box
         sx={{
@@ -124,12 +152,17 @@ const HardwareTable = () => {
             />
           )} */}
 
-          {showNext === "two" && (
+          <>
+            <HardWareComponentHeader type={"Handles"} />
+            <HardWareComponent  />
+          </>
+
+          {/* {showNext === "two" && (
             <>
               <HardWareComponentHeader type={"Handles"} />
               <HardWareComponent />
             </>
-          )}
+          )} */}
         </div>
       </Box>
       <BasicModal

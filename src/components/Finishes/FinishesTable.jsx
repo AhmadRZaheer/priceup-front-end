@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
@@ -9,17 +9,40 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteHardware } from "../../redux/hardwareSlice";
 import { Add } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-
+import axios from "axios";
 import BasicModal from "../Model/Model";
-
+import { backendURL } from "../../utiles/common";
 const FinishesTable = () => {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/finishes`);
+        console.log(response, "response form api");
+
+        if (response.status === 200) {
+          setData(response.data.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(data, "data form api");
+
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-
-  const [showNext, SetShowNext] = React.useState("one");
 
   const handleOpen = () => {
     setOpen(true);
@@ -62,6 +85,25 @@ const FinishesTable = () => {
       },
     },
   ];
+  if (error) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+
+          width: "100%",
+          height: "100vh",
+          // background: "red",
+          color: "red",
+        }}
+      >
+        Error: {error}
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="page-title">
@@ -100,7 +142,8 @@ const FinishesTable = () => {
       <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
         <div className="hardwareTable">
           <DataGrid
-            rows={hardwareData}
+            getRowId={(row) => row._id}
+            rows={data}
             columns={userColumnsHardware.concat(actionColumn)}
             paginationModel={{ page: 0, pageSize: 8 }}
             // checkboxSelection

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import wheel from "../../Assets/wheel.svg";
 
 import {
@@ -13,11 +13,39 @@ import {
 import { Add, ToggleOff, ToggleOn } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/formSlice";
+import { backendURL } from "../../utiles/common";
+import axios from "axios";
 
 const HardWareComponent = () => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const formEntries = useSelector((state) => state.form.entries);
+
+  const [hardwareDetail, setHardwareDetail] = React.useState([]);
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/hardwareCategory`);
+        console.log(response, "response form api");
+
+        if (response.status === 200) {
+          setHardwareDetail(response.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(hardwareDetail, "hardwareDetail form api");
 
   const finishTypeOptions = [
     { value: "one", label: "one" },

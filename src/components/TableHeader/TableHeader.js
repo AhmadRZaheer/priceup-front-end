@@ -6,7 +6,7 @@ import { items } from "../../data/data";
 const TableHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     return items.map((item, index) => (
-      <div key={index}>{renderSliderItem(item.title, item.option)}</div>
+      <div key={index}>{renderSliderItem(item.name, item._id)}</div>
     ));
   };
 
@@ -44,19 +44,22 @@ const TableHeader = ({ showMore, types }) => {
   );
 
   const CustomNextArrow = (props) => (
-    <div
-      {...props}
-      style={{
-        ...props.style,
-        color: "red", // Change the arrow color to blue
-      }}
-    >
-      Next
-    </div>
+    // console.log(props, "arrow porpss"),
+    (
+      <div
+        {...props}
+        style={{
+          ...props.style,
+          background: "green !important", // Change the arrow color to blue
+        }}
+      >
+        Next
+      </div>
+    )
   );
 
   const sliderSettings = {
-    infinite: true,
+  
     speed: 500,
     arrows: true,
     slidesToShow: 6,

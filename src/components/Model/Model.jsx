@@ -46,7 +46,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
     const newId = Date.now() % 10000;
     const newHardware = {
       id: newId,
-      hardwareLabel: props?.hardwareLabel,
+      hardwareLabel: props?.name,
       image: userImg,
       Thickness: props?.thickness,
       username: "",
@@ -92,9 +92,9 @@ export default function BasicModal({ open, close, isEdit, data }) {
   const formik = useFormik({
     initialValues: isEdit
       ? {
-          hardwareLabel: data?.hardwareLabel,
+          hardwareLabel: data?.name,
           image: "",
-          thickness: data?.Thickness,
+          thickness: data?.holesNeeded,
           id: data?.id,
         }
       : {
@@ -198,10 +198,10 @@ export default function BasicModal({ open, close, isEdit, data }) {
           </Box>
 
           <Box>
-            <Typography>Thickness</Typography>
+            <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
               <TextField
-                select
+               
                 size="small"
                 variant="outlined"
                 name="thickness"
@@ -214,11 +214,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
                 }
                 helperText={formik.touched.thickness && formik.errors.thickness}
               >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
+                
               </TextField>
             </FormControl>
           </Box>
