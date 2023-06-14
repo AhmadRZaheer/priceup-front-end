@@ -27,7 +27,7 @@ const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [showNext, SetShowNext] = React.useState("two");
+  const [showNext, SetShowNext] = React.useState("handles");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
@@ -111,7 +111,6 @@ const HardwareTable = () => {
 
         if (response.status === 200) {
           setHeaderTitle(response.data.data);
-          setHardwareDetail(response.data);
         } else {
           setError("An error occurred while fetching the data.");
         }
@@ -124,45 +123,34 @@ const HardwareTable = () => {
     fetchData();
   }, []);
 
-  console.log(headerTitle, "data form api");
-  console.log(hardwareDetail, "hardwareDetail form api");
+  // console.log(headerTitle, "data form api");
+  // console.log(showNext, "showNext form api");
 
   return (
     <>
       <div className="page-title">
         <h2>Hardware</h2>
       </div>
-      <div style={{ padding: "10px" }}>
+      <div
+        style={{
+          marginLeft: "15px",
+          marginRight: "15px",
+          background: "rgb(232, 232, 232)",
+        }}
+      >
         <Header types={headerTitle} showMore={SetShowNext} />
       </div>
       <Box
         sx={{
           border: "1px solid rgb(232, 232, 232)",
           margin: 2,
-          // background: "rgb(232, 232, 232)",
         }}
       >
         <div className="hardwareTable">
-          {/* {showNext === "one" && (
-            <DataGrid
-              rows={hardwareData}
-              columns={userColumnsHardware.concat(actionColumn)}
-              paginationModel={{ page: 0, pageSize: 8 }}
-              // checkboxSelection
-            />
-          )} */}
-
-          <>
-            <HardWareComponentHeader type={"Handles"} />
-            <HardWareComponent  />
-          </>
-
-          {/* {showNext === "two" && (
-            <>
-              <HardWareComponentHeader type={"Handles"} />
-              <HardWareComponent />
-            </>
-          )} */}
+          <div className="hardwareTable">
+            <HardWareComponentHeader type={showNext} />
+            <HardWareComponent type={showNext} />
+          </div>
         </div>
       </Box>
       <BasicModal

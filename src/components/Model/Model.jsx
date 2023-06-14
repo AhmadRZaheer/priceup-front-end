@@ -29,7 +29,7 @@ const style = {
 };
 
 export default function BasicModal({ open, close, isEdit, data }) {
-  console.log(data, "data in model");
+  // console.log(data, "data in model");
   const dispatch = useDispatch();
 
   const [selectedImage, setSelectedImage] = useState(null);

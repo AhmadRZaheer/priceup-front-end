@@ -16,7 +16,7 @@ import { addItems } from "../../redux/formSlice";
 import { backendURL } from "../../utiles/common";
 import axios from "axios";
 
-const HardWareComponent = () => {
+const HardWareComponent = ({ type }) => {
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const formEntries = useSelector((state) => state.form.entries);
@@ -28,8 +28,8 @@ const HardWareComponent = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${backendURL}/hardwareCategory`);
-        console.log(response, "response form api");
+        const response = await axios.get(`${backendURL}/hardwares`);
+        // console.log(response, "response form api");
 
         if (response.status === 200) {
           setHardwareDetail(response.data);

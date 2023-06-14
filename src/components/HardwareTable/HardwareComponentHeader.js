@@ -41,10 +41,11 @@ const HardWareComponentHeader = ({ type }) => {
             width: "250px",
             padding: 4,
             alignItems: "center",
+            textTransform: "uppercase",
           }}
         >
           {type}
-        </div>{" "}
+        </div>
         <div
           style={{
             padding: 4,

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import React from "react";
 import { Select } from "@material-ui/core";
 
@@ -64,6 +64,32 @@ const HardwareForm = () => {
       })
     );
   };
+
+  const [hardwareDetail, setHardwareDetail] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${backendURL}/hardwares/category/${type}`
+        );
+        console.log(response, "response form api1123");
+
+        if (response.status === 200) {
+          setHardwareDetail(response.data.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(hardwareDetail, "hardwareDetail form api123");
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>

@@ -34,7 +34,7 @@ const Index = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          background: "yellow",
+          // background: "yellow",
           height: "93.3vh",
           overflowY: "scroll",
           paddingY: 4,
