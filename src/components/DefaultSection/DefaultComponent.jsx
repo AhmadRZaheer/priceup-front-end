@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import door from "../../Assets/door.png";
 // import { FieldArray,  } from "formik";
 import { useFormik, Field, ErrorMessage, FieldArray } from "formik";
@@ -22,6 +22,8 @@ import {
   options,
   pivotHingeOption,
 } from "../../data/data";
+import { backendURL } from "../../utilities/common";
+import axios from "axios";
 const validationSchema = Yup.object().shape({
   image: Yup.mixed()
     .required("Image is required")
@@ -179,12 +181,40 @@ const DefaultComponent = () => {
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
+  const [layouts, setLayouts] = React.useState([]);
+
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${backendURL}/layouts`);
+        // console.log(response, "response form api");
+
+        if (response.status === 200) {
+          setLayouts(response.data.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log(layouts, "layouts form api");
+
   return (
     <form type="submit">
       <Box
         style={{
           display: "flex",
           marginTop: 4,
+          maxHeight: "600px",
+          overflowY: "scroll",
         }}
       >
         {/* image Section*/}
@@ -216,7 +246,8 @@ const DefaultComponent = () => {
                   marginX: 1,
                 }}
               >
-                Door & Notched panel
+                {/* Door & Notched panel */}
+                {layouts[0]?.name}
               </Box>
             </Box>
             <Box
@@ -252,7 +283,8 @@ const DefaultComponent = () => {
                     <img
                       width={"100%"}
                       height={"400px"}
-                      src={door}
+                      // src={door}
+                      src={`${backendURL}/${layouts[0]?.image}`}
                       alt="Selected"
                     />
                   )}
@@ -350,6 +382,7 @@ const DefaultComponent = () => {
               }}
             >
               Handles
+              {/* {layouts[0]?.settings.handles} */}
             </div>{" "}
             <div
               style={{

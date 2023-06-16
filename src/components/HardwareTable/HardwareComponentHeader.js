@@ -99,7 +99,7 @@ const HardWareComponentHeader = ({ type }) => {
         >
           Cost
         </div>
-        <div
+        {/* <div
           style={{
             width: "250px",
 
@@ -107,7 +107,7 @@ const HardWareComponentHeader = ({ type }) => {
           }}
         >
           Price
-        </div>{" "}
+        </div>{" "} */}
         <div
           style={{
             width: "250px",

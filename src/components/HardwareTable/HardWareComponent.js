@@ -13,7 +13,7 @@ import {
 import { Add, ToggleOff, ToggleOn } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/formSlice";
-import { backendURL } from "../../utiles/common";
+import { backendURL } from "../../utilities/common";
 import axios from "axios";
 
 const HardWareComponent = ({ type }) => {
@@ -25,14 +25,35 @@ const HardWareComponent = ({ type }) => {
 
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${backendURL}/hardwares/`);
+  //       // console.log(response, "response form api");
+
+  //       if (response.status === 200) {
+  //         setHardwareDetail(response.data.data);
+  //       } else {
+  //         setError("An error occurred while fetching the data.");
+  //       }
+  //     } catch (error) {
+  //       setError("An error occurred while fetching the data.");
+  //       console.error(error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${backendURL}/hardwares`);
-        // console.log(response, "response form api");
+        const response = await axios.get(
+          `${backendURL}/hardwares/category/${type}`
+        );
+        console.log(response, "response form api1123");
 
         if (response.status === 200) {
-          setHardwareDetail(response.data);
+          setHardwareDetail(response.data.data);
         } else {
           setError("An error occurred while fetching the data.");
         }
@@ -44,8 +65,7 @@ const HardWareComponent = ({ type }) => {
 
     fetchData();
   }, []);
-
-  console.log(hardwareDetail, "hardwareDetail form api");
+  console.log(hardwareDetail, "hardwareDetail form api hardware component");
 
   const finishTypeOptions = [
     { value: "one", label: "one" },
@@ -81,24 +101,39 @@ const HardWareComponent = ({ type }) => {
   };
   return (
     <div
-      style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 4 }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        marginTop: 4,
+        // background: "red",
+
+        maxHeight: "600px",
+        overflowY: "scroll",
+      }}
     >
-      {formEntries.map((entry, mainIndex) => (
+      {hardwareDetail?.map((entry, mainIndex) => (
         <div
           style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
           key={mainIndex}
         >
           <div className="cellWrapper" style={{ padding: "8px" }}>
             <div className="customerImg">
-              <img className="cellImg" src={wheel} alt="" />
+              <img
+                className="cellImg"
+                // src={wheel}
+                src={`${backendURL}/${entry.image}`}
+                alt=""
+              />
             </div>
             <div className="customerNameTable">
               <div className="userNameTable" style={{ marginLeft: "8px" }}>
-                8 x 8 MT Pull-1
+                {/* 8 x 8 MT Pull-1 */}
+                {entry.name}
               </div>
             </div>
           </div>
-          {entry.items?.map((entry, index) => (
+          {entry?.finishes?.map((finish, index) => (
             <div key={index}>
               <form>
                 <div
@@ -114,36 +149,38 @@ const HardWareComponent = ({ type }) => {
                     style={{ width: "250px", padding: 4, alignItems: "center" }}
                   >
                     <Typography>Finish Type</Typography>
-                    <Typography variant="h6">Finish Type Name</Typography>
+                    <Typography variant="h6">{finish?.name}</Typography>
                   </div>
 
                   <div
                     style={{ width: "250px", padding: 4, alignItems: "center" }}
                   >
                     <Typography>Hardware Part Number</Typography>
-                    <TextField
+                    {/* <TextField
                       size="small"
                       variant="outlined"
                       name="hardwarePartNumber"
                       placeholder="Hardware Part Number"
                       style={{ width: "100%" }}
-                    />
+                    /> */}
+                    <Typography variant="h6">{finish?.partNumber}</Typography>
                   </div>
 
                   <div
                     style={{ width: "250px", padding: 4, alignItems: "center" }}
                   >
                     <Typography>Cost</Typography>
-                    <TextField
+                    {/* <TextField
                       size="small"
                       variant="outlined"
                       name="cost"
                       placeholder="Cost"
                       style={{ width: "100%" }}
-                    />
+                    /> */}
+                    <Typography variant="h6">{finish?.cost}</Typography>
                   </div>
 
-                  <div
+                  {/* <div
                     style={{ width: "250px", padding: 4, alignItems: "center" }}
                   >
                     <Typography>Price</Typography>
@@ -154,7 +191,7 @@ const HardWareComponent = ({ type }) => {
                       placeholder="Price"
                       style={{ width: "100%" }}
                     />
-                  </div>
+                  </div> */}
 
                   <div
                     style={{
@@ -182,7 +219,7 @@ const HardWareComponent = ({ type }) => {
                     >
                       <FormControl style={{ width: "100%" }} size="small">
                         <Typography>Thickness</Typography>
-                        <TextField
+                        {/* <TextField
                           select
                           size="small"
                           variant="outlined"
@@ -194,7 +231,10 @@ const HardWareComponent = ({ type }) => {
                               {option.label}
                             </MenuItem>
                           ))}
-                        </TextField>
+                        </TextField> */}
+                        <Typography variant="h6">
+                          {finish?.thickness}
+                        </Typography>
                       </FormControl>
                     </div>
 
@@ -276,7 +316,7 @@ const HardWareComponent = ({ type }) => {
                 />
               </div>
 
-              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+              {/* <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
                 <Typography>Price</Typography>
                 <TextField
                   size="small"
@@ -285,7 +325,7 @@ const HardWareComponent = ({ type }) => {
                   placeholder="Price"
                   style={{ width: "100%" }}
                 />
-              </div>
+              </div> */}
 
               <div
                 style={{

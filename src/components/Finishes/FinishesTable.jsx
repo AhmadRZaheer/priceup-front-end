@@ -11,7 +11,7 @@ import { Add } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
 import axios from "axios";
 import BasicModal from "../Model/Model";
-import { backendURL } from "../../utiles/common";
+import { backendURL } from "../../utilities/common";
 const FinishesTable = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);

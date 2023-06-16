@@ -44,7 +44,7 @@
 
             li {
                 display: flex;
-                align-items: center;
+                align-items: baseline;
                 padding: 7px;
                 cursor: pointer;
                 margin: 15px;
@@ -56,12 +56,12 @@
                 }
 
                 .icon{
-                    font-size: 22px;
+                    font-size: 16px;
                     margin-right: 10px;
                 }
 
                 span {
-                    font-size: 16px;
+                    font-size: 18px;
                     font-weight: 500;
                 }
 

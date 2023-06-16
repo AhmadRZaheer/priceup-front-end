@@ -21,7 +21,7 @@ import BasicModal from "../Model/Model";
 import HardWareComponent from "./HardWareComponent";
 import HardWareComponentHeader from "./HardwareComponentHeader";
 import axios from "axios";
-import { backendURL } from "../../utiles/common";
+import { backendURL } from "../../utilities/common";
 
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);

@@ -3,7 +3,7 @@ import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 
 import "./components/table/table.scss";
-import { backendURL } from "./utiles/common";
+import { backendURL } from "./utilities/common";
 
 export const userColumns = [
   {
