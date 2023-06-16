@@ -5,11 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./redux/store";
+import Login from "./components/Login/login";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   // <React.StrictMode>
   <Provider store={store}>
+    <Login />
     <App />
   </Provider>
   // </React.StrictMode>

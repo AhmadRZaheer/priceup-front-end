@@ -4,7 +4,7 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { Box } from "@mui/material";
 import Index from "../../components/Estimates/Index";
 
-const Extimates = () => {
+const Estimates = () => {
   return (
     <div className="Customers">
       <Sidebar />
@@ -15,4 +15,4 @@ const Extimates = () => {
   );
 };
 
-export default Extimates;
+export default Estimates;

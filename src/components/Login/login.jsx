@@ -5,9 +5,9 @@ import axios from "axios";
 import { backendURL } from "../../utilities/common";
 
 const Login = (props) => {
-  // const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   // const [pass, setPass] = useState("");
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -18,7 +18,7 @@ const Login = (props) => {
     e.preventDefault();
     try {
       const response = await axios.post(`${backendURL}/users/login`, {
-        username,
+        email,
         password,
       });
       const token = response.data.token;
@@ -41,9 +41,9 @@ const Login = (props) => {
             <label htmlFor="email">Email or Username</label>
             <input
               type="text"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <label htmlFor="password">Password</label>
             <input

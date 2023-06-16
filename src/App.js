@@ -11,7 +11,8 @@ import Defaults from "./pages/Layouts/Defaults";
 import Single from "./pages/singlle/Single";
 import New from "./pages/new/New";
 import Finishes from "./pages/Finishes/Finishes";
-import Estimates from "./pages/Estimates/Extimates";
+import Estimates from "./pages/Estimates/Estimates";
+import AppRoutes from "./components/ProtectedRoute/AppRoutes";
 
 function App() {
   const [CurrentForm, setCurrentForm] = useState("login");
@@ -21,7 +22,7 @@ function App() {
   };
   return (
     <div className="App">
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           <Route path="/">
             <Route index element={<Overview />} />
@@ -40,7 +41,8 @@ function App() {
             <Route path="Defaults" element={<Defaults />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <AppRoutes />
       {/* {
          CurrentForm === "login" ? <Login onFormSwitch={toggleForm} /> : <Reset onFormSwitch={toggleForm} />
           } */}
@@ -50,5 +52,25 @@ function App() {
 
 export default App;
 
+// const App = () => {
+//   return (
+//     <Router>
+//       <Switch>
+//         <Route exact path="/login" component={Login} />
+//         <ProtectedRoute
+//           paths={['/dashboard', '/profile']}
+//           component={Dashboard}
+//         />
+//         <ProtectedRoute
+//           paths={['/profile']}
+//           component={Profile}
+//         />
+//         <Route path="*">
+//           <Redirect to="/login" />
+//         </Route>
+//       </Switch>
+//     </Router>
+//   );
+// };
 
-
+// export default App;
