@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Login from "./components/Login/login";
@@ -13,13 +13,16 @@ import New from "./pages/new/New";
 import Finishes from "./pages/Finishes/Finishes";
 import Estimates from "./pages/Estimates/Estimates";
 import AppRoutes from "./components/ProtectedRoute/AppRoutes";
+import AuthVerify from "./components/ProtectedRoute/AuthVerify";
+import { useDispatch } from "react-redux";
+import { logoutHandler } from "./redux/userAuth";
 
 function App() {
-  const [CurrentForm, setCurrentForm] = useState("login");
+  const dispatch = useDispatch();
 
-  const toggleForm = (formName) => {
-    setCurrentForm(formName);
-  };
+  const logOut = useCallback(() => {
+    dispatch(logoutHandler());
+  }, [dispatch]);
   return (
     <div className="App">
       {/* <BrowserRouter>
@@ -42,7 +45,10 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter> */}
-      <AppRoutes />
+      <BrowserRouter>
+        <AppRoutes />
+        <AuthVerify logOut={logOut} />
+      </BrowserRouter>
       {/* {
          CurrentForm === "login" ? <Login onFormSwitch={toggleForm} /> : <Reset onFormSwitch={toggleForm} />
           } */}

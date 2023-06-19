@@ -1,45 +1,20 @@
-import { useDispatch, useSelector } from "react-redux";
+
+
 import AuthenticatedRoutes from "./AuthenticatedRoutes";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
 
 const AppRoutes = () => {
-  const dispatch = useDispatch();
-
   const token = localStorage.getItem("token");
-  if(token)
-  console.log(token, "token");
 
-  //   const ValidateToken = async (currToken) => {
-  //     const resp = await axios({
-  //       method: "POST",
-  //       url: `${backend}/api/login`,
-  //       headers: {
-  //         authorization: `Bearer ${currToken}`,
-  //       },
-  //     })
-  //       .then((res) => {
-  //         setIsLoading(false);
-  //         const checkExpiry = true;
-  //         if (checkExpiry) {
-  //           dispatch(
-  //             settingInitialValues({ userToken: currToken, userLoggedIn: true })
-  //           );
-  //         } else {
-  //           dispatch(logoutHandler());
-  //         }
-  //       })
-  //       .catch((er) => {
-  //         dispatch(logoutHandler());
-  //       });
-  //   };
-
-  //   if (!token) {
-  //     dispatch(logoutHandler);
-  //   } else {
-  //     ValidateToken(token);
-  //   }
-
-  return <>{token ? <AuthenticatedRoutes /> : <UnAuthenticatedRoutes />}</>;
+  if (!token || token === "undefined") {
+    // Token is empty or undefined
+    console.log("UnAuthenticatedRoutes");
+    return <UnAuthenticatedRoutes />;
+  } else {
+    // Token has a value
+    console.log(token, "token token");
+    return <AuthenticatedRoutes />;
+  }
 };
 
 export default AppRoutes;

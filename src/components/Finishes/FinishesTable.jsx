@@ -18,8 +18,11 @@ const FinishesTable = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const token = localStorage.getItem("token");
       try {
-        const response = await axios.get(`${backendURL}/finishes`);
+        const response = await axios.get(`${backendURL}/finishes`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         console.log(response, "response form api");
 
         if (response.status === 200) {
@@ -35,6 +38,34 @@ const FinishesTable = () => {
 
     fetchData();
   }, []);
+
+  const updateHardware = async (id) => {
+    const url = `localhost:5000/hardwares/${id}`;
+
+    const payload = {
+      name: "Victorian 8x8 Pulls",
+      finishes: {
+        0: {
+          name: "Polished Nickel",
+          cost: 2,
+          status: true,
+        },
+        1: {
+          name: "Polished Nickels",
+          cost: 3,
+          status: true,
+        },
+      },
+    };
+
+    try {
+      const response = await axios.put(url, payload);
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+      // Handle the error
+    }
+  };
 
   console.log(data, "data form api");
 
@@ -55,6 +86,25 @@ const FinishesTable = () => {
     setIsEdit(true);
   };
   const handleDelete = (id) => {
+    console.log(id, "id for delelte");
+    const token = localStorage.getItem("token");
+    console.log(token, "token for delelte");
+
+
+    axios
+      .delete(
+        `${backendURL}/finishes/${id}`,
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response, "put resp");
+      })
+      .catch((error) => {
+        console.error("Update failed", error);
+      });
     dispatch(deleteHardware(id));
   };
 
@@ -68,7 +118,7 @@ const FinishesTable = () => {
       // ),
       width: 200,
       renderCell: (params) => {
-        const id = params.row.id;
+        const id = params.row._id;
         return (
           <div className="cellAction">
             <div className="deleteButton" onClick={() => handleDelete(id)}>

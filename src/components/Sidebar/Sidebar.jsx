@@ -9,9 +9,17 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import UserIcon from "../../Assets/username1.svg";
 import Logout from "../../Assets/logout.svg";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { logoutHandler } from "../../redux/userAuth";
+import { useDispatch } from "react-redux";
 
 const Sidebar = () => {
+  const dispatch = useDispatch();
+  const logout = () => {
+    console.log("hello world");
+    dispatch(logoutHandler());
+  };
+
   return (
     <div className="sidebar">
       <div className="top">
@@ -110,12 +118,13 @@ const Sidebar = () => {
           Olivia Rhye
           <div className="emailUser">Olivia@glassexperts.com</div>
         </div>
-        <div className="logOutIcon">
-          <img src={Logout} alt="" />
+        <div className="logOutIcon" onClick={logout}>
+          <a href="/login">
+            <img src={Logout} alt="" />
+          </a>
         </div>
       </div>
     </div>
   );
 };
-
 export default Sidebar;

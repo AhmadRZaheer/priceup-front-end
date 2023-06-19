@@ -8,11 +8,13 @@ import Modal from "@mui/material/Modal";
 import userImg from "../../Assets/username1.svg";
 
 import { useState } from "react";
-import { FormControl, IconButton, MenuItem, TextField } from "@mui/material";
+import { FormControl, IconButton, TextField } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { addHardware, editHardware } from "../../redux/hardwareSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { backendURL } from "../../utilities/common";
 
 const style = {
   position: "absolute",
@@ -29,7 +31,7 @@ const style = {
 };
 
 export default function BasicModal({ open, close, isEdit, data }) {
-  // console.log(data, "data in model");
+  console.log(data, "data in model exios ");
   const dispatch = useDispatch();
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -60,8 +62,26 @@ export default function BasicModal({ open, close, isEdit, data }) {
     setSelectedImage(null);
   };
   const handleEdit = (updatedHardware) => {
-    // console.log(updatedHardware, "clicked Edit button");
+    const token = localStorage.getItem("token");
 
+    // console.log(updatedHardware, "clicked Edit button");
+    axios
+      .put(
+        `${backendURL}/finishes/${data?._id}`,
+        {
+          name: updatedHardware?.hardwareLabel,
+          holesNeeded: updatedHardware?.thickness,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response, "put resp");
+      })
+      .catch((error) => {
+        console.error("Update failed", error);
+      });
     dispatch(editHardware(updatedHardware));
     setSelectedImage(null);
   };
@@ -201,7 +221,6 @@ export default function BasicModal({ open, close, isEdit, data }) {
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
               <TextField
-               
                 size="small"
                 variant="outlined"
                 name="thickness"
@@ -213,9 +232,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
                   formik.touched.thickness && Boolean(formik.errors.thickness)
                 }
                 helperText={formik.touched.thickness && formik.errors.thickness}
-              >
-                
-              </TextField>
+              ></TextField>
             </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>
