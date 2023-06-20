@@ -8,14 +8,11 @@ import Modal from "@mui/material/Modal";
 import userImg from "../../Assets/username1.svg";
 
 import { useState } from "react";
-import { FormControl, IconButton, TextField } from "@mui/material";
+import { FormControl, IconButton, MenuItem, TextField } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { addHardware, editHardware } from "../../redux/hardwareSlice";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-import { backendURL, createSlug } from "../../utilities/common";
-import { parseJwt } from "../ProtectedRoute/AuthVerify";
 
 const style = {
   position: "absolute",
@@ -32,7 +29,7 @@ const style = {
 };
 
 export default function BasicModal({ open, close, isEdit, data }) {
-  console.log(data, "data in model exios ");
+  // console.log(data, "data in model");
   const dispatch = useDispatch();
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -45,70 +42,26 @@ export default function BasicModal({ open, close, isEdit, data }) {
   const { getInputProps } = useDropzone({ onDrop });
 
   const handleHeaderClick = (props) => {
-    console.log(props, "handleHeaderClick Edit button name name");
+    // console.log(props, "handleHeaderClick Edit button");
+    const newId = Date.now() % 10000;
+    const newHardware = {
+      id: newId,
+      hardwareLabel: props?.name,
+      image: userImg,
+      Thickness: props?.thickness,
+      username: "",
+      PartNumber: "",
+      Cost: "",
+      Price: "",
+      Status: "",
+    };
 
-    const token = localStorage.getItem("token");
-    const slug = createSlug(props.hardwareLabel);
-    const parseJwt = parseJwt(token);
-    console.log(parseJwt, "parseJwtparseJwt");
-
-    axios
-      .post(
-        `${backendURL}/finishes/save`,
-        {
-          name: props.hardwareLabel,
-          company_id: parseJwt(token),
-          thickness: "both",
-          slug: slug,
-        },
-
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response, "put resp");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
-    // const newId = Date.now() % 10000;
-    // const newHardware = {
-    //   id: newId,
-    //   hardwareLabel: props?.name,
-    //   image: userImg,
-    //   Thickness: props?.thickness,
-    //   username: "",
-    //   PartNumber: "",
-    //   Cost: "",
-    //   Price: "",
-    //   Status: "",
-    // };
-
-    // dispatch(addHardware(newHardware));
+    dispatch(addHardware(newHardware));
     setSelectedImage(null);
   };
   const handleEdit = (updatedHardware) => {
-    const token = localStorage.getItem("token");
-
     // console.log(updatedHardware, "clicked Edit button");
-    axios
-      .put(
-        `${backendURL}/finishes/${data?._id}`,
-        {
-          name: updatedHardware?.hardwareLabel,
-          holesNeeded: updatedHardware?.thickness,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response, "put resp");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
+
     dispatch(editHardware(updatedHardware));
     setSelectedImage(null);
   };
@@ -248,6 +201,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
               <TextField
+               
                 size="small"
                 variant="outlined"
                 name="thickness"
@@ -259,7 +213,9 @@ export default function BasicModal({ open, close, isEdit, data }) {
                   formik.touched.thickness && Boolean(formik.errors.thickness)
                 }
                 helperText={formik.touched.thickness && formik.errors.thickness}
-              ></TextField>
+              >
+                
+              </TextField>
             </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>

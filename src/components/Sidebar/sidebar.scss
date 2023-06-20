@@ -51,7 +51,7 @@
                 border-radius: 5px;
 
                 &:hover{
-                    background-color: #8477DA;
+                    background-color: #120d2e;
 
                 }
 
@@ -101,8 +101,10 @@
         color: inherit;
       }
       .active {
-        font-weight: bold;
-        color: blue;
+        font-weight: 800;
+       
+
+        // color: blue;
         /* Add any other styles you want for the active link */
       }
 

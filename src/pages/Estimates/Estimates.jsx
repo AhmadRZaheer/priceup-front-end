@@ -10,6 +10,7 @@ const Estimates = () => {
       <Sidebar />
       <div className="customersContainer">
         <Index />
+        
       </div>
     </div>
   );

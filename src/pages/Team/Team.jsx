@@ -1,13 +1,16 @@
 import React from "react";
 import "./team.scss";
-import Login from "../../components/Login/login";
+import Sidebar from "../../components/Sidebar/Sidebar";
+import Customertable from "../../components/CustomerTable/Customertable";
 const Team = () => {
   return (
     <>
-      {/* <div>Team</div> */}
-      <Login />
-
-      <div style={{ padding: "15px", display: "flex" }}></div>
+      <div className="Team">
+        <Sidebar />
+        <div className="teamContainer">
+          <Customertable />
+        </div>
+      </div>
     </>
   );
 };
