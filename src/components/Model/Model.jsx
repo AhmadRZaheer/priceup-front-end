@@ -5,14 +5,15 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import userImg from "../../Assets/username1.svg";
 
 import { useState } from "react";
-import { FormControl, IconButton, MenuItem, TextField } from "@mui/material";
+import { FormControl, IconButton, TextField } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-import { addHardware, editHardware } from "../../redux/hardwareSlice";
 import { useDispatch } from "react-redux";
+import axios from "axios";
+import { backendURL, createSlug } from "../../utilities/common";
+import { parseJwt } from "../ProtectedRoute/AuthVerify";
 
 const style = {
   position: "absolute",
@@ -29,7 +30,6 @@ const style = {
 };
 
 export default function BasicModal({ open, close, isEdit, data }) {
-  // console.log(data, "data in model");
   const dispatch = useDispatch();
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -41,28 +41,55 @@ export default function BasicModal({ open, close, isEdit, data }) {
 
   const { getInputProps } = useDropzone({ onDrop });
 
-  const handleHeaderClick = (props) => {
-    // console.log(props, "handleHeaderClick Edit button");
-    const newId = Date.now() % 10000;
-    const newHardware = {
-      id: newId,
-      hardwareLabel: props?.name,
-      image: userImg,
-      Thickness: props?.thickness,
-      username: "",
-      PartNumber: "",
-      Cost: "",
-      Price: "",
-      Status: "",
-    };
+  const handleCreate = (props) => {
+    const token = localStorage.getItem("token");
+    const slug = createSlug(props.hardwareLabel);
+    const docodedToken = parseJwt(token);
+    console.log(docodedToken, "parseJwtparseJwt");
 
-    dispatch(addHardware(newHardware));
+    axios
+      .post(
+        `${backendURL}/finishes/save`,
+        {
+          name: props.hardwareLabel,
+          company_id: docodedToken?.company_id,
+          thickness: "both",
+          slug: slug,
+          holesNeeded: props.thickness,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response, "put resp");
+      })
+      .catch((error) => {
+        console.error("Update failed", error);
+      });
+
     setSelectedImage(null);
   };
   const handleEdit = (updatedHardware) => {
-    // console.log(updatedHardware, "clicked Edit button");
+    const token = localStorage.getItem("token");
 
-    dispatch(editHardware(updatedHardware));
+    axios
+      .put(
+        `${backendURL}/finishes/${data?._id}`,
+        {
+          name: updatedHardware?.hardwareLabel,
+          holesNeeded: updatedHardware?.thickness,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response, "put resp");
+      })
+      .catch((error) => {
+        console.error("Update failed", error);
+      });
     setSelectedImage(null);
   };
 
@@ -105,9 +132,8 @@ export default function BasicModal({ open, close, isEdit, data }) {
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      // console.log(values, "valuesss");
       {
-        isEdit ? handleEdit(values) : handleHeaderClick(values);
+        isEdit ? handleEdit(values) : handleCreate(values);
 
         resetForm();
       }
@@ -115,11 +141,6 @@ export default function BasicModal({ open, close, isEdit, data }) {
       close();
     },
   });
-  const options = [
-    { value: "1mm", label: "1mm" },
-    { value: "2mm", label: "2mm" },
-    { value: "3mm", label: "3mm" },
-  ];
 
   return (
     <div>
@@ -201,7 +222,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
               <TextField
-               
+                type="number"
                 size="small"
                 variant="outlined"
                 name="thickness"
@@ -213,9 +234,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
                   formik.touched.thickness && Boolean(formik.errors.thickness)
                 }
                 helperText={formik.touched.thickness && formik.errors.thickness}
-              >
-                
-              </TextField>
+              />
             </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>

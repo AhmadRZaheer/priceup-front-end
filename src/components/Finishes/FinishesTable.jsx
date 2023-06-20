@@ -4,40 +4,16 @@ import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
-import { useDispatch, useSelector } from "react-redux";
-import { deleteHardware } from "../../redux/hardwareSlice";
 import { Add } from "@mui/icons-material";
 import { Box, IconButton } from "@mui/material";
-import axios from "axios";
 import BasicModal from "../Model/Model";
-import { backendURL } from "../../utilities/common";
+import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/Hooks";
 const FinishesTable = () => {
-  const [data, setData] = useState([]);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      try {
-        const response = await axios.get(`${backendURL}/finishes`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log(response, "response form api");
+  const { data: finishesData, error: finishesError } = useFetchDataFinishes();
 
-        if (response.status === 200) {
-          setData(response.data.data);
-        } else {
-          setError("An error occurred while fetching the data.");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching the data.");
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-  console.log(data, "data form api");
-  const hardwareData = useSelector((state) => state.hardware);
-  const dispatch = useDispatch();
+  const { handleDelete: deleteFinish, error: finishDeleteError } =
+    useDeleteFinishes();
+
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -52,26 +28,9 @@ const FinishesTable = () => {
     setEdit(data);
     setIsEdit(true);
   };
-  const handleDelete = (id) => {
-    console.log(id, "id for delelte");
-    const token = localStorage.getItem("token");
-    console.log(token, "token for delelte");
 
-    axios
-      .delete(
-        `${backendURL}/finishes/${id}`,
-
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response, "put resp");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
-    dispatch(deleteHardware(id));
+  const handleFinishDelete = (id) => {
+    deleteFinish("finishes", id);
   };
 
   const actionColumn = [
@@ -87,7 +46,10 @@ const FinishesTable = () => {
         const id = params.row._id;
         return (
           <div className="cellAction">
-            <div className="deleteButton" onClick={() => handleDelete(id)}>
+            <div
+              className="deleteButton"
+              onClick={() => handleFinishDelete(id)}
+            >
               <DeleteIcon />
             </div>
             <div
@@ -101,7 +63,7 @@ const FinishesTable = () => {
       },
     },
   ];
-  if (error) {
+  if (finishesError) {
     return (
       <div
         style={{
@@ -115,7 +77,7 @@ const FinishesTable = () => {
           color: "red",
         }}
       >
-        Error: {error}
+        Error: {finishesError}
       </div>
     );
   }
@@ -134,7 +96,7 @@ const FinishesTable = () => {
             paddingRight: "10px",
           }}
         >
-          {" "}
+          splash-logo.svg{" "}
           <div
             style={{
               width: "250px",
@@ -159,10 +121,9 @@ const FinishesTable = () => {
         <div className="hardwareTable">
           <DataGrid
             getRowId={(row) => row._id}
-            rows={data}
+            rows={finishesData}
             columns={userColumnsHardware.concat(actionColumn)}
             paginationModel={{ page: 0, pageSize: 8 }}
-            // checkboxSelection
           />
         </div>
       </Box>
