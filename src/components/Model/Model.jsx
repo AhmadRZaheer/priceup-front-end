@@ -14,7 +14,8 @@ import { useDropzone } from "react-dropzone";
 import { addHardware, editHardware } from "../../redux/hardwareSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { backendURL } from "../../utilities/common";
+import { backendURL, createSlug } from "../../utilities/common";
+import { parseJwt } from "../ProtectedRoute/AuthVerify";
 
 const style = {
   position: "absolute",
@@ -44,21 +45,47 @@ export default function BasicModal({ open, close, isEdit, data }) {
   const { getInputProps } = useDropzone({ onDrop });
 
   const handleHeaderClick = (props) => {
-    // console.log(props, "handleHeaderClick Edit button");
-    const newId = Date.now() % 10000;
-    const newHardware = {
-      id: newId,
-      hardwareLabel: props?.name,
-      image: userImg,
-      Thickness: props?.thickness,
-      username: "",
-      PartNumber: "",
-      Cost: "",
-      Price: "",
-      Status: "",
-    };
+    console.log(props, "handleHeaderClick Edit button name name");
 
-    dispatch(addHardware(newHardware));
+    const token = localStorage.getItem("token");
+    const slug = createSlug(props.hardwareLabel);
+    const parseJwt = parseJwt(token);
+    console.log(parseJwt, "parseJwtparseJwt");
+
+    axios
+      .post(
+        `${backendURL}/finishes/save`,
+        {
+          name: props.hardwareLabel,
+          company_id: parseJwt(token),
+          thickness: "both",
+          slug: slug,
+        },
+
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .then((response) => {
+        console.log(response, "put resp");
+      })
+      .catch((error) => {
+        console.error("Update failed", error);
+      });
+    // const newId = Date.now() % 10000;
+    // const newHardware = {
+    //   id: newId,
+    //   hardwareLabel: props?.name,
+    //   image: userImg,
+    //   Thickness: props?.thickness,
+    //   username: "",
+    //   PartNumber: "",
+    //   Cost: "",
+    //   Price: "",
+    //   Status: "",
+    // };
+
+    // dispatch(addHardware(newHardware));
     setSelectedImage(null);
   };
   const handleEdit = (updatedHardware) => {

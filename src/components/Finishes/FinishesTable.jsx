@@ -3,7 +3,6 @@ import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
-
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteHardware } from "../../redux/hardwareSlice";
@@ -15,7 +14,6 @@ import { backendURL } from "../../utilities/common";
 const FinishesTable = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
-
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
@@ -35,40 +33,9 @@ const FinishesTable = () => {
         console.error(error);
       }
     };
-
     fetchData();
   }, []);
-
-  const updateHardware = async (id) => {
-    const url = `localhost:5000/hardwares/${id}`;
-
-    const payload = {
-      name: "Victorian 8x8 Pulls",
-      finishes: {
-        0: {
-          name: "Polished Nickel",
-          cost: 2,
-          status: true,
-        },
-        1: {
-          name: "Polished Nickels",
-          cost: 3,
-          status: true,
-        },
-      },
-    };
-
-    try {
-      const response = await axios.put(url, payload);
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
-      // Handle the error
-    }
-  };
-
   console.log(data, "data form api");
-
   const hardwareData = useSelector((state) => state.hardware);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
@@ -89,7 +56,6 @@ const FinishesTable = () => {
     console.log(id, "id for delelte");
     const token = localStorage.getItem("token");
     console.log(token, "token for delelte");
-
 
     axios
       .delete(
