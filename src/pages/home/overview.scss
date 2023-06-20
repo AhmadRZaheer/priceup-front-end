@@ -1,8 +1,11 @@
 
 .overview {
     display: flex;
+  
     .overviewContainer {
         flex:6;
+        max-height: 100vh;
+        overflow-y: scroll;
         .page-title{
             padding: 20px; 
             h2 {

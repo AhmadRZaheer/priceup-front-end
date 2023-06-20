@@ -29,11 +29,13 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar">
-        <div className="top">
-          <span className="logo">
-            <img src={Logo} alt="" />
-          </span>
-        </div>
+        <NavLink to="/">
+          <div className="top">
+            <span className="logo">
+              <img src={Logo} alt="" />
+            </span>
+          </div>
+        </NavLink>
         <div className="center">
           {/* <ul>
           <li className="estimates">
@@ -116,8 +118,8 @@ const Sidebar = () => {
                 <span>Default</span>
               </NavLink>
             </li>
-            <li className="settings">
-              <NavLink to="/setting" activeClassName="active" className="link">
+            <li className="setting">
+              <NavLink to="/settings" activeClassName="active" className="link">
                 <SettingsOutlinedIcon className="icon" />
                 <span>Settings</span>
               </NavLink>

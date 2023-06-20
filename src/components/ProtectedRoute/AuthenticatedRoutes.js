@@ -9,6 +9,7 @@ import Hardware from "../../pages/Hardware/Hardware";
 import Finishes from "../../pages/Finishes/Finishes";
 import Defaults from "../../pages/Layouts/Defaults";
 import Estimates from "../../pages/Estimates/Estimates";
+import Settings from "../../pages/Settings/Settings";
 
 const AuthenticatedRoutes = () => {
   return (
@@ -22,11 +23,12 @@ const AuthenticatedRoutes = () => {
           <Route path=":userId" element={<Single />} />
           <Route path="new" element={<New />} />
         </Route>
-        <Route path="Team" element={<Team />} />
-        <Route path="Hardware" element={<Hardware />} />
-        <Route path="Finishes" element={<Finishes />} />
+        <Route path="team" element={<Team />} />
+        <Route path="hardware" element={<Hardware />} />
+        <Route path="finishes" element={<Finishes />} />
 
-        <Route path="Defaults" element={<Defaults />} />
+        <Route path="defaults" element={<Defaults />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>
