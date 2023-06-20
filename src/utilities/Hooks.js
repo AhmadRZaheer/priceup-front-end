@@ -3,85 +3,61 @@ import axios from "axios";
 import { backendURL } from "./common";
 // import { useQuery } from "react-query";
 
-// export const useFetchDataFinishes = () => {
-//   const [data, setData] = useState([]);
-//   const [error, setError] = useState(null);
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       const token = localStorage.getItem("token");
-//       try {
-//         const response = await axios.get(`${backendURL}/finishes`, {
-//           headers: { Authorization: `Bearer ${token}` },
-//         });
-
-//         if (response.status === 200) {
-//           setData(response.data.data);
-//         } else {
-//           setError("An error occurred while fetching the data.");
-//         }
-//       } catch (error) {
-//         setError("An error occurred while fetching the data.");
-//         console.error(error);
-//       }
-//     };
-
-//     fetchData();
-//   }, [backendURL]);
-
-//   return { data, error };
-// };
-
 export const useFetchDataFinishes = () => {
-  const { data, error } = useQuery("finishesData", fetchData, {
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
-  async function fetchData() {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.get(`${backendURL}/finishes`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await axios.get(`${backendURL}/finishes`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
-      if (response.status === 200) {
-        return response.data.data;
-      } else {
-        throw new Error("An error occurred while fetching the data.");
+        if (response.status === 200) {
+          setData(response.data.data);
+        } else {
+          setError("An error occurred while fetching the data.");
+        }
+      } catch (error) {
+        setError("An error occurred while fetching the data.");
+        console.error(error);
       }
-    } catch (error) {
-      throw new Error("An error occurred while fetching the data.");
-    }
-  }
+    };
+
+    fetchData();
+  }, [backendURL]);
 
   return { data, error };
 };
 
-// export function useGetNFTsByWallet() {
-//     const chain = useChain();
-//     // const { address: connectedAddress } = useAccount();
-//     // const address = (inputAddress || connectedAddress) as string;
-//     const fetchNFTsByWallet = async (chainId: number): Promise<NFTItemType[]> => {
-//       try {
-//         const res = await axios.get(
-//           `${process.env.NEXT_PUBLIC_BACKEND_URL}/nfts/nftsByWallet/${chainId}/${address}`
-//         );
-//         return res.data.code === 200 ? res.data.data.result : [];
-//       } catch (error) {
-//         console.log(error);
-//       }
-//       return [];
-//     };
+// export const useFetchDataFinishes = () => {
+//   const { data, error } = useQuery("finishesData", fetchData, {
+//     onError: (error) => {
+//       console.error(error);
+//     },
+//   });
 
-//     return useQuery({
-//       queryKey: ['nftsByWallet', chain?.id],
-//       queryFn: () => fetchNFTsByWallet(chain?.id as number),
-//       refetchInterval: 120_000,
-//       enabled: Boolean(address && chain?.id),
-//     });
+//   async function fetchData() {
+//     const token = localStorage.getItem("token");
+//     try {
+//       const response = await axios.get(`${backendURL}/finishes`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       if (response.status === 200) {
+//         return response.data.data;
+//       } else {
+//         throw new Error("An error occurred while fetching the data.");
+//       }
+//     } catch (error) {
+//       throw new Error("An error occurred while fetching the data.");
+//     }
 //   }
+
+//   return { data, error };
+// };
 
 export const useDeleteFinishes = () => {
   const [error, setError] = useState(null);
