@@ -1,0 +1,22 @@
+.Main{
+    background-color: #18133b;
+    color: white;
+    border-bottom: 1px solid #404040;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    position: fixed;
+    top: 0;
+    z-index: 2;
+}
+.top{
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .logo{
+        padding: 20px;
+        margin-top: 15px; 
+    }
+}

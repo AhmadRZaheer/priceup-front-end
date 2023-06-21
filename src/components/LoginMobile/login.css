@@ -1,0 +1,97 @@
+.login {
+    background-color: #8477DA;
+    padding: 10px 18px;
+    gap: 8px;
+    border: 1px solid #7F56D9;
+    border-radius: 8px;
+    color: white;
+    margin-top: 20px;
+   }
+   .loginAsfield {
+    background: rgba(132, 119, 218, 0.11);
+    padding: 10px 18px;
+    gap: 8px;
+    border: 1px solid #7F56D9;
+    border-radius: 8px;
+    color: #8477DA;
+    margin-top: 6px;
+  }
+
+  
+  
+  
+   
+  @media screen and (max-width: 920px) {
+    .fixed {
+      position:  fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      border-radius: 0;
+      background-color: #201a47;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      color: white;
+      padding-bottom: 80px;
+      border-top: 3px solid#34314a;
+      padding: 0;
+    }
+    .disable{
+      display: none;
+    }
+    .center{
+      text-align: center;
+      padding-bottom: 30px;
+    }
+    .Image-Box{
+      text-align: center;
+      padding-top: 100px;
+      padding-left: 10px;
+    }
+    .inputs {
+      background-color: #1d1742;
+      border: none;
+      padding: 17px;
+    }
+    .padding{
+      padding: 40px;
+    }
+  }
+  @media screen and (max-width: 468px) {
+    .fixed {
+      position:  fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      border-radius: 0;
+      background-color: #201a47;
+      border-top-left-radius: 30px;
+      border-top-right-radius: 30px;
+      color: white;
+      padding-bottom: 80px;
+      border-top: 3px solid#34314a;
+      padding: 0;
+    }
+    .padding{
+      padding: 40px;
+    }
+    .disable{
+      display: none;
+    }
+    .center{
+      text-align: center;
+      padding-bottom: 30px;
+    }
+    .Image-Box{
+      text-align: center;
+      padding-top: 100px;
+      padding-left: 10px;
+    }
+    .inputs {
+      background-color: #1d1742;
+      border: none;
+      padding: 17px;
+    }
+  }
+
+ 
