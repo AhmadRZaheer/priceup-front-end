@@ -5,8 +5,8 @@ import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 import MenuList from "./MenuList";
-import ChevronLeftOutlinedIcon from '@mui/icons-material/ChevronLeftOutlined';
-
+import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
+import LoginMobile from "../LoginMobile/login";
 
 const Index = () => {
   const boxStyles = {
@@ -28,7 +28,7 @@ const Index = () => {
     position: "relative",
     "&:hover": {
       backgroundColor: { md: "none", xs: "rgba(121, 102, 189, 0.5)" },
-    }
+    },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
@@ -47,12 +47,11 @@ const Index = () => {
           paddingY: { md: 4, sx: 0 },
         }}
       >
-        {!layoutMeasurementsOpen ? (
+        {layoutMeasurementsOpen ? (
           <Box
             sx={{
               width: { md: "70%", sm: "100%", sx: "100%" },
               margin: { md: "auto", xs: 0 },
-              
 
               display: "flex",
               alignItems: { md: "center", xs: "start" },
@@ -62,15 +61,35 @@ const Index = () => {
               p: { md: 2, sx: 0 },
               gap: { md: 4, xs: 0 },
             }}
-          ><Box sx={{ display: { md: "none", xs: "flex" }, zIndex: 1, justifyContent: { md: "center", xs: "start" }, background: "#18133b", width: "100%", color: "white", paddingY: 1.2, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,marginTop:7.6 }}>
+          >
+            <Box
+              sx={{
+                display: { md: "none", xs: "flex" },
+                zIndex: 1,
+                justifyContent: { md: "center", xs: "start" },
+                background: "#18133b",
+                width: "100%",
+                color: "white",
+                paddingY: 1.2,
+                borderBottomLeftRadius: 20,
+                borderBottomRightRadius: 20,
+                marginTop: 7.6,
+              }}
+            >
               <Box sx={{ display: { md: "none", xs: "block" } }}>
-                <ChevronLeftOutlinedIcon sx={{ fontSize: 34, paddingTop: 0.4 }} />
+                <ChevronLeftOutlinedIcon
+                  sx={{ fontSize: 34, paddingTop: 0.4 }}
+                />
               </Box>
               <Typography textAlign={"center"} variant="h4">
                 Create New Qoute
               </Typography>
             </Box>
-            <Typography sx={{ display: { md: "block", xs: "none" } }} textAlign={"center"} variant="h4">
+            <Typography
+              sx={{ display: { md: "block", xs: "none" } }}
+              textAlign={"center"}
+              variant="h4"
+            >
               Create New Qoute
             </Typography>
             <Box
@@ -88,12 +107,22 @@ const Index = () => {
                 display: "flex",
                 flexDirection: "column",
                 paddingTop: { md: 4, xs: 6 },
-                marginTop: { md: 0, xs: -3 }
+                marginTop: { md: 0, xs: -3 },
               }}
             >
               <Box>
-                <Typography sx={{ fontSize: { md: "18px", xs: "18px" }, color: { md: "black", xs: "white" }, paddingBottom: 1 }}>Slect Layout</Typography>
-                <Typography sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}>
+                <Typography
+                  sx={{
+                    fontSize: { md: "18px", xs: "18px" },
+                    color: { md: "black", xs: "white" },
+                    paddingBottom: 1,
+                  }}
+                >
+                  Select Layout
+                </Typography>
+                <Typography
+                  sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+                >
                   Your new project has been created. Invite colleagues to
                   collaborate on this project.
                 </Typography>
@@ -101,7 +130,11 @@ const Index = () => {
               <Grid container gap={2}>
                 {layouts.map((layout) => (
                   <Box key={layout.id} sx={boxStyles}>
-                    <img style={{ position: "relative", zIndex: 1 }} src={layout.imageSrc} alt="Selected" />
+                    <img
+                      style={{ position: "relative", zIndex: 1 }}
+                      src={layout.imageSrc}
+                      alt="Selected"
+                    />
                     <Typography sx={{ font: "18px" }}>
                       {layout.title}
                     </Typography>
@@ -111,34 +144,51 @@ const Index = () => {
                   <Typography sx={{ font: "18px" }}>Custom</Typography>
                 </Box>
               </Grid>
-              <Box sx={{ display: "flex", justifyContent: { md: "end", xs: "center" } }}>
-                <Box sx={{
-                  position: {md: "relative", xs:"fixed"},
-                  bottom: {md: "none", xs: 0},
-                  left: {md: "none", xs: 0},zIndex: 2, width: { md: "150px", sm: "96%", xs: "94%" }, paddingY: { md: 0, xs: 3 },paddingX: { md: 0, sm: 2, xs: 1.4 } , borderTop: { md: "none", xs: "1px solid #404040" }, backgroundColor: { md: "none", xs: "#100D24" }
-                }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: { md: "end", xs: "center" },
+                }}
+              >
+                {/* <Box
+                  sx={{
+                    position: { md: "relative", xs: "fixed" },
+                    bottom: { md: "none", xs: 0 },
+                    left: { md: "none", xs: 0 },
+                    zIndex: 2,
+                    width: { md: "150px", sm: "96%", xs: "94%" },
+                    paddingY: { md: 0, xs: 3 },
+                    paddingX: { md: 0, sm: 2, xs: 1.4 },
+                    borderTop: { md: "none", xs: "1px solid #404040" },
+                    backgroundColor: { md: "none", xs: "#100D24" },
+                  }}
+                >
                   <Button
-                    onClick={() => setClientDetailOpen(true)}
+                    onClick={() => {
+                      setClientDetailOpen(true);
+                      SetlayoutMeasurementsOpen(false);
+                    }}
                     fullWidth
                     variant="contained"
                   >
                     {" "}
                     Next
                   </Button>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
           </Box>
         ) : (
           <LayoutMeasurements />
-          // <LayoutReview />
-          // <MenuList />
-          // <ClientDetailsModel />
         )}
       </Box>
+      {}
+      <LayoutMeasurements />
+      <LayoutReview />
+      {/* <LoginMobile /> */}
       <ClientDetailsModel
         open={clientDetailOpen}
-        handleCancel={() => setClientDetailOpen(false)}
+        handleCancel={() => setClientDetailOpen(true)}
         SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
       />
     </>

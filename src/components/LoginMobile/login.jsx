@@ -4,7 +4,7 @@ import './login.css'
 import { Box } from '@mui/material';
 
 
-const Login = (props) => {
+const LoginMobile = (props) => {
     const [email, setEmail] = useState('');
     const [pass, setPass] = useState('');
 
@@ -39,4 +39,4 @@ const Login = (props) => {
   )
 }
 
-export default Login;
+export default LoginMobile;
