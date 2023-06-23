@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
@@ -9,11 +9,14 @@ import { Box, IconButton } from "@mui/material";
 import BasicModal from "../Model/Model";
 import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/Hooks";
 const FinishesTable = () => {
-  const { data: finishesData, error: finishesError } = useFetchDataFinishes();
-
-  const { handleDelete: deleteFinish, error: finishDeleteError } =
-    useDeleteFinishes();
-
+  const { data: finishesData, refetch: finishesRefetch } =
+    useFetchDataFinishes();
+  const {
+    mutate: deleteFinish,
+    error: finishDeleteError,
+    isSuccess: deleteSuccess,
+  } = useDeleteFinishes();
+  console.log(finishesData, "data");
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -30,9 +33,13 @@ const FinishesTable = () => {
   };
 
   const handleFinishDelete = (id) => {
-    deleteFinish("finishes", id);
+    deleteFinish(id);
   };
-
+  useEffect(() => {
+    if (deleteSuccess) {
+      finishesRefetch();
+    }
+  }, [deleteSuccess]);
   const actionColumn = [
     {
       field: " ",
@@ -63,25 +70,24 @@ const FinishesTable = () => {
       },
     },
   ];
-  if (finishesError) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
+  // if (finishesError) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
 
-          width: "100%",
-          height: "100vh",
-          // background: "red",
-          color: "red",
-        }}
-      >
-        Error: {finishesError}
-      </div>
-    );
-  }
-
+  //         width: "100%",
+  //         height: "100vh",
+  //         // background: "red",
+  //         color: "red",
+  //       }}
+  //     >
+  //       Error: {finishesError}
+  //     </div>
+  //   );
+  // }
   return (
     <>
       <div className="page-title">
@@ -128,9 +134,14 @@ const FinishesTable = () => {
         </div>
       </Box>
 
-      <BasicModal open={open} close={handleClose} data={edit} isEdit={isEdit} />
+      <BasicModal
+        open={open}
+        close={handleClose}
+        data={edit}
+        isEdit={isEdit}
+        finishesRefetch={finishesRefetch}
+      />
     </>
   );
 };
-
 export default FinishesTable;

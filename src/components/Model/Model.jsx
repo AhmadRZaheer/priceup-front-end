@@ -10,10 +10,8 @@ import { useState } from "react";
 import { FormControl, IconButton, TextField } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-import { useDispatch } from "react-redux";
-import axios from "axios";
-import { backendURL, createSlug } from "../../utilities/common";
-import { parseJwt } from "../ProtectedRoute/AuthVerify";
+
+import { useCreateFinish, useEditFinish } from "../../utilities/Hooks";
 
 const style = {
   position: "absolute",
@@ -29,8 +27,14 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({ open, close, isEdit, data }) {
-  const dispatch = useDispatch();
+export default function BasicModal({
+  open,
+  close,
+  isEdit,
+  data,
+  finishesRefetch,
+}) {
+  console.log(data, "data not id");
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -40,79 +44,59 @@ export default function BasicModal({ open, close, isEdit, data }) {
   };
 
   const { getInputProps } = useDropzone({ onDrop });
+  // hook for add
+  const {
+    mutate: addFinish,
+    isLoading: LoadingForAdd,
+    isError: ErrorForAdd,
+    isSuccess: CreatedSuccessfully,
+  } = useCreateFinish();
+  // hook for edit
+  const {
+    mutate: editFinish,
+    isLoading: LoadingForEdit,
+    isError: ErrorForEdit,
+    isSuccess: SuccessForEdit,
+  } = useEditFinish();
 
-  const handleCreate = (props) => {
-    const token = localStorage.getItem("token");
-    const slug = createSlug(props.hardwareLabel);
-    const docodedToken = parseJwt(token);
-    console.log(docodedToken, "parseJwtparseJwt");
+  React.useEffect(() => {
+    if (CreatedSuccessfully || SuccessForEdit) {
+      finishesRefetch();
+    }
+  }, [CreatedSuccessfully, SuccessForEdit]);
 
-    axios
-      .post(
-        `${backendURL}/finishes/save`,
-        {
-          name: props.hardwareLabel,
-          company_id: docodedToken?.company_id,
-          thickness: "both",
-          slug: slug,
-          holesNeeded: props.thickness,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response, "put resp");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
-
-    setSelectedImage(null);
+  const handleCreateClick = (props) => {
+    console.log(props, "props for creat hook in model");
+    addFinish(props);
   };
-  const handleEdit = (updatedHardware) => {
-    const token = localStorage.getItem("token");
 
-    axios
-      .put(
-        `${backendURL}/finishes/${data?._id}`,
-        {
-          name: updatedHardware?.hardwareLabel,
-          holesNeeded: updatedHardware?.thickness,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      )
-      .then((response) => {
-        console.log(response, "put resp");
-      })
-      .catch((error) => {
-        console.error("Update failed", error);
-      });
-    setSelectedImage(null);
+  const handleEditClick = (props) => {
+    console.log(props, "props for edit to refetch");
+    const id = data;
+    console.log(id, "id2 for edit hook");
+    editFinish(props, id);
   };
 
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
-    image: Yup.mixed()
-      .required("Image is required")
-      .test(
-        "fileType",
-        "Only image files are allowed (JPEG, PNG, GIF)",
-        (value) => {
-          if (value) {
-            const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-            return supportedFormats.includes(value.type);
-          }
-          return false;
-        }
-      )
-      .test(
-        "fileSize",
-        "Image size should be less than 5MB",
-        (value) => value && value.size <= 5 * 1024 * 1024
-      ),
+    image: Yup.mixed(),
+    // .required("Image is required")
+    // .test(
+    //   "fileType",
+    //   "Only image files are allowed (JPEG, PNG, GIF)",
+    //   (value) => {
+    //     if (value) {
+    //       const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
+    //       return supportedFormats.includes(value.type);
+    //     }
+    //     return false;
+    //   }
+    // )
+    // .test(
+    //   "fileSize",
+    //   "Image size should be less than 5MB",
+    //   (value) => value && value.size <= 5 * 1024 * 1024
+    // ),
     thickness: Yup.string().required("Thickness is required"),
   });
 
@@ -122,7 +106,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
           hardwareLabel: data?.name,
           image: "",
           thickness: data?.holesNeeded,
-          id: data?.id,
+          id: data?._id,
         }
       : {
           hardwareLabel: "",
@@ -133,7 +117,7 @@ export default function BasicModal({ open, close, isEdit, data }) {
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       {
-        isEdit ? handleEdit(values) : handleCreate(values);
+        isEdit ? handleEditClick(values) : handleCreateClick(values);
 
         resetForm();
       }

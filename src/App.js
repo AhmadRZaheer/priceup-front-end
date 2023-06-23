@@ -16,13 +16,13 @@ function App() {
   }, [dispatch]);
   return (
     <div className="App">
-      {/* <QueryClientProvider client={queryClient}> */}
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
 
           <AppRoutes />
           <AuthVerify logOut={logOut} />
         </BrowserRouter>
-      {/* </QueryClientProvider> */}
+      </QueryClientProvider>
     </div>
   );
 }
