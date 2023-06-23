@@ -2,7 +2,7 @@ import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 import door from "../../Assets/door.png";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-const LayoutMeasurements = () => {
+const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
   return (
     <>
       <Box
@@ -111,8 +111,11 @@ const LayoutMeasurements = () => {
                 borderTopLeftRadius: { md: 0, xs: 30 },
                 borderTopRightRadius: { md: 0, xs: 30 },
                 borderTop: { md: 0, xs: "1px solid #667085" },
-                padding: { md: 0, xs: 2 },
+                paddingX: { md: 0, xs: 2 },
                 // background: "red",
+                paddingTop: 2,
+
+                paddingBottom: 8,
               }}
             >
               <Box
@@ -228,7 +231,7 @@ const LayoutMeasurements = () => {
                 order: { md: 2, xs: -1 },
               }}
             >
-              <img src={door} alt="Selected" />
+              <img width="150px" src={door} alt="Selected" />
             </Box>
           </Box>
           <Box
@@ -238,7 +241,7 @@ const LayoutMeasurements = () => {
               maxWidth: "100%",
             }}
           >
-            <Box sx={{ display: { md: "block", xs: "none" }, width: "150px" }}>
+            {/* <Box sx={{ display: { md: "block", xs: "none" }, width: "150px" }}>
               <Button
                 fullWidth
                 sx={{
@@ -250,20 +253,26 @@ const LayoutMeasurements = () => {
               >
                 Reset
               </Button>
-            </Box>
+            </Box> */}
+
             <Box
               sx={{
-                display: "flex",
-                gap: 4,
-                justifyContent: { md: "end", xs: "center" },
-                width: { md: "50%", xs: "100%" },
-                paddingBottom: { md: 0, xs: 2 },
-                paddingX: { md: 0, xs: 3 },
+                display: { md: "none", xs: "flex" },
+                gap: 2,
+                justifyContent: "center",
+                width: "92%",
+                paddingX: 2,
+                paddingY: 2,
+                position: "fixed",
+                bottom: 0,
+                backgroundColor: "#100d24",
+                borderTop: "1px solid #423f57",
               }}
             >
               <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                 <Button
                   fullWidth
+                  onClick={() => setHandleEstimatesPages("layout")}
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                     color: "#344054",
@@ -272,11 +281,16 @@ const LayoutMeasurements = () => {
                     backgroundColor: { md: "transparent", xs: "white" },
                   }}
                 >
+                  {" "}
                   Back
                 </Button>
               </Box>
               <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                <Button fullWidth variant="contained">
+                <Button
+                  fullWidth
+                  variant="contained"
+                  onClick={() => setHandleEstimatesPages("review")}
+                >
                   {" "}
                   Next
                 </Button>

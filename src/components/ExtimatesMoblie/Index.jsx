@@ -7,10 +7,11 @@ import LayoutReview from "./LayoutReview";
 import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import LoginMobile from "../LoginMobile/login";
+import Summary from "./Summary";
 
 const Index = () => {
   const boxStyles = {
-    minHeight: "182px",
+    // minHeight: "182px",
     minWidth: { md: "180px", xs: "140px" },
     margin: "auto",
     borderRadius: "12px",
@@ -31,7 +32,9 @@ const Index = () => {
     },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
+  const [handleEstimatesPages, setHandleEstimatesPages] = useState("layout");
+
+  console.log(handleEstimatesPages, "handleEstimatesPageshandleEstimatesPages");
 
   return (
     <>
@@ -42,12 +45,12 @@ const Index = () => {
           alignItems: "center",
           flexDirection: "column",
           // background: "yellow",
-          height: "93.3vh",
+          // height: "93.3vh",
           overflowY: "scroll",
           paddingY: { md: 4, sx: 0 },
         }}
       >
-        {layoutMeasurementsOpen ? (
+        {handleEstimatesPages == "layout" && (
           <Box
             sx={{
               width: { md: "70%", sm: "100%", sx: "100%" },
@@ -150,7 +153,7 @@ const Index = () => {
                   justifyContent: { md: "end", xs: "center" },
                 }}
               >
-                {/* <Box
+                <Box
                   sx={{
                     position: { md: "relative", xs: "fixed" },
                     bottom: { md: "none", xs: 0 },
@@ -165,8 +168,7 @@ const Index = () => {
                 >
                   <Button
                     onClick={() => {
-                      setClientDetailOpen(true);
-                      SetlayoutMeasurementsOpen(false);
+                      setHandleEstimatesPages("measurements");
                     }}
                     fullWidth
                     variant="contained"
@@ -174,22 +176,29 @@ const Index = () => {
                     {" "}
                     Next
                   </Button>
-                </Box> */}
+                </Box>
               </Box>
             </Box>
           </Box>
-        ) : (
-          <LayoutMeasurements />
         )}
       </Box>
-      {}
-      <LayoutMeasurements />
-      <LayoutReview />
+      {handleEstimatesPages == "measurements" && (
+        <LayoutMeasurements setHandleEstimatesPages={setHandleEstimatesPages} />
+      )}
+      {handleEstimatesPages == "review" && (
+        <LayoutReview setHandleEstimatesPages={setHandleEstimatesPages} />
+      )}
+      {handleEstimatesPages == "summary" && (
+        <Summary
+          setHandleEstimatesPages={setHandleEstimatesPages}
+          setClientDetailOpen={setClientDetailOpen}
+        />
+      )}
+
       {/* <LoginMobile /> */}
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(true)}
-        SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
       />
     </>
   );

@@ -3,16 +3,19 @@ import door from "../../Assets/estimates/layout1.svg";
 
 import MenuList from "./MenuList";
 import { menuOptions } from "../../data/data";
-import { AddCircleOutline, ChevronLeftOutlined, RemoveCircleOutline } from "@mui/icons-material";
+import {
+  AddCircleOutline,
+  ChevronLeftOutlined,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
 
-const LayoutReview = () => {
+const LayoutReview = ({ setHandleEstimatesPages }) => {
   return (
     <>
       <Box
         sx={{
           width: { md: "70%", sm: "100%", sx: "100%" },
           margin: { md: "auto", xs: 0 },
-          
 
           display: "flex",
           alignItems: { md: "center", xs: "start" },
@@ -23,15 +26,32 @@ const LayoutReview = () => {
           gap: { md: 4, xs: 0 },
         }}
       >
-        <Box sx={{ display: { md: "none", xs: "flex" }, zIndex: 1,justifyContent: { md: "center", xs: "start" }, background: "#18133b", width: "100%", color: "white", paddingY: 1.2, borderBottomLeftRadius: 20, borderBottomRightRadius: 20,marginTop:7.6 }}>
-              <Box sx={{ display: { md: "none", xs: "block" } }}>
-                <ChevronLeftOutlined sx={{ fontSize: 34, paddingTop: 0.4 }} />
-              </Box>
-              <Typography textAlign={"center"} variant="h4">
-                Create New Qoute
-              </Typography>
-            </Box>
-        <Typography sx={{ display: { md: "block", xs: "none" } }}  textAlign={"center"} variant="h4">
+        <Box
+          sx={{
+            display: { md: "none", xs: "flex" },
+            zIndex: 1,
+            justifyContent: { md: "center", xs: "start" },
+            background: "#18133b",
+            width: "100%",
+            color: "white",
+            paddingY: 1.2,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            marginTop: 7.6,
+          }}
+        >
+          <Box sx={{ display: { md: "none", xs: "block" } }}>
+            <ChevronLeftOutlined sx={{ fontSize: 34, paddingTop: 0.4 }} />
+          </Box>
+          <Typography textAlign={"center"} variant="h4">
+            Create New Qoute
+          </Typography>
+        </Box>
+        <Typography
+          sx={{ display: { md: "block", xs: "none" } }}
+          textAlign={"center"}
+          variant="h4"
+        >
           Create New Qoute
         </Typography>
         <Box
@@ -42,19 +62,29 @@ const LayoutReview = () => {
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             border: { md: "1px solid #EAECF0", xs: "none" },
-            paddingX: {md:2, xs: 0},
+            paddingX: { md: 2, xs: 0 },
             paddingY: 4,
             rowGap: 4,
             background: { md: "white", xs: "#100D24" },
             display: "flex",
             flexDirection: "column",
             paddingTop: { md: 0, xs: 6 },
-            marginTop: { md: 0, xs: -3 }
+            marginTop: { md: 0, xs: -3 },
           }}
         >
-          <Box sx={{paddingLeft: 1.5}}>
-            <Typography sx={{ fontSize: { md: "18px", xs: "18px" }, color: { md: "black", xs: "white" }, paddingBottom: 1 }}>Review</Typography>
-            <Typography sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}>
+          <Box sx={{ paddingLeft: 1.5 }}>
+            <Typography
+              sx={{
+                fontSize: { md: "18px", xs: "18px" },
+                color: { md: "black", xs: "white" },
+                paddingBottom: 1,
+              }}
+            >
+              Review
+            </Typography>
+            <Typography
+              sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+            >
               Your new project has been created. Invite colleagues to
               collaborate on this project.
             </Typography>
@@ -62,14 +92,14 @@ const LayoutReview = () => {
           <Box
             sx={{
               display: "flex",
-              width: {md:"96.5%", xs: "94%"},
-              paddingY: {md:4,xs: 1 },
-              paddingX: {md:2, xs: 0},
-              background: {md:"rgba(217, 217, 217, 0.3)", xs: "#100D24"},
+              width: { md: "96.5%", xs: "94%" },
+              paddingY: { md: 4, xs: 1 },
+              paddingX: { md: 2, xs: 0 },
+              background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
               borderRadius: "8px",
               justifyContent: "space-between",
-              flexDirection: {md: "row", xs:"column"},
+              flexDirection: { md: "row", xs: "column" },
             }}
           >
             {/* LeftSide */}
@@ -77,7 +107,7 @@ const LayoutReview = () => {
             <Box
               sx={{
                 display: "flex",
-                width: {md:"40.5%", xs: "100%"},
+                width: { md: "40.5%", xs: "100%" },
                 flexDirection: "column",
 
                 // background: "red",
@@ -98,8 +128,11 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
-                    color: {md: "black", xs: "white"}
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
+                    color: { md: "black", xs: "white" },
                   }}
                 >
                   <MenuList
@@ -113,7 +146,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={"Handles"} />
@@ -122,7 +158,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -136,7 +172,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={" Hinges"} />
@@ -145,7 +184,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -159,8 +198,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
-                    
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={"Mounting"} />
@@ -171,7 +212,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={" Glass type"} />
@@ -180,7 +224,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -194,7 +238,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={"Bars"} />
@@ -203,7 +250,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -217,7 +264,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={"Header"} />
@@ -226,7 +276,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -240,7 +290,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList
@@ -254,7 +307,10 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                   }}
                 >
                   <MenuList menuOptions={menuOptions} title={"Add ons:"} />
@@ -263,7 +319,7 @@ const LayoutReview = () => {
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      color: {md: "#000000  ", xs: "white"}
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
                     <AddCircleOutline sx={{ color: "#98A2B3" }} />
@@ -278,10 +334,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>1" Holes</Typography>
@@ -294,7 +353,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -303,10 +370,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>1" Holes</Typography>
@@ -319,7 +389,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -328,10 +406,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Hinges Cut</Typography>
@@ -344,7 +425,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -353,10 +442,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>ClampCut</Typography>
@@ -369,7 +461,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -378,10 +478,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Notch</Typography>
@@ -393,8 +496,16 @@ const LayoutReview = () => {
                       width: "120px",
                       padddingY: 4,
                     }}
-                  > 
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                  >
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -403,10 +514,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Outages</Typography>
@@ -419,7 +533,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -428,10 +550,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Mitre</Typography>
@@ -444,7 +569,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -453,10 +586,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Polish</Typography>
@@ -469,7 +605,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -478,10 +622,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>People:</Typography>
@@ -494,7 +641,15 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
                 <Box
@@ -503,10 +658,13 @@ const LayoutReview = () => {
                     alignItems: "center",
                     // gap: 4,
                     justifyContent: "space-between",
-                    borderBottom: {md: "2px solid #D0D5DD", xs: "2px solid #423f57"},
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: {md: "#000000  ", xs: "white"}
+                    color: { md: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Hours:</Typography>
@@ -519,13 +677,21 @@ const LayoutReview = () => {
                       padddingY: 4,
                     }}
                   >
-                    <TextField sx={{border: {md: "none", xs: "2px solid #423f57"}, borderRadius: {md: 0, xs: 2}, color: {md: "black", xs: "white"}}} variant="outlined" size="small" />
+                    <TextField
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                      }}
+                      variant="outlined"
+                      size="small"
+                    />
                   </Box>
                 </Box>{" "}
               </Box>
             </Box>
             {/* rightSide */}
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -593,32 +759,51 @@ const LayoutReview = () => {
                   <Typography variant="h6">$895</Typography>
                 </Box>{" "}
               </Box>
-            </Box>
+            </Box> */}
           </Box>
-          
         </Box>
-        <Box sx={{ display: {md: "none", xs:"flex"}, gap: 2, justifyContent:  "center", width: "92%" , paddingX: 2,paddingY: 2,  position: "fixed", bottom: 0, backgroundColor: "#100d24", borderTop: "1px solid #423f57"}}>
-              <Box sx={{ width: {md:"150px", xs: "50%"} }}>
-                <Button
-                  fullWidth
-                  sx={{
-                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
-                    textTransform: "initial",
-                    border: "1px solid #D0D5DD",
-                    backgroundColor: {md: "transparent", xs: "white"}
-                  }}
-                >
-                  Back
-                </Button>
-              </Box>
-              <Box sx={{ width: {md:"150px", xs: "50%"} }}>
-                <Button fullWidth variant="contained">
-                  {" "}
-                  Next
-                </Button>
-              </Box>
-            </Box>
+        <Box
+          sx={{
+            display: { md: "none", xs: "flex" },
+            gap: 2,
+            justifyContent: "center",
+            width: "92%",
+            paddingX: 2,
+            paddingY: 2,
+            position: "fixed",
+            bottom: 0,
+            backgroundColor: "#100d24",
+            borderTop: "1px solid #423f57",
+          }}
+        >
+          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+            <Button
+              fullWidth
+              onClick={() => setHandleEstimatesPages("measurements")}
+              sx={{
+                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                color: "#344054",
+                textTransform: "initial",
+                border: "1px solid #D0D5DD",
+                backgroundColor: { md: "transparent", xs: "white" },
+              }}
+            >
+              {" "}
+              Back
+            </Button>
+          </Box>
+
+          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setHandleEstimatesPages("summary")}
+            >
+              {" "}
+              Next
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </>
   );
