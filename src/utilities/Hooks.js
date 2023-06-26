@@ -36,7 +36,7 @@ export const useDeleteFinishes = () => {
       const response = await axios.delete(`${backendURL}/finishes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "delete response");
+      // console.log(response, "delete response");
       if (response.data.code === 200) {
         return response.data.data;
       } else {

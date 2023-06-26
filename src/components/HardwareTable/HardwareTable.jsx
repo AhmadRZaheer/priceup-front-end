@@ -16,12 +16,11 @@ import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
-import { items } from "../../data/data";
-import BasicModal from "../Model/Model";
 import HardWareComponent from "./HardWareComponent";
 import HardWareComponentHeader from "./HardwareComponentHeader";
 import axios from "axios";
 import { backendURL } from "../../utilities/common";
+import AddEditModel from "../Model/AddEdit";
 
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
@@ -107,7 +106,7 @@ const HardwareTable = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${backendURL}/hardwareCategory`);
-        console.log(response, "response form api");
+        // console.log(response, "response form api");
 
         if (response.status === 200) {
           setHeaderTitle(response.data.data);
@@ -153,7 +152,7 @@ const HardwareTable = () => {
           </div>
         </div>
       </Box>
-      <BasicModal
+      <AddEditModel
         open={open}
         close={handleClose}
         handleHeaderClick={handleHeaderClick}

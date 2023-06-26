@@ -1,20 +1,28 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, IconButton } from "@mui/material";
-import BasicModal from "../Model/Model";
+import { Box, CircularProgress, IconButton } from "@mui/material";
+import AddEditModel from "../Model/AddEdit";
 import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/Hooks";
+import Snackbars from "../Model/SnackBar";
 const FinishesTable = () => {
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  console.log(snackbar, "snackbar snackbar");
   const { data: finishesData, refetch: finishesRefetch } =
     useFetchDataFinishes();
   const {
     mutate: deleteFinish,
     error: finishDeleteError,
     isSuccess: deleteSuccess,
+    isLoading: loaderForDelete,
   } = useDeleteFinishes();
   console.log(finishesData, "data");
   const [open, setOpen] = React.useState(false);
@@ -35,9 +43,11 @@ const FinishesTable = () => {
   const handleFinishDelete = (id) => {
     deleteFinish(id);
   };
+
   useEffect(() => {
     if (deleteSuccess) {
       finishesRefetch();
+      showSnackbar("Finish is Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
   const actionColumn = [
@@ -57,7 +67,11 @@ const FinishesTable = () => {
               className="deleteButton"
               onClick={() => handleFinishDelete(id)}
             >
-              <DeleteIcon />
+              {!loaderForDelete ? (
+                <DeleteIcon />
+              ) : (
+                <CircularProgress size={24} />
+              )}
             </div>
             <div
               className="viewButton"
@@ -70,24 +84,20 @@ const FinishesTable = () => {
       },
     },
   ];
-  // if (finishesError) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
 
-  //         width: "100%",
-  //         height: "100vh",
-  //         // background: "red",
-  //         color: "red",
-  //       }}
-  //     >
-  //       Error: {finishesError}
-  //     </div>
-  //   );
-  // }
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
   return (
     <>
       <div className="page-title">
@@ -134,12 +144,20 @@ const FinishesTable = () => {
         </div>
       </Box>
 
-      <BasicModal
+      <AddEditModel
         open={open}
         close={handleClose}
         data={edit}
         isEdit={isEdit}
         finishesRefetch={finishesRefetch}
+        showSnackbar={showSnackbar}
+      />
+
+      <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
       />
     </>
   );

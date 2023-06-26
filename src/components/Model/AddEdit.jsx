@@ -7,11 +7,17 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 
 import { useState } from "react";
-import { FormControl, IconButton, TextField } from "@mui/material";
+import {
+  CircularProgress,
+  FormControl,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 
 import { useCreateFinish, useEditFinish } from "../../utilities/Hooks";
+import Snackbars from "./SnackBar";
 
 const style = {
   position: "absolute",
@@ -27,14 +33,16 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal({
+export default function AddEditModel({
   open,
   close,
   isEdit,
   data,
   finishesRefetch,
+  showSnackbar,
 }) {
-  console.log(data, "data not id");
+  // console.log(data, "data not id");
+  // const [openSnackBarAlert, setOpenSnakbarAlert] = React.useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -59,9 +67,27 @@ export default function BasicModal({
     isSuccess: SuccessForEdit,
   } = useEditFinish();
 
+  // React.useEffect(() => {
+  //   if (CreatedSuccessfully || SuccessForEdit) {
+  //     finishesRefetch();
+  //     if (CreatedSuccessfully) {
+  //       showSnackbar("Created Successfully ", "success");
+  //     }
+  //     showSnackbar("UpDated Successfully ", "success");
+  //   }
+  // }, [CreatedSuccessfully, SuccessForEdit]);
+
   React.useEffect(() => {
-    if (CreatedSuccessfully || SuccessForEdit) {
+    if (CreatedSuccessfully) {
       finishesRefetch();
+      showSnackbar("Created Successfully ", "success");
+      close();
+    }
+
+    if (SuccessForEdit) {
+      finishesRefetch();
+      showSnackbar("Updated Successfully ", "success");
+      close();
     }
   }, [CreatedSuccessfully, SuccessForEdit]);
 
@@ -73,7 +99,7 @@ export default function BasicModal({
   const handleEditClick = (props) => {
     console.log(props, "props for edit to refetch");
     const id = data;
-    console.log(id, "id2 for edit hook");
+    // console.log(id, "id2 for edit hook");
     editFinish(props, id);
   };
 
@@ -121,8 +147,6 @@ export default function BasicModal({
 
         resetForm();
       }
-
-      close();
     },
   });
 
@@ -130,7 +154,7 @@ export default function BasicModal({
     <div>
       <Modal
         open={open}
-        onClose={close}
+        // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -222,8 +246,30 @@ export default function BasicModal({
             </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>
-            <Button fullWidth variant="contained">
+            {/* <Button fullWidth variant="contained">
               {isEdit ? "Update" : "Create"}
+            </Button> */}
+
+            {/* <Button
+              fullWidth
+              variant="contained"
+              disabled={LoadingForAdd || LoadingForEdit}
+            >
+              {isEdit ? "Update" : "Create"}
+            </Button> */}
+
+            <Button
+              fullWidth
+              variant="contained"
+              disabled={LoadingForAdd || LoadingForEdit}
+            >
+              {LoadingForAdd || LoadingForEdit ? (
+                <CircularProgress size={24} /> 
+              ) : isEdit ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Box>
         </Box>

@@ -5,23 +5,23 @@ import axios from "axios";
 import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import Snackbars from "../Model/SnackBar";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
-  // const [pass, setPass] = useState("");
-  // const [username, setUsername] = useState("");
+
   const [password, setPassword] = useState("");
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log(email);
-  // };
-  const navigate = useNavigate();
+
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+
   const dispatch = useDispatch();
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("inside login");
     // try {
     axios
       .post(`${backendURL}/users/login`, {
@@ -30,23 +30,32 @@ const Login = (props) => {
       })
       .then((response) => {
         localStorage.setItem("email", email);
+
         console.log(response.data, "response");
         dispatch(loginHandler(response.data.data));
-        // navigate("/estimates");
         window.location.href = "/estimates";
       })
       .catch((error) => {
-        console.error("Login failed", error);
+        const errorMessage =
+          error.response?.data?.message || "Login failed. Please try again.";
+        console.log(error.response.data, "erorrr");
+        showSnackbar(errorMessage, "error");
       });
-    // const token = response.data.data.token;
+  };
 
-    //   localStorage.setItem("email", email);
-    //   console.log(response.data, "response");
-    //   // dispatch(loginHandler(response.data));
-    //   // window.location.href = "/estimates";
-    // } catch (error) {
-    //   console.error("Login failed", error);
-    // }
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
   };
   return (
     <>
@@ -99,6 +108,13 @@ const Login = (props) => {
           </button>
         </div>
       </div>
+
+      <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
+      />
     </>
   );
 };

@@ -8,11 +8,11 @@ const AppRoutes = () => {
 
   if (!token || token === "undefined") {
     // Token is empty or undefined
-    console.log("UnAuthenticatedRoutes");
+    // console.log("UnAuthenticatedRoutes");
     return <UnAuthenticatedRoutes />;
   } else {
     // Token has a value
-    console.log(token, "token token");
+    // console.log(token, "token token");
     return <AuthenticatedRoutes />;
   }
 };

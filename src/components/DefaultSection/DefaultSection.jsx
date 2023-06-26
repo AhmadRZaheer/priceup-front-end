@@ -15,10 +15,10 @@ import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
 import Header from "../TableHeader/TableHeader";
 import { categories } from "../../data/data";
-import BasicModal from "../Model/Model";
 
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import DefaultComponent from "./DefaultComponent";
+import AddEditModel from "../Model/AddEdit";
 
 const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
@@ -122,7 +122,7 @@ const DefaultSection = () => {
           )}
         </div>
       </Box>
-      <BasicModal
+      <AddEditModel
         open={open}
         close={handleClose}
         handleHeaderClick={handleHeaderClick}
