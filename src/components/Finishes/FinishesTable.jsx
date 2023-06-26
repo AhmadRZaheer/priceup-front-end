@@ -28,6 +28,7 @@ const FinishesTable = () => {
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
+  const [matchingId, setMatchingId] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -42,6 +43,7 @@ const FinishesTable = () => {
 
   const handleFinishDelete = (id) => {
     deleteFinish(id);
+    setMatchingId(id);
   };
 
   useEffect(() => {
@@ -61,16 +63,17 @@ const FinishesTable = () => {
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;
+        const isMatchingId = id === matchingId;
         return (
           <div className="cellAction">
             <div
               className="deleteButton"
               onClick={() => handleFinishDelete(id)}
             >
-              {!loaderForDelete ? (
-                <DeleteIcon />
+              {isMatchingId && loaderForDelete ? (
+                <CircularProgress size={24} color="warning" />
               ) : (
-                <CircularProgress size={24} />
+                <DeleteIcon />
               )}
             </div>
             <div
@@ -112,7 +115,7 @@ const FinishesTable = () => {
             paddingRight: "10px",
           }}
         >
-          splash-logo.svg{" "}
+        
           <div
             style={{
               width: "250px",
