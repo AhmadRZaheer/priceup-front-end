@@ -16,7 +16,10 @@ import {
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 
-import { useCreateFinish, useEditFinish } from "../../utilities/Hooks";
+import {
+  useCreateFinish,
+  useEditFinish,
+} from "../../utilities/ApiHooks/Finishes";
 import Snackbars from "./SnackBar";
 
 const style = {
@@ -78,7 +81,7 @@ export default function AddEditModel({
   // }, [CreatedSuccessfully, SuccessForEdit]);
 
   React.useEffect(() => {
-    if (CreatedSuccessfully) {
+    if (CreatedSuccessfully ) {
       finishesRefetch();
       showSnackbar("Created Successfully ", "success");
       close();
@@ -246,25 +249,13 @@ export default function AddEditModel({
             </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>
-            {/* <Button fullWidth variant="contained">
-              {isEdit ? "Update" : "Create"}
-            </Button> */}
-
-            {/* <Button
-              fullWidth
-              variant="contained"
-              disabled={LoadingForAdd || LoadingForEdit}
-            >
-              {isEdit ? "Update" : "Create"}
-            </Button> */}
-
             <Button
               fullWidth
               variant="contained"
               disabled={LoadingForAdd || LoadingForEdit}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24} /> 
+                <CircularProgress size={24} />
               ) : isEdit ? (
                 "Update"
               ) : (

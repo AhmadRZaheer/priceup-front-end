@@ -7,7 +7,10 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import AddEditModel from "../Model/AddEdit";
-import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/Hooks";
+import {
+  useDeleteFinishes,
+  useFetchDataFinishes,
+} from "../../utilities/ApiHooks/Finishes";
 import Snackbars from "../Model/SnackBar";
 const FinishesTable = () => {
   const [snackbar, setSnackbar] = useState({
@@ -115,7 +118,6 @@ const FinishesTable = () => {
             paddingRight: "10px",
           }}
         >
-        
           <div
             style={{
               width: "250px",

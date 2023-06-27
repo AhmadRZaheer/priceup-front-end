@@ -21,6 +21,7 @@ import HardWareComponentHeader from "./HardwareComponentHeader";
 import axios from "axios";
 import { backendURL } from "../../utilities/common";
 import AddEditModel from "../Model/AddEdit";
+import { useFetchDatahardwareCategory } from "../../utilities/ApiHooks/Hardware";
 
 const HardwareTable = () => {
   const hardwareData = useSelector((state) => state.hardware);
@@ -99,32 +100,10 @@ const HardwareTable = () => {
   ];
 
   //get header data from api
-  const [headerTitle, setHeaderTitle] = React.useState([]);
-  const [hardwareDetail, setHardwareDetail] = React.useState([]);
-  const [error, setError] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${backendURL}/hardwareCategory`);
-        // console.log(response, "response form api");
 
-        if (response.status === 200) {
-          setHeaderTitle(response.data.data);
-        } else {
-          setError("An error occurred while fetching the data.");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching the data.");
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  // console.log(headerTitle, "data form api");
-  // console.log(showNext, "showNext form api");
-
+  const { data: hardwareCategoryData, refetch: hardwareCategoryRefetch } =
+    useFetchDatahardwareCategory();
+  console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
       <div className="page-title">
@@ -135,9 +114,11 @@ const HardwareTable = () => {
           marginLeft: "15px",
           marginRight: "15px",
           background: "rgb(232, 232, 232)",
+          // width: "80vw",
+          // height: "45px",
         }}
       >
-        <Header types={headerTitle} showMore={SetShowNext} />
+        <Header types={hardwareCategoryData} showMore={SetShowNext} />
       </div>
       <Box
         sx={{

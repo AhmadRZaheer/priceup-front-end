@@ -2,6 +2,7 @@ import { Add } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
 const DefaultComponentHeader = ({ type }) => {
+  console.log(type, "type in default component header");
   return (
     <>
       <div

@@ -22,7 +22,7 @@ const TableHeader = ({ showMore, types }) => {
 
         minHeight: "50px",
         minWidth: "110px",
-        // backgroundColor: "rgb(232, 232, 232)",
+        backgroundColor: "rgb(232, 232, 232)",
         // backgroundColor: "#fff",
 
         display: "flex",

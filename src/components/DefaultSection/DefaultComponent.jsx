@@ -24,6 +24,7 @@ import {
 } from "../../data/data";
 import { backendURL } from "../../utilities/common";
 import axios from "axios";
+import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 const validationSchema = Yup.object().shape({
   image: Yup.mixed()
     .required("Image is required")
@@ -181,31 +182,33 @@ const DefaultComponent = () => {
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const [layouts, setLayouts] = React.useState([]);
+  // const [layouts, setLayouts] = React.useState([]);
 
-  const [error, setError] = useState(null);
+  // const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${backendURL}/layouts`);
-        // console.log(response, "response form api");
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(`${backendURL}/layouts`);
+  //       // console.log(response, "response form api");
 
-        if (response.status === 200) {
-          setLayouts(response.data.data);
-        } else {
-          setError("An error occurred while fetching the data.");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching the data.");
-        console.error(error);
-      }
-    };
+  //       if (response.status === 200) {
+  //         setLayouts(response.data.data);
+  //       } else {
+  //         setError("An error occurred while fetching the data.");
+  //       }
+  //     } catch (error) {
+  //       setError("An error occurred while fetching the data.");
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
-  console.log(layouts, "layouts form api");
+  const { data: defaultData, refetch: defaultRefetch } = useFetchDataDefault();
+
+  console.log(defaultData, "defaultData from api");
 
   return (
     <form type="submit">
@@ -218,98 +221,101 @@ const DefaultComponent = () => {
         }}
       >
         {/* image Section*/}
-        <Box>
-          <Box
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 14,
-              alignContent: "center",
-              paddingTop: 15,
-              paddingBottom: 15,
-              paddingLeft: "10px",
-              paddingRight: "10px",
-            }}
-          >
-            <Box
-              style={{
-                width: "380px",
-                paddingX: 10,
-              }}
-            >
+        {defaultData?.map((layouts) => {
+          return (
+            <Box>
               <Box
-                sx={{
-                  width: "300px",
-                  border: "1px solid #D0D5DD",
-                  borderRadius: 2,
-                  padding: 1,
-                  marginX: 1,
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 14,
+                  alignContent: "center",
+                  paddingTop: 15,
+                  paddingBottom: 15,
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
                 }}
               >
-                {/* Door & Notched panel */}
-                {layouts[0]?.name}
-              </Box>
-            </Box>
-            <Box
-              style={{
-                width: "380px",
-                paddingX: 10,
-              }}
-            >
-              <Box
-                sx={{
-                  width: "315px",
-                  borderRadius: 2,
-                  marginX: 1,
-                }}
-              >
-                <Box>
-                  <input
-                    accept="image/*"
-                    id="image-input"
-                    type="file"
-                    onChange={handleImageChange}
-                    style={{ display: "none" }}
-                  />
-
-                  {formik.values.image ? (
-                    <img
-                      width={"100%"}
-                      height={"400px"}
-                      src={URL.createObjectURL(formik.values.image)}
-                      alt="Selected"
-                    />
-                  ) : (
-                    <img
-                      width={"100%"}
-                      height={"400px"}
-                      // src={door}
-                      src={`${backendURL}/${layouts[0]?.image}`}
-                      alt="Selected"
-                    />
+                <Box
+                  style={{
+                    width: "380px",
+                    paddingX: 10,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "300px",
+                      border: "1px solid #D0D5DD",
+                      borderRadius: 2,
+                      padding: 1,
+                      marginX: 1,
+                    }}
+                  >
+                    {/* Door & Notched panel */}
+                    {layouts.name}
+                  </Box>
+                </Box>
+                <Box
+                  style={{
+                    width: "380px",
+                    paddingX: 10,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "315px",
+                      borderRadius: 2,
+                      marginX: 1,
+                    }}
+                  >
+                    <Box>
+                      <input
+                        accept="image/*"
+                        id="image-input"
+                        type="file"
+                        onChange={handleImageChange}
+                        style={{ display: "none" }}
+                      />
+                      {formik.values.image ? (
+                        <img
+                          width={"100%"}
+                          height={"400px"}
+                          src={URL.createObjectURL(formik.values.image)}
+                          alt="Selected"
+                        />
+                      ) : (
+                        <img
+                          width={"100%"}
+                          height={"400px"}
+                          src={door}
+                          // src={`${backendURL}/${layouts[0]?.image}`}
+                          alt="Selected"
+                        />
+                      )}
+                      <label htmlFor="image-input">
+                        <Button
+                          style={{
+                            width: "100%",
+                            boxShadow: "0px 0px 2px blue",
+                            color: "#000000",
+                            backgroundColor: "rgba(132, 119, 218, 0.14)",
+                          }}
+                          component="span"
+                        >
+                          Upload Image
+                        </Button>
+                      </label>
+                    </Box>
+                  </Box>
+                  {touched.image && errors.image && (
+                    <div style={{ color: "red" }}>{errors.image}</div>
                   )}
-                  <label htmlFor="image-input">
-                    <Button
-                      style={{
-                        width: "100%",
-                        boxShadow: "0px 0px 2px blue",
-                        color: "#000000",
-                        backgroundColor: "rgba(132, 119, 218, 0.14)",
-                      }}
-                      component="span"
-                    >
-                      Upload Image
-                    </Button>
-                  </label>
                 </Box>
               </Box>
-              {touched.image && errors.image && (
-                <div style={{ color: "red" }}>{errors.image}</div>
-              )}
+              <Button onClick={formik.handleSubmit}>Submit</Button>
             </Box>
-          </Box>
-          <Button onClick={formik.handleSubmit}>Submit</Button>
-        </Box>
+          );
+        })}
 
         <Box>
           {/* Hardware Finishes */}

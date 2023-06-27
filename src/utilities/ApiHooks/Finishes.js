@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { backendURL, createSlug } from "./common";
+import { backendURL, createSlug } from "../common";
 import { Mutation, useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { parseJwt } from "../components/ProtectedRoute/AuthVerify";
+import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
 export const useFetchDataFinishes = () => {
   async function fetchData() {

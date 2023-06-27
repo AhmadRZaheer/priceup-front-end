@@ -15,57 +15,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/formSlice";
 import { backendURL } from "../../utilities/common";
 import axios from "axios";
+import { useFetchDatahardware } from "../../utilities/ApiHooks/Hardware";
 
 const HardWareComponent = ({ type }) => {
+  console.log(type, "type check");
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
-  const formEntries = useSelector((state) => state.form.entries);
 
-  const [hardwareDetail, setHardwareDetail] = React.useState([]);
+  const { data: hardwareData, refetch: hardwareRefetch } =
+    useFetchDatahardware(type);
 
-  const [error, setError] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(`${backendURL}/hardwares/`);
-  //       // console.log(response, "response form api");
-
-  //       if (response.status === 200) {
-  //         setHardwareDetail(response.data.data);
-  //       } else {
-  //         setError("An error occurred while fetching the data.");
-  //       }
-  //     } catch (error) {
-  //       setError("An error occurred while fetching the data.");
-  //       console.error(error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${backendURL}/hardwares/category/${type}`
-        );
-        console.log(response, "response form api1123");
-
-        if (response.status === 200) {
-          setHardwareDetail(response.data.data);
-        } else {
-          setError("An error occurred while fetching the data.");
-        }
-      } catch (error) {
-        setError("An error occurred while fetching the data.");
-        console.error(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-  console.log(hardwareDetail, "hardwareDetail form api hardware component");
+  console.log(hardwareData, "hardwareData12 form api hardware component");
 
   const finishTypeOptions = [
     { value: "one", label: "one" },
@@ -112,7 +72,7 @@ const HardWareComponent = ({ type }) => {
         overflowY: "scroll",
       }}
     >
-      {hardwareDetail?.map((entry, mainIndex) => (
+      {hardwareData?.map((entry, mainIndex) => (
         <div
           style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
           key={mainIndex}
