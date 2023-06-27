@@ -1,6 +1,26 @@
 import React from "react";
 import "./settings.scss";
 import Sidebar from "../../components/Sidebar/Sidebar";
+import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  location: Yup.string().required("Location is required"),
+  pf: Yup.number().required("Pricing factor is required"),
+  dh: Yup.number().required("Default Hourly rate is required"),
+});
+
+const initialValues = {
+  location: "spain",
+  pf: "45",
+  dh: "12",
+};
+
+const handleSubmit = (values) => {
+  // Handle form submission
+  console.log(values, "efjdks");
+};
+console.log(Formik.values, "formik");
 
 const Settings = () => {
   return (
@@ -8,7 +28,7 @@ const Settings = () => {
       <Sidebar />
       <div className="settingsContainer">
         <div className="Title">Settings</div>
-        <form>
+        {/* <form>
           <div>
             <label htmlFor="fiel">Upload you Profile Picture</label>
             <input type="file" id="file" name="file" />
@@ -129,7 +149,72 @@ const Settings = () => {
               id="Location"
             ></input>
           </div>
-        </form>
+        </form> */}
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          <form>
+            <div>
+              <label htmlFor="file">Upload your Profile Picture</label>
+              <Field type="file" id="file" name="file" />
+            </div>
+            <div className="test">
+              <div className="input-block">
+                <label htmlFor="location" className="input-label">
+                  Location
+                </label>
+                <Field
+                  type="text"
+                  autoComplete="off"
+                  name="location"
+                  placeholder="Add Location"
+                  id="location"
+                />
+                <ErrorMessage
+                  name="location"
+                  component="div"
+                  className="error"
+                />
+              </div>
+            </div>
+            <h3 className="heading">Misc, Pricing</h3>
+            <div className="input-block">
+              <label htmlFor="pf" className="input-label">
+                Pricing factor
+              </label>
+              <p className="explain">Factor to Multiply Price</p>
+              <Field
+                type="number"
+                autoComplete="off"
+                name="pf"
+                placeholder="Add factor"
+                id="pf"
+              />
+              <ErrorMessage name="pf" component="div" className="error" />
+            </div>
+            <div className="input-block">
+              <label htmlFor="dh" className="input-label">
+                Default Hourly rate
+                <p className="explain">
+                  Hourly rates to be used for labour price
+                </p>
+              </label>
+              <Field
+                type="number"
+                autoComplete="off"
+                name="dh"
+                placeholder="Add"
+                id="dh"
+              />
+              <ErrorMessage name="dh" component="div" className="error" />
+            </div>
+            <h3 className="heading">Fabrication Pricing</h3>
+            {/* Add the rest of the form fields here */}
+            <button type="submit">Submit</button>
+          </form>
+        </Formik>
       </div>
     </div>
   );
