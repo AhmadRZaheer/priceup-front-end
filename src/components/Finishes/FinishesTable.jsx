@@ -6,12 +6,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton } from "@mui/material";
-import AddEditModel from "../Model/AddEdit";
+
 import {
   useDeleteFinishes,
   useFetchDataFinishes,
 } from "../../utilities/ApiHooks/Finishes";
 import Snackbars from "../Model/SnackBar";
+import AddEditFinish from "../Model/AddEditFinish";
 const FinishesTable = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -149,7 +150,7 @@ const FinishesTable = () => {
         </div>
       </Box>
 
-      <AddEditModel
+      <AddEditFinish
         open={open}
         close={handleClose}
         data={edit}

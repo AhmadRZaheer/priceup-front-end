@@ -20,7 +20,7 @@ import HardWareComponent from "./HardWareComponent";
 import HardWareComponentHeader from "./HardwareComponentHeader";
 import axios from "axios";
 import { backendURL } from "../../utilities/common";
-import AddEditModel from "../Model/AddEdit";
+import AddEditModel from "../Model/AddEditFinish";
 import { useFetchDatahardwareCategory } from "../../utilities/ApiHooks/Hardware";
 
 const HardwareTable = () => {
@@ -128,7 +128,7 @@ const HardwareTable = () => {
       >
         <div className="hardwareTable">
           <div className="hardwareTable">
-            <HardWareComponentHeader type={showNext} />
+            {/* <HardWareComponentHeader type={showNext} /> */}
             <HardWareComponent type={showNext} />
           </div>
         </div>

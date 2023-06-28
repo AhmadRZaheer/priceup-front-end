@@ -18,8 +18,9 @@ import { categories } from "../../data/data";
 
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import DefaultComponent from "./DefaultComponent";
-import AddEditModel from "../Model/AddEdit";
+// import AddEditModel from "../Model/AddEdit";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
+import AddEditFinish from "../Model/AddEditFinish";
 
 const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
@@ -167,7 +168,7 @@ const DefaultSection = () => {
           </div>
         </div>
       </Box>
-      <AddEditModel
+      <AddEditFinish
         open={open}
         close={handleClose}
         handleHeaderClick={handleHeaderClick}
