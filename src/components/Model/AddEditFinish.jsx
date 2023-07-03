@@ -36,7 +36,7 @@ const style = {
   p: 4,
 };
 
-export default function AddEditModel({
+export default function AddEditFinish({
   open,
   close,
   isEdit,

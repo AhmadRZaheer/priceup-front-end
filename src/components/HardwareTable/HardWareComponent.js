@@ -2,7 +2,9 @@ import React, { useEffect, useState } from "react";
 import wheel from "../../Assets/wheel.svg";
 
 import {
+  Box,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   IconButton,
@@ -10,34 +12,78 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Add, ToggleOff, ToggleOn } from "@mui/icons-material";
+import { Add, Delete, Edit, ToggleOff, ToggleOn } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { addItems } from "../../redux/formSlice";
 import { backendURL } from "../../utilities/common";
 import axios from "axios";
-import { useFetchDatahardware } from "../../utilities/ApiHooks/Hardware";
+import {
+  useDeleteHardwares,
+  useFetchDatahardware,
+} from "../../utilities/ApiHooks/Hardware";
+import AddEditHardware from "../Model/AddEditHardware";
+import Snackbars from "../Model/SnackBar";
+import FinishItem from "./FinishItem";
 
 const HardWareComponent = ({ type }) => {
-  console.log(type, "type check");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
   const dispatch = useDispatch();
-  const [toggle, setToggle] = useState(false);
 
-  const { data: hardwareData, refetch: hardwareRefetch } =
-    useFetchDatahardware(type);
+  const {
+    data: hardwareData,
+    refetch: hardwareRefetch,
+    isFetching: hardwareFetching,
+  } = useFetchDatahardware(type);
+  const {
+    mutate: deleteHardware,
+    error: hardwareDeleteError,
+    isSuccess: deleteSuccess,
+    isLoading: loaderForDelete,
+  } = useDeleteHardwares();
+  const [open, setOpen] = React.useState(false);
+  const [edit, setEdit] = React.useState(null);
+  const [isEdit, setIsEdit] = React.useState(false);
 
-  console.log(hardwareData, "hardwareData12 form api hardware component");
+  const handleOpen = (data) => {
+    setOpen(true);
+    setIsEdit(false);
+  };
+  const handleClose = () => setOpen(false);
+  const handleOpenEdit = (data, isEditAble) => {
+    setOpen(true);
+    setEdit(data);
+    setIsEdit(true);
+  };
+  const handleHardwareDelete = (id) => {
+    deleteHardware(id);
+  };
 
-  const finishTypeOptions = [
-    { value: "one", label: "one" },
-    { value: "two", label: "two" },
-    { value: "three", label: "three" },
-    { value: "four", label: "four" },
-    { value: "five", label: "five" },
-  ];
-  const options = [
-    { value: "1/2", label: "1/2" },
-    { value: "2/4", label: "2/4" },
-  ];
+  useEffect(() => {
+    if (deleteSuccess) {
+      hardwareRefetch();
+      showSnackbar("Hardware is Deleted Successfully ", "error");
+    }
+  }, [deleteSuccess]);
+  console.log(hardwareFetching, "hardwareData12 form api hardware component");
+
   const handleAddFormEntryItems = (id, event) => {
     dispatch(
       addItems({
@@ -54,178 +100,175 @@ const HardWareComponent = ({ type }) => {
       })
     );
   };
-  const handleToggle = (id) => {
-    console.log(id, "id for delete");
 
-    dispatch(handleToggle(id));
-  };
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        marginTop: 4,
-        // background: "red",
-
-        maxHeight: "600px",
-        overflowY: "scroll",
-      }}
-    >
-      {hardwareData?.map((entry, mainIndex) => (
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignContent: "center",
+          paddingTop: 15,
+          paddingBottom: 15,
+          paddingLeft: "10px",
+          paddingRight: "10px",
+          // background: "red",
+        }}
+      >
+        {" "}
         <div
-          style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
-          key={mainIndex}
+          style={{
+            width: "250px",
+            padding: 4,
+            alignItems: "center",
+            textTransform: "uppercase",
+          }}
         >
-          <div className="cellWrapper" style={{ padding: "8px" }}>
-            <div className="customerImg">
-              <img
-                className="cellImg"
-                // src={wheel}
-                src={`${backendURL}/${entry.image}`}
-                alt=""
-              />
-            </div>
-            <div className="customerNameTable">
-              <div className="userNameTable" style={{ marginLeft: "8px" }}>
-                {/* 8 x 8 MT Pull-1 */}
-                {entry.name}
-              </div>
-            </div>
-          </div>
-          {entry?.finishes?.map((finish, index) => (
-            <div key={index}>
-              <form>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    paddingTop: 4,
-                    paddingBottom: 4,
-                  }}
-                >
-                  <div
-                    style={{ width: "250px", padding: 4, alignItems: "center" }}
-                  >
-                    <Typography>Finish Type</Typography>
-                    <Typography variant="h6">{finish?.name}</Typography>
-                  </div>
+          {type}
+        </div>
+        <div
+          style={{
+            padding: 4,
+          }}
+        >
+          <IconButton onClick={handleOpen}>
+            <Add style={{ color: "rgb(65, 106, 238)" }} />
+          </IconButton>
+        </div>{" "}
+      </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 4,
+          alignContent: "center",
+          backgroundColor: "rgb(232, 232, 232)",
+          paddingTop: 15,
+          paddingBottom: 15,
+          paddingLeft: "10px",
+          paddingRight: "10px",
 
-                  <div
-                    style={{ width: "250px", padding: 4, alignItems: "center" }}
-                  >
-                    <Typography>Hardware Part Number</Typography>
-                    {/* <TextField
-                      size="small"
-                      variant="outlined"
-                      name="hardwarePartNumber"
-                      placeholder="Hardware Part Number"
-                      style={{ width: "100%" }}
-                    /> */}
-                    <Typography variant="h6">{finish?.partNumber}</Typography>
-                  </div>
+          // background: "red",
+        }}
+      >
+        {" "}
+        <div
+          style={{
+            width: "250px",
+            padding: 4,
+            alignItems: "center",
+          }}
+        >
+          Name
+        </div>{" "}
+        <div
+          style={{
+            width: "250px",
 
-                  <div
-                    style={{ width: "250px", padding: 4, alignItems: "center" }}
-                  >
-                    <Typography>Cost</Typography>
-                    {/* <TextField
-                      size="small"
-                      variant="outlined"
-                      name="cost"
-                      placeholder="Cost"
-                      style={{ width: "100%" }}
-                    /> */}
-                    <Typography variant="h6">{finish?.cost}</Typography>
-                  </div>
+            padding: 4,
+          }}
+        >
+          PartNnumber{" "}
+        </div>{" "}
+        <div
+          style={{
+            width: "250px",
 
-                  {/* <div
-                    style={{ width: "250px", padding: 4, alignItems: "center" }}
-                  >
-                    <Typography>Price</Typography>
-                    <TextField
-                      size="small"
-                      variant="outlined"
-                      name="price"
-                      placeholder="Price"
-                      style={{ width: "100%" }}
-                    />
-                  </div> */}
+            padding: 4,
+          }}
+        >
+          Cost
+        </div>
+        {/* <div
+          style={{
+            width: "250px",
 
-                  <div
-                    style={{
-                      maxWidth: "400px",
-                      padding: 4,
-                      display: "flex",
-                      alignItems: "center",
-                      // background: "red",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <div style={{ marginTop: "18px" }}>
-                      <FormControlLabel
-                        control={<Checkbox color="primary" name="isChecked" />}
-                        label="Price by sqft"
-                      />
-                    </div>
-                    <div
-                      style={{
-                        width: "150px",
-                        padding: 4,
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <FormControl style={{ width: "100%" }} size="small">
-                        <Typography>Thickness</Typography>
-                        {/* <TextField
-                          select
-                          size="small"
-                          variant="outlined"
-                          name="thickness"
-                          style={{ width: "100%" }}
-                        >
-                          {options.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </TextField> */}
-                        <Typography variant="h6">
-                          {finish?.thickness}
-                        </Typography>
-                      </FormControl>
-                    </div>
+            padding: 4,
+          }}
+        >
+          Price
+        </div>{" "} */}
+        <div
+          style={{
+            width: "250px",
 
-                    <div style={{ marginTop: "18px" }}>
-                      <IconButton onClick={() => setToggle(!toggle)}>
-                        {toggle ? (
-                          <ToggleOn
-                            style={{
-                              width: "45px",
-                              height: "45px",
-                              color: "rgb(65, 106, 238)",
-                            }}
-                          />
-                        ) : (
-                          <ToggleOff
-                            style={{
-                              width: "45px",
-                              height: "45px",
-                              color: "rgb(65, 106, 238)",
-                            }}
-                          />
-                        )}
-                      </IconButton>
-                    </div>
+            padding: 4,
+          }}
+        >
+          Status
+        </div>{" "}
+      </div>
+      {hardwareFetching ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+            alignItems: "center",
+            width: "100%",
+            
+          }}
+        >
+          <CircularProgress size={24} color="warning" />
+        </Box>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+            marginTop: 4,
+            // background: "red",
+
+            maxHeight: "600px",
+            overflowY: "scroll",
+          }}
+        >
+          {hardwareData?.map((entry, mainIndex) => (
+            <div
+              style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
+              key={mainIndex}
+            >
+              <div className="cellWrapper" style={{ padding: "8px" }}>
+                <div className="customerImg">
+                  <img
+                    className="cellImg"
+                    // src={wheel}
+                    src={`${backendURL}/${entry.image}`}
+                    alt=""
+                  />
+                </div>
+                <div className="customerNameTable">
+                  <div className="userNameTable" style={{ marginLeft: "8px" }}>
+                    {/* 8 x 8 MT Pull-1 */}
+                    {entry.name}
                   </div>
                 </div>
-              </form>
-            </div>
-          ))}
+                <div>
+                  <IconButton>
+                    <Edit
+                      style={{ color: "rgb(65, 106, 238)" }}
+                      onClick={() => handleOpenEdit(entry)}
+                    />
+                  </IconButton>
+                  <IconButton>
+                    <Delete
+                      style={{ color: "rgb(65, 106, 238)" }}
+                      onClick={() => handleHardwareDelete(entry._id)}
+                    />
+                  </IconButton>
+                </div>
+              </div>
+              {entry?.finishes?.map((finish, index) => (
+                <FinishItem
+                  data={finish}
+                  key={index}
+                  index={index}
+                  refetch={hardwareRefetch}
+                  hardwareId={entry._id}
+                />
+              ))}
 
-          <form>
+              {/* <form>
             <div
               style={{
                 display: "flex",
@@ -276,17 +319,6 @@ const HardWareComponent = ({ type }) => {
                 />
               </div>
 
-              {/* <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <Typography>Price</Typography>
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  name="price"
-                  placeholder="Price"
-                  style={{ width: "100%" }}
-                />
-              </div> */}
-
               <div
                 style={{
                   maxWidth: "400px",
@@ -329,10 +361,29 @@ const HardWareComponent = ({ type }) => {
                 </div>
               </div>
             </div>
-          </form>
+          </form> */}
+            </div>
+          ))}
         </div>
-      ))}
-    </div>
+      )}
+
+      <AddEditHardware
+        open={open}
+        close={handleClose}
+        data={edit}
+        isEdit={isEdit}
+        refetch={hardwareRefetch}
+        showSnackbar={showSnackbar}
+        categorySlug={type}
+      />
+
+      <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
+      />
+    </>
   );
 };
 
