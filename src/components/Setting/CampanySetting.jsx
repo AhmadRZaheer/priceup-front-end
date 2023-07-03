@@ -12,33 +12,61 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   useEditSetting,
   useFetchDataSetting,
 } from "../../utilities/ApiHooks/setting";
 import { backendURL } from "../../utilities/common";
+import Snackbars from "../Model/SnackBar";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
-  console.log(
-    settingData?.miscPricing?.hourlyRate,
-    "settingData?.miscPricing?.hourlyRate"
-  );
+  console.log(settingData, "settingData");
   const {
     mutate: editFinish,
     isLoading: LoadingForEdit,
     isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditSetting();
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
+
+  useEffect(() => {
+    if (SuccessForEdit) {
+      reFetchDataSetting();
+      showSnackbar("UPDATED Successfully ", "success");
+    }
+  }, [SuccessForEdit]);
   const formik = useFormik({
     initialValues: {
       location: settingData?.address,
+      image: selectedImage,
 
       miscPricing: {
-        pricingFactor: settingData?.miscPricing?.pricingFactor || 45,
+        pricingFactor: settingData?.miscPricing?.pricingFactor,
         hourlyRate: settingData?.miscPricing?.hourlyRate,
+        pricingFactorStatus: settingData?.miscPricing?.pricingFactorStatus,
       },
       fabricatingPricing: {
         oneHoleOneByTwoInchGlass:
@@ -72,15 +100,10 @@ const CampanySetting = () => {
     enableReinitialize: true,
     onSubmit: (values) => {
       handleEditSetting(values);
-      // Handle form submission here
-      console.log(values, "onclickkk");
     },
   });
-  console.log(formik.values, "comapny setting");
 
   const fileInputRef = useRef(null);
-
-  const [selectedImage, setSelectedImage] = useState(null);
 
   const handleFileUpload = () => {
     fileInputRef.current.click();
@@ -91,10 +114,10 @@ const CampanySetting = () => {
     setSelectedImage(URL.createObjectURL(file));
   };
   const handleEditSetting = (props) => {
-    console.log(props, "props for edit to refetch");
-
-    // console.log(id, "id2 for edit hook");
-    editFinish(props);
+    let id = settingData._id;
+    console.log(settingData._id, "edit id for setting");
+    editFinish({ data: props, id: settingData._id });
+    reFetchDataSetting();
   };
   console.log(settingData, "settingDatasettingData");
   return (
@@ -148,7 +171,6 @@ const CampanySetting = () => {
               <img
                 width={"40px"}
                 height={"40px"}
-                // src={selectedImage || imageUploader}
                 src={selectedImage || `${backendURL}/${settingData?.image}`}
                 alt="Selected"
                 style={{ borderRadius: "100%" }}
@@ -239,19 +261,36 @@ const CampanySetting = () => {
                 value={formik.values?.miscPricing?.pricingFactor}
                 onChange={formik.handleChange}
               />
+              {/* <Box sx={{ display: "flex" }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      color="primary"
+                      checked={
+                        formik.values?.miscPricing?.pricingFactorStatus || false
+                      }
+                      onChange={(event) => {
+                        const newValue = event.target.checked;
+                      }}
+                    />
+                  }
+                  label={"active"}
+                />
+              </Box> */}
+
               <Box sx={{ display: "flex" }}>
                 <FormControlLabel
                   control={
                     <Switch
                       color="primary"
-                      // checked={isActive || false}
-                      onChange={(event) => {
-                        const newValue = event.target.checked;
-                        // handleEntryValueChange(key, "active", newValue);
-                      }}
+                      checked={
+                        formik.values?.miscPricing?.pricingFactorStatus || false
+                      }
+                      onChange={formik.handleChange}
+                      name="miscPricing.pricingFactorStatus" // Add the name attribute to link the input to Formik's values
                     />
                   }
-                  label={"active"}
+                  label="active"
                 />
               </Box>
             </Box>
@@ -358,12 +397,12 @@ const CampanySetting = () => {
           >
             <Typography>Clamp Cutout (3/8in)</Typography>
             <TextField
-              sx={{ paddingRight: 19 }}
-              size="small"
               type="number"
+              sx={{ paddingRight: 19 }}
               name="fabricatingPricing.clampCutoutThreeByEightInch"
+              size="small"
               value={
-                settingData?.fabricatingPricing?.clampCutoutThreeByEightInch
+                formik.values?.fabricatingPricing?.clampCutoutThreeByEightInch
               }
               onChange={formik.handleChange}
             />
@@ -381,7 +420,7 @@ const CampanySetting = () => {
               size="small"
               type="number"
               name="fabricatingPricing.hingeCutoutOneByTwoInch"
-              value={settingData?.fabricatingPricing?.hingeCutoutOneByTwoInch}
+              value={formik.values?.fabricatingPricing?.hingeCutoutOneByTwoInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -398,7 +437,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.minterOneByTwoInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.minterOneByTwoInch}
+              value={formik.values?.fabricatingPricing?.minterOneByTwoInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -415,7 +454,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.minterThreeByEightInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.minterThreeByEightInch}
+              value={formik.values?.fabricatingPricing?.minterThreeByEightInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -432,7 +471,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.notchOneByTwoInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.notchOneByTwoInch}
+              value={formik.values?.fabricatingPricing?.notchOneByTwoInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -449,7 +488,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.notchThreeByEightInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.notchThreeByEightInch}
+              value={formik.values?.fabricatingPricing?.notchThreeByEightInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -466,7 +505,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.outageOneByTwoInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.outageOneByTwoInch}
+              value={formik.values?.fabricatingPricing?.outageOneByTwoInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -483,7 +522,7 @@ const CampanySetting = () => {
               name="fabricatingPricing.outageThreeByEightInch"
               size="small"
               type="number"
-              value={settingData?.fabricatingPricing?.outageThreeByEightInch}
+              value={formik.values?.fabricatingPricing?.outageThreeByEightInch}
               onChange={formik.handleChange}
             />
           </Box>
@@ -501,7 +540,7 @@ const CampanySetting = () => {
               size="small"
               type="number"
               value={
-                settingData?.fabricatingPricing?.polishPricePerOneByTwoInch
+                formik.values?.fabricatingPricing?.polishPricePerOneByTwoInch
               }
               onChange={formik.handleChange}
             />
@@ -520,13 +559,21 @@ const CampanySetting = () => {
               size="small"
               type="number"
               value={
-                settingData?.fabricatingPricing?.polishPricePerThreeByEightInch
+                formik.values?.fabricatingPricing
+                  ?.polishPricePerThreeByEightInch
               }
               onChange={formik.handleChange}
             />
           </Box>
         </Box>
       </Box>
+
+      <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
+      />
     </form>
   );
 };

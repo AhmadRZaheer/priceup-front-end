@@ -7,7 +7,6 @@ export const useFetchDataSetting = () => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
-    console.log(decodedToken, "decodedToken for setting");
     try {
       const response = await axios.get(
         `${backendURL}/companies/${decodedToken?.company_id}`,
@@ -15,7 +14,7 @@ export const useFetchDataSetting = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response, "response");
+
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {
@@ -34,16 +33,55 @@ export const useFetchDataSetting = () => {
 };
 
 export const useEditSetting = () => {
-  const handleEditSetting = async (updatedSetting) => {
-    console.log(updatedSetting, "updatedSetting in hooks");
+  const handleEditSetting = async (editedData) => {
+    console.log(editedData.data, "updatedSetting in hooks and id");
 
     const token = localStorage.getItem("token");
 
     try {
       const response = await axios.put(
-        `${backendURL}/campanies/${updatedSetting?.id}`,
+        `${backendURL}/companies/${editedData?.id}`,
         {
-          location: updatedSetting.location,
+          address: editedData.data.location,
+          image: editedData.data.image,
+
+          miscPricing: {
+            pricingFactor: editedData.data.miscPricing.pricingFactor,
+            hourlyRate: editedData.data.miscPricing.hourlyRate,
+            pricingFactorStatus:
+              editedData.data.miscPricing?.pricingFactorStatus,
+          },
+          fabricatingPricing: {
+            oneHoleOneByTwoInchGlass:
+              editedData?.data.fabricatingPricing?.oneHoleOneByTwoInchGlass,
+            oneHoleThreeByEightInchGlass:
+              editedData?.data.fabricatingPricing?.oneHoleThreeByEightInchGlass,
+            clampCutoutOneByTwoInch:
+              editedData?.data.fabricatingPricing?.clampCutoutOneByTwoInch,
+            clampCutoutThreeByEightInch:
+              editedData?.data.fabricatingPricing?.clampCutoutThreeByEightInch,
+            hingeCutoutOneByTwoInch:
+              editedData?.data.fabricatingPricing?.hingeCutoutOneByTwoInch,
+            hingeCutoutThreeByEightInch:
+              editedData?.data.fabricatingPricing?.hingeCutoutThreeByEightInch,
+            minterOneByTwoInch:
+              editedData?.data.fabricatingPricing?.minterOneByTwoInch,
+            minterThreeByEightInch:
+              editedData?.data.fabricatingPricing?.minterThreeByEightInch,
+            notchOneByTwoInch:
+              editedData?.data.fabricatingPricing?.notchOneByTwoInch,
+            notchThreeByEightInch:
+              editedData?.data.fabricatingPricing?.notchThreeByEightInch,
+            outageOneByTwoInch:
+              editedData?.data.fabricatingPricing?.outageOneByTwoInch,
+            outageThreeByEightInch:
+              editedData?.data.fabricatingPricing?.outageThreeByEightInch,
+            polishPricePerOneByTwoInch:
+              editedData?.data.fabricatingPricing?.polishPricePerOneByTwoInch,
+            polishPricePerThreeByEightInch:
+              editedData?.data.fabricatingPricing
+                ?.polishPricePerThreeByEightInch,
+          },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
