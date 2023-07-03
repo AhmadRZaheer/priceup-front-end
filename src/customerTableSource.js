@@ -5,6 +5,48 @@ import wheel from "./Assets/wheel.svg";
 import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
 
+export const teamColumns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 70,
+  },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 230,
+    renderCell: (params) => {
+      return (
+        <div className="cellWrapper">
+          <div className="customerImg">
+            <img className="cellImg" src={params.row.img} alt="" />
+          </div>
+          <div className="customerNameTable">
+            {params.row.name}
+            <div className="userNameTable">{params.row.username}</div>
+          </div>
+        </div>
+      );
+    },
+  },
+  { field: "Email", headerName: "Email address", width: 330 },
+  {
+    field: "dateAdded",
+    headerName: "Date added",
+    width: 120,
+  },
+  {
+    field: "LastQuote",
+    headerName: "Last Quoted",
+    width: 180,
+  },
+  {
+    field: "TotalQuote",
+    headerName: "Total Quoted ",
+    width: 180,
+  },
+];
+
 export const userColumns = [
   {
     field: "id",

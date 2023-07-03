@@ -1,14 +1,14 @@
 import React from "react";
 import "./team.scss";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import Customertable from "../../components/CustomerTable/Customertable";
+import TeamTable from "../../components/TeamTable/TeamTable";
 const Team = () => {
   return (
     <>
       <div className="Team">
         <Sidebar />
         <div className="teamContainer">
-          <Customertable />
+          <TeamTable />
         </div>
       </div>
     </>
