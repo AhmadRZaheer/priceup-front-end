@@ -29,91 +29,92 @@ export const useFetchDataTeam = () => {
   });
 };
 
-// export const useDeleteFinishes = () => {
-//   const handleDelete = async (id) => {
-//     try {
-//       const token = localStorage.getItem("token");
-//       const response = await axios.delete(`${backendURL}/finishes/${id}`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       // console.log(response, "delete response");
-//       if (response.data.code === 200) {
-//         return response.data.data;
-//       } else {
-//         throw new Error("An error occurred while fetching the data.");
-//       }
-//     } catch (error) {
-//       console.error("Delete failed", error);
-//       throw error;
-//     }
-//   };
+export const useDeleteTeamMembers = () => {
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/staffs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // console.log(response, "delete response");
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+      throw error;
+    }
+  };
 
-//   return useMutation(handleDelete);
-// };
+  return useMutation(handleDelete);
+};
 
-// export const useCreateFinish = () => {
-//   const handleCreate = async (props) => {
-//     console.log(props, "hook props in create hook");
-//     const token = localStorage.getItem("token");
-//     const slug = createSlug(props.hardwareLabel);
-//     const decodedToken = parseJwt(token);
-//     console.log(decodedToken, "parseJwt");
+export const useCreateTeamMembers = () => {
+  const handleCreate = async (props) => {
+    console.log(props, "hook props in create hook");
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    console.log(decodedToken, "parseJwt");
 
-//     try {
-//       const response = await axios.post(
-//         `${backendURL}/finishes/save`,
-//         {
-//           name: props.hardwareLabel,
-//           company_id: decodedToken?.company_id,
-//           thickness: "both",
-//           slug: slug,
-//           holesNeeded: props.thickness,
-//         },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
+    try {
+      const response = await axios.post(
+        `${backendURL}/staffs/save`,
+        {
+          name: props.name,
 
-//       if (response.data.code === 200) {
-//         return response.data.data;
-//       } else {
-//         throw new Error("An error occurred while creating the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while creating the data.");
-//     }
-//   };
+          company_id: decodedToken?.company_id,
+          password: props.password,
+          email: props.email,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-//   return useMutation(handleCreate);
-// };
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
 
-// export const useEditFinish = () => {
-//   const handleEdit = async (updatedHardware) => {
-//     console.log(updatedHardware, "updatehardware in hooks");
+  return useMutation(handleCreate);
+};
 
-//     const token = localStorage.getItem("token");
+export const useEditTeamMembers = () => {
+  const handleEdit = async (editTeamMembers) => {
+    console.log(editTeamMembers, "editTeamMembers in hooks");
 
-//     try {
-//       const response = await axios.put(
-//         `${backendURL}/finishes/${updatedHardware?.id}`,
-//         {
-//           name: updatedHardware?.hardwareLabel,
-//           holesNeeded: updatedHardware?.thickness,
-//         },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
+    const token = localStorage.getItem("token");
 
-//       if (response.data.code === 200) {
-//         return response.data.data;
-//       } else {
-//         throw new Error("An error occurred while updating the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while updating the data.");
-//     }
-//   };
+    try {
+      const response = await axios.put(
+        `${backendURL}/staffs/${editTeamMembers?.id}`,
+        {
+          name: editTeamMembers?.teamData?.name,
+          email: editTeamMembers?.teamData?.email,
+          password: editTeamMembers?.teamData?.password,
+          image: editTeamMembers?.teamData?.image,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
 
-//   return useMutation(handleEdit);
-// };
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};

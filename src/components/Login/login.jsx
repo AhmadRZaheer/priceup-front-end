@@ -33,7 +33,7 @@ const Login = (props) => {
 
         console.log(response.data, "response");
         dispatch(loginHandler(response.data.data));
-        window.location.href = "/estimates";
+        window.location.href = "/";
       })
       .catch((error) => {
         const errorMessage =

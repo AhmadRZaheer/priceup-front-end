@@ -6,11 +6,11 @@ import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
 
 export const teamColumns = [
-  {
-    field: "id",
-    headerName: "ID",
-    width: 70,
-  },
+  // {
+  //   field: "id",
+  //   headerName: "ID",
+  //   width: 70,
+  // },
   {
     field: "name",
     headerName: "Name",
@@ -29,7 +29,7 @@ export const teamColumns = [
       );
     },
   },
-  { field: "Email", headerName: "Email address", width: 330 },
+  { field: "email", headerName: "Email address", width: 330 },
   {
     field: "dateAdded",
     headerName: "Date added",

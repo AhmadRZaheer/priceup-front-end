@@ -25,6 +25,10 @@ import {
   useCreateHardware,
   useEditHardware,
 } from "../../utilities/ApiHooks/Hardware";
+import {
+  useCreateTeamMembers,
+  useEditTeamMembers,
+} from "../../utilities/ApiHooks/Team";
 
 const style = {
   position: "absolute",
@@ -47,7 +51,6 @@ export default function AddTeamMembers({
   data,
   refetch,
   showSnackbar,
-  categorySlug,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -59,46 +62,52 @@ export default function AddTeamMembers({
   const { getInputProps } = useDropzone({ onDrop });
   // hook for add
   const {
-    mutate: addHardware,
+    mutate: addTeamMembers,
     isLoading: LoadingForAdd,
     isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
-  } = useCreateHardware();
+  } = useCreateTeamMembers();
   // hook for edit
   const {
-    mutate: editHardware,
+    mutate: editTeamMembers,
     isLoading: LoadingForEdit,
     isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
-  } = useEditHardware();
+  } = useEditTeamMembers();
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("Created Successfully ", "success");
+      showSnackbar("New Team Member Created  ", "success");
       close();
     }
+  }, [CreatedSuccessfully]);
 
+  React.useEffect(() => {
     if (SuccessForEdit) {
       refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
     }
-  }, [CreatedSuccessfully, SuccessForEdit]);
+  }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
     console.log(props, "props for creat hook in model");
-    addHardware(props);
+    addTeamMembers(props);
   };
 
   const handleEditClick = (props) => {
     console.log(props, "props for edit to refetch");
     const id = data;
-    editHardware(props, id);
+    editTeamMembers(props, id);
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Hardware Label is required"),
+    name: Yup.string().required("Name is required"),
+    email: Yup.string().email("Invalid email address"),
+
+    password: Yup.string().required("Name is required"),
+
     image: Yup.mixed(),
     // .required("Image is required")
     // .test(
@@ -123,19 +132,23 @@ export default function AddTeamMembers({
     initialValues: isEdit
       ? {
           name: data?.name,
+          email: data?.email,
+          password: data?.password,
+
           image: "",
         }
       : {
           name: "",
           image: "",
-          hardware_category_slug: categorySlug,
+          email: "",
+          password: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       {
         isEdit
-          ? handleEditClick({ hardwareData: values, id: data._id })
+          ? handleEditClick({ teamData: values, id: data._id })
           : handleCreateClick(values);
 
         resetForm();
@@ -211,6 +224,34 @@ export default function AddTeamMembers({
               onBlur={formik.handleBlur}
               error={formik.touched.name && Boolean(formik.errors.name)}
               helperText={formik.touched.name && formik.errors.name}
+              variant="outlined"
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <Typography>Email</Typography>
+            <TextField
+              placeholder="email"
+              name="email"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.name && Boolean(formik.errors.email)}
+              helperText={formik.touched.name && formik.errors.email}
+              variant="outlined"
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <Typography>Password</Typography>
+            <TextField
+              placeholder="Password"
+              name="password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.password && Boolean(formik.errors.password)}
+              helperText={formik.touched.password && formik.errors.password}
               variant="outlined"
               fullWidth
             />

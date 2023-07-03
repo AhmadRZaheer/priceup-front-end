@@ -9,7 +9,7 @@ import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import UserIcon from "../../Assets/username1.svg";
 import logout from "../../Assets/logout.svg";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Model/Logout";
@@ -18,6 +18,7 @@ import { useHistory } from "react-router-dom";
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
     console.log("hello world");
@@ -37,93 +38,76 @@ const Sidebar = () => {
           </div>
         </NavLink>
         <div className="center">
-          {/* <ul>
-          <li className="estimates">
-            <LeaderboardSharpIcon className="icon" />
-            <span>Estimates</span>
-          </li>
-          <li>
-            <Link to="/Customers" className="link">
-              <AdjustIcon className="icon" />
-              <span>Customers</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/team" className="link">
-              <PeopleOutlineIcon className="icon" />
-              <span>Team</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/hardware" className="link">
-              <ViewInArOutlinedIcon className="icon" />
-              <span>Hardware</span>
-            </Link>
-          </li>
-          <li>
-            <Link to="/Defaults" className="link">
-              <AddBoxOutlinedIcon className="icon" />
-              <span>Default</span>
-            </Link>
-          </li>
-          <li className="settings">
-            <Link to="/setting" className="link">
-              <SettingsOutlinedIcon className="icon" />
-              <span>Settings</span>
-            </Link>
-          </li>
-        </ul> */}
           <ul>
-            <li className="estimates">
-              <NavLink
-                to="/estimates"
-                activeClassName="active"
-                className="link"
+            <NavLink to="/estimates" className="link">
+              <li
+                className={`estimates ${
+                  location.pathname === "/estimates" ? "active" : ""
+                }`}
               >
                 <LeaderboardSharpIcon className="icon" />
                 <span>Estimates</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/Customers"
-                activeClassName="active"
-                className="link"
+              </li>
+            </NavLink>
+            <NavLink to="/Customers" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/Customers" ? "active" : ""
+                }`}
               >
                 <AdjustIcon className="icon" />
                 <span>Customers</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/team" activeClassName="active" className="link">
-                <PeopleOutlineIcon className="icon" />
+              </li>
+            </NavLink>
+            <NavLink to="/team" className="link">
+              <li
+                className={` ${location.pathname === "/team" ? "active" : ""}`}
+              >
+                <AdjustIcon className="icon" />
                 <span>Team</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/hardware" activeClassName="active" className="link">
+              </li>
+            </NavLink>
+            <NavLink to="/hardware" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/hardware" ? "active" : ""
+                }`}
+              >
                 <ViewInArOutlinedIcon className="icon" />
                 <span>Hardware</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/finishes" activeClassName="active" className="link">
+              </li>
+            </NavLink>
+            <NavLink to="/finishes" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/finishes" ? "active" : ""
+                }`}
+              >
                 <AddBoxOutlinedIcon className="icon" />
                 <span>Finishes</span>
-              </NavLink>
-            </li>
-            <li>
-              <NavLink to="/Defaults" activeClassName="active" className="link">
+              </li>
+            </NavLink>
+            <NavLink to="/Defaults" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/Defaults" ? "active" : ""
+                }`}
+              >
                 <AddBoxOutlinedIcon className="icon" />
                 <span>Default</span>
-              </NavLink>
-            </li>
-            <li className="setting">
-              <NavLink to="/settings" activeClassName="active" className="link">
+              </li>
+            </NavLink>
+            <NavLink to="/settings" className="link">
+              <li
+                style={{ marginTop: "300px" }}
+                className={` ${
+                  location.pathname === "/settings" ? "active" : ""
+                }`}
+              >
                 <SettingsOutlinedIcon className="icon" />
                 <span>Settings</span>
-              </NavLink>
-            </li>
+              </li>
+            </NavLink>
           </ul>
         </div>
         <div className="line"></div>

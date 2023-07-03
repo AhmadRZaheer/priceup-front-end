@@ -5,16 +5,20 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Typography } from "@mui/material";
-import { useFetchDataTeam } from "../../utilities/ApiHooks/Team";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import {
+  useDeleteTeamMembers,
+  useFetchDataTeam,
+} from "../../utilities/ApiHooks/Team";
 import AddTeamMembers from "../Model/AddTeamMembers";
 import Snackbars from "../Model/SnackBar";
 
 const TeamTable = () => {
-  const { data: teamData, refetch: finishesRefetch } = useFetchDataTeam();
+  const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
+  const [matchingId, setMatchingId] = useState("");
 
   const handleOpen = (data) => {
     setOpen(true);
@@ -46,18 +50,75 @@ const TeamTable = () => {
     }));
   };
   console.log(teamData, "teamDatateamData");
+  // const actionColumn = [
+  //   {
+  //     field: "action",
+  //     headerName: "Actions",
+  //     width: 200,
+  //     renderCell: () => {
+  //       return (
+  //         <div className="cellAction">
+  //           <div className="deleteButton">
+  //             <DeleteIcon />
+  //           </div>
+  //           <div className="viewButton">
+  //             <ModeIcon />
+  //           </div>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
+
+  const {
+    mutate: deleteFinish,
+    error: finishDeleteError,
+    isSuccess: deleteSuccess,
+    isLoading: loaderForDelete,
+  } = useDeleteTeamMembers();
+  const handleTeamMemberDelete = (id) => {
+    deleteFinish(id);
+    setMatchingId(id);
+    if (deleteSuccess) {
+      showSnackbar("Deleted Successfully ", "warning");
+      teamMemberRefetch();
+    }
+  };
+  React.useEffect(() => {
+    if (deleteSuccess) {
+      teamMemberRefetch();
+      showSnackbar("Deleted Successfully ", "warning");
+    }
+  }, [deleteSuccess]);
+
   const actionColumn = [
     {
-      field: "action",
-      headerName: "Actions",
+      field: " ",
+      // headerName: (
+      //   // <div onClick={handleOpen}>
+      //   //   <img src={plus} alt="Add More" />
+      //   // </div>
+      // ),
       width: 200,
-      renderCell: () => {
+      renderCell: (params) => {
+        const id = params.row._id;
+        const isMatchingId = id === matchingId;
         return (
           <div className="cellAction">
-            <div className="deleteButton">
-              <DeleteIcon />
+            <div
+              className="deleteButton"
+              onClick={() => handleTeamMemberDelete(id)}
+            >
+              {isMatchingId && loaderForDelete ? (
+                <CircularProgress size={24} color="warning" />
+              ) : (
+                <DeleteIcon />
+              )}
             </div>
-            <div className="viewButton">
+            <div
+              className="viewButton"
+              onClick={() => handleOpenEdit(params.row)}
+            >
               <ModeIcon />
             </div>
           </div>
@@ -84,7 +145,8 @@ const TeamTable = () => {
       </div>
       <div className="CustomerTable">
         <DataGrid
-          rows={userRows}
+          getRowId={(row) => row._id}
+          rows={teamData}
           columns={teamColumns.concat(actionColumn)}
           paginationModel={{ page: 0, pageSize: 8 }}
         />
@@ -95,7 +157,7 @@ const TeamTable = () => {
         close={handleClose}
         data={edit}
         isEdit={isEdit}
-        // refetch={hardwareRefetch}
+        refetch={teamMemberRefetch}
         showSnackbar={showSnackbar}
       />
       <Snackbars
