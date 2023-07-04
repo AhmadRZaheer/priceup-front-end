@@ -205,7 +205,6 @@ const HardWareComponent = ({ type }) => {
             padding: "20px",
             alignItems: "center",
             width: "100%",
-            
           }}
         >
           <CircularProgress size={24} color="warning" />
@@ -228,45 +227,54 @@ const HardWareComponent = ({ type }) => {
               style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
               key={mainIndex}
             >
-              <div className="cellWrapper" style={{ padding: "8px" }}>
-                <div className="customerImg">
+              <Box
+                sx={{
+                  // background: "red",
+
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignContent: "center",
+                  p: 2,
+                }}
+              >
+                {" "}
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                  {/* <div className="customerImg"> */}
                   <img
                     className="cellImg"
                     // src={wheel}
                     src={`${backendURL}/${entry.image}`}
                     alt=""
                   />
-                </div>
-                <div className="customerNameTable">
-                  <div className="userNameTable" style={{ marginLeft: "8px" }}>
-                    {/* 8 x 8 MT Pull-1 */}
-                    {entry.name}
-                  </div>
-                </div>
-                <div>
-                  <IconButton>
-                    <Edit
-                      style={{ color: "rgb(65, 106, 238)" }}
-                      onClick={() => handleOpenEdit(entry)}
-                    />
-                  </IconButton>
+                  {entry.name}
+                  {/* </div> */}
+                </Box>
+                <Box>
                   <IconButton>
                     <Delete
-                      style={{ color: "rgb(65, 106, 238)" }}
+                      // style={{ color: "rgb(65, 106, 238)" }}
                       onClick={() => handleHardwareDelete(entry._id)}
                     />
                   </IconButton>
-                </div>
-              </div>
-              {entry?.finishes?.map((finish, index) => (
-                <FinishItem
-                  data={finish}
-                  key={index}
-                  index={index}
-                  refetch={hardwareRefetch}
-                  hardwareId={entry._id}
-                />
-              ))}
+                  <IconButton>
+                    <Edit
+                      // style={{ color: "rgb(65, 106, 238)" }}
+                      onClick={() => handleOpenEdit(entry)}
+                    />
+                  </IconButton>
+                </Box>
+              </Box>
+              <Box sx={{ p: 2 }}>
+                {entry?.finishes?.map((finish, index) => (
+                  <FinishItem
+                    data={finish}
+                    key={index}
+                    index={index}
+                    refetch={hardwareRefetch}
+                    hardwareId={entry._id}
+                  />
+                ))}
+              </Box>
 
               {/* <form>
             <div
