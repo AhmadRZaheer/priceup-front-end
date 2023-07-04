@@ -23,6 +23,7 @@ const DefaultComponentHeader = ({ type }) => {
             width: "250px",
             padding: 4,
             alignItems: "center",
+            color: "red",
           }}
         >
           {type}

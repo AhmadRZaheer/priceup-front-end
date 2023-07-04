@@ -3,11 +3,11 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
 
-const TableHeader = ({ showMore, types }) => {
+const layoutHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
-      <div key={index}>{renderSliderItem(item, item?.slug)}</div>
+      <div key={index}>{renderSliderItem(item, item?._id)}</div>
     ));
   };
 
@@ -92,4 +92,4 @@ const TableHeader = ({ showMore, types }) => {
   );
 };
 
-export default TableHeader;
+export default layoutHeader;

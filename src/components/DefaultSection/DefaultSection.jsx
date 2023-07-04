@@ -13,12 +13,11 @@ import { ContentCopy } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import plus from "../../Assets/plus.svg";
-import Header from "../TableHeader/TableHeader";
-import { categories } from "../../data/data";
 
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import DefaultComponent from "./DefaultComponent";
-// import AddEditModel from "../Model/AddEdit";
+import LayoutHeader from "./LayoutHeader";
+
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import AddEditFinish from "../Model/AddEditFinish";
 
@@ -27,6 +26,7 @@ const DefaultSection = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const [showNext, SetShowNext] = React.useState("");
+  console.log(showNext, "showNext default");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -105,38 +105,6 @@ const DefaultSection = () => {
     },
   ];
 
-  // return (
-  //   <>
-  //     <div className="page-title">
-  //       <h2>Default</h2>
-  //     </div>
-  //     <div style={{ padding: "10px" }}>
-  //       <Header types={categories} showMore={SetShowNext} />
-  //     </div>
-  //     <Box
-  //       sx={{
-  //         border: "1px solid rgb(232, 232, 232)",
-  //         margin: 2,
-  //         // background: "rgb(232, 232, 232)",
-  //       }}
-  //     >
-  //       <div className="hardwareTable">
-  //         {showNext === "two" && (
-  //           <>
-  //             <DefaultComponentHeader type={"LayOut:Door"} />
-  //             <DefaultComponent />
-  //           </>
-  //         )}
-  //       </div>
-  //     </Box>
-  //     <AddEditModel
-  //       open={open}
-  //       close={handleClose}
-  //       handleHeaderClick={handleHeaderClick}
-  //     />
-  //   </>
-  // );
-
   return (
     <>
       <div className="page-title">
@@ -147,11 +115,9 @@ const DefaultSection = () => {
           marginLeft: "15px",
           marginRight: "15px",
           background: "rgb(232, 232, 232)",
-          // width: "80vw",
-          // height: "45px",
         }}
       >
-        <Header types={defaultData} showMore={SetShowNext} />
+        <LayoutHeader types={defaultData} showMore={SetShowNext} />
       </div>
       <Box
         sx={{
@@ -161,8 +127,6 @@ const DefaultSection = () => {
       >
         <div className="hardwareTable">
           <div className="hardwareTable">
-            {/* <HardWareComponentHeader type={showNext} />
-            <HardWareComponent type={showNext} /> */}
             <DefaultComponentHeader type={showNext} />
             <DefaultComponent />
           </div>
