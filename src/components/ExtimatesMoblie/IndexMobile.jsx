@@ -10,7 +10,7 @@ import Summary from "./Summary";
 
 const IndexMobile = () => {
   const boxStyles = {
-    // minHeight: "182px",
+    minHeight: "152px",
     minWidth: { md: "180px", xs: "140px" },
     margin: "auto",
     borderRadius: "12px",
@@ -37,19 +37,19 @@ const IndexMobile = () => {
 
   return (
     <>
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          // background: "yellow",
-          // height: "93.3vh",
-          overflowY: "scroll",
-          paddingY: { md: 4, sx: 0 },
-        }}
-      >
-        {handleEstimatesPages == "layout" && (
+      {handleEstimatesPages == "layout" && (
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            // background: "yellow",
+            height: "93.3vh",
+            overflowY: "scroll",
+            paddingY: { md: 4, sx: 0 },
+          }}
+        >
           <Box
             sx={{
               width: { md: "70%", sm: "100%", sx: "100%" },
@@ -179,8 +179,9 @@ const IndexMobile = () => {
               </Box>
             </Box>
           </Box>
-        )}
-      </Box>
+        </Box>
+      )}
+
       {handleEstimatesPages == "measurements" && (
         <LayoutMeasurements setHandleEstimatesPages={setHandleEstimatesPages} />
       )}
