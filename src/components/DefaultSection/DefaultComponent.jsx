@@ -24,151 +24,172 @@ import {
 } from "../../data/data";
 import { backendURL } from "../../utilities/common";
 import axios from "axios";
-import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
-const validationSchema = Yup.object().shape({
-  image: Yup.mixed()
-    .required("Image is required")
-    .test(
-      "fileType",
-      "Only image files are allowed (JPEG, PNG, GIF)",
-      (value) => {
-        if (value) {
-          const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-          return supportedFormats.includes(value.type);
-        }
-        return false;
-      }
-    )
-    .test(
-      "fileSize",
-      "Image size should be less than 5MB",
-      (value) => value && value.size <= 5 * 1024 * 1024
-    ),
-  hardwareFinishes: Yup.string().required("HardwareFinishes Value is required"),
+import {
+  useFetchDataDefault,
+  useFetchSingleDefault,
+} from "../../utilities/ApiHooks/DefaultLayouts";
+// const validationSchema = Yup.object().shape({
+//   image: Yup.mixed()
+//     .required("Image is required")
+//     .test(
+//       "fileType",
+//       "Only image files are allowed (JPEG, PNG, GIF)",
+//       (value) => {
+//         if (value) {
+//           const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
+//           return supportedFormats.includes(value.type);
+//         }
+//         return false;
+//       }
+//     )
+//     .test(
+//       "fileSize",
+//       "Image size should be less than 5MB",
+//       (value) => value && value.size <= 5 * 1024 * 1024
+//     ),
+//   hardwareFinishes: Yup.string().required("HardwareFinishes Value is required"),
 
-  handles: Yup.object().shape({
-    default: Yup.string().required("Handles Option is required"),
-    count: Yup.string().required("Handles Value is required"),
-  }),
-  hinges: Yup.object().shape({
-    default: Yup.string().required("hingesOptions Option is required"),
-    count: Yup.string().required("hingesValue Value is required"),
-  }),
-  pivotHinge: Yup.object().shape({
-    default: Yup.string().required("pivotHingeOptions Option is required"),
-    count: Yup.string().required("pivotHingeValue Value is required"),
-  }),
-  heavyDuty: Yup.object().shape({
-    default: Yup.string().required("default Option is required"),
-    countOne: Yup.string().required("countOne Value is required"),
-    countTwo: Yup.string().required("countTwo Value is required"),
-  }),
-  heavyPivot: Yup.object().shape({
-    default: Yup.string().required("default Option is required"),
-    countOne: Yup.string().required("countOne Value is required"),
-    countTwo: Yup.string().required("countTwo Value is required"),
-  }),
-  // ChannelorClamps: Yup.string().required("ChannelorClamps Value is required"),
-  // mountingChannel: Yup.string().required("mountingChannel Value is required"),
-  // clamps: Yup.array().of(
-  //   Yup.object().shape({
-  //     default: Yup.string().required("Default is required"),
-  //     count: Yup.string().required("Count is required"),
-  //   })
-  // ),
+//   handles: Yup.object().shape({
+//     default: Yup.string().required("Handles Option is required"),
+//     count: Yup.string().required("Handles Value is required"),
+//   }),
+//   hinges: Yup.object().shape({
+//     default: Yup.string().required("hingesOptions Option is required"),
+//     count: Yup.string().required("hingesValue Value is required"),
+//   }),
+//   pivotHinge: Yup.object().shape({
+//     default: Yup.string().required("pivotHingeOptions Option is required"),
+//     count: Yup.string().required("pivotHingeValue Value is required"),
+//   }),
+//   heavyDuty: Yup.object().shape({
+//     default: Yup.string().required("default Option is required"),
+//     countOne: Yup.string().required("countOne Value is required"),
+//     countTwo: Yup.string().required("countTwo Value is required"),
+//   }),
+//   heavyPivot: Yup.object().shape({
+//     default: Yup.string().required("default Option is required"),
+//     countOne: Yup.string().required("countOne Value is required"),
+//     countTwo: Yup.string().required("countTwo Value is required"),
+//   }),
+//   // ChannelorClamps: Yup.string().required("ChannelorClamps Value is required"),
+//   // mountingChannel: Yup.string().required("mountingChannel Value is required"),
+//   // clamps: Yup.array().of(
+//   //   Yup.object().shape({
+//   //     default: Yup.string().required("Default is required"),
+//   //     count: Yup.string().required("Count is required"),
+//   //   })
+//   // ),
 
-  glassToGlass: Yup.object().shape({
-    default: Yup.string().required("default Option is required"),
-    count: Yup.string().required("count Value is required"),
-  }),
-  bar: Yup.object().shape({
-    default: Yup.string().required("bar Option is required"),
-    count: Yup.string().required("bar Value is required"),
-  }),
-  outages: Yup.object().shape({
-    default: Yup.string().required("outages Option is required"),
-  }),
-  other: Yup.object().shape({
-    people: Yup.number().required("People  is required"),
-    hours: Yup.number().required("Hours Value is required"),
-  }),
-  transom: Yup.string().required("transom Value is required"),
-  header: Yup.string().required("transom Value is required"),
-  glassTreatment: Yup.string().required("glassTreatment Value is required"),
-});
+//   glassToGlass: Yup.object().shape({
+//     default: Yup.string().required("default Option is required"),
+//     count: Yup.string().required("count Value is required"),
+//   }),
+//   bar: Yup.object().shape({
+//     default: Yup.string().required("bar Option is required"),
+//     count: Yup.string().required("bar Value is required"),
+//   }),
+//   outages: Yup.object().shape({
+//     default: Yup.string().required("outages Option is required"),
+//   }),
+//   other: Yup.object().shape({
+//     people: Yup.number().required("People  is required"),
+//     hours: Yup.number().required("Hours Value is required"),
+//   }),
+//   transom: Yup.string().required("transom Value is required"),
+//   header: Yup.string().required("transom Value is required"),
+//   glassTreatment: Yup.string().required("glassTreatment Value is required"),
+// });
 
-const DefaultComponent = () => {
+const DefaultComponent = ({ id }) => {
+  const { data: singleDefault, refetch: defaultRefetch } =
+    useFetchSingleDefault(id);
+  console.log(
+    singleDefault?.layoutData?.settings?.hardwareFinishes,
+    "hardwareFinishes"
+  );
+  console.log(singleDefault?.layoutData?.settings?.hinges.count, "count");
+
   const formik = useFormik({
     initialValues: {
       image: null,
       handles: {
-        default: Handles[0].value,
-        count: "2",
+        handleType: singleDefault?.layoutData?.settings?.handles.handleType,
+        count: singleDefault?.layoutData?.settings?.handles.count,
       },
-      hardwareFinishes: hardwareFinishes[0].value,
+
+      // hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
+      hardwareFinishes: "64a276b30336b4e1e0846c3f",
 
       hinges: {
-        default: hinges[0].value,
-        count: "2",
+        // hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
+
+        hingesType: "648c3976f6d79c6250a964c2",
+
+        count: singleDefault?.layoutData?.settings?.hinges?.count,
       },
       pivotHinge: {
-        default: pivotHingeOption[0].value,
-        count: "2",
+        pivotHingeType:
+          singleDefault?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
+        count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
       },
-      heavyDuty: {
-        default: heavyDutyOption[0].value,
-        countOne: "2",
-        countTwo: "2",
+      heavyDutyOption: {
+        heavyDutyType:
+          singleDefault?.layoutData?.settings?.heavyDutyOption.heavyDutyType,
+        height: singleDefault?.layoutData?.settings?.heavyDutyOption.height,
+        threshold:
+          singleDefault?.layoutData?.settings?.heavyDutyOption.threshold,
       },
-      heavyPivot: {
-        default: heavyPivotOption[0].value,
-        countOne: "2",
-        countTwo: "2",
+      heavyPivotOption: {
+        heavyPivotType:
+          singleDefault?.layoutData?.settings?.heavyPivotOption.heavyPivotType,
+        height: singleDefault?.layoutData?.settings?.heavyPivotOption.height,
+        threshold:
+          singleDefault?.layoutData?.settings?.heavyPivotOption.threshold,
       },
-      channelorClamps: channelorClamps[0].value,
-      mountingChannel: mountingChannel[0].value,
-      clamps: [
-        {
-          name: "wallClamps",
-          default: "select options",
-          count: "1",
-        },
-        {
-          name: "sleepOver",
-          default: "",
-          count: "2",
-        },
-        {
-          name: "glassToGlass",
-          default: "",
-          count: "3",
-        },
-      ],
+      channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
+      mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
+
       glassToGlass: {
-        default: glassType[0].value,
-        count: glassTypeCount[0].value,
+        glassToGlassType:
+          singleDefault?.layoutData?.settings.glassToGlass?.glassToGlassType,
+
+        count: singleDefault?.layoutData?.settings.glassToGlass?.count,
       },
-      bar: {
-        default: Handles[0].value,
-        count: "2",
+      wallClamp: {
+        wallClampType:
+          singleDefault?.layoutData?.settings.wallClamp?.wallClampType,
+
+        count: singleDefault?.layoutData?.settings.wallClamp?.count,
       },
-      outages: {
-        default: "4",
+      sleeveOver: {
+        sleeveOverType:
+          singleDefault?.layoutData?.settings.sleeveOver?.sleeveOverType,
+        count: singleDefault?.layoutData?.settings.sleeveOver?.count,
       },
-      transom: "",
-      header: "",
-      glassTypeCount: "",
+      glassType: {
+        type: singleDefault?.layoutData?.settings?.glassType?.type,
+        thickness: singleDefault?.layoutData?.settings?.glassType?.thickness,
+      },
+      slidingDoorSystem: {
+        type: singleDefault?.layoutData?.settings?.slidingDoorSystem.type,
+        count: singleDefault?.layoutData?.settings?.slidingDoorSystem.count,
+      },
+      outages: singleDefault?.layoutData?.settings?.outages,
+      transom: singleDefault?.layoutData?.settings?.transom,
+      header: singleDefault?.layoutData?.settings?.header,
+
       other: {
-        people: "5",
-        hours: "2",
+        people: singleDefault?.layoutData?.settings?.other?.people,
+        hours: singleDefault?.layoutData?.settings?.other?.hours,
       },
     },
-
-    validationSchema,
+    enableReinitialize: true,
+    // validationSchema,
     onSubmit: (values) => {
       console.log(values, "not found or found images");
     },
   });
+  console.log(formik.values, "thickness of glass type");
 
   const handleImageChange = (event) => {
     setFieldValue("image", event.target.files[0]);
@@ -182,9 +203,12 @@ const DefaultComponent = () => {
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  const { data: defaultData, refetch: defaultRefetch } = useFetchDataDefault();
+  console.log(singleDefault, "singleDefault");
 
-  console.log(defaultData, "defaultData from api");
+  console.log(
+    singleDefault?.listData?.handles,
+    "singleDefault?.listData?.handles from api"
+  );
 
   return (
     <form type="submit">
@@ -192,7 +216,7 @@ const DefaultComponent = () => {
         style={{
           display: "flex",
           marginTop: 4,
-          maxHeight: "750px",
+          maxHeight: "600px",
           overflowY: "scroll",
         }}
       >
@@ -226,8 +250,7 @@ const DefaultComponent = () => {
                   marginX: 1,
                 }}
               >
-                Door & Notched panel
-                {/* {layouts.name} */}
+                {singleDefault?.layoutData?.name}
               </Box>
             </Box>
             <Box
@@ -263,7 +286,6 @@ const DefaultComponent = () => {
                       width={"100%"}
                       height={"400px"}
                       src={door}
-                      // src={`${backendURL}/${layouts[0]?.image}`}
                       alt="Selected"
                     />
                   )}
@@ -287,7 +309,6 @@ const DefaultComponent = () => {
               )}
             </Box>
           </Box>
-          <Button onClick={formik.handleSubmit}>Submit</Button>
         </Box>
 
         <Box>
@@ -327,9 +348,16 @@ const DefaultComponent = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {hardwareFinishes.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.hardwareFinishes.map((option) => (
+                    <MenuItem
+                      key={option.name}
+                      // selected={
+                      //   singleDefault?.layoutData?.settings
+                      //     ?.hardwareFinishes === option?._id
+                      // }
+                      value={option?._id}
+                    >
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -361,7 +389,6 @@ const DefaultComponent = () => {
               }}
             >
               Handles
-              {/* {layouts[0]?.settings.handles} */}
             </div>{" "}
             <div
               style={{
@@ -373,15 +400,15 @@ const DefaultComponent = () => {
                   select
                   size="small"
                   variant="outlined"
-                  name="handles.default"
+                  name="handles.handleType"
                   style={{ width: "100%" }}
-                  value={formik.values.handles.default}
+                  value={formik.values.handles.handleType}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {Handles.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.handles.map((option) => (
+                    <MenuItem key={option?._id} value={option?._id}>
+                      {option?.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -436,15 +463,15 @@ const DefaultComponent = () => {
                   select
                   size="small"
                   variant="outlined"
-                  name="hinges.default"
+                  name="hinges.hingesType"
                   style={{ width: "100%" }}
-                  value={formik.values.hinges.default}
+                  value={formik.values.hinges.hingesType}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {hinges.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.hinges.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option?.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -499,13 +526,13 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="pivotHinge.default"
                   style={{ width: "100%" }}
-                  value={formik.values.pivotHinge.default}
+                  value={formik.values.pivotHinge.pivotHingeType}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {pivotHingeOption.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.pivotHingeOption.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -559,15 +586,15 @@ const DefaultComponent = () => {
                   select
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.default"
+                  name="pivotHinge.heavyDutyType"
                   style={{ width: "100%" }}
-                  value={formik.values.heavyDuty.default}
+                  value={formik.values.heavyDutyOption.heavyDutyType}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {heavyDutyOption.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.heavyDutyOption.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -583,25 +610,25 @@ const DefaultComponent = () => {
               <TextField
                 size="small"
                 variant="outlined"
-                name="heavyDuty.countOne"
+                name="heavyDuty.height"
                 style={{
                   width: "120px",
                 }}
-                value={formik.values.heavyDuty.countOne}
+                value={formik.values.heavyDutyOption.height}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
               <TextField
                 size="small"
                 variant="outlined"
-                name="heavyDuty.countTwo"
+                name="heavyDuty.threshold"
                 style={{
                   width: "120px",
 
                   padding: 1,
                   marginX: 1,
                 }}
-                value={formik.values.heavyDuty.countTwo}
+                value={formik.values.heavyDutyOption.threshold}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -634,15 +661,15 @@ const DefaultComponent = () => {
                   select
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.default"
+                  name="pivotHinge.heavyPivotType"
                   style={{ width: "100%" }}
-                  value={formik.values.heavyPivot.default}
+                  value={formik.values.heavyPivotOption.heavyPivotType}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {heavyPivotOption.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.heavyPivotOption.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -662,7 +689,7 @@ const DefaultComponent = () => {
                 style={{
                   width: "120px",
                 }}
-                value={formik.values.heavyPivot.countOne}
+                value={formik.values.heavyPivotOption.height}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -676,7 +703,7 @@ const DefaultComponent = () => {
                   padding: 1,
                   marginX: 1,
                 }}
-                value={formik.values.heavyPivot.countTwo}
+                value={formik.values.heavyPivotOption.threshold}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -714,19 +741,19 @@ const DefaultComponent = () => {
                   variant="outlined"
                   name="channelorClamps"
                   style={{ width: "100%" }}
-                  value={formik.values.channelorClamps}
+                  value={formik.values.channelOrClamps}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {channelorClamps.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.channelOrClamps.map((option) => (
+                    <MenuItem key={option} value={option}>
+                      {option}
                     </MenuItem>
                   ))}
                 </TextField>
-                {formik.touched.channelorClamps &&
-                  formik.errors.channelorClamps && (
-                    <div>{formik.errors.channelorClamps}</div>
+                {formik.touched.channelOrClamps &&
+                  formik.errors.channelOrClamps && (
+                    <div>{formik.errors.channelOrClamps}</div>
                   )}
               </Box>
             </div>
@@ -773,9 +800,9 @@ const DefaultComponent = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {mountingChannel.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.mountingChannel.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -791,7 +818,7 @@ const DefaultComponent = () => {
           </div>
           {/* Clamps*/}
 
-          <Box sx={{ border: "1px solid #EAECF0" }}>
+          {/* <Box sx={{ border: "1px solid #EAECF0" }}>
             {formik.values.clamps.map((clamp, index) => (
               <div
                 key={index}
@@ -862,11 +889,192 @@ const DefaultComponent = () => {
                 </Box>
               </div>
             ))}
-          </Box>
+          </Box> */}
+          {/* Wall Clamps */}
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              alignContent: "center",
+              padding: "15px 10px 15px 10px",
+            }}
+          >
+            <div
+              style={{
+                width: "250px",
+                padding: "15px 10px 15px 10px",
+                padding: 4,
+
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Clamps</Typography>
+              <Typography variant="body2">Wall Clamps</Typography>
+            </div>
+            <div
+              style={{
+                width: "250px",
+              }}
+            >
+              <Box sx={{ width: "220px" }}>
+                <TextField
+                  select
+                  size="small"
+                  variant="outlined"
+                  name="wallClamp.wallClampType"
+                  style={{ width: "100%" }}
+                  value={formik.values.wallClamp.wallClampType}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  {singleDefault?.listData?.wallClamp.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </div>
+            <Box sx={{ width: "250px" }}>
+              <TextField
+                size="small"
+                variant="outlined"
+                name="wallClamp.count"
+                style={{
+                  width: "250px",
+                  paddingX: 10,
+                }}
+                value={formik.values.wallClamp.count}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </Box>
+          </div>
+          {/* Sleeve Over */}
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              alignContent: "center",
+              padding: "15px 10px 15px 10px",
+            }}
+          >
+            <div
+              style={{
+                width: "250px",
+                padding: "15px 10px 15px 10px",
+                padding: 4,
+
+                display: "flex",
+                justifyContent: "end",
+              }}
+            >
+              <Typography variant="body2">Sleeve Over</Typography>
+            </div>
+            <div
+              style={{
+                width: "250px",
+              }}
+            >
+              <Box sx={{ width: "220px" }}>
+                <TextField
+                  select
+                  size="small"
+                  variant="outlined"
+                  name="sleeveOver.sleeveOverType"
+                  style={{ width: "100%" }}
+                  value={formik.values.sleeveOver.sleeveOverType}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  {singleDefault?.listData?.sleeveOver.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </div>
+            <Box sx={{ width: "250px" }}>
+              <TextField
+                size="small"
+                variant="outlined"
+                name="sleeveOver.count"
+                style={{
+                  width: "250px",
+                  paddingX: 10,
+                }}
+                value={formik.values.sleeveOver.count}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </Box>
+          </div>
+          {/* Glass to Glass */}
+          <div
+            style={{
+              display: "flex",
+              gap: 4,
+              alignContent: "center",
+              padding: "15px 10px 15px 10px",
+            }}
+          >
+            <div
+              style={{
+                width: "250px",
+                padding: "15px 10px 15px 10px",
+                padding: 4,
+
+                display: "flex",
+                justifyContent: "end",
+              }}
+            >
+              <Typography variant="body2">Glass to Glass</Typography>
+            </div>
+            <div
+              style={{
+                width: "250px",
+              }}
+            >
+              <Box sx={{ width: "220px" }}>
+                <TextField
+                  select
+                  size="small"
+                  variant="outlined"
+                  name="glassToGlass.glassToGlassType"
+                  style={{ width: "100%" }}
+                  value={formik.values.glassToGlass.glassToGlassType}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  {singleDefault?.listData?.glassToGlass.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+            </div>
+            <Box sx={{ width: "250px" }}>
+              <TextField
+                size="small"
+                variant="outlined"
+                name="glassToGlass.count"
+                style={{
+                  width: "250px",
+                  paddingX: 10,
+                }}
+                value={formik.values.glassToGlass.count}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+            </Box>
+          </div>
 
           {/*  clamps ends here*/}
 
-          {/* Glass cl Glass */}
+          {/* Glass type*/}
           <div
             style={{
               display: "flex",
@@ -882,53 +1090,98 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Glass To Glass
+              Glass Type
             </div>
             <div
               style={{
                 width: "250px",
               }}
             >
+              {/* <Box sx={{ width: "220px" }}>
+                <TextField
+                  select
+                  size="small"
+                  variant="outlined"
+                  name="glassType.type"
+                  style={{ width: "100%" }}
+                  value={formik.values.glassType.type}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                >
+                  {singleDefault?.listData?.glassType.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box> */}
               <Box sx={{ width: "220px" }}>
                 <TextField
                   select
                   size="small"
                   variant="outlined"
-                  name="default"
+                  name="glassType.type"
                   style={{ width: "100%" }}
-                  value={formik.values.glassToGlass.default}
-                  onChange={formik.handleChange}
+                  value={formik.values.glassType.type}
+                  onChange={(event) => {
+                    formik.handleChange(event);
+                  }}
                   onBlur={formik.handleBlur}
                 >
-                  {glassType.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.glassType.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
               </Box>
             </div>
+            {/* <Box sx={{ width: "250px" }}>
+              <TextField
+                select
+                size="small"
+                variant="outlined"
+                name="glassType.thickness"
+                style={{ width: "100%" }}
+                value={formik.values.glassType.thickness}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              >
+                {singleDefault?.listData?.glassType?.[0].options?.map(
+                  (option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.thickness}
+                    </MenuItem>
+                  )
+                )}
+             
+              </TextField>
+            </Box> */}
             <Box sx={{ width: "250px" }}>
               <TextField
                 select
                 size="small"
                 variant="outlined"
-                name="count"
+                name="glassType.thickness"
                 style={{ width: "100%" }}
-                value={formik.values.glassToGlass.count}
+                value={formik.values.glassType.thickness}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               >
-                {glassTypeCount.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
+                {singleDefault?.listData?.glassType
+                  ?.find(
+                    (option) => option._id === formik.values.glassType.type
+                  )
+                  ?.options?.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.thickness}
+                    </MenuItem>
+                  ))}
               </TextField>
             </Box>
           </div>
 
-          {/* Bar */}
+          {/*   sliding Door System */}
 
           <div
             style={{
@@ -944,7 +1197,7 @@ const DefaultComponent = () => {
                 padding: 4,
               }}
             >
-              Bar
+              sliding Door System
             </div>{" "}
             <div
               style={{
@@ -956,35 +1209,30 @@ const DefaultComponent = () => {
                   select
                   size="small"
                   variant="outlined"
-                  name="bar.default"
+                  name="slidingDoorSystem.type"
                   style={{ width: "100%" }}
-                  value={formik.values.bar.default}
+                  value={formik.values.slidingDoorSystem.type}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {Handles.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.slidingDoorSystem.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
               </Box>
             </div>
-            <Box
-              style={{
-                width: "250px",
-                paddingX: 10,
-              }}
-            >
+            <Box sx={{ width: "250px" }}>
               <TextField
                 size="small"
                 variant="outlined"
-                name="bar.count"
+                name="slidingDoorSystem.count"
                 style={{
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.bar.count}
+                value={formik.values.slidingDoorSystem.count}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -1018,12 +1266,12 @@ const DefaultComponent = () => {
                 <TextField
                   size="small"
                   variant="outlined"
-                  name="outages.default"
+                  name="outages"
                   style={{
                     width: "220px",
                     paddingX: 10,
                   }}
-                  value={formik.values.outages.default}
+                  value={formik.values.outages}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
@@ -1072,9 +1320,9 @@ const DefaultComponent = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {channelorClamps.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.transom.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -1123,9 +1371,9 @@ const DefaultComponent = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {mountingChannel.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.header.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>
@@ -1175,9 +1423,9 @@ const DefaultComponent = () => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
-                  {mountingChannel.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
+                  {singleDefault?.listData?.glassTreatment.map((option) => (
+                    <MenuItem key={option._id} value={option._id}>
+                      {option.name}
                     </MenuItem>
                   ))}
                 </TextField>

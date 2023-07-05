@@ -1,8 +1,8 @@
 import { Add } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 
-const DefaultComponentHeader = ({ type }) => {
-  console.log(type, "type in default component header");
+const DefaultComponentHeader = ({ selected }) => {
+  console.log(selected, "type in default component header");
   return (
     <>
       <div
@@ -23,10 +23,22 @@ const DefaultComponentHeader = ({ type }) => {
             width: "250px",
             padding: 4,
             alignItems: "center",
-            color: "red",
+            
+          
           }}
         >
-          {type}
+          {selected?.name}
+        </div>{" "}
+        <div
+          style={{
+            width: "250px",
+            padding: 4,
+            alignItems: "center",
+            color: "red",
+          
+          }}
+        >
+          {selected?._id}
         </div>{" "}
         <div
           style={{

@@ -23,15 +23,15 @@ import AddEditFinish from "../Model/AddEditFinish";
 
 const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
+  const { data: defaultData, refetch: defaultDataRefetch } =
+    useFetchDataDefault();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [showNext, SetShowNext] = React.useState("");
+  const [showNext, SetShowNext] = React.useState("defaultData[0]");
   console.log(showNext, "showNext default");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const { data: defaultData, refetch: defaultDataRefetch } =
-    useFetchDataDefault();
   console.log(defaultData, "defaultDatadefaultData");
 
   const handleDelete = (id) => {
@@ -127,8 +127,8 @@ const DefaultSection = () => {
       >
         <div className="hardwareTable">
           <div className="hardwareTable">
-            <DefaultComponentHeader type={showNext} />
-            <DefaultComponent />
+            <DefaultComponentHeader selected={showNext} />
+            <DefaultComponent id={showNext?._id} />
           </div>
         </div>
       </Box>

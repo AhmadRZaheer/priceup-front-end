@@ -7,15 +7,15 @@ const layoutHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
-      <div key={index}>{renderSliderItem(item, item?._id)}</div>
+      <div key={index}>{renderSliderItem(item)}</div>
     ));
   };
 
-  const renderSliderItem = (title, option) => (
-    console.log(option, "options to show handles"),
+  const renderSliderItem = (props) => (
+    console.log(props, "options to show handles"),
     (
       <div
-        onClick={() => showMore(option)}
+        onClick={() => showMore(props)}
         style={{
           paddingLeft: "15px",
           paddingRight: "15px",
@@ -37,7 +37,7 @@ const layoutHeader = ({ showMore, types }) => {
           borderRadius: "4px", // Add border radius for a rounded look
         }}
       >
-        <h3>{title?.name}</h3>
+        <h3>{props?.name}</h3>
       </div>
     )
   );
