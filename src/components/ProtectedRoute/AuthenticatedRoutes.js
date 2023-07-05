@@ -10,6 +10,7 @@ import Finishes from "../../pages/Finishes/Finishes";
 import Defaults from "../../pages/Layouts/Defaults";
 import Estimates from "../../pages/Estimates/Estimates";
 import Settings from "../../pages/Settings/Settings";
+import Staff from "../../pages/EstimatesMobile/Staff";
 
 const AuthenticatedRoutes = () => {
   return (
@@ -29,6 +30,7 @@ const AuthenticatedRoutes = () => {
 
         <Route path="defaults" element={<Defaults />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="staff" element={<Staff />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>

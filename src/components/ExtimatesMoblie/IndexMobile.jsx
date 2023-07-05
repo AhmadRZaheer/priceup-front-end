@@ -6,10 +6,9 @@ import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-import LoginMobile from "../LoginMobile/login";
 import Summary from "./Summary";
 
-const Index = () => {
+const IndexMobile = () => {
   const boxStyles = {
     // minHeight: "182px",
     minWidth: { md: "180px", xs: "140px" },
@@ -204,4 +203,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default IndexMobile;
