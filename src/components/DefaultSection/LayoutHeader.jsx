@@ -15,7 +15,7 @@ const layoutHeader = ({ showMore, types }) => {
     console.log(props, "options to show handles"),
     (
       <div
-        onClick={() => showMore(props)}
+        onClick={() => showMore(props?._id)}
         style={{
           paddingLeft: "15px",
           paddingRight: "15px",

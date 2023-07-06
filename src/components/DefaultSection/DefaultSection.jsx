@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./hardwareTable.scss";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -18,16 +18,37 @@ import DefaultComponentHeader from "./DefaultComponentHeader";
 import DefaultComponent from "./DefaultComponent";
 import LayoutHeader from "./LayoutHeader";
 
-import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
+import {
+  useFetchDataDefault,
+  useFetchSingleDefault,
+} from "../../utilities/ApiHooks/DefaultLayouts";
 import AddEditFinish from "../Model/AddEditFinish";
+import { CircularProgress } from "@material-ui/core";
 
 const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
+  const [showNext, SetShowNext] = React.useState("64a66af918c2e537956dfc80");
+  console.log(showNext, "showNext test11");
+
   const { data: defaultData, refetch: defaultDataRefetch } =
     useFetchDataDefault();
+  const [singleDefaultdata, setSingleDefault] = React.useState({});
+
+  const {
+    data: singleDefault,
+    refetch: defaultRefetch,
+    isLoading: isLoadingDefaultSingle,
+    isFetching: isfetchingDefaultSingle,
+  } = useFetchSingleDefault(showNext);
+  console.log(singleDefault, "singleDefault test2 ");
+  useEffect(() => {
+    if (isfetchingDefaultSingle) {
+      setSingleDefault(singleDefault);
+    }
+  }, [isfetchingDefaultSingle]);
+
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [showNext, SetShowNext] = React.useState("defaultData[0]");
   console.log(showNext, "showNext default");
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -128,7 +149,11 @@ const DefaultSection = () => {
         <div className="hardwareTable">
           <div className="hardwareTable">
             <DefaultComponentHeader selected={showNext} />
-            <DefaultComponent id={showNext?._id} />
+            {isfetchingDefaultSingle ? (
+              <CircularProgress />
+            ) : (
+              <DefaultComponent singleDefault={singleDefaultdata} />
+            )}
           </div>
         </div>
       </Box>

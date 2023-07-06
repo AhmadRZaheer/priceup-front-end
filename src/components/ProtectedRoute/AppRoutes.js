@@ -1,19 +1,19 @@
-
-
+import { parseJwt } from "./AuthVerify";
 import AuthenticatedRoutes from "./AuthenticatedRoutes";
+import AuthenticatedRouteStaff from "./AuthenticatedRoutesStaff";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
+  const decodedToken = parseJwt(token);
+  console.log(decodedToken?.role, "parseJwt");
 
   if (!token || token === "undefined") {
-    // Token is empty or undefined
-    // console.log("UnAuthenticatedRoutes");
     return <UnAuthenticatedRoutes />;
   } else {
-    // Token has a value
-    // console.log(token, "token token");
-    return <AuthenticatedRoutes />;
+    if (decodedToken?.role === "staff") {
+      return <AuthenticatedRouteStaff />;
+    } else return <AuthenticatedRoutes />;
   }
 };
 

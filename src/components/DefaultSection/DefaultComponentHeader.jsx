@@ -27,7 +27,7 @@ const DefaultComponentHeader = ({ selected }) => {
           
           }}
         >
-          {selected?.name}
+          {selected}
         </div>{" "}
         <div
           style={{
@@ -38,7 +38,7 @@ const DefaultComponentHeader = ({ selected }) => {
           
           }}
         >
-          {selected?._id}
+          {/* {selected?._id} */}
         </div>{" "}
         <div
           style={{

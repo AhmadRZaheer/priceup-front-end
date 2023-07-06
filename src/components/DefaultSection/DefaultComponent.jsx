@@ -28,6 +28,7 @@ import {
   useFetchDataDefault,
   useFetchSingleDefault,
 } from "../../utilities/ApiHooks/DefaultLayouts";
+import { CircularProgress } from "@material-ui/core";
 // const validationSchema = Yup.object().shape({
 //   image: Yup.mixed()
 //     .required("Image is required")
@@ -100,14 +101,13 @@ import {
 //   glassTreatment: Yup.string().required("glassTreatment Value is required"),
 // });
 
-const DefaultComponent = ({ id }) => {
-  const { data: singleDefault, refetch: defaultRefetch } =
-    useFetchSingleDefault(id);
-  console.log(
-    singleDefault?.layoutData?.settings?.hardwareFinishes,
-    "hardwareFinishes"
-  );
-  console.log(singleDefault?.layoutData?.settings?.hinges.count, "count");
+const DefaultComponent = ({ singleDefault }) => {
+  // const {
+  //   data: singleDefault,
+  //   refetch: defaultRefetch,
+  //   isLoading: fetched,
+  // } = useFetchSingleDefault(id);
+  console.log(singleDefault, "singleDefault test1");
 
   const formik = useFormik({
     initialValues: {
@@ -121,9 +121,7 @@ const DefaultComponent = ({ id }) => {
       hardwareFinishes: "64a276b30336b4e1e0846c3f",
 
       hinges: {
-        // hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
-
-        hingesType: "648c3976f6d79c6250a964c2",
+        hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
 
         count: singleDefault?.layoutData?.settings?.hinges?.count,
       },
@@ -209,6 +207,8 @@ const DefaultComponent = ({ id }) => {
     singleDefault?.listData?.handles,
     "singleDefault?.listData?.handles from api"
   );
+
+  // if (fetched) return <CircularProgress />;
 
   return (
     <form type="submit">
@@ -304,9 +304,6 @@ const DefaultComponent = ({ id }) => {
                   </label>
                 </Box>
               </Box>
-              {touched.image && errors.image && (
-                <div style={{ color: "red" }}>{errors.image}</div>
-              )}
             </Box>
           </Box>
         </Box>
@@ -421,6 +418,7 @@ const DefaultComponent = ({ id }) => {
               }}
             >
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="handles.count"
@@ -428,7 +426,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.handles.count}
+                value={
+                  formik.values.handles.count !== 0
+                    ? formik.values.handles.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -484,6 +486,7 @@ const DefaultComponent = ({ id }) => {
               }}
             >
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="hinges.count"
@@ -491,7 +494,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.hinges.count}
+                value={
+                  formik.values.hinges.count !== 0
+                    ? formik.values.hinges.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -545,6 +552,7 @@ const DefaultComponent = ({ id }) => {
               }}
             >
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="pivotHinge.count"
@@ -552,7 +560,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.pivotHinge.count}
+                value={
+                  formik.values.pivotHinge.count !== 0
+                    ? formik.values.pivotHinge.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -608,17 +620,7 @@ const DefaultComponent = ({ id }) => {
               }}
             >
               <TextField
-                size="small"
-                variant="outlined"
-                name="heavyDuty.height"
-                style={{
-                  width: "120px",
-                }}
-                value={formik.values.heavyDutyOption.height}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="heavyDuty.threshold"
@@ -628,7 +630,27 @@ const DefaultComponent = ({ id }) => {
                   padding: 1,
                   marginX: 1,
                 }}
-                value={formik.values.heavyDutyOption.threshold}
+                value={
+                  formik.values.heavyDutyOption.threshold !== 0
+                    ? formik.values.heavyDutyOption.threshold
+                    : ""
+                }
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+              />
+              <TextField
+                type="number"
+                size="small"
+                variant="outlined"
+                name="heavyDuty.height"
+                style={{
+                  width: "120px",
+                }}
+                value={
+                  formik.values.heavyDutyOption.height !== 0
+                    ? formik.values.heavyDutyOption.height
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -683,17 +705,23 @@ const DefaultComponent = ({ id }) => {
               }}
             >
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="heavyPivot.countOne"
                 style={{
                   width: "120px",
                 }}
-                value={formik.values.heavyPivotOption.height}
+                value={
+                  formik.values.heavyPivotOption.height !== 0
+                    ? formik.values.heavyPivotOption.height
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="heavyPivot.countTwo"
@@ -703,7 +731,11 @@ const DefaultComponent = ({ id }) => {
                   padding: 1,
                   marginX: 1,
                 }}
-                value={formik.values.heavyPivotOption.threshold}
+                value={
+                  formik.values.heavyPivotOption.threshold !== 0
+                    ? formik.values.heavyPivotOption.threshold
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -818,78 +850,6 @@ const DefaultComponent = ({ id }) => {
           </div>
           {/* Clamps*/}
 
-          {/* <Box sx={{ border: "1px solid #EAECF0" }}>
-            {formik.values.clamps.map((clamp, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  gap: 4,
-                  alignContent: "center",
-                  padding: "15px 10px 15px 10px",
-                }}
-              >
-                {index === 0 && (
-                  <div
-                    style={{
-                      width: "250px",
-                      display: "flex",
-                      padding: 4,
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <div>Clamps</div>
-
-                    <div>{clamp.name}</div>
-                  </div>
-                )}
-
-                {index !== 0 && (
-                  <div
-                    style={{
-                      width: "250px",
-                      textAlign: "right",
-                      padding: 4,
-                    }}
-                  >
-                    <div>{clamp.name}</div>
-                  </div>
-                )}
-
-                <div style={{ width: "250px" }}>
-                  <Box sx={{ width: "220px" }}>
-                    <TextField
-                      select
-                      size="small"
-                      variant="outlined"
-                      name={`clamps[${index}].default`}
-                      style={{ width: "100%" }}
-                      value={clamp.default}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    >
-                      {Clamps.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </Box>
-                </div>
-                <Box style={{ width: "250px", paddingX: 10 }}>
-                  <TextField
-                    size="small"
-                    variant="outlined"
-                    name={`clamps[${index}].count`}
-                    style={{ width: "250px", paddingX: 10 }}
-                    value={clamp.count}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-              </div>
-            ))}
-          </Box> */}
           {/* Wall Clamps */}
           <div
             style={{
@@ -938,6 +898,7 @@ const DefaultComponent = ({ id }) => {
             </div>
             <Box sx={{ width: "250px" }}>
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="wallClamp.count"
@@ -945,7 +906,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.wallClamp.count}
+                value={
+                  formik.values.wallClamp.count !== 0
+                    ? formik.values.wallClamp.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -998,6 +963,7 @@ const DefaultComponent = ({ id }) => {
             </div>
             <Box sx={{ width: "250px" }}>
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="sleeveOver.count"
@@ -1005,7 +971,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.sleeveOver.count}
+                value={
+                  formik.values.sleeveOver.count !== 0
+                    ? formik.values.sleeveOver.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -1058,6 +1028,7 @@ const DefaultComponent = ({ id }) => {
             </div>
             <Box sx={{ width: "250px" }}>
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="glassToGlass.count"
@@ -1065,7 +1036,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.glassToGlass.count}
+                value={
+                  formik.values.glassToGlass.count !== 0
+                    ? formik.values.glassToGlass.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
@@ -1225,6 +1200,7 @@ const DefaultComponent = ({ id }) => {
             </div>
             <Box sx={{ width: "250px" }}>
               <TextField
+                type="number"
                 size="small"
                 variant="outlined"
                 name="slidingDoorSystem.count"
@@ -1232,7 +1208,11 @@ const DefaultComponent = ({ id }) => {
                   width: "250px",
                   paddingX: 10,
                 }}
-                value={formik.values.slidingDoorSystem.count}
+                value={
+                  formik.values.slidingDoorSystem.count !== 0
+                    ? formik.values.slidingDoorSystem.count
+                    : ""
+                }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
               />
