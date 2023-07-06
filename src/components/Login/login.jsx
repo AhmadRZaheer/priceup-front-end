@@ -43,6 +43,30 @@ const Login = (props) => {
       });
   };
 
+
+  const handleLoginAgent = (e) => {
+    e.preventDefault();
+    // try {
+    axios
+      .post(`${backendURL}/users/staff`, {
+        email,
+        password,
+      })
+      .then((response) => {
+        localStorage.setItem("email", email);
+
+        console.log(response.data, "response");
+        dispatch(loginHandler(response.data.data));
+        window.location.href = "/staff";
+      })
+      .catch((error) => {
+        const errorMessage =
+          error.response?.data?.message || "Login failed. Please try again.";
+        console.log(error.response.data, "erorrr");
+        showSnackbar(errorMessage, "error");
+      });
+  };
+
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -98,7 +122,7 @@ const Login = (props) => {
             >
               Login as Admin
             </button>
-            <button className="loginAsfield">Login as Field Agent</button>
+            <button className="loginAsfield" onClick={(e) => handleLoginAgent(e)}>Login as Field Agent</button>
           </form>
           <button
             className="forget-pass"
