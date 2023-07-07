@@ -47,7 +47,7 @@ const MenuList = ({ menuOptions, title }) => {
                   display: "flex",
                   gap: 2,
                   alignItems: "center",
-                  width: {md: "100%", xs:"80%"}
+                  width: {md: "100%", xs:"95%"}
                   
                   
                 }}

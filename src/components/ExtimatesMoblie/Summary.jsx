@@ -72,7 +72,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
             marginTop: { md: 0, xs: -3 },
           }}
         >
-          <Box sx={{ paddingLeft: 1.5 }}>
+          <Box sx={{ width: {md: "100%", xs: "90%"}, margin: "auto"}}>
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "18px" },
@@ -96,7 +96,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               paddingY: { md: 4, xs: 1 },
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
-
+              margin: {md: 0, xs:"auto"},
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
@@ -110,7 +110,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                 display: "flex",
                 flexDirection: "column",
                 width: { md: "45.5%", xs: "100%" },
-                background: { md: "#ffff", xs: "#100d24" },
+                background: { md: "#ffff", xs: "rgba(37, 32, 56,0.4)" },
                 p: { md: 3, xs: 0 },
                 borderRadius: "8px",
                 color: { md: "black", xs: "white" },
@@ -119,11 +119,12 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               <Box
                 sx={{
                   display: "flex",
-                  width: "89%",
+                  width: "84%",
                   justifyContent: "center",
-                  background: "#D9D9D9",
-                  borderRadius: "8px",
+                  // background: "#D9D9D9",
+                  margin: {md: 0, xs: "auto"},
                   p: 3,
+                  borderBottom: "1px solid #2c2c3c"
                   // height: "250px",
                 }}
               >
@@ -136,16 +137,17 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               </Box>
               <Box
                 sx={{
-                  width: "89%",
+                  width: "94%",
 
                   borderRadius: "8px",
-                  p: 3,
+                  paddingY: 4,
+                  margin: {md: 0, xs: "auto"},
                   // height: "250px",
                 }}
               >
                 <Typography>12’’/ 12’’/ 12’’ </Typography>
                 <Typography variant="h6">Summary </Typography>
-                <Typography> Finish: Polished Chrome</Typography>
+                <Typography> Finish: Polished Chrome,Polished Chrome,Polished Chrome,Polished Chrome,Polished Chrome</Typography>
                 <Typography>Handles: 8 by 8 D-Pull </Typography>
                 <Typography>Hinges: STD Bevel </Typography>
                 <Typography> Channel </Typography>
