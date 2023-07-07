@@ -37,7 +37,7 @@ export const useFetchSingleDefault = (id) => {
       });
       console.log(response, "response");
       if (response.data && response.data.code === 200) {
-        return response.data.data ? response.data.data : [];
+        return response.data.data ? response.data.data : null;
       } else {
         throw new Error("An error occurred while fetching the data.");
       }
@@ -48,7 +48,7 @@ export const useFetchSingleDefault = (id) => {
   return useQuery({
     queryKey: ["singleLayout",id],
     queryFn: fetchData,
-    enabled: true,
-    placeholderData: [],
+    enabled: !!id,
+    placeholderData: null,
   });
 };

@@ -102,12 +102,6 @@ import { CircularProgress } from "@material-ui/core";
 // });
 
 const DefaultComponent = ({ singleDefault }) => {
-  // const {
-  //   data: singleDefault,
-  //   refetch: defaultRefetch,
-  //   isLoading: fetched,
-  // } = useFetchSingleDefault(id);
-  console.log(singleDefault, "singleDefault test1");
 
   const formik = useFormik({
     initialValues: {
@@ -117,8 +111,8 @@ const DefaultComponent = ({ singleDefault }) => {
         count: singleDefault?.layoutData?.settings?.handles.count,
       },
 
-      // hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
-      hardwareFinishes: "64a276b30336b4e1e0846c3f",
+      hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
+      // hardwareFinishes: "64a276b30336b4e1e0846c3f",
 
       hinges: {
         hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
@@ -201,12 +195,12 @@ const DefaultComponent = ({ singleDefault }) => {
   };
   const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
-  console.log(singleDefault, "singleDefault");
+  // console.log(singleDefault, "singleDefault");
 
-  console.log(
-    singleDefault?.listData?.handles,
-    "singleDefault?.listData?.handles from api"
-  );
+  // console.log(
+  //   singleDefault?.listData?.handles,
+  //   "singleDefault?.listData?.handles from api"
+  // );
 
   // if (fetched) return <CircularProgress />;
 
@@ -341,7 +335,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="hardwareFinishes"
                   style={{ width: "100%" }}
-                  value={formik.values.hardwareFinishes}
+                  value={formik.values.hardwareFinishes || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -399,7 +393,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="handles.handleType"
                   style={{ width: "100%" }}
-                  value={formik.values.handles.handleType}
+                  value={formik.values.handles.handleType || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -467,7 +461,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="hinges.hingesType"
                   style={{ width: "100%" }}
-                  value={formik.values.hinges.hingesType}
+                  value={formik.values.hinges.hingesType || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -1050,6 +1044,7 @@ const DefaultComponent = ({ singleDefault }) => {
           {/*  clamps ends here*/}
 
           {/* Glass type*/}
+
           <div
             style={{
               display: "flex",
@@ -1155,7 +1150,6 @@ const DefaultComponent = ({ singleDefault }) => {
               </TextField>
             </Box>
           </div>
-
           {/*   sliding Door System */}
 
           <div

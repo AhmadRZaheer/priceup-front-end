@@ -27,7 +27,7 @@ import { CircularProgress } from "@material-ui/core";
 
 const DefaultSection = () => {
   const hardwareData = useSelector((state) => state.hardware);
-  const [showNext, SetShowNext] = React.useState("64a66af918c2e537956dfc80");
+  const [showNext, SetShowNext] = React.useState("");
   console.log(showNext, "showNext test11");
 
   const { data: defaultData, refetch: defaultDataRefetch } =
@@ -40,13 +40,18 @@ const DefaultSection = () => {
     isLoading: isLoadingDefaultSingle,
     isFetching: isfetchingDefaultSingle,
   } = useFetchSingleDefault(showNext);
-  console.log(singleDefault, "singleDefault test2 ");
-  useEffect(() => {
-    if (isfetchingDefaultSingle) {
-      setSingleDefault(singleDefault);
-    }
-  }, [isfetchingDefaultSingle]);
+  // console.log(singleDefault, "singleDefault test2 ");
+  // useEffect(() => {
+  //   if (isfetchingDefaultSingle) {
+  //     setSingleDefault(singleDefault);
+  //   }
+  // }, [isfetchingDefaultSingle]);
 
+  useEffect(() => {
+    if (defaultData?.length) {
+      SetShowNext(defaultData[0]?._id);
+    }
+  }, [defaultData])
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   console.log(showNext, "showNext default");
@@ -152,7 +157,7 @@ const DefaultSection = () => {
             {isfetchingDefaultSingle ? (
               <CircularProgress />
             ) : (
-              <DefaultComponent singleDefault={singleDefaultdata} />
+              <DefaultComponent singleDefault={singleDefault} />
             )}
           </div>
         </div>
