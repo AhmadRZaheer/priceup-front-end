@@ -6,7 +6,7 @@ const AppRoutes = () => {
   const token = localStorage.getItem("token");
 
   const decodedToken = parseJwt(token);
-  console.log(decodedToken.role, "decodedToken-ar");
+  // console.log(decodedToken.role, "decodedToken-ar");
 
   if (!token || token === "undefined") {
     console.log("UnAuthenticatedRoutes");

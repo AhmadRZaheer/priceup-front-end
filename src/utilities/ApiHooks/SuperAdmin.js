@@ -29,8 +29,6 @@ export const useFetchDataAdmin = () => {
   });
 };
 
-
-
 export const useCreateAdminsMembers = () => {
   const handleCreate = async (props) => {
     console.log(props, "hook props in create hook");
@@ -66,4 +64,32 @@ export const useCreateAdminsMembers = () => {
   return useMutation(handleCreate);
 };
 
+export const useUserStatus = () => {
+  const handleEdit = async (status) => {
+    console.log(status, "status in hooks");
 
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/users/status/${status?.id}`,
+        {
+          status: status.status,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
