@@ -5,31 +5,21 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import {
-  useDeleteTeamMembers,
-  useFetchDataTeam,
-} from "../../utilities/ApiHooks/Team";
-import AddTeamMembers from "../Model/AddTeamMembers";
+import { Box, Button, CircularProgress, FormControlLabel, Switch, Typography } from "@mui/material";
 import Snackbars from "../Model/SnackBar";
+import { useFetchDataAdmin } from "../../utilities/ApiHooks/SuperAdmin";
+import AddSuperAdminModel from "../Model/AddSuperAdminModel";
+import { Delete } from "@mui/icons-material";
 
 const SuperAdminTable = () => {
-  const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
   const [open, setOpen] = useState(false);
-  const [edit, setEdit] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
 
-  const handleOpen = (data) => {
-    setOpen(true);
-    setIsEdit(false);
-  };
+  console.log(AdminData, "AdminData");
+
   const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data, isEditAble) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
+
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -49,77 +39,43 @@ const SuperAdminTable = () => {
       open: false,
     }));
   };
-  console.log(teamData, "teamDatateamData");
-  // const actionColumn = [
-  //   {
-  //     field: "action",
-  //     headerName: "Actions",
-  //     width: 200,
-  //     renderCell: () => {
-  //       return (
-  //         <div className="cellAction">
-  //           <div className="deleteButton">
-  //             <DeleteIcon />
-  //           </div>
-  //           <div className="viewButton">
-  //             <ModeIcon />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  // ];
-
-  const {
-    mutate: deleteFinish,
-    error: finishDeleteError,
-    isSuccess: deleteSuccess,
-    isLoading: loaderForDelete,
-  } = useDeleteTeamMembers();
-  const handleTeamMemberDelete = (id) => {
-    deleteFinish(id);
-    setMatchingId(id);
-    if (deleteSuccess) {
-      showSnackbar("Deleted Successfully ", "warning");
-      teamMemberRefetch();
-    }
-  };
-  React.useEffect(() => {
-    if (deleteSuccess) {
-      teamMemberRefetch();
-      showSnackbar("Deleted Successfully ", "warning");
-    }
-  }, [deleteSuccess]);
-
+  console.log(AdminData, "teamDatateamData");
+  
   const actionColumn = [
     {
+      
       field: " ",
       // headerName: (
       //   // <div onClick={handleOpen}>
       //   //   <img src={plus} alt="Add More" />
       //   // </div>
       // ),
-      width: 200,
+      width: 220,
       renderCell: (params) => {
-        const id = params.row._id;
-        const isMatchingId = id === matchingId;
+
         return (
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleTeamMemberDelete(id)}
             >
-              {isMatchingId && loaderForDelete ? (
-                <CircularProgress size={24} color="warning" />
-              ) : (
-                <DeleteIcon />
-              )}
             </div>
             <div
               className="viewButton"
-              onClick={() => handleOpenEdit(params.row)}
+              // onClick={() => handleOpenEdit(params.row)}
             >
-              <ModeIcon />
+                   <FormControlLabel
+                      
+                            control={
+                                <Switch
+                                    color="primary"
+                                    // checked={formik.values.status}
+                                    // onChange={formik.handleChange}
+                                    // onBlur={formik.handleBlur}
+                                    name="status"
+                                />
+                            }
+                    label={"active"}
+                 />
             </div>
           </div>
         );
@@ -146,17 +102,15 @@ const SuperAdminTable = () => {
       <div className="CustomerTable">
         <DataGrid
           getRowId={(row) => row._id}
-          rows={teamData}
+          rows={AdminData}
           columns={teamColumns.concat(actionColumn)}
           paginationModel={{ page: 0, pageSize: 8 }}
         />
       </div>
 
-      <AddTeamMembers
+      <AddSuperAdminModel
         open={open}
         close={handleClose}
-        data={edit}
-        isEdit={isEdit}
         refetch={teamMemberRefetch}
         showSnackbar={showSnackbar}
       />

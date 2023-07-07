@@ -24,6 +24,7 @@ export const teamColumns = [
           <div className="customerNameTable">
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
+            
           </div>
         </div>
       );
