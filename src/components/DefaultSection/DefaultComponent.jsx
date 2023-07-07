@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import door from "../../Assets/door.png";
 // import { FieldArray,  } from "formik";
 import { useFormik, Field, ErrorMessage, FieldArray } from "formik";
@@ -6,29 +6,16 @@ import * as Yup from "yup";
 import { Button, MenuItem, TextField, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDropzone } from "react-dropzone";
-import {
-  Clamps,
-  GlassType,
-  GlassTypeCount,
-  Handles,
-  channelorClamps,
-  glassType,
-  glassTypeCount,
-  hardwareFinishes,
-  heavyDutyOption,
-  heavyPivotOption,
-  hinges,
-  mountingChannel,
-  options,
-  pivotHingeOption,
-} from "../../data/data";
+
 import { backendURL } from "../../utilities/common";
 import axios from "axios";
 import {
+  useEditDefault,
   useFetchDataDefault,
   useFetchSingleDefault,
 } from "../../utilities/ApiHooks/DefaultLayouts";
 import { CircularProgress } from "@material-ui/core";
+import DefaultComponentHeader from "./DefaultComponentHeader";
 // const validationSchema = Yup.object().shape({
 //   image: Yup.mixed()
 //     .required("Image is required")
@@ -102,6 +89,16 @@ import { CircularProgress } from "@material-ui/core";
 // });
 
 const DefaultComponent = ({ singleDefault }) => {
+  useEffect(() => {
+    console.log(singleDefault, "testing phase");
+  }, [singleDefault]);
+
+  const {
+    mutate: updateDefault,
+    isLoading: LoadingForEdit,
+    isError: ErrorForEdit,
+    isSuccess: SuccessForEdit,
+  } = useEditDefault();
 
   const formik = useFormik({
     initialValues: {
@@ -175,7 +172,8 @@ const DefaultComponent = ({ singleDefault }) => {
         hours: singleDefault?.layoutData?.settings?.other?.hours,
       },
     },
-    enableReinitialize: true,
+
+    // enableReinitialize: true,
     // validationSchema,
     onSubmit: (values) => {
       console.log(values, "not found or found images");
@@ -183,29 +181,48 @@ const DefaultComponent = ({ singleDefault }) => {
   });
   console.log(formik.values, "thickness of glass type");
 
-  const handleImageChange = (event) => {
+  const { getFieldProps, setFieldValue, touched, errors } = formik;
+  // const handleImageChange = (event) => {
+  //   setFieldValue("image", event.target.files[0]);
+  // };
+  // const [selectedImage, setSelectedImage] = useState(null);
+  // const onDrop = (acceptedFiles) => {
+  //   setSelectedImage(acceptedFiles[0]);
+  //   // setFieldValue("image", acceptedFiles[0]);
+  //   formik.setFieldValue("image", acceptedFiles[0]);
+  // };
+  // const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  // const fileInputRef = useRef(null);
+
+  // const handleButtonClick = () => {
+  //   fileInputRef.current.click();
+  // };
+
+  const fileInputRef = useRef(null);
+
+  const handleFileUpload = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    // setSelectedImage(URL.createObjectURL(file));
     setFieldValue("image", event.target.files[0]);
   };
-  const { getFieldProps, setFieldValue, touched, errors } = formik;
-  const [selectedImage, setSelectedImage] = useState(null);
-  const onDrop = (acceptedFiles) => {
-    setSelectedImage(acceptedFiles[0]);
-    // setFieldValue("image", acceptedFiles[0]);
-    formik.setFieldValue("image", acceptedFiles[0]);
+  const handleEditClick = (props) => {
+    console.log(props, "props for edit to refetch");
+    const id = singleDefault?._id;
+    // console.log(id, "id2 for edit hook");
+    updateDefault(props, id);
   };
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
-
-  // console.log(singleDefault, "singleDefault");
-
-  // console.log(
-  //   singleDefault?.listData?.handles,
-  //   "singleDefault?.listData?.handles from api"
-  // );
-
-  // if (fetched) return <CircularProgress />;
-
   return (
     <form type="submit">
+      <DefaultComponentHeader
+        selected={singleDefault?.name || "Door"}
+        // handleEditClick={handleEditClick(formik.values)}
+      />
+
       <Box
         style={{
           display: "flex",
@@ -260,7 +277,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   marginX: 1,
                 }}
               >
-                <Box>
+                {/* <Box>
                   <input
                     accept="image/*"
                     id="image-input"
@@ -283,7 +300,7 @@ const DefaultComponent = ({ singleDefault }) => {
                       alt="Selected"
                     />
                   )}
-                  <label htmlFor="image-input">
+                <label htmlFor="image-input"> 
                     <Button
                       style={{
                         width: "100%",
@@ -295,7 +312,44 @@ const DefaultComponent = ({ singleDefault }) => {
                     >
                       Upload Image
                     </Button>
-                  </label>
+                  </label> 
+                </Box> */}
+
+                <Box>
+                  <input
+                    type="file"
+                    accept="image/svg+xml,image/png,image/jpeg,image/gif"
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
+                  {formik.values.image ? (
+                    <img
+                      width={"100%"}
+                      height={"400px"}
+                      src={URL.createObjectURL(formik.values.image)}
+                      alt="Selected"
+                    />
+                  ) : (
+                    <img
+                      width={"100%"}
+                      height={"400px"}
+                      src={door}
+                      alt="Selected"
+                    />
+                  )}
+                  <Button
+                    style={{
+                      width: "100%",
+                      boxShadow: "0px 0px 2px blue",
+                      color: "#000000",
+                      backgroundColor: "rgba(132, 119, 218, 0.14)",
+                    }}
+                    component="span"
+                    onClick={handleFileUpload}
+                  >
+                    Upload Image
+                  </Button>
                 </Box>
               </Box>
             </Box>
@@ -335,7 +389,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="hardwareFinishes"
                   style={{ width: "100%" }}
-                  value={formik.values.hardwareFinishes || ""}
+                  value={formik.values.hardwareFinishes || null}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -393,7 +447,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="handles.handleType"
                   style={{ width: "100%" }}
-                  value={formik.values.handles.handleType || ""}
+                  value={formik.values.handles.handleType || null}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -423,7 +477,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.handles.count !== 0
                     ? formik.values.handles.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -461,7 +515,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   variant="outlined"
                   name="hinges.hingesType"
                   style={{ width: "100%" }}
-                  value={formik.values.hinges.hingesType || ""}
+                  value={formik.values.hinges.hingesType || null}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 >
@@ -491,7 +545,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.hinges.count !== 0
                     ? formik.values.hinges.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -557,7 +611,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.pivotHinge.count !== 0
                     ? formik.values.pivotHinge.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -627,7 +681,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.heavyDutyOption.threshold !== 0
                     ? formik.values.heavyDutyOption.threshold
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -643,7 +697,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.heavyDutyOption.height !== 0
                     ? formik.values.heavyDutyOption.height
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -677,7 +731,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   select
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.heavyPivotType"
+                  name="heavyPivotOption.heavyPivotType"
                   style={{ width: "100%" }}
                   value={formik.values.heavyPivotOption.heavyPivotType}
                   onChange={formik.handleChange}
@@ -709,7 +763,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.heavyPivotOption.height !== 0
                     ? formik.values.heavyPivotOption.height
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -728,7 +782,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.heavyPivotOption.threshold !== 0
                     ? formik.values.heavyPivotOption.threshold
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -765,7 +819,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   select
                   size="small"
                   variant="outlined"
-                  name="channelorClamps"
+                  name="channelOrClamps"
                   style={{ width: "100%" }}
                   value={formik.values.channelOrClamps}
                   onChange={formik.handleChange}
@@ -903,7 +957,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.wallClamp.count !== 0
                     ? formik.values.wallClamp.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -968,7 +1022,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.sleeveOver.count !== 0
                     ? formik.values.sleeveOver.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -1033,7 +1087,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.glassToGlass.count !== 0
                     ? formik.values.glassToGlass.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -1205,7 +1259,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 value={
                   formik.values.slidingDoorSystem.count !== 0
                     ? formik.values.slidingDoorSystem.count
-                    : ""
+                    : null
                 }
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
