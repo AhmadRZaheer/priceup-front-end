@@ -7,15 +7,17 @@ import { backendURL } from "../../utilities/common";
 
 const MenuList = ({ menuOptions, title }) => {
   const [anchorEl, setAnchorEl] = React.useState(false);
-
-  const handleClose = () => {
-    setAnchorEl(!anchorEl);
+  const [selectedItem, setSelectedItem] = React.useState([]);
+  console.log(selectedItem, "selectedItem");
+  const handleClose = (item) => {
+    setSelectedItem((prevItems) => [...prevItems, item]);
+    setAnchorEl(false);
   };
 
   return (
     <div>
       <Button
-        onClick={handleClose}
+        onClick={() => setAnchorEl(!anchorEl)}
         id="basic-button"
         sx={{ color: { md: "#000000 !important ", xs: "white" } }}
       >
@@ -42,7 +44,7 @@ const MenuList = ({ menuOptions, title }) => {
           }}
         >
           {menuOptions?.map((item) => (
-            <MenuItem key={item.id} onClick={handleClose}>
+            <MenuItem key={item.id} onClick={() => handleClose(item)}>
               <Box
                 sx={{
                   width: "200px",
