@@ -1,45 +1,88 @@
-import React from 'react'
-import "./customerTable.scss"
-import { userColumns , userRows } from '../../customerTableSource';
-import ModeIcon from '@mui/icons-material/Mode';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from "react";
+import "./customerTable.scss";
+import { CustomerColumns } from "../../customerTableSource";
+import DeleteIcon from "@mui/icons-material/Delete";
+
+import { DataGrid } from "@mui/x-data-grid";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { useFetchDataCustomer } from "../../utilities/ApiHooks/Customer";
 
 
-import { DataGrid } from '@mui/x-data-grid';
+const CustomerTable = () => {
+  const { data: CustomerData, refetch: CustomerMemberRefetch } = useFetchDataCustomer();
+  const [matchingId, setMatchingId] = useState("");
 
 
-const Customertable = () => {
-    const actionColumn = [{
-        field: "action" ,
-        headerName: "Actions",
-        width: 200,
-        renderCell: () => {
-            return(
-                <div className="cellAction">
-                    <div className="deleteButton"><DeleteIcon/></div>
-                    <div className="viewButton"><ModeIcon/></div>
-                </div>
-            )
-        }
 
-    }]
+  console.log(CustomerData, "customersData");
+  // const actionColumn = [
+  //   {
+  //     field: "action",
+  //     headerName: "Actions",
+  //     width: 200,
+  //     renderCell: () => {
+  //       return (
+  //         <div className="cellAction">
+  //           <div className="deleteButton">
+  //             <DeleteIcon />
+  //           </div>
+  //           <div className="viewButton">
+  //             <ModeIcon />
+  //           </div>
+  //         </div>
+  //       );
+  //     },
+  //   },
+  // ];
+
+
+
+  const actionColumn = [
+    {
+      field: " ",
+      // headerName: (
+      //   // <div onClick={handleOpen}>
+      //   //   <img src={plus} alt="Add More" />
+      //   // </div>
+      // ),
+      width: 200,
+      renderCell: (params) => {
+        const id = params.row._id;
+        const isMatchingId = id === matchingId;
+        return (
+          <div className="cellAction">
+            <div
+              className="deleteButton"
+             
+            >
+             
+            </div>
+          </div>
+        );
+      },
+    },
+  ];
   return (
     <>
-    <div className="page-title">
-          <h2>Customer List</h2>
-        </div>
-    <div className="CustomerTable">
+      <div className="page-title">
+        <Box
+          sx={{
+            display: "flex",
+          }}
+        >
+          <Typography Boxvariant="h3">Customer List</Typography>
+        </Box>
+      </div>
+      <div className="CustomerTable">
         <DataGrid
-        rows={userRows}
-        columns={userColumns.concat(actionColumn)}
-        paginationModel={{ page: 0, pageSize: 8 }}
-        checkboxSelection
-      />
-
-    </div>
+          getRowId={(row) => row._id}
+          rows={CustomerData}
+          columns={CustomerColumns}
+          paginationModel={{ page: 0, pageSize: 8 }}
+        />
+      </div>
     </>
-    
-  )
-}
+  );
+};
 
-export default Customertable
+export default CustomerTable;

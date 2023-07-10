@@ -47,6 +47,43 @@ export const teamColumns = [
   },
 ];
 
+export const CustomerColumns = [
+  // {
+  //   field: "id",
+  //   headerName: "ID",
+  //   width: 70,
+  // },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 330,
+    renderCell: (params) => {
+      return (
+        <div className="cellWrapper">
+          <div className="customerImg">
+            <img style={{width: 30, height: 30}} src={`${backendURL}/${params.row.image}`} alt="" />
+            {/* <img style={{}} src={wheel} alt="" /> */}
+          </div>
+          <div className="customerNameTable">
+            {params.row.name}
+            <div className="userNameTable">{params.row.username}</div>
+          </div>
+        </div>
+      );
+    },
+  },
+  { field: "email", headerName: "Email address", width: 220 },
+  {
+    field: "address",
+    headerName: "Address",
+    width: 330,
+  },
+  {
+    field: "lastQuotedOn",
+    headerName: "Last Quoted on",
+    width: 220,
+  },,
+];
 export const userColumns = [
   {
     field: "id",
