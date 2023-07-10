@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./SuperAdmin.scss";
-import { teamColumns } from "../../customerTableSource";
+import { AdminColumns, teamColumns } from "../../customerTableSource";
 
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -17,20 +17,16 @@ import {
 } from "../../utilities/ApiHooks/SuperAdmin";
 import AddSuperAdminModel from "../Model/AddSuperAdminModel";
 import { Delete } from "@mui/icons-material";
+import TableRow from "./TableRow";
 
 const SuperAdminTable = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-  const {
-    mutate: updateStatus,
-    isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
-    isSuccess: SuccessForEdit,
-  } = useUserStatus();
+  
   const [open, setOpen] = useState(false);
-  const [status, setStatus] = useState(false);
+  // const [matchingId, setMatchingId] = useState("");
+  // console.log(matchingId, "matchingId")
 
   console.log(AdminData, "AdminData");
-  console.log(status, "status");
 
   const handleClose = () => setOpen(false);
 
@@ -55,6 +51,12 @@ const SuperAdminTable = () => {
   };
   console.log(AdminData, "teamDatateamData");
 
+  const handleSwitch = (row) => {
+    console.log(row, "row");
+    // deleteFinish(id);
+    // setMatchingId(id);
+  };
+
   const actionColumn = [
     {
       field: " ",
@@ -65,34 +67,11 @@ const SuperAdminTable = () => {
       // ),
       width: 220,
       renderCell: (params) => {
-        // let id  = AdminData.id;
+        const id = params.row._id;
+        console.log(params.row, "params id");
+        // const isMatchingId = id === matchingId;
 
-        let status = false;
-        if (AdminData.id === params.row.id) {
-          // Perform any additional logic based on the id values
-          status = true; // Set the status to true if the ids match
-        }
-        return (
-          <div className="cellAction">
-            <div className="deleteButton"></div>
-            <div
-              className="viewButton"
-              // onClick={() => handleOpenEdit(params.row)}
-            >
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="primary"
-                    checked={status}
-                    onChange={() => setStatus(!status)}
-                    name="status"
-                  />
-                }
-                label={"active"}
-              />
-            </div>
-          </div>
-        );
+        return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
   ];
@@ -117,7 +96,7 @@ const SuperAdminTable = () => {
         <DataGrid
           getRowId={(row) => row._id}
           rows={AdminData}
-          columns={teamColumns.concat(actionColumn)}
+          columns={AdminColumns.concat(actionColumn)}
           paginationModel={{ page: 0, pageSize: 8 }}
         />
       </div>
