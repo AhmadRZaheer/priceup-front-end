@@ -62,7 +62,7 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
           }}
         >
           <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-            Exiting Quotes
+            Existing Quotes
           </Typography>
           <IconButton sx={{ height: 25 }}>
             <NavLink to="/login">
