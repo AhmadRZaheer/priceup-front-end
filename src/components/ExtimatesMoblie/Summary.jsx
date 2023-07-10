@@ -41,7 +41,9 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
           }}
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
-            <ChevronLeftOutlined sx={{ fontSize: 34, paddingTop: 0.4 }} />
+            <ChevronLeftOutlined
+            onClick={() => setHandleEstimatesPages("review")}
+             sx={{ fontSize: 34, paddingTop: 0.4 }} />
           </Box>
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute

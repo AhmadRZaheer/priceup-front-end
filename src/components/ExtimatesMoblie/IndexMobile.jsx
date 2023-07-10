@@ -7,10 +7,11 @@ import LayoutReview from "./LayoutReview";
 import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import Summary from "./Summary";
+import ExitingQuotes from "./existingQuotes";
 
 const IndexMobile = () => {
   const boxStyles = {
-    minHeight: "152px",
+    minHeight: "152namepx",
     minWidth: { md: "180px", xs: "140px" },
     margin: "auto",
     borderRadius: "12px",
@@ -31,7 +32,7 @@ const IndexMobile = () => {
     },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [handleEstimatesPages, setHandleEstimatesPages] = useState("layout");
+  const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
 
   console.log(handleEstimatesPages, "handleEstimatesPageshandleEstimatesPages");
 
@@ -80,6 +81,9 @@ const IndexMobile = () => {
             >
               <Box sx={{ display: { md: "none", xs: "block" } }}>
                 <ChevronLeftOutlinedIcon
+                onClick={() => {
+                  setHandleEstimatesPages("exiting");
+                }}
                   sx={{ fontSize: 34, paddingTop: 0.4 }}
                 />
               </Box>
@@ -190,6 +194,12 @@ const IndexMobile = () => {
       )}
       {handleEstimatesPages == "summary" && (
         <Summary
+          setHandleEstimatesPages={setHandleEstimatesPages}
+          setClientDetailOpen={setClientDetailOpen}
+        />
+      )}
+      {handleEstimatesPages == "exiting" && (
+        <ExitingQuotes
           setHandleEstimatesPages={setHandleEstimatesPages}
           setClientDetailOpen={setClientDetailOpen}
         />
