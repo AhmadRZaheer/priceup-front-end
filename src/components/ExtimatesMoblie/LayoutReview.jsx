@@ -41,10 +41,14 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
           }}
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
-            <ChevronLeftOutlined sx={{ fontSize: 34, paddingTop: 0.4 }} />
+            <ChevronLeftOutlined 
+            onClick={() => {
+              setHandleEstimatesPages("measurements");
+            }}
+            sx={{ fontSize: 34, paddingTop: 0.4 }} />
           </Box>
           <Typography textAlign={"center"} variant="h4">
-            Create New Qoute
+            Create New Quote
           </Typography>
         </Box>
         <Typography
@@ -70,9 +74,10 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
             flexDirection: "column",
             paddingTop: { md: 0, xs: 6 },
             marginTop: { md: 0, xs: -3 },
+            marginBottom: 4.6
           }}
         >
-          <Box sx={{ paddingLeft: 1.5 }}>
+          <Box sx={{ width: {md: "100%", xs: "90%"}, margin: "auto" }}>
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "18px" },
@@ -93,13 +98,14 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
             sx={{
               display: "flex",
               width: { md: "96.5%", xs: "94%" },
-              paddingY: { md: 4, xs: 1 },
+              paddingY: { md: 4, xs: 0 },
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
+              margin: {md: 0, xs: "auto"}
             }}
           >
             {/* LeftSide */}
@@ -135,10 +141,12 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     color: { md: "black", xs: "white" },
                   }}
                 >
+                  <Box sx={{width: "100%"}}>
                   <MenuList
                     menuOptions={menuOptions}
                     title={" Hardware Finishes"}
                   />
+                  </Box>
                 </Box>
                 <Box
                   sx={{
@@ -149,10 +157,13 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     borderBottom: {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
+
                     },
                   }}
                 >
-                  <MenuList menuOptions={menuOptions} title={"Handles"} />
+                  <Box sx={{width: "80%"}}>
+                  <MenuList menuOptions={menuOptions} title={"Handles"}  />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -178,7 +189,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                    <Box sx={{width: "80%"}}>
                   <MenuList menuOptions={menuOptions} title={" Hinges"} />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -204,7 +217,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "100%"}}>
                   <MenuList menuOptions={menuOptions} title={"Mounting"} />
+                  </Box>
                 </Box>{" "}
                 <Box
                   sx={{
@@ -218,7 +233,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "80%"}}>
                   <MenuList menuOptions={menuOptions} title={" Glass type"} />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -244,7 +261,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "80%"}}>
                   <MenuList menuOptions={menuOptions} title={"Bars"} />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -270,7 +289,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "80%"}}>
                   <MenuList menuOptions={menuOptions} title={"Header"} />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -296,10 +317,12 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "100%"}}>
                   <MenuList
                     menuOptions={menuOptions}
                     title={"Glass treatment"}
                   />
+                  </Box>
                 </Box>{" "}
                 <Box
                   sx={{
@@ -313,7 +336,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
+                  <Box sx={{width: "80%"}}>
                   <MenuList menuOptions={menuOptions} title={"Add ons:"} />
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -767,7 +792,7 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
             display: { md: "none", xs: "flex" },
             gap: 2,
             justifyContent: "center",
-            width: "92%",
+            width: "93%",
             paddingX: 2,
             paddingY: 2,
             position: "fixed",

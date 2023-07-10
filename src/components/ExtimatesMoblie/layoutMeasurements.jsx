@@ -33,7 +33,10 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
           }}
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
-            <ChevronLeftOutlinedIcon sx={{ fontSize: 34, paddingTop: 0.4 }} />
+            <ChevronLeftOutlinedIcon
+            onClick={() => {
+              setHandleEstimatesPages("layout");
+            }} sx={{ fontSize: 34, paddingTop: 0.4 }} />
           </Box>
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute
