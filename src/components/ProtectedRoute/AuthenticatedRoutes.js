@@ -11,6 +11,8 @@ import Defaults from "../../pages/Layouts/Defaults";
 import Estimates from "../../pages/Estimates/Estimates";
 import Settings from "../../pages/Settings/Settings";
 import Staff from "../../pages/EstimatesMobile/Staff";
+import SuperAdminTable from "../SuperAdmin/SuperAdmin";
+import Admin from "../../pages/Admin/Admin";
 
 const AuthenticatedRoutesAdmin = () => {
   return (
@@ -30,6 +32,8 @@ const AuthenticatedRoutesAdmin = () => {
 
         <Route path="defaults" element={<Defaults />} />
         <Route path="settings" element={<Settings />} />
+
+        <Route path="admin" element={<Admin />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>

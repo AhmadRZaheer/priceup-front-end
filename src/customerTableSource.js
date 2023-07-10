@@ -1,4 +1,5 @@
 //temporary data
+import { FormControlLabel, Switch } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 
@@ -24,6 +25,20 @@ export const teamColumns = [
           <div className="customerNameTable">
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
+            
+            {/* <FormControlLabel
+                      
+                      control={
+                          <Switch
+                              color="primary"
+                              // checked={formik.values.status}
+                              // onChange={formik.handleChange}
+                              // onBlur={formik.handleBlur}
+                              name="status"
+                          />
+                      }
+              label={"active"}
+           /> */}
           </div>
         </div>
       );
