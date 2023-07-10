@@ -19,12 +19,12 @@ const TableRow = ({ row, refetch }) => {
       refetch();
     }
   }, [SuccessForEdit]);
+  console.log(LoadingForEdit, "LoadingForEdit")
   return (
     <div className="cellAction">
       <div className="deleteButton"></div>
       <div
         className="viewButton"
-        // onClick={() => handleOpenEdit(params.row)}
       >
         {LoadingForEdit ? (
           <CircularProgress size={24} color="warning" />
