@@ -12,11 +12,11 @@ const MenuList = ({ menuOptions, title }) => {
   };
 
   return (
-    <div >
+    <div>
       <Button
         onClick={handleClose}
         id="basic-button"
-        sx={{ color: {md: "#000000 !important ", xs: "white"} }}
+        sx={{ color: { md: "#000000 !important ", xs: "white" } }}
       >
         {anchorEl ? (
           <ChevronRight
@@ -33,7 +33,13 @@ const MenuList = ({ menuOptions, title }) => {
         {title}
       </Button>
       {anchorEl ? (
-        <Box sx={{ height: "150px", overflowY: "scroll", color: {md: "#000000", xs: "white"}}}>
+        <Box
+          sx={{
+            height: "150px",
+            overflowY: "scroll",
+            color: { md: "#000000", xs: "white" },
+          }}
+        >
           {menuOptions.map((item) => (
             <MenuItem key={item.id} onClick={handleClose}>
               <Box
@@ -47,9 +53,7 @@ const MenuList = ({ menuOptions, title }) => {
                   display: "flex",
                   gap: 2,
                   alignItems: "center",
-                  width: {md: "100%", xs:"80%"}
-                  
-                  
+                  width: { md: "100%", xs: "80%" },
                 }}
               >
                 <img
@@ -58,8 +62,8 @@ const MenuList = ({ menuOptions, title }) => {
                   src={item.image}
                   alt="Selected"
                 />
-                <Box sx={{color: {md: "#000000 ", xs: "white"}}}>
-                  <Typography >{item.name}</Typography>
+                <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
+                  <Typography>{item.name}</Typography>
                   <Typography>{item.price}</Typography>
                 </Box>
               </Box>
