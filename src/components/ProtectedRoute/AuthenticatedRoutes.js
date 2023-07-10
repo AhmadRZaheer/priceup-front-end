@@ -33,7 +33,6 @@ const AuthenticatedRoutesAdmin = () => {
         <Route path="defaults" element={<Defaults />} />
         <Route path="settings" element={<Settings />} />
 
-        <Route path="admin" element={<Admin />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>

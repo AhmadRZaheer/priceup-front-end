@@ -25,56 +25,61 @@ const SuperSidebar = () => {
     console.log("hello world");
     dispatch(logoutHandler());
 
-    navigate("/login");
+    navigate("/adminlogin");
   };
 
   return (
     <>
-   
-      
       <div className="sidebar">
-      <Box sx={{display: "flex", flexDirection: "column" , alignItems: "space-between", height: "95vh", justifyContent: "space-between"}}>
-      <Box sx={{marginTop: 2}} >
-
-        <NavLink style={{marginTop: 20}} to="/">
-          <div className="top">
-            <span className="logo">
-              <img src={Logo} alt="" />
-            </span>
-          </div>
-        </NavLink>
-        <div className="center">
-          <ul style={{marginTop: 80}}>
-            <NavLink  to="/admin" className="link">
-              <li
-                className={` ${location.pathname === "/admin" ? "active" : ""}`}
-              >
-                <AdjustIcon className="icon" />
-                <span>Admin</span>
-              </li>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "space-between",
+            height: "95vh",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ marginTop: 2 }}>
+            <NavLink style={{ marginTop: 20 }} to="/">
+              <div className="top">
+                <span className="logo">
+                  <img src={Logo} alt="" />
+                </span>
+              </div>
             </NavLink>
-            
-          </ul>
-        </div>
-        
-        </Box>
-        <Box>
-        <div className="line"></div>
-        <div className="bottom">
-          <div className="UserIcon">
-            <img src={UserIcon} alt="" />
-          </div>
-          <div className="userInSidebar">
-            Olivia Rhye
-            <div className="emailUser">Olivia@glassexperts.com</div>
-          </div>
-          <div className="logOutIcon" onClick={() => setOpen(!open)}>
-            {/* <a href="/login"> */}
-            <img src={logout} alt="image" />
-            {/* </a> */}
-          </div>
-        </div>
-        </Box>
+            <div className="center">
+              <ul style={{ marginTop: 80 }}>
+                <NavLink to="/admin" className="link">
+                  <li
+                    className={` ${
+                      location.pathname === "/admin" ? "active" : ""
+                    }`}
+                  >
+                    <AdjustIcon className="icon" />
+                    <span>Admin</span>
+                  </li>
+                </NavLink>
+              </ul>
+            </div>
+          </Box>
+          <Box>
+            <div className="line"></div>
+            <div className="bottom">
+              <div className="UserIcon">
+                <img src={UserIcon} alt="" />
+              </div>
+              <div className="userInSidebar">
+                Olivia Rhye
+                <div className="emailUser">Olivia@glassexperts.com</div>
+              </div>
+              <div className="logOutIcon" onClick={() => setOpen(!open)}>
+                {/* <a href="/login"> */}
+                <img src={logout} alt="image" />
+                {/* </a> */}
+              </div>
+            </div>
+          </Box>
         </Box>
       </div>
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />

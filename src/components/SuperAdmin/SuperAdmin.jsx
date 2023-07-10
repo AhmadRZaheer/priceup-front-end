@@ -54,7 +54,7 @@ const SuperAdminTable = () => {
     }));
   };
   console.log(AdminData, "teamDatateamData");
-  
+
   const actionColumn = [
     {
       field: " ",
@@ -66,10 +66,8 @@ const SuperAdminTable = () => {
       width: 220,
       renderCell: (params) => {
         // let id  = AdminData.id;
-       
-          
 
-        let status = false ;
+        let status = false;
         if (AdminData.id === params.row.id) {
           // Perform any additional logic based on the id values
           status = true; // Set the status to true if the ids match

@@ -1,6 +1,7 @@
 import { parseJwt } from "./AuthVerify";
-import AuthenticatedRoutes from "./AuthenticatedRoutes";
+import AuthenticatedRoutesAdmin from "./AuthenticatedRoutes";
 import AuthenticatedRouteStaff from "./AuthenticatedRoutesStaff";
+import AuthenticatedRouteSuperAdmin from "./AuthenticatedRoutesSuperAdmin";
 import UnAuthenticatedRoutes from "./UnAuthenticatedRoutes";
 
 const AppRoutes = () => {
@@ -13,7 +14,10 @@ const AppRoutes = () => {
   } else {
     if (decodedToken?.role === "staff") {
       return <AuthenticatedRouteStaff />;
-    } else return <AuthenticatedRoutes />;
+    } else if (decodedToken?.role === "admin")
+      return <AuthenticatedRoutesAdmin />;
+    else if (decodedToken?.role === "super_admin")
+      return <AuthenticatedRouteSuperAdmin />;
   }
 };
 
