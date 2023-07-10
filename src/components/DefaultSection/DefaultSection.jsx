@@ -3,7 +3,6 @@ import "./hardwareTable.scss";
 
 import { Box } from "@mui/material";
 
-import DefaultComponentHeader from "./DefaultComponentHeader";
 import DefaultComponent from "./DefaultComponent";
 import LayoutHeader from "./LayoutHeader";
 
@@ -19,7 +18,6 @@ const DefaultSection = () => {
 
   const { data: defaultData, refetch: defaultDataRefetch } =
     useFetchDataDefault();
-  // const [singleDefaultdata, setSingleDefault] = React.useState({});
 
   const {
     data: singleDefault,

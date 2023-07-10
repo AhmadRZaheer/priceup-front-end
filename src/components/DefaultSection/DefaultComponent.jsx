@@ -213,7 +213,6 @@ const DefaultComponent = ({ singleDefault }) => {
   const handleEditClick = (props) => {
     console.log(props, "props for edit to refetch");
     const id = singleDefault?._id;
-    // console.log(id, "id2 for edit hook");
     updateDefault(props, id);
   };
   return (
@@ -579,7 +578,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   select
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.default"
+                  name="pivotHinge.pivotHingeType"
                   style={{ width: "100%" }}
                   value={formik.values.pivotHinge.pivotHingeType}
                   onChange={formik.handleChange}
@@ -646,7 +645,7 @@ const DefaultComponent = ({ singleDefault }) => {
                   select
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.heavyDutyType"
+                  name="heavyDutyOption.heavyDutyType"
                   style={{ width: "100%" }}
                   value={formik.values.heavyDutyOption.heavyDutyType}
                   onChange={formik.handleChange}
@@ -671,7 +670,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 type="number"
                 size="small"
                 variant="outlined"
-                name="heavyDuty.threshold"
+                name="heavyDutyOption.threshold"
                 style={{
                   width: "120px",
 
@@ -690,7 +689,7 @@ const DefaultComponent = ({ singleDefault }) => {
                 type="number"
                 size="small"
                 variant="outlined"
-                name="heavyDuty.height"
+                name="heavyDutyOption.height"
                 style={{
                   width: "120px",
                 }}
