@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SuperAdmin.scss";
 import { teamColumns } from "../../customerTableSource";
 
@@ -54,7 +54,7 @@ const SuperAdminTable = () => {
     }));
   };
   console.log(AdminData, "teamDatateamData");
-
+  
   const actionColumn = [
     {
       field: " ",
@@ -65,13 +65,15 @@ const SuperAdminTable = () => {
       // ),
       width: 220,
       renderCell: (params) => {
-        const id  = AdminData.id;
-  
-        if (id === params.row.id) {
+        // let id  = AdminData.id;
+       
+          
+
+        let status = false ;
+        if (AdminData.id === params.row.id) {
           // Perform any additional logic based on the id values
           status = true; // Set the status to true if the ids match
         }
-  
         return (
           <div className="cellAction">
             <div className="deleteButton"></div>
