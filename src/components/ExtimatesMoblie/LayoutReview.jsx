@@ -8,8 +8,13 @@ import {
   ChevronLeftOutlined,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimates";
 
 const LayoutReview = ({ setHandleEstimatesPages }) => {
+  const { data: estimatesData, refetch: estimatesRefetch } =
+    useFetchDataEstimate();
+
+  console.log(estimatesData, "estimatesData");
   return (
     <>
       <Box
@@ -136,7 +141,7 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                   }}
                 >
                   <MenuList
-                    menuOptions={menuOptions}
+                    menuOptions={estimatesData?.hardwareFinishes}
                     title={" Hardware Finishes"}
                   />
                 </Box>

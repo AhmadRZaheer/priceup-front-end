@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import { ChevronRight } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
+import { backendURL } from "../../utilities/common";
 
 const MenuList = ({ menuOptions, title }) => {
   const [anchorEl, setAnchorEl] = React.useState(false);
@@ -12,11 +13,11 @@ const MenuList = ({ menuOptions, title }) => {
   };
 
   return (
-    <div >
+    <div>
       <Button
         onClick={handleClose}
         id="basic-button"
-        sx={{ color: {md: "#000000 !important ", xs: "white"} }}
+        sx={{ color: { md: "#000000 !important ", xs: "white" } }}
       >
         {anchorEl ? (
           <ChevronRight
@@ -33,8 +34,14 @@ const MenuList = ({ menuOptions, title }) => {
         {title}
       </Button>
       {anchorEl ? (
-        <Box sx={{ height: "150px", overflowY: "scroll", color: {md: "#000000", xs: "white"}}}>
-          {menuOptions.map((item) => (
+        <Box
+          sx={{
+            height: "150px",
+            overflowY: "scroll",
+            color: { md: "#000000", xs: "white" },
+          }}
+        >
+          {menuOptions?.map((item) => (
             <MenuItem key={item.id} onClick={handleClose}>
               <Box
                 sx={{
@@ -47,20 +54,17 @@ const MenuList = ({ menuOptions, title }) => {
                   display: "flex",
                   gap: 2,
                   alignItems: "center",
-                  width: {md: "100%", xs:"80%"}
-                  
-                  
+                  width: { md: "100%", xs: "80%" },
                 }}
               >
                 <img
                   width={"25px"}
                   height={"25px"}
-                  src={item.image}
+                  src={`${backendURL}/${item.image}`}
                   alt="Selected"
                 />
-                <Box sx={{color: {md: "#000000 ", xs: "white"}}}>
-                  <Typography >{item.name}</Typography>
-                  <Typography>{item.price}</Typography>
+                <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
+                  <Typography>{item.name}</Typography>
                 </Box>
               </Box>
             </MenuItem>
