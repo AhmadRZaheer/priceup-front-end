@@ -16,11 +16,71 @@ export const teamColumns = [
     field: "name",
     headerName: "Name",
     width: 230,
-    renderCell: (params) => {
+    renderCell: (params) => { 
+      console.log(params.id, "params.row.id")
+
       return (
         <div className="cellWrapper">
           <div className="customerImg">
             <img className="cellImg" src={params.row.img} alt="" />
+          </div>
+          <div className="customerNameTable">
+            {params.row.name}
+            <div className="userNameTable">{params.row.username}</div>
+            
+            {/* <FormControlLabel
+                      
+                      control={
+                          <Switch
+                              color="primary"
+                              // checked={formik.values.status}
+                              // onChange={formik.handleChange}
+                              // onBlur={formik.handleBlur}
+                              name="status"
+                          />
+                      }
+              label={"active"}
+           /> */}
+          </div>
+        </div>
+      );
+    },
+  },
+  { field: "email", headerName: "Email address", width: 330 },
+  {
+    field: "dateAdded",
+    headerName: "Date added",
+    width: 120,
+  },
+  {
+    field: "LastQuote",
+    headerName: "Last Quoted",
+    width: 180,
+  },
+  {
+    field: "TotalQuote",
+    headerName: "Total Quoted ",
+    width: 180,
+  },
+];
+export const AdminColumns = [
+  // {
+  //   field: "id",
+  //   headerName: "ID",
+  //   width: 70,
+  // },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 230,
+    renderCell: (params) => { 
+      // console.log(params, "params.row.id")
+      
+
+      return (
+        <div className="cellWrapper">
+          <div className="customerImg">
+            <img className="cellImg" src={`${backendURL}/`} alt="" />
           </div>
           <div className="customerNameTable">
             {params.row.name}
