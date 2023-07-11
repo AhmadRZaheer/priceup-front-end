@@ -1,16 +1,27 @@
 import * as React from "react";
+
 import Button from "@mui/material/Button";
+
 import MenuItem from "@mui/material/MenuItem";
+
 import { ChevronRight } from "@mui/icons-material";
+
 import { Box, Typography } from "@mui/material";
+
+import { backendURL } from "../../utilities/common";
 
 const MenuList = ({ menuOptions, title }) => {
   const [anchorEl, setAnchorEl] = React.useState(false);
 
-  const handleClose = () => {
-    setAnchorEl(!anchorEl);
-  };
+  const [selectedItem, setSelectedItem] = React.useState([]);
 
+  console.log(selectedItem, "selectedItem");
+
+  const handleClose = (item) => {
+    setSelectedItem((prevItems) => [...prevItems, item]);
+
+    setAnchorEl(false);
+  };
   return (
     <div>
       <Button
@@ -41,7 +52,7 @@ const MenuList = ({ menuOptions, title }) => {
           }}
         >
           {menuOptions.map((item) => (
-            <MenuItem key={item.id} onClick={handleClose}>
+            <MenuItem key={item.id} onClick={() => handleClose(item)}>
               <Box
                 sx={{
                   width: "200px",
@@ -59,12 +70,12 @@ const MenuList = ({ menuOptions, title }) => {
                 <img
                   width={"25px"}
                   height={"25px"}
-                  src={item.image}
+                  src={`${backendURL}/${item.image}`}
                   alt="Selected"
                 />
                 <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
                   <Typography>{item.name}</Typography>
-                  <Typography>{item.price}</Typography>
+                  {/* <Typography>{item.price}</Typography> */}
                 </Box>
               </Box>
             </MenuItem>
