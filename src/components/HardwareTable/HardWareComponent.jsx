@@ -66,7 +66,12 @@ const HardWareComponent = ({ type }) => {
     setOpen(true);
     setIsEdit(false);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    
+  };
+
+
   const handleOpenEdit = (data, isEditAble) => {
     setOpen(true);
     setEdit(data);
@@ -79,7 +84,7 @@ const HardWareComponent = ({ type }) => {
   useEffect(() => {
     if (deleteSuccess) {
       hardwareRefetch();
-      showSnackbar("Hardware is Deleted Successfully ", "error");
+      showSnackbar("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
   console.log(hardwareFetching, "hardwareData12 form api hardware component");
@@ -272,6 +277,7 @@ const HardWareComponent = ({ type }) => {
                     index={index}
                     refetch={hardwareRefetch}
                     hardwareId={entry._id}
+                    showSnackbar={showSnackbar}
                   />
                 ))}
               </Box>

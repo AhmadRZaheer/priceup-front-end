@@ -6,7 +6,7 @@ import { useDeleteHardwareFinish, useEditHardware } from "../../utilities/ApiHoo
 import { useEffect } from "react";
 
 
-const FinishItem = ({ data, index, refetch, hardwareId }) => {
+const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
 
     const { mutate: deleteFinish, isLoading: LoadingForDelete,
         isError: ErrorForDelete,
@@ -53,8 +53,17 @@ const FinishItem = ({ data, index, refetch, hardwareId }) => {
     useEffect(() => {
         if (SuccessForEdit || SuccessForDelete) {
             refetch();
+            if (SuccessForEdit) {
+                showSnackbar("Eidt Successfully","success")
+            }
+            if (SuccessForDelete) {
+                showSnackbar("Deleted Successfully","error")
+            }
+          
         }
     }, [SuccessForEdit, SuccessForDelete]);
+
+   
 
     return (<Box key={index}>
         <form onSubmit={formik.handleSubmit}>

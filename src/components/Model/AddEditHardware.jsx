@@ -15,6 +15,7 @@ import {
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import { useCreateHardware, useEditHardware } from "../../utilities/ApiHooks/Hardware";
+import { hardwareFinishes } from "../../data/data";
 
 const style = {
     position: "absolute",
@@ -65,15 +66,15 @@ export default function AddEditHardware({
         isSuccess: SuccessForEdit,
     } = useEditHardware();
 
-    // React.useEffect(() => {
-    //   if (CreatedSuccessfully || SuccessForEdit) {
-    //     finishesRefetch();
-    //     if (CreatedSuccessfully) {
-    //       showSnackbar("Created Successfully ", "success");
+    // useEffect(() => {
+    //     if(SuccessForEdit) {
+    //         refetch();
+
+            
     //     }
-    //     showSnackbar("UpDated Successfully ", "success");
-    //   }
-    // }, [CreatedSuccessfully, SuccessForEdit]);
+    //     showSnackbar("Edit Successfully ", "success")
+    //   }, [])
+    console.log(CreatedSuccessfully, SuccessForEdit, "CreatedSuccessfully, SuccessForEdit")
 
     React.useEffect(() => {
         if (CreatedSuccessfully) {
@@ -88,6 +89,8 @@ export default function AddEditHardware({
             close();
         }
     }, [CreatedSuccessfully, SuccessForEdit]);
+
+    
 
     const handleCreateClick = (props) => {
         console.log(props, "props for creat hook in model");
