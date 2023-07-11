@@ -8,10 +8,12 @@ import {
   ChevronLeftOutlined,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 
 const LayoutReview = ({ setHandleEstimatesPages }) => {
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
+  // const estimatesData = [];
 
   console.log(estimatesData, "estimatesData");
   return (
@@ -148,8 +150,8 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={menuOptions}
-                      title={" Hardware Finishes"}
+                      menuOptions={estimatesData?.hardwareFinishes}
+                      title={"Hardware Finishes"}
                     />
                   </Box>
                 </Box>
@@ -166,7 +168,10 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                   }}
                 >
                   <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={"Handles"} />
+                    <MenuList
+                      menuOptions={estimatesData?.handles}
+                      title={"Handles"}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -194,107 +199,10 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                   }}
                 >
                   <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={" Hinges"} />
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      color: { md: "#000000  ", xs: "white" },
-                    }}
-                  >
-                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
-                    <Typography> 1</Typography>
-                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
-                  </Box>
-                </Box>{" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: "100%" }}>
-                    <MenuList menuOptions={menuOptions} title={"Mounting"} />
-                  </Box>
-                </Box>{" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={" Glass type"} />
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      color: { md: "#000000  ", xs: "white" },
-                    }}
-                  >
-                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
-                    <Typography> 1</Typography>
-                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
-                  </Box>
-                </Box>{" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={"Bars"} />
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      color: { md: "#000000  ", xs: "white" },
-                    }}
-                  >
-                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
-                    <Typography> 1</Typography>
-                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
-                  </Box>
-                </Box>{" "}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={"Header"} />
+                    <MenuList
+                      menuOptions={estimatesData?.hinges}
+                      title={"Hinges"}
+                    />
                   </Box>
                   <Box
                     sx={{
@@ -323,7 +231,119 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={menuOptions}
+                      menuOptions={estimatesData?.mountingChannel}
+                      title={"Mounting"}
+                    />
+                  </Box>
+                </Box>{" "}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    // gap: 4,
+                    justifyContent: "space-between",
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
+                  }}
+                >
+                  <Box sx={{ width: "80%" }}>
+                    <MenuList
+                      menuOptions={estimatesData?.glassType}
+                      title={" Glass type"}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      color: { md: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
+                    <Typography> 1</Typography>
+                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
+                  </Box>
+                </Box>{" "}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    // gap: 4,
+                    justifyContent: "space-between",
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
+                  }}
+                >
+                  <Box sx={{ width: "80%" }}>
+                    <MenuList
+                      menuOptions={estimatesData?.slidingDoorSystem}
+                      title={"Sliding Door System"}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      color: { md: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
+                    <Typography> 1</Typography>
+                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
+                  </Box>
+                </Box>{" "}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    // gap: 4,
+                    justifyContent: "space-between",
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
+                  }}
+                >
+                  <Box sx={{ width: "80%" }}>
+                    <MenuList
+                      menuOptions={estimatesData?.header}
+                      title={"Header"}
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      color: { md: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <AddCircleOutline sx={{ color: "#98A2B3" }} />
+                    <Typography> 1</Typography>
+                    <RemoveCircleOutline sx={{ color: "#98A2B3" }} />
+                  </Box>
+                </Box>{" "}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    // gap: 4,
+                    justifyContent: "space-between",
+                    borderBottom: {
+                      md: "2px solid #D0D5DD",
+                      xs: "2px solid #423f57",
+                    },
+                  }}
+                >
+                  <Box sx={{ width: "100%" }}>
+                    <MenuList
+                      menuOptions={estimatesData?.glassTreatment}
                       title={"Glass treatment"}
                     />
                   </Box>
@@ -341,7 +361,10 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                   }}
                 >
                   <Box sx={{ width: "80%" }}>
-                    <MenuList menuOptions={menuOptions} title={"Add ons:"} />
+                    <MenuList
+                      menuOptions={estimatesData?.addOns}
+                      title={"Add ons:"}
+                    />
                   </Box>
                   <Box
                     sx={{

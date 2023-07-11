@@ -6,7 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 import { ChevronRight } from "@mui/icons-material";
 
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 
@@ -20,12 +20,12 @@ const MenuList = ({ menuOptions, title }) => {
   const handleClose = (item) => {
     setSelectedItem((prevItems) => [...prevItems, item]);
 
-    setAnchorEl(false);
+    // setAnchorEl(false);
   };
   return (
     <div>
       <Button
-        onClick={handleClose}
+        onClick={() => setAnchorEl(!anchorEl)}
         id="basic-button"
         sx={{ color: { md: "#000000 !important ", xs: "white" } }}
       >
@@ -51,7 +51,7 @@ const MenuList = ({ menuOptions, title }) => {
             color: { md: "#000000", xs: "white" },
           }}
         >
-          {menuOptions.map((item) => (
+          {menuOptions?.map((item) => (
             <MenuItem key={item.id} onClick={() => handleClose(item)}>
               <Box
                 sx={{
@@ -70,11 +70,11 @@ const MenuList = ({ menuOptions, title }) => {
                 <img
                   width={"25px"}
                   height={"25px"}
-                  src={`${backendURL}/${item.image}`}
+                  src={`${backendURL}/${item?.image}`}
                   alt="Selected"
                 />
                 <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
-                  <Typography>{item.name}</Typography>
+                  <Typography>{item?.name}</Typography>
                   {/* <Typography>{item.price}</Typography> */}
                 </Box>
               </Box>
