@@ -1,48 +1,194 @@
-import * as React from "react";
+import { useState } from "react";
 
 import Button from "@mui/material/Button";
 
 import MenuItem from "@mui/material/MenuItem";
 
-import { ChevronRight } from "@mui/icons-material";
+import { AddCircleOutline, ChevronRight, RemoveCircleOutline } from "@mui/icons-material";
 
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 
-const MenuList = ({ menuOptions, title }) => {
-  const [anchorEl, setAnchorEl] = React.useState(false);
-
-  const [selectedItem, setSelectedItem] = React.useState([]);
-
-  console.log(selectedItem, "selectedItem");
-
-  const handleClose = (item) => {
-    setSelectedItem((prevItems) => [...prevItems, item]);
-
-    // setAnchorEl(false);
+const MenuList = ({ menuOptions, title, type, setSelectedContent, count, thickness }) => {
+  console.log(thickness,'thickness');
+  const [anchorEl, setAnchorEl] = useState(false);
+  const [countVal, setCountVal] = useState(count || 0);
+  const [thicknessVal, setThicknessVal] = useState(thickness || '1/2');
+  const handleItemSelect = (item) => {
+    if (['wallClamp', 'sleeveOver', 'glassToGlass'].includes(type)) {  // for mounting clamps
+      setSelectedContent((prevState) => {
+        return {
+          ...prevState,
+          mounting: {
+            ...prevState.mounting,
+            clamps: {
+              ...prevState.mounting.clamps,
+              [type]: {
+                ...prevState.mounting.clamps[type],
+                item: item
+              }
+            }
+          }
+        };
+      });
+    } else if (['channel'].includes(type)) {  // for mounting channel
+      setSelectedContent((prevState) => {
+        return {
+          ...prevState,
+          mounting: {
+            ...prevState.mounting,
+            channel: {
+              ...prevState.mounting.channel,
+              item: item
+            }
+          }
+        };
+      });
+    } else if (['hardwareFinishes'].includes(type)) { // for hardware finishes
+      setSelectedContent((prevState) => {
+        return {
+          ...prevState,
+          [type]: item
+        }
+      });
+    }
+    else {
+      setSelectedContent((prevState) => {  // for others
+        return {
+          ...prevState,
+          [type]: {
+            ...prevState[type],
+            item: item
+          }
+        }
+      });
+    }
   };
+
+  const handleCountSet = (value) => {
+    if (value >= 0) {
+      setCountVal(value);
+
+      if (['wallClamp', 'sleeveOver', 'glassToGlass'].includes(type)) {  // for mounting clamps
+        setSelectedContent((prevState) => {
+          return {
+            ...prevState,
+            mounting: {
+              ...prevState.mounting,
+              clamps: {
+                ...prevState.mounting.clamps,
+                [type]: {
+                  ...prevState.mounting.clamps[type],
+                  count: value
+                }
+              }
+            }
+          };
+        });
+      }
+      else {
+        setSelectedContent((prevState) => {  // for others
+          return {
+            ...prevState,
+            [type]: {
+              ...prevState[type],
+              count: value
+            }
+          }
+        });
+      }
+
+    }
+  }
+  const handleThicknessSet = (thickness) => {
+    setThicknessVal(thickness);
+    setSelectedContent((prevState) => {  // for others
+      return {
+        ...prevState,
+        glassType: {
+          ...prevState.glassType,
+          thickness: thickness
+        }
+      }
+    });
+  }
   return (
-    <div>
-      <Button
-        onClick={() => setAnchorEl(!anchorEl)}
-        id="basic-button"
-        sx={{ color: { md: "#000000 !important ", xs: "white" } }}
-      >
-        {anchorEl ? (
-          <ChevronRight
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              transform: "rotate(90deg)",
-              color: "#98A2B3 !important",
-            }}
-          />
-        ) : (
-          <ChevronRight sx={{ color: "#98A2B3" }} />
-        )}
-        {title}
-      </Button>
+    <Box>
+      <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+        <Button
+          onClick={() => setAnchorEl(!anchorEl)}
+          id="basic-button"
+          sx={{ color: { md: "#000000 !important ", xs: "white" } }}
+        >
+          {anchorEl ? (
+            <ChevronRight
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                transform: "rotate(90deg)",
+                color: "#98A2B3 !important",
+              }}
+            />
+          ) : (
+            <ChevronRight sx={{ color: "#98A2B3" }} />
+          )}
+          <Typography>{title}</Typography>
+        </Button>
+        {!['hardwareFinishes', 'channel', 'glassTreatment', 'glassType', 'addOns'].includes(type) && <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            color: { md: "#000000  ", xs: "white" },
+            alignSelf: 'flex-end'
+          }}
+        >
+          <AddCircleOutline onClick={() => handleCountSet(countVal + 1)} sx={{ color: "#98A2B3" }} />
+          <Typography>{countVal}</Typography>
+          <RemoveCircleOutline onClick={() => handleCountSet(countVal - 1)} sx={{ color: "#98A2B3" }} />
+        </Box>}
+        {['glassType'].includes(type) && <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 2,
+            color: { md: "#000000  ", xs: "white" },
+            alignSelf: 'flex-end'
+          }}
+        >
+          <TextField
+            select
+            size="small"
+            variant="outlined"
+            style={{ width: "100%", background: 'white' }}
+            value={thicknessVal}
+            onChange={(event) => handleThicknessSet(event.target.value)}
+          // onChange={formik.handleChange} ()=>handleThicknessSet()
+          // onBlur={formik.handleBlur}
+          >
+            <MenuItem
+              key="1/2"
+              // selected={thickness === "1/2"}
+              value="1/2"
+            >
+              1/2
+            </MenuItem>
+            <MenuItem
+              key="3/8"
+              // selected={thickness === "3/8"}
+              // selected={
+              //   singleDefault?.layoutData?.settings
+              //     ?.hardwareFinishes === option?._id
+              // }
+              value="3/8"
+            >
+              3/8
+            </MenuItem>
+
+          </TextField>
+        </Box>}
+      </Box>
       {anchorEl ? (
         <Box
           sx={{
@@ -52,7 +198,7 @@ const MenuList = ({ menuOptions, title }) => {
           }}
         >
           {menuOptions?.map((item) => (
-            <MenuItem key={item.id} onClick={() => handleClose(item)}>
+            <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
               <Box
                 sx={{
                   width: "200px",
@@ -84,7 +230,7 @@ const MenuList = ({ menuOptions, title }) => {
       ) : (
         ""
       )}
-    </div>
+    </Box>
   );
 };
 
