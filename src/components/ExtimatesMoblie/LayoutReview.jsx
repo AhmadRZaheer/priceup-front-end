@@ -229,7 +229,12 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                     },
                   }}
                 >
-                  <Box sx={{ width: "100%" }}>
+                  {/* mouting channel */}
+                  <Box sx={{ width: "100%", display: "flex" }}>
+                    <MenuList
+                      menuOptions={estimatesData?.mountingChannel}
+                      title={"Mounting"}
+                    />
                     <MenuList
                       menuOptions={estimatesData?.mountingChannel}
                       title={"Mounting"}
