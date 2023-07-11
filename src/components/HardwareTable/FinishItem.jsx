@@ -148,7 +148,7 @@ const FinishItem = ({ data, index, refetch, hardwareId }) => {
                         }}
                     >
                         <FormControl style={{ width: "100%" }} size="small">
-                            <Typography>Thickness</Typography>
+                            {/* <Typography>Thickness</Typography> */}
 
                             <Typography variant="h6">
                                 {data?.thickness}

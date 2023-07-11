@@ -29,6 +29,7 @@ export const useFetchDatahardwareCategory = () => {
 };
 
 export const useFetchDatahardware = (type) => {
+  console.log(type, "ar-type")
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {

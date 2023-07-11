@@ -3,87 +3,91 @@ import "./AddOns.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 import { DataGrid } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton } from "@mui/material";
-
-import Snackbars from "../Model/SnackBar";
-
-import { useDeleteHardwares, useFetchDatahardware } from "../../utilities/ApiHooks/Hardware";
-import AddEditAddOns from "../Model/AddEditAddOns";
-import { useFetchDataAddOns } from "../../utilities/ApiHooks/AddOns";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addHardware,
+  deleteHardware,
+  editHardware,
+} from "../../redux/hardwareSlice";
+import { ContentCopy } from "@mui/icons-material";
+import { Box } from "@mui/material";
+import userImg from "../../Assets/username1.svg";
+import plus from "../../Assets/plus.svg";
+import Header from "../TableHeader/TableHeader";
+import AddEditModel from "../Model/AddEditFinish";
+import { useFetchDatahardware } from "../../utilities/ApiHooks/Hardware";
+import HardWareComponent from "../HardwareTable/HardWareComponent";
 
 const AddOnsTable = () => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  console.log(snackbar, "snackbar snackbar");
-  const { data: AddOnsData, refetch: AddOnsRefetch } =
-  useFetchDatahardware("add-ons");
-  const {
-    mutate: deleteAddOns,
-    // error: addOnsDeleteError,
-    isSuccess: deleteSuccess,
-    isLoading: loaderForDelete,
-  } = useDeleteHardwares();
-  console.log(AddOnsData, "data");
+  const hardwareData = useSelector((state) => state.hardware);
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [edit, setEdit] = React.useState(null);
-  const [isEdit, setIsEdit] = React.useState(false);
-  const [matchingId, setMatchingId] = useState("");
-
-  const handleOpen = () => {
-    setOpen(true);
-    setIsEdit(false);
-  };
+  const [showNext, SetShowNext] = React.useState("");
+  const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data, isEditAble) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
+  const handleDelete = (id) => {
+    console.log(id, "clicked deleted button");
+    dispatch(deleteHardware(id));
+  };
+  const handleEdit = (updatedHardware) => {
+    console.log(updatedHardware, "clicked Edit button");
+
+    dispatch(editHardware(updatedHardware));
   };
 
-  const handleFinishDelete = (id) => {
-    deleteAddOns(id);
-    setMatchingId(id);
-  };
+  const handleAddClick = () => {
+    const newId = Date.now() % 10000;
+    const newHardware = {
+      id: newId,
+      name: "new ",
+      img: userImg,
+      username: "New",
+      PartNumber: "",
+      Cost: "",
+      Price: "",
+      Status: "",
+    };
 
-  useEffect(() => {
-    if (deleteSuccess) {
-      AddOnsRefetch();
-      showSnackbar("Finish is Deleted Successfully ", "error");
-    }
-  }, [deleteSuccess]);
+    dispatch(addHardware(newHardware));
+  };
+  const handleHeaderClick = (selectedImage) => {
+    console.log("handleHeaderClick Edit button");
+    const newId = Date.now() % 10000;
+    const newHardware = {
+      id: newId,
+      name: "new ",
+      img: userImg,
+      username: "New",
+      PartNumber: "",
+      Cost: "",
+      Price: "",
+      Status: "",
+    };
+
+    dispatch(addHardware(newHardware));
+  };
   const actionColumn = [
     {
-      field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
+      field: "actions",
+      headerName: (
+        <div onClick={handleOpen}>
+          <img src={plus} alt="Add More" />
+        </div>
+      ),
       width: 200,
       renderCell: (params) => {
-        const id = params.row._id;
-        const isMatchingId = id === matchingId;
+        const id = params.row.id;
         return (
           <div className="cellAction">
-            <div
-              className="deleteButton"
-              onClick={() => handleFinishDelete(id)}
-            >
-              {isMatchingId && loaderForDelete ? (
-                <CircularProgress size={24} color="warning" />
-              ) : (
-                <DeleteIcon />
-              )}
+            <div className="viewButton">
+              <ContentCopy />
             </div>
-            <div
-              className="viewButton"
-              onClick={() => handleOpenEdit(params.row)}
-            >
+            <div className="deleteButton" onClick={() => handleDelete(id)}>
+              <DeleteIcon />
+            </div>
+            <div className="viewButton" onClick={() => handleEdit(params.row)}>
               <ModeIcon />
             </div>
           </div>
@@ -91,79 +95,42 @@ const AddOnsTable = () => {
       },
     },
   ];
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
+  //get header data from api
+
+  // const { data: hardwareCategoryData, refetch: hardwareCategoryRefetch } =
+  //   useFetchDatahardware("add-ons");
+  // console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
-      <div className="page-title">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignContent: "center",
-            paddingTop: 15,
-            paddingBottom: 15,
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
-        >
-          <div
-            style={{
-              width: "250px",
-              padding: 4,
-              alignItems: "center",
-            }}
-          >
-          AddOns
-          </div>{" "}
-          <div
-            style={{
-              padding: 4,
-            }}
-          >
-            <IconButton onClick={handleOpen}>
-              <Add style={{ color: "rgb(65, 106, 238)" }} />
-            </IconButton>
-          </div>{" "}
-        </div>
+      <div
+        style={{
+          marginLeft: "15px",
+          marginRight: "15px",
+          background: "rgb(232, 232, 232)",
+          // width: "80vw",
+          // height: "45px",
+        }}
+      >
+        {/* <Header types={hardwareCategoryData} showMore={SetShowNext} /> */}
       </div>
-      <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
+      <Box
+        sx={{
+          border: "1px solid rgb(232, 232, 232)",
+          margin: 2,
+        }}
+      >
         <div className="hardwareTable">
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={AddOnsData}
-            columns={userColumnsHardware.concat(actionColumn)}
-            paginationModel={{ page: 0, pageSize: 8 }}
-          />
+          <div className="hardwareTable">
+            {/* <HardWareComponentHeader type={showNext} /> */}
+            <HardWareComponent type={"add-ons"} />
+          </div>
         </div>
       </Box>
-
-      <AddEditAddOns
+      <AddEditModel
         open={open}
         close={handleClose}
-        data={edit}
-        isEdit={isEdit}
-        finishesRefetch={AddOnsRefetch}
-        showSnackbar={showSnackbar}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
+        handleHeaderClick={handleHeaderClick}
       />
     </>
   );
