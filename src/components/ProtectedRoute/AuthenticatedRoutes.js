@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Overview from "../../pages/home/Overview";
 import Customers from "../../pages/Customers/Customers";
 import Single from "../../pages/singlle/Single";
@@ -11,8 +11,10 @@ import Defaults from "../../pages/Layouts/Defaults";
 import Estimates from "../../pages/Estimates/Estimates";
 import Settings from "../../pages/Settings/Settings";
 import Staff from "../../pages/EstimatesMobile/Staff";
-import SuperAdminTable from "../SuperAdmin/SuperAdmin";
 import Admin from "../../pages/Admin/Admin";
+import AddOns from "../../pages/AddOns/addOns";
+import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
+import GlassType from "../../pages/GlassType/glassType";
 
 const AuthenticatedRoutes = () => {
   return (
@@ -34,6 +36,9 @@ const AuthenticatedRoutes = () => {
         <Route path="settings" element={<Settings />} />
         <Route path="staff" element={<Staff />} />
         <Route path="admin" element={<Admin />} />
+        <Route path="Addons" element={<AddOns />} />
+        <Route path="GlassType" element={<GlassType />} />
+        <Route path="GlassTreatement" element={<GlassTreatement />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>

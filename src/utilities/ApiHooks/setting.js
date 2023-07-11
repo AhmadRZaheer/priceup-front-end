@@ -1,4 +1,4 @@
-import { backendURL, createSlug } from "../common";
+import { backendURL} from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";

@@ -4,7 +4,6 @@ import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
-import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import Summary from "./Summary";
 

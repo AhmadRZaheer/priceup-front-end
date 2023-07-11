@@ -1,13 +1,13 @@
-import { backendURL } from "../common";
+import { backendURL, createSlug } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
-export const useFetchDataAdmin = () => {
+export const useFetchDataGlassType = () => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${backendURL}/users`, {
+      const response = await axios.get(`${backendURL}/glassTypes`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       console.log(response, "response");
@@ -21,29 +21,53 @@ export const useFetchDataAdmin = () => {
     }
   }
   return useQuery({
-    queryKey: ["teamData"],
+    queryKey: ["glassTypeData"],
     queryFn: fetchData,
     enabled: true,
     placeholderData: [],
   });
 };
 
-export const useCreateAdminsMembers = () => {
+
+export const useDeleteGlassType = () => {
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/glassTypes/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      // console.log(response, "delete response");
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
+export const useCreateGlassType = () => {
   const handleCreate = async (props) => {
     console.log(props, "hook props in create hook");
     const token = localStorage.getItem("token");
+    const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
     console.log(decodedToken, "parseJwt");
 
     try {
       const response = await axios.post(
-        `${backendURL}/users/save`,
+        `${backendURL}/glassTypes/save`,
         {
-          name: props.name,
-
+          name: props.hardwareLabel,
           company_id: decodedToken?.company_id,
-          password: props.password,
-          email: props.email,
+          thickness: "both",
+          slug: slug,
+          holesNeeded: props.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -63,17 +87,18 @@ export const useCreateAdminsMembers = () => {
   return useMutation(handleCreate);
 };
 
-export const useUserStatus = () => {
-  const handleEdit = async (status) => {
-    console.log(status, "status in hooks");
+export const useEditGlassType = () => {
+  const handleEdit = async (updatedHardware) => {
+    console.log(updatedHardware, "updatehardware in hooks");
 
     const token = localStorage.getItem("token");
 
     try {
       const response = await axios.put(
-        `${backendURL}/users/status/${status?.id}`,
+        `${backendURL}/glassTypes/${updatedHardware?.id}`,
         {
-          status: status.status,
+          name: updatedHardware?.hardwareLabel,
+          holesNeeded: updatedHardware?.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

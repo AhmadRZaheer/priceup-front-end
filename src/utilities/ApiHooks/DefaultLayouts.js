@@ -1,4 +1,4 @@
-import { backendURL, createSlug } from "../common";
+import { backendURL } from "../common";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 

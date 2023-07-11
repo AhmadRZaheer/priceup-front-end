@@ -2,7 +2,6 @@ import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
-import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 
 const Index = () => {

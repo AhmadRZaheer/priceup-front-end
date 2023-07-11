@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "../../customerTableSource";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/Customer";
 
 

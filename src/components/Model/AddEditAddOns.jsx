@@ -9,12 +9,15 @@ import Modal from "@mui/material/Modal";
 import { useState } from "react";
 import {
   CircularProgress,
+  FormControl,
   IconButton,
   TextField,
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-import { useCreateAdminsMembers } from "../../utilities/ApiHooks/SuperAdmin";
+
+
+import { useCreateHardware, useEditHardware } from "../../utilities/ApiHooks/Hardware";
 
 const style = {
   position: "absolute",
@@ -30,14 +33,17 @@ const style = {
   p: 4,
 };
 
-export default function AddSuperAdminModel({
+export default function AddEditAddOns({
   open,
   close,
   isEdit,
   data,
-  refetch,
+  finishesRefetch,
   showSnackbar,
 }) {
+  // console.log(data, "data not id");
+  // const [openSnackBarAlert, setOpenSnakbarAlert] = React.useState(false);
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
@@ -48,32 +54,57 @@ export default function AddSuperAdminModel({
   const { getInputProps } = useDropzone({ onDrop });
   // hook for add
   const {
-    mutate: addTeamAdminsMembers,
+    mutate: addFinish,
     isLoading: LoadingForAdd,
-    // isError: ErrorForAdd,
+    isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
-  } = useCreateAdminsMembers();
+  } = useCreateHardware();
   // hook for edit
+  const {
+    mutate: editFinish,
+    isLoading: LoadingForEdit,
+    isError: ErrorForEdit,
+    isSuccess: SuccessForEdit,
+  } = useEditHardware();
+
+  // React.useEffect(() => {
+  //   if (CreatedSuccessfully || SuccessForEdit) {
+  //     finishesRefetch();
+  //     if (CreatedSuccessfully) {
+  //       showSnackbar("Created Successfully ", "success");
+  //     }
+  //     showSnackbar("UpDated Successfully ", "success");
+  //   }
+  // }, [CreatedSuccessfully, SuccessForEdit]);
 
   React.useEffect(() => {
-    if (CreatedSuccessfully) {
-      refetch();
-      showSnackbar("New User Created  ", "success");
+    if (CreatedSuccessfully ) {
+      finishesRefetch();
+      showSnackbar("Created Successfully ", "success");
       close();
     }
-  }, [CreatedSuccessfully]);
+
+    if (SuccessForEdit) {
+      finishesRefetch();
+      showSnackbar("Updated Successfully ", "success");
+      close();
+    }
+  }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
     console.log(props, "props for creat hook in model");
-    addTeamAdminsMembers(props);
+    addFinish(props);
+  };
+
+  const handleEditClick = (props) => {
+    console.log(props, "props for edit to refetch");
+    const id = data;
+    // console.log(id, "id2 for edit hook");
+    editFinish(props, id);
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email address"),
-
-    // password: Yup.string().required("Name is required"),
-
+    hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
     // .required("Image is required")
     // .test(
@@ -92,28 +123,30 @@ export default function AddSuperAdminModel({
     //   "Image size should be less than 5MB",
     //   (value) => value && value.size <= 5 * 1024 * 1024
     // ),
+    thickness: Yup.string().required("Thickness is required"),
   });
 
   const formik = useFormik({
     initialValues: isEdit
       ? {
-          name: data?.name,
-          email: data?.email,
-          password: data?.password,
-
+          hardwareLabel: data?.name,
           image: "",
+          thickness: data?.holesNeeded,
+          id: data?._id,
         }
       : {
-          name: "",
+          hardwareLabel: "",
           image: "",
-          email: "",
-          password: "",
+          thickness: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      handleCreateClick(values);
-      resetForm();
+      {
+        isEdit ? handleEditClick(values) : handleCreateClick(values);
+
+        resetForm();
+      }
     },
   });
 
@@ -133,9 +166,7 @@ export default function AddSuperAdminModel({
               alignItems: "baseline",
             }}
           >
-            <Typography>
-              {isEdit ? "Edit Team Members" : "Add Team Members"}
-            </Typography>
+            <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
             <IconButton onClick={close}>
               <Close />
             </IconButton>
@@ -176,36 +207,57 @@ export default function AddSuperAdminModel({
             )}
           </Box>
           <Box>
-            <Typography>Name</Typography>
+            <Typography>Hardware Label</Typography>
             <TextField
-              placeholder="Name"
-              name="name"
-              value={formik.values.name}
+              placeholder="Hardware Label"
+              name="hardwareLabel"
+              value={formik.values.hardwareLabel}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={
+                formik.touched.hardwareLabel &&
+                Boolean(formik.errors.hardwareLabel)
+              }
+              helperText={
+                formik.touched.hardwareLabel && formik.errors.hardwareLabel
+              }
               variant="outlined"
               fullWidth
             />
           </Box>
+
           <Box>
-            <Typography>Email</Typography>
-            <TextField
-              placeholder="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.email)}
-              helperText={formik.touched.name && formik.errors.email}
-              variant="outlined"
-              fullWidth
-            />
+            <Typography>Holes Nedeed</Typography>
+            <FormControl style={{ width: "100%" }} size="small">
+              <TextField
+                type="number"
+                size="small"
+                variant="outlined"
+                name="thickness"
+                style={{ width: "100%" }}
+                value={formik.values.thickness}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.thickness && Boolean(formik.errors.thickness)
+                }
+                helperText={formik.touched.thickness && formik.errors.thickness}
+              />
+            </FormControl>
           </Box>
           <Box onClick={formik.handleSubmit}>
-            <Button fullWidth variant="contained" disabled={LoadingForAdd}>
-              {LoadingForAdd ? <CircularProgress size={24} /> : "Create"}
+            <Button
+              fullWidth
+              variant="contained"
+              disabled={LoadingForAdd || LoadingForEdit}
+            >
+              {LoadingForAdd || LoadingForEdit ? (
+                <CircularProgress size={24} />
+              ) : isEdit ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Box>
         </Box>

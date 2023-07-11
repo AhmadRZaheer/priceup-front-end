@@ -1,12 +1,8 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import door from "../../Assets/estimates/layout1.svg";
 
-import MenuList from "./MenuList";
-import { menuOptions } from "../../data/data";
 import {
-  AddCircleOutline,
   ChevronLeftOutlined,
-  RemoveCircleOutline,
 } from "@mui/icons-material";
 
 const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {

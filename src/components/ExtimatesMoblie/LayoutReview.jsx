@@ -1,5 +1,4 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import door from "../../Assets/estimates/layout1.svg";
 
 import MenuList from "./MenuList";
 import { menuOptions } from "../../data/data";
