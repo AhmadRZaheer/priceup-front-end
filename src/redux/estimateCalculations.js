@@ -1,10 +1,12 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
+export const measumentSide = (state) => state.estimateCalculations.measuments;
 
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
+    measuments: [],
     content: {
       hardwareFinishes: null,
       handles: {
@@ -161,6 +163,34 @@ const estimateCalcSlice = createSlice({
         },
       };
     },
+    updateMeasurements: (state, action) => {
+      const newMeasurements = action.payload;
+      console.log(newMeasurements, "newMeasurements in redux");
+
+      newMeasurements?.forEach((measurement) => {
+        state.measuments.push(measurement);
+      });
+    },
+    // updateMeasurements: (state, action) => {
+    //   const newMeasurements = action.payload;
+    //   console.log(newMeasurements, "newMeasurements in redux");
+
+    //   if (Array.isArray(newMeasurements)) {
+    //     newMeasurements.forEach((measurement) => {
+    //       state.measurements.push(measurement);
+    //     });
+    //   }
+    // },
+    // updateMeasurements: (state, action) => {
+    //   const newMeasurements = action.payload;
+    //   console.log(newMeasurements, "newMeasurements in redux");
+
+    //   if (typeof newMeasurements === "object" && newMeasurements !== null) {
+    //     Object.entries(newMeasurements).forEach(([key, value]) => {
+    //       state.measurements.push({ key, value });
+    //     });
+    //   }
+    // },
   },
 });
 
@@ -170,5 +200,6 @@ export const {
   setCounters,
   setInputContent,
   setThickness,
+  updateMeasurements,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

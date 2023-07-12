@@ -14,8 +14,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getTotal,
+  measumentSide,
   setInputContent,
   setTotal,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
 
 const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
@@ -25,7 +27,9 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
+
   const dispatch = useDispatch();
+  // const measurements = useSelector((state) => state.measurements);
 
   useEffect(() => {
     // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
@@ -142,6 +146,16 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     "selected items",
     totalPrice
   );
+  const handleBoxClick = () => {
+    setHandleEstimatesPages("summary");
+    const measurementsArray = Object.entries(doorDetail)
+      .filter(([key, value]) => value !== "")
+      .map(([key, value]) => ({
+        key,
+        value,
+      }));
+    dispatch(updateMeasurements(measurementsArray));
+  };
   return (
     <>
       <Box
@@ -1044,7 +1058,8 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
             <Button
               fullWidth
               variant="contained"
-              onClick={() => setHandleEstimatesPages("summary")}
+              // onClick={() => setHandleEstimatesPages("summary")}
+              onClick={handleBoxClick}
             >
               {" "}
               Next

@@ -5,6 +5,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import { backendURL } from "../../utilities/common";
+import { useDispatch } from "react-redux";
+import { updateMeasurements } from "../../redux/estimateCalculations";
 const LayoutMeasurements = ({
   setHandleEstimatesPages,
   item,
@@ -33,10 +35,12 @@ const LayoutMeasurements = ({
     },
   });
   console.log(formik.values, "formik values");
+  const dispatch = useDispatch();
   const handleBoxClick = () => {
-    console.log(formik.values, "formik values");
 
     setDoorDetail(formik.values);
+   
+    // ])
     setHandleEstimatesPages("measurements");
   };
   return (
@@ -286,6 +290,7 @@ const LayoutMeasurements = ({
                 >
                   <Typography>e</Typography>
                   <TextField
+                    type="number"
                     size="small"
                     variant="outlined"
                     name="e"

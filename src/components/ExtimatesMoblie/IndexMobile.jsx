@@ -244,6 +244,8 @@ const IndexMobile = () => {
         <Summary
           setHandleEstimatesPages={setHandleEstimatesPages}
           setClientDetailOpen={setClientDetailOpen}
+          // setDoorDetail={setDoorDetail}
+          doorDetail={doorDetail}
         />
       )}
       {handleEstimatesPages == "exiting" && (
