@@ -14,13 +14,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "../../redux/selectedIdSlice";
 
 const IndexMobile = () => {
-  const selectedId = useSelector((state) => state.selectedId);
-  console.log(selectedId, "selectedId 11");
-  const dispatch = useDispatch();
+  // const selectedId = useSelector((state) => state.selectedId);
+  // console.log(selectedId, "selectedId 11");
+  // const dispatch = useDispatch();
 
-  const handleBoxClick = (id) => {
-    dispatch(setSelectedId(id));
-  };
+  // const handleBoxClick = (id) => {
+  //   dispatch(setSelectedId(id));
+  // };
   const boxStyles = {
     minHeight: "152px",
     minWidth: { md: "180px", xs: "140px" },
@@ -38,14 +38,21 @@ const IndexMobile = () => {
     flexDirection: "column",
     cursor: "pointer",
     position: "relative",
-    "&:hover": {
-      backgroundColor: { md: "none", xs: "rgba(121, 102, 189, 0.5)" },
-    },
+    // "&:hover": {
+    //   backgroundColor: { md: "none", xs: "rgba(121, 102, 189, 0.5)" },
+    // },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
-  // const [id, setId] = useState("");
-  // console.log(id, "id estimate");
+  // const [item, setItem] = useState("");
+  // console.log(item, "item estimate");
+  const [selectedLayout, setSelectedLayout] = useState(null);
+  const [doorDetail, setDoorDetail] = useState(null);
+
+  const handleBoxClick = (layout) => {
+    setSelectedLayout(layout);
+    setHandleEstimatesPages("measurements");
+  };
 
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
   console.log(layouts, "layouts in mobile view");
@@ -152,9 +159,16 @@ const IndexMobile = () => {
                 {layouts.map((layout) => (
                   <Box
                     key={layout._id}
-                    sx={boxStyles}
-                    // onClick={() => setId(layout._id)}
-                    onClick={() => handleBoxClick(layout._id)}
+                    // sx={boxStyles}
+                    sx={{
+                      ...boxStyles,
+                      backgroundColor:
+                        selectedLayout === layout
+                          ? "rgba(121, 102, 189, 0.5)"
+                          : "#D9D9D9",
+                    }}
+                    // onClick={() => setItem(layout)}
+                    onClick={() => handleBoxClick(layout)}
                   >
                     <img
                       style={{
@@ -182,7 +196,7 @@ const IndexMobile = () => {
                   justifyContent: { md: "end", xs: "center" },
                 }}
               >
-                <Box
+                {/* <Box
                   sx={{
                     position: { md: "relative", xs: "fixed" },
                     bottom: { md: "none", xs: 0 },
@@ -206,7 +220,7 @@ const IndexMobile = () => {
                     {" "}
                     Next
                   </Button>
-                </Box>
+                </Box> */}
               </Box>
             </Box>
           </Box>
@@ -214,10 +228,17 @@ const IndexMobile = () => {
       )}
 
       {handleEstimatesPages == "measurements" && (
-        <LayoutMeasurements setHandleEstimatesPages={setHandleEstimatesPages} />
+        <LayoutMeasurements
+          setHandleEstimatesPages={setHandleEstimatesPages}
+          item={selectedLayout}
+          setDoorDetail={setDoorDetail}
+        />
       )}
       {handleEstimatesPages == "review" && (
-        <LayoutReview setHandleEstimatesPages={setHandleEstimatesPages} />
+        <LayoutReview
+          setHandleEstimatesPages={setHandleEstimatesPages}
+          doorDetail={doorDetail}
+        />
       )}
       {handleEstimatesPages == "summary" && (
         <Summary

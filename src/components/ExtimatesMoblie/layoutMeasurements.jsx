@@ -4,14 +4,19 @@ import door from "../../Assets/door.png";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
-  const validationSchema = Yup.object().shape({
-    a: Yup.number().required("a is required"),
-    b: Yup.number().required("b is required"),
-    c: Yup.number().required("c is required"),
-    d: Yup.number().required("d is required"),
-    e: Yup.number().required("e is required"),
-  });
+import { backendURL } from "../../utilities/common";
+const LayoutMeasurements = ({
+  setHandleEstimatesPages,
+  item,
+  setDoorDetail,
+}) => {
+  // const validationSchema = Yup.object().shape({
+  //   a: Yup.number().required("a is required"),
+  //   b: Yup.number().required("b is required"),
+  //   c: Yup.number().required("c is required"),
+  //   d: Yup.number().required("d is required"),
+  //   e: Yup.number().required("e is required"),
+  // });
   const formik = useFormik({
     initialValues: {
       a: "",
@@ -20,7 +25,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
       d: "",
       e: "",
     },
-    validationSchema,
+    // validationSchema,
     onSubmit: async (values, resetForm) => {
       console.log(values, "formik values in mobiel");
       // };
@@ -28,6 +33,12 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
     },
   });
   console.log(formik.values, "formik values");
+  const handleBoxClick = () => {
+    console.log(formik.values, "formik values");
+
+    setDoorDetail(formik.values);
+    setHandleEstimatesPages("measurements");
+  };
   return (
     <>
       <Box
@@ -59,9 +70,11 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlinedIcon
-              onClick={() => {
-                setHandleEstimatesPages("layout");
-              }}
+              // onClick={() => {
+              //   setHandleEstimatesPages("layout");
+              //   setDoorDetail(formik.values);
+              // }}
+              onClick={handleBoxClick()}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
           </Box>
@@ -172,13 +185,13 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                       background: { xs: "#100d24" },
                       borderRadius: "8px",
                       border: "1px solid #D0D5DD",
-                      text: "red",
+                      color: "white !important",
                     }}
                     value={formik.values.a}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.a && formik.errors.a}
-                    helperText={formik.touched.a && formik.errors.a}
+                    // error={formik.touched.a && formik.errors.a}
+                    // helperText={formik.touched.a && formik.errors.a}
                   />
                 </Box>
                 <Box
@@ -204,8 +217,8 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                     value={formik.values.b}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.c && formik.errors.b}
-                    helperText={formik.touched.b && formik.errors.b}
+                    // error={formik.touched.c && formik.errors.b}
+                    // helperText={formik.touched.b && formik.errors.b}
                   />
                 </Box>
 
@@ -232,8 +245,8 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                     value={formik.values.c}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.c && formik.errors.c}
-                    helperText={formik.touched.c && formik.errors.c}
+                    // error={formik.touched.c && formik.errors.c}
+                    // helperText={formik.touched.c && formik.errors.c}
                   />
                 </Box>
                 <Box
@@ -260,8 +273,8 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                     value={formik.values.d}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.d && formik.errors.d}
-                    helperText={formik.touched.d && formik.errors.d}
+                    // error={formik.touched.d && formik.errors.d}
+                    // helperText={formik.touched.d && formik.errors.d}
                   />
                 </Box>
                 <Box
@@ -301,7 +314,12 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                   order: { md: 2, xs: -1 },
                 }}
               >
-                <img width="150px" src={door} alt="Selected" />
+                <img
+                  width="150px"
+                  // src={door}
+                  src={`${backendURL}/${item?.image}`}
+                  alt="Selected"
+                />
               </Box>
             </Box>
 

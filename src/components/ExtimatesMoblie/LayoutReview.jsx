@@ -11,10 +11,14 @@ import {
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useState } from "react";
 
-const LayoutReview = ({ setHandleEstimatesPages }) => {
+const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
+  console.log(doorDetail, "doorDetail in mobile view");
+
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
   // const estimatesData = [];
+
+ 
   const [selectedContent, setSelectedContent] = useState({
     hardwareFinishes: null,
     handles: {
