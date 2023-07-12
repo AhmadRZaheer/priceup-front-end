@@ -1,9 +1,10 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 
 export default function ExitingQuotes({ setHandleEstimatesPages }) {
+  const param = useParams()
   const dates = [
     {
       Date: "7/06/2023",
@@ -93,21 +94,22 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
           ))}
         </Box>
         <Box sx={{ paddingX: 2, pt: 2 }}>
-          <Button
-            onClick={() => setHandleEstimatesPages("layout")}
-            color="primary"
-            sx={{
-              textTransform: "capitalize",
-              width: "100%",
-              background: "#8477DA",
-              color: "white",
-              fontSize: 18,
-              "&:hover": { background: "#8477DA", color: "white" },
-            }}
-          >
-            {" "}
-            Create New Qoute
-          </Button>
+          <NavLink to="/Quotes/staff">
+            <Button
+              // onClick={() => setHandleEstimatesPages("layout")}
+              color="primary"
+              sx={{
+                textTransform: "capitalize",
+                width: "100%",
+                background: "#8477DA",
+                color: "white",
+                fontSize: 18,
+                "&:hover": { background: "#8477DA", color: "white" },
+              }}
+            >
+              Create New Quote
+            </Button>
+          </NavLink>
           <Button
             variant="outlined"
             sx={{

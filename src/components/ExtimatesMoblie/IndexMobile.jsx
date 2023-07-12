@@ -12,6 +12,7 @@ import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import { setSelectedId } from "../../redux/selectedIdSlice";
+import { NavLink, useParams } from "react-router-dom";
 
 const IndexMobile = () => {
   const selectedId = useSelector((state) => state.selectedId);
@@ -43,7 +44,7 @@ const IndexMobile = () => {
     },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
+  const [handleEstimatesPages, setHandleEstimatesPages] = useState("layout");
   // const [id, setId] = useState("");
   // console.log(id, "id estimate");
 
@@ -95,12 +96,12 @@ const IndexMobile = () => {
               }}
             >
               <Box sx={{ display: { md: "none", xs: "block" } }}>
+                <NavLink to={"/exitingQuotes"}>
                 <ChevronLeftOutlinedIcon
-                  onClick={() => {
-                    setHandleEstimatesPages("exiting");
-                  }}
+                  
                   sx={{ fontSize: 34, paddingTop: 0.4 }}
                 />
+                \</NavLink>
               </Box>
               <Typography textAlign={"center"} variant="h4">
                 Create New Qoute
@@ -225,12 +226,12 @@ const IndexMobile = () => {
           setClientDetailOpen={setClientDetailOpen}
         />
       )}
-      {handleEstimatesPages == "exiting" && (
+      {/* {handleEstimatesPages == "exiting" && (
         <ExitingQuotes
           setHandleEstimatesPages={setHandleEstimatesPages}
           setClientDetailOpen={setClientDetailOpen}
         />
-      )}
+      )} */}
 
       {/* <LoginMobile /> */}
       <ClientDetailsModel
