@@ -18,7 +18,7 @@ import {
 } from "../../utilities/ApiHooks/Hardware";
 import { useEffect } from "react";
 
-const FinishItem = ({ data, index, refetch, hardwareId }) => {
+const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
@@ -67,6 +67,12 @@ const FinishItem = ({ data, index, refetch, hardwareId }) => {
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
+      if(SuccessForDelete) {
+        showSnackbar("Deleted Successfully", "error")
+      }
+      if (SuccessForEdit) {
+        showSnackbar("Edit Successfully", "success")
+      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 
@@ -163,7 +169,6 @@ const FinishItem = ({ data, index, refetch, hardwareId }) => {
               }}
             >
               <FormControl style={{ width: "100%" }} size="small">
-                <Typography>Thickness</Typography>
 
                 <Typography variant="h6">{data?.thickness}</Typography>
               </FormControl>

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./glassTreatement.scss";
-import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton } from "@mui/material";
-import Snackbars from "../Model/SnackBar";
-import {
-  useDeleteGlassTreatement,
-  useFetchDataGlassTreatement,
-} from "../../utilities/ApiHooks/GlassTreatement";
+import { useDeleteGlassTreatement, useFetchDataGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
+import { userColumnsHardware } from "../../customerTableSource";
 import AddEditGlassTreatement from "../Model/AddGlassTreatement";
+import Snackbars from "../Model/SnackBar";
+
 
 const GlassTreatementTable = () => {
   const [snackbar, setSnackbar] = useState({

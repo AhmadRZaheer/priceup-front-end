@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import "./glassType.scss";
-import { userColumnsHardware } from "../../customerTableSource";
+// import "./glassType.scss";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton } from "@mui/material";
-import Snackbars from "../Model/SnackBar";
 import { useDeleteGlassType, useFetchDataGlassType } from "../../utilities/ApiHooks/GlassType";
+import { userColumnsHardware } from "../../customerTableSource";
 import AddEditGlassType from "../Model/AddEidtGlassType";
+import Snackbars from "../Model/SnackBar";
 const GlassTypeTable = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
