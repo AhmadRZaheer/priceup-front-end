@@ -8,8 +8,12 @@ import {
   ChevronLeftOutlined,
   RemoveCircleOutline,
 } from "@mui/icons-material";
+import { getContent, getTotal } from "../../redux/estimateCalculations";
+import { useSelector } from "react-redux";
 
 const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
+  const totalPrice = useSelector(getTotal);
+  const selectedContent = useSelector(getContent);
   return (
     <>
       <Box
@@ -42,8 +46,8 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
-            onClick={() => setHandleEstimatesPages("review")}
-             sx={{ fontSize: 34, paddingTop: 0.4 }} />
+              onClick={() => setHandleEstimatesPages("review")}
+              sx={{ fontSize: 34, paddingTop: 0.4 }} />
           </Box>
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute
@@ -74,7 +78,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
             marginTop: { md: 0, xs: -3 },
           }}
         >
-          <Box sx={{ width: {md: "100%", xs: "90%"}, margin: "auto"}}>
+          <Box sx={{ width: { md: "100%", xs: "90%" }, margin: "auto" }}>
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "18px" },
@@ -98,7 +102,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               paddingY: { md: 4, xs: 1 },
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
-              margin: {md: 0, xs:"auto"},
+              margin: { md: 0, xs: "auto" },
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
@@ -124,7 +128,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   width: "84%",
                   justifyContent: "center",
                   // background: "#D9D9D9",
-                  margin: {md: 0, xs: "auto"},
+                  margin: { md: 0, xs: "auto" },
                   p: 3,
                   borderBottom: "1px solid #2c2c3c"
                   // height: "250px",
@@ -143,16 +147,16 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
 
                   borderRadius: "8px",
                   paddingY: 4,
-                  margin: {md: 0, xs: "auto"},
+                  margin: { md: 0, xs: "auto" },
                   // height: "250px",
                 }}
               >
                 <Typography>12’’/ 12’’/ 12’’ </Typography>
                 <Typography variant="h6">Summary </Typography>
-                <Typography> Finish: Polished Chrome,Polished Chrome,Polished Chrome,Polished Chrome,Polished Chrome</Typography>
-                <Typography>Handles: 8 by 8 D-Pull </Typography>
-                <Typography>Hinges: STD Bevel </Typography>
-                <Typography> Channel </Typography>
+                <Typography> Finish: {selectedContent?.hardwareFinishes?.name}</Typography>
+                <Typography>Handles: {selectedContent?.hardwareFinishes?.handles?.item?.name}</Typography>
+                <Typography>Hinges: {selectedContent?.hardwareFinishes?.hinges?.item?.name} {selectedContent?.hardwareFinishes?.hinges?.item?.name}</Typography>
+                <Typography> Channel {selectedContent?.mounting?.activeType === 'channel' ? selectedContent?.mounting?.channel?.type?.name : selectedContent?.mounting?.activeType === 'clamps' && selectedContent?.mounting?.clamps?.wallClamp?.item}</Typography>
                 <Typography>Glass Type:Clear (3/8)</Typography>
                 <Typography> Bars</Typography>
                 <Typography>Transom </Typography>
@@ -174,7 +178,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   }}
                 >
                   <Typography>Price</Typography>
-                  <Typography variant="h6">$895</Typography>
+                  <Typography variant="h6">${totalPrice}</Typography>
                 </Box>{" "}
               </Box>
             </Box>
