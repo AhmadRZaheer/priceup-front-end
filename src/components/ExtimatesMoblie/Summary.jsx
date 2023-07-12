@@ -153,18 +153,20 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               >
                 <Typography>12’’/ 12’’/ 12’’ </Typography>
                 <Typography variant="h6">Summary </Typography>
-                <Typography> Finish: {selectedContent?.hardwareFinishes?.name}</Typography>
-                <Typography>Handles: {selectedContent?.hardwareFinishes?.handles?.item?.name}</Typography>
-                <Typography>Hinges: {selectedContent?.hardwareFinishes?.hinges?.item?.name} {selectedContent?.hardwareFinishes?.hinges?.item?.name}</Typography>
-                <Typography> Channel {selectedContent?.mounting?.activeType === 'channel' ? selectedContent?.mounting?.channel?.type?.name : selectedContent?.mounting?.activeType === 'clamps' && selectedContent?.mounting?.clamps?.wallClamp?.item}</Typography>
-                <Typography>Glass Type:Clear (3/8)</Typography>
-                <Typography> Bars</Typography>
-                <Typography>Transom </Typography>
-                <Typography>Header </Typography>
-                <Typography>Glass Treatment </Typography>
-                <Typography variant="h6">Add ons </Typography>
-                <Typography> People: 2</Typography>
-                <Typography> Hours: 2 </Typography>
+                <Typography>Finish: {selectedContent?.hardwareFinishes?.name}</Typography>
+                <Typography>Handles: {selectedContent?.handles?.item?.name} ({selectedContent?.handles?.count})</Typography>
+                <Typography>Hinges: {selectedContent?.hinges?.item?.name}  ({selectedContent?.hinges?.count})</Typography>
+                {selectedContent?.mounting?.activeType === 'channel' ? <Typography>Channel: {selectedContent?.mounting?.channel?.type?.name}</Typography> :
+                  <Typography>Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.name} / {selectedContent?.mounting?.clamps?.sleeveOver?.name} / {selectedContent?.mounting?.clamps?.glassToGlass?.name}</Typography>
+                }
+                <Typography>Glass Type:{selectedContent?.glassType?.item?.name} ({selectedContent?.glassType?.thickness})</Typography>
+                <Typography>Bars: {selectedContent?.slidingDoorSystem?.item?.name} ({selectedContent?.slidingDoorSystem?.count})</Typography>
+                <Typography>Transom: </Typography>
+                <Typography>Header: {selectedContent?.header?.item?.name}  ({selectedContent?.header?.count})</Typography>
+                <Typography>Glass Treatment: {selectedContent?.glassTreatment?.name}</Typography>
+                <Typography variant="h6">Add ons: </Typography>
+                <Typography>People: {selectedContent?.people}</Typography>
+                <Typography>Hours: {selectedContent?.hours}</Typography>
                 <Typography> </Typography>
                 <Box
                   sx={{
