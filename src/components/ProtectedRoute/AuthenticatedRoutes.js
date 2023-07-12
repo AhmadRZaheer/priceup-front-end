@@ -13,6 +13,7 @@ import Settings from "../../pages/Settings/Settings";
 import Staff from "../../pages/EstimatesMobile/Staff";
 import SuperAdminTable from "../SuperAdmin/SuperAdmin";
 import Admin from "../../pages/Admin/Admin";
+import AddOns from "../../pages/AddOns/addOns";
 
 const AuthenticatedRoutesAdmin = () => {
   return (
@@ -32,6 +33,7 @@ const AuthenticatedRoutesAdmin = () => {
 
         <Route path="defaults" element={<Defaults />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="Addons" element={<AddOns />} />
 
       </Route>
       <Route path="*" element={<Overview />}></Route>

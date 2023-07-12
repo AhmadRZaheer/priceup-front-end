@@ -87,6 +87,36 @@ const Sidebar = () => {
                 <span>Finishes</span>
               </li>
             </NavLink>
+            <NavLink to="/Addons" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/Addons" ? "active" : ""
+                }`}
+              >
+                <AddBoxOutlinedIcon className="icon" />
+                <span>Add ons</span>
+              </li>
+            </NavLink>
+            <NavLink to="/GlassType" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/GlassType" ? "active" : ""
+                }`}
+              >
+                <AddBoxOutlinedIcon className="icon" />
+                <span>Glass Type</span>
+              </li>
+            </NavLink>
+            <NavLink to="/GlassTreatement" className="link">
+              <li
+                className={` ${
+                  location.pathname === "/GlassTreatement" ? "active" : ""
+                }`}
+              >
+                <AddBoxOutlinedIcon className="icon" />
+                <span>Glass Treatement</span>
+              </li>
+            </NavLink>
             <NavLink to="/Defaults" className="link">
               <li
                 className={` ${
