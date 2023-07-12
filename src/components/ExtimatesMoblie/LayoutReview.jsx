@@ -222,7 +222,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       count={selectedContent.handles.count}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -245,7 +244,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       count={selectedContent.hinges.count}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -261,14 +259,13 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                 >
                   {/* mouting channel */}
                   <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <MenuList
                         menuOptions={estimatesData?.wallClamp}
                         title={"Wall Clamps"}
                         type={"wallClamp"}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.wallClamp.count}
-
                       />
                       <MenuList
                         menuOptions={estimatesData?.sleeveOver}
@@ -315,7 +312,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       thickness={selectedContent.glassType.thickness}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -336,10 +332,8 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       type={"slidingDoorSystem"}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
-
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -360,10 +354,8 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       type={"header"}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
-
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -404,7 +396,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       title={"Add ons:"}
                     />
                   </Box>
-
                 </Box>
                 {/* holes onword */}
                 <Box

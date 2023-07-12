@@ -1,8 +1,33 @@
 import { Box, Button, Grid, TextField, Typography } from "@mui/material";
 import React from "react";
 import door from "../../Assets/door.png";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
+  const validationSchema = Yup.object().shape({
+    a: Yup.number().required("a is required"),
+    b: Yup.number().required("b is required"),
+    c: Yup.number().required("c is required"),
+    d: Yup.number().required("d is required"),
+    e: Yup.number().required("e is required"),
+  });
+  const formik = useFormik({
+    initialValues: {
+      a: "",
+      b: "",
+      c: "",
+      d: "",
+      e: "",
+    },
+    validationSchema,
+    onSubmit: async (values, resetForm) => {
+      console.log(values, "formik values in mobiel");
+      // };
+      resetForm();
+    },
+  });
+  console.log(formik.values, "formik values");
   return (
     <>
       <Box
@@ -34,9 +59,11 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlinedIcon
-            onClick={() => {
-              setHandleEstimatesPages("layout");
-            }} sx={{ fontSize: 34, paddingTop: 0.4 }} />
+              onClick={() => {
+                setHandleEstimatesPages("layout");
+              }}
+              sx={{ fontSize: 34, paddingTop: 0.4 }}
+            />
           </Box>
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute
@@ -49,202 +76,243 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
         >
           Create New Qoute
         </Typography>
-        <Box
-          sx={{
-            width: { md: "94%", sm: "100%", xs: "100%" },
-            margin: "auto",
-            borderRadius: { md: "12px", xs: 0 },
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: { md: "1px solid #EAECF0", xs: "none" },
-            paddingX: { md: 2, xs: 0 },
-            paddingY: { md: 4, xs: 0 },
-            rowGap: 4,
-            background: { md: "white", xs: "#100D24" },
-            display: "flex",
-            flexDirection: "column",
-            paddingTop: { md: 0, xs: 6 },
-            marginTop: { md: 0, xs: -3 },
-          }}
-        >
-          <Box
-            sx={{ paddingLeft: { md: 0, xs: 3 }, paddingTop: { md: 2, xs: 0 } }}
-          >
-            <Typography
-              sx={{
-                fontSize: { md: "18px", xs: "18px" },
-                color: { md: "black", xs: "white" },
-                paddingBottom: 1,
-              }}
-            >
-              Enter Measurements
-            </Typography>
-            <Typography
-              sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
-            >
-              Your new project has been created. Invite colleagues to
-              collaborate on this project.
-            </Typography>
-          </Box>
-
+        <form onSubmit={formik.handleSubmit}>
           <Box
             sx={{
-              display: "flex",
-              flexDirection: { md: "row", xs: "column" },
-              width: { md: "96.5%", xs: "100%" },
-              paddingY: { md: 4, xs: 0 },
+              width: { md: "94%", sm: "100%", xs: "100%" },
+              margin: "auto",
+              borderRadius: { md: "12px", xs: 0 },
+              boxShadow:
+                "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+              border: { md: "1px solid #EAECF0", xs: "none" },
               paddingX: { md: 2, xs: 0 },
-
-              background: { md: "#D9D9D9", xs: "#100D24" },
-              gap: 4,
-              borderRadius: "8px",
-            }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                width: { md: "48.5%", xs: "92%" },
-                flexDirection: "column",
-                gap: { md: 2, xs: 5 },
-                color: { md: "black", xs: "white" },
-                background: {
-                  md: "none",
-                  xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
-                },
-                borderTopLeftRadius: { md: 0, xs: 30 },
-                borderTopRightRadius: { md: 0, xs: 30 },
-                borderTop: { md: 0, xs: "1px solid #667085" },
-                paddingX: { md: 0, xs: 2 },
-                // background: "red",
-                paddingTop: 2,
-
-                paddingBottom: 8,
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <label
-                  htmlFor="address"
-                  style={{ paddingRight: { md: 0, xs: 2 } }}
-                >
-                  a
-                </label>
-                <TextField
-                  placeholder="12 inch"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    background: { md: "#ffff", xs: "#100d24" },
-                    borderRadius: "8px",
-                    border: "1px solid #D0D5DD",
-                    color: { md: "black", xs: "#667085" },
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <label htmlFor="address">b</label>
-                <TextField
-                  placeholder="12 inch"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    background: { md: "#ffff", xs: "#100d24" },
-                    borderRadius: "8px",
-                    border: "1px solid #D0D5DD",
-                  }}
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <label htmlFor="address">c</label>
-                <TextField
-                  placeholder="12 inch"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    background: { md: "#ffff", xs: "#100d24" },
-                    borderRadius: "8px",
-                    border: "1px solid #D0D5DD",
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <label htmlFor="address">d</label>
-                <TextField
-                  placeholder="12 inch"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    background: { md: "#ffff", xs: "#100d24" },
-                    borderRadius: "8px",
-                    border: "1px solid #D0D5DD",
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 1,
-                }}
-              >
-                <label htmlFor="address">e</label>
-                <TextField
-                  placeholder="12 inch"
-                  size="small"
-                  variant="outlined"
-                  sx={{
-                    background: { md: "#ffff", xs: "#100d24" },
-                    borderRadius: "8px",
-                    border: "1px solid #D0D5DD",
-                  }}
-                />
-              </Box>
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                width: "48.5%",
-                justifyContent: { md: "end", xs: "center" },
-                alignItems: { md: "center", xs: "center" },
-                margin: "auto",
-                order: { md: 2, xs: -1 },
-              }}
-            >
-              <img width="150px" src={door} alt="Selected" />
-            </Box>
-          </Box>
-          <Box
-            sx={{
+              paddingY: { md: 4, xs: 0 },
+              rowGap: 4,
+              background: { md: "white", xs: "#100D24" },
               display: "flex",
-              justifyContent: "space-between",
-              maxWidth: "100%",
+              flexDirection: "column",
+              paddingTop: { md: 0, xs: 6 },
+              marginTop: { md: 0, xs: -3 },
             }}
           >
-            {/* <Box sx={{ display: { md: "block", xs: "none" }, width: "150px" }}>
+            <Box
+              sx={{
+                paddingLeft: { md: 0, xs: 3 },
+                paddingTop: { md: 2, xs: 0 },
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: { md: "18px", xs: "18px" },
+                  color: { md: "black", xs: "white" },
+                  paddingBottom: 1,
+                }}
+              >
+                Enter Measurements
+              </Typography>
+              <Typography
+                sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+              >
+                Your new project has been created. Invite colleagues to
+                collaborate on this project.
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { md: "row", xs: "column" },
+                width: { md: "96.5%", xs: "100%" },
+                paddingY: { md: 4, xs: 0 },
+                paddingX: { md: 2, xs: 0 },
+
+                background: { md: "#D9D9D9", xs: "#100D24" },
+                gap: 4,
+                borderRadius: "8px",
+              }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  width: { md: "48.5%", xs: "92%" },
+                  flexDirection: "column",
+                  gap: { md: 2, xs: 5 },
+                  color: { md: "black", xs: "white" },
+                  background: {
+                    md: "none",
+                    xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                  },
+                  borderTopLeftRadius: { md: 0, xs: 30 },
+                  borderTopRightRadius: { md: 0, xs: 30 },
+                  borderTop: { md: 0, xs: "1px solid #667085" },
+                  paddingX: { md: 0, xs: 2 },
+                  // background: "red",
+                  paddingTop: 2,
+
+                  paddingBottom: 8,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Typography style={{ paddingRight: { md: 0, xs: 2 } }}>
+                    a
+                  </Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="a"
+                    placeholder="a"
+                    style={{
+                      background: { xs: "#100d24" },
+                      borderRadius: "8px",
+                      border: "1px solid #D0D5DD",
+                      text: "red",
+                    }}
+                    value={formik.values.a}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.a && formik.errors.a}
+                    helperText={formik.touched.a && formik.errors.a}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Typography>b</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="b"
+                    placeholder="b"
+                    style={{
+                      background: { xs: "#100d24" },
+                      borderRadius: "8px",
+                      border: "1px solid #D0D5DD",
+                      text: "red",
+                    }}
+                    value={formik.values.b}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.c && formik.errors.b}
+                    helperText={formik.touched.b && formik.errors.b}
+                  />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Typography>c</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="c"
+                    placeholder="c"
+                    style={{
+                      background: { xs: "#100d24" },
+                      borderRadius: "8px",
+                      border: "1px solid #D0D5DD",
+                      text: "red",
+                    }}
+                    value={formik.values.c}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.c && formik.errors.c}
+                    helperText={formik.touched.c && formik.errors.c}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Typography>D</Typography>
+
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="d"
+                    placeholder="d"
+                    style={{
+                      background: { xs: "#100d24" },
+                      borderRadius: "8px",
+                      border: "1px solid #D0D5DD",
+                      text: "red",
+                    }}
+                    value={formik.values.d}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.d && formik.errors.d}
+                    helperText={formik.touched.d && formik.errors.d}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                  }}
+                >
+                  <Typography>e</Typography>
+                  <TextField
+                    size="small"
+                    variant="outlined"
+                    name="e"
+                    placeholder="e"
+                    style={{
+                      background: { xs: "#100d24" },
+                      borderRadius: "8px",
+                      border: "1px solid #D0D5DD",
+                      text: "red",
+                    }}
+                    value={formik.values.e}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.e && formik.errors.e}
+                    helperText={formik.touched.e && formik.errors.e}
+                  />
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  width: "48.5%",
+                  justifyContent: { md: "end", xs: "center" },
+                  alignItems: { md: "center", xs: "center" },
+                  margin: "auto",
+                  order: { md: 2, xs: -1 },
+                }}
+              >
+                <img width="150px" src={door} alt="Selected" />
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                maxWidth: "100%",
+              }}
+            >
+              {/* <Box sx={{ display: { md: "block", xs: "none" }, width: "150px" }}>
               <Button
                 fullWidth
                 sx={{
@@ -258,49 +326,49 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
               </Button>
             </Box> */}
 
-            <Box
-              sx={{
-                display: { md: "none", xs: "flex" },
-                gap: 2,
-                justifyContent: "center",
-                width: "92%",
-                paddingX: 2,
-                paddingY: 2,
-                position: "fixed",
-                bottom: 0,
-                backgroundColor: "#100d24",
-                borderTop: "1px solid #423f57",
-              }}
-            >
-              <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                <Button
-                  fullWidth
-                  onClick={() => setHandleEstimatesPages("layout")}
-                  sx={{
-                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
-                    textTransform: "initial",
-                    border: "1px solid #D0D5DD",
-                    backgroundColor: { md: "transparent", xs: "white" },
-                  }}
-                >
-                  {" "}
-                  Back
-                </Button>
-              </Box>
-              <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                <Button
-                  fullWidth
-                  variant="contained"
-                  onClick={() => setHandleEstimatesPages("review")}
-                >
-                  {" "}
-                  Next
-                </Button>
+              <Box
+                sx={{
+                  display: { md: "none", xs: "flex" },
+                  gap: 2,
+                  justifyContent: "center",
+                  width: "92%",
+                  paddingX: 2,
+                  paddingY: 2,
+                  position: "fixed",
+                  bottom: 0,
+                  backgroundColor: "#100d24",
+                  borderTop: "1px solid #423f57",
+                }}
+              >
+                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+                  <Button
+                    fullWidth
+                    onClick={() => setHandleEstimatesPages("layout")}
+                    sx={{
+                      boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                      color: "#344054",
+                      textTransform: "initial",
+                      border: "1px solid #D0D5DD",
+                      backgroundColor: { md: "transparent", xs: "white" },
+                    }}
+                  >
+                    {" "}
+                    Back
+                  </Button>
+                </Box>
+                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    onClick={() => setHandleEstimatesPages("review")}
+                  >
+                    Next
+                  </Button>
+                </Box>
               </Box>
             </Box>
           </Box>
-        </Box>
+        </form>
       </Box>
     </>
   );
