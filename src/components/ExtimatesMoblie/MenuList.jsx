@@ -9,109 +9,27 @@ import { AddCircleOutline, ChevronRight, RemoveCircleOutline } from "@mui/icons-
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
+import { useDispatch } from "react-redux";
+import { setContent, setCounters, setThickness } from "../../redux/estimateCalculations";
 
 const MenuList = ({ menuOptions, title, type, setSelectedContent, count, thickness }) => {
-  console.log(thickness,'thickness');
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || '1/2');
+  const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    if (['wallClamp', 'sleeveOver', 'glassToGlass'].includes(type)) {  // for mounting clamps
-      setSelectedContent((prevState) => {
-        return {
-          ...prevState,
-          mounting: {
-            ...prevState.mounting,
-            clamps: {
-              ...prevState.mounting.clamps,
-              [type]: {
-                ...prevState.mounting.clamps[type],
-                item: item
-              }
-            }
-          }
-        };
-      });
-    } else if (['channel'].includes(type)) {  // for mounting channel
-      setSelectedContent((prevState) => {
-        return {
-          ...prevState,
-          mounting: {
-            ...prevState.mounting,
-            channel: {
-              ...prevState.mounting.channel,
-              item: item
-            }
-          }
-        };
-      });
-    } else if (['hardwareFinishes'].includes(type)) { // for hardware finishes
-      setSelectedContent((prevState) => {
-        return {
-          ...prevState,
-          [type]: item
-        }
-      });
-    }
-    else {
-      setSelectedContent((prevState) => {  // for others
-        return {
-          ...prevState,
-          [type]: {
-            ...prevState[type],
-            item: item
-          }
-        }
-      });
-    }
+    dispatch(setContent({ type: type, item: item }));
   };
 
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-
-      if (['wallClamp', 'sleeveOver', 'glassToGlass'].includes(type)) {  // for mounting clamps
-        setSelectedContent((prevState) => {
-          return {
-            ...prevState,
-            mounting: {
-              ...prevState.mounting,
-              clamps: {
-                ...prevState.mounting.clamps,
-                [type]: {
-                  ...prevState.mounting.clamps[type],
-                  count: value
-                }
-              }
-            }
-          };
-        });
-      }
-      else {
-        setSelectedContent((prevState) => {  // for others
-          return {
-            ...prevState,
-            [type]: {
-              ...prevState[type],
-              count: value
-            }
-          }
-        });
-      }
-
+      dispatch(setCounters({ type: type, value: value }))
     }
   }
   const handleThicknessSet = (thickness) => {
     setThicknessVal(thickness);
-    setSelectedContent((prevState) => {  // for others
-      return {
-        ...prevState,
-        glassType: {
-          ...prevState.glassType,
-          thickness: thickness
-        }
-      }
-    });
+    dispatch(setThickness(thickness));
   }
   return (
     <Box>
