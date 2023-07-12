@@ -256,7 +256,7 @@ const IndexMobile = () => {
       {/* <LoginMobile /> */}
       <ClientDetailsModel
         open={clientDetailOpen}
-        handleCancel={() => setClientDetailOpen(true)}
+        handleCancel={() => setClientDetailOpen(false)}
       />
     </>
   );

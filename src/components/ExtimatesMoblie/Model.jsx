@@ -214,7 +214,7 @@ export default function ClientDetailsModel({
                   }}
                   fullWidth
                   variant="contained"
-                  // onClick={() => SetlayoutMeasurementsOpen(true)}
+                  onClick={handleCancel()}
                 >
                   Save
                 </Button>
