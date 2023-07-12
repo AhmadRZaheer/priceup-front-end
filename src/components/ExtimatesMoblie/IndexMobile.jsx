@@ -1,6 +1,6 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { layouts } from "../../data/data";
+// import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
@@ -8,10 +8,13 @@ import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import Summary from "./Summary";
 import ExitingQuotes from "./existingQuotes";
+import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
+import { backendURL } from "../../utilities/common";
+
 
 const IndexMobile = () => {
   const boxStyles = {
-    minHeight: "152namepx",
+    minHeight: "152px",
     minWidth: { md: "180px", xs: "140px" },
     margin: "auto",
     borderRadius: "12px",
@@ -33,8 +36,11 @@ const IndexMobile = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
+  const [id, setId] = useState("");
+  console.log(id, "id estimate");
 
-  console.log(handleEstimatesPages, "handleEstimatesPageshandleEstimatesPages");
+  const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
+  console.log(layouts, "layouts in mobile view");
 
   return (
     <>
@@ -45,7 +51,8 @@ const IndexMobile = () => {
             display: "flex",
             alignItems: "center",
             flexDirection: "column",
-            // background: "yellow",
+            background: "#18133b",
+
             height: "93.3vh",
             overflowY: "scroll",
             paddingY: { md: 4, sx: 0 },
@@ -81,9 +88,9 @@ const IndexMobile = () => {
             >
               <Box sx={{ display: { md: "none", xs: "block" } }}>
                 <ChevronLeftOutlinedIcon
-                onClick={() => {
-                  setHandleEstimatesPages("exiting");
-                }}
+                  onClick={() => {
+                    setHandleEstimatesPages("exiting");
+                  }}
                   sx={{ fontSize: 34, paddingTop: 0.4 }}
                 />
               </Box>
@@ -135,14 +142,24 @@ const IndexMobile = () => {
               </Box>
               <Grid container gap={2}>
                 {layouts.map((layout) => (
-                  <Box key={layout.id} sx={boxStyles}>
+                  <Box
+                    key={layout._id}
+                    sx={boxStyles}
+                    onClick={() => setId(layout._id)}
+                  >
                     <img
-                      style={{ position: "relative", zIndex: 1 }}
-                      src={layout.imageSrc}
+                      style={{
+                        position: "relative",
+                        zIndex: 1,
+                        width: "80px",
+                        height: "80px",
+                      }}
+                      // src={layout.imageSrc}
+                      src={`${backendURL}/${layout?.image}`}
                       alt="Selected"
                     />
                     <Typography sx={{ font: "18px" }}>
-                      {layout.title}
+                      {layout?.name}
                     </Typography>
                   </Box>
                 ))}
@@ -170,6 +187,7 @@ const IndexMobile = () => {
                   }}
                 >
                   <Button
+                    disabled={id.length === 0}
                     onClick={() => {
                       setHandleEstimatesPages("measurements");
                     }}

@@ -19,57 +19,62 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
     hardwareFinishes: null,
     handles: {
       item: null,
-      count: 0
+      count: 0,
     },
     hinges: {
       item: null,
-      count: 0
+      count: 0,
     },
     mounting: {
       clamps: {
         wallClamp: {
           item: null,
-          count: 0
+          count: 0,
         },
         sleeveOver: {
           item: null,
-          count: 0
+          count: 0,
         },
         glassToGlass: {
           item: null,
-          count: 0
+          count: 0,
         },
       },
       channel: {
         item: null,
-        count: 0
-      }
+        count: 0,
+      },
     },
     header: {
       item: null,
-      count: 0
+      count: 0,
     },
     slidingDoorSystem: {
       item: null,
-      count: 0
+      count: 0,
     },
     glassType: {
       item: null,
-      thickness: "1/2"
+      thickness: "1/2",
     },
     glassTreatment: null,
-    oneInchHoles: '',
-    hingeCut: '',
-    clampCut: '',
-    notch: '',
-    outages: '',
-    mitre: '',
-    polish: '',
+    oneInchHoles: "",
+    hingeCut: "",
+    clampCut: "",
+    notch: "",
+    outages: "",
+    mitre: "",
+    polish: "",
     people: 0,
     hours: 0,
-    addOns: []
-  })
-  console.log(estimatesData, "estimatesData", selectedContent, 'selected items');
+    addOns: [],
+  });
+  console.log(
+    estimatesData,
+    "estimatesData",
+    selectedContent,
+    "selected items"
+  );
   return (
     <>
       <Box
@@ -232,7 +237,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       count={selectedContent.handles.count}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -255,7 +259,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       count={selectedContent.hinges.count}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -271,14 +274,13 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                 >
                   {/* mouting channel */}
                   <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <MenuList
                         menuOptions={estimatesData?.wallClamp}
                         title={"Wall Clamps"}
                         type={"wallClamp"}
                         setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.wallClamp.count}
-
                       />
                       <MenuList
                         menuOptions={estimatesData?.sleeveOver}
@@ -292,8 +294,9 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         title={"Glass to Glass"}
                         type={"glassToGlass"}
                         setSelectedContent={setSelectedContent}
-                        count={selectedContent.mounting.clamps.glassToGlass.count}
-
+                        count={
+                          selectedContent.mounting.clamps.glassToGlass.count
+                        }
                       />
                     </Box>
                     <MenuList
@@ -325,7 +328,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       thickness={selectedContent.glassType.thickness}
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -346,10 +348,8 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       type={"slidingDoorSystem"}
                       setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
-
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -370,10 +370,8 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       type={"header"}
                       setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
-
                     />
                   </Box>
-
                 </Box>
                 <Box
                   sx={{
@@ -414,7 +412,6 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                       title={"Add ons:"}
                     />
                   </Box>
-
                 </Box>
                 {/* holes onword */}
                 <Box
@@ -447,12 +444,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.oneInchHoles}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, oneInchHoles: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          oneInchHoles: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -486,12 +488,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.hingeCut}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, hingeCut: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          hingeCut: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -525,12 +532,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.clampCut}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, clampCut: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          clampCut: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -564,12 +576,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.notch}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, notch: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          notch: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -603,12 +620,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.outages}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, outages: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          outages: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -642,12 +664,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.mitre}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, mitre: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          mitre: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -681,12 +708,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.polish}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, polish: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          polish: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -721,12 +753,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.people}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, people: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          people: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
@@ -761,12 +798,17 @@ const LayoutReview = ({ setHandleEstimatesPages }) => {
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: 'white'
+                        background: "white",
                       }}
                       variant="outlined"
                       size="small"
                       value={selectedContent.hours}
-                      onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, hours: event.target.value }))}
+                      onChange={(event) =>
+                        setSelectedContent((prevState) => ({
+                          ...prevState,
+                          hours: event.target.value,
+                        }))
+                      }
                     />
                   </Box>
                 </Box>
