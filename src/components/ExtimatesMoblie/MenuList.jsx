@@ -4,36 +4,57 @@ import Button from "@mui/material/Button";
 
 import MenuItem from "@mui/material/MenuItem";
 
-import { AddCircleOutline, ChevronRight, RemoveCircleOutline } from "@mui/icons-material";
+import {
+  AddCircleOutline,
+  ChevronRight,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
 
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
-import { setContent, setCounters, setThickness } from "../../redux/estimateCalculations";
+import {
+  setContent,
+  setCounters,
+  setThickness,
+} from "../../redux/estimateCalculations";
 
-const MenuList = ({ menuOptions, title, type, setSelectedContent, count, thickness }) => {
+const MenuList = ({
+  menuOptions,
+  title,
+  type,
+  setSelectedContent,
+  count,
+  thickness,
+}) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
-  const [thicknessVal, setThicknessVal] = useState(thickness || '1/2');
+  const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     dispatch(setContent({ type: type, item: item }));
+    setSelectedItem(item);
   };
 
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-      dispatch(setCounters({ type: type, value: value }))
+      dispatch(setCounters({ type: type, value: value }));
     }
-  }
+  };
   const handleThicknessSet = (thickness) => {
     setThicknessVal(thickness);
     dispatch(setThickness(thickness));
-  }
+  };
+
   return (
     <Box>
-      <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+      <Box
+        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+      >
         <Button
           onClick={() => setAnchorEl(!anchorEl)}
           id="basic-button"
@@ -53,59 +74,74 @@ const MenuList = ({ menuOptions, title, type, setSelectedContent, count, thickne
           )}
           <Typography>{title}</Typography>
         </Button>
-        {!['hardwareFinishes', 'channel', 'glassTreatment', 'glassType', 'addOns'].includes(type) && <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            color: { md: "#000000  ", xs: "white" },
-            alignSelf: 'flex-end'
-          }}
-        >
-          <AddCircleOutline onClick={() => handleCountSet(countVal + 1)} sx={{ color: "#98A2B3" }} />
-          <Typography>{countVal}</Typography>
-          <RemoveCircleOutline onClick={() => handleCountSet(countVal - 1)} sx={{ color: "#98A2B3" }} />
-        </Box>}
-        {['glassType'].includes(type) && <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            color: { md: "#000000  ", xs: "white" },
-            alignSelf: 'flex-end'
-          }}
-        >
-          <TextField
-            select
-            size="small"
-            variant="outlined"
-            style={{ width: "100%", background: 'white' }}
-            value={thicknessVal}
-            onChange={(event) => handleThicknessSet(event.target.value)}
-          // onChange={formik.handleChange} ()=>handleThicknessSet()
-          // onBlur={formik.handleBlur}
+        {![
+          "hardwareFinishes",
+          "channel",
+          "glassTreatment",
+          "glassType",
+          "addOns",
+        ].includes(type) && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              color: { md: "#000000  ", xs: "white" },
+              alignSelf: "flex-end",
+            }}
           >
-            <MenuItem
-              key="1/2"
-              // selected={thickness === "1/2"}
-              value="1/2"
+            <AddCircleOutline
+              onClick={() => handleCountSet(countVal + 1)}
+              sx={{ color: "#98A2B3" }}
+            />
+            <Typography>{countVal}</Typography>
+            <RemoveCircleOutline
+              onClick={() => handleCountSet(countVal - 1)}
+              sx={{ color: "#98A2B3" }}
+            />
+          </Box>
+        )}
+        {["glassType"].includes(type) && (
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              color: { md: "#000000  ", xs: "white" },
+              alignSelf: "flex-end",
+            }}
+          >
+            <TextField
+              select
+              size="small"
+              variant="outlined"
+              style={{ width: "100%", background: "white" }}
+              value={thicknessVal}
+              onChange={(event) => handleThicknessSet(event.target.value)}
+              // onChange={formik.handleChange} ()=>handleThicknessSet()
+              // onBlur={formik.handleBlur}
             >
-              1/2
-            </MenuItem>
-            <MenuItem
-              key="3/8"
-              // selected={thickness === "3/8"}
-              // selected={
-              //   singleDefault?.layoutData?.settings
-              //     ?.hardwareFinishes === option?._id
-              // }
-              value="3/8"
-            >
-              3/8
-            </MenuItem>
-
-          </TextField>
-        </Box>}
+              <MenuItem
+                key="1/2"
+                // selected={thickness === "1/2"}
+                value="1/2"
+              >
+                1/2
+              </MenuItem>
+              <MenuItem
+                key="3/8"
+                // selected={thickness === "3/8"}
+                // selected={
+                //   singleDefault?.layoutData?.settings
+                //     ?.hardwareFinishes === option?._id
+                // }
+                value="3/8"
+              >
+                3/8
+              </MenuItem>
+            </TextField>
+          </Box>
+        )}
       </Box>
       {anchorEl ? (
         <Box
@@ -121,9 +157,13 @@ const MenuList = ({ menuOptions, title, type, setSelectedContent, count, thickne
                 sx={{
                   width: "200px",
                   borderRadius: "12px",
+                  border:
+                    item === selectedItem
+                      ? "2px solid blue"
+                      : "1px solid #EAECF0",
                   boxShadow:
                     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                  border: "1px solid #EAECF0",
+                  // border: "1px solid #EAECF0",
                   p: 2,
                   display: "flex",
                   gap: 2,
