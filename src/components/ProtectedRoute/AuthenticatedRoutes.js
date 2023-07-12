@@ -13,6 +13,9 @@ import Settings from "../../pages/Settings/Settings";
 import Staff from "../../pages/EstimatesMobile/Staff";
 import SuperAdminTable from "../SuperAdmin/SuperAdmin";
 import Admin from "../../pages/Admin/Admin";
+import AddOns from "../../pages/AddOns/addOns";
+import GlassType from "../../pages/GlassType/glassType";
+import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
 
 const AuthenticatedRoutesAdmin = () => {
   return (
@@ -32,7 +35,9 @@ const AuthenticatedRoutesAdmin = () => {
 
         <Route path="defaults" element={<Defaults />} />
         <Route path="settings" element={<Settings />} />
-
+        <Route path="Addons" element={<AddOns />} />
+        <Route path="GlassType" element={<GlassType />} />
+        <Route path="GlassTreatement" element={<GlassTreatement />} />
       </Route>
       <Route path="*" element={<Overview />}></Route>
     </Routes>
