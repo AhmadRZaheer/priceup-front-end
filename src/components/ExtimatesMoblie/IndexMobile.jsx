@@ -10,9 +10,17 @@ import Summary from "./Summary";
 import ExitingQuotes from "./existingQuotes";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { backendURL } from "../../utilities/common";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setSelectedId } from "../../redux/selectedIdSlice";
 
 const IndexMobile = () => {
+  const selectedId = useSelector((state) => state.selectedId);
+  console.log(selectedId, "selectedId 11");
+  const dispatch = useDispatch();
+
+  const handleBoxClick = (id) => {
+    dispatch(setSelectedId(id));
+  };
   const boxStyles = {
     minHeight: "152px",
     minWidth: { md: "180px", xs: "140px" },
@@ -36,8 +44,8 @@ const IndexMobile = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
-  const [id, setId] = useState("");
-  console.log(id, "id estimate");
+  // const [id, setId] = useState("");
+  // console.log(id, "id estimate");
 
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
   console.log(layouts, "layouts in mobile view");
@@ -145,7 +153,8 @@ const IndexMobile = () => {
                   <Box
                     key={layout._id}
                     sx={boxStyles}
-                    onClick={() => setId(layout._id)}
+                    // onClick={() => setId(layout._id)}
+                    onClick={() => handleBoxClick(layout._id)}
                   >
                     <img
                       style={{
@@ -187,7 +196,7 @@ const IndexMobile = () => {
                   }}
                 >
                   <Button
-                    disabled={id.length === 0}
+                    // disabled={id.length === 0}
                     onClick={() => {
                       setHandleEstimatesPages("measurements");
                     }}
@@ -216,12 +225,12 @@ const IndexMobile = () => {
           setClientDetailOpen={setClientDetailOpen}
         />
       )}
-      {handleEstimatesPages == "exiting" && (
+      {/* {handleEstimatesPages == "exiting" && (
         <ExitingQuotes
           setHandleEstimatesPages={setHandleEstimatesPages}
           setClientDetailOpen={setClientDetailOpen}
         />
-      )}
+      )} */}
 
       {/* <LoginMobile /> */}
       <ClientDetailsModel
