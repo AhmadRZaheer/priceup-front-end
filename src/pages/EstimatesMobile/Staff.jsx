@@ -10,8 +10,8 @@ const Staff = () => {
     <div className="Customers">
       <MobileBar />
       <div className="customersContainer">
-        {/* <IndexMobile /> */}
-        <ExitingQuotes />
+        <IndexMobile />
+        {/* <ExitingQuotes /> */}
       </div>
     </div>
   );

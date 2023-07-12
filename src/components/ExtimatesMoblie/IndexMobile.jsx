@@ -225,12 +225,12 @@ const IndexMobile = () => {
           setClientDetailOpen={setClientDetailOpen}
         />
       )}
-      {/* {handleEstimatesPages == "exiting" && (
+      {handleEstimatesPages == "exiting" && (
         <ExitingQuotes
           setHandleEstimatesPages={setHandleEstimatesPages}
           setClientDetailOpen={setClientDetailOpen}
         />
-      )} */}
+      )}
 
       {/* <LoginMobile /> */}
       <ClientDetailsModel
