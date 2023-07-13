@@ -195,33 +195,7 @@ const IndexMobile = () => {
                   display: "flex",
                   justifyContent: { md: "end", xs: "center" },
                 }}
-              >
-                {/* <Box
-                  sx={{
-                    position: { md: "relative", xs: "fixed" },
-                    bottom: { md: "none", xs: 0 },
-                    left: { md: "none", xs: 0 },
-                    zIndex: 2,
-                    width: { md: "150px", sm: "96%", xs: "94%" },
-                    paddingY: { md: 0, xs: 3 },
-                    paddingX: { md: 0, sm: 2, xs: 1.4 },
-                    borderTop: { md: "none", xs: "1px solid #404040" },
-                    backgroundColor: { md: "none", xs: "#100D24" },
-                  }}
-                >
-                  <Button
-                    // disabled={id.length === 0}
-                    onClick={() => {
-                      setHandleEstimatesPages("measurements");
-                    }}
-                    fullWidth
-                    variant="contained"
-                  >
-                    {" "}
-                    Next
-                  </Button>
-                </Box> */}
-              </Box>
+              ></Box>
             </Box>
           </Box>
         </Box>

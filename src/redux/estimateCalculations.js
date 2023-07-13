@@ -167,30 +167,8 @@ const estimateCalcSlice = createSlice({
       const newMeasurements = action.payload;
       console.log(newMeasurements, "newMeasurements in redux");
 
-      newMeasurements?.forEach((measurement) => {
-        state.measuments.push(measurement);
-      });
+      state.measuments = newMeasurements;
     },
-    // updateMeasurements: (state, action) => {
-    //   const newMeasurements = action.payload;
-    //   console.log(newMeasurements, "newMeasurements in redux");
-
-    //   if (Array.isArray(newMeasurements)) {
-    //     newMeasurements.forEach((measurement) => {
-    //       state.measurements.push(measurement);
-    //     });
-    //   }
-    // },
-    // updateMeasurements: (state, action) => {
-    //   const newMeasurements = action.payload;
-    //   console.log(newMeasurements, "newMeasurements in redux");
-
-    //   if (typeof newMeasurements === "object" && newMeasurements !== null) {
-    //     Object.entries(newMeasurements).forEach(([key, value]) => {
-    //       state.measurements.push({ key, value });
-    //     });
-    //   }
-    // },
   },
 });
 

@@ -37,9 +37,8 @@ const LayoutMeasurements = ({
   console.log(formik.values, "formik values");
   const dispatch = useDispatch();
   const handleBoxClick = () => {
-
     setDoorDetail(formik.values);
-   
+
     // ])
     setHandleEstimatesPages("measurements");
   };

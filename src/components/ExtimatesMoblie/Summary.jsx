@@ -1,21 +1,13 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import door from "../../Assets/estimates/layout1.svg";
 
-import MenuList from "./MenuList";
-import { menuOptions } from "../../data/data";
-import {
-  AddCircleOutline,
-  ChevronLeftOutlined,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
   getContent,
   getTotal,
   measumentSide,
-  updateMeasurements,
 } from "../../redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 const Summary = ({
   setClientDetailOpen,
