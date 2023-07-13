@@ -490,7 +490,8 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   <Box sx={{ width: "100%" }}>
                     <MenuList
                       menuOptions={estimatesData?.addOns}
-                      title={"Add ons:"}
+                      title={"Add ons"}
+                      type={"addOns"}
                     />
                   </Box>
                 </Box>

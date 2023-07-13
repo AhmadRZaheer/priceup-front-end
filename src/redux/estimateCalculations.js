@@ -50,6 +50,7 @@ const estimateCalcSlice = createSlice({
         item: null,
         thickness: "1/2",
       },
+
       glassTreatment: null,
       oneInchHoles: "",
       hingeCut: "",
@@ -60,6 +61,8 @@ const estimateCalcSlice = createSlice({
       polish: "",
       people: 0,
       hours: 0,
+      sleeveOverCount: 0, // Add separate property for Sleeve Over count
+      towelBarsCount: 0, // Add separate property for Towel Bars count
       addOns: [],
     },
     totalPrice: 0,
@@ -103,6 +106,19 @@ const estimateCalcSlice = createSlice({
           ...state.content,
           [type]: item,
         };
+      }
+    
+      else if (["addOns"].includes(type)) {
+        const foundIndex = state.content.addOns?.findIndex(
+          (row) => row.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          state.content.addOns.splice(foundIndex, 1);
+        } else {
+          if (item.slug !== "sleeve-over" && item.slug !== "towel-bars") {
+            state.content.addOns.push(item);
+          }
+        }
       } else {
         // for others
         state.content = {
@@ -169,6 +185,17 @@ const estimateCalcSlice = createSlice({
 
       state.measuments = newMeasurements;
     },
+
+    updateAddOnCount: (state, action) => {
+      const { type, count } = action.payload;
+      // const updatedAddOns = state.content.addOns.map((addOn) => {
+      //   if (addOn.type === type) {
+      //     return { ...addOn, count };
+      //   }
+      //   return addOn;
+      // });
+      state.content[type] = count;
+    },
   },
 });
 
@@ -178,6 +205,7 @@ export const {
   setCounters,
   setInputContent,
   setThickness,
+  updateAddOnCount,
   updateMeasurements,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
