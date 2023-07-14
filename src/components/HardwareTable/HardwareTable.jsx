@@ -106,38 +106,49 @@ const HardwareTable = () => {
   console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
-      <div className="page-title">
-        <h2>Hardware</h2>
-      </div>
-      <div
-        style={{
-          marginLeft: "15px",
-          marginRight: "15px",
-          background: "rgb(232, 232, 232)",
-          // width: "80vw",
-          // height: "45px",
-        }}
-      >
-        <Header types={hardwareCategoryData} showMore={SetShowNext} />
-      </div>
       <Box
         sx={{
-          border: "1px solid rgb(232, 232, 232)",
-          margin: 2,
+          backgroundColor: "white",
+          height: "98.2vh",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+          paddingLeft: 1,
+          pt: 2
         }}
       >
-        <div className="hardwareTable">
-          <div className="hardwareTable">
-            {/* <HardWareComponentHeader type={showNext} /> */}
-            <HardWareComponent type={showNext} />
-          </div>
+        <div className="page-title">
+          <h2 style={{fontSize: 30, paddingLeft: 10}}>Hardware</h2>
         </div>
+        <div
+          style={{
+            marginLeft: "15px",
+            marginRight: "15px",
+            // background: "rgb(232, 232, 232)",
+            // width: "80vw",
+            // height: "45px",
+          }}
+        >
+          <Header types={hardwareCategoryData} showMore={SetShowNext} />
+        </div>
+        <Box
+          sx={{
+            border: "1px solid rgb(232, 232, 232)",
+            margin: 2,
+          }}
+        >
+          <div className="hardwareTable">
+            <div className="hardwareTable">
+              {/* <HardWareComponentHeader type={showNext} /> */}
+              <HardWareComponent type={showNext} />
+            </div>
+          </div>
+        </Box>
+        <AddEditModel
+          open={open}
+          close={handleClose}
+          handleHeaderClick={handleHeaderClick}
+        />
       </Box>
-      <AddEditModel
-        open={open}
-        close={handleClose}
-        handleHeaderClick={handleHeaderClick}
-      />
     </>
   );
 };

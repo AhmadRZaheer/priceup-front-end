@@ -6,6 +6,7 @@ import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import Snackbars from "../Model/SnackBar";
+import desktopImage from "../../Assets/desktop.svg"
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -86,18 +87,19 @@ const Login = (props) => {
         style={{
           width: "100%",
           margin: "auto",
-          background: "#8888",
+          background: "#8477DA",
           height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          backgroundImage: `url(${desktopImage})`
         }}
       >
         <div>
           <img className="logo-img" src={Logo} />
         </div>
-        <div className="auth-form-container">
+        <div style={{marginTop: 30}} className="auth-form-container">
           <h3>Login</h3>
           <form className="login-form">
             <label htmlFor="email">Email or Username</label>

@@ -2,43 +2,44 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
+import { Box } from "@mui/material";
 
 const TableHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
-      <div key={index}>{renderSliderItem(item, item?.slug)}</div>
+      <div key={index} style={{display: "flex", gap: 10}}>{renderSliderItem(item, item?.slug)}</div>
     ));
   };
 
   const renderSliderItem = (title, option) => (
     console.log(option, "options to show handles"),
     (
-      <div
+      <Box
         onClick={() => showMore(option)}
-        style={{
+        sx={{
           paddingLeft: "15px",
           paddingRight: "15px",
-          // paddingTop: "10px",
-          // paddingBottom: "10px",
-
           minHeight: "50px",
-          minWidth: "110px",
-          backgroundColor: "rgb(232, 232, 232)",
-          // backgroundColor: "#fff",
-
+          // minWidth: "80px",
+          // maxWidth: "200px",
+          "&:hover": {
+            backgroundColor: "rgba(132, 119, 218, 0.2)",
+          },
+          "&:active": {
+            backgroundColor: "rgba(132, 119, 218, 0.2)",
+          },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           cursor: "pointer",
-          // gap: 8,
-          width: "fit-content", // Set the width to fit the content
-          margin: "0 auto", // Center the item horizontally
-          borderRadius: "4px", // Add border radius for a rounded look
+          // width: "fit-content",
+          // margin: "0 auto",
+          borderRadius: "4px",// Add border radius for a rounded look
         }}
       >
         <h3>{title?.name}</h3>
-      </div>
+      </Box>
     )
   );
 
@@ -49,6 +50,8 @@ const TableHeader = ({ showMore, types }) => {
         ...props.style,
         color: "blue !important", // Change the arrow color to red
         zIndex: 2,
+        backgroundColor: "black",
+        borderRadius: "100%" 
       }}
     >
       Previous
@@ -61,7 +64,9 @@ const TableHeader = ({ showMore, types }) => {
       {...props}
       style={{
         ...props.style,
-        color: "green !important", // Change the arrow color to blue
+        color: "green !important",
+        backgroundColor: "black",
+        borderRadius: "100%" // Change the arrow color to blue
       }}
     >
       jkj

@@ -1,13 +1,22 @@
 
 .overview {
     display: flex;
+    background-color: black;
   
     .overviewContainer {
         flex:6;
-        max-height: 100vh;
+        max-height: 98.7vh;
         overflow-y: scroll;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius:30px;
+        background-color: white;
+        padding-left: 10px;
+        padding-top: 10px;
+        // overflow: hidden;
         .page-title{
             padding: 20px; 
+            margin-top: 10px;
+            margin-left: 10px;
             h2 {
                 font-size: 25px;
                 font-weight: 500;

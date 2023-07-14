@@ -128,44 +128,61 @@ const TeamTable = () => {
   ];
   return (
     <>
-      <div className="page-title">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography Boxvariant="h3">Team Memebers</Typography>
-          <Box sx={{ width: "200px" }}>
-            <Button fullWidth variant="contained" onClick={() => setOpen(true)}>
-              Add Members
-            </Button>
+      <Box
+        sx={{
+          backgroundColor: "white",
+          height: "98.2vh",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+          paddingLeft: 1,
+          pt: 2,
+        }}
+      >
+        <div className="page-title">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: "98%"
+            }}
+          >
+            <Typography sx={{ fontSize: 30, pl: 2 }}>Team Memebers</Typography>
+            <Box sx={{ width: "200px" }}>
+              <Button
+                sx={{ backgroundColor: "#8477DA", padding: 1.2, boxShadow: 0, }}
+                fullWidth
+                variant="contained"
+                onClick={() => setOpen(true)}
+              >
+                Add Members
+              </Button>
+            </Box>
           </Box>
-        </Box>
-      </div>
-      <div className="CustomerTable">
-        <DataGrid
-          getRowId={(row) => row._id}
-          rows={teamData}
-          columns={teamColumns.concat(actionColumn)}
-          paginationModel={{ page: 0, pageSize: 8 }}
-        />
-      </div>
+        </div>
+        <div className="CustomerTable">
+          <DataGrid
+            getRowId={(row) => row._id}
+            rows={teamData}
+            columns={teamColumns.concat(actionColumn)}
+            paginationModel={{ page: 0, pageSize: 8 }}
+          />
+        </div>
 
-      <AddTeamMembers
-        open={open}
-        close={handleClose}
-        data={edit}
-        isEdit={isEdit}
-        refetch={teamMemberRefetch}
-        showSnackbar={showSnackbar}
-      />
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
-      />
+        <AddTeamMembers
+          open={open}
+          close={handleClose}
+          data={edit}
+          isEdit={isEdit}
+          refetch={teamMemberRefetch}
+          showSnackbar={showSnackbar}
+        />
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
+      </Box>
     </>
   );
 };

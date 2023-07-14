@@ -34,10 +34,13 @@ const Index = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          // background: "yellow",
+          background: "white",
           height: "93.3vh",
           overflowY: "scroll",
           paddingY: 4,
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+
         }}
       >
         {!layoutMeasurementsOpen ? (
