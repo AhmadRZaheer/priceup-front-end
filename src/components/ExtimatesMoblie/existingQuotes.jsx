@@ -1,58 +1,25 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setNavigation } from "../../redux/estimateCalculations";
+import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
-export default function ExitingQuotes({ setHandleEstimatesPages }) {
-  const dates = [
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-  ];
+export default function ExitingQuotes() {
+  const { data: estimates, isLoading ,isFetching} = useGetEstimates();
+  console.log(estimates, "estimates in existing");
+  const dispatch = useDispatch();
+
   return (
     <>
-      <Box sx={{ marginTop: 10 }}>
+      <Box sx={{ marginTop: 10, height: "100vh" }}>
         <Box
           sx={{
             paddingY: 2,
@@ -70,31 +37,42 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
             </NavLink>
           </IconButton>
         </Box>
-        <Box sx={{ paddingX: 2, marginTop: 2, height: 345, overflow: "auto" }}>
-          {dates.map((item) => (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-              }}
-            >
-              <Typography sx={{ fontWeight: "Medium" }}>{item.Date}</Typography>
-              <Box sx={{ display: "flex" }}>
-                <Typography color="red" marginRight={3}>
-                  {item.status}
+        <Box
+          sx={{ paddingX: 2, marginTop: 2, height: "70vh", overflow: "auto" }}
+        >
+          {isFetching ? (
+            <CircularProgress />
+          ) : (
+            estimates?.map((item) => (
+              <Box
+                key={item._id}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingY: 2,
+                  borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                }}
+              >
+                <Typography sx={{ fontWeight: "Medium" }}>
+                  {new Date(item?.updatedAt).toLocaleString()}
                 </Typography>
-                <IconButton sx={{ marginRight: 1, height: 25 }}>
-                  <img src={pencil} alt="image of pencil" />
-                </IconButton>
+                <Box sx={{ display: "flex" }}>
+                  <Typography color="red" marginRight={3}>
+                    {/* {item?.updatedAt} */}
+                  </Typography>
+                  <IconButton sx={{ marginRight: 1, height: 25 }}>
+                    <img src={pencil} alt="image of pencil" />
+                  </IconButton>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))
+          )}
         </Box>
         <Box sx={{ paddingX: 2, pt: 2 }}>
           <Button
-            onClick={() => setHandleEstimatesPages("layout")}
+            onClick={() => {
+              dispatch(setNavigation("layout"));
+            }}
             color="primary"
             sx={{
               textTransform: "capitalize",
@@ -108,7 +86,7 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
             {" "}
             Create New Qoute
           </Button>
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               textTransform: "capitalize",
@@ -122,7 +100,7 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
           >
             {" "}
             Cancel
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </>

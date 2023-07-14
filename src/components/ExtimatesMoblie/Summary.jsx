@@ -1,19 +1,24 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import door from "../../Assets/estimates/layout1.svg";
 
-import MenuList from "./MenuList";
-import { menuOptions } from "../../data/data";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
-  AddCircleOutline,
-  ChevronLeftOutlined,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
-import { getContent, getTotal } from "../../redux/estimateCalculations";
-import { useSelector } from "react-redux";
+  getContent,
+  getMeasumentSide,
+  getTotal,
+  selectedItem,
+  setNavigation,
+} from "../../redux/estimateCalculations";
+import { useDispatch, useSelector } from "react-redux";
+import { backendURL } from "../../utilities/common";
 
-const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
+const Summary = ({ handleOpen }) => {
+  const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
+  const measurements = useSelector(getMeasumentSide);
+  const selectedData = useSelector(selectedItem);
+
   return (
     <>
       <Box
@@ -46,8 +51,11 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
-              onClick={() => setHandleEstimatesPages("review")}
-              sx={{ fontSize: 34, paddingTop: 0.4 }} />
+              onClick={() => {
+                dispatch(setNavigation("review"));
+              }}
+              sx={{ fontSize: 34, paddingTop: 0.4 }}
+            />
           </Box>
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute
@@ -130,14 +138,15 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   // background: "#D9D9D9",
                   margin: { md: 0, xs: "auto" },
                   p: 3,
-                  borderBottom: "1px solid #2c2c3c"
+                  borderBottom: "1px solid #2c2c3c",
                   // height: "250px",
                 }}
               >
                 <img
-                  // width={"350px"}
-                  // height={"250px"}
-                  src={door}
+                  width={"350px"}
+                  height={"250px"}
+                  // src={door}
+                  src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
               </Box>
@@ -151,19 +160,59 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   // height: "250px",
                 }}
               >
-                <Typography>12’’/ 12’’/ 12’’ </Typography>
+                {/* <Typography>12’’/ 12’’/ 12’’ </Typography> */}
+                {/* {measurements?.map((measurement, index) => (
+                  <p key={index}>{measurement.value}</p>
+                ))} */}
+                <Typography>
+                  {measurements
+                    .filter(
+                      (measurement) =>
+                        measurement.value !== null && measurement.value !== ""
+                    )
+                    .map((measurement) => measurement.value)
+                    .join("’’/ ")}
+                  ’’
+                </Typography>
                 <Typography variant="h6">Summary </Typography>
-                <Typography>Finish: {selectedContent?.hardwareFinishes?.name}</Typography>
-                <Typography>Handles: {selectedContent?.handles?.item?.name} ({selectedContent?.handles?.count})</Typography>
-                <Typography>Hinges: {selectedContent?.hinges?.item?.name}  ({selectedContent?.hinges?.count})</Typography>
-                {selectedContent?.mounting?.activeType === 'channel' ? <Typography>Channel: {selectedContent?.mounting?.channel?.type?.name}</Typography> :
-                  <Typography>Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.name} / {selectedContent?.mounting?.clamps?.sleeveOver?.name} / {selectedContent?.mounting?.clamps?.glassToGlass?.name}</Typography>
-                }
-                <Typography>Glass Type:{selectedContent?.glassType?.item?.name} ({selectedContent?.glassType?.thickness})</Typography>
-                <Typography>Bars: {selectedContent?.slidingDoorSystem?.item?.name} ({selectedContent?.slidingDoorSystem?.count})</Typography>
+                <Typography>
+                  Finish: {selectedContent?.hardwareFinishes?.name}
+                </Typography>
+                <Typography>
+                  Handles: {selectedContent?.handles?.item?.name} (
+                  {selectedContent?.handles?.count})
+                </Typography>
+                <Typography>
+                  Hinges: {selectedContent?.hinges?.item?.name} (
+                  {selectedContent?.hinges?.count})
+                </Typography>
+                {selectedContent?.mounting?.activeType === "channel" ? (
+                  <Typography>
+                    Channel: {selectedContent?.mounting?.channel?.type?.name}
+                  </Typography>
+                ) : (
+                  <Typography>
+                    Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.name}{" "}
+                    / {selectedContent?.mounting?.clamps?.sleeveOver?.name} /{" "}
+                    {selectedContent?.mounting?.clamps?.glassToGlass?.name}
+                  </Typography>
+                )}
+                <Typography>
+                  Glass Type:{selectedContent?.glassType?.item?.name} (
+                  {selectedContent?.glassType?.thickness})
+                </Typography>
+                <Typography>
+                  Bars: {selectedContent?.slidingDoorSystem?.item?.name} (
+                  {selectedContent?.slidingDoorSystem?.count})
+                </Typography>
                 <Typography>Transom: </Typography>
-                <Typography>Header: {selectedContent?.header?.item?.name}  ({selectedContent?.header?.count})</Typography>
-                <Typography>Glass Treatment: {selectedContent?.glassTreatment?.name}</Typography>
+                <Typography>
+                  Header: {selectedContent?.header?.item?.name} (
+                  {selectedContent?.header?.count})
+                </Typography>
+                <Typography>
+                  Glass Treatment: {selectedContent?.glassTreatment?.name}
+                </Typography>
                 <Typography variant="h6">Add ons: </Typography>
                 <Typography>People: {selectedContent?.people}</Typography>
                 <Typography>Hours: {selectedContent?.hours}</Typography>
@@ -203,7 +252,9 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("review")}
+              onClick={() => {
+                dispatch(setNavigation("review"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",
@@ -217,14 +268,7 @@ const Summary = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
           </Box>
 
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                setClientDetailOpen(true);
-              }}
-            >
-              {" "}
+            <Button fullWidth variant="contained" onClick={handleOpen}>
               Next
             </Button>
           </Box>

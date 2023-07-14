@@ -14,17 +14,19 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getTotal,
+  measumentSide,
   setInputContent,
+  setNavigation,
   setTotal,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
 
-const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
-  console.log(doorDetail, "doorDetail in mobile view");
-
+const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -142,6 +144,9 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     "selected items",
     totalPrice
   );
+  const handleBoxClick = () => {
+    dispatch(setNavigation("summary"));
+  };
   return (
     <>
       <Box
@@ -151,8 +156,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
 
           display: "flex",
           alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
+
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -175,7 +179,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
               onClick={() => {
-                setHandleEstimatesPages("measurements");
+                dispatch(setNavigation("measurements"));
               }}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
@@ -476,7 +480,8 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   <Box sx={{ width: "100%" }}>
                     <MenuList
                       menuOptions={estimatesData?.addOns}
-                      title={"Add ons:"}
+                      title={"Add ons"}
+                      type={"addOns"}
                     />
                   </Box>
                 </Box>
@@ -1026,7 +1031,10 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("measurements")}
+              // onClick={() => setHandleEstimatesPages("measurements")}
+              onClick={() => {
+                dispatch(setNavigation("measurements"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",
@@ -1044,7 +1052,8 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
             <Button
               fullWidth
               variant="contained"
-              onClick={() => setHandleEstimatesPages("summary")}
+              // onClick={() => setHandleEstimatesPages("summary")}
+              onClick={handleBoxClick}
             >
               {" "}
               Next

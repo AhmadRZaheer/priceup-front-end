@@ -5,11 +5,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import { backendURL } from "../../utilities/common";
-const LayoutMeasurements = ({
-  setHandleEstimatesPages,
-  item,
-  setDoorDetail,
-}) => {
+import { useDispatch, useSelector } from "react-redux";
+import {
+  selectedItem,
+  setNavigation,
+  updateMeasurements,
+} from "../../redux/estimateCalculations";
+const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
+  const selectedData = useSelector(selectedItem);
+
   // const validationSchema = Yup.object().shape({
   //   a: Yup.number().required("a is required"),
   //   b: Yup.number().required("b is required"),
@@ -17,28 +21,53 @@ const LayoutMeasurements = ({
   //   d: Yup.number().required("d is required"),
   //   e: Yup.number().required("e is required"),
   // });
+  const validationSchema = Yup.object().shape({
+    // Define validation rules for each field dynamically
+    ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
+      (schema, _, index) => {
+        const fieldName = String.fromCharCode(97 + index);
+        return {
+          ...schema,
+          [fieldName]: Yup.number().required(
+            `${fieldName.toUpperCase()} is required`
+          ),
+        };
+      },
+      {}
+    ),
+  });
   const formik = useFormik({
-    initialValues: {
-      a: "",
-      b: "",
-      c: "",
-      d: "",
-      e: "",
-    },
-    // validationSchema,
+    initialValues: {},
+    validationSchema,
     onSubmit: async (values, resetForm) => {
       console.log(values, "formik values in mobiel");
+      const measurementsArray = Object.entries(values)
+        .filter(([key, value]) => value !== "")
+        .map(([key, value]) => ({
+          key,
+          value,
+        }));
+      dispatch(updateMeasurements(measurementsArray));
+
+      // setHandleEstimatesPages("measurements");
+      dispatch(setNavigation("review"));
       // };
       resetForm();
     },
   });
   console.log(formik.values, "formik values");
+  const dispatch = useDispatch();
   const handleBoxClick = () => {
-    console.log(formik.values, "formik values");
-
-    setDoorDetail(formik.values);
-    setHandleEstimatesPages("measurements");
+    // const measurementsArray = Object.entries(formik.values)
+    //   .filter(([key, value]) => value !== "")
+    //   .map(([key, value]) => ({
+    //     key,
+    //     value,
+    //   }));
+    // dispatch(updateMeasurements(measurementsArray));
+    // setHandleEstimatesPages("measurements");
   };
+  console.log(selectedData?.settings?.measurementSides, " side check");
   return (
     <>
       <Box
@@ -70,11 +99,7 @@ const LayoutMeasurements = ({
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlinedIcon
-              // onClick={() => {
-              //   setHandleEstimatesPages("layout");
-              //   setDoorDetail(formik.values);
-              // }}
-              onClick={handleBoxClick()}
+              // onClick={handleBoxClick()}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
           </Box>
@@ -144,7 +169,7 @@ const LayoutMeasurements = ({
                 borderRadius: "8px",
               }}
             >
-              <Box
+              {/* <Box
                 sx={{
                   display: "flex",
                   width: { md: "48.5%", xs: "92%" },
@@ -286,6 +311,7 @@ const LayoutMeasurements = ({
                 >
                   <Typography>e</Typography>
                   <TextField
+                    type="number"
                     size="small"
                     variant="outlined"
                     name="e"
@@ -303,6 +329,56 @@ const LayoutMeasurements = ({
                     helperText={formik.touched.e && formik.errors.e}
                   />
                 </Box>
+              </Box> */}
+              <Box
+                sx={{
+                  display: "flex",
+                  width: { md: "48.5%", xs: "92%" },
+                  flexDirection: "column",
+                  gap: { md: 2, xs: 5 },
+                  color: { md: "black", xs: "white" },
+                  background: {
+                    md: "none",
+                    xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                  },
+                  borderTopLeftRadius: { md: 0, xs: 30 },
+                  borderTopRightRadius: { md: 0, xs: 30 },
+                  borderTop: { md: 0, xs: "1px solid #667085" },
+                  paddingX: { md: 0, xs: 2 },
+                  paddingTop: 2,
+                  paddingBottom: 8,
+                }}
+              >
+                {Array.from({
+                  length: selectedData?.settings?.measurementSides,
+                }).map((_, index) => (
+                  <Box
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                    }}
+                  >
+                    <Typography>{String.fromCharCode(97 + index)}</Typography>
+                    <TextField
+                      type="number"
+                      size="small"
+                      variant="outlined"
+                      name={String.fromCharCode(97 + index)}
+                      placeholder={String.fromCharCode(97 + index)}
+                      style={{
+                        background: { xs: "#100d24" },
+                        borderRadius: "8px",
+                        border: "1px solid #D0D5DD",
+                        color: "white !important",
+                      }}
+                      value={formik.values[String.fromCharCode(97 + index)]}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                    />
+                  </Box>
+                ))}
               </Box>
               <Box
                 sx={{
@@ -317,7 +393,7 @@ const LayoutMeasurements = ({
                 <img
                   width="150px"
                   // src={door}
-                  src={`${backendURL}/${item?.image}`}
+                  src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
               </Box>
@@ -361,7 +437,9 @@ const LayoutMeasurements = ({
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
                     fullWidth
-                    onClick={() => setHandleEstimatesPages("layout")}
+                    onClick={() => {
+                      dispatch(setNavigation("layout"));
+                    }}
                     sx={{
                       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                       color: "#344054",
@@ -376,9 +454,17 @@ const LayoutMeasurements = ({
                 </Box>
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
+                    type="submit"
                     fullWidth
+                    disabled={Object.keys(formik.values).some(
+                      (key) => !formik.values[key]
+                    )}
                     variant="contained"
-                    onClick={() => setHandleEstimatesPages("review")}
+                    // onClick={() => setHandleEstimatesPages("review")}
+                    // onClick={() => {
+                    //   dispatch(setNavigation("review"));
+                    // }}
+                    // onClick={handleBoxClick()}
                   >
                     Next
                   </Button>

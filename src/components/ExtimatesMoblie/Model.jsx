@@ -6,6 +6,15 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
+import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getContent,
+  getMeasumentSide,
+  getTotal,
+  selectedItem,
+  setNavigation,
+} from "../../redux/estimateCalculations";
 const style = {
   position: "absolute",
   display: "flex",
@@ -16,10 +25,11 @@ const style = {
   bottom: 0,
   // transform: "translate(-50%, -50%)",
   width: { md: 350, xs: "100%" },
-  bgcolor: "#ffff",
+  bgcolor: "red",
   borderRadius: { md: "4px" },
   borderTopLeftRadius: { md: "4px", xs: 30 },
   borderTopRightRadius: { md: "4px", xs: 30 },
+  zIndex: 2,
 };
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -31,8 +41,21 @@ const validationSchema = yup.object({
 export default function ClientDetailsModel({
   open,
   handleCancel,
-  SetlayoutMeasurementsOpen,
+  showSnackbar,
 }) {
+  const {
+    mutate,
+    isError: ErrorForAdd,
+    isSuccess: CreatedSuccessfully,
+  } = useCreateEstimates();
+  const estimatesContent = useSelector(getContent);
+  const estimatesTotal = useSelector(getTotal);
+  const estimatesLayout = useSelector(selectedItem);
+  const measurements = useSelector(getMeasumentSide);
+  console.log(estimatesContent?.addOns, "addon in model");
+  const data = estimatesContent?.addOns;
+  const addOnIds = data.map((obj) => obj._id);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -42,11 +65,81 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      // Handle form submission here
       console.log(values);
+      const estimate = {
+        layout_id: estimatesLayout?._id,
+        hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
+        handles: {
+          type: estimatesContent?.handles?.item?._id,
+          count: estimatesContent?.handles?.count,
+        },
+        hinges: {
+          type: estimatesContent?.hinges?.item?._id,
+          count: estimatesContent?.hinges?.count,
+        },
+        mounting: {
+          clamps: {
+            wallClamp: {
+              type: estimatesContent?.mounting?.clamps?.wallClamp?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.wallClamp?.count,
+            },
+            sleeveOver: {
+              type: estimatesContent?.mounting?.clamps?.sleeveOver?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.sleeveOver?.count,
+            },
+            glassToGlass: {
+              type: estimatesContent?.mounting?.clamps?.glassToGlass?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.glassToGlass?.count,
+            },
+          },
+          channel: estimatesContent?.mounting?.channel?.item?._id,
+          activeType: estimatesContent?.mounting?.activeType,
+        },
+        glassType: {
+          type: estimatesContent?.glassType?.item?._id,
+          thickness: estimatesContent?.glassType?.count,
+        },
+        glassTreatment: estimatesContent?.glassTreatment?._id,
+        slidingDoorSystem: {
+          type: estimatesContent?.slidingDoorSystem?.item?._id,
+          count: estimatesContent?.slidingDoorSystem?.count,
+        },
+        header: {
+          type: estimatesContent?.header?.item?._id,
+          count: estimatesContent?.slidingDoorSystem?.count,
+        },
+        oneInchHoles: estimatesContent?.oneInchHoles,
+        hingeCut: estimatesContent?.hingeCut,
+        clampCut: estimatesContent?.clampCut,
+        notch: estimatesContent?.notch,
+        outages: estimatesContent?.outages,
+        mitre: estimatesContent?.mitre,
+        polish: estimatesContent?.polish,
+        people: estimatesContent?.people,
+        hours: estimatesContent?.hours,
+        cost: Number(estimatesTotal),
+        addOns: addOnIds,
+        sleeveOverCount: estimatesContent?.sleeveOverCount,
+        towelBarsCount: estimatesContent?.sleeveOverCount,
+        measurements: measurements,
+      };
+      mutate({ customerData: values, estimateData: estimate });
+      handleCancel();
     },
   });
+
+  React.useEffect(() => {
+    if (CreatedSuccessfully) {
+      showSnackbar("Estimate created successfully", "success");
+      // window.location.href = "/";
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAdd) {
+      const errorMessage = ErrorForAdd.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfully, ErrorForAdd]);
   console.log(formik.values);
+
   return (
     <div>
       <Modal
@@ -195,18 +288,7 @@ export default function ClientDetailsModel({
                   justifyContent: "end",
                 }}
               >
-                {/* <Button
-                  fullWidth
-                  sx={{
-                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
-                    textTransform: "initial",
-                    border: "1px solid #D0D5DD",
-                  }}
-                  onClick={handleCancel}
-                >
-                  Cancel
-                </Button> */}
+                {/* <Box onClick={handleCancel}> */}
                 <Button
                   type="submit"
                   sx={{
@@ -214,10 +296,11 @@ export default function ClientDetailsModel({
                   }}
                   fullWidth
                   variant="contained"
-                  onClick={handleCancel()}
+                  // onClick={handleCancel}
                 >
                   Save
                 </Button>
+                {/* </Box> */}
               </Box>
             </Box>
           </Box>

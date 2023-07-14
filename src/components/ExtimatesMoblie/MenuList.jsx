@@ -18,6 +18,7 @@ import {
   setContent,
   setCounters,
   setThickness,
+  updateAddOnCount,
 } from "../../redux/estimateCalculations";
 
 const MenuList = ({
@@ -28,10 +29,28 @@ const MenuList = ({
   count,
   thickness,
 }) => {
+  console.log(title, "title sam");
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [sleeveOverCount, setSleeveOverCount] = useState(0);
+  const [towelBarsCount, setTowelBarsCount] = useState(0);
+
+  // Handle functions for each item
+  const handleSleeveOverCount = (count) => {
+    if (count >= 0) {
+      setSleeveOverCount(count);
+      dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
+    }
+  };
+
+  const handleTowelBarsCount = (count) => {
+    if (count >= 0) {
+      setTowelBarsCount(count);
+      dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
+    }
+  };
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
@@ -169,17 +188,72 @@ const MenuList = ({
                   gap: 2,
                   alignItems: "center",
                   width: { md: "100%", xs: "95%" },
+                  justifyContent: "space-between",
                 }}
               >
-                <img
-                  width={"25px"}
-                  height={"25px"}
-                  src={`${backendURL}/${item?.image}`}
-                  alt="Selected"
-                />
-                <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <img
+                    width={"25px"}
+                    height={"25px"}
+                    src={`${backendURL}/${item?.image}`}
+                    alt="Selected"
+                  />
                   <Typography>{item?.name}</Typography>
-                  {/* <Typography>{item.price}</Typography> */}
+                </Box>
+                <Box>
+                  {item?.slug === "sleeve-over" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                        gap: 2,
+                        color: { md: "#000000  ", xs: "white" },
+                        alignSelf: "flex-end",
+                      }}
+                    >
+                      <AddCircleOutline
+                        onClick={() =>
+                          handleSleeveOverCount(sleeveOverCount + 1)
+                        }
+                        sx={{ color: "#98A2B3" }}
+                      />
+                      <Typography>{sleeveOverCount}</Typography>
+                      <RemoveCircleOutline
+                        onClick={() =>
+                          handleSleeveOverCount(sleeveOverCount - 1)
+                        }
+                        sx={{ color: "#98A2B3" }}
+                      />
+                    </Box>
+                  )}
+                  <Box>
+                    {item?.slug === "towel-bars" && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          color: { md: "#000000  ", xs: "white" },
+                          alignSelf: "flex-end",
+                        }}
+                      >
+                        <AddCircleOutline
+                          onClick={() =>
+                            handleTowelBarsCount(towelBarsCount + 1)
+                          }
+                          sx={{ color: "#98A2B3" }}
+                        />
+                        <Typography>{towelBarsCount}</Typography>
+                        <RemoveCircleOutline
+                          onClick={() =>
+                            handleTowelBarsCount(towelBarsCount - 1)
+                          }
+                          sx={{ color: "#98A2B3" }}
+                        />
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </MenuItem>
