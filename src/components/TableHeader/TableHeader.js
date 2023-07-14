@@ -3,12 +3,17 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
 import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 
 const TableHeader = ({ showMore, types }) => {
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
-      <div key={index} style={{display: "flex", gap: 10}}>{renderSliderItem(item, item?.slug)}</div>
+      <div key={index} style={{display: "flex", gap: 10}}>
+        {renderSliderItem(item, item?.slug)}
+        </div>
     ));
   };
 
@@ -65,11 +70,14 @@ const TableHeader = ({ showMore, types }) => {
       style={{
         ...props.style,
         color: "green !important",
-        backgroundColor: "black",
-        borderRadius: "100%" // Change the arrow color to blue
+        // backgroundColor: "black",
+        borderRadius: "100%",
+        width: "20px",
+        height: "20px"
+         // Change the arrow color to blue
       }}
     >
-      jkj
+      
     </div>
   );
 
@@ -79,8 +87,8 @@ const TableHeader = ({ showMore, types }) => {
     slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
-    prevArrow: <CustomPrevArrow />, // Replace default prevArrow with a custom one
-    nextArrow: <CustomNextArrow />, // Replace default nextArrow with a custom one
+    prevArrow: <ArrowBackIosNewIcon  sx={{color: "black", "&:hover": {color: 'black'}}}/>, // Replace default prevArrow with a custom one
+    nextArrow: <ArrowForwardIosIcon  sx={{color: "black", "&:hover": {color: 'black'}}}/>, // Replace default nextArrow with a custom one
     adaptiveHeight: true,
   };
 

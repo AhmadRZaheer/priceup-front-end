@@ -113,31 +113,32 @@ const HardwareTable = () => {
           borderTopLeftRadius: 30,
           borderBottomLeftRadius: 30,
           paddingLeft: 1,
-          pt: 2
+          pt: 2,
         }}
       >
         <div className="page-title">
-          <h2 style={{fontSize: 30, paddingLeft: 10}}>Hardware</h2>
-        </div>
-        <div
-          style={{
-            marginLeft: "15px",
-            marginRight: "15px",
-            // background: "rgb(232, 232, 232)",
-            // width: "80vw",
-            // height: "45px",
-          }}
-        >
-          <Header types={hardwareCategoryData} showMore={SetShowNext} />
+          <h2 style={{ fontSize: 30, paddingLeft: 10 }}>Hardware</h2>
         </div>
         <Box
           sx={{
             border: "1px solid rgb(232, 232, 232)",
-            margin: 2,
+            marginX: 2,
           }}
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
+              <div
+                style={{
+                  marginLeft: "15px",
+                  marginRight: "15px",
+                  paddingLeft: 20,
+                  paddingRight: 20,
+                  paddingTop: 10,
+                
+                }}
+              >
+                <Header types={hardwareCategoryData} showMore={SetShowNext} />
+              </div>
               {/* <HardWareComponentHeader type={showNext} /> */}
               <HardWareComponent type={showNext} />
             </div>

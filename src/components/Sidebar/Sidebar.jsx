@@ -48,9 +48,26 @@ const Sidebar = () => {
         </NavLink>
         <div className="center">
           <ul>
-            <NavLink to="/estimates" className="link">
+          <NavLink to="/" className="link">
               <li
                 className={`estimates ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
+              >
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={EstimsteIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Dashboard</span>
+                </IconButton>
+              </li>
+            </NavLink>
+            <NavLink to="/estimates" className="link">
+              <li
+                className={` ${
                   location.pathname === "/estimates" ? "active" : ""
                 }`}
               >
@@ -193,7 +210,7 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/settings" className="link">
               <li
-                style={{ marginTop: "210px" }}
+                style={{ marginTop: "120px" }}
                 className={` ${
                   location.pathname === "/settings" ? "active" : ""
                 }`}
