@@ -25,6 +25,7 @@ const Index = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
+  const [StorePage, setStorePage] = useState("Layout")
 
   return (
     <>
@@ -40,7 +41,7 @@ const Index = () => {
           paddingY: 4,
         }}
       >
-        {!layoutMeasurementsOpen ? (
+        {StorePage === "Layout" && (
           <Box
             sx={{
               width: "70%",
@@ -97,7 +98,7 @@ const Index = () => {
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <Box sx={{ width: "150px" }}>
                   <Button
-                    onClick={() => setClientDetailOpen(true)}
+                    onClick={() => setStorePage("Measurments")}
                     fullWidth
                     variant="contained"
                   >
@@ -108,11 +109,14 @@ const Index = () => {
               </Box>
             </Box>
           </Box>
-        ) : (
-          //   <LayoutMeasurements />
-          <LayoutReview />
+        ) }
+        {StorePage === "Measurments" && (
+          <LayoutMeasurements setHandleEstimatesPages={setStorePage}/>
         )}
-      </Box>
+         {StorePage === "Review" && (
+           <LayoutReview setStorePage={setStorePage} />
+        )}
+       </Box>
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}

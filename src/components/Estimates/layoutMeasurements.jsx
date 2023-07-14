@@ -4,7 +4,7 @@ import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
 import door from "../../Assets/door.png";
 
-const LayoutMeasurements = () => {
+const LayoutMeasurements = ({setHandleEstimatesPages}) => {
   return (
     <>
       <Box
@@ -194,6 +194,7 @@ const LayoutMeasurements = () => {
               <Box sx={{ width: "150px" }}>
                 <Button
                   fullWidth
+                  onClick={() => setHandleEstimatesPages("Layout")}
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                     color: "#344054",
@@ -205,7 +206,7 @@ const LayoutMeasurements = () => {
                 </Button>
               </Box>
               <Box sx={{ width: "150px" }}>
-                <Button fullWidth variant="contained">
+                <Button onClick={() => setHandleEstimatesPages("Review")} fullWidth variant="contained">
                   {" "}
                   Next
                 </Button>
