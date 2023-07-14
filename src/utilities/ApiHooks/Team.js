@@ -65,7 +65,7 @@ export const useCreateTeamMembers = () => {
           name: props.name,
 
           company_id: decodedToken?.company_id,
-          password: props.password,
+          password: "",
           email: props.email,
         },
         {

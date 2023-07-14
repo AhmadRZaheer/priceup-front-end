@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-
+import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import {
   CircularProgress,
@@ -137,7 +137,7 @@ export default function AddEditFinish({
     onSubmit: (values, { resetForm }) => {
       {
         isEdit ? handleEditClick(values) : handleCreateClick(values);
-
+        setSelectedImage(null);
         resetForm();
       }
     },
@@ -150,6 +150,10 @@ export default function AddEditFinish({
         // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{
+          backdropFilter: "blur(2px)", // Apply blur effect to the backdrop
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
       >
         <Box sx={style}>
           <Box
@@ -160,9 +164,6 @@ export default function AddEditFinish({
             }}
           >
             <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
-            <IconButton onClick={close}>
-              <Close />
-            </IconButton>
           </Box>
 
           <Box>
@@ -186,16 +187,40 @@ export default function AddEditFinish({
               />
             ) : (
               <label htmlFor="image-input">
-                <Button
-                  style={{
-                    height: "100px",
-                    width: "100px",
-                    boxShadow: "0px 0px 2px blue",
+                <Box
+                  sx={{
+                    border: "1px solid #EAECF0",
+                    textAlign: "center",
+                    padding: 2,
                   }}
-                  component="span"
                 >
-                  Upload Image
-                </Button>
+                  <Box sx={{ height: 60 }}>
+                    <img
+                      width={60}
+                      src={InputImageIcon}
+                      alt="icon of input image"
+                    />
+                  </Box>
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <Typography sx={{ color: "#8477DA" }}>
+                      Click to Upload
+                    </Typography>
+                    {/* <Typography sx={{ color: "#667085" }}>
+                      or drag and drop
+                    </Typography> */}
+                  </span>
+                  {/* <Typography sx={{color: "#8477DA"}}>Click to Upload</Typography> */}
+                  <Typography variant="body2" sx={{ color: "#667085" }}>
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                  </Typography>
+                </Box>
               </label>
             )}
           </Box>
@@ -238,11 +263,22 @@ export default function AddEditFinish({
               />
             </FormControl>
           </Box>
-          <Box onClick={formik.handleSubmit}>
+          <Box
+            onClick={formik.handleSubmit}
+            sx={{ display: "flex", gap: 2, marginTop: 2 }}
+          >
+            <Button
+              variant="outlined"
+              onClick={close}
+              sx={{ color: "black", border: "1px solid #D0D5DD", width: "50%" }}
+            >
+              Cancel
+            </Button>
             <Button
               fullWidth
               variant="contained"
               disabled={LoadingForAdd || LoadingForEdit}
+              sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >
               {LoadingForAdd || LoadingForEdit ? (
                 <CircularProgress size={24} />

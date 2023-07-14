@@ -20,6 +20,7 @@ import {
   setTotal,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
+import Snackbars from "../Model/SnackBar";
 
 const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
@@ -146,6 +147,25 @@ const LayoutReview = () => {
   );
   const handleBoxClick = () => {
     dispatch(setNavigation("summary"));
+  };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
   };
   return (
     <>
@@ -283,6 +303,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hardwareFinishes}
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -304,6 +325,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.handles}
                       title={"Handles"}
                       type={"handles"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.handles.count}
                     />
@@ -326,6 +348,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hinges}
                       title={"Hinges"}
                       type={"hinges"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.hinges.count}
                     />
@@ -350,6 +373,7 @@ const LayoutReview = () => {
                         menuOptions={estimatesData?.wallClamp}
                         title={"Wall Clamps"}
                         type={"wallClamp"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.wallClamp.count}
                       />
@@ -357,6 +381,7 @@ const LayoutReview = () => {
                         menuOptions={estimatesData?.sleeveOver}
                         title={"Sleeve Over"}
                         type={"sleeveOver"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.sleeveOver.count}
                       />
@@ -364,6 +389,7 @@ const LayoutReview = () => {
                         menuOptions={estimatesData?.glassToGlass}
                         title={"Glass to Glass"}
                         type={"glassToGlass"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={
                           selectedContent.mounting.clamps.glassToGlass.count
@@ -374,6 +400,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.mountingChannel}
                       title={"Channel"}
                       type={"channel"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -395,6 +422,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassType}
                       title={" Glass type"}
                       type={"glassType"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       thickness={selectedContent.glassType.thickness}
                     />
@@ -417,6 +445,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.slidingDoorSystem}
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
                     />
@@ -439,6 +468,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.header}
                       title={"Header"}
                       type={"header"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
                     />
@@ -461,6 +491,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassTreatment}
                       title={"Glass treatment"}
                       type={"glassTreatment"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -482,6 +513,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.addOns}
                       title={"Add ons"}
                       type={"addOns"}
+                      showSnackbar={showSnackbar}
                     />
                   </Box>
                 </Box>
@@ -1061,6 +1093,12 @@ const LayoutReview = () => {
             </Button>
           </Box>
         </Box>
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
     </>
   );
