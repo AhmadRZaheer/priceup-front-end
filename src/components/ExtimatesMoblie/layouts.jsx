@@ -1,23 +1,21 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
-import Model from "./Model";
-import LayoutMeasurements from "./layoutMeasurements";
-import LayoutReview from "./LayoutReview";
+
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-import Summary from "./Summary";
-import ExitingQuotes from "./existingQuotes";
+
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { backendURL } from "../../utilities/common";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
+  selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
 export const boxStyles = {
   minHeight: "152px",
   minWidth: { md: "180px", xs: "140px" },
   margin: "auto",
-  borderRadius: "12px",
+  borderRadius: "8px",
   boxShadow:
     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
   border: { md: "1px solid #EAECF0", xs: "none" },
@@ -29,15 +27,16 @@ export const boxStyles = {
   gap: { md: 2, xs: 1 },
   flexDirection: "column",
   cursor: "pointer",
-  position: "relative",
+  // position: "relative",
 };
-const Layout = ({ setHandleEstimatesPages }) => {
+const Layout = () => {
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
   const dispatch = useDispatch();
+  const selectedData = useSelector(selectedItem);
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));
-    dispatch(setNavigation("measurements"));
+    // dispatch(setNavigation("measurements"));
   };
   return (
     <>
@@ -49,8 +48,8 @@ const Layout = ({ setHandleEstimatesPages }) => {
           flexDirection: "column",
           background: "#18133b",
 
-          height: "93.3vh",
-          overflowY: "scroll",
+          height: "97vh",
+          // overflowY: "scroll",
           paddingY: { md: 4, sx: 0 },
         }}
       >
@@ -68,6 +67,7 @@ const Layout = ({ setHandleEstimatesPages }) => {
             gap: { md: 4, xs: 0 },
           }}
         >
+          {/* create New Quotes  header with back arrow*/}
           <Box
             sx={{
               display: { md: "none", xs: "flex" },
@@ -80,6 +80,7 @@ const Layout = ({ setHandleEstimatesPages }) => {
               borderBottomLeftRadius: 20,
               borderBottomRightRadius: 20,
               marginTop: 7.6,
+              borderTop: "2px solid rgba(255, 255, 255, 0.2)",
             }}
           >
             <Box sx={{ display: { md: "none", xs: "block" } }}>
@@ -136,19 +137,18 @@ const Layout = ({ setHandleEstimatesPages }) => {
                 collaborate on this project.
               </Typography>
             </Box>
-            <Grid container gap={2}>
+            <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
               {layouts.map((layout) => (
                 <Box
                   key={layout._id}
-                  sx={boxStyles}
-                  // sx={{
-                  // ...boxStyles,
-                  // backgroundColor:
-                  //   selectedLayout === layout
-                  //     ? "rgba(121, 102, 189, 0.5)"
-                  //     : "#D9D9D9",
-                  // }}
-                  // onClick={() => setItem(layout)}
+                  // sx={boxStyles}
+                  sx={{
+                    ...boxStyles,
+                    backgroundColor:
+                      selectedData?._id !== layout._id
+                        ? "rgba(121, 102, 189, 0.5)"
+                        : "#8477DA",
+                  }}
                   onClick={() => handleBoxClick(layout)}
                 >
                   <img
@@ -172,9 +172,29 @@ const Layout = ({ setHandleEstimatesPages }) => {
             <Box
               sx={{
                 display: "flex",
+                // position: "absolute",
+                // botton: 0,
                 justifyContent: { md: "end", xs: "center" },
               }}
-            ></Box>
+            >
+              <Button
+                onClick={() => {
+                  dispatch(setNavigation("measurements"));
+                }}
+                color="primary"
+                sx={{
+                  textTransform: "capitalize",
+                  width: "100%",
+                  background: "#8477DA",
+                  color: "white",
+                  fontSize: 18,
+                  "&:hover": { background: "#8477DA", color: "white" },
+                }}
+              >
+                {" "}
+                Next
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>

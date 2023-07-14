@@ -12,16 +12,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 
-const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
+const Summary = ({ handleOpen }) => {
   const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasumentSide);
   const selectedData = useSelector(selectedItem);
-  console.log(selectedData.image, "selectedItem");
-  // const handleBoxClick = () => {
-  //   setClientDetailOpen(true);
-  // };
 
   return (
     <>
@@ -55,7 +51,9 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
-              onClick={() => setHandleEstimatesPages("review")}
+              onClick={() => {
+                dispatch(setNavigation("review"));
+              }}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
           </Box>
@@ -254,7 +252,6 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              // onClick={() => setHandleEstimatesPages("review")}
               onClick={() => {
                 dispatch(setNavigation("review"));
               }}

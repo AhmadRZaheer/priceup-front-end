@@ -1,19 +1,15 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 import Model from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 import Summary from "./Summary";
 import ExitingQuotes from "./existingQuotes";
-
 import { getPageNavigation } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
-
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
   console.log(clientDetailOpen, "clientDetailOpen in mobile view");
   const handleClose = () => setClientDetailOpen(false);
   const handleOpen = () => setClientDetailOpen(true);
@@ -41,11 +37,11 @@ const IndexMobile = () => {
 
   return (
     <>
+      {Navigation == "existing" && <ExitingQuotes />}
       {Navigation == "layout" && <Layout />}
       {Navigation == "measurements" && <LayoutMeasurements />}
       {Navigation == "review" && <LayoutReview />}
       {Navigation == "summary" && <Summary handleOpen={handleOpen} />}
-      {Navigation == "existing" && <ExitingQuotes />}
 
       <Model
         open={clientDetailOpen}

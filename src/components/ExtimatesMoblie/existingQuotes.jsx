@@ -1,4 +1,10 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  Typography,
+} from "@mui/material";
 import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { NavLink } from "react-router-dom";
@@ -7,56 +13,10 @@ import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
 export default function ExitingQuotes() {
-  const { data: estimates } = useGetEstimates();
+  const { data: estimates, isLoading ,isFetching} = useGetEstimates();
   console.log(estimates, "estimates in existing");
   const dispatch = useDispatch();
 
-  const dates = [
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-    {
-      Date: "7/06/2023",
-      status: "Draft",
-    },
-  ];
   return (
     <>
       <Box sx={{ marginTop: 10, height: "100vh" }}>
@@ -80,32 +40,36 @@ export default function ExitingQuotes() {
         <Box
           sx={{ paddingX: 2, marginTop: 2, height: "70vh", overflow: "auto" }}
         >
-          {estimates.map((item) => (
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-              }}
-            >
-              <Typography sx={{ fontWeight: "Medium" }}>
-                {new Date(item?.updatedAt).toLocaleString()}
-              </Typography>
-              <Box sx={{ display: "flex" }}>
-                <Typography color="red" marginRight={3}>
-                  {/* {item?.updatedAt} */}
+          {isFetching ? (
+            <CircularProgress />
+          ) : (
+            estimates?.map((item) => (
+              <Box
+                key={item._id}
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  paddingY: 2,
+                  borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                }}
+              >
+                <Typography sx={{ fontWeight: "Medium" }}>
+                  {new Date(item?.updatedAt).toLocaleString()}
                 </Typography>
-                <IconButton sx={{ marginRight: 1, height: 25 }}>
-                  <img src={pencil} alt="image of pencil" />
-                </IconButton>
+                <Box sx={{ display: "flex" }}>
+                  <Typography color="red" marginRight={3}>
+                    {/* {item?.updatedAt} */}
+                  </Typography>
+                  <IconButton sx={{ marginRight: 1, height: 25 }}>
+                    <img src={pencil} alt="image of pencil" />
+                  </IconButton>
+                </Box>
               </Box>
-            </Box>
-          ))}
+            ))
+          )}
         </Box>
         <Box sx={{ paddingX: 2, pt: 2 }}>
           <Button
-            // onClick={() => setHandleEstimatesPages("layout")}
             onClick={() => {
               dispatch(setNavigation("layout"));
             }}
@@ -122,7 +86,7 @@ export default function ExitingQuotes() {
             {" "}
             Create New Qoute
           </Button>
-          <Button
+          {/* <Button
             variant="outlined"
             sx={{
               textTransform: "capitalize",
@@ -136,7 +100,7 @@ export default function ExitingQuotes() {
           >
             {" "}
             Cancel
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </>

@@ -21,9 +21,7 @@ import {
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 
-const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
-  console.log(doorDetail, "doorDetail in mobile view");
-
+const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
@@ -147,7 +145,6 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     totalPrice
   );
   const handleBoxClick = () => {
-    // setHandleEstimatesPages("summary");
     dispatch(setNavigation("summary"));
   };
   return (
@@ -182,7 +179,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
               onClick={() => {
-                setHandleEstimatesPages("measurements");
+                dispatch(setNavigation("measurements"));
               }}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
