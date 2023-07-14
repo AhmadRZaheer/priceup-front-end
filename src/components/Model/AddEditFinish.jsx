@@ -70,18 +70,8 @@ export default function AddEditFinish({
     isSuccess: SuccessForEdit,
   } = useEditFinish();
 
-  // React.useEffect(() => {
-  //   if (CreatedSuccessfully || SuccessForEdit) {
-  //     finishesRefetch();
-  //     if (CreatedSuccessfully) {
-  //       showSnackbar("Created Successfully ", "success");
-  //     }
-  //     showSnackbar("UpDated Successfully ", "success");
-  //   }
-  // }, [CreatedSuccessfully, SuccessForEdit]);
-
   React.useEffect(() => {
-    if (CreatedSuccessfully ) {
+    if (CreatedSuccessfully) {
       finishesRefetch();
       showSnackbar("Created Successfully ", "success");
       close();

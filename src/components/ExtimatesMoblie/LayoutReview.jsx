@@ -148,13 +148,13 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
   );
   const handleBoxClick = () => {
     setHandleEstimatesPages("summary");
-    const measurementsArray = Object.entries(doorDetail)
-      .filter(([key, value]) => value !== "")
-      .map(([key, value]) => ({
-        key,
-        value,
-      }));
-    dispatch(updateMeasurements(measurementsArray));
+    // const measurementsArray = Object.entries(doorDetail)
+    //   .filter(([key, value]) => value !== "")
+    //   .map(([key, value]) => ({
+    //     key,
+    //     value,
+    //   }));
+    // dispatch(updateMeasurements(measurementsArray));
   };
   return (
     <>

@@ -1,26 +1,18 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
-// import { layouts } from "../../data/data";
-import ClientDetailsModel from "./Model";
+import Model from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
-import MenuList from "./MenuList";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import Summary from "./Summary";
 import ExitingQuotes from "./existingQuotes";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { backendURL } from "../../utilities/common";
-import { useDispatch, useSelector } from "react-redux";
-import { setSelectedId } from "../../redux/selectedIdSlice";
+import { useDispatch } from "react-redux";
+import { addSelectedItem } from "../../redux/estimateCalculations";
 
 const IndexMobile = () => {
-  // const selectedId = useSelector((state) => state.selectedId);
-  // console.log(selectedId, "selectedId 11");
-  // const dispatch = useDispatch();
-
-  // const handleBoxClick = (id) => {
-  //   dispatch(setSelectedId(id));
-  // };
+  const dispatch = useDispatch();
   const boxStyles = {
     minHeight: "152px",
     minWidth: { md: "180px", xs: "140px" },
@@ -38,24 +30,20 @@ const IndexMobile = () => {
     flexDirection: "column",
     cursor: "pointer",
     position: "relative",
-    // "&:hover": {
-    //   backgroundColor: { md: "none", xs: "rgba(121, 102, 189, 0.5)" },
-    // },
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [handleEstimatesPages, setHandleEstimatesPages] = useState("exiting");
-  // const [item, setItem] = useState("");
-  // console.log(item, "item estimate");
   const [selectedLayout, setSelectedLayout] = useState(null);
   const [doorDetail, setDoorDetail] = useState(null);
-
   const handleBoxClick = (layout) => {
     setSelectedLayout(layout);
+    dispatch(addSelectedItem(layout));
     setHandleEstimatesPages("measurements");
   };
-
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
-  console.log(layouts, "layouts in mobile view");
+  console.log(clientDetailOpen, "clientDetailOpen in mobile view");
+  const handleClose = () => setClientDetailOpen(false);
+  const handleOpen = () => setClientDetailOpen(true);
 
   return (
     <>
@@ -200,7 +188,6 @@ const IndexMobile = () => {
           </Box>
         </Box>
       )}
-
       {handleEstimatesPages == "measurements" && (
         <LayoutMeasurements
           setHandleEstimatesPages={setHandleEstimatesPages}
@@ -217,23 +204,14 @@ const IndexMobile = () => {
       {handleEstimatesPages == "summary" && (
         <Summary
           setHandleEstimatesPages={setHandleEstimatesPages}
-          setClientDetailOpen={setClientDetailOpen}
-          // setDoorDetail={setDoorDetail}
-          doorDetail={doorDetail}
+          handleOpen={handleOpen}
         />
       )}
       {handleEstimatesPages == "exiting" && (
-        <ExitingQuotes
-          setHandleEstimatesPages={setHandleEstimatesPages}
-          setClientDetailOpen={setClientDetailOpen}
-        />
+        <ExitingQuotes setHandleEstimatesPages={setHandleEstimatesPages} />
       )}
-
       {/* <LoginMobile /> */}
-      <ClientDetailsModel
-        open={clientDetailOpen}
-        handleCancel={() => setClientDetailOpen(false)}
-      />
+      <Model open={clientDetailOpen} handleCancel={handleClose} />
     </>
   );
 };

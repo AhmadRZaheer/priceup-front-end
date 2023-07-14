@@ -6,30 +6,21 @@ import {
   getContent,
   getTotal,
   measumentSide,
+  selectedItem,
 } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
+import { backendURL } from "../../utilities/common";
 
-const Summary = ({
-  setClientDetailOpen,
-  setHandleEstimatesPages,
-  doorDetail,
-}) => {
+const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
-  // const selectedContent = useSelector(getContent);
   const measurements = useSelector(measumentSide);
-  // const dispatch = useDispatch();
+  const selectedData = useSelector(selectedItem);
+  console.log(selectedData.image, "selectedItem");
+  // const handleBoxClick = () => {
+  //   setClientDetailOpen(true);
+  // };
 
-  // console.log(measurements, "measurements test ");
-  // useEffect(() => {
-  //   const measurementsArray = Object.entries(doorDetail)
-  //     .filter(([key, value]) => value !== "")
-  //     .map(([key, value]) => ({
-  //       key,
-  //       value,
-  //     }));
-  //   dispatch(updateMeasurements(measurementsArray));
-  // }, [doorDetail]);
   return (
     <>
       <Box
@@ -152,9 +143,10 @@ const Summary = ({
                 }}
               >
                 <img
-                  // width={"350px"}
-                  // height={"250px"}
-                  src={door}
+                  width={"350px"}
+                  height={"250px"}
+                  // src={door}
+                  src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
               </Box>
@@ -274,14 +266,7 @@ const Summary = ({
           </Box>
 
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => {
-                setClientDetailOpen(true);
-              }}
-            >
-              {" "}
+            <Button fullWidth variant="contained" onClick={handleOpen}>
               Next
             </Button>
           </Box>

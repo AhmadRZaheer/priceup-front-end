@@ -2,11 +2,13 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
 export const measumentSide = (state) => state.estimateCalculations.measuments;
+export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
     measuments: [],
+    selectedItem: [],
     content: {
       hardwareFinishes: null,
       handles: {
@@ -61,8 +63,8 @@ const estimateCalcSlice = createSlice({
       polish: "",
       people: 0,
       hours: 0,
-      sleeveOverCount: 0, // Add separate property for Sleeve Over count
-      towelBarsCount: 0, // Add separate property for Towel Bars count
+      sleeveOverCount: 0,
+      towelBarsCount: 0,
       addOns: [],
     },
     totalPrice: 0,
@@ -106,9 +108,7 @@ const estimateCalcSlice = createSlice({
           ...state.content,
           [type]: item,
         };
-      }
-    
-      else if (["addOns"].includes(type)) {
+      } else if (["addOns"].includes(type)) {
         const foundIndex = state.content.addOns?.findIndex(
           (row) => row.slug === item.slug
         );
@@ -188,17 +188,16 @@ const estimateCalcSlice = createSlice({
 
     updateAddOnCount: (state, action) => {
       const { type, count } = action.payload;
-      // const updatedAddOns = state.content.addOns.map((addOn) => {
-      //   if (addOn.type === type) {
-      //     return { ...addOn, count };
-      //   }
-      //   return addOn;
-      // });
+
       state.content[type] = count;
+    },
+    addSelectedItem: (state, action) => {
+      const itemData = action.payload;
+
+      state.selectedItem = itemData;
     },
   },
 });
-
 export const {
   setContent,
   setTotal,
@@ -207,5 +206,6 @@ export const {
   setThickness,
   updateAddOnCount,
   updateMeasurements,
+  addSelectedItem,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
