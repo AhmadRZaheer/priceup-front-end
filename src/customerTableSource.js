@@ -17,12 +17,12 @@ export const teamColumns = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => { 
-      console.log(params.id, "params.row.id")
+      console.log(params, "params.row.image")
 
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img className="cellImg" src={params.row.img} alt="" />
+            <img style={{width: 34, height: 34}} className="cellImg" src={`${backendURL}/${params.row.image}`} alt="dd" />
           </div>
           <div className="customerNameTable">
             {params.row.name}
@@ -133,6 +133,7 @@ export const CustomerColumns = [
     headerName: "Name",
     width: 330,
     renderCell: (params) => {
+      console.log(params,"image I")
       return (
         <div className="cellWrapper">
           <div className="customerImg">
