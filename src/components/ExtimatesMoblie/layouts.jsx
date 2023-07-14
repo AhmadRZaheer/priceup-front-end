@@ -33,6 +33,7 @@ const Layout = () => {
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
+  console.log(selectedData, "selectedData11");
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));
@@ -172,12 +173,12 @@ const Layout = () => {
             <Box
               sx={{
                 display: "flex",
-                // position: "absolute",
-                // botton: 0,
+
                 justifyContent: { md: "end", xs: "center" },
               }}
             >
               <Button
+                disabled={selectedData?.length < 1}
                 onClick={() => {
                   dispatch(setNavigation("measurements"));
                 }}

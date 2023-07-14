@@ -167,6 +167,7 @@ const LayoutReview = () => {
       open: false,
     }));
   };
+  console.log(estimatesData, "estimatesData12");
   return (
     <>
       <Box
@@ -395,14 +396,14 @@ const LayoutReview = () => {
                           selectedContent.mounting.clamps.glassToGlass.count
                         }
                       />
+                      <MenuList
+                        menuOptions={estimatesData?.mountingChannel}
+                        title={"Channel"}
+                        type={"channel"}
+                        showSnackbar={showSnackbar}
+                        // setSelectedContent={setSelectedContent}
+                      />
                     </Box>
-                    <MenuList
-                      menuOptions={estimatesData?.mountingChannel}
-                      title={"Channel"}
-                      type={"channel"}
-                      showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
-                    />
                   </Box>
                 </Box>
                 <Box

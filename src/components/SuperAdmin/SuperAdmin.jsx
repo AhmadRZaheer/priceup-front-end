@@ -21,7 +21,7 @@ import TableRow from "./TableRow";
 
 const SuperAdminTable = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-  
+
   const [open, setOpen] = useState(false);
   // const [matchingId, setMatchingId] = useState("");
   // console.log(matchingId, "matchingId")
