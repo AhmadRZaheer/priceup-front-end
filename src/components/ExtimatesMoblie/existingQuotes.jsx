@@ -17,11 +17,11 @@ export default function ExitingQuotes() {
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
   console.log(estimates, "estimates in existing");
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const Logout = () => {
     console.log("hello world");
     dispatch(logoutHandler());
-    
+
     navigate("/login");
   };
 
@@ -51,9 +51,7 @@ export default function ExitingQuotes() {
               Existing Quotes
             </Typography>
             <IconButton onClick={Logout} sx={{ height: 25 }}>
-              
-                <img src={logout} alt="image of log out icon" />
-           
+              <img src={logout} alt="image of log out icon" />
             </IconButton>
           </Box>
 

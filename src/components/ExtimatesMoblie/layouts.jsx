@@ -16,11 +16,12 @@ export const boxStyles = {
   minWidth: { md: "180px", xs: "140px" },
   margin: "auto",
   borderRadius: "8px",
+  color: "white",
   boxShadow:
     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
   border: { md: "1px solid #EAECF0", xs: "none" },
   p: { md: 1.2, xs: 0.3 },
-  background: "#8477DA",
+  background: "rgba(36, 28, 52,0.5)",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -150,6 +151,7 @@ const Layout = () => {
                       selectedData?._id !== layout._id
                         ? "rgba(36, 28, 52,0.5)"
                         : "#8477DA",
+                    color: selectedData?._id !== layout._id ? "white" : "black",
                   }}
                   onClick={() => handleBoxClick(layout)}
                 >
@@ -180,7 +182,7 @@ const Layout = () => {
                 // justifyContent: { md: "end", xs: "center" },
                 backgroundColor: "#18133b",
                 width: "92.6%",
-                padding: 2
+                padding: 2,
               }}
             >
               <Button

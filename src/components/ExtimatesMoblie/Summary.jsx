@@ -265,7 +265,17 @@ const Summary = ({ handleOpen }) => {
           </Box>
 
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button fullWidth variant="contained" onClick={handleOpen}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleOpen}
+              sx={{
+                backgroundColor: "#8477da",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
+            >
               Next
             </Button>
           </Box>

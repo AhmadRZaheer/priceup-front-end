@@ -193,14 +193,13 @@ export default function ClientDetailsModel({
                       variant="outlined"
                       InputProps={{
                         style: {
-                          color: "white", 
-                          backgroundColor: "rgba(27,22,51,255,0.5)"// Change the color of the input text
+                          color: "white",
+                          backgroundColor: "rgba(27,22,51,255,0.5)", // Change the color of the input text
                         },
                       }}
                       InputLabelProps={{
                         style: {
                           color: "rgba(255, 255, 255, 0.5)",
-                          backgroundColor: "rgba(27, 22, 51, 0.5)",  // Change the color of the placeholder text
                         },
                       }}
                       value={formik.values.firstName}
@@ -343,6 +342,10 @@ export default function ClientDetailsModel({
                   type="submit"
                   sx={{
                     textTransform: "initial",
+                    backgroundColor: "#8477da",
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                    },
                   }}
                   fullWidth
                   variant="contained"

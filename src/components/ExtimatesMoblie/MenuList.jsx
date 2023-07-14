@@ -82,7 +82,13 @@ const MenuList = ({
   return (
     <Box>
       <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center", pb: 1 }}
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          pb: 1,
+        }}
       >
         <Button
           onClick={opneClose}
@@ -101,7 +107,7 @@ const MenuList = ({
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
-          <Typography >{title}</Typography>
+          <Typography>{title}</Typography>
         </Button>
         {![
           "hardwareFinishes",
@@ -117,7 +123,7 @@ const MenuList = ({
               gap: 2,
               color: { md: "#000000  ", xs: "white" },
               alignSelf: "flex-end",
-              py: 1.5
+              py: 1.5,
             }}
           >
             <AddCircleOutline
@@ -149,21 +155,20 @@ const MenuList = ({
                 style: {
                   color: "white", // Change the color of the input text
                 },
-                inputProps: { min: 0, max: 50 } 
+                inputProps: { min: 0, max: 50 },
               }}
               InputLabelProps={{
                 style: {
                   color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
                 },
               }}
-              
               sx={{
                 border: { md: "none", xs: "2px solid #423f57" },
                 borderRadius: { md: 0, xs: 2 },
                 color: { md: "black", xs: "white" },
                 background: "#14112c",
                 width: "100%",
-                mb: 1
+                mb: 1,
               }}
               // style={{ width: "100%", background: "white" }}
               value={thicknessVal}

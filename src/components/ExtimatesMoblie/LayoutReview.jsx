@@ -1179,6 +1179,12 @@ const LayoutReview = () => {
               variant="contained"
               // onClick={() => setHandleEstimatesPages("summary")}
               onClick={handleBoxClick}
+              sx={{
+                backgroundColor: "#8477da",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
             >
               {" "}
               Next

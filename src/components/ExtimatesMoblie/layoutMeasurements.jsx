@@ -484,7 +484,10 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                     sx={{
                       height: 40,
                       fontSize: 20,
-                      backgroundColor: "#8477da"
+                      backgroundColor: "#8477da",
+                      "&:hover": {
+                        backgroundColor: "#8477da",
+                      },
                     }}
                     variant="contained"
                     // onClick={() => setHandleEstimatesPages("review")}
