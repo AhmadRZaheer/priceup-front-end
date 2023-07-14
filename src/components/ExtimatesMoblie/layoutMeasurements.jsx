@@ -81,6 +81,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
+          height: "98vh",
         }}
       >
         <Box
@@ -99,7 +100,9 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
         >
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlinedIcon
-              // onClick={handleBoxClick()}
+              onClick={() => {
+                dispatch(setNavigation("layout"));
+              }}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
           </Box>
@@ -347,6 +350,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                   paddingX: { md: 0, xs: 2 },
                   paddingTop: 2,
                   paddingBottom: 8,
+                  // height: "350px",
                 }}
               >
                 {Array.from({
@@ -392,6 +396,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
               >
                 <img
                   width="150px"
+                  height="300px"
                   // src={door}
                   src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"

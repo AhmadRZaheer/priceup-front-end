@@ -12,7 +12,7 @@ import {
   setNavigation,
 } from "../../redux/estimateCalculations";
 export const boxStyles = {
-  minHeight: "152px",
+  minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },
   margin: "auto",
   borderRadius: "8px",
@@ -20,7 +20,7 @@ export const boxStyles = {
     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
   border: { md: "1px solid #EAECF0", xs: "none" },
   p: { md: 1.2, xs: 0.3 },
-  background: "#D9D9D9",
+  background: "#8477DA",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -155,8 +155,8 @@ const Layout = () => {
                     style={{
                       position: "relative",
                       zIndex: 1,
-                      width: "80px",
-                      height: "80px",
+                      width: "70px",
+                      height: "120px",
                     }}
                     // src={layout.imageSrc}
                     src={`${backendURL}/${layout?.image}`}

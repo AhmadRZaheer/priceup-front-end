@@ -13,62 +13,75 @@ import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
 export default function ExitingQuotes() {
-  const { data: estimates, isLoading ,isFetching} = useGetEstimates();
+  const { data: estimates, isLoading, isFetching } = useGetEstimates();
   console.log(estimates, "estimates in existing");
   const dispatch = useDispatch();
 
   return (
     <>
-      <Box sx={{ marginTop: 10, height: "100vh" }}>
-        <Box
-          sx={{
-            paddingY: 2,
-            paddingX: 2,
-            display: "flex",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-            Existing Quotes
-          </Typography>
-          <IconButton sx={{ height: 25 }}>
-            <NavLink to="/login">
-              <img src={logout} alt="image of log out icon" />
-            </NavLink>
-          </IconButton>
-        </Box>
-        <Box
-          sx={{ paddingX: 2, marginTop: 2, height: "70vh", overflow: "auto" }}
-        >
-          {isFetching ? (
-            <CircularProgress />
-          ) : (
-            estimates?.map((item) => (
-              <Box
-                key={item._id}
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  paddingY: 2,
-                  borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                }}
-              >
-                <Typography sx={{ fontWeight: "Medium" }}>
-                  {new Date(item?.updatedAt).toLocaleString()}
-                </Typography>
-                <Box sx={{ display: "flex" }}>
-                  <Typography color="red" marginRight={3}>
-                    {/* {item?.updatedAt} */}
+      <Box
+        sx={{
+          marginTop: 7.5,
+          height: "96vh",
+          color: "#ffff",
+          backgroundColor: "rgba(16, 13, 36, 1)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "space-between",
+        }}
+      >
+        <Box sx={{}}>
+          <Box
+            sx={{
+              paddingY: 2,
+              paddingX: 2,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
+              Existing Quotes
+            </Typography>
+            <IconButton sx={{ height: 25 }}>
+              <NavLink to="/login">
+                <img src={logout} alt="image of log out icon" />
+              </NavLink>
+            </IconButton>
+          </Box>
+
+          <Box
+            sx={{ paddingX: 2, marginTop: 2, height: "62vh", overflow: "auto" }}
+          >
+            {isFetching ? (
+              <CircularProgress />
+            ) : (
+              estimates?.map((item) => (
+                <Box
+                  key={item._id}
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    paddingY: 2,
+                    borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "Medium" }}>
+                    {new Date(item?.updatedAt).toLocaleString()}
                   </Typography>
-                  <IconButton sx={{ marginRight: 1, height: 25 }}>
-                    <img src={pencil} alt="image of pencil" />
-                  </IconButton>
+                  <Box sx={{ display: "flex" }}>
+                    <Typography color="red" marginRight={3}>
+                      {/* {item?.updatedAt} */}
+                    </Typography>
+                    <IconButton sx={{ marginRight: 1, height: 25 }}>
+                      <img src={pencil} alt="image of pencil" />
+                    </IconButton>
+                  </Box>
                 </Box>
-              </Box>
-            ))
-          )}
+              ))
+            )}
+          </Box>
         </Box>
-        <Box sx={{ paddingX: 2, pt: 2 }}>
+        <Box sx={{ paddingX: 2, pt: 8 }}>
           <Button
             onClick={() => {
               dispatch(setNavigation("layout"));

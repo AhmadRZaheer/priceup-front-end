@@ -13,8 +13,9 @@ import {
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  getContent,
   setContent,
   setCounters,
   setThickness,
@@ -25,7 +26,7 @@ const MenuList = ({
   menuOptions,
   title,
   type,
-  setSelectedContent,
+
   count,
   thickness,
 }) => {
@@ -36,6 +37,8 @@ const MenuList = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
+  const selectedContent = useSelector(getContent);
+  console.log(selectedContent.hardwareFinishes, "selectedContent12");
 
   // Handle functions for each item
   const handleSleeveOverCount = (count) => {
@@ -57,6 +60,18 @@ const MenuList = ({
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };
+  // const handleItemSelect = (item) => {
+  //   if (type === "hardwareFinishes") {
+  //     dispatch(setContent({ type: type, item: item }));
+  //     setSelectedItem(item);
+  //     if (selectedContent?.hardwareFinishes !== null) {
+  //       dispatch(setContent({ type: type, item: item }));
+  //       setSelectedItem(item);
+  //     }
+  //   } else {
+  //     alert("Hello! I am an alert box!!");
+  //   }
+  // };
 
   const handleCountSet = (value) => {
     if (value >= 0) {
@@ -68,6 +83,7 @@ const MenuList = ({
     setThicknessVal(thickness);
     dispatch(setThickness(thickness));
   };
+ 
 
   return (
     <Box>
