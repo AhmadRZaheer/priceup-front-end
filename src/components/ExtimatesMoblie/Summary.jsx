@@ -4,8 +4,8 @@ import door from "../../Assets/estimates/layout1.svg";
 import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
   getContent,
+  getMeasumentSide,
   getTotal,
-  measumentSide,
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
@@ -16,7 +16,7 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
   const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
-  const measurements = useSelector(measumentSide);
+  const measurements = useSelector(getMeasumentSide);
   const selectedData = useSelector(selectedItem);
   console.log(selectedData.image, "selectedItem");
   // const handleBoxClick = () => {
@@ -271,12 +271,7 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
           </Box>
 
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-           
-              fullWidth
-              variant="contained"
-               onClick={handleOpen}
-            >
+            <Button fullWidth variant="contained" onClick={handleOpen}>
               Next
             </Button>
           </Box>

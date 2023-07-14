@@ -1,7 +1,7 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
-export const measumentSide = (state) => state.estimateCalculations.measuments;
+export const getMeasumentSide = (state) => state.estimateCalculations.measuments;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;

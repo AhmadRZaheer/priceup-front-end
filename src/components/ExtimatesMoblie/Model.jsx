@@ -10,6 +10,7 @@ import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  getMeasumentSide,
   getTotal,
   selectedItem,
   setNavigation,
@@ -50,6 +51,14 @@ export default function ClientDetailsModel({
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
+  const measurements = useSelector(getMeasumentSide);
+  console.log(estimatesContent?.addOns, "addon in model");
+  const data = estimatesContent?.addOns;
+
+  const addOnIds = data.map((obj) => obj._id);
+
+  console.log(addOnIds, "addOnIds");
+
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -115,8 +124,10 @@ export default function ClientDetailsModel({
         people: estimatesContent?.people,
         hours: estimatesContent?.hours,
         cost: Number(estimatesTotal),
-        //addons
-        //measurements
+        addOns: addOnIds,
+        sleeveOverCount: estimatesContent?.sleeveOverCount,
+        towelBarsCount: estimatesContent?.sleeveOverCount,
+        measurements: measurements,
       };
       mutate({ customerData: values, estimateData: estimate });
       handleCancel();

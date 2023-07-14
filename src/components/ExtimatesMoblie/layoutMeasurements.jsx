@@ -41,6 +41,16 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
     validationSchema,
     onSubmit: async (values, resetForm) => {
       console.log(values, "formik values in mobiel");
+      const measurementsArray = Object.entries(values)
+        .filter(([key, value]) => value !== "")
+        .map(([key, value]) => ({
+          key,
+          value,
+        }));
+      dispatch(updateMeasurements(measurementsArray));
+
+      // setHandleEstimatesPages("measurements");
+      dispatch(setNavigation("review"));
       // };
       resetForm();
     },
@@ -48,15 +58,14 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
   console.log(formik.values, "formik values");
   const dispatch = useDispatch();
   const handleBoxClick = () => {
-    const measurementsArray = Object.entries(formik.values)
-      .filter(([key, value]) => value !== "")
-      .map(([key, value]) => ({
-        key,
-        value,
-      }));
-    dispatch(updateMeasurements(measurementsArray));
-
-    setHandleEstimatesPages("measurements");
+    // const measurementsArray = Object.entries(formik.values)
+    //   .filter(([key, value]) => value !== "")
+    //   .map(([key, value]) => ({
+    //     key,
+    //     value,
+    //   }));
+    // dispatch(updateMeasurements(measurementsArray));
+    // setHandleEstimatesPages("measurements");
   };
   console.log(selectedData?.settings?.measurementSides, " side check");
   return (
@@ -445,15 +454,16 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                 </Box>
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
+                    type="submit"
                     fullWidth
                     disabled={Object.keys(formik.values).some(
                       (key) => !formik.values[key]
                     )}
                     variant="contained"
                     // onClick={() => setHandleEstimatesPages("review")}
-                    onClick={() => {
-                      dispatch(setNavigation("review"));
-                    }}
+                    // onClick={() => {
+                    //   dispatch(setNavigation("review"));
+                    // }}
                     // onClick={handleBoxClick()}
                   >
                     Next
