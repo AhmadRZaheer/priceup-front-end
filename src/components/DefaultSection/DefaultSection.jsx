@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import "./hardwareTable.scss";
 
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import DefaultComponent from "./DefaultComponent";
 import LayoutHeader from "./LayoutHeader";
@@ -37,9 +37,13 @@ const DefaultSection = () => {
   console.log(defaultData, "defaultDatadefaultData");
 
   return (
-    <>
+    <><Box sx={{
+      borderTopLeftRadius: 30,
+       borderBottomLeftRadius: 30,
+       pt: 2
+    }}>
       <div className="page-title">
-        <h2>Default</h2>
+      <Typography sx={{fontSize: 30, pl: 1}}>Default</Typography>
       </div>
       <div
         style={{
@@ -66,6 +70,7 @@ const DefaultSection = () => {
             )}
           </div>
         </div>
+      </Box>
       </Box>
     </>
   );

@@ -103,6 +103,14 @@ const AddOnsTable = () => {
   // console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
+    <Box sx={{
+       backgroundColor: "white",
+       height: "98.2vh",
+       borderTopLeftRadius: 30,
+       borderBottomLeftRadius: 30,
+       paddingTop: 2,
+       paddingLeft: 1
+    }}>
       <div
         style={{
           marginLeft: "15px",
@@ -132,6 +140,7 @@ const AddOnsTable = () => {
         close={handleClose}
         handleHeaderClick={handleHeaderClick}
       />
+      </Box>
     </>
   );
 };

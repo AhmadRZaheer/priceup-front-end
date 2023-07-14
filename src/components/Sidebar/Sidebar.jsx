@@ -14,6 +14,15 @@ import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Model/Logout";
 import { useHistory } from "react-router-dom";
+import EstimsteIcon from "../../Assets/bar.svg";
+import CustomerIcon from "../../Assets/Customer-icon.svg";
+import TremIcon from "../../Assets/users.svg"
+import HardWairIcon from "../../Assets/box.svg"
+import DefaltIcon from "../../Assets/columns.svg"
+import SettingsIcon from "../../Assets/settings.svg"
+import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
+import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
+import { Box, IconButton } from "@mui/material";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
@@ -39,14 +48,38 @@ const Sidebar = () => {
         </NavLink>
         <div className="center">
           <ul>
-            <NavLink to="/estimates" className="link">
+          <NavLink to="/" className="link">
               <li
                 className={`estimates ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
+              >
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={EstimsteIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Dashboard</span>
+                </IconButton>
+              </li>
+            </NavLink>
+            <NavLink to="/estimates" className="link">
+              <li
+                className={` ${
                   location.pathname === "/estimates" ? "active" : ""
                 }`}
               >
-                <LeaderboardSharpIcon className="icon" />
-                <span>Estimates</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={EstimsteIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Estimates</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/Customers" className="link">
@@ -55,16 +88,30 @@ const Sidebar = () => {
                   location.pathname === "/Customers" ? "active" : ""
                 }`}
               >
-                <AdjustIcon className="icon" />
-                <span>Customers</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={CustomerIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Customers</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/team" className="link">
               <li
                 className={` ${location.pathname === "/team" ? "active" : ""}`}
               >
-                <AdjustIcon className="icon" />
-                <span>Team</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={TremIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Team</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/hardware" className="link">
@@ -73,8 +120,15 @@ const Sidebar = () => {
                   location.pathname === "/hardware" ? "active" : ""
                 }`}
               >
-                <ViewInArOutlinedIcon className="icon" />
-                <span>Hardware</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={HardWairIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Hardware</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/finishes" className="link">
@@ -83,8 +137,11 @@ const Sidebar = () => {
                   location.pathname === "/finishes" ? "active" : ""
                 }`}
               >
-                <AddBoxOutlinedIcon className="icon" />
-                <span>Finishes</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <FormatColorFillIcon sx={{fontSize: 30, marginLeft: -0.2, p: 0,marginRight: 0.8 }} />
+
+                  <span>Finishes</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/Addons" className="link">
@@ -93,8 +150,11 @@ const Sidebar = () => {
                   location.pathname === "/Addons" ? "active" : ""
                 }`}
               >
-                <AddBoxOutlinedIcon className="icon" />
-                <span>Add ons</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <LayersOutlinedIcon sx={{fontSize: 30, marginLeft: -0.2, p: 0,marginRight: 0.8 }} />
+
+                  <span>Add ons</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/GlassType" className="link">
@@ -103,8 +163,15 @@ const Sidebar = () => {
                   location.pathname === "/GlassType" ? "active" : ""
                 }`}
               >
-                <AddBoxOutlinedIcon className="icon" />
-                <span>Glass Type</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={HardWairIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Glass Type</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/GlassTreatement" className="link">
@@ -113,8 +180,15 @@ const Sidebar = () => {
                   location.pathname === "/GlassTreatement" ? "active" : ""
                 }`}
               >
-                <AddBoxOutlinedIcon className="icon" />
-                <span>Glass Treatement</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={HardWairIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Glass Treatement</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/Defaults" className="link">
@@ -123,19 +197,33 @@ const Sidebar = () => {
                   location.pathname === "/Defaults" ? "active" : ""
                 }`}
               >
-                <AddBoxOutlinedIcon className="icon" />
-                <span>Default</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={DefaltIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Default</span>
+                </IconButton>
               </li>
             </NavLink>
             <NavLink to="/settings" className="link">
               <li
-                style={{ marginTop: "300px" }}
+                style={{ marginTop: "120px" }}
                 className={` ${
                   location.pathname === "/settings" ? "active" : ""
                 }`}
               >
-                <SettingsOutlinedIcon className="icon" />
-                <span>Settings</span>
+                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={SettingsIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Settings</span>
+                </IconButton>
               </li>
             </NavLink>
           </ul>

@@ -64,13 +64,14 @@ const CustomerTable = () => {
   ];
   return (
     <>
+    <Box sx={{borderTopLeftRadius: 30, borderBottomLeftRadius: 30, backgroundColor: "white", height: "98.2vh", paddingLeft: 1, pt: 2}}>
       <div className="page-title">
         <Box
           sx={{
             display: "flex",
           }}
         >
-          <Typography Boxvariant="h3">Customer List</Typography>
+          <Typography  sx={{fontSize: 30, pl: 2}}>Customer List</Typography>
         </Box>
       </div>
       <div className="CustomerTable">
@@ -81,6 +82,7 @@ const CustomerTable = () => {
           paginationModel={{ page: 0, pageSize: 8 }}
         />
       </div>
+      </Box>
     </>
   );
 };
