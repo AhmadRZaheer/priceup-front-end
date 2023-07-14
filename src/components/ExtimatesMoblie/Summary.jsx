@@ -1,6 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
-import door from "../../Assets/estimates/layout1.svg";
-
+import { Box, Button, Typography } from "@mui/material";
 import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
   getContent,
@@ -117,7 +115,6 @@ const Summary = ({ handleOpen }) => {
             }}
           >
             {/* LeftSide */}
-
             {/* rightSide */}
             <Box
               sx={{
@@ -143,8 +140,8 @@ const Summary = ({ handleOpen }) => {
                 }}
               >
                 <img
-                  width={"350px"}
-                  height={"250px"}
+                  width={"100px"}
+                  height={"110px"}
                   // src={door}
                   src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
@@ -277,5 +274,4 @@ const Summary = ({ handleOpen }) => {
     </>
   );
 };
-
 export default Summary;

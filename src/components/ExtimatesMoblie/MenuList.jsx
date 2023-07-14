@@ -10,7 +10,7 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-import { Box, CircularProgress, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,11 +26,10 @@ const MenuList = ({
   menuOptions,
   title,
   type,
-
+  showSnackbar,
   count,
   thickness,
 }) => {
-  console.log(title, "title sam");
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
@@ -60,18 +59,6 @@ const MenuList = ({
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };
-  // const handleItemSelect = (item) => {
-  //   if (type === "hardwareFinishes") {
-  //     dispatch(setContent({ type: type, item: item }));
-  //     setSelectedItem(item);
-  //     if (selectedContent?.hardwareFinishes !== null) {
-  //       dispatch(setContent({ type: type, item: item }));
-  //       setSelectedItem(item);
-  //     }
-  //   } else {
-  //     alert("Hello! I am an alert box!!");
-  //   }
-  // };
 
   const handleCountSet = (value) => {
     if (value >= 0) {
@@ -83,7 +70,14 @@ const MenuList = ({
     setThicknessVal(thickness);
     dispatch(setThickness(thickness));
   };
- 
+  const opneClose = () => {
+    if (
+      selectedContent.hardwareFinishes !== null ||
+      ["hardwareFinishes"].includes(type)
+    )
+      setAnchorEl(!anchorEl);
+    else showSnackbar("Please select 'hardwareFinishes' first", "warning");
+  };
 
   return (
     <Box>
@@ -91,7 +85,7 @@ const MenuList = ({
         sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
       >
         <Button
-          onClick={() => setAnchorEl(!anchorEl)}
+          onClick={opneClose}
           id="basic-button"
           sx={{ color: { md: "#000000 !important ", xs: "white" } }}
         >
