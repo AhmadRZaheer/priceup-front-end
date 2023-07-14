@@ -7,11 +7,12 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
 import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getTotal,
   selectedItem,
+  setNavigation,
 } from "../../redux/estimateCalculations";
 const style = {
   position: "absolute",
@@ -36,11 +37,20 @@ const validationSchema = yup.object({
 
   address: yup.string().required("Address is required"),
 });
-export default function ClientDetailsModel({ open, handleCancel }) {
-  const { mutate, isLoadig } = useCreateEstimates();
+export default function ClientDetailsModel({
+  open,
+  handleCancel,
+  showSnackbar,
+}) {
+  const {
+    mutate,
+    isError: ErrorForAdd,
+    isSuccess: CreatedSuccessfully,
+  } = useCreateEstimates();
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -109,12 +119,22 @@ export default function ClientDetailsModel({ open, handleCancel }) {
         //measurements
       };
       mutate({ customerData: values, estimateData: estimate });
+      handleCancel();
     },
   });
+
+  React.useEffect(() => {
+    if (CreatedSuccessfully) {
+      showSnackbar("Estimate created successfully", "success");
+      // window.location.href = "/";
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAdd) {
+      const errorMessage = ErrorForAdd.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfully, ErrorForAdd]);
   console.log(formik.values);
-  // const handleSaveClick = () => {
-  //   handleCancel
-  // };
+
   return (
     <div>
       <Modal
@@ -264,17 +284,17 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                 }}
               >
                 {/* <Box onClick={handleCancel}> */}
-                  <Button
-                    type="submit"
-                    sx={{
-                      textTransform: "initial",
-                    }}
-                    fullWidth
-                    variant="contained"
-                    onClick={handleCancel}
-                  >
-                    Save
-                  </Button>
+                <Button
+                  type="submit"
+                  sx={{
+                    textTransform: "initial",
+                  }}
+                  fullWidth
+                  variant="contained"
+                  // onClick={handleCancel}
+                >
+                  Save
+                </Button>
                 {/* </Box> */}
               </Box>
             </Box>

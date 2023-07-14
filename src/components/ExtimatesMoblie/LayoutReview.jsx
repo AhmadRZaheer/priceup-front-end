@@ -16,6 +16,7 @@ import {
   getTotal,
   measumentSide,
   setInputContent,
+  setNavigation,
   setTotal,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
@@ -29,7 +30,6 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
   const totalPrice = useSelector(getTotal);
 
   const dispatch = useDispatch();
-  // const measurements = useSelector((state) => state.measurements);
 
   useEffect(() => {
     // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
@@ -147,14 +147,8 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     totalPrice
   );
   const handleBoxClick = () => {
-    setHandleEstimatesPages("summary");
-    // const measurementsArray = Object.entries(doorDetail)
-    //   .filter(([key, value]) => value !== "")
-    //   .map(([key, value]) => ({
-    //     key,
-    //     value,
-    //   }));
-    // dispatch(updateMeasurements(measurementsArray));
+    // setHandleEstimatesPages("summary");
+    dispatch(setNavigation("summary"));
   };
   return (
     <>
@@ -165,8 +159,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
 
           display: "flex",
           alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
+
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -1041,7 +1034,10 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("measurements")}
+              // onClick={() => setHandleEstimatesPages("measurements")}
+              onClick={() => {
+                dispatch(setNavigation("measurements"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",

@@ -7,11 +7,13 @@ import {
   getTotal,
   measumentSide,
   selectedItem,
+  setNavigation,
 } from "../../redux/estimateCalculations";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 
 const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
+  const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(measumentSide);
@@ -252,7 +254,10 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("review")}
+              // onClick={() => setHandleEstimatesPages("review")}
+              onClick={() => {
+                dispatch(setNavigation("review"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",
@@ -266,7 +271,12 @@ const Summary = ({ handleOpen, setHandleEstimatesPages }) => {
           </Box>
 
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button fullWidth variant="contained" onClick={handleOpen}>
+            <Button
+           
+              fullWidth
+              variant="contained"
+               onClick={handleOpen}
+            >
               Next
             </Button>
           </Box>

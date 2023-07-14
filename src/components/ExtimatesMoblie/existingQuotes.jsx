@@ -2,8 +2,12 @@ import { Box, Button, IconButton, Typography } from "@mui/material";
 import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setNavigation } from "../../redux/estimateCalculations";
 
 export default function ExitingQuotes({ setHandleEstimatesPages }) {
+  const dispatch = useDispatch();
+
   const dates = [
     {
       Date: "7/06/2023",
@@ -94,7 +98,10 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
         </Box>
         <Box sx={{ paddingX: 2, pt: 2 }}>
           <Button
-            onClick={() => setHandleEstimatesPages("layout")}
+            // onClick={() => setHandleEstimatesPages("layout")}
+            onClick={() => {
+              dispatch(setNavigation("layout"));
+            }}
             color="primary"
             sx={{
               textTransform: "capitalize",

@@ -3,10 +3,14 @@ export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
 export const measumentSide = (state) => state.estimateCalculations.measuments;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
+export const getPageNavigation = (state) =>
+  state.estimateCalculations.handlePageNavigation;
 
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
+    handlePageNavigation: "existing",
+
     measuments: [],
     selectedItem: [],
     content: {
@@ -196,6 +200,9 @@ const estimateCalcSlice = createSlice({
 
       state.selectedItem = itemData;
     },
+    setNavigation: (state, action) => {
+      state.handlePageNavigation = action.payload;
+    },
   },
 });
 export const {
@@ -207,5 +214,6 @@ export const {
   updateAddOnCount,
   updateMeasurements,
   addSelectedItem,
+  setNavigation,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
