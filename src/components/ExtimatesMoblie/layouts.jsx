@@ -48,7 +48,7 @@ const Layout = () => {
           flexDirection: "column",
           background: "#18133b",
 
-          height: "97vh",
+          height: "98vh",
           // overflowY: "scroll",
           paddingY: { md: 4, sx: 0 },
         }}
@@ -57,7 +57,7 @@ const Layout = () => {
           sx={{
             width: { md: "70%", sm: "100%", sx: "100%" },
             margin: { md: "auto", xs: 0 },
-
+            height: "100%",
             display: "flex",
             alignItems: { md: "center", xs: "start" },
             //   background: "blue",
@@ -74,6 +74,7 @@ const Layout = () => {
               zIndex: 1,
               justifyContent: { md: "center", xs: "start" },
               background: "#18133b",
+              // height: "100%",
               width: "100%",
               color: "white",
               paddingY: 1.2,
@@ -146,7 +147,7 @@ const Layout = () => {
                     ...boxStyles,
                     backgroundColor:
                       selectedData?._id !== layout._id
-                        ? "rgba(121, 102, 189, 0.5)"
+                        ? "rgba(36, 28, 52,0.5)"
                         : "#8477DA",
                   }}
                   onClick={() => handleBoxClick(layout)}
@@ -172,9 +173,13 @@ const Layout = () => {
             <Box
               sx={{
                 display: "flex",
-                // position: "absolute",
-                // botton: 0,
-                justifyContent: { md: "end", xs: "center" },
+                position: "fixed",
+                bottom: 0,
+                left: 0,
+                // justifyContent: { md: "end", xs: "center" },
+                backgroundColor: "#18133b",
+                width: "92.6%",
+                padding: 2
               }}
             >
               <Button

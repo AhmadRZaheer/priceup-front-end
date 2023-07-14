@@ -513,12 +513,23 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      // InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -562,12 +573,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -611,12 +632,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -662,12 +693,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -712,12 +753,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -763,12 +814,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -814,12 +875,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -865,12 +936,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -916,12 +997,22 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"

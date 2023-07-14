@@ -6,6 +6,7 @@ import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import Snackbars from "../Model/SnackBar";
+import desktopImage from "../../Assets/desktop.svg"
 
 const SuperAdminLogin = (props) => {
   const [email, setEmail] = useState("");
@@ -63,12 +64,14 @@ const SuperAdminLogin = (props) => {
         style={{
           width: "100%",
           margin: "auto",
-          background: "#8888",
+          // background: "#8888",
+          backgroundColor: "#8477DA",
           height: "100vh",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          backgroundImage: `url(${desktopImage})`
         }}
       >
         <div>

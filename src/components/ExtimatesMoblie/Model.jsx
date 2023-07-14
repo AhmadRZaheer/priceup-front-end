@@ -190,6 +190,17 @@ export default function ClientDetailsModel({
                       placeholder="First Name"
                       size="small"
                       variant="outlined"
+                      InputProps={{
+                        style: {
+                          color: "white", 
+                          backgroundColor: "rgba(27,22,51,255,0.5)"// Change the color of the input text
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          backgroundColor: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       value={formik.values.firstName}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
@@ -221,6 +232,23 @@ export default function ClientDetailsModel({
                       variant="outlined"
                       value={formik.values.lastName}
                       onChange={formik.handleChange}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
+                      sx={{
+                        border: { md: "none", xs: "2px solid #423f57" },
+                        borderRadius: { md: 0, xs: 2 },
+                        color: { md: "black", xs: "white" },
+                        background: "#14112c",
+                        width: "100%",
+                      }}
                       onBlur={formik.handleBlur}
                       error={formik.touched.lastName && formik.errors.lastName}
                       helperText={
@@ -249,6 +277,16 @@ export default function ClientDetailsModel({
                   size="small"
                   variant="outlined"
                   value={formik.values.email}
+                  InputProps={{
+                    style: {
+                      color: "white", // Change the color of the input text
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: {
+                      color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                    },
+                  }}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.email && formik.errors.email}
@@ -273,6 +311,16 @@ export default function ClientDetailsModel({
                   size="small"
                   variant="outlined"
                   value={formik.values.address}
+                  InputProps={{
+                    style: {
+                      color: "white", // Change the color of the input text
+                    },
+                  }}
+                  InputLabelProps={{
+                    style: {
+                      color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                    },
+                  }}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   error={formik.touched.address && formik.errors.address}

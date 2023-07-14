@@ -7,15 +7,23 @@ import {
 } from "@mui/material";
 import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
+import { logoutHandler } from "../../redux/userAuth";
 
 export default function ExitingQuotes() {
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
   console.log(estimates, "estimates in existing");
   const dispatch = useDispatch();
+  const navigate = useNavigate()
+  const Logout = () => {
+    console.log("hello world");
+    dispatch(logoutHandler());
+    
+    navigate("/login");
+  };
 
   return (
     <>
@@ -42,10 +50,10 @@ export default function ExitingQuotes() {
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
               Existing Quotes
             </Typography>
-            <IconButton sx={{ height: 25 }}>
-              <NavLink to="/login">
+            <IconButton onClick={Logout} sx={{ height: 25 }}>
+              
                 <img src={logout} alt="image of log out icon" />
-              </NavLink>
+           
             </IconButton>
           </Box>
 
