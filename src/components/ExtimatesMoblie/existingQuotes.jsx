@@ -4,8 +4,11 @@ import pencil from "../../Assets/estimates/edit-2.svg";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
+import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
-export default function ExitingQuotes({ setHandleEstimatesPages }) {
+export default function ExitingQuotes() {
+  const { data: estimates } = useGetEstimates();
+  console.log(estimates, "estimates in existing");
   const dispatch = useDispatch();
 
   const dates = [
@@ -56,7 +59,7 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
   ];
   return (
     <>
-      <Box sx={{ marginTop: 10 }}>
+      <Box sx={{ marginTop: 10, height: "100vh" }}>
         <Box
           sx={{
             paddingY: 2,
@@ -74,8 +77,10 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
             </NavLink>
           </IconButton>
         </Box>
-        <Box sx={{ paddingX: 2, marginTop: 2, height: 345, overflow: "auto" }}>
-          {dates.map((item) => (
+        <Box
+          sx={{ paddingX: 2, marginTop: 2, height: "70vh", overflow: "auto" }}
+        >
+          {estimates.map((item) => (
             <Box
               sx={{
                 display: "flex",
@@ -84,10 +89,12 @@ export default function ExitingQuotes({ setHandleEstimatesPages }) {
                 borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
               }}
             >
-              <Typography sx={{ fontWeight: "Medium" }}>{item.Date}</Typography>
+              <Typography sx={{ fontWeight: "Medium" }}>
+                {new Date(item?.updatedAt).toLocaleString()}
+              </Typography>
               <Box sx={{ display: "flex" }}>
                 <Typography color="red" marginRight={3}>
-                  {item.status}
+                  {/* {item?.updatedAt} */}
                 </Typography>
                 <IconButton sx={{ marginRight: 1, height: 25 }}>
                   <img src={pencil} alt="image of pencil" />

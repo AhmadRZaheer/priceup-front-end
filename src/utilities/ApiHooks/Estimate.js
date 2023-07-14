@@ -30,31 +30,30 @@ export const useFetchDataEstimate = () => {
   });
 };
 
-// export const useFetchSingleDefault = (id) => {
-//   console.log(id, "second hook");
-//   async function fetchData() {
-//     const token = localStorage.getItem("token");
-//     try {
-//       const response = await axios.get(`${backendURL}/layouts/${id}`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       console.log(response, "response");
-//       if (response.data && response.data.code === 200) {
-//         return response.data.data ? response.data.data : null;
-//       } else {
-//         throw new Error("An error occurred while fetching the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while fetching the data.");
-//     }
-//   }
-//   return useQuery({
-//     queryKey: ["singleLayout", id],
-//     queryFn: fetchData,
-//     enabled: !!id,
-//     placeholderData: null,
-//   });
-// };
+export const useGetEstimates = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/estimates`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log(response, "response");
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : null;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["estimates"],
+    queryFn: fetchData,
+    enabled: true,
+    placeholderData: null,
+  });
+};
 
 // export const useEditDefault = () => {
 //   const handleEdit = async (updatedHardware) => {

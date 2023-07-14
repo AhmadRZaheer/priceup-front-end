@@ -54,13 +54,8 @@ export default function ClientDetailsModel({
   const measurements = useSelector(getMeasumentSide);
   console.log(estimatesContent?.addOns, "addon in model");
   const data = estimatesContent?.addOns;
-
   const addOnIds = data.map((obj) => obj._id);
-
-  console.log(addOnIds, "addOnIds");
-
   const dispatch = useDispatch();
-
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -70,7 +65,6 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      // Handle form submission here
       console.log(values);
       const estimate = {
         layout_id: estimatesLayout?._id,
