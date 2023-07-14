@@ -122,6 +122,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
             sx={{
               width: { md: "94%", sm: "100%", xs: "100%" },
               margin: "auto",
+              height: "100%",
               borderRadius: { md: "12px", xs: 0 },
               boxShadow:
                 "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -337,8 +338,9 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                 sx={{
                   display: "flex",
                   width: { md: "48.5%", xs: "92%" },
+                  height: "100%",
                   flexDirection: "column",
-                  gap: { md: 2, xs: 5 },
+                  gap: { md: 2, xs: 2 },
                   color: { md: "black", xs: "white" },
                   background: {
                     md: "none",
@@ -348,7 +350,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                   borderTopRightRadius: { md: 0, xs: 30 },
                   borderTop: { md: 0, xs: "1px solid #667085" },
                   paddingX: { md: 0, xs: 2 },
-                  paddingTop: 2,
+                  paddingTop: 4,
                   paddingBottom: 8,
                   // height: "350px",
                 }}
@@ -364,18 +366,31 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                       gap: 1,
                     }}
                   >
-                    <Typography>{String.fromCharCode(97 + index)}</Typography>
+                    <Typography sx={{ mr: 2 }}>
+                      {String.fromCharCode(97 + index)}
+                    </Typography>
                     <TextField
                       type="number"
                       size="small"
                       variant="outlined"
                       name={String.fromCharCode(97 + index)}
                       placeholder={String.fromCharCode(97 + index)}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       style={{
-                        background: { xs: "#100d24" },
+                        background: "#14112c",
                         borderRadius: "8px",
-                        border: "1px solid #D0D5DD",
+                        border: "1px solid #29263f",
                         color: "white !important",
+                        width: "100%",
                       }}
                       value={formik.values[String.fromCharCode(97 + index)]}
                       onChange={formik.handleChange}
@@ -451,6 +466,8 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                       textTransform: "initial",
                       border: "1px solid #D0D5DD",
                       backgroundColor: { md: "transparent", xs: "white" },
+                      height: 40,
+                      fontSize: 20,
                     }}
                   >
                     {" "}
@@ -464,6 +481,11 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                     disabled={Object.keys(formik.values).some(
                       (key) => !formik.values[key]
                     )}
+                    sx={{
+                      height: 40,
+                      fontSize: 20,
+                      backgroundColor: "#8477da"
+                    }}
                     variant="contained"
                     // onClick={() => setHandleEstimatesPages("review")}
                     // onClick={() => {
