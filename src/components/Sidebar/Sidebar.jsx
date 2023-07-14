@@ -23,6 +23,8 @@ import SettingsIcon from "../../Assets/settings.svg"
 import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import { Box, IconButton } from "@mui/material";
+import { parseJwt } from "../ProtectedRoute/AuthVerify";
+import { backendURL } from "../../utilities/common";
 
 const Sidebar = () => {
   const [open, setOpen] = useState(false);
@@ -35,7 +37,8 @@ const Sidebar = () => {
 
     navigate("/login");
   };
-
+  const token = localStorage.getItem("token");
+  const decodedToken = parseJwt(token);
   return (
     <>
       <div className="sidebar">
@@ -231,11 +234,11 @@ const Sidebar = () => {
         <div className="line"></div>
         <div className="bottom">
           <div className="UserIcon">
-            <img src={UserIcon} alt="" />
+            <img src={`${backendURL}/${decodedToken?.image}`} width="50" height="50" alt="no" />
           </div>
           <div className="userInSidebar">
-            Olivia Rhye
-            <div className="emailUser">Olivia@glassexperts.com</div>
+            {decodedToken?.name}
+            <div className="emailUser">{decodedToken?.email}</div>
           </div>
           <div className="logOutIcon" onClick={() => setOpen(!open)}>
             {/* <a href="/login"> */}

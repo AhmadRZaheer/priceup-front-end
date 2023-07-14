@@ -33,6 +33,7 @@ const Layout = () => {
   const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
+  console.log(selectedData, "selectedData11");
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));
@@ -183,6 +184,7 @@ const Layout = () => {
               }}
             >
               <Button
+                disabled={selectedData?.length < 1}
                 onClick={() => {
                   dispatch(setNavigation("measurements"));
                 }}

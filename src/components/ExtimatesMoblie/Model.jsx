@@ -25,8 +25,9 @@ const style = {
   bottom: 0,
   // transform: "translate(-50%, -50%)",
   width: { md: 350, xs: "100%" },
-  bgcolor: "red",
+  // bgcolor: "red",
   borderRadius: { md: "4px" },
+  borderTop: "2px solid #4c4d53",
   borderTopLeftRadius: { md: "4px", xs: 30 },
   borderTopRightRadius: { md: "4px", xs: 30 },
   zIndex: 2,
@@ -198,7 +199,8 @@ export default function ClientDetailsModel({
                       }}
                       InputLabelProps={{
                         style: {
-                          backgroundColor: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
+                          backgroundColor: "rgba(27, 22, 51, 0.5)",  // Change the color of the placeholder text
                         },
                       }}
                       value={formik.values.firstName}
