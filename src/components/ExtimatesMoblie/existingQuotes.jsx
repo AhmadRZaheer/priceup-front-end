@@ -87,7 +87,7 @@ export default function ExitingQuotes() {
             )}
           </Box>
         </Box>
-        <Box sx={{ paddingX: 2, pt: 8 }}>
+        <Box sx={{ paddingX: 2, py: 3, position:"fixed", bottom: 0, left: 0, width: "92%", borderTop: "1px solid rgba(102, 112, 133, 0.5)" }}>
           <Button
             onClick={() => {
               dispatch(setNavigation("layout"));

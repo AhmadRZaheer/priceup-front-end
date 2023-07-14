@@ -194,13 +194,16 @@ export default function ClientDetailsModel({
                       InputProps={{
                         style: {
                           color: "white",
-                          backgroundColor: "rgba(27,22,51,255,0.5)", // Change the color of the input text
+                          paddingY: 30, 
                         },
                       }}
-                      InputLabelProps={{
-                        style: {
-                          color: "rgba(255, 255, 255, 0.5)",
-                        },
+                      style={{
+                        height: 40,
+                        border:  "2px solid #423f57",
+                        borderRadius: 3,
+                        color: { md: "black", xs: "white" },
+                        backgroundColor: "rgba(22,19,48)",
+                        width: "100%",
                       }}
                       value={formik.values.firstName}
                       onChange={formik.handleChange}
@@ -235,19 +238,16 @@ export default function ClientDetailsModel({
                       onChange={formik.handleChange}
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
+                          paddingY: 30, 
                         },
                       }}
-                      InputLabelProps={{
-                        style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
-                        },
-                      }}
-                      sx={{
-                        border: { md: "none", xs: "2px solid #423f57" },
-                        borderRadius: { md: 0, xs: 2 },
+                      style={{
+                        height: 40,
+                        border:  "2px solid #423f57",
+                        borderRadius: 3,
                         color: { md: "black", xs: "white" },
-                        background: "#14112c",
+                        backgroundColor: "rgba(22,19,48)",
                         width: "100%",
                       }}
                       onBlur={formik.handleBlur}
@@ -280,13 +280,17 @@ export default function ClientDetailsModel({
                   value={formik.values.email}
                   InputProps={{
                     style: {
-                      color: "white", // Change the color of the input text
+                      color: "white",
+                      paddingY: 30, 
                     },
                   }}
-                  InputLabelProps={{
-                    style: {
-                      color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
-                    },
+                  style={{
+                    height: 40,
+                    border:  "2px solid #423f57",
+                    borderRadius: 3,
+                    color: { md: "black", xs: "white" },
+                    backgroundColor: "rgba(22,19,48)",
+                    width: "100%",
                   }}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -314,13 +318,17 @@ export default function ClientDetailsModel({
                   value={formik.values.address}
                   InputProps={{
                     style: {
-                      color: "white", // Change the color of the input text
+                      color: "white",
+                      paddingY: 30, 
                     },
                   }}
-                  InputLabelProps={{
-                    style: {
-                      color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
-                    },
+                  style={{
+                    height: 40,
+                    border:  "2px solid #423f57",
+                    borderRadius: 3,
+                    color: { md: "black", xs: "white" },
+                    backgroundColor: "rgba(22,19,48)",
+                    width: "100%",
                   }}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
