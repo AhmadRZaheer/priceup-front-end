@@ -5,6 +5,7 @@ import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 import ExistingQuotes from "./existingQuotes";
+import { NavLink } from "react-router-dom";
 
 const Index = () => {
   const boxStyles = {
@@ -26,7 +27,7 @@ const Index = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
-  const [StorePage, setStorePage] = useState("Existing")
+  const [StorePage, setStorePage] = useState("Layout");
 
   return (
     <>
@@ -42,18 +43,8 @@ const Index = () => {
           paddingY: 4,
           borderTopLeftRadius: 30,
           borderBottomLeftRadius: 30,
-
         }}
       >
-        {StorePage === "Existing" && (
-          <Box sx={{
-            width: '100%',
-          height: "100%",
-          backgroundColor: "#f5f5f5",
-          }}>
-          <ExistingQuotes setStorePage={setStorePage} />
-          </Box>
-        )}
         {StorePage === "Layout" && (
           <Box
             sx={{
@@ -63,7 +54,7 @@ const Index = () => {
               display: "flex",
               alignItems: "center",
               //   background: "blue",
-              marginTop: 15,
+              marginTop: 5,
               flexDirection: "column",
               p: 2,
               gap: 4,
@@ -108,28 +99,38 @@ const Index = () => {
                   <Typography sx={{ font: "18px" }}>Custom</Typography>
                 </Box>
               </Grid>
-              <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Box sx={{ width: "150px" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <NavLink to="/Estimates">
                   <Button
-                    onClick={() => setStorePage("Measurments")}
+                    // href="/Existing"
+                    sx={{ width: 100 }}
                     fullWidth
-                    variant="contained"
+                    variant="outlined"
                   >
                     {" "}
-                    Next
+                    Back
                   </Button>
-                </Box>
+                </NavLink>
+                <Button
+                  sx={{ width: 100 }}
+                  onClick={() => setStorePage("Measurments")}
+                  fullWidth
+                  variant="contained"
+                >
+                  {" "}
+                  Next
+                </Button>
               </Box>
             </Box>
           </Box>
-        ) }
+        )}
         {StorePage === "Measurments" && (
-          <LayoutMeasurements setHandleEstimatesPages={setStorePage}/>
+          <LayoutMeasurements setHandleEstimatesPages={setStorePage} />
         )}
-         {StorePage === "Review" && (
-           <LayoutReview setHandleEstimatesPages={setStorePage} />
+        {StorePage === "Review" && (
+          <LayoutReview setHandleEstimatesPages={setStorePage} />
         )}
-       </Box>
+      </Box>
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}

@@ -16,13 +16,18 @@ import Admin from "../../pages/Admin/Admin";
 import AddOns from "../../pages/AddOns/addOns";
 import GlassType from "../../pages/GlassType/glassType";
 import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
+import Existing from "../../pages/Existing/Existing";
 
 const AuthenticatedRoutesAdmin = () => {
   return (
     <Routes>
       <Route path="/">
         <Route index element={<Overview />} />
-        <Route path="estimates" element={<Estimates />} />
+        {/* <Route path="estimates" element={<Estimates />} /> */}
+        <Route path="/Estimates/">
+          <Route index element={<Existing />} />
+          <Route path="Steps" element={<Estimates />} />
+        </Route>
 
         <Route path="customers">
           <Route index element={<Customers />} />
