@@ -1,4 +1,11 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import door from "../../Assets/door.png";
 import { useFormik } from "formik";
@@ -81,7 +88,7 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
-          height: "98vh",
+          height: "40vh",
         }}
       >
         <Box
@@ -167,10 +174,11 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                 width: { md: "96.5%", xs: "100%" },
                 paddingY: { md: 4, xs: 0 },
                 paddingX: { md: 2, xs: 0 },
-
+                height: "100%",
                 background: { md: "#D9D9D9", xs: "#100D24" },
                 gap: 4,
                 borderRadius: "8px",
+                overflow: "auto"
               }}
             >
               {/* <Box
@@ -409,13 +417,28 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
                   order: { md: 2, xs: -1 },
                 }}
               >
-                <img
-                  width="150px"
-                  height="300px"
-                  // src={door}
-                  src={`${backendURL}/${selectedData?.image}`}
-                  alt="Selected"
-                />
+                {selectedData?.image ===  "" ? (
+                  <Box
+                    sx={{
+                      width: 40,
+                      m: "auto",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 700,
+                    }}
+                  >
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  <img
+                    width="150px"
+                    height="300px"
+                    // src={door}
+                    src={`${backendURL}/${selectedData?.image}`}
+                    alt="Selected"
+                  />
+                )}
               </Box>
             </Box>
 

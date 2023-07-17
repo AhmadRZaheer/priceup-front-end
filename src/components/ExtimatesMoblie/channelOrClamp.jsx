@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Button from "@mui/material/Button";
-
+import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
 
 import {
@@ -10,19 +10,21 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-import { Box, CircularProgress, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  setActiveMounting,
   setContent,
   setCounters,
   setThickness,
   updateAddOnCount,
 } from "../../redux/estimateCalculations";
+import MenuList from "./MenuList";
 
-const MenuList = ({
+const ChannelType = ({
   menuOptions,
   title,
   type,
@@ -33,18 +35,13 @@ const MenuList = ({
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState("channel");
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
-
   const selectedContent = useSelector(getContent);
-  console.log(selectedContent.hardwareFinishes, "selectedContent12");
+  console.log(selectedContent.mounting.activeType, "selectedContent12");
 
   // Handle functions for each item
-  // const [mountingType, setmountingType] = useState(
-  //   selectedContent.mounting.activeType || "clamps"
-  // );
-
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
@@ -61,9 +58,12 @@ const MenuList = ({
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-   
-    dispatch(setContent({ type: type, item: item }));
-    setSelectedItem(item);
+    if (!["mounting"].includes(type)) {
+      dispatch(setContent({ type: type, activeType: item }));
+      setSelectedItem(item);
+    } else {
+      dispatch(setActiveMounting(item.toLowerCase()));
+    }
   };
 
   const handleCountSet = (value) => {
@@ -84,15 +84,15 @@ const MenuList = ({
       setAnchorEl(!anchorEl);
     else showSnackbar("Please select 'hardwareFinishes' first", "warning");
   };
-console.log(menuOptions, "menuOptions")
+
   return (
     <Box>
       <Box
         sx={{
           display: "flex",
           width: "100%",
-          justifyContent: "space-between",
-          alignItems: "center",
+          // justifyContent: "space-between",
+          // alignItems: "center",
           pb: 1,
         }}
       >
@@ -115,7 +115,7 @@ console.log(menuOptions, "menuOptions")
           )}
           <Typography>{title}</Typography>
         </Button>
-        {![
+        {/* {![
           "hardwareFinishes",
           "channel",
           "glassTreatment",
@@ -142,8 +142,8 @@ console.log(menuOptions, "menuOptions")
               sx={{ color: "#98A2B3" }}
             />
           </Box>
-        )}
-        {["glassType"].includes(type) && (
+        )} */}
+        {/* {["glassType"].includes(type) && (
           <Box
             sx={{
               display: "flex",
@@ -202,39 +202,27 @@ console.log(menuOptions, "menuOptions")
               </MenuItem>
             </TextField>
           </Box>
-        )}
+        )} */}
       </Box>
-      
       {anchorEl ? (
         <Box
           sx={{
-            height: "150px",
+            height: "80px",
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
+            display: "flex",
+            // backgroundColor: "red",
+            width: "100%",
           }}
         >
-           {menuOptions ===  undefined ? (
-                  <Box
-                    sx={{
-                      width: 40,
-                      m: "auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 150,
-                    }}
-                  >
-                    <CircularProgress />
-               </Box>
-                ) : (
-          menuOptions?.map((item) => (
-            <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
+          {menuOptions?.map((item, index) => (
+            <MenuItem key={index} onClick={() => handleItemSelect(item)}>
               <Box
                 sx={{
                   width: "200px",
                   borderRadius: "12px",
                   border:
-                    item === selectedItem
+                    item === selectedContent?.mounting?.activeType
                       ? "2px solid blue"
                       : "1px solid #EAECF0",
                   boxShadow:
@@ -252,12 +240,13 @@ console.log(menuOptions, "menuOptions")
                   <img
                     width={"25px"}
                     height={"25px"}
-                    src={`${backendURL}/${item?.image}`}
+                    // src={`${backendURL}/${item?.image}`}
+                    src={Logo}
                     alt="Selected"
                   />
-                  <Typography>{item?.name}</Typography>
+                  <Typography>{item}</Typography>
                 </Box>
-                <Box>
+                {/* <Box>
                   {item?.slug === "sleeve-over" && (
                     <Box
                       sx={{
@@ -311,11 +300,18 @@ console.log(menuOptions, "menuOptions")
                       </Box>
                     )}
                   </Box>
-                </Box>
+                </Box> */}
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignContent: "space-between",
+                  }}
+                ></Box>
               </Box>
             </MenuItem>
-          ))
-          )}
+          ))}
         </Box>
       ) : (
         ""
@@ -324,4 +320,4 @@ console.log(menuOptions, "menuOptions")
   );
 };
 
-export default MenuList;
+export default ChannelType;

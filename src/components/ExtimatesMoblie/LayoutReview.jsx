@@ -21,6 +21,7 @@ import {
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Model/SnackBar";
+import ChannelType from "./channelOrClamp";
 
 const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
@@ -28,7 +29,11 @@ const LayoutReview = () => {
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
 
+  console.log(selectedContent.mounting.activeType, "active type");
   const dispatch = useDispatch();
+  // const [mountingType, setmountingType] = useState(
+  //   selectedContent.mounting.activeType || "clamps"
+  // );
 
   useEffect(() => {
     // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
@@ -260,10 +265,12 @@ const LayoutReview = () => {
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
+              maxHeight: "60vh",
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               margin: { md: 0, xs: "auto" },
+              overflow: "auto"
             }}
           >
             {/* LeftSide */}
@@ -357,10 +364,10 @@ const LayoutReview = () => {
                 </Box>
                 <Box
                   sx={{
-                    display: "flex",
+                    // display: "flex",
                     alignItems: "center",
                     // gap: 4,
-                    justifyContent: "space-between",
+                    // justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
@@ -368,7 +375,7 @@ const LayoutReview = () => {
                   }}
                 >
                   {/* mouting channel */}
-                  <Box sx={{ width: "100%", display: "flex" }}>
+                  {/* <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <MenuList
                         menuOptions={estimatesData?.wallClamp}
@@ -403,6 +410,75 @@ const LayoutReview = () => {
                         showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                       />
+                    </Box>
+                  </Box> */}
+                  <Box sx={{ width: "100%", display: "flex" }}>
+                    <Box sx={{ width: "100%", display: "flex" }}>
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <ChannelType
+                          menuOptions={estimatesData?.channelOrClamps}
+                          title={"Mounting"}
+                          type={"mounting"}
+                          showSnackbar={showSnackbar}
+                          // wallClamp={estimatesData?.wallClamp}
+                          // setSelectedContent={setSelectedContent}
+                          // count={
+                          //   selectedContent.mounting.clamps.wallClamp.count
+                          // }
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignContent: "space-between",
+                          }}
+                        >
+                          {selectedContent.mounting.activeType === "clamps" && (
+                            <>
+                              <MenuList
+                                menuOptions={estimatesData?.wallClamp}
+                                title={"Wall Clamps"}
+                                type={"wallClamp"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.wallClamp
+                                    .count
+                                }
+                              />
+                              <MenuList
+                                menuOptions={estimatesData?.sleeveOver}
+                                title={"Sleeve Over"}
+                                type={"sleeveOver"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.sleeveOver
+                                    .count
+                                }
+                              />
+                              <MenuList
+                                menuOptions={estimatesData?.glassToGlass}
+                                title={"Glass to Glass"}
+                                type={"glassToGlass"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.glassToGlass
+                                    .count
+                                }
+                              />
+                            </>
+                          )}
+
+                          {selectedContent.mounting.activeType ===
+                            "channel" && (
+                            <MenuList
+                              menuOptions={estimatesData?.mountingChannel}
+                              title={"Channel"}
+                              type={"channel"}
+                              showSnackbar={showSnackbar}
+                            />
+                          )}
+                        </Box>
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
@@ -1175,9 +1251,8 @@ const LayoutReview = () => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              disable={selectedContent?.hardwareFinishes === null}
+              disabled={selectedContent?.hardwareFinishes === null}
               variant="contained"
-              // onClick={() => setHandleEstimatesPages("summary")}
               onClick={handleBoxClick}
               sx={{
                 backgroundColor: "#8477da",

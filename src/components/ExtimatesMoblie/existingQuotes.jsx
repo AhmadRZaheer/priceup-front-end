@@ -12,25 +12,30 @@ import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 import { logoutHandler } from "../../redux/userAuth";
+import { useState } from "react";
 
 export default function ExitingQuotes() {
+  const [selectedQuote, setSelectedQuote] = useState(null);
+
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
   console.log(estimates, "estimates in existing");
+  console.log(selectedQuote, "selectedQuote in existing");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const Logout = () => {
-    console.log("hello world");
-    dispatch(logoutHandler());
+  // const Logout = () => {
+  //   console.log("hello world");
+  //   dispatch(logoutHandler());
 
-    navigate("/login");
-  };
+  //   navigate("/login");
+  // };
 
   return (
     <>
       <Box
         sx={{
-          marginTop: 7.5,
-          height: "96vh",
+          marginTop: 8,
+          height: "92.8vh",
           color: "#ffff",
           backgroundColor: "rgba(16, 13, 36, 1)",
           display: "flex",
@@ -50,16 +55,18 @@ export default function ExitingQuotes() {
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
               Existing Quotes
             </Typography>
-            <IconButton onClick={Logout} sx={{ height: 25 }}>
+            {/* <IconButton onClick={Logout} sx={{ height: 25 }}>
               <img src={logout} alt="image of log out icon" />
-            </IconButton>
+            </IconButton> */}
           </Box>
 
           <Box
-            sx={{ paddingX: 2, marginTop: 2, height: "62vh", overflow: "auto" }}
+            sx={{ paddingX: 2, marginTop: 2, height: "40vh",overflow: "auto"}}
           >
             {isFetching ? (
-              <CircularProgress />
+              <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 600}}>
+              <CircularProgress sx={{}} />
+              </Box>
             ) : (
               estimates?.map((item) => (
                 <Box
@@ -78,7 +85,11 @@ export default function ExitingQuotes() {
                     <Typography color="red" marginRight={3}>
                       {/* {item?.updatedAt} */}
                     </Typography>
-                    <IconButton sx={{ marginRight: 1, height: 25 }}>
+
+                    <IconButton
+                      onClick={() => setSelectedQuote(item?._id)}
+                      sx={{ marginRight: 1, height: 25 }}
+                    >
                       <img src={pencil} alt="image of pencil" />
                     </IconButton>
                   </Box>
@@ -87,7 +98,17 @@ export default function ExitingQuotes() {
             )}
           </Box>
         </Box>
-        <Box sx={{ paddingX: 2, py: 3, position:"fixed", bottom: 0, left: 0, width: "92%", borderTop: "1px solid rgba(102, 112, 133, 0.5)" }}>
+        <Box
+          sx={{
+            paddingX: 2,
+            py: 3,
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: "92%",
+            borderTop: "1px solid rgba(102, 112, 133, 0.5)",
+          }}
+        >
           <Button
             onClick={() => {
               dispatch(setNavigation("layout"));
