@@ -4,6 +4,7 @@ import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
+import ExistingQuotes from "./existingQuotes";
 
 const Index = () => {
   const boxStyles = {
@@ -25,7 +26,7 @@ const Index = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
-  const [StorePage, setStorePage] = useState("Layout")
+  const [StorePage, setStorePage] = useState("Existing")
 
   return (
     <>
@@ -41,6 +42,15 @@ const Index = () => {
           paddingY: 4,
         }}
       >
+        {StorePage === "Existing" && (
+          <Box sx={{
+            width: '100%',
+          height: "100%",
+          backgroundColor: "#f5f5f5",
+          }}>
+          <ExistingQuotes setStorePage={setStorePage} />
+          </Box>
+        )}
         {StorePage === "Layout" && (
           <Box
             sx={{
@@ -114,7 +124,7 @@ const Index = () => {
           <LayoutMeasurements setHandleEstimatesPages={setStorePage}/>
         )}
          {StorePage === "Review" && (
-           <LayoutReview setStorePage={setStorePage} />
+           <LayoutReview setHandleEstimatesPages={setStorePage} />
         )}
        </Box>
       <ClientDetailsModel
