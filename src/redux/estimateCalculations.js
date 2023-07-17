@@ -1,7 +1,8 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
-export const getMeasumentSide = (state) => state.estimateCalculations.measuments;
+export const getMeasumentSide = (state) =>
+  state.estimateCalculations.measuments;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;
@@ -90,7 +91,7 @@ const estimateCalcSlice = createSlice({
                 item: item,
               },
             },
-            activeType: "clamps",
+            // activeType: "clamps",
           },
         };
       } else if (["channel"].includes(type)) {
@@ -103,7 +104,7 @@ const estimateCalcSlice = createSlice({
               ...state.content.mounting.channel,
               item: item,
             },
-            activeType: "channel",
+            // activeType: "channel",
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
@@ -203,6 +204,13 @@ const estimateCalcSlice = createSlice({
     setNavigation: (state, action) => {
       state.handlePageNavigation = action.payload;
     },
+    setActiveMounting: (state, action) => {
+      const { payload } = action;
+      state.content.mounting = {
+        ...state.content.mounting,
+        activeType: payload,
+      };
+    },
   },
 });
 export const {
@@ -215,5 +223,6 @@ export const {
   updateMeasurements,
   addSelectedItem,
   setNavigation,
+  setActiveMounting,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

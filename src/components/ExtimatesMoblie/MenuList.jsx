@@ -36,10 +36,15 @@ const MenuList = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
+
   const selectedContent = useSelector(getContent);
   console.log(selectedContent.hardwareFinishes, "selectedContent12");
 
   // Handle functions for each item
+  // const [mountingType, setmountingType] = useState(
+  //   selectedContent.mounting.activeType || "clamps"
+  // );
+
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
@@ -56,6 +61,7 @@ const MenuList = ({
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
+   
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };

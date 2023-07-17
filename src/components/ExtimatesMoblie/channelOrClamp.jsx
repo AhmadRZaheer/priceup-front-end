@@ -16,6 +16,7 @@ import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  setActiveMounting,
   setContent,
   setCounters,
   setThickness,
@@ -30,16 +31,15 @@ const ChannelType = ({
   showSnackbar,
   count,
   thickness,
-  wallClamp,
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState("channel");
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
   const selectedContent = useSelector(getContent);
-  console.log(selectedContent.hardwareFinishes, "selectedContent12");
+  console.log(selectedContent.mounting.activeType, "selectedContent12");
 
   // Handle functions for each item
   const handleSleeveOverCount = (count) => {
@@ -58,8 +58,12 @@ const ChannelType = ({
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    dispatch(setContent({ type: type, item: item }));
-    setSelectedItem(item);
+    if (!["mounting"].includes(type)) {
+      dispatch(setContent({ type: type, activeType: item }));
+      setSelectedItem(item);
+    } else {
+      dispatch(setActiveMounting(item.toLowerCase()));
+    }
   };
 
   const handleCountSet = (value) => {
@@ -203,11 +207,11 @@ const ChannelType = ({
       {anchorEl ? (
         <Box
           sx={{
-            height: "150px",
+            height: "80px",
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
             display: "flex",
-            backgroundColor: "red",
+            // backgroundColor: "red",
             width: "100%",
           }}
         >
@@ -218,7 +222,7 @@ const ChannelType = ({
                   width: "200px",
                   borderRadius: "12px",
                   border:
-                    item === selectedItem
+                    item === selectedContent?.mounting?.activeType
                       ? "2px solid blue"
                       : "1px solid #EAECF0",
                   boxShadow:
@@ -304,44 +308,7 @@ const ChannelType = ({
                     flexDirection: "column",
                     alignContent: "space-between",
                   }}
-                >
-                  {selectedContent.mounting.ActiveType === "clamps" && (
-                    <>
-                      <MenuList
-                        menuOptions={wallClamp}
-                        title={"Wall Clamps"}
-                        type={"wallClamp"}
-                        // showSnackbar={showSnackbar}
-                        count={selectedContent.mounting.clamps.wallClamp.count}
-                      />
-                      {/* <MenuList
-                        menuOptions={estimatesData?.sleeveOver}
-                        title={"Sleeve Over"}
-                        type={"sleeveOver"}
-                        showSnackbar={showSnackbar}
-                        count={selectedContent.mounting.clamps.sleeveOver.count}
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.glassToGlass}
-                        title={"Glass to Glass"}
-                        type={"glassToGlass"}
-                        showSnackbar={showSnackbar}
-                        count={
-                          selectedContent.mounting.clamps.glassToGlass.count
-                        }
-                      /> */}
-                    </>
-                  )}
-
-                  {selectedContent.mounting.item === "channel" && (
-                    <MenuList
-                      menuOptions={wallClamp}
-                      title={"Channel"}
-                      type={"channel"}
-                      // showSnackbar={showSnackbar}
-                    />
-                  )}
-                </Box>
+                ></Box>
               </Box>
             </MenuItem>
           ))}

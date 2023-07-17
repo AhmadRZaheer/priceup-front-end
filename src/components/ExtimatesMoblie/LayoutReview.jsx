@@ -31,6 +31,9 @@ const LayoutReview = () => {
 
   console.log(selectedContent.mounting.activeType, "active type");
   const dispatch = useDispatch();
+  // const [mountingType, setmountingType] = useState(
+  //   selectedContent.mounting.activeType || "clamps"
+  // );
 
   useEffect(() => {
     // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
@@ -415,20 +418,20 @@ const LayoutReview = () => {
                           title={"Mounting"}
                           type={"mounting"}
                           showSnackbar={showSnackbar}
-                          wallClamp={estimatesData?.wallClamp}
+                          // wallClamp={estimatesData?.wallClamp}
                           // setSelectedContent={setSelectedContent}
                           // count={
                           //   selectedContent.mounting.clamps.wallClamp.count
                           // }
                         />
-                        {/* <Box
+                        <Box
                           sx={{
                             display: "flex",
                             flexDirection: "column",
                             alignContent: "space-between",
                           }}
                         >
-                          {selectedContent.mounting.item === "clamps" && (
+                          {selectedContent.mounting.activeType === "clamps" && (
                             <>
                               <MenuList
                                 menuOptions={estimatesData?.wallClamp}
@@ -463,7 +466,7 @@ const LayoutReview = () => {
                             </>
                           )}
 
-                          {selectedContent.mounting.item ===
+                          {selectedContent.mounting.activeType ===
                             "channel" && (
                             <MenuList
                               menuOptions={estimatesData?.mountingChannel}
@@ -472,7 +475,7 @@ const LayoutReview = () => {
                               showSnackbar={showSnackbar}
                             />
                           )}
-                        </Box> */}
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
