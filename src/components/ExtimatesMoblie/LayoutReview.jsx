@@ -1175,9 +1175,8 @@ const LayoutReview = () => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              disable={selectedContent?.hardwareFinishes === null}
+              disabled={selectedContent?.hardwareFinishes === null}
               variant="contained"
-              // onClick={() => setHandleEstimatesPages("summary")}
               onClick={handleBoxClick}
               sx={{
                 backgroundColor: "#8477da",
