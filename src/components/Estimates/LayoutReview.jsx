@@ -2,15 +2,13 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import door from "../../Assets/estimates/layout1.svg";
 
 import MenuList from "./MenuList";
-import { menuOptions } from "../../data/data";
-import { AddCircleOutline, ChevronLeftOutlined, RemoveCircleOutline } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import { getContent, getTotal, setInputContent, setTotal } from "../../redux/estimateCalculations";
 
 const LayoutReview = ({setHandleEstimatesPages}) => {
-  const [doorDetail, setDoorDetail] = useState(null);
+  // const [doorDetail, setDoorDetail] = useState(null);
 
 
   const { data: estimatesData, refetch: estimatesRefetch } =
@@ -140,11 +138,8 @@ console.log(
         sx={{
           width: "70%",
           margin: "auto",
-
           display: "flex",
           alignItems: "center",
-          //   background: "blue",
-          // marginTop: 4,
           flexDirection: "column",
           p: 2,
           gap: 4,
@@ -164,7 +159,6 @@ console.log(
             paddingX: 2,
             paddingY: 4,
             rowGap: 4,
-            // background: "green",
             display: "flex",
             flexDirection: "column",
           }}
