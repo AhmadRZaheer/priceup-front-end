@@ -1,8 +1,14 @@
 .Defaults{
     display: flex;
     width: 100%;
+    background-color: black;
     .defaultsConatiner{
         flex:6;
+        background-color: white;
+        border-top-left-radius: 30px;
+        border-bottom-left-radius: 30px;
+        height: 100vh;
+        padding-left: 10px;
     }
     .title{
         font-size: 25px;

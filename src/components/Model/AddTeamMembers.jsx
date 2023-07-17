@@ -5,6 +5,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import InputImageIcon from "../../Assets/imageUploader.svg";
 
 import { useState } from "react";
 import {
@@ -15,16 +16,6 @@ import {
 } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-
-import {
-  useCreateFinish,
-  useEditFinish,
-} from "../../utilities/ApiHooks/Finishes";
-import Snackbars from "./SnackBar";
-import {
-  useCreateHardware,
-  useEditHardware,
-} from "../../utilities/ApiHooks/Hardware";
 import {
   useCreateTeamMembers,
   useEditTeamMembers,
@@ -40,7 +31,7 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  borderRadius: "4px",
+  borderRadius: "12px",
   p: 4,
 };
 
@@ -106,7 +97,7 @@ export default function AddTeamMembers({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address"),
 
-    password: Yup.string().required("Name is required"),
+    // password: Yup.string().required("Name is required"),
 
     image: Yup.mixed(),
     // .required("Image is required")
@@ -133,7 +124,7 @@ export default function AddTeamMembers({
       ? {
           name: data?.name,
           email: data?.email,
-          password: data?.password,
+          // password: data?.password,
 
           image: "",
         }
@@ -141,7 +132,7 @@ export default function AddTeamMembers({
           name: "",
           image: "",
           email: "",
-          password: "",
+          // password: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -150,6 +141,7 @@ export default function AddTeamMembers({
         isEdit
           ? handleEditClick({ teamData: values, id: data._id })
           : handleCreateClick(values);
+        setSelectedImage(null);
 
         resetForm();
       }
@@ -163,21 +155,20 @@ export default function AddTeamMembers({
         // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        sx={{
+          backdropFilter: "blur(2px)", // Apply blur effect to the backdrop
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+        }}
       >
         <Box sx={style}>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "baseline",
-            }}
-          >
-            <Typography>
-              {isEdit ? "Edit Team Members" : "Add Team Members"}
+          <Box>
+            <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
+              {isEdit ? "Edit Team Members" : "Add New Team Members"}
             </Typography>
-            <IconButton onClick={close}>
-              <Close />
-            </IconButton>
+            <Typography sx={{ color: "#667085", marginTop: 1 }}>
+              Your new project has been created. Invite colleagues to
+              collaborate on this project.
+            </Typography>
           </Box>
 
           <Box>
@@ -188,7 +179,9 @@ export default function AddTeamMembers({
               {...getInputProps()}
               style={{ display: "none" }}
             />
-
+            <Typography sx={{ color: "black", marginTop: 1 }}>
+              Add Image
+            </Typography>
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
             )}
@@ -201,16 +194,40 @@ export default function AddTeamMembers({
               />
             ) : (
               <label htmlFor="image-input">
-                <Button
-                  style={{
-                    height: "100px",
-                    width: "100px",
-                    boxShadow: "0px 0px 2px blue",
+                <Box
+                  sx={{
+                    border: "1px solid #EAECF0",
+                    textAlign: "center",
+                    padding: 2,
                   }}
-                  component="span"
                 >
-                  Upload Image
-                </Button>
+                  <Box sx={{ height: 60 }}>
+                    <img
+                      width={60}
+                      src={InputImageIcon}
+                      alt="icon of input image"
+                    />
+                  </Box>
+                  <span
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: 4,
+                    }}
+                  >
+                    <Typography sx={{ color: "#8477DA" }}>
+                      Click to Upload
+                    </Typography>
+                    {/* <Typography sx={{ color: "#667085" }}>
+                      or drag and drop
+                    </Typography> */}
+                  </span>
+                  {/* <Typography sx={{color: "#8477DA"}}>Click to Upload</Typography> */}
+                  <Typography variant="body2" sx={{ color: "#667085" }}>
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                  </Typography>
+                </Box>
               </label>
             )}
           </Box>
@@ -242,7 +259,7 @@ export default function AddTeamMembers({
               fullWidth
             />
           </Box>
-          <Box>
+          {/* <Box>
             <Typography>Password</Typography>
             <TextField
               placeholder="Password"
@@ -255,12 +272,23 @@ export default function AddTeamMembers({
               variant="outlined"
               fullWidth
             />
-          </Box>
-          <Box onClick={formik.handleSubmit}>
+          </Box> */}
+          <Box
+            onClick={formik.handleSubmit}
+            sx={{ display: "flex", gap: 2, marginTop: 2 }}
+          >
+            <Button
+              variant="outlined"
+              onClick={close}
+              sx={{ color: "black", border: "1px solid #D0D5DD", width: "50%" }}
+            >
+              Cancel
+            </Button>
             <Button
               fullWidth
               variant="contained"
               disabled={LoadingForAdd || LoadingForEdit}
+              sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >
               {LoadingForAdd || LoadingForEdit ? (
                 <CircularProgress size={24} />

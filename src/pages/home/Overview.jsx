@@ -3,6 +3,8 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import "./overview.scss";
 import Widget from "../../components/widgets/Widget";
 import Table from "../../components/table/Table";
+import Customers from "../Customers/Customers";
+import CustomerTable from "../../components/CustomerTable/Customertable";
 
 const Overview = () => {
   return (
@@ -11,6 +13,7 @@ const Overview = () => {
       <div className="overviewContainer">
         <div className="page-title">
           <h2>Welcome back, Olivis</h2>
+          
           <p>Tract, manage and forecast your customers and orders.</p>
         </div>
         <div className="widgets">
@@ -30,7 +33,7 @@ const Overview = () => {
         </div>
         <div className="listContainer">
           <div className="listTitle">Estimates Queue</div>
-          <Table />
+          <CustomerTable />
         </div>
         <div className="listContainer">
           <div className="listTitle">Create New Queue</div>

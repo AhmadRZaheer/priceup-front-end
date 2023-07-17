@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 import LagoutModal from "../Model/Logout";
 import { useHistory } from "react-router-dom";
 import { Box } from "@mui/material";
+import { parseJwt } from "../ProtectedRoute/AuthVerify";
+import { backendURL } from "../../utilities/common";
 
 const SuperSidebar = () => {
   const [open, setOpen] = useState(false);
@@ -27,7 +29,8 @@ const SuperSidebar = () => {
 
     navigate("/adminlogin");
   };
-
+  const token = localStorage.getItem("token");
+  const decodedToken = parseJwt(token);
   return (
     <>
       <div className="sidebar">
@@ -52,9 +55,8 @@ const SuperSidebar = () => {
               <ul style={{ marginTop: 80 }}>
                 <NavLink to="/admin" className="link">
                   <li
-                    className={` ${
-                      location.pathname === "/admin" ? "active" : ""
-                    }`}
+                    className={` ${location.pathname === "/admin" ? "active" : ""
+                      }`}
                   >
                     <AdjustIcon className="icon" />
                     <span>Admin</span>
@@ -67,11 +69,11 @@ const SuperSidebar = () => {
             <div className="line"></div>
             <div className="bottom">
               <div className="UserIcon">
-                <img src={UserIcon} alt="" />
+                <img src={`${backendURL}/${decodedToken?.image}`} width="50" height="50" alt="no" />
               </div>
               <div className="userInSidebar">
-                Olivia Rhye
-                <div className="emailUser">Olivia@glassexperts.com</div>
+                {decodedToken?.name}
+                <div className="emailUser">{decodedToken?.email}</div>
               </div>
               <div className="logOutIcon" onClick={() => setOpen(!open)}>
                 {/* <a href="/login"> */}

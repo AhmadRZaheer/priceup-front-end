@@ -4,7 +4,7 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import { useDeleteGlassType, useFetchDataGlassType } from "../../utilities/ApiHooks/GlassType";
 import { userColumnsHardware } from "../../customerTableSource";
 import AddEditGlassType from "../Model/AddEidtGlassType";
@@ -102,6 +102,15 @@ const GlassTypeTable = () => {
   };
   return (
     <>
+    <Box sx={{
+       backgroundColor: "white",
+       height: "100vh",
+       borderTopLeftRadius: 30,
+       borderBottomLeftRadius: 30,
+       pl: 1
+    }}>
+
+   
       <div className="page-title">
         <div
           style={{
@@ -114,15 +123,7 @@ const GlassTypeTable = () => {
             paddingRight: "10px",
           }}
         >
-          <div
-            style={{
-              width: "250px",
-              padding: 4,
-              alignItems: "center",
-            }}
-          >
-            Glass Type
-          </div>{" "}
+          <Typography sx={{fontSize: 30}}>Glass Type</Typography>
           <div
             style={{
               padding: 4,
@@ -160,6 +161,7 @@ const GlassTypeTable = () => {
         severity={snackbar.severity}
         closeSnackbar={closeSnackbar}
       />
+      </Box>
     </>
   );
 };

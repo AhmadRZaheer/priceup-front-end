@@ -4,7 +4,7 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import { useDeleteGlassTreatement, useFetchDataGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
 import { userColumnsHardware } from "../../customerTableSource";
 import AddEditGlassTreatement from "../Model/AddGlassTreatement";
@@ -105,6 +105,13 @@ const GlassTreatementTable = () => {
   };
   return (
     <>
+    <Box sx={{
+       backgroundColor: "white",
+       height: "100vh",
+       borderTopLeftRadius: 30,
+       borderBottomLeftRadius: 30,
+       pl: 1
+    }}>
       <div className="page-title">
         <div
           style={{
@@ -117,15 +124,7 @@ const GlassTreatementTable = () => {
             paddingRight: "10px",
           }}
         >
-          <div
-            style={{
-              width: "250px",
-              padding: 4,
-              alignItems: "center",
-            }}
-          >
-            GlassTreatement
-          </div>{" "}
+          <Typography sx={{fontSize: 30}}>GlassTreatement</Typography>
           <div
             style={{
               padding: 4,
@@ -163,6 +162,7 @@ const GlassTreatementTable = () => {
         severity={snackbar.severity}
         closeSnackbar={closeSnackbar}
       />
+      </Box>
     </>
   );
 };

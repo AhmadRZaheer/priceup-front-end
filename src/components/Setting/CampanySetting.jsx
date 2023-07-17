@@ -127,6 +127,13 @@ const CampanySetting = () => {
           display: "flex",
           flexDirection: "column",
           gap: 3,
+          backgroundColor: "white",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+          height: "98vh",
+          paddingLeft: 3.5,
+          pr: 3.5,
+          pt: 2.4,
         }}
       >
         {/* setting */}
@@ -138,7 +145,7 @@ const CampanySetting = () => {
         >
           <Typography variant="h4">Setting</Typography>
           <Box sx={{ width: "200px" }}>
-            <Button fullWidth variant="contained" onClick={formik.handleSubmit}>
+            <Button sx={{backgroundColor: "#8477DA", boxShadow: 0}} fullWidth variant="contained" onClick={formik.handleSubmit}>
               Update
             </Button>
           </Box>
@@ -184,7 +191,7 @@ const CampanySetting = () => {
                     justifyContent: "center",
                     alignItems: "center",
                     borderRadius: "8px",
-                    border: "1px solid #D9D9D9",
+                    border: "1px solid #EAECF0",
                     p: 3,
                   }}
                 >
@@ -226,6 +233,7 @@ const CampanySetting = () => {
                 type="text"
                 name="location"
                 value={formik.values?.location}
+                placeholder={"Add location"}
                 onChange={formik.handleChange}
               ></TextField>
             </Box>
@@ -235,8 +243,8 @@ const CampanySetting = () => {
 
         <Box
           sx={{
-            borderTop: "1px solid gray",
-            borderBottom: "1px solid gray",
+            borderTop: "1px solid #EAECF0",
+            borderBottom: "1px solid #EAECF0",
             paddingY: 2,
             display: "flex",
             flexDirection: "column",

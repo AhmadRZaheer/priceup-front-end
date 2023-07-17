@@ -5,7 +5,7 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 
 import {
   useDeleteFinishes,
@@ -107,64 +107,62 @@ const FinishesTable = () => {
   };
   return (
     <>
-      <div className="page-title">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignContent: "center",
-            paddingTop: 15,
-            paddingBottom: 15,
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
-        >
+      <Box
+        sx={{
+          backgroundColor: "white",
+          height: "100vh",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
+          pl: 1
+        }}
+      >
+        <div className="page-title">
           <div
             style={{
-              width: "250px",
-              padding: 4,
-              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              alignContent: "center",
+              paddingTop: 15,
+              paddingBottom: 15,
+              paddingLeft: "10px",
+              paddingRight: "10px",
             }}
           >
-            Finishes
-          </div>{" "}
-          <div
-            style={{
-              padding: 4,
-            }}
-          >
-            <IconButton onClick={handleOpen}>
-              <Add style={{ color: "rgb(65, 106, 238)" }} />
-            </IconButton>
-          </div>{" "}
+            <Typography variant="h4">Finishes</Typography>
+            <div>
+              <IconButton onClick={handleOpen}>
+                <Add style={{ color: "rgb(65, 106, 238)" }} />
+              </IconButton>
+            </div>{" "}
+          </div>
         </div>
-      </div>
-      <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
-        <div className="hardwareTable">
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={finishesData}
-            columns={userColumnsHardware.concat(actionColumn)}
-            paginationModel={{ page: 0, pageSize: 8 }}
-          />
-        </div>
+        <Box sx={{ border: "1px solid #EAECF0", margin: 2, p: 0 }}>
+          <div className="hardwareTable">
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={finishesData}
+              columns={userColumnsHardware.concat(actionColumn)}
+              paginationModel={{ page: 0, pageSize: 8 }}
+            />
+          </div>
+        </Box>
+
+        <AddEditFinish
+          open={open}
+          close={handleClose}
+          data={edit}
+          isEdit={isEdit}
+          finishesRefetch={finishesRefetch}
+          showSnackbar={showSnackbar}
+        />
+
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
-
-      <AddEditFinish
-        open={open}
-        close={handleClose}
-        data={edit}
-        isEdit={isEdit}
-        finishesRefetch={finishesRefetch}
-        showSnackbar={showSnackbar}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
-      />
     </>
   );
 };

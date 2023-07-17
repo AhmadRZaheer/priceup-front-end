@@ -43,7 +43,7 @@ const DefaultComponentHeader = ({ selected }) => {
           }}
         >
         
-          <Button variant="contained"> Update</Button>
+          <Button sx={{backgroundColor: "#8477DA", boxShadow: 0,}} variant="contained"> Update</Button>
         </div>{" "}
       </div>
 

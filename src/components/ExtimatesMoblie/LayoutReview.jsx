@@ -14,17 +14,20 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getTotal,
+  measumentSide,
   setInputContent,
+  setNavigation,
   setTotal,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
+import Snackbars from "../Model/SnackBar";
 
-const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
-  console.log(doorDetail, "doorDetail in mobile view");
-
+const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -142,6 +145,29 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
     "selected items",
     totalPrice
   );
+  const handleBoxClick = () => {
+    dispatch(setNavigation("summary"));
+  };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
+  console.log(estimatesData, "estimatesData12");
   return (
     <>
       <Box
@@ -151,8 +177,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
 
           display: "flex",
           alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
+
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -175,7 +200,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ display: { md: "none", xs: "block" } }}>
             <ChevronLeftOutlined
               onClick={() => {
-                setHandleEstimatesPages("measurements");
+                dispatch(setNavigation("measurements"));
               }}
               sx={{ fontSize: 34, paddingTop: 0.4 }}
             />
@@ -279,6 +304,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.hardwareFinishes}
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -300,6 +326,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.handles}
                       title={"Handles"}
                       type={"handles"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.handles.count}
                     />
@@ -322,6 +349,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.hinges}
                       title={"Hinges"}
                       type={"hinges"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.hinges.count}
                     />
@@ -346,6 +374,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                         menuOptions={estimatesData?.wallClamp}
                         title={"Wall Clamps"}
                         type={"wallClamp"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.wallClamp.count}
                       />
@@ -353,6 +382,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                         menuOptions={estimatesData?.sleeveOver}
                         title={"Sleeve Over"}
                         type={"sleeveOver"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.sleeveOver.count}
                       />
@@ -360,18 +390,20 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                         menuOptions={estimatesData?.glassToGlass}
                         title={"Glass to Glass"}
                         type={"glassToGlass"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={
                           selectedContent.mounting.clamps.glassToGlass.count
                         }
                       />
+                      <MenuList
+                        menuOptions={estimatesData?.mountingChannel}
+                        title={"Channel"}
+                        type={"channel"}
+                        showSnackbar={showSnackbar}
+                        // setSelectedContent={setSelectedContent}
+                      />
                     </Box>
-                    <MenuList
-                      menuOptions={estimatesData?.mountingChannel}
-                      title={"Channel"}
-                      type={"channel"}
-                      // setSelectedContent={setSelectedContent}
-                    />
                   </Box>
                 </Box>
                 <Box
@@ -391,6 +423,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.glassType}
                       title={" Glass type"}
                       type={"glassType"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       thickness={selectedContent.glassType.thickness}
                     />
@@ -413,6 +446,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.slidingDoorSystem}
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
                     />
@@ -435,6 +469,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.header}
                       title={"Header"}
                       type={"header"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
                     />
@@ -457,6 +492,7 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                       menuOptions={estimatesData?.glassTreatment}
                       title={"Glass treatment"}
                       type={"glassTreatment"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -476,7 +512,9 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   <Box sx={{ width: "100%" }}>
                     <MenuList
                       menuOptions={estimatesData?.addOns}
-                      title={"Add ons:"}
+                      title={"Add ons"}
+                      type={"addOns"}
+                      showSnackbar={showSnackbar}
                     />
                   </Box>
                 </Box>
@@ -508,12 +546,23 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      // InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -557,12 +606,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -606,12 +665,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -657,12 +726,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -707,12 +786,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -758,12 +847,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -809,12 +908,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -860,12 +969,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -911,12 +1030,22 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -1026,7 +1155,10 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("measurements")}
+              // onClick={() => setHandleEstimatesPages("measurements")}
+              onClick={() => {
+                dispatch(setNavigation("measurements"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",
@@ -1043,14 +1175,28 @@ const LayoutReview = ({ setHandleEstimatesPages, doorDetail }) => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
+              disable={selectedContent?.hardwareFinishes === null}
               variant="contained"
-              onClick={() => setHandleEstimatesPages("summary")}
+              // onClick={() => setHandleEstimatesPages("summary")}
+              onClick={handleBoxClick}
+              sx={{
+                backgroundColor: "#8477da",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
             >
               {" "}
               Next
             </Button>
           </Box>
         </Box>
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
     </>
   );

@@ -10,21 +10,23 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-import { Box, CircularProgress, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  getContent,
   setContent,
   setCounters,
   setThickness,
+  updateAddOnCount,
 } from "../../redux/estimateCalculations";
 
 const MenuList = ({
   menuOptions,
   title,
   type,
-  setSelectedContent,
+  showSnackbar,
   count,
   thickness,
 }) => {
@@ -32,6 +34,25 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(null);
+  const [sleeveOverCount, setSleeveOverCount] = useState(0);
+  const [towelBarsCount, setTowelBarsCount] = useState(0);
+  const selectedContent = useSelector(getContent);
+  console.log(selectedContent.hardwareFinishes, "selectedContent12");
+
+  // Handle functions for each item
+  const handleSleeveOverCount = (count) => {
+    if (count >= 0) {
+      setSleeveOverCount(count);
+      dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
+    }
+  };
+
+  const handleTowelBarsCount = (count) => {
+    if (count >= 0) {
+      setTowelBarsCount(count);
+      dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
+    }
+  };
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
@@ -49,14 +70,28 @@ const MenuList = ({
     setThicknessVal(thickness);
     dispatch(setThickness(thickness));
   };
+  const opneClose = () => {
+    if (
+      selectedContent.hardwareFinishes !== null ||
+      ["hardwareFinishes"].includes(type)
+    )
+      setAnchorEl(!anchorEl);
+    else showSnackbar("Please select 'hardwareFinishes' first", "warning");
+  };
 
   return (
     <Box>
       <Box
-        sx={{ display: "flex", width: "100%", justifyContent: "space-between" }}
+        sx={{
+          display: "flex",
+          width: "100%",
+          justifyContent: "space-between",
+          alignItems: "center",
+          pb: 1,
+        }}
       >
         <Button
-          onClick={() => setAnchorEl(!anchorEl)}
+          onClick={opneClose}
           id="basic-button"
           sx={{ color: { md: "#000000 !important ", xs: "white" } }}
         >
@@ -88,6 +123,7 @@ const MenuList = ({
               gap: 2,
               color: { md: "#000000  ", xs: "white" },
               alignSelf: "flex-end",
+              py: 1.5,
             }}
           >
             <AddCircleOutline
@@ -115,7 +151,26 @@ const MenuList = ({
               select
               size="small"
               variant="outlined"
-              style={{ width: "100%", background: "white" }}
+              InputProps={{
+                style: {
+                  color: "white", // Change the color of the input text
+                },
+                inputProps: { min: 0, max: 50 },
+              }}
+              InputLabelProps={{
+                style: {
+                  color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                },
+              }}
+              sx={{
+                border: { md: "none", xs: "2px solid #423f57" },
+                borderRadius: { md: 0, xs: 2 },
+                color: { md: "black", xs: "white" },
+                background: "#14112c",
+                width: "100%",
+                mb: 1,
+              }}
+              // style={{ width: "100%", background: "white" }}
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
               // onChange={formik.handleChange} ()=>handleThicknessSet()
@@ -169,17 +224,72 @@ const MenuList = ({
                   gap: 2,
                   alignItems: "center",
                   width: { md: "100%", xs: "95%" },
+                  justifyContent: "space-between",
                 }}
               >
-                <img
-                  width={"25px"}
-                  height={"25px"}
-                  src={`${backendURL}/${item?.image}`}
-                  alt="Selected"
-                />
-                <Box sx={{ color: { md: "#000000 ", xs: "white" } }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <img
+                    width={"25px"}
+                    height={"25px"}
+                    src={`${backendURL}/${item?.image}`}
+                    alt="Selected"
+                  />
                   <Typography>{item?.name}</Typography>
-                  {/* <Typography>{item.price}</Typography> */}
+                </Box>
+                <Box>
+                  {item?.slug === "sleeve-over" && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-around",
+                        gap: 2,
+                        color: { md: "#000000  ", xs: "white" },
+                        alignSelf: "flex-end",
+                      }}
+                    >
+                      <AddCircleOutline
+                        onClick={() =>
+                          handleSleeveOverCount(sleeveOverCount + 1)
+                        }
+                        sx={{ color: "#98A2B3" }}
+                      />
+                      <Typography>{sleeveOverCount}</Typography>
+                      <RemoveCircleOutline
+                        onClick={() =>
+                          handleSleeveOverCount(sleeveOverCount - 1)
+                        }
+                        sx={{ color: "#98A2B3" }}
+                      />
+                    </Box>
+                  )}
+                  <Box>
+                    {item?.slug === "towel-bars" && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          color: { md: "#000000  ", xs: "white" },
+                          alignSelf: "flex-end",
+                        }}
+                      >
+                        <AddCircleOutline
+                          onClick={() =>
+                            handleTowelBarsCount(towelBarsCount + 1)
+                          }
+                          sx={{ color: "#98A2B3" }}
+                        />
+                        <Typography>{towelBarsCount}</Typography>
+                        <RemoveCircleOutline
+                          onClick={() =>
+                            handleTowelBarsCount(towelBarsCount - 1)
+                          }
+                          sx={{ color: "#98A2B3" }}
+                        />
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </MenuItem>
