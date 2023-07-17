@@ -10,7 +10,7 @@ import {
   RemoveCircleOutline,
 } from "@mui/icons-material";
 
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,7 +84,7 @@ const MenuList = ({
       setAnchorEl(!anchorEl);
     else showSnackbar("Please select 'hardwareFinishes' first", "warning");
   };
-
+console.log(menuOptions, "menuOptions")
   return (
     <Box>
       <Box
@@ -204,6 +204,7 @@ const MenuList = ({
           </Box>
         )}
       </Box>
+      
       {anchorEl ? (
         <Box
           sx={{
@@ -212,7 +213,21 @@ const MenuList = ({
             color: { md: "#000000", xs: "white" },
           }}
         >
-          {menuOptions?.map((item) => (
+           {menuOptions ===  undefined ? (
+                  <Box
+                    sx={{
+                      width: 40,
+                      m: "auto",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: 150,
+                    }}
+                  >
+                    <CircularProgress />
+               </Box>
+                ) : (
+          menuOptions?.map((item) => (
             <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
               <Box
                 sx={{
@@ -299,7 +314,8 @@ const MenuList = ({
                 </Box>
               </Box>
             </MenuItem>
-          ))}
+          ))
+          )}
         </Box>
       ) : (
         ""

@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useState } from "react";
 
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
@@ -31,7 +31,7 @@ export const boxStyles = {
   // position: "relative",
 };
 const Layout = () => {
-  const { data: layouts, refetch: defaultDataRefetch } = useFetchDataDefault();
+  const { data: layouts, refetch: defaultDataRefetch, isFetching: loading } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   console.log(selectedData, "selectedData11");
@@ -109,6 +109,7 @@ const Layout = () => {
             sx={{
               width: { md: "94%", sm: "98%", xs: "91.3%" },
               margin: "auto",
+              minHeight: 700,
               borderRadius: { md: "12px", xs: 0 },
               boxShadow:
                 "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -140,7 +141,13 @@ const Layout = () => {
                 collaborate on this project.
               </Typography>
             </Box>
+            {loading ? (
+              <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 700}}>
+              <CircularProgress />
+              </Box>
+            ) : (
             <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
+              
               {layouts.map((layout) => (
                 <Box
                   key={layout._id}
@@ -169,10 +176,12 @@ const Layout = () => {
                   <Typography sx={{ font: "18px" }}>{layout?.name}</Typography>
                 </Box>
               ))}
+              
               <Box sx={boxStyles}>
                 <Typography sx={{ font: "18px" }}>Custom</Typography>
               </Box>
             </Grid>
+            )}
             <Box
               sx={{
                 display: "flex",

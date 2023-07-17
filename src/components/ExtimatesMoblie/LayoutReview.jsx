@@ -265,10 +265,12 @@ const LayoutReview = () => {
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
+              maxHeight: "60vh",
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               margin: { md: 0, xs: "auto" },
+              overflow: "auto"
             }}
           >
             {/* LeftSide */}

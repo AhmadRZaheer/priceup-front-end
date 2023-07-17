@@ -112,6 +112,10 @@ const Summary = ({ handleOpen }) => {
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
+              minHeight: "50vh",
+              maxHeight: "62vh",
+              // height: "60vh",
+              overflow: "auto"
             }}
           >
             {/* LeftSide */}

@@ -23,19 +23,19 @@ export default function ExitingQuotes() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const Logout = () => {
-    console.log("hello world");
-    dispatch(logoutHandler());
+  // const Logout = () => {
+  //   console.log("hello world");
+  //   dispatch(logoutHandler());
 
-    navigate("/login");
-  };
+  //   navigate("/login");
+  // };
 
   return (
     <>
       <Box
         sx={{
-          marginTop: 7.5,
-          height: "96vh",
+          marginTop: 8,
+          height: "92.8vh",
           color: "#ffff",
           backgroundColor: "rgba(16, 13, 36, 1)",
           display: "flex",
@@ -55,16 +55,18 @@ export default function ExitingQuotes() {
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
               Existing Quotes
             </Typography>
-            <IconButton onClick={Logout} sx={{ height: 25 }}>
+            {/* <IconButton onClick={Logout} sx={{ height: 25 }}>
               <img src={logout} alt="image of log out icon" />
-            </IconButton>
+            </IconButton> */}
           </Box>
 
           <Box
-            sx={{ paddingX: 2, marginTop: 2, height: "62vh", overflow: "auto" }}
+            sx={{ paddingX: 2, marginTop: 2, height: "40vh",overflow: "auto"}}
           >
             {isFetching ? (
-              <CircularProgress />
+              <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 600}}>
+              <CircularProgress sx={{}} />
+              </Box>
             ) : (
               estimates?.map((item) => (
                 <Box
