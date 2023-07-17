@@ -12,10 +12,15 @@ import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 import { logoutHandler } from "../../redux/userAuth";
+import { useState } from "react";
 
 export default function ExitingQuotes() {
+  const [selectedQuote, setSelectedQuote] = useState(null);
+
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
   console.log(estimates, "estimates in existing");
+  console.log(selectedQuote, "selectedQuote in existing");
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const Logout = () => {
@@ -78,7 +83,11 @@ export default function ExitingQuotes() {
                     <Typography color="red" marginRight={3}>
                       {/* {item?.updatedAt} */}
                     </Typography>
-                    <IconButton sx={{ marginRight: 1, height: 25 }}>
+
+                    <IconButton
+                      onClick={() => setSelectedQuote(item?._id)}
+                      sx={{ marginRight: 1, height: 25 }}
+                    >
                       <img src={pencil} alt="image of pencil" />
                     </IconButton>
                   </Box>
@@ -87,7 +96,17 @@ export default function ExitingQuotes() {
             )}
           </Box>
         </Box>
-        <Box sx={{ paddingX: 2, py: 3, position:"fixed", bottom: 0, left: 0, width: "92%", borderTop: "1px solid rgba(102, 112, 133, 0.5)" }}>
+        <Box
+          sx={{
+            paddingX: 2,
+            py: 3,
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            width: "92%",
+            borderTop: "1px solid rgba(102, 112, 133, 0.5)",
+          }}
+        >
           <Button
             onClick={() => {
               dispatch(setNavigation("layout"));
