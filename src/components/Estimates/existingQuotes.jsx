@@ -133,7 +133,7 @@ export default function ExistingQuotes() {
           </Box>
         </Box>
 
-        <Box sx={{ backgroundColor: "white", width: "94%" }}>
+        <Box sx={{ backgroundColor: "white", width: "92%" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold" }}>
               Estimates Queue

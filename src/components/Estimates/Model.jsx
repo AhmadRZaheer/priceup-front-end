@@ -6,18 +6,31 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
+import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getContent,
+  getMeasumentSide,
+  getTotal,
+  selectedItem,
+  setNavigation,
+} from "../../redux/estimateCalculations";
 const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
   gap: 3,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 350,
-  bgcolor: "#ffff",
-  borderRadius: "4px",
-  p: 3,
+  // top: { md: "50%", xs: "76%" },
+  // left: { md: "50%", xs: "50%" },
+  top: "30%",
+  left: "40%",
+  // transform: "translate(-50%, -50%)",
+  width: 400,
+  height: "auto",
+  // bgcolor: "red",
+  borderRadius: { md: "4px" },
+  backgroundColor: "white",
+  zIndex: 2,
 };
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -29,8 +42,21 @@ const validationSchema = yup.object({
 export default function ClientDetailsModel({
   open,
   handleCancel,
-  SetlayoutMeasurementsOpen,
+  showSnackbar,
 }) {
+  const {
+    mutate,
+    isError: ErrorForAdd,
+    isSuccess: CreatedSuccessfully,
+  } = useCreateEstimates();
+  const estimatesContent = useSelector(getContent);
+  const estimatesTotal = useSelector(getTotal);
+  const estimatesLayout = useSelector(selectedItem);
+  const measurements = useSelector(getMeasumentSide);
+  console.log(estimatesContent?.addOns, "addon in model");
+  const data = estimatesContent?.addOns;
+  const addOnIds = data.map((obj) => obj._id);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -40,11 +66,82 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      // Handle form submission here
       console.log(values);
+      const estimate = {
+        layout_id: estimatesLayout?._id,
+        hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
+        handles: {
+          type: estimatesContent?.handles?.item?._id,
+          count: estimatesContent?.handles?.count,
+        },
+        hinges: {
+          type: estimatesContent?.hinges?.item?._id,
+          count: estimatesContent?.hinges?.count,
+        },
+        mounting: {
+          clamps: {
+            wallClamp: {
+              type: estimatesContent?.mounting?.clamps?.wallClamp?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.wallClamp?.count,
+            },
+            sleeveOver: {
+              type: estimatesContent?.mounting?.clamps?.sleeveOver?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.sleeveOver?.count,
+            },
+            glassToGlass: {
+              type: estimatesContent?.mounting?.clamps?.glassToGlass?.item?._id,
+              count: estimatesContent?.mounting?.clamps?.glassToGlass?.count,
+            },
+          },
+          channel: estimatesContent?.mounting?.channel?.item?._id,
+          activeType: estimatesContent?.mounting?.activeType,
+        },
+        glassType: {
+          type: estimatesContent?.glassType?.item?._id,
+          thickness: estimatesContent?.glassType?.count,
+        },
+        glassTreatment: estimatesContent?.glassTreatment?._id,
+        slidingDoorSystem: {
+          type: estimatesContent?.slidingDoorSystem?.item?._id,
+          count: estimatesContent?.slidingDoorSystem?.count,
+        },
+        header: {
+          type: estimatesContent?.header?.item?._id,
+          count: estimatesContent?.slidingDoorSystem?.count,
+        },
+        oneInchHoles: estimatesContent?.oneInchHoles,
+        hingeCut: estimatesContent?.hingeCut,
+        clampCut: estimatesContent?.clampCut,
+        notch: estimatesContent?.notch,
+        outages: estimatesContent?.outages,
+        mitre: estimatesContent?.mitre,
+        polish: estimatesContent?.polish,
+        people: estimatesContent?.people,
+        hours: estimatesContent?.hours,
+        cost: Number(estimatesTotal),
+        addOns: addOnIds,
+        sleeveOverCount: estimatesContent?.sleeveOverCount,
+        towelBarsCount: estimatesContent?.sleeveOverCount,
+        measurements: measurements,
+      };
+      mutate({ customerData: values, estimateData: estimate });
+      handleCancel();
+      window.location.href = "/Estimates";
     },
   });
+
+  React.useEffect(() => {
+    if (CreatedSuccessfully) {
+      showSnackbar("Estimate created successfully", "success");
+      // window.location.href = "/";
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAdd) {
+      const errorMessage = ErrorForAdd.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfully, ErrorForAdd]);
   console.log(formik.values);
+
   return (
     <div>
       <Modal
@@ -56,137 +153,233 @@ export default function ClientDetailsModel({
           <Box sx={style}>
             <Box
               sx={{
-                display: "flex",
+                background: {
+                  md: "#ffff",
+                  xs: "linear-gradient(to top right, #625f78 16%, #312969, #100d24 82%)",
+                },
+                padding: 3,
+                borderTopLeftRadius: { md: "4px", xs: 30 },
+                borderTopRightRadius: { md: "4px", xs: 30 },
+                color: { md: "black", xs: "white" },
               }}
             >
-              <Typography>Clients Details</Typography>
-            </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  paddingBottom: 2,
+                }}
+              >
+                <Typography>Clients Details</Typography>
+              </Box>
 
-            <Box sx={{ display: "flex", gap: 4 }}>
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                  }}
-                >
-                  <label htmlFor="firstName">First Name</label>
-                  <TextField
-                    id="firstName"
-                    name="firstName"
-                    placeholder="First Name"
-                    size="small"
-                    variant="outlined"
-                    value={formik.values.firstName}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.firstName && formik.errors.firstName}
-                    helperText={
-                      formik.touched.firstName && formik.errors.firstName
-                    }
-                  />
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                  }}
-                >
-                  <label htmlFor="lastName">Last Name</label>
-                  <TextField
-                    id="lastName"
-                    name="lastName"
-                    placeholder="Last Name"
-                    size="small"
-                    variant="outlined"
-                    value={formik.values.lastName}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.lastName && formik.errors.lastName}
-                    helperText={
-                      formik.touched.lastName && formik.errors.lastName
-                    }
-                  />
+              <Box sx={{ display: "flex", gap: 4 }}>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      paddingY: { md: 0, xs: 2 },
+                    }}
+                  >
+                    <Box sx={{ display: { md: "block", xs: "none" } }}>
+                      <label htmlFor="firstName">First Name</label>
+                    </Box>
+
+                    <TextField
+                      id="firstName"
+                      name="firstName"
+                      placeholder="First Name"
+                      size="small"
+                      variant="outlined"
+                      InputProps={{
+                        style: {
+                          color: "black", 
+                          borderRadius:  4,
+                          border: "1px solid #cccccc",
+                          backgroundColor: "white"
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)",
+                        },
+                      }}
+                      sx={{
+                        color: { md: "black", xs: "white" },
+                        width: "100%",
+                      }}
+                      value={formik.values.firstName}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.firstName && formik.errors.firstName
+                      }
+                      helperText={
+                        formik.touched.firstName && formik.errors.firstName
+                      }
+                    />
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      paddingY: { md: 0, xs: 2 },
+                    }}
+                  >
+                    <Box sx={{ display: { md: "block", xs: "none" } }}>
+                      {" "}
+                      <label htmlFor="lastName">Last Name</label>
+                    </Box>
+                    <TextField
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Last Name"
+                      size="small"
+                      variant="outlined"
+                      value={formik.values.lastName}
+                      onChange={formik.handleChange}
+                      InputProps={{
+                        style: {
+                          color: "black", 
+                          borderRadius:  4,
+                          border: "1px solid #cccccc",
+                          backgroundColor: "white"
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)",
+                        },
+                      }}
+                      sx={{
+                        color: { md: "black", xs: "white" },
+                        width: "100%",
+                      }}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.lastName && formik.errors.lastName}
+                      helperText={
+                        formik.touched.lastName && formik.errors.lastName
+                      }
+                    />
+                  </Box>
                 </Box>
               </Box>
-            </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-              }}
-            >
-              <label htmlFor="email">Client Email address</label>
-              <TextField
-                id="email"
-                name="email"
-                placeholder="Client Email address"
-                size="small"
-                variant="outlined"
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.email && formik.errors.email}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 1,
-              }}
-            >
-              <label htmlFor="address">Client address</label>
-              <TextField
-                id="address"
-                name="address"
-                placeholder="Client address"
-                size="small"
-                variant="outlined"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.address && formik.errors.address}
-                helperText={formik.touched.address && formik.errors.address}
-              />
-            </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  paddingBottom: { md: 0, xs: 2 },
+                }}
+              >
+                <Box sx={{ display: { md: "block", xs: "none" } }}>
+                  <label htmlFor="email">Client Email address</label>
+                </Box>
+                <TextField
+                  id="email"
+                  name="email"
+                  placeholder="Client Email address"
+                  size="small"
+                  variant="outlined"
+                  value={formik.values.email}
+                  InputProps={{
+                    style: {
+                      color: "black", 
+                      borderRadius:  4,
+                      border: "1px solid #cccccc",
+                      backgroundColor: "white"
+                    },
+                    inputProps: { min: 0, max: 50 },
+                  }}
+                  InputLabelProps={{
+                    style: {
+                      color: "rgba(255, 255, 255, 0.5)",
+                    },
+                  }}
+                  sx={{
+                    color: { md: "black", xs: "white" },
+                    width: "100%",
+                  }}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                }}
+              >
+                <Box sx={{ display: { md: "block", xs: "none" } }}>
+                  {" "}
+                  <label htmlFor="address">Client address</label>
+                </Box>
+                <TextField
+                  id="address"
+                  name="address"
+                  placeholder="Client address"
+                  size="small"
+                  variant="outlined"
+                  value={formik.values.address}
+                  InputProps={{
+                    style: {
+                      color: "black", 
+                      borderRadius:  4,
+                      border: "1px solid #cccccc",
+                      backgroundColor: "white"
+                    },
+                    inputProps: { min: 0, max: 50 },
+                  }}
+                  InputLabelProps={{
+                    style: {
+                      color: "rgba(255, 255, 255, 0.5)",
+                    },
+                  }}
+                  sx={{
+                    color: { md: "black", xs: "white" },
+                    width: "100%",
+                  }}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.address && formik.errors.address}
+                  helperText={formik.touched.address && formik.errors.address}
+                />
+              </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                gap: 1,
-                marginTop: 2,
-                justifyContent: "end",
-              }}
-            >
-              <Button
-                fullWidth
+              <Box
                 sx={{
-                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                  color: "#344054",
-                  textTransform: "initial",
-                  border: "1px solid #D0D5DD",
+                  display: "flex",
+                  gap: 1,
+                  marginTop: 2,
+                  justifyContent: "end",
                 }}
-                onClick={handleCancel}
               >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                sx={{
-                  textTransform: "initial",
-                }}
-                fullWidth
-                variant="contained"
-                onClick={() => SetlayoutMeasurementsOpen(true)}
-              >
-                Save
-              </Button>
+                {/* <Box onClick={handleCancel}> */}
+                <Button
+                  type="submit"
+                  sx={{
+                    textTransform: "initial",
+                    backgroundColor: "#8477da",
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                    },
+                  }}
+                  fullWidth
+                  variant="contained"
+                  // onClick={handleCancel}
+                >
+                  Save
+                </Button>
+                {/* </Box> */}
+              </Box>
             </Box>
           </Box>
         </form>

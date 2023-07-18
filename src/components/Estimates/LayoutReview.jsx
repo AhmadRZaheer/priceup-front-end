@@ -11,12 +11,18 @@ import {
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
-import { getContent, getTotal, setInputContent, setNavigation, setTotal } from "../../redux/estimateCalculations";
+import {
+  getContent,
+  getTotal,
+  setInputContent,
+  setNavigation,
+  setTotal,
+} from "../../redux/estimateCalculations";
 import ChannelType from "../ExtimatesMoblie/channelOrClamp";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import Summary from "./Summery";
 
-const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
+const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
   const { data: estimatesData, refetch: estimatesRefetch } =
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
@@ -177,8 +183,8 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
           alignItems: "center",
 
           flexDirection: "column",
-          p:  2,
-          gap:  4,
+          p: 2,
+          gap: 4,
         }}
       >
         <Typography
@@ -203,7 +209,7 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
             display: "flex",
             flexDirection: "column",
             paddingTop: 2,
-           
+
             marginBottom: 4.6,
           }}
         >
@@ -237,7 +243,7 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               margin: { md: 0, xs: "auto" },
-              overflow: "auto"
+              overflow: "auto",
             }}
           >
             {/* LeftSide */}
@@ -590,10 +596,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       // InputProps={{ inputProps: { min: 0, max: 50 } }}
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -649,10 +655,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -708,10 +714,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -769,10 +775,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -829,10 +835,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -890,10 +896,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -951,10 +957,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -1012,10 +1018,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -1073,10 +1079,10 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  10,
+                          color: "black",
+                          borderRadius: 10,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -1108,59 +1114,59 @@ const LayoutReview = ({setClientDetailOpen, setHandleEstimatesPages}) => {
               </Box>
             </Box>
             {/* rightSide */}
-            <Box sx={{width: '46%'}}>
-            <Summary  />
+            <Box sx={{ width: "46%" }}>
+              <Summary />
             </Box>
           </Box>
           <Box
-          sx={{
-            display: "flex",
-            // gap: 2,
-            justifyContent: "space-between",
-            width: "96%",
-            paddingX: 2,
-          }}
-        >
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              onClick={() => setHandleEstimatesPages("Measurments")}
-              // onClick={() => {
-              //   dispatch(setNavigation("measurements"));
-              // }}
-              sx={{
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                color: "#344054",
-                textTransform: "initial",
-                border: "1px solid #D0D5DD",
-                backgroundColor: { md: "transparent", xs: "white" },
-              }}
-            >
-              {" "}
-              Back
-            </Button>
-          </Box>
+            sx={{
+              display: "flex",
+              // gap: 2,
+              justifyContent: "space-between",
+              width: "96%",
+              paddingX: 2,
+            }}
+          >
+            <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+              <Button
+                fullWidth
+                onClick={() => setHandleEstimatesPages("Measurments")}
+                // onClick={() => {
+                //   dispatch(setNavigation("measurements"));
+                // }}
+                sx={{
+                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                  color: "#344054",
+                  textTransform: "initial",
+                  border: "1px solid #D0D5DD",
+                  backgroundColor: { md: "transparent", xs: "white" },
+                }}
+              >
+                {" "}
+                Back
+              </Button>
+            </Box>
 
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              disabled={selectedContent?.hardwareFinishes === null}
-              variant="contained"
-              onClick={() => setClientDetailOpen(true)}
-              sx={{
-                backgroundColor: "#8477da",
-                "&:hover": {
+            <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+              <Button
+                fullWidth
+                disabled={selectedContent?.hardwareFinishes === null}
+                variant="contained"
+                onClick={() => setClientDetailOpen(true)}
+                sx={{
                   backgroundColor: "#8477da",
-                },
-              }}
-            >
-              {" "}
-              Next
-            </Button>
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
+                }}
+              >
+                {" "}
+                Next
+              </Button>
+            </Box>
           </Box>
         </Box>
-        </Box>
-        
+
         <Snackbars
           open={snackbar.open}
           message={snackbar.message}

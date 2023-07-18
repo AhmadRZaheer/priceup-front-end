@@ -7,6 +7,9 @@ import ExistingQuotes from "./existingQuotes";
 import { NavLink } from "react-router-dom";
 import Layout from "./Layouts";
 import Summary from "./Summery";
+import Snackbars from "../Model/SnackBar";
+import { getPageNavigation } from "../../redux/estimateCalculations";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const boxStyles = {
@@ -29,6 +32,29 @@ const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
   const [StorePage, setStorePage] = useState("Layout");
+  const handleClose = () => setClientDetailOpen(false);
+  const handleOpen = () => setClientDetailOpen(true);
+  const Navigation = useSelector(getPageNavigation);
+  console.log(Navigation, "Navigation ");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
 
   return (
     <>
@@ -59,6 +85,13 @@ const Index = () => {
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
         SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
+        showSnackbar={showSnackbar}
+      />
+            <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
       />
     </>
   );
