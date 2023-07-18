@@ -68,10 +68,10 @@ const Sidebar = () => {
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/estimates" className="link">
+            <NavLink to="/Estimates" className="link">
               <li
                 className={` ${
-                  location.pathname === "/estimates" ? "active" : ""
+                  location.pathname === "/Estimates" ? "active" : ""
                 }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>

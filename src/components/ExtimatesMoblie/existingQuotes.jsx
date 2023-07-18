@@ -5,13 +5,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import logout from "../../Assets/estimates/log-out.svg";
 import pencil from "../../Assets/estimates/edit-2.svg";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
-import { logoutHandler } from "../../redux/userAuth";
 import { useState } from "react";
 
 export default function ExitingQuotes() {

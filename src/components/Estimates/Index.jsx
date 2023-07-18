@@ -1,9 +1,13 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import React, { useState } from "react";
-import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
+import Layout from "./Layouts";
+
+import Snackbars from "../Model/SnackBar";
+import { getPageNavigation } from "../../redux/estimateCalculations";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const boxStyles = {
@@ -25,6 +29,30 @@ const Index = () => {
   };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
+  const [StorePage, setStorePage] = useState("Layout");
+  const handleClose = () => setClientDetailOpen(false);
+  const handleOpen = () => setClientDetailOpen(true);
+  const Navigation = useSelector(getPageNavigation);
+  console.log(Navigation, "Navigation ");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
 
   return (
     <>
@@ -40,86 +68,28 @@ const Index = () => {
           paddingY: 4,
           borderTopLeftRadius: 30,
           borderBottomLeftRadius: 30,
-
         }}
       >
-        {!layoutMeasurementsOpen ? (
-          <Box
-            sx={{
-              width: "70%",
-              margin: "auto",
-
-              display: "flex",
-              alignItems: "center",
-              //   background: "blue",
-              marginTop: 15,
-              flexDirection: "column",
-              p: 2,
-              gap: 4,
-            }}
-          >
-            <Typography textAlign={"center"} variant="h4">
-              Create New Qoute
-            </Typography>
-            <Box
-              sx={{
-                width: "94%",
-                margin: "auto",
-                borderRadius: "12px",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                border: "1px solid #EAECF0",
-                paddingX: 2,
-                paddingY: 4,
-                rowGap: 4,
-                // background: "green",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Box>
-                <Typography sx={{ font: "18px" }}>Slect Layout</Typography>
-                <Typography sx={{ color: "#667085", font: "14px" }}>
-                  Your new project has been created. Invite colleagues to
-                  collaborate on this project.
-                </Typography>
-              </Box>
-              <Grid container gap={4}>
-                {layouts.map((layout) => (
-                  <Box key={layout.id} sx={boxStyles}>
-                    <img src={layout.imageSrc} alt="Selected" />
-                    <Typography sx={{ font: "18px" }}>
-                      {layout.title}
-                    </Typography>
-                  </Box>
-                ))}
-                <Box sx={boxStyles}>
-                  <Typography sx={{ font: "18px" }}>Custom</Typography>
-                </Box>
-              </Grid>
-              <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <Box sx={{ width: "150px" }}>
-                  <Button
-                    onClick={() => setClientDetailOpen(true)}
-                    fullWidth
-                    variant="contained"
-                  >
-                    {" "}
-                    Next
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        ) : (
-          //   <LayoutMeasurements />
-          <LayoutReview />
+        {StorePage === "Layout" && <Layout setStorePage={setStorePage} />}
+        {StorePage === "Measurments" && (
+          <LayoutMeasurements setHandleEstimatesPages={setStorePage} />
+        )}
+        {StorePage === "review" && (        
+          <LayoutReview setHandleEstimatesPages={setStorePage} setClientDetailOpen={setClientDetailOpen} />
         )}
       </Box>
+
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
         SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
+        showSnackbar={showSnackbar}
+      />
+            <Snackbars
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.severity}
+        closeSnackbar={closeSnackbar}
       />
     </>
   );
