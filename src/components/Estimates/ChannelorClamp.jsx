@@ -1,11 +1,10 @@
 import { useState } from "react";
+
 import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  ChevronRight,
-} from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import { ChevronRight } from "@mui/icons-material";
+import { Box, TextField, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -17,7 +16,7 @@ import {
 } from "../../redux/estimateCalculations";
 import MenuList from "./MenuList";
 
-const ChannelType = ({
+const ChannelTypeDesktop = ({
   menuOptions,
   title,
   type,
@@ -125,7 +124,7 @@ const ChannelType = ({
               display: "flex",
               width: "100%",
               // backgroundColor: "red",
-              width: "95vw",
+              // width: "95vw",
             }}
           >
             {menuOptions?.map((item, index) => (
@@ -137,7 +136,7 @@ const ChannelType = ({
                     border:
                       item === selectedContent?.mounting?.activeType
                         ? "2px solid blue"
-                        : "1px solid #EAECF0",
+                        : "1px solid black",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                     // border: "1px solid #EAECF0",
@@ -213,4 +212,4 @@ const ChannelType = ({
   );
 };
 
-export default ChannelType;
+export default ChannelTypeDesktop;

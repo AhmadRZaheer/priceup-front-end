@@ -1,11 +1,9 @@
-import { Box, Button, Typography } from "@mui/material";
-import { ChevronLeftOutlined } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
 import {
   getContent,
   getMeasumentSide,
   getTotal,
   selectedItem,
-  setNavigation,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";

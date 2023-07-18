@@ -2,14 +2,11 @@ import {
   Box,
   Button,
   CircularProgress,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { layouts } from "../../data/data";
-import ClientDetailsModel from "./Model";
-import door from "../../Assets/door.png";
+import React from "react";
+
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +15,6 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
-import { ChevronLeftOutlined } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 
 const LayoutMeasurements = ({ setHandleEstimatesPages }) => {

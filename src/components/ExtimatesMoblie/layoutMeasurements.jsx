@@ -2,12 +2,10 @@ import {
   Box,
   Button,
   CircularProgress,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
 import React from "react";
-import door from "../../Assets/door.png";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
@@ -18,7 +16,7 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
-const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
+const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
 
   // const validationSchema = Yup.object().shape({

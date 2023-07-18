@@ -1,14 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-
 import MenuList from "./MenuList";
-
-import {
-  AddCircleOutline,
-  ChevronLeftOutlined,
-  RemoveCircleOutline,
-} from "@mui/icons-material";
-
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
 import {
@@ -18,9 +10,9 @@ import {
   setNavigation,
   setTotal,
 } from "../../redux/estimateCalculations";
-import ChannelType from "../ExtimatesMoblie/channelOrClamp";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import Summary from "./Summery";
+import ChannelTypeDesktop from "./ChannelorClamp";
 
 const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
   const { data: estimatesData, refetch: estimatesRefetch } =
@@ -383,73 +375,65 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       />
                     </Box>
                   </Box> */}
-                  <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
-                        <ChannelType
-                          menuOptions={estimatesData?.channelOrClamps}
-                          title={"Mounting"}
-                          type={"mounting"}
-                          showSnackbar={showSnackbar}
-                          // wallClamp={estimatesData?.wallClamp}
-                          // setSelectedContent={setSelectedContent}
-                          // count={
-                          //   selectedContent.mounting.clamps.wallClamp.count
-                          // }
-                        />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignContent: "space-between",
-                          }}
-                        >
-                          {selectedContent.mounting.activeType === "clamps" && (
-                            <>
-                              <MenuList
-                                menuOptions={estimatesData?.wallClamp}
-                                title={"Wall Clamps"}
-                                type={"wallClamp"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.wallClamp
-                                    .count
-                                }
-                              />
-                              <MenuList
-                                menuOptions={estimatesData?.sleeveOver}
-                                title={"Sleeve Over"}
-                                type={"sleeveOver"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.sleeveOver
-                                    .count
-                                }
-                              />
-                              <MenuList
-                                menuOptions={estimatesData?.glassToGlass}
-                                title={"Glass to Glass"}
-                                type={"glassToGlass"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.glassToGlass
-                                    .count
-                                }
-                              />
-                            </>
-                          )}
 
-                          {selectedContent.mounting.activeType ===
-                            "channel" && (
+                  <Box sx={{ width: "100%", display: "flex" }}>
+                    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+                      <ChannelTypeDesktop
+                        menuOptions={estimatesData?.channelOrClamps}
+                        title={"Mounting"}
+                        type={"mounting"}
+                        showSnackbar={showSnackbar}
+                        estimatesData={estimatesData}
+                      />
+                      {/* <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignContent: "space-between",
+                        }}
+                      >
+                        {selectedContent.mounting.activeType === "clamps" && (
+                         <>
                             <MenuList
-                              menuOptions={estimatesData?.mountingChannel}
-                              title={"Channel"}
-                              type={"channel"}
+                              menuOptions={estimatesData?.wallClamp}
+                              title={"Wall Clamps"}
+                              type={"wallClamp"}
                               showSnackbar={showSnackbar}
+                              count={
+                                selectedContent.mounting.clamps.wallClamp.count
+                              }
                             />
-                          )}
-                        </Box>
-                      </Box>
+                            <MenuList
+                              menuOptions={estimatesData?.sleeveOver}
+                              title={"Sleeve Over"}
+                              type={"sleeveOver"}
+                              showSnackbar={showSnackbar}
+                              count={
+                                selectedContent.mounting.clamps.sleeveOver.count
+                              }
+                            />
+                            <MenuList
+                              menuOptions={estimatesData?.glassToGlass}
+                              title={"Glass to Glass"}
+                              type={"glassToGlass"}
+                              showSnackbar={showSnackbar}
+                              count={
+                                selectedContent.mounting.clamps.glassToGlass
+                                  .count
+                              }
+                            />
+                          </>
+                        )} 
+
+                        {selectedContent.mounting.activeType === "channel" && (
+                          <MenuList
+                            menuOptions={estimatesData?.mountingChannel}
+                            title={"Channel"}
+                            type={"channel"}
+                            showSnackbar={showSnackbar}
+                          />
+                        )}
+                      </Box> */}
                     </Box>
                   </Box>
                 </Box>

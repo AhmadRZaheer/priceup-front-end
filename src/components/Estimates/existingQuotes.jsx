@@ -1,11 +1,5 @@
-// import { GifBoxTwoTone } from "@mui/icons-material";
-import {
-  AddCircle,
-  CreateOutlined,
-  Delete,
-  DeleteOutline,
-} from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
+import { AddCircle, CreateOutlined, DeleteOutline } from "@mui/icons-material";
+import { Box, Typography } from "@mui/material";
 import image1 from "../../Assets/hourglass.svg";
 import image2 from "../../Assets/ok.svg";
 import image3 from "../../Assets/cancel.svg";
@@ -28,7 +22,7 @@ export default function ExistingQuotes() {
           overflow: "auto",
           backgroundColor: "#f5f5f5",
           gap: 5,
-          pt: 4
+          pt: 4,
         }}
       >
         <Box sx={{ display: "flex", gap: 5 }}>
@@ -45,8 +39,12 @@ export default function ExistingQuotes() {
           >
             <img style={{ width: "20%", height: "100%" }} src={image1} alt="" />
             <Box sx={{ paddingLeft: 1 }}>
-              <Typography sx={{fontSize: 18, color: "#575761"}}>Pending</Typography>
-              <Typography color="#6676f2" fontSize={16}>211</Typography>
+              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+                Pending
+              </Typography>
+              <Typography color="#6676f2" fontSize={16}>
+                211
+              </Typography>
             </Box>
           </Box>
 
@@ -63,8 +61,12 @@ export default function ExistingQuotes() {
           >
             <img style={{ width: "20%", height: "100%" }} src={image2} alt="" />
             <Box sx={{ paddingLeft: 1 }}>
-              <Typography sx={{fontSize: 18, color: "#575761"}}>Approved</Typography>
-              <Typography color="#6676f2" fontSize={16}>0</Typography>
+              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+                Approved
+              </Typography>
+              <Typography color="#6676f2" fontSize={16}>
+                0
+              </Typography>
             </Box>
           </Box>
 
@@ -81,8 +83,12 @@ export default function ExistingQuotes() {
           >
             <img style={{ width: "20%", height: "100%" }} src={image3} alt="" />
             <Box sx={{ paddingLeft: 1 }}>
-              <Typography sx={{fontSize: 18, color: "#575761"}}>Voided</Typography>
-              <Typography color="#6676f2" fontSize={16}>131</Typography>
+              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+                Voided
+              </Typography>
+              <Typography color="#6676f2" fontSize={16}>
+                131
+              </Typography>
             </Box>
           </Box>
 
@@ -99,8 +105,12 @@ export default function ExistingQuotes() {
           >
             <img style={{ width: "20%", height: "100%" }} src={image4} alt="" />
             <Box sx={{ paddingLeft: 1 }}>
-              <Typography sx={{fontSize: 18, color: "#575761"}}>Invoice Total</Typography>
-              <Typography color="#6676f2" fontSize={16}>$28,956.00</Typography>
+              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+                Invoice Total
+              </Typography>
+              <Typography color="#6676f2" fontSize={16}>
+                $28,956.00
+              </Typography>
             </Box>
           </Box>
         </Box>
@@ -131,7 +141,9 @@ export default function ExistingQuotes() {
             >
               <Typography sx={{ width: 340 }}></Typography>
               <Typography sx={{ width: 300 }}></Typography>
-              <Typography sx={{ width: 180 }}>{new Date(item?.updatedAt).toLocaleString()}</Typography>
+              <Typography sx={{ width: 180 }}>
+                {new Date(item?.updatedAt).toLocaleString()}
+              </Typography>
               <Typography sx={{ width: 190 }}></Typography>
               <Typography sx={{ width: 180 }}></Typography>
               <Typography sx={{ width: 180 }}></Typography>

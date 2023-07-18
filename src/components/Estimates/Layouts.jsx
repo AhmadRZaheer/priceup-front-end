@@ -1,5 +1,4 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
-import { layouts } from "../../data/data";
 import { NavLink } from "react-router-dom";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -7,9 +6,7 @@ import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import {
   addSelectedItem,
   selectedItem,
-  setNavigation,
 } from "../../redux/estimateCalculations";
-import { ChevronLeftOutlined } from "@mui/icons-material";
 
 export default function Layout({ setStorePage }) {
   const boxStyles = {

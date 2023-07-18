@@ -1,24 +1,17 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import door from "../../Assets/estimates/layout1.svg";
-
 import MenuList from "./MenuList";
-import { glassType, hinges, menuOptions } from "../../data/data";
 import {
-  AddCircleOutline,
   ChevronLeftOutlined,
-  RemoveCircleOutline,
 } from "@mui/icons-material";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getTotal,
-  measumentSide,
   setInputContent,
   setNavigation,
   setTotal,
-  updateMeasurements,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
