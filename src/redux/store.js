@@ -5,6 +5,7 @@ import formSlice from "./formSlice";
 import userAuth from "./userAuth";
 import estimateCalculations from "./estimateCalculations";
 import selectedIdSlice from "./selectedIdSlice";
+import defaultSlice from "./defaultSlice";
 const store = configureStore({
   reducer: {
     hardware: hardwareReducer,
@@ -12,6 +13,7 @@ const store = configureStore({
     userAuth: userAuth,
     estimateCalculations: estimateCalculations,
     selectedIdSlice: selectedIdSlice,
+    defaultSlice: defaultSlice,
   },
 });
 

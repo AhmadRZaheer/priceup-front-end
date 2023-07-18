@@ -2,8 +2,15 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
+import { useDispatch } from "react-redux";
+import { setDefaultId } from "../../redux/defaultSlice";
 
-const layoutHeader = ({ showMore, types }) => {
+const LayoutHeader = ({ types }) => {
+  const dispatch = useDispatch();
+
+  const showMore = (id) => {
+    dispatch(setDefaultId(id));
+  };
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
@@ -92,4 +99,4 @@ const layoutHeader = ({ showMore, types }) => {
   );
 };
 
-export default layoutHeader;
+export default LayoutHeader;
