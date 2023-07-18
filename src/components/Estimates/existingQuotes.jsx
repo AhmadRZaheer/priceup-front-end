@@ -11,38 +11,10 @@ import image2 from "../../Assets/ok.svg";
 import image3 from "../../Assets/cancel.svg";
 import image4 from "../../Assets/calculator.svg";
 import { NavLink } from "react-router-dom";
+import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
 export default function ExistingQuotes() {
-  const data = [
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-    {
-      dataquotes: "7/13/2022",
-      status: "pending",
-    },
-  ];
+  const { data: estimates, isLoading, isFetching } = useGetEstimates();
   return (
     <>
       <Box
@@ -153,16 +125,16 @@ export default function ExistingQuotes() {
             <Typography sx={{ width: 60 }}></Typography>
           </Box>
 
-          {data.map((item) => (
+          {estimates?.map((item) => (
             <Box
               sx={{ display: "flex", borderBottom: "1px solid #f0ecec", p: 2 }}
             >
               <Typography sx={{ width: 340 }}></Typography>
               <Typography sx={{ width: 300 }}></Typography>
-              <Typography sx={{ width: 180 }}>{item.dataquotes}</Typography>
+              <Typography sx={{ width: 180 }}>{new Date(item?.updatedAt).toLocaleString()}</Typography>
               <Typography sx={{ width: 190 }}></Typography>
               <Typography sx={{ width: 180 }}></Typography>
-              <Typography sx={{ width: 180 }}>{item.status}</Typography>
+              <Typography sx={{ width: 180 }}></Typography>
               <CreateOutlined sx={{ color: "gray", fontSize: 25 }} />
               <DeleteOutline sx={{ color: "red", fontSize: 25 }} />
             </Box>
