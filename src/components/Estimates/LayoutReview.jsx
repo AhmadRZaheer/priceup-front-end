@@ -1,171 +1,250 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
-import door from "../../Assets/estimates/layout1.svg";
 
 import MenuList from "./MenuList";
-import { useEffect, useState } from "react";
-import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
+
+import {
+  AddCircleOutline,
+  ChevronLeftOutlined,
+  RemoveCircleOutline,
+} from "@mui/icons-material";
+
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getContent, getTotal, setInputContent, setTotal } from "../../redux/estimateCalculations";
+import Snackbars from "../Model/SnackBar";
+import { getContent, getTotal, setInputContent, setNavigation, setTotal } from "../../redux/estimateCalculations";
+import ChannelType from "../ExtimatesMoblie/channelOrClamp";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 
-const LayoutReview = ({setHandleEstimatesPages}) => {
-  // const [doorDetail, setDoorDetail] = useState(null);
-
-
+const LayoutReview = () => {
   const { data: estimatesData, refetch: estimatesRefetch } =
-  useFetchDataEstimate();
-const selectedContent = useSelector(getContent);
-const totalPrice = useSelector(getTotal);
-const dispatch = useDispatch();
+    useFetchDataEstimate();
+  const selectedContent = useSelector(getContent);
+  const totalPrice = useSelector(getTotal);
 
-useEffect(() => {
-  // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
-  const handlePrice = selectedContent?.handles?.item
-    ? (selectedContent?.handles?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent.handles.count
-    : 0;
-  const hingesPrice = selectedContent?.hinges?.item
-    ? (selectedContent?.hinges?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent.hinges.count
-    : 0;
-  const mountingChannel = selectedContent?.mounting?.channel.item
-    ? selectedContent?.mounting?.channel?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0
-    : 0;
-  const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp
-    ?.item
-    ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
-    : 0;
-  const mountingsleeveOver = selectedContent?.mounting?.clamps?.sleeveOver
-    ?.item
-    ? (selectedContent?.mounting?.clamps?.sleeveOver?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
-    : 0;
-  const mountingglassToGlass = selectedContent?.mounting?.clamps?.glassToGlass
-    ?.item
-    ? (selectedContent?.mounting?.clamps?.glassToGlass?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
-    : 0;
-  const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
-    ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent.slidingDoorSystem.count
-    : 0;
-  const headerPrice = selectedContent?.header?.item
-    ? (selectedContent?.header?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent.header.count
-    : 0;
+  console.log(selectedContent.mounting.activeType, "active type");
+  const dispatch = useDispatch();
+  // const [mountingType, setmountingType] = useState(
+  //   selectedContent.mounting.activeType || "clamps"
+  // );
 
-  const hardwareTotals =
-    handlePrice +
-    hingesPrice +
-    (mountingChannel * selectedContent?.mounting?.activeType === "channel"
-      ? 1
-      : 0) +
-    ((mountingWallClamps + mountingglassToGlass + mountingsleeveOver) *
-      selectedContent?.mounting?.activeType ===
-    "clamps"
-      ? 1
-      : 0) +
-    slidingDoorSystemPrice +
-    headerPrice;
+  useEffect(() => {
+    // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
+    const handlePrice = selectedContent?.handles?.item
+      ? (selectedContent?.handles?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent.handles.count
+      : 0;
+    const hingesPrice = selectedContent?.hinges?.item
+      ? (selectedContent?.hinges?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent.hinges.count
+      : 0;
+    const mountingChannel = selectedContent?.mounting?.channel.item
+      ? selectedContent?.mounting?.channel?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0
+      : 0;
+    const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp
+      ?.item
+      ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
+      : 0;
+    const mountingsleeveOver = selectedContent?.mounting?.clamps?.sleeveOver
+      ?.item
+      ? (selectedContent?.mounting?.clamps?.sleeveOver?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
+      : 0;
+    const mountingglassToGlass = selectedContent?.mounting?.clamps?.glassToGlass
+      ?.item
+      ? (selectedContent?.mounting?.clamps?.glassToGlass?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
+      : 0;
+    const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
+      ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent.slidingDoorSystem.count
+      : 0;
+    const headerPrice = selectedContent?.header?.item
+      ? (selectedContent?.header?.item?.finishes?.find(
+          (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        )?.cost || 0) * selectedContent.header.count
+      : 0;
 
-  let fabricationPrice = 0;
-  if (selectedContent.glassType.thickness === "1/2") {
-    // for 1/2 price
-    fabricationPrice =
-      Number(selectedContent?.oneInchHoles) *
-        estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
-      Number(selectedContent?.hingeCut) *
-        estimatesData?.fabricatingPricing?.hingeCutoutOneByTwoInch +
-      Number(selectedContent?.clampCut) *
-        estimatesData?.fabricatingPricing?.clampCutoutOneByTwoInch +
-      Number(selectedContent?.notch) *
-        estimatesData?.fabricatingPricing?.notchOneByTwoInch +
-      Number(selectedContent?.outages) *
-        estimatesData?.fabricatingPricing?.outageOneByTwoInch +
-      Number(selectedContent?.mitre) *
-        estimatesData?.fabricatingPricing?.minterOneByTwoInch +
-      Number(selectedContent?.polish) *
-        estimatesData?.fabricatingPricing?.polishPricePerOneByTwoInch;
-  } else if (selectedContent.glassType.thickness === "3/8") {
-    fabricationPrice =
-      Number(selectedContent?.oneInchHoles) *
-        estimatesData?.fabricatingPricing?.oneHoleThreeByEightInchGlass +
-      Number(selectedContent?.hingeCut) *
-        estimatesData?.fabricatingPricing?.hingeCutoutThreeByEightInch +
-      Number(selectedContent?.clampCut) *
-        estimatesData?.fabricatingPricing?.clampCutoutThreeByEightInch +
-      Number(selectedContent?.notch) *
-        estimatesData?.fabricatingPricing?.notchThreeByEightInch +
-      Number(selectedContent?.outages) *
-        estimatesData?.fabricatingPricing?.outageThreeByEightInch +
-      Number(selectedContent?.mitre) *
-        estimatesData?.fabricatingPricing?.minterThreeByEightInch +
-      Number(selectedContent?.polish) *
-        estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
-  }
+    const hardwareTotals =
+      handlePrice +
+      hingesPrice +
+      (mountingChannel * selectedContent?.mounting?.activeType === "channel"
+        ? 1
+        : 0) +
+      ((mountingWallClamps + mountingglassToGlass + mountingsleeveOver) *
+        selectedContent?.mounting?.activeType ===
+      "clamps"
+        ? 1
+        : 0) +
+      slidingDoorSystemPrice +
+      headerPrice;
 
-  const laborPrice =
-    selectedContent?.people *
-    selectedContent?.hours *
-    estimatesData?.miscPricing?.hourlyRate;
+    let fabricationPrice = 0;
+    if (selectedContent.glassType.thickness === "1/2") {
+      // for 1/2 price
+      fabricationPrice =
+        Number(selectedContent?.oneInchHoles) *
+          estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
+        Number(selectedContent?.hingeCut) *
+          estimatesData?.fabricatingPricing?.hingeCutoutOneByTwoInch +
+        Number(selectedContent?.clampCut) *
+          estimatesData?.fabricatingPricing?.clampCutoutOneByTwoInch +
+        Number(selectedContent?.notch) *
+          estimatesData?.fabricatingPricing?.notchOneByTwoInch +
+        Number(selectedContent?.outages) *
+          estimatesData?.fabricatingPricing?.outageOneByTwoInch +
+        Number(selectedContent?.mitre) *
+          estimatesData?.fabricatingPricing?.minterOneByTwoInch +
+        Number(selectedContent?.polish) *
+          estimatesData?.fabricatingPricing?.polishPricePerOneByTwoInch;
+    } else if (selectedContent.glassType.thickness === "3/8") {
+      fabricationPrice =
+        Number(selectedContent?.oneInchHoles) *
+          estimatesData?.fabricatingPricing?.oneHoleThreeByEightInchGlass +
+        Number(selectedContent?.hingeCut) *
+          estimatesData?.fabricatingPricing?.hingeCutoutThreeByEightInch +
+        Number(selectedContent?.clampCut) *
+          estimatesData?.fabricatingPricing?.clampCutoutThreeByEightInch +
+        Number(selectedContent?.notch) *
+          estimatesData?.fabricatingPricing?.notchThreeByEightInch +
+        Number(selectedContent?.outages) *
+          estimatesData?.fabricatingPricing?.outageThreeByEightInch +
+        Number(selectedContent?.mitre) *
+          estimatesData?.fabricatingPricing?.minterThreeByEightInch +
+        Number(selectedContent?.polish) *
+          estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
+    }
 
-  // total formula = (hardware's cost + glass cost + add-ons cost + fabrication + fabrication 1/2) * Company pricing factor + Labor result
-  const total =
-    (hardwareTotals + fabricationPrice) *
-      estimatesData?.miscPricing?.pricingFactor +
-    laborPrice;
-  dispatch(setTotal(total));
-}, [selectedContent]);
-console.log(
-  estimatesData,
-  "estimatesData",
-  selectedContent,
-  "selected items",
-  totalPrice
-);
+    const laborPrice =
+      selectedContent?.people *
+      selectedContent?.hours *
+      estimatesData?.miscPricing?.hourlyRate;
+
+    // total formula = (hardware's cost + glass cost + add-ons cost + fabrication + fabrication 1/2) * Company pricing factor + Labor result
+    const total =
+      (hardwareTotals + fabricationPrice) *
+        estimatesData?.miscPricing?.pricingFactor +
+      laborPrice;
+    dispatch(setTotal(total));
+  }, [selectedContent]);
+  console.log(
+    estimatesData,
+    "estimatesData",
+    selectedContent,
+    "selected items",
+    totalPrice
+  );
+  const handleBoxClick = () => {
+    dispatch(setNavigation("summary"));
+  };
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
+  console.log(estimatesData, "estimatesData12");
   return (
     <>
       <Box
         sx={{
-          width: "70%",
-          margin: "auto",
+          width: { md: "70%", sm: "100%", sx: "100%" },
+          margin: { md: "auto", xs: 0 },
+
           display: "flex",
-          alignItems: "center",
+          alignItems: { md: "center", xs: "start" },
+
           flexDirection: "column",
-          p: 2,
-          gap: 4,
+          p: { md: 2, sx: 0 },
+          gap: { md: 4, xs: 0 },
         }}
       >
-        <Typography textAlign={"center"} variant="h4">
+        <Box
+          sx={{
+            display: { md: "none", xs: "flex" },
+            zIndex: 1,
+            justifyContent: { md: "center", xs: "start" },
+            background: "#18133b",
+            width: "100%",
+            color: "white",
+            paddingY: 1.2,
+            borderBottomLeftRadius: 20,
+            borderBottomRightRadius: 20,
+            marginTop: 7.6,
+          }}
+        >
+          <Box sx={{ display: { md: "none", xs: "block" } }}>
+            <ChevronLeftOutlined
+              onClick={() => {
+                dispatch(setNavigation("measurements"));
+              }}
+              sx={{ fontSize: 34, paddingTop: 0.4 }}
+            />
+          </Box>
+          <Typography textAlign={"center"} variant="h4">
+            Create New Quote
+          </Typography>
+        </Box>
+        <Typography
+          sx={{ display: { md: "block", xs: "none" } }}
+          textAlign={"center"}
+          variant="h4"
+        >
           Create New Qoute
         </Typography>
         <Box
           sx={{
-            width: "94%",
+            width: { md: "94%", sm: "100%", xs: "100%" },
             margin: "auto",
-            borderRadius: "12px",
+            borderRadius: { md: "12px", xs: 0 },
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: "1px solid #EAECF0",
-            paddingX: 2,
+            border: { md: "1px solid #EAECF0", xs: "none" },
+            paddingX: { md: 2, xs: 0 },
             paddingY: 4,
             rowGap: 4,
+            background: { md: "white", xs: "#100D24" },
             display: "flex",
             flexDirection: "column",
+            paddingTop: { md: 0, xs: 6 },
+            marginTop: { md: 0, xs: -3 },
+            marginBottom: 4.6,
           }}
         >
-          <Box>
-            <Typography sx={{ font: "18px" }}>Review</Typography>
-            <Typography sx={{ color: "#667085", font: "14px" }}>
+          <Box sx={{ width: { md: "100%", xs: "90%" }, margin: "auto" }}>
+            <Typography
+              sx={{
+                fontSize: { md: "18px", xs: "18px" },
+                color: { md: "black", xs: "white" },
+                paddingBottom: 1,
+              }}
+            >
+              Review
+            </Typography>
+            <Typography
+              sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+            >
               Your new project has been created. Invite colleagues to
               collaborate on this project.
             </Typography>
@@ -173,44 +252,17 @@ console.log(
           <Box
             sx={{
               display: "flex",
-              width: "96.5%",
-              paddingY: 4,
-              paddingX: 2,
-              background: "rgba(217, 217, 217, 0.3)",
-              gap: 4,
-              borderRadius: "8px",
-              justifyContent: "space-between",
-            }}
-          >
-            {/* LeftSide */}
-
-            <Box
-        sx={{
-          width:  "50%",
-          margin: { md: "auto", xs: 0 },
-
-          display: "flex",
-          alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
-          flexDirection: "column",
-          p: { md: 2, sx: 0 },
-          gap: { md: 4, xs: 0 },
-        }}
-      >
-       
-          <Box
-            sx={{
-              display: "flex",
-              width: "100%",
+              width: { md: "96.5%", xs: "94%" },
               paddingY: { md: 4, xs: 0 },
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
+              maxHeight: "60vh",
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               margin: { md: 0, xs: "auto" },
+              overflow: "auto"
             }}
           >
             {/* LeftSide */}
@@ -218,7 +270,7 @@ console.log(
             <Box
               sx={{
                 display: "flex",
-                width: "100%",
+                width: { md: "40.5%", xs: "100%" },
                 flexDirection: "column",
 
                 // background: "red",
@@ -251,6 +303,7 @@ console.log(
                       menuOptions={estimatesData?.hardwareFinishes}
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -272,6 +325,7 @@ console.log(
                       menuOptions={estimatesData?.handles}
                       title={"Handles"}
                       type={"handles"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.handles.count}
                     />
@@ -294,6 +348,7 @@ console.log(
                       menuOptions={estimatesData?.hinges}
                       title={"Hinges"}
                       type={"hinges"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.hinges.count}
                     />
@@ -301,10 +356,10 @@ console.log(
                 </Box>
                 <Box
                   sx={{
-                    display: "flex",
+                    // display: "flex",
                     alignItems: "center",
                     // gap: 4,
-                    justifyContent: "space-between",
+                    // justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
@@ -312,12 +367,13 @@ console.log(
                   }}
                 >
                   {/* mouting channel */}
-                  <Box sx={{ width: "100%", display: "flex" }}>
+                  {/* <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ display: "flex", flexDirection: "column" }}>
                       <MenuList
                         menuOptions={estimatesData?.wallClamp}
                         title={"Wall Clamps"}
                         type={"wallClamp"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.wallClamp.count}
                       />
@@ -325,6 +381,7 @@ console.log(
                         menuOptions={estimatesData?.sleeveOver}
                         title={"Sleeve Over"}
                         type={"sleeveOver"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={selectedContent.mounting.clamps.sleeveOver.count}
                       />
@@ -332,18 +389,89 @@ console.log(
                         menuOptions={estimatesData?.glassToGlass}
                         title={"Glass to Glass"}
                         type={"glassToGlass"}
+                        showSnackbar={showSnackbar}
                         // setSelectedContent={setSelectedContent}
                         count={
                           selectedContent.mounting.clamps.glassToGlass.count
                         }
                       />
+                      <MenuList
+                        menuOptions={estimatesData?.mountingChannel}
+                        title={"Channel"}
+                        type={"channel"}
+                        showSnackbar={showSnackbar}
+                        // setSelectedContent={setSelectedContent}
+                      />
                     </Box>
-                    <MenuList
-                      menuOptions={estimatesData?.mountingChannel}
-                      title={"Channel"}
-                      type={"channel"}
-                      // setSelectedContent={setSelectedContent}
-                    />
+                  </Box> */}
+                  <Box sx={{ width: "100%", display: "flex" }}>
+                    <Box sx={{ width: "100%", display: "flex" }}>
+                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <ChannelType
+                          menuOptions={estimatesData?.channelOrClamps}
+                          title={"Mounting"}
+                          type={"mounting"}
+                          showSnackbar={showSnackbar}
+                          // wallClamp={estimatesData?.wallClamp}
+                          // setSelectedContent={setSelectedContent}
+                          // count={
+                          //   selectedContent.mounting.clamps.wallClamp.count
+                          // }
+                        />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignContent: "space-between",
+                          }}
+                        >
+                          {selectedContent.mounting.activeType === "clamps" && (
+                            <>
+                              <MenuList
+                                menuOptions={estimatesData?.wallClamp}
+                                title={"Wall Clamps"}
+                                type={"wallClamp"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.wallClamp
+                                    .count
+                                }
+                              />
+                              <MenuList
+                                menuOptions={estimatesData?.sleeveOver}
+                                title={"Sleeve Over"}
+                                type={"sleeveOver"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.sleeveOver
+                                    .count
+                                }
+                              />
+                              <MenuList
+                                menuOptions={estimatesData?.glassToGlass}
+                                title={"Glass to Glass"}
+                                type={"glassToGlass"}
+                                showSnackbar={showSnackbar}
+                                count={
+                                  selectedContent.mounting.clamps.glassToGlass
+                                    .count
+                                }
+                              />
+                            </>
+                          )}
+
+                          {selectedContent.mounting.activeType ===
+                            "channel" && (
+                            <MenuList
+                              menuOptions={estimatesData?.mountingChannel}
+                              title={"Channel"}
+                              type={"channel"}
+                              showSnackbar={showSnackbar}
+                            />
+                          )}
+                        </Box>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
                 <Box
@@ -363,6 +491,7 @@ console.log(
                       menuOptions={estimatesData?.glassType}
                       title={" Glass type"}
                       type={"glassType"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       thickness={selectedContent.glassType.thickness}
                     />
@@ -385,6 +514,7 @@ console.log(
                       menuOptions={estimatesData?.slidingDoorSystem}
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
                     />
@@ -407,6 +537,7 @@ console.log(
                       menuOptions={estimatesData?.header}
                       title={"Header"}
                       type={"header"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
                     />
@@ -429,6 +560,7 @@ console.log(
                       menuOptions={estimatesData?.glassTreatment}
                       title={"Glass treatment"}
                       type={"glassTreatment"}
+                      showSnackbar={showSnackbar}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -448,7 +580,9 @@ console.log(
                   <Box sx={{ width: "100%" }}>
                     <MenuList
                       menuOptions={estimatesData?.addOns}
-                      title={"Add ons:"}
+                      title={"Add ons"}
+                      type={"addOns"}
+                      showSnackbar={showSnackbar}
                     />
                   </Box>
                 </Box>
@@ -480,12 +614,23 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      // InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -529,12 +674,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -578,12 +733,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -629,12 +794,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -679,12 +854,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -730,12 +915,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -781,12 +976,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -832,12 +1037,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -883,12 +1098,22 @@ console.log(
                   >
                     <TextField
                       type="number"
-                      InputProps={{ inputProps: { min: 0, max: 50 } }}
+                      InputProps={{
+                        style: {
+                          color: "white", // Change the color of the input text
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                        },
+                      }}
                       sx={{
                         border: { md: "none", xs: "2px solid #423f57" },
                         borderRadius: { md: 0, xs: 2 },
                         color: { md: "black", xs: "white" },
-                        background: "white",
+                        background: "#14112c",
                         width: "100%",
                       }}
                       variant="outlined"
@@ -980,10 +1205,10 @@ console.log(
               </Box>
             </Box> */}
           </Box>
-        
+        </Box>
         <Box
           sx={{
-            display: { md: "none", xs: "flex" },
+            display: "flex",
             gap: 2,
             justifyContent: "center",
             width: "93%",
@@ -998,7 +1223,10 @@ console.log(
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              onClick={() => setHandleEstimatesPages("measurements")}
+              // onClick={() => setHandleEstimatesPages("measurements")}
+              onClick={() => {
+                dispatch(setNavigation("measurements"));
+              }}
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                 color: "#344054",
@@ -1015,166 +1243,27 @@ console.log(
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
+              disabled={selectedContent?.hardwareFinishes === null}
               variant="contained"
-              onClick={() => setHandleEstimatesPages("summary")}
+              onClick={handleBoxClick}
+              sx={{
+                backgroundColor: "#8477da",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
             >
               {" "}
               Next
             </Button>
           </Box>
         </Box>
-      </Box>
-            {/* rightSide */}
-            <Box
-        sx={{
-          width: "50%",
-          margin: 0,
-
-          display: "flex",
-          alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
-          flexDirection: "column",
-          p: { md: 2, sx: 0 },
-          gap: { md: 4, xs: 0 },
-        }}
-      >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                background: { md: "#ffff", xs: "rgba(37, 32, 56,0.4)" },
-                p: { md: 3, xs: 0 },
-                borderRadius: "8px",
-                color: { md: "black", xs: "white" },
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  width: "84%",
-                  justifyContent: "center",
-                  // background: "#D9D9D9",
-                  margin: { md: 0, xs: "auto" },
-                  p: 3,
-                  borderBottom: "1px solid #2c2c3c"
-                  // height: "250px",
-                }}
-              >
-                <img
-                  // width={"350px"}
-                  // height={"250px"}
-                  src={door}
-                  alt="Selected"
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: "94%",
-
-                  borderRadius: "8px",
-                  paddingY: 4,
-                  margin: { md: 0, xs: "auto" },
-                  // height: "250px",
-                }}
-              >
-                <Typography>12’’/ 12’’/ 12’’ </Typography>
-                <Typography variant="h6">Summary </Typography>
-                <Typography>Finish: {selectedContent?.hardwareFinishes?.name}</Typography>
-                <Typography>Handles: {selectedContent?.handles?.item?.name} ({selectedContent?.handles?.count})</Typography>
-                <Typography>Hinges: {selectedContent?.hinges?.item?.name}  ({selectedContent?.hinges?.count})</Typography>
-                {selectedContent?.mounting?.activeType === 'channel' ? <Typography>Channel: {selectedContent?.mounting?.channel?.type?.name}</Typography> :
-                  <Typography>Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.name} / {selectedContent?.mounting?.clamps?.sleeveOver?.name} / {selectedContent?.mounting?.clamps?.glassToGlass?.name}</Typography>
-                }
-                <Typography>Glass Type:{selectedContent?.glassType?.item?.name} ({selectedContent?.glassType?.thickness})</Typography>
-                <Typography>Bars: {selectedContent?.slidingDoorSystem?.item?.name} ({selectedContent?.slidingDoorSystem?.count})</Typography>
-                <Typography>Transom: </Typography>
-                <Typography>Header: {selectedContent?.header?.item?.name}  ({selectedContent?.header?.count})</Typography>
-                <Typography>Glass Treatment: {selectedContent?.glassTreatment?.name}</Typography>
-                <Typography variant="h6">Add ons: </Typography>
-                <Typography>People: {selectedContent?.people}</Typography>
-                <Typography>Hours: {selectedContent?.hours}</Typography>
-                <Typography> </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderTop: "2px solid #D0D5DD",
-                    marginTop: 1,
-                    paddingY: 1,
-                  }}
-                >
-                  <Typography>Price</Typography>
-                  <Typography variant="h6">${totalPrice}</Typography>
-                </Box>{" "}
-              </Box>
-            </Box>
-       
-  
-        <Box
-          sx={{
-            display: { md: "none", xs: "flex" },
-            gap: 2,
-            justifyContent: "center",
-            width: "92%",
-            paddingX: 2,
-            paddingY: 2,
-            position: "fixed",
-            bottom: 0,
-            backgroundColor: "#100d24",
-            borderTop: "1px solid #423f57",
-          }}
-        >
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              onClick={() => setHandleEstimatesPages("review")}
-              sx={{
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                color: "#344054",
-                textTransform: "initial",
-                border: "1px solid #D0D5DD",
-                backgroundColor: { md: "transparent", xs: "white" },
-              }}
-            >
-              Back
-            </Button>
-          </Box>
-
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              variant="contained"
-              // onClick={() => {
-              //   setClientDetailOpen(true);
-              // }}
-            >
-              {" "}
-              Next
-            </Button>
-          </Box>
-        </Box>
-      </Box>
-          </Box>
-        
-              <Box sx={{ width: "150px" }}>
-                <Button
-                  fullWidth
-                  onClick={() => setHandleEstimatesPages("Measurments")}
-                  sx={{
-                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
-                    textTransform: "initial",
-                    border: "1px solid #D0D5DD",
-                  }}
-                >
-                  Back
-                </Button>
-             </Box>
-        </Box>
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
     </>
   );
