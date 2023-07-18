@@ -159,22 +159,21 @@ console.log(menuOptions, "menuOptions")
               variant="outlined"
               InputProps={{
                 style: {
-                  color: "white", // Change the color of the input text
+                  color: "black", 
+                  borderRadius:  10,
+                  border: "1px solid #cccccc",
+                  backgroundColor: "white"
                 },
                 inputProps: { min: 0, max: 50 },
               }}
               InputLabelProps={{
                 style: {
-                  color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                  color: "rgba(255, 255, 255, 0.5)",
                 },
               }}
               sx={{
-                border: { md: "none", xs: "2px solid #423f57" },
-                borderRadius: { md: 0, xs: 2 },
                 color: { md: "black", xs: "white" },
-                background: "#14112c",
                 width: "100%",
-                mb: 1,
               }}
               // style={{ width: "100%", background: "white" }}
               value={thicknessVal}

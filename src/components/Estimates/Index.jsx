@@ -50,13 +50,11 @@ const Index = () => {
         {StorePage === "Measurments" && (
           <LayoutMeasurements setHandleEstimatesPages={setStorePage} />
         )}
-        {StorePage === "review" && (
-          <Box>
-          <LayoutReview setHandleEstimatesPages={setStorePage} />
-          <Summary />
-          </Box>
+        {StorePage === "review" && (        
+          <LayoutReview setHandleEstimatesPages={setStorePage} setClientDetailOpen={setClientDetailOpen} />
         )}
       </Box>
+
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
