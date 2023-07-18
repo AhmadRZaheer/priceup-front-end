@@ -4,8 +4,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
 import { useDispatch } from "react-redux";
 import { setDefaultId } from "../../redux/defaultSlice";
+import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 
-const LayoutHeader = ({ types }) => {
+const LayoutHeader = () => {
+  const { data: types, refetch: defaultDataRefetch } = useFetchDataDefault();
   const dispatch = useDispatch();
 
   const showMore = (id) => {
@@ -22,7 +24,7 @@ const LayoutHeader = ({ types }) => {
     console.log(props, "options to show handles"),
     (
       <div
-        onClick={() => showMore(props?._id)}
+        onClick={() => showMore(props._id)}
         style={{
           paddingLeft: "15px",
           paddingRight: "15px",
@@ -31,7 +33,7 @@ const LayoutHeader = ({ types }) => {
 
           minHeight: "50px",
           minWidth: "110px",
-          backgroundColor: "rgb(232, 232, 232)",
+          // backgroundColor: "rgb(232, 232, 232)",
           // backgroundColor: "#fff",
 
           display: "flex",

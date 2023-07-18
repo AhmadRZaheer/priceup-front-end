@@ -11,177 +11,106 @@ import {
   Typography,
 } from "@mui/material";
 import { Box } from "@mui/system";
-import { useFetchSingleDefault } from "../../utilities/ApiHooks/DefaultLayouts";
-
-//   image: Yup.mixed()
-//     .required("Image is required")
-//     .test(
-//       "fileType",
-//       "Only image files are allowed (JPEG, PNG, GIF)",
-//       (value) => {
-//         if (value) {
-//           const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-//           return supportedFormats.includes(value.type);
-//         }
-//         return false;
-//       }
-//     )
-//     .test(
-//       "fileSize",
-//       "Image size should be less than 5MB",
-//       (value) => value && value.size <= 5 * 1024 * 1024
-//     ),
-//   hardwareFinishes: Yup.string().required("HardwareFinishes Value is required"),
-
-//   handles: Yup.object().shape({
-//     default: Yup.string().required("Handles Option is required"),
-//     count: Yup.string().required("Handles Value is required"),
-//   }),
-//   hinges: Yup.object().shape({
-//     default: Yup.string().required("hingesOptions Option is required"),
-//     count: Yup.string().required("hingesValue Value is required"),
-//   }),
-//   pivotHinge: Yup.object().shape({
-//     default: Yup.string().required("pivotHingeOptions Option is required"),
-//     count: Yup.string().required("pivotHingeValue Value is required"),
-//   }),
-//   heavyDuty: Yup.object().shape({
-//     default: Yup.string().required("default Option is required"),
-//     countOne: Yup.string().required("countOne Value is required"),
-//     countTwo: Yup.string().required("countTwo Value is required"),
-//   }),
-//   heavyPivot: Yup.object().shape({
-//     default: Yup.string().required("default Option is required"),
-//     countOne: Yup.string().required("countOne Value is required"),
-//     countTwo: Yup.string().required("countTwo Value is required"),
-//   }),
-//   // ChannelorClamps: Yup.string().required("ChannelorClamps Value is required"),
-//   // mountingChannel: Yup.string().required("mountingChannel Value is required"),
-//   // clamps: Yup.array().of(
-//   //   Yup.object().shape({
-//   //     default: Yup.string().required("Default is required"),
-//   //     count: Yup.string().required("Count is required"),
-//   //   })
-//   // ),
-
-//   glassToGlass: Yup.object().shape({
-//     default: Yup.string().required("default Option is required"),
-//     count: Yup.string().required("count Value is required"),
-//   }),
-//   bar: Yup.object().shape({
-//     default: Yup.string().required("bar Option is required"),
-//     count: Yup.string().required("bar Value is required"),
-//   }),
-//   outages: Yup.object().shape({
-//     default: Yup.string().required("outages Option is required"),
-//   }),
-//   other: Yup.object().shape({
-//     people: Yup.number().required("People  is required"),
-//     hours: Yup.number().required("Hours Value is required"),
-//   }),
-//   transom: Yup.string().required("transom Value is required"),
-//   header: Yup.string().required("transom Value is required"),
-//   glassTreatment: Yup.string().required("glassTreatment Value is required"),
-// });
+import {
+  useEditDefault,
+  useFetchSingleDefault,
+} from "../../utilities/ApiHooks/DefaultLayouts";
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import { getDefaultId } from "../../redux/defaultSlice";
 import { useSelector } from "react-redux";
-const DefaultComponent = () => {
+import { backendURL } from "../../utilities/common";
+const DefaultComponent = ({ showSnackbar }) => {
   const defaultId = useSelector(getDefaultId);
+  const {
+    mutate: updateDefault,
+    isLoading: LoadingForEdit,
+    isError: ErrorForEdit,
+    isSuccess: SuccessForEdit,
+  } = useEditDefault();
 
   const { data: singleDefault, isFetching: isfetchingDefaultSingle } =
     useFetchSingleDefault(defaultId);
+  console.log(singleDefault, "singleDefault test");
+  const formik = useFormik({
+    initialValues: {
+      // image: singleDefault?.layoutData?.image,
+      image: null,
+      name: singleDefault?.layoutData?.name,
+      handles: {
+        handleType: singleDefault?.layoutData?.settings?.handles.handleType,
+        count: singleDefault?.layoutData?.settings?.handles.count,
+      },
 
-  const formik = useFormik(
-    React.useMemo(
-      () => ({
-        initialValues: {
-          image: null,
-          handles: {
-            handleType: singleDefault?.layoutData?.settings?.handles.handleType,
-            count: singleDefault?.layoutData?.settings?.handles.count,
-          },
+      hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
+      // hardwareFinishes: "64a276b30336b4e1e0846c3f",
 
-          hardwareFinishes:
-            singleDefault?.layoutData?.settings?.hardwareFinishes,
-          // hardwareFinishes: "64a276b30336b4e1e0846c3f",
+      hinges: {
+        hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
 
-          hinges: {
-            hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
+        count: singleDefault?.layoutData?.settings?.hinges?.count,
+      },
+      pivotHinge: {
+        pivotHingeType:
+          singleDefault?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
+        count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
+      },
+      heavyDutyOption: {
+        heavyDutyType:
+          singleDefault?.layoutData?.settings?.heavyDutyOption.heavyDutyType,
+        height: singleDefault?.layoutData?.settings?.heavyDutyOption.height,
+        threshold:
+          singleDefault?.layoutData?.settings?.heavyDutyOption.threshold,
+      },
+      heavyPivotOption: {
+        heavyPivotType:
+          singleDefault?.layoutData?.settings?.heavyPivotOption.heavyPivotType,
+        height: singleDefault?.layoutData?.settings?.heavyPivotOption.height,
+        threshold:
+          singleDefault?.layoutData?.settings?.heavyPivotOption.threshold,
+      },
+      channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
+      mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
 
-            count: singleDefault?.layoutData?.settings?.hinges?.count,
-          },
-          pivotHinge: {
-            pivotHingeType:
-              singleDefault?.layoutData?.settings?.pivotHingeOption
-                .pivotHingeType,
-            count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
-          },
-          heavyDutyOption: {
-            heavyDutyType:
-              singleDefault?.layoutData?.settings?.heavyDutyOption
-                .heavyDutyType,
-            height: singleDefault?.layoutData?.settings?.heavyDutyOption.height,
-            threshold:
-              singleDefault?.layoutData?.settings?.heavyDutyOption.threshold,
-          },
-          heavyPivotOption: {
-            heavyPivotType:
-              singleDefault?.layoutData?.settings?.heavyPivotOption
-                .heavyPivotType,
-            height:
-              singleDefault?.layoutData?.settings?.heavyPivotOption.height,
-            threshold:
-              singleDefault?.layoutData?.settings?.heavyPivotOption.threshold,
-          },
-          channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
-          mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
+      glassToGlass: {
+        glassToGlassType:
+          singleDefault?.layoutData?.settings.glassToGlass?.glassToGlassType,
 
-          glassToGlass: {
-            glassToGlassType:
-              singleDefault?.layoutData?.settings.glassToGlass
-                ?.glassToGlassType,
+        count: singleDefault?.layoutData?.settings.glassToGlass?.count,
+      },
+      wallClamp: {
+        wallClampType:
+          singleDefault?.layoutData?.settings.wallClamp?.wallClampType,
 
-            count: singleDefault?.layoutData?.settings.glassToGlass?.count,
-          },
-          wallClamp: {
-            wallClampType:
-              singleDefault?.layoutData?.settings.wallClamp?.wallClampType,
+        count: singleDefault?.layoutData?.settings.wallClamp?.count,
+      },
+      sleeveOver: {
+        sleeveOverType:
+          singleDefault?.layoutData?.settings.sleeveOver?.sleeveOverType,
+        count: singleDefault?.layoutData?.settings.sleeveOver?.count,
+      },
+      glassType: {
+        type: singleDefault?.layoutData?.settings?.glassType?.type,
+        thickness: singleDefault?.layoutData?.settings?.glassType?.thickness,
+      },
+      slidingDoorSystem: {
+        type: singleDefault?.layoutData?.settings?.slidingDoorSystem.type,
+        count: singleDefault?.layoutData?.settings?.slidingDoorSystem.count,
+      },
+      outages: singleDefault?.layoutData?.settings?.outages,
+      transom: singleDefault?.layoutData?.settings?.transom,
+      header: singleDefault?.layoutData?.settings?.header,
+      glassTreatment: singleDefault?.layoutData?.settings?.glassTreatment,
 
-            count: singleDefault?.layoutData?.settings.wallClamp?.count,
-          },
-          sleeveOver: {
-            sleeveOverType:
-              singleDefault?.layoutData?.settings.sleeveOver?.sleeveOverType,
-            count: singleDefault?.layoutData?.settings.sleeveOver?.count,
-          },
-          glassType: {
-            type: singleDefault?.layoutData?.settings?.glassType?.type,
-            thickness:
-              singleDefault?.layoutData?.settings?.glassType?.thickness,
-          },
-          slidingDoorSystem: {
-            type: singleDefault?.layoutData?.settings?.slidingDoorSystem.type,
-            count: singleDefault?.layoutData?.settings?.slidingDoorSystem.count,
-          },
-          outages: singleDefault?.layoutData?.settings?.outages,
-          transom: singleDefault?.layoutData?.settings?.transom,
-          header: singleDefault?.layoutData?.settings?.header,
-
-          other: {
-            people: singleDefault?.layoutData?.settings?.other?.people,
-            hours: singleDefault?.layoutData?.settings?.other?.hours,
-          },
-        },
-        enableReinitialize: true,
-        onSubmit: (values) => {},
-      }),
-      []
-    )
-  );
-
+      other: {
+        people: singleDefault?.layoutData?.settings?.other?.people,
+        hours: singleDefault?.layoutData?.settings?.other?.hours,
+      },
+    },
+    enableReinitialize: true,
+    onSubmit: (values) => {},
+  });
+  console.log(formik.values, "formik values to check image");
   const { setFieldValue } = formik;
-
   const fileInputRef = useRef(null);
 
   const handleFileUpload = () => {
@@ -190,24 +119,45 @@ const DefaultComponent = () => {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-
-    setFieldValue("image", file);
+    const imageUrl = URL.createObjectURL(file);
+    setFieldValue("image", imageUrl);
   };
+  const handleEditClick = () => {
+    const updatedValues = formik.values;
 
+    const id = defaultId;
+    updateDefault({ settings: updatedValues, id: id });
+  };
+  useEffect(() => {
+    if (SuccessForEdit) {
+      showSnackbar("Updated Successfully ", "success");
+    }
+  }, [SuccessForEdit]);
   return (
     <form type="submit">
       <DefaultComponentHeader
-        selected={singleDefault?.name || "Door"}
-        // handleEditClick={handleEditClick(formik.values)}
+        selected={singleDefault?.layoutData?.name}
+        handleEditClick={handleEditClick}
       />
       {isfetchingDefaultSingle ? (
-        <CircularProgress />
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            padding: "20px",
+            alignItems: "center",
+
+            height: "56vh",
+          }}
+        >
+          <CircularProgress size={24} color="warning" />
+        </Box>
       ) : (
         <Box
           style={{
             display: "flex",
             marginTop: 4,
-            maxHeight: "600px",
+            maxHeight: "66vh",
             overflowY: "scroll",
           }}
         >
@@ -232,16 +182,16 @@ const DefaultComponent = () => {
                   paddingX: 10,
                 }}
               >
-                <Box
-                  sx={{
-                    width: "300px",
-                    border: "1px solid #D0D5DD",
-                    borderRadius: 2,
-                    padding: 1,
-                    marginX: 1,
-                  }}
-                >
-                  {singleDefault?.layoutData?.name}
+                <Box sx={{ width: "320px" }}>
+                  <TextField
+                    size="small"
+                    variant="outlined"
+                    name="name"
+                    style={{ width: "100%" }}
+                    value={formik.values.name || null}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
                 </Box>
               </Box>
               <Box
@@ -270,6 +220,7 @@ const DefaultComponent = () => {
                         width={"100%"}
                         height={"400px"}
                         src={URL.createObjectURL(formik.values.image)}
+                        // src={`${backendURL}/${formik.values.image}`}
                         alt="Selected"
                       />
                     ) : (
@@ -292,6 +243,18 @@ const DefaultComponent = () => {
                     >
                       Upload Image
                     </Button>
+                    {/* <Button
+                      style={{
+                        width: "100%",
+                        boxShadow: "0px 0px 2px blue",
+                        color: "#000000",
+                        backgroundColor: "rgba(132, 119, 218, 0.14)",
+                      }}
+                      component="span"
+                      onClick={handleEditClick}
+                    >
+                      Update Data
+                    </Button> */}
                   </Box>
                 </Box>
               </Box>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
 
 import { Box, Typography } from "@mui/material";
@@ -13,33 +13,28 @@ import {
 import { CircularProgress } from "@material-ui/core";
 import { getDefaultId } from "../../redux/defaultSlice";
 import { useSelector } from "react-redux";
+import Snackbars from "../Model/SnackBar";
 
 const DefaultSection = () => {
-  const [showNext, SetShowNext] = React.useState("");
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
 
-  const { data: defaultData, refetch: defaultDataRefetch } =
-    useFetchDataDefault();
-
-  // const defaultId = useSelector(getDefaultId);
-
-  // const { data: singleDefault, isFetching: isfetchingDefaultSingle } =
-  //   useFetchSingleDefault(defaultId);
-
-  // const {
-  //   data: singleDefault,
-  //   isFetching: isfetchingDefaultSingle,
-  // } = useFetchSingleDefault("64b1519397c2fbba74ad806b");
-
-  // useEffect(() => {
-  //   if (defaultData?.length) {
-  //     SetShowNext(defaultData[0]?._id);
-  //   }
-  // }, [defaultData]);
-
-  console.log(showNext, "showNext default");
-
-  // console.log(defaultData, "defaultDatadefaultData");
-
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
   return (
     <>
       <Box
@@ -51,19 +46,10 @@ const DefaultSection = () => {
       >
         <div className="page-title">
           <Typography sx={{ fontSize: 30, pl: 1 }}>Default</Typography>
+          
+
         </div>
-        <div
-          style={{
-            marginLeft: "15px",
-            marginRight: "15px",
-            background: "rgb(232, 232, 232)",
-          }}
-        >
-          <LayoutHeader
-            types={defaultData}
-            //  showMore={SetShowNext}
-          />
-        </div>
+
         <Box
           sx={{
             border: "1px solid rgb(232, 232, 232)",
@@ -72,16 +58,16 @@ const DefaultSection = () => {
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
-              {/* <DefaultComponentHeader selected={showNext} /> */}
-              {/* {isfetchingDefaultSingle ? (
-                <CircularProgress />
-              ) : (
-                <DefaultComponent singleDefault={singleDefault} />
-              )} */}
-              <DefaultComponent />
+              <DefaultComponent showSnackbar={showSnackbar} />
             </div>
           </div>
         </Box>
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
     </>
   );

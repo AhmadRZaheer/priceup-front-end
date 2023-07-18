@@ -1,10 +1,19 @@
 import { Add } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
+import LayoutHeader from "./LayoutHeader";
 
-const DefaultComponentHeader = ({ selected }) => {
+const DefaultComponentHeader = ({ selected, handleEditClick }) => {
   console.log(selected, "type in default component header");
   return (
     <>
+      <div
+        style={{
+          
+          // background: "rgb(232, 232, 232)",
+        }}
+      >
+        <LayoutHeader />
+      </div>
       <div
         style={{
           display: "flex",
@@ -35,15 +44,20 @@ const DefaultComponentHeader = ({ selected }) => {
             color: "red",
           }}
         >
-          {/* {selected?._id} */}
         </div>{" "}
         <div
           style={{
             padding: 4,
           }}
         >
-        
-          <Button sx={{backgroundColor: "#8477DA", boxShadow: 0,}} variant="contained"> Update</Button>
+          <Button
+            onClick={handleEditClick}
+            sx={{ backgroundColor: "#8477DA", boxShadow: 0 }}
+            variant="contained"
+          >
+            {" "}
+            Update
+          </Button>
         </div>{" "}
       </div>
 
