@@ -143,13 +143,7 @@ const LayoutReview = () => {
       laborPrice;
     dispatch(setTotal(total));
   }, [selectedContent]);
-  console.log(
-    estimatesData,
-    "estimatesData",
-    selectedContent,
-    "selected items",
-    totalPrice
-  );
+
   const handleBoxClick = () => {
     dispatch(setNavigation("summary"));
   };
@@ -270,7 +264,7 @@ const LayoutReview = () => {
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               margin: { md: 0, xs: "auto" },
-              overflow: "auto"
+              overflow: "auto",
             }}
           >
             {/* LeftSide */}
@@ -312,6 +306,7 @@ const LayoutReview = () => {
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
+                      estimatesData={estimatesData}
                       // setSelectedContent={setSelectedContent}
                     />
                   </Box>
@@ -420,13 +415,9 @@ const LayoutReview = () => {
                           title={"Mounting"}
                           type={"mounting"}
                           showSnackbar={showSnackbar}
-                          // wallClamp={estimatesData?.wallClamp}
-                          // setSelectedContent={setSelectedContent}
-                          // count={
-                          //   selectedContent.mounting.clamps.wallClamp.count
-                          // }
+                          estimatesData={estimatesData}
                         />
-                        <Box
+                        {/* <Box
                           sx={{
                             display: "flex",
                             flexDirection: "column",
@@ -477,7 +468,7 @@ const LayoutReview = () => {
                               showSnackbar={showSnackbar}
                             />
                           )}
-                        </Box>
+                        </Box> */}
                       </Box>
                     </Box>
                   </Box>
@@ -486,7 +477,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",

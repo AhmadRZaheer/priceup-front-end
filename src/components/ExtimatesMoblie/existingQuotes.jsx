@@ -61,11 +61,20 @@ export default function ExitingQuotes() {
           </Box>
 
           <Box
-            sx={{ paddingX: 2, marginTop: 2, height: "40vh",overflow: "auto"}}
+            sx={{ paddingX: 2, marginTop: 2, height: "40vh", overflow: "auto" }}
           >
             {isFetching ? (
-              <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 600}}>
-              <CircularProgress sx={{}} />
+              <Box
+                sx={{
+                  width: 40,
+                  m: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: 600,
+                }}
+              >
+                <CircularProgress sx={{}} />
               </Box>
             ) : (
               estimates?.map((item) => (
