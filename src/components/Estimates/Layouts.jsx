@@ -70,34 +70,6 @@ export default function Layout({ setStorePage }) {
           }}
         >
           {/* create New Quotes  header with back arrow*/}
-          <Box
-            sx={{
-              display: { md: "none", xs: "flex" },
-              zIndex: 1,
-              justifyContent: { md: "center", xs: "start" },
-              background: "#18133b",
-              // height: "100%",
-              width: "100%",
-              color: "white",
-              paddingY: 1.2,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              marginTop: 7.6,
-              borderTop: "2px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            <Box sx={{ display: { md: "none", xs: "block" } }}>
-              <ChevronLeftOutlined
-                onClick={() => {
-                  dispatch(setNavigation("existing"));
-                }}
-                sx={{ fontSize: 34, paddingTop: 0.4 }}
-              />
-            </Box>
-            <Typography textAlign={"center"} variant="h4">
-              Create New Qoute
-            </Typography>
-          </Box>
           <Typography
             sx={{ display: { md: "block", xs: "none" } }}
             textAlign={"center"}
@@ -153,7 +125,11 @@ export default function Layout({ setStorePage }) {
                 <CircularProgress />
               </Box>
             ) : (
-              <Grid container gap={1} sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}>
+              <Grid
+                container
+                gap={1}
+                sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}
+              >
                 {layouts.map((layout) => (
                   <Box
                     key={layout._id}
@@ -195,7 +171,13 @@ export default function Layout({ setStorePage }) {
               <NavLink to="/Estimates">
                 <Button
                   // href="/Existing"
-                  sx={{ width: 180, color: "black", border: '1px solid black',fontSize: 18, ml: 2 }}
+                  sx={{
+                    width: 180,
+                    color: "black",
+                    border: "1px solid black",
+                    fontSize: 18,
+                    ml: 2,
+                  }}
                   fullWidth
                   variant="outlined"
                 >
@@ -208,7 +190,12 @@ export default function Layout({ setStorePage }) {
                 //    onClick={() => {
                 //      dispatch(setNavigation("measurements"));
                 //    }}
-                sx={{ width: 180, backgroundColor: "#8477DA", fontSize: 18 }}
+                sx={{
+                  width: 180,
+                  backgroundColor: "#8477DA",
+                  fontSize: 18,
+                  "&:hover": { backgroundColor: "#8477DA" },
+                }}
                 onClick={() => setStorePage("Measurments")}
                 fullWidth
                 variant="contained"

@@ -1,4 +1,11 @@
-import { Box, Button, CircularProgress, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import React, { useState } from "react";
 import { layouts } from "../../data/data";
 import ClientDetailsModel from "./Model";
@@ -6,11 +13,15 @@ import door from "../../Assets/door.png";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { selectedItem, setNavigation, updateMeasurements } from "../../redux/estimateCalculations";
+import {
+  selectedItem,
+  setNavigation,
+  updateMeasurements,
+} from "../../redux/estimateCalculations";
 import { ChevronLeftOutlined } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 
-const LayoutMeasurements = ({setHandleEstimatesPages}) => {
+const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
   const selectedData = useSelector(selectedItem);
 
   // const validationSchema = Yup.object().shape({
@@ -84,7 +95,7 @@ const LayoutMeasurements = ({setHandleEstimatesPages}) => {
             borderBottomRightRadius: 20,
             marginTop: 7.6,
           }}
-       >
+        >
           <Typography textAlign={"center"} variant="h4">
             Create New Qoute
           </Typography>
@@ -148,7 +159,7 @@ const LayoutMeasurements = ({setHandleEstimatesPages}) => {
                 background: "#D9D9D9",
                 gap: 4,
                 borderRadius: "8px",
-                overflow: "auto"
+                overflow: "auto",
               }}
             >
               <Box
@@ -227,7 +238,7 @@ const LayoutMeasurements = ({setHandleEstimatesPages}) => {
                   order: { md: 2, xs: -1 },
                 }}
               >
-                {selectedData?.image ===  "" ? (
+                {selectedData?.image === "" ? (
                   <Box
                     sx={{
                       width: 40,
@@ -286,8 +297,9 @@ const LayoutMeasurements = ({setHandleEstimatesPages}) => {
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
                     fullWidth
-                    onClick={ () => {setHandleEstimatesPages("Layout")}}
-                    
+                    onClick={() => {
+                      setHandleEstimatesPages("Layout");
+                    }}
                     sx={{
                       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                       color: "#344054",
@@ -309,7 +321,9 @@ const LayoutMeasurements = ({setHandleEstimatesPages}) => {
                     disabled={Object.keys(formik.values).some(
                       (key) => !formik.values[key]
                     )}
-                    onClick={() => {setHandleEstimatesPages("review")}}
+                    onClick={() => {
+                      setHandleEstimatesPages("review");
+                    }}
                     sx={{
                       height: 40,
                       fontSize: 20,
