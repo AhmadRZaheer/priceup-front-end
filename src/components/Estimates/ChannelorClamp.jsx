@@ -42,7 +42,6 @@ const ChannelTypeDesktop = ({
       setAnchorEl(!anchorEl);
     else showSnackbar("Please select 'hardwareFinishes' first", "warning");
   };
-
   return (
     <Box>
       <Box
@@ -96,9 +95,9 @@ const ChannelTypeDesktop = ({
                     width: "200px",
                     borderRadius: "12px",
                     border:
-                      item === selectedContent?.mounting?.activeType
+                      item.toLowerCase() === selectedContent?.mounting?.activeType
                         ? "2px solid blue"
-                        : "1px solid black",
+                        : "",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                     p: 2,

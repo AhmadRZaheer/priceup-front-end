@@ -26,8 +26,6 @@ const Summary = ({ handleOpen }) => {
 
           display: "flex",
           alignItems: { md: "center", xs: "start" },
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -114,12 +112,9 @@ const Summary = ({ handleOpen }) => {
               flexDirection: { md: "row", xs: "column" },
               minHeight: "50vh",
               maxHeight: "62vh",
-              // height: "60vh",
               overflow: "auto"
             }}
           >
-            {/* LeftSide */}
-            {/* rightSide */}
             <Box
               sx={{
                 display: "flex",
@@ -136,17 +131,14 @@ const Summary = ({ handleOpen }) => {
                   display: "flex",
                   width: "84%",
                   justifyContent: "center",
-                  // background: "#D9D9D9",
                   margin: { md: 0, xs: "auto" },
                   p: 3,
                   borderBottom: "1px solid #2c2c3c",
-                  // height: "250px",
                 }}
               >
                 <img
                   width={"100px"}
                   height={"110px"}
-                  // src={door}
                   src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
@@ -154,17 +146,11 @@ const Summary = ({ handleOpen }) => {
               <Box
                 sx={{
                   width: "94%",
-
                   borderRadius: "8px",
                   paddingY: 4,
                   margin: { md: 0, xs: "auto" },
-                  // height: "250px",
                 }}
               >
-                {/* <Typography>12’’/ 12’’/ 12’’ </Typography> */}
-                {/* {measurements?.map((measurement, index) => (
-                  <p key={index}>{measurement.value}</p>
-                ))} */}
                 <Typography>
                   {measurements
                     .filter(
@@ -222,7 +208,6 @@ const Summary = ({ handleOpen }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderTop: "2px solid #D0D5DD",
                     marginTop: 1,
