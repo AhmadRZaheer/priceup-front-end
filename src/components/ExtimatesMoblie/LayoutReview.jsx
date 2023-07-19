@@ -22,7 +22,6 @@ const LayoutReview = () => {
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
 
-  console.log(selectedContent.mounting.activeType, "active type");
   const dispatch = useDispatch();
   // const [mountingType, setmountingType] = useState(
   //   selectedContent.mounting.activeType || "clamps"
@@ -159,7 +158,6 @@ const LayoutReview = () => {
       open: false,
     }));
   };
-  console.log(estimatesData, "estimatesData12");
   return (
     <>
       <Box

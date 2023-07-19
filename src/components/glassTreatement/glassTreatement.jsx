@@ -17,7 +17,6 @@ const GlassTreatementTable = () => {
     message: "",
     severity: "",
   });
-  // console.log(snackbar, "snackbar snackbar");
   const { data: glassTreatementData, refetch: glassTreatementRefetch } =
     useFetchDataGlassTreatement();
   const {
@@ -26,7 +25,6 @@ const GlassTreatementTable = () => {
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteGlassTreatement();
-  console.log(glassTreatementData, "data");
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);

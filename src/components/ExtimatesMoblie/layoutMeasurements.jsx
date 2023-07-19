@@ -45,7 +45,6 @@ const LayoutMeasurements = () => {
     initialValues: {},
     validationSchema,
     onSubmit: async (values, resetForm) => {
-      console.log(values, "formik values in mobiel");
       const measurementsArray = Object.entries(values)
         .filter(([key, value]) => value !== "")
         .map(([key, value]) => ({
@@ -60,7 +59,6 @@ const LayoutMeasurements = () => {
       resetForm();
     },
   });
-  console.log(formik.values, "formik values");
   const dispatch = useDispatch();
   const handleBoxClick = () => {
     // const measurementsArray = Object.entries(formik.values)
@@ -72,7 +70,6 @@ const LayoutMeasurements = () => {
     // dispatch(updateMeasurements(measurementsArray));
     // setHandleEstimatesPages("measurements");
   };
-  console.log(selectedData?.settings?.measurementSides, " side check");
   return (
     <>
       <Box

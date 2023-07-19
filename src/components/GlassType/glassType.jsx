@@ -15,7 +15,6 @@ const GlassTypeTable = () => {
     message: "",
     severity: "",
   });
-  console.log(snackbar, "snackbar snackbar");
   const { data: GlassTypeData, refetch: glassTypeRefetch } = useFetchDataGlassType();
   const {
     mutate: deleteFinish,
@@ -23,7 +22,6 @@ const GlassTypeTable = () => {
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteGlassType();
-  console.log( GlassTypeData, "data");
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);

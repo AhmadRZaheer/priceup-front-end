@@ -21,7 +21,6 @@ const UserAuth = createSlice({
     },
     loginHandler: (state, action) => {
       const { token } = action.payload;
-      console.log(action.payload, "login payload");
       state.token = token;
       state.isLoggedIn = true;
       state.Useremail = localStorage.getItem("email");

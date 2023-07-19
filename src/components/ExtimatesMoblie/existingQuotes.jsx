@@ -16,17 +16,9 @@ export default function ExitingQuotes() {
   const [selectedQuote, setSelectedQuote] = useState(null);
 
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
-  console.log(estimates, "estimates in existing");
-  console.log(selectedQuote, "selectedQuote in existing");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const Logout = () => {
-  //   console.log("hello world");
-  //   dispatch(logoutHandler());
-
-  //   navigate("/login");
-  // };
 
   return (
     <>

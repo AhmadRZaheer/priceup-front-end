@@ -23,10 +23,6 @@ const SuperAdminTable = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
 
   const [open, setOpen] = useState(false);
-  // const [matchingId, setMatchingId] = useState("");
-  // console.log(matchingId, "matchingId")
-
-  console.log(AdminData, "AdminData");
 
   const handleClose = () => setOpen(false);
 
@@ -49,13 +45,6 @@ const SuperAdminTable = () => {
       open: false,
     }));
   };
-  console.log(AdminData, "teamDatateamData");
-
-  const handleSwitch = (row) => {
-    console.log(row, "row");
-    // deleteFinish(id);
-    // setMatchingId(id);
-  };
 
   const actionColumn = [
     {
@@ -68,7 +57,6 @@ const SuperAdminTable = () => {
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
-        console.log(params.row, "params id");
         // const isMatchingId = id === matchingId;
 
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;

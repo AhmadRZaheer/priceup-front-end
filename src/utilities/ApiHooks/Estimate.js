@@ -1,10 +1,9 @@
-import { backendURL, createSlug } from "../common";
+import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
 export const useFetchDataEstimate = () => {
-  console.log("first  hook");
 
   async function fetchData() {
     const token = localStorage.getItem("token");
@@ -12,7 +11,6 @@ export const useFetchDataEstimate = () => {
       const response = await axios.get(`${backendURL}/estimates/listsData`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {
@@ -37,7 +35,6 @@ export const useGetEstimates = () => {
       const response = await axios.get(`${backendURL}/estimates`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : null;
       } else {
@@ -55,44 +52,11 @@ export const useGetEstimates = () => {
   });
 };
 
-// export const useEditDefault = () => {
-//   const handleEdit = async (updatedHardware) => {
-//     console.log(updatedHardware, "updatehardware in hooks");
-
-//     const token = localStorage.getItem("token");
-
-//     try {
-//       const response = await axios.put(
-//         `${backendURL}/finishes/${updatedHardware?.id}`,
-//         {
-//           name: updatedHardware?.hardwareLabel,
-//           holesNeeded: updatedHardware?.thickness,
-//         },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-
-//       if (response.data.code === 200) {
-//         return response.data.data;
-//       } else {
-//         throw new Error("An error occurred while updating the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while updating the data.");
-//     }
-//   };
-
-//   return useMutation(handleEdit);
-// };
-
 export const useCreateEstimates = () => {
   const handleCreate = async (props) => {
-    console.log(props, "hook props in create hook");
     const token = localStorage.getItem("token");
     // const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
-    console.log(decodedToken, "parseJwt");
 
     try {
       const response = await axios.post(

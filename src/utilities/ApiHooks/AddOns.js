@@ -12,7 +12,6 @@ export const useFetchDataAddOns = (type) => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {

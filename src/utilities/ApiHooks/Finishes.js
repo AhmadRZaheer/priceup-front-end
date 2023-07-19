@@ -11,7 +11,6 @@ export const useFetchDataFinishes = () => {
       const response = await axios.get(`${backendURL}/finishes`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {
@@ -36,7 +35,6 @@ export const useDeleteFinishes = () => {
       const response = await axios.delete(`${backendURL}/finishes/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      // console.log(response, "delete response");
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -53,11 +51,9 @@ export const useDeleteFinishes = () => {
 
 export const useCreateFinish = () => {
   const handleCreate = async (props) => {
-    console.log(props, "hook props in create hook");
     const token = localStorage.getItem("token");
     const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
-    console.log(decodedToken, "parseJwt");
 
     try {
       const response = await axios.post(
@@ -89,7 +85,6 @@ export const useCreateFinish = () => {
 
 export const useEditFinish = () => {
   const handleEdit = async (updatedHardware) => {
-    console.log(updatedHardware, "updatehardware in hooks");
 
     const token = localStorage.getItem("token");
 

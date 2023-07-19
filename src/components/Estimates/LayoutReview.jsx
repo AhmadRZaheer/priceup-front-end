@@ -20,7 +20,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
   const selectedContent = useSelector(getContent);
   const totalPrice = useSelector(getTotal);
 
-  console.log(selectedContent.mounting.activeType, "active type");
   const dispatch = useDispatch();
   // const [mountingType, setmountingType] = useState(
   //   selectedContent.mounting.activeType || "clamps"
@@ -134,13 +133,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
       laborPrice;
     dispatch(setTotal(total));
   }, [selectedContent]);
-  console.log(
-    estimatesData,
-    "estimatesData",
-    selectedContent,
-    "selected items",
-    totalPrice
-  );
   const handleBoxClick = () => {
     dispatch(setNavigation("summary"));
   };
@@ -163,7 +155,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
       open: false,
     }));
   };
-  console.log(estimatesData, "estimatesData12");
   return (
     <>
       <Box

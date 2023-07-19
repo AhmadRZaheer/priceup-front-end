@@ -10,7 +10,6 @@ import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 const TableHeader = ({ showMore, types }) => {
   const [selectedOption, setSelectedOption] = useState("handles");
   const renderSliderItems = (items) => {
-    console.log(items, "itemsss");
     return items?.map((item, index) => (
       <div key={index} style={{ display: "flex", gap: 10 }}>
         {renderSliderItem(item, item?.slug)}
@@ -23,7 +22,6 @@ const TableHeader = ({ showMore, types }) => {
   };
 
   const renderSliderItem = (title, option) => (
-    console.log(option, "options to show handles"),
     (
       <Box
         onClick={() => handleItemClick(option)}

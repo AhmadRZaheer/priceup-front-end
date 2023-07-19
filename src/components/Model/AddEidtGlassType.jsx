@@ -40,8 +40,6 @@ export default function AddEditGlassType({
   finishesRefetch,
   showSnackbar,
 }) {
-  // console.log(data, "data not id");
-  // const [openSnackBarAlert, setOpenSnakbarAlert] = React.useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -91,14 +89,11 @@ export default function AddEditGlassType({
   }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "props for creat hook in model");
     addGlassType(props);
   };
 
   const handleEditClick = (props) => {
-    console.log(props, "props for edit to refetch");
     const id = data;
-    // console.log(id, "id2 for edit hook");
     editGlassType(props, id);
   };
 

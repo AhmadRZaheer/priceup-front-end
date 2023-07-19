@@ -40,10 +40,8 @@ function MobileBar() {
   };
 
   const navigate = useNavigate();
-  // const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
-    // console.log("hello world");
     dispatch(logoutHandler());
 
     navigate("/login");

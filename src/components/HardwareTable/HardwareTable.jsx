@@ -31,11 +31,9 @@ const HardwareTable = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
-    console.log(id, "clicked deleted button");
     dispatch(deleteHardware(id));
   };
   const handleEdit = (updatedHardware) => {
-    console.log(updatedHardware, "clicked Edit button");
 
     dispatch(editHardware(updatedHardware));
   };
@@ -56,7 +54,6 @@ const HardwareTable = () => {
     dispatch(addHardware(newHardware));
   };
   const handleHeaderClick = (selectedImage) => {
-    console.log("handleHeaderClick Edit button");
     const newId = Date.now() % 10000;
     const newHardware = {
       id: newId,
@@ -103,7 +100,6 @@ const HardwareTable = () => {
 
   const { data: hardwareCategoryData, refetch: hardwareCategoryRefetch } =
     useFetchDatahardwareCategory();
-  console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
       <Box

@@ -3,7 +3,6 @@ import { Button, IconButton } from "@mui/material";
 import LayoutHeader from "./LayoutHeader";
 
 const DefaultComponentHeader = ({ selected, handleEditClick }) => {
-  console.log(selected, "type in default component header");
   return (
     <>
       <LayoutHeader />

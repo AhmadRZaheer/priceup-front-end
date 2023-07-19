@@ -34,7 +34,6 @@ const Layout = () => {
   const { data: layouts, refetch: defaultDataRefetch, isFetching: loading } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
-  console.log(selectedData, "selectedData11");
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));

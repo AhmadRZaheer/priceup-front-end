@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
 import { ChevronRight } from "@mui/icons-material";
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -32,7 +32,6 @@ const ChannelTypeDesktop = ({
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
   const selectedContent = useSelector(getContent);
-  console.log(estimatesData, "estimatesData test ");
 
   // Handle functions for each item
   const handleSleeveOverCount = (count) => {

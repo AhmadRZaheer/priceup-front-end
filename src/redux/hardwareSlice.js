@@ -12,7 +12,6 @@ const hardwareSlice = createSlice({
  
 
     editHardware: (state, action) => {
-      console.log(action, "action in edit reducer");
       const updatedHardware = action.payload;
       return state.map((hardware) =>
         hardware.id === updatedHardware.id ? updatedHardware : hardware

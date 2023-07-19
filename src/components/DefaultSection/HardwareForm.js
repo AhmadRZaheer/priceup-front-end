@@ -49,7 +49,6 @@ const HardwareForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
     },
   });
   const handleAddFormEntry = () => {

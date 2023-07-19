@@ -79,7 +79,6 @@ export default function AddSuperAdminModel({
   }, [CreatedSuccessfully]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "props for creat hook in model");
     addTeamAdminsMembers(props);
   };
 
