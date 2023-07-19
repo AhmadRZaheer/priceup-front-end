@@ -20,12 +20,8 @@ const style = {
   display: "flex",
   flexDirection: "column",
   gap: 3,
-  // top: { md: "50%", xs: "76%" },
-  // left: { md: "50%", xs: "50%" },
   bottom: 0,
-  // transform: "translate(-50%, -50%)",
   width: { md: 350, xs: "100%" },
-  // bgcolor: "red",
   borderRadius: { md: "4px" },
   borderTop: "2px solid #4c4d53",
   borderTopLeftRadius: { md: "4px", xs: 30 },
@@ -130,7 +126,6 @@ export default function ClientDetailsModel({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
-      // window.location.href = "/";
       dispatch(setNavigation("existing"));
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
@@ -342,7 +337,6 @@ export default function ClientDetailsModel({
                   justifyContent: "end",
                 }}
               >
-                {/* <Box onClick={handleCancel}> */}
                 <Button
                   type="submit"
                   sx={{
@@ -354,11 +348,9 @@ export default function ClientDetailsModel({
                   }}
                   fullWidth
                   variant="contained"
-                  // onClick={handleCancel}
                 >
                   Save
                 </Button>
-                {/* </Box> */}
               </Box>
             </Box>
           </Box>
