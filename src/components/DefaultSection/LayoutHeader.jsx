@@ -3,16 +3,24 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
 import { useDispatch, useSelector } from "react-redux";
-import { getRefetch, setDefaultId } from "../../redux/defaultSlice";
+import {
+  getDefaultId,
+  getRefetch,
+  setDefaultId,
+} from "../../redux/defaultSlice";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
   useEditDefault,
   useFetchDataDefault,
 } from "../../utilities/ApiHooks/DefaultLayouts";
 import { useEffect } from "react";
+import { Box } from "@mui/material";
 
 const LayoutHeader = () => {
   const { data: types, refetch: defaultDataRefetch } = useFetchDataDefault();
   const refetch = useSelector(getRefetch);
+  const defaultId = useSelector(getDefaultId);
 
   useEffect(() => {
     defaultDataRefetch();
@@ -32,58 +40,33 @@ const LayoutHeader = () => {
   const renderSliderItem = (props) => (
     console.log(props, "options to show handles"),
     (
-      <div
+      <Box
         onClick={() => showMore(props._id)}
-        style={{
+        sx={{
           paddingLeft: "15px",
           paddingRight: "15px",
-          // paddingTop: "10px",
-          // paddingBottom: "10px",
-
           minHeight: "50px",
-          minWidth: "110px",
-          // backgroundColor: "rgb(232, 232, 232)",
-          // backgroundColor: "#fff",
+          marginRight: 2,
+          backgroundColor:
+            props?._id === defaultId ? "rgba(132, 119, 218, 0.2)" : "",
 
+          "&:hover": {
+            backgroundColor: "rgba(132, 119, 218, 0.2)",
+          },
+          "&:active": {
+            backgroundColor: "rgba(132, 119, 218, 0.2)",
+          },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           cursor: "pointer",
-          // gap: 8,
-          width: "fit-content", // Set the width to fit the content
-          margin: "0 auto", // Center the item horizontally
-          borderRadius: "4px", // Add border radius for a rounded look
+
+          borderRadius: "4px",
         }}
       >
         <h3>{props?.name}</h3>
-      </div>
+      </Box>
     )
-  );
-
-  const CustomPrevArrow = (props) => (
-    <div
-      {...props}
-      style={{
-        ...props.style,
-        color: "blue !important", // Change the arrow color to red
-        zIndex: 2,
-      }}
-    >
-      Previous
-    </div>
-  );
-
-  const CustomNextArrow = (props) => (
-    // console.log(props, "arrow porpss"),
-    <div
-      {...props}
-      style={{
-        ...props.style,
-        color: "green !important", // Change the arrow color to blue
-      }}
-    >
-      jkj
-    </div>
   );
 
   const sliderSettings = {
@@ -92,8 +75,16 @@ const LayoutHeader = () => {
     slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
-    prevArrow: <CustomPrevArrow />, // Replace default prevArrow with a custom one
-    nextArrow: <CustomNextArrow />, // Replace default nextArrow with a custom one
+    prevArrow: (
+      <ArrowBackIosNewIcon
+        sx={{ color: "black", "&:hover": { color: "black" } }}
+      />
+    ),
+    nextArrow: (
+      <ArrowForwardIosIcon
+        sx={{ color: "black", "&:hover": { color: "black" } }}
+      />
+    ),
     adaptiveHeight: true,
   };
 

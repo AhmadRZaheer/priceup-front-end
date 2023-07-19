@@ -4,30 +4,38 @@ import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 const TableHeader = ({ showMore, types }) => {
+  const [selectedOption, setSelectedOption] = useState("handles");
   const renderSliderItems = (items) => {
     console.log(items, "itemsss");
     return items?.map((item, index) => (
-      <div key={index} style={{display: "flex", gap: 10}}>
+      <div key={index} style={{ display: "flex", gap: 10 }}>
         {renderSliderItem(item, item?.slug)}
-        </div>
+      </div>
     ));
+  };
+  const handleItemClick = (option) => {
+    showMore(option);
+    setSelectedOption(option);
   };
 
   const renderSliderItem = (title, option) => (
     console.log(option, "options to show handles"),
     (
       <Box
-        onClick={() => showMore(option)}
+        onClick={() => handleItemClick(option)}
         sx={{
           paddingLeft: "15px",
           paddingRight: "15px",
           minHeight: "50px",
-          // minWidth: "80px",
-          // maxWidth: "200px",
+          marginRight: 2,
+          backgroundColor:
+            selectedOption === option
+              ? "rgba(132, 119, 218, 0.2)"
+              : "transparent",
           "&:hover": {
             backgroundColor: "rgba(132, 119, 218, 0.2)",
           },
@@ -38,47 +46,13 @@ const TableHeader = ({ showMore, types }) => {
           alignItems: "center",
           justifyContent: "center",
           cursor: "pointer",
-          // width: "fit-content",
-          // margin: "0 auto",
-          borderRadius: "4px",// Add border radius for a rounded look
+
+          borderRadius: "4px",
         }}
       >
         <h3>{title?.name}</h3>
       </Box>
     )
-  );
-
-  const CustomPrevArrow = (props) => (
-    <div
-      {...props}
-      style={{
-        ...props.style,
-        color: "blue !important", // Change the arrow color to red
-        zIndex: 2,
-        backgroundColor: "black",
-        borderRadius: "100%" 
-      }}
-    >
-      Previous
-    </div>
-  );
-
-  const CustomNextArrow = (props) => (
-    // console.log(props, "arrow porpss"),
-    <div
-      {...props}
-      style={{
-        ...props.style,
-        color: "green !important",
-        // backgroundColor: "black",
-        borderRadius: "100%",
-        width: "20px",
-        height: "20px"
-         // Change the arrow color to blue
-      }}
-    >
-      
-    </div>
   );
 
   const sliderSettings = {
@@ -87,8 +61,16 @@ const TableHeader = ({ showMore, types }) => {
     slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
-    prevArrow: <ArrowBackIosNewIcon  sx={{color: "black", "&:hover": {color: 'black'}}}/>, // Replace default prevArrow with a custom one
-    nextArrow: <ArrowForwardIosIcon  sx={{color: "black", "&:hover": {color: 'black'}}}/>, // Replace default nextArrow with a custom one
+    prevArrow: (
+      <ArrowBackIosNewIcon
+        sx={{ color: "black", "&:hover": { color: "black" } }}
+      />
+    ), // Replace default prevArrow with a custom one
+    nextArrow: (
+      <ArrowForwardIosIcon
+        sx={{ color: "black", "&:hover": { color: "black" } }}
+      />
+    ), // Replace default nextArrow with a custom one
     adaptiveHeight: true,
   };
 

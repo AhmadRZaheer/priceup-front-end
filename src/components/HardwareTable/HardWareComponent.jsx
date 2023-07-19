@@ -68,9 +68,7 @@ const HardWareComponent = ({ type }) => {
   };
   const handleClose = () => {
     setOpen(false);
-    
   };
-
 
   const handleOpenEdit = (data, isEditAble) => {
     setOpen(true);
@@ -79,7 +77,6 @@ const HardWareComponent = ({ type }) => {
   };
   const handleHardwareDelete = (id) => {
     deleteHardware(id);
-    
   };
 
   useEffect(() => {
@@ -210,7 +207,8 @@ const HardWareComponent = ({ type }) => {
             justifyContent: "center",
             padding: "20px",
             alignItems: "center",
-            width: "100%",
+
+            height: "56vh",
           }}
         >
           <CircularProgress size={24} color="warning" />
@@ -279,105 +277,9 @@ const HardWareComponent = ({ type }) => {
                     refetch={hardwareRefetch}
                     hardwareId={entry._id}
                     showSnackbar={showSnackbar}
-                    
                   />
                 ))}
               </Box>
-
-              {/* <form>
-            <div
-              style={{
-                display: "flex",
-                gap: 4,
-                alignContent: "center",
-                paddingTop: 4,
-                paddingBottom: 4,
-              }}
-            >
-              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <FormControl style={{ width: "100%" }}>
-                  <Typography>Finish Type</Typography>
-                  <TextField
-                    select
-                    size="small"
-                    variant="outlined"
-                    name="finishType"
-                    style={{ width: "100%" }}
-                  >
-                    {finishTypeOptions.map((option) => (
-                      <MenuItem key={option.value} value={option.value}>
-                        {option.label}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                </FormControl>
-              </div>
-
-              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <Typography>Hardware Part Number</Typography>
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  name="hardwarePartNumber"
-                  placeholder="Hardware Part Number"
-                  style={{ width: "100%" }}
-                />
-              </div>
-
-              <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
-                <Typography>Cost</Typography>
-                <TextField
-                  size="small"
-                  variant="outlined"
-                  name="cost"
-                  placeholder="Cost"
-                  style={{ width: "100%" }}
-                />
-              </div>
-
-              <div
-                style={{
-                  maxWidth: "400px",
-                  padding: 4,
-                  display: "flex",
-                  alignItems: "center",
-                }}
-              >
-                <div style={{ marginTop: "18px" }}>
-                  <FormControlLabel
-                    control={<Checkbox color="primary" name="isChecked" />}
-                    label="Price by sqft"
-                  />
-                </div>
-
-                <div
-                  style={{ width: "150px", padding: 4, alignItems: "center" }}
-                >
-                  <FormControl style={{ width: "100%" }} size="small">
-                    <Typography>Thickness</Typography>
-                    <TextField
-                      select
-                      size="small"
-                      variant="outlined"
-                      name="thickness"
-                      style={{ width: "100%" }}
-                    >
-                      {options.map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </TextField>
-                  </FormControl>
-                </div>
-                <div style={{ marginTop: "18px" }}>
-                  <IconButton onClick={() => handleAddFormEntryItems(entry.id)}>
-                    <Add style={{ color: "rgb(65, 106, 238)" }} />
-                  </IconButton>
-                </div>
-              </div>
-            </div>
-          </form> */}
             </div>
           ))}
         </div>

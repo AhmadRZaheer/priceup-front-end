@@ -44,6 +44,7 @@ const DefaultSection = () => {
           sx={{
             border: "1px solid rgb(232, 232, 232)",
             margin: 2,
+            paddingTop: 2,
           }}
         >
           <div className="hardwareTable">
