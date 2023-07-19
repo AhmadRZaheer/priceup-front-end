@@ -4,15 +4,7 @@ import "./hardwareTable.scss";
 import { Box, Typography } from "@mui/material";
 
 import DefaultComponent from "./DefaultComponent";
-import LayoutHeader from "./LayoutHeader";
 
-import {
-  useFetchDataDefault,
-  useFetchSingleDefault,
-} from "../../utilities/ApiHooks/DefaultLayouts";
-import { CircularProgress } from "@material-ui/core";
-import { getDefaultId } from "../../redux/defaultSlice";
-import { useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
 
 const DefaultSection = () => {
@@ -46,8 +38,6 @@ const DefaultSection = () => {
       >
         <div className="page-title">
           <Typography sx={{ fontSize: 30, pl: 1 }}>Default</Typography>
-          
-
         </div>
 
         <Box

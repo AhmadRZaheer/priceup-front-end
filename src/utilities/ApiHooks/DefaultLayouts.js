@@ -2,10 +2,8 @@ import { backendURL, createSlug } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
-
 export const useFetchDataDefault = () => {
   console.log("first  hook");
-
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
@@ -29,36 +27,11 @@ export const useFetchDataDefault = () => {
     placeholderData: [],
   });
 };
-
-// export const useFetchSingleDefault = (id) => {
-//   console.log(id, "second hook");
-//   async function fetchData() {
-//     const token = localStorage.getItem("token");
-//     try {
-//       const response = await axios.get(`${backendURL}/layouts/${id}`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-//       console.log(response, "response");
-//       if (response.data && response.data.code === 200) {
-//         return response.data.data ? response.data.data : null;
-//       } else {
-//         throw new Error("An error occurred while fetching the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while fetching the data.");
-//     }
-//   }
-//   return useQuery({
-//     queryKey: ["singleLayout", 1],
-//     queryFn: fetchData,
-//     enabled: !!id,
-//     placeholderData: null,
-//   });
-// };
 export const useFetchSingleDefault = (id) => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(true);
+
   const fetchData = async () => {
     const token = localStorage.getItem("token");
     try {
@@ -75,6 +48,21 @@ export const useFetchSingleDefault = (id) => {
       throw new Error("An error occurred while fetching the data.");
     }
   };
+  const refetch = () => {
+    setIsLoading(true);
+    setIsFetching(true);
+    fetchData()
+      .then((fetchedData) => {
+        setData(fetchedData);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsFetching(false);
+      });
+  };
 
   useEffect(() => {
     setIsFetching(true);
@@ -90,16 +78,12 @@ export const useFetchSingleDefault = (id) => {
         setIsFetching(false);
       });
   }, [id]);
-
-  return { data, isLoading, isFetching };
+  return { data, isLoading, isFetching, refetch };
 };
-
 export const useEditDefault = () => {
   const handleEdit = async (updatedDefault) => {
     console.log(updatedDefault, "updatedDefault in hooks");
-
     const token = localStorage.getItem("token");
-
     try {
       const response = await axios.put(
         `${backendURL}/layouts/${updatedDefault?.id}`,
@@ -107,8 +91,7 @@ export const useEditDefault = () => {
         {
           name: updatedDefault.settings?.name,
           image: updatedDefault.settings?.image,
-          // company_id: updatedDefault.settings?.company_id,
-          // hardwareFinishes: updatedDefault.settings?.hardwareFinishes,
+
           settings: {
             hardwareFinishes: updatedDefault.settings?.hardwareFinishes,
             handles: {
@@ -133,8 +116,9 @@ export const useEditDefault = () => {
             heavyPivotOption: {
               heavyPivotType:
                 updatedDefault.settings?.heavyPivotOption?.heavyPivotType,
-              threshold: updatedDefault.settings?.heavyPivotOption?.threshold,
-              height: updatedDefault.settings?.heavyPivotOption?.height,
+              threshold: updatedDefault.settings.heavyPivotOption.threshold,
+
+              height: updatedDefault.settings.heavyPivotOption.height,
             },
             channelOrClamps: updatedDefault.settings?.channelOrClamps,
             mountingChannel: updatedDefault.settings?.mountingChannel,

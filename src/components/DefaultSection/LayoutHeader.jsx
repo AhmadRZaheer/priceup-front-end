@@ -2,12 +2,21 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { items } from "../../data/data";
-import { useDispatch } from "react-redux";
-import { setDefaultId } from "../../redux/defaultSlice";
-import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
+import { useDispatch, useSelector } from "react-redux";
+import { getRefetch, setDefaultId } from "../../redux/defaultSlice";
+import {
+  useEditDefault,
+  useFetchDataDefault,
+} from "../../utilities/ApiHooks/DefaultLayouts";
+import { useEffect } from "react";
 
 const LayoutHeader = () => {
   const { data: types, refetch: defaultDataRefetch } = useFetchDataDefault();
+  const refetch = useSelector(getRefetch);
+
+  useEffect(() => {
+    defaultDataRefetch();
+  }, [refetch]);
   const dispatch = useDispatch();
 
   const showMore = (id) => {

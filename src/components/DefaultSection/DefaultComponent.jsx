@@ -16,11 +16,13 @@ import {
   useFetchSingleDefault,
 } from "../../utilities/ApiHooks/DefaultLayouts";
 import DefaultComponentHeader from "./DefaultComponentHeader";
-import { getDefaultId } from "../../redux/defaultSlice";
-import { useSelector } from "react-redux";
+import { getDefaultId, getRefetch, setRefetch } from "../../redux/defaultSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 const DefaultComponent = ({ showSnackbar }) => {
+  const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
+  const refetchDefault = useSelector(getRefetch);
   const {
     mutate: updateDefault,
     isLoading: LoadingForEdit,
@@ -28,8 +30,11 @@ const DefaultComponent = ({ showSnackbar }) => {
     isSuccess: SuccessForEdit,
   } = useEditDefault();
 
-  const { data: singleDefault, isFetching: isfetchingDefaultSingle } =
-    useFetchSingleDefault(defaultId);
+  const {
+    data: singleDefault,
+    isFetching: isfetchingDefaultSingle,
+    refetch,
+  } = useFetchSingleDefault(defaultId);
   console.log(singleDefault, "singleDefault test");
   const formik = useFormik({
     initialValues: {
@@ -130,7 +135,9 @@ const DefaultComponent = ({ showSnackbar }) => {
   };
   useEffect(() => {
     if (SuccessForEdit) {
+      refetch();
       showSnackbar("Updated Successfully ", "success");
+      dispatch(setRefetch(refetchDefault + 1));
     }
   }, [SuccessForEdit]);
   return (
