@@ -99,7 +99,7 @@ const ChannelType = ({
                     width: "200px",
                     borderRadius: "12px",
                     border:
-                      item === selectedContent?.mounting?.activeType
+                      item.toLowerCase() === selectedContent?.mounting?.activeType
                         ? "2px solid blue"
                         : "1px solid #EAECF0",
                     boxShadow:

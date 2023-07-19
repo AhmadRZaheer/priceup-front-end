@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
@@ -18,8 +17,6 @@ const ChannelTypeDesktop = ({
   title,
   type,
   showSnackbar,
-  count,
-  thickness,
   estimatesData,
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
