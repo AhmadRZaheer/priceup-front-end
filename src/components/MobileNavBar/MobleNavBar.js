@@ -6,9 +6,6 @@ import React, { useState } from "react";
 import {
   Drawer,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Backdrop,
   Box,
   Button,
@@ -16,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { logoutHandler } from "../../redux/userAuth";
 
@@ -88,14 +85,39 @@ function MobileBar() {
               // py: 1,
             }}
           >
+            <Box>
+              <div className="top2">
+                <span className="logo2">
+                  <img src={Logo} alt="" />
+                </span>
+              </div>
+              <Box sx={{marginTop: 8,}}>
+                <Button
+                // href="/staff"
+                  sx={{
+                    width: 220,
+                    color: "white",
+                    marginLeft: 4,
+                    backgroundColor: "#8477da",
+                    ":hover": {
+                      backgroundColor: "#8477da",
+                    }
+                  }}
+                  // variant="contained"
+                >
+                  Staff
+                </Button>
+              </Box>
+            </Box>
             <Box
               sx={{
                 display: "flex",
                 justifyContent: "end",
                 alignItems: "start",
-                height: "100%",
-                width: '100%',
+                height: "78%",
+                width: "100%",
                 flexDirection: "column",
+                backgroundColor: "#100d24"
               }}
             >
               <Box>
@@ -104,7 +126,7 @@ function MobileBar() {
                     width: 200,
                     color: "white",
                     margin: 3,
-                    marginLeft: 5,
+                    marginLeft: 4,
                     backgroundColor: "#8477da",
                   }}
                   variant="contained"
