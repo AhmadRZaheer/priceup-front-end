@@ -34,10 +34,6 @@ const MenuList = ({
 
   const selectedContent = useSelector(getContent);
 
-  // Handle functions for each item
-  // const [mountingType, setmountingType] = useState(
-  //   selectedContent.mounting.activeType || "clamps"
-  // );
 
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
@@ -167,26 +163,17 @@ const MenuList = ({
                 color: { md: "black", xs: "white" },
                 width: "100%",
               }}
-              // style={{ width: "100%", background: "white" }}
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
-              // onChange={formik.handleChange} ()=>handleThicknessSet()
-              // onBlur={formik.handleBlur}
             >
               <MenuItem
                 key="1/2"
-                // selected={thickness === "1/2"}
                 value="1/2"
               >
                 1/2
               </MenuItem>
               <MenuItem
                 key="3/8"
-                // selected={thickness === "3/8"}
-                // selected={
-                //   singleDefault?.layoutData?.settings
-                //     ?.hardwareFinishes === option?._id
-                // }
                 value="3/8"
               >
                 3/8
@@ -230,7 +217,6 @@ const MenuList = ({
                         : "1px solid #EAECF0",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                    // border: "1px solid #EAECF0",
                     p: 2,
                     display: "flex",
                     gap: 2,

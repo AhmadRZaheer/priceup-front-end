@@ -23,10 +23,6 @@ const formSlice = createSlice({
     addFormEntry: (state, action) => {
       state.entries.push(action.payload);
     },
-    // addItems: (state, action) => {
-    //   const { id, data } = action.payload;
-    //   state.entries[index].items.push(data);
-    // },
 
     addItems: (state, action) => {
       const { id, data } = action.payload;

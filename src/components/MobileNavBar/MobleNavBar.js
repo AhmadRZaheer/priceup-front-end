@@ -80,7 +80,6 @@ function MobileBar() {
               height: "100%",
               padding: 0,
               margin: 0,
-              // py: 1,
             }}
           >
             <Box>
@@ -91,7 +90,6 @@ function MobileBar() {
               </div>
               <Box sx={{marginTop: 8,}}>
                 <Button
-                // href="/staff"
                   sx={{
                     width: 220,
                     color: "white",
@@ -101,7 +99,6 @@ function MobileBar() {
                       backgroundColor: "#8477da",
                     }
                   }}
-                  // variant="contained"
                 >
                   Staff
                 </Button>
@@ -149,17 +146,6 @@ function MobileBar() {
               </div>
             </Box>
           </Box>
-          {/* <List>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 1" />
-          </ListItem>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 2" />
-          </ListItem>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 3" />
-          </ListItem>
-        </List> */}
         </Drawer>
 
         <Backdrop

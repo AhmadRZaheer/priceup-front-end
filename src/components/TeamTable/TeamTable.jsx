@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./TeamTable.scss";
-import { teamColumns, userRows } from "../../customerTableSource";
+import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -20,10 +20,7 @@ const TeamTable = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
 
-  const handleOpen = (data) => {
-    setOpen(true);
-    setIsEdit(false);
-  };
+
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data, isEditAble) => {
     setOpen(true);
@@ -49,29 +46,10 @@ const TeamTable = () => {
       open: false,
     }));
   };
-  // const actionColumn = [
-  //   {
-  //     field: "action",
-  //     headerName: "Actions",
-  //     width: 200,
-  //     renderCell: () => {
-  //       return (
-  //         <div className="cellAction">
-  //           <div className="deleteButton">
-  //             <DeleteIcon />
-  //           </div>
-  //           <div className="viewButton">
-  //             <ModeIcon />
-  //           </div>
-  //         </div>
-  //       );
-  //     },
-  //   },
-  // ];
+
 
   const {
     mutate: deleteFinish,
-    error: finishDeleteError,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteTeamMembers();
@@ -93,11 +71,7 @@ const TeamTable = () => {
   const actionColumn = [
     {
       field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
+
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;

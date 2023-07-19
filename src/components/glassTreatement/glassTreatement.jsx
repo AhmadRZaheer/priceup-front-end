@@ -21,7 +21,6 @@ const GlassTreatementTable = () => {
     useFetchDataGlassTreatement();
   const {
     mutate: deleteGlassTreatement,
-    error: finishDeleteError,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteGlassTreatement();
@@ -55,11 +54,6 @@ const GlassTreatementTable = () => {
   const actionColumn = [
     {
       field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;

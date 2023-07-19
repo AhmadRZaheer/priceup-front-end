@@ -1,19 +1,11 @@
 import React, { useState } from "react";
 import "./sidebar.scss";
 import Logo from "../../Assets/purplelogo.svg";
-import LeaderboardSharpIcon from "@mui/icons-material/LeaderboardSharp";
-import AdjustIcon from "@mui/icons-material/Adjust";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
-import ViewInArOutlinedIcon from "@mui/icons-material/ViewInArOutlined";
-import AddBoxOutlinedIcon from "@mui/icons-material/AddBoxOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import UserIcon from "../../Assets/username1.svg";
 import logout from "../../Assets/logout.svg";
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Model/Logout";
-import { useHistory } from "react-router-dom";
 import EstimsteIcon from "../../Assets/bar.svg";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
 import TremIcon from "../../Assets/users.svg"
@@ -22,7 +14,7 @@ import DefaltIcon from "../../Assets/columns.svg"
 import SettingsIcon from "../../Assets/settings.svg"
 import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import { Box, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { backendURL } from "../../utilities/common";
 

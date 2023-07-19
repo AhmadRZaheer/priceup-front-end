@@ -8,11 +8,7 @@ const UserAuth = createSlice({
     Useremail: "",
   },
   reducers: {
-    // settingInitialValues: (state, action) => {
-    //   const { userToken, userLoggedIn } = action.payload;
-    //   state.token = userToken;
-    //   state.isLoggedIn = userLoggedIn;
-    // },
+
     logoutHandler: (state) => {
       state.token = "";
       state.isLoggedIn = false;
@@ -25,11 +21,6 @@ const UserAuth = createSlice({
       state.isLoggedIn = true;
       state.Useremail = localStorage.getItem("email");
       localStorage.setItem("token", token);
-      // Token Expire Time
-      // const totalTime = new Date( new Date().getTime() + (+expiresIn * 1000))
-      // const currTime = new Date().getTime();
-      // const finalTime = totalTime - currTime;
-      // setTimeout(()=> logoutHandler  , 3000);
     },
   },
 });

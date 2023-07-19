@@ -19,15 +19,7 @@ import {
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
 
-  // const validationSchema = Yup.object().shape({
-  //   a: Yup.number().required("a is required"),
-  //   b: Yup.number().required("b is required"),
-  //   c: Yup.number().required("c is required"),
-  //   d: Yup.number().required("d is required"),
-  //   e: Yup.number().required("e is required"),
-  // });
   const validationSchema = Yup.object().shape({
-    // Define validation rules for each field dynamically
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
       (schema, _, index) => {
         const fieldName = String.fromCharCode(97 + index);
@@ -53,23 +45,12 @@ const LayoutMeasurements = () => {
         }));
       dispatch(updateMeasurements(measurementsArray));
 
-      // setHandleEstimatesPages("measurements");
       dispatch(setNavigation("review"));
-      // };
       resetForm();
     },
   });
   const dispatch = useDispatch();
-  const handleBoxClick = () => {
-    // const measurementsArray = Object.entries(formik.values)
-    //   .filter(([key, value]) => value !== "")
-    //   .map(([key, value]) => ({
-    //     key,
-    //     value,
-    //   }));
-    // dispatch(updateMeasurements(measurementsArray));
-    // setHandleEstimatesPages("measurements");
-  };
+
   return (
     <>
       <Box
@@ -194,7 +175,6 @@ const LayoutMeasurements = () => {
                   paddingX: { md: 0, xs: 2 },
                   paddingTop: 4,
                   paddingBottom: 8,
-                  // height: "350px",
                 }}
               >
                 {Array.from({
@@ -219,12 +199,12 @@ const LayoutMeasurements = () => {
                       placeholder={String.fromCharCode(97 + index)}
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white", 
                         },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       style={{
@@ -268,7 +248,6 @@ const LayoutMeasurements = () => {
                   <img
                     width="150px"
                     height="300px"
-                    // src={door}
                     src={`${backendURL}/${selectedData?.image}`}
                     alt="Selected"
                   />
@@ -283,19 +262,6 @@ const LayoutMeasurements = () => {
                 maxWidth: "100%",
               }}
             >
-              {/* <Box sx={{ display: { md: "block", xs: "none" }, width: "150px" }}>
-              <Button
-                fullWidth
-                sx={{
-                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                  color: "#344054",
-                  textTransform: "initial",
-                  border: "1px solid #8477DA",
-                }}
-              >
-                Reset
-              </Button>
-            </Box> */}
 
               <Box
                 sx={{
@@ -347,11 +313,6 @@ const LayoutMeasurements = () => {
                       },
                     }}
                     variant="contained"
-                    // onClick={() => setHandleEstimatesPages("review")}
-                    // onClick={() => {
-                    //   dispatch(setNavigation("review"));
-                    // }}
-                    // onClick={handleBoxClick()}
                   >
                     Next
                   </Button>

@@ -5,11 +5,10 @@ import {
   getTotal,
   selectedItem,
 } from "../../redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 
 const Summary = () => {
-  const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasumentSide);
@@ -21,11 +20,8 @@ const Summary = () => {
         sx={{
           width:  "90%",
           margin: "auto",
-
           display: "flex",
           alignItems:"center",
-          //   background: "blue",
-          // marginTop: { md: 15, sx: 0 },
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -45,18 +41,13 @@ const Summary = () => {
               flexDirection: { md: "row", xs: "column" },
               minHeight: "50vh",
               maxHeight: "62vh",
-              // height: "60vh",
-              // overflow: "auto"
             }}
           >
-            {/* rightSide */}
             <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 width: "100%",
-                // p: { md: 3, xs: 0 },
-                // margin: 'auto',
                 borderRadius: "8px",
                 color: { md: "black", xs: "white" },
               }}
@@ -69,14 +60,11 @@ const Summary = () => {
                   background: "rgba(217, 217, 217, 0.3)",
                   margin: { md: 0, xs: "auto" },
                   p: 3,
-                  // borderBottom: "1px solid #2c2c3c",
-                  // height: "250px",
                 }}
               >
                 <img
                   width={"100px"}
                   height={"110px"}
-                  // src={door}
                   src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
@@ -87,13 +75,8 @@ const Summary = () => {
 
                   paddingTop: 2,
                   margin: "auto",
-                  // height: "250px",
                 }}
               >
-                {/* <Typography>12’’/ 12’’/ 12’’ </Typography> */}
-                {/* {measurements?.map((measurement, index) => (
-                  <p key={index}>{measurement.value}</p>
-                ))} */}
                 <Typography>
                   {measurements
                     .filter(
@@ -150,7 +133,6 @@ const Summary = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderTop: "2px solid #D0D5DD",
                     marginTop: 1,

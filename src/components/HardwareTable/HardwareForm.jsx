@@ -19,7 +19,6 @@ import { addFormEntry } from "../../redux/formSlice";
 
 const HardwareForm = () => {
   const dispatch = useDispatch();
-  const formEntries = useSelector((state) => state.form.entries);
   const options = [
     { value: "option1", label: "Option 1" },
     { value: "option2", label: "Option 2" },
@@ -101,7 +100,6 @@ const HardwareForm = () => {
         >
           <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
             <FormControl style={{ width: "100%" }}>
-              {/* <InputLabel> Add Additional Finish Type</InputLabel> */}
               <Typography>Add Additional Finish Type</Typography>
 
               <Select
@@ -187,7 +185,6 @@ const HardwareForm = () => {
             }}
           >
             <FormControlLabel
-              //   style={{ marginTop: 18 }}
               control={
                 <Checkbox
                   checked={formik.values.isChecked}

@@ -2,8 +2,6 @@ import React from "react";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import "./overview.scss";
 import Widget from "../../components/widgets/Widget";
-import Table from "../../components/table/Table";
-import Customers from "../Customers/Customers";
 import CustomerTable from "../../components/CustomerTable/Customertable";
 
 const Overview = () => {

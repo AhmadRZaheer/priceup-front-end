@@ -4,7 +4,6 @@ import EstimateIcon from "../../Assets/estimate-icon.svg";
 import CustomerIcon from "../../Assets/customer.svg";
 import TeamIcon from "../../Assets/team.svg";
 import InvoiceIcon from "../../Assets/invoice.svg";
-import ArrowUpwardRoundedIcon from "@mui/icons-material/ArrowUpwardRounded";
 
 const widget = ({ type }) => {
   let data;
@@ -89,13 +88,7 @@ const widget = ({ type }) => {
           {data.isMoney && "$"} {data.cardNum}
         </div>
       </div>
-      {/* <div className="right">
-        <div className="percentage positive">
-          <ArrowUpwardRoundedIcon />
-          40%
-        </div>
-        vs last month
-      </div> */}
+
     </div>
   );
 };

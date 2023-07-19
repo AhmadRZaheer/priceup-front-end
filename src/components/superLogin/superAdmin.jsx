@@ -23,7 +23,6 @@ const SuperAdminLogin = (props) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // try {
     axios
       .post(`${backendURL}/admins/login`, {
         email,
@@ -62,7 +61,6 @@ const SuperAdminLogin = (props) => {
         style={{
           width: "100%",
           margin: "auto",
-          // background: "#8888",
           backgroundColor: "#8477DA",
           height: "100vh",
           display: "flex",

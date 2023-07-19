@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import pencil from "../../Assets/estimates/edit-2.svg";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setNavigation } from "../../redux/estimateCalculations";
 import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
@@ -15,10 +14,9 @@ import { useState } from "react";
 export default function ExitingQuotes() {
   const [selectedQuote, setSelectedQuote] = useState(null);
 
-  const { data: estimates, isLoading, isFetching } = useGetEstimates();
+  const { data: estimates, isFetching } = useGetEstimates();
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   return (
     <>
@@ -45,9 +43,6 @@ export default function ExitingQuotes() {
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
               Existing Quotes
             </Typography>
-            {/* <IconButton onClick={Logout} sx={{ height: 25 }}>
-              <img src={logout} alt="image of log out icon" />
-            </IconButton> */}
           </Box>
 
           <Box
@@ -82,7 +77,6 @@ export default function ExitingQuotes() {
                   </Typography>
                   <Box sx={{ display: "flex" }}>
                     <Typography color="red" marginRight={3}>
-                      {/* {item?.updatedAt} */}
                     </Typography>
 
                     <IconButton
@@ -125,21 +119,6 @@ export default function ExitingQuotes() {
             {" "}
             Create New Qoute
           </Button>
-          {/* <Button
-            variant="outlined"
-            sx={{
-              textTransform: "capitalize",
-              border: "2px solid rgba(102, 112, 133, 0.5)",
-              fontSize: 18,
-              width: "100%",
-              marginTop: 1,
-              color: "black",
-              "&:hover": { border: "2px solid rgba(102, 112, 133, 0.5)" },
-            }}
-          >
-            {" "}
-            Cancel
-          </Button> */}
         </Box>
       </Box>
     </>

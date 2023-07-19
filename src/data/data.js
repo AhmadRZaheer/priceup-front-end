@@ -34,7 +34,6 @@ export const items = [
   { title: "Handles", option: "five" },
   { title: "Handles", option: "six" },
 ];
-//default layouts page data
 export const hardwareFinishes = [
   { value: "Polished Chrome", label: "Polished Chrome" },
   { value: "Polished", label: "Polished " },
