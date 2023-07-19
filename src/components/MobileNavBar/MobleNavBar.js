@@ -3,13 +3,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Logo from "../../Assets/purplelogo.svg";
 import "./MobileNavBar.scss";
 import React, { useState } from "react";
-import {
-  Drawer,
-  IconButton,
-  Backdrop,
-  Box,
-  Button,
-} from "@mui/material";
+import { Drawer, IconButton, Backdrop, Box, Button } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
@@ -80,7 +74,6 @@ function MobileBar() {
               height: "100%",
               padding: 0,
               margin: 0,
-              // py: 1,
             }}
           >
             <Box>
@@ -89,19 +82,17 @@ function MobileBar() {
                   <img src={Logo} alt="" />
                 </span>
               </div>
-              <Box sx={{marginTop: 8,}}>
+              <Box sx={{ marginTop: 8 }}>
                 <Button
-                // href="/staff"
                   sx={{
-                    width: 220,
+                    width: 240,
                     color: "white",
-                    marginLeft: 4,
+                    margin: 2,
                     backgroundColor: "#8477da",
                     ":hover": {
                       backgroundColor: "#8477da",
-                    }
+                    },
                   }}
-                  // variant="contained"
                 >
                   Staff
                 </Button>
@@ -115,16 +106,16 @@ function MobileBar() {
                 height: "78%",
                 width: "100%",
                 flexDirection: "column",
-                backgroundColor: "#100d24"
+                backgroundColor: "#100d24",
               }}
             >
               <Box>
                 <Button
                   sx={{
-                    width: 200,
+                    width: 240,
                     color: "white",
-                    margin: 3,
-                    marginLeft: 4,
+                    margin: 2,
+
                     backgroundColor: "#8477da",
                   }}
                   variant="contained"
@@ -149,17 +140,6 @@ function MobileBar() {
               </div>
             </Box>
           </Box>
-          {/* <List>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 1" />
-          </ListItem>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 2" />
-          </ListItem>
-          <ListItem button onClick={toggleSidebar}>
-            <ListItemText primary="Item 3" />
-          </ListItem>
-        </List> */}
         </Drawer>
 
         <Backdrop
