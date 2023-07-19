@@ -33,7 +33,6 @@ const ChannelType = ({
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
   const selectedContent = useSelector(getContent);
-  console.log(estimatesData, "estimatesData test ");
 
   // Handle functions for each item
   const handleSleeveOverCount = (count) => {

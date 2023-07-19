@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
 export const getMeasumentSide = (state) =>
@@ -78,42 +78,8 @@ const estimateCalcSlice = createSlice({
     setContent: (state, action) => {
       //   state.(action.payload);
       const { type, item } = action.payload;
-      console.log("type in reduxx ", type);
 
-      // if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
-      //   console.log("kuch aa rhaa ", type);
-      //   // for mounting clamps
-      //   state.content = {
-      //     ...state.content,
-      //     mounting: {
-      //       ...state.content.mounting,
-      //       clamps: {
-      //         ...state.content.mounting.clamps,
-      //         [type]: {
-      //           ...state.content.mounting.clamps[type],
-      //           item: item,
-      //         },
-      //       },
-      //       // activeType: "clamps",
-      //     },
-      //   };
-      // } else if (["channel"].includes(type)) {
-      //   console.log("kuch aa rhaa ", type);
-      //   // for mounting channel
-      //   state = {
-      //     ...state.content,
-      //     mounting: {
-      //       ...state.content.mounting,
-      //       channel: {
-      //         ...state.content.mounting.channel,
-      //         item: item,
-      //       },
-      //       // activeType: "channel",
-      //     },
-      //   };
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
-        console.log("kuch aa rhaa ", type);
-        // for mounting clamps
         state.content = {
           ...state.content,
           mounting: {
@@ -125,12 +91,9 @@ const estimateCalcSlice = createSlice({
                 item: item,
               },
             },
-            // activeType: "clamps",
           },
         };
       } else if (["channel"].includes(type)) {
-        console.log("kuch aa rhaa ", type);
-        // for mounting channel
         state.content = {
           ...state.content,
           mounting: {
@@ -139,11 +102,9 @@ const estimateCalcSlice = createSlice({
               ...state.content.mounting.channel,
               item: item,
             },
-            // activeType: "channel",
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
-        // for hardware finishes
         state.content = {
           ...state.content,
           [type]: item,
@@ -221,7 +182,6 @@ const estimateCalcSlice = createSlice({
     },
     updateMeasurements: (state, action) => {
       const newMeasurements = action.payload;
-      console.log(newMeasurements, "newMeasurements in redux");
 
       state.measuments = newMeasurements;
     },

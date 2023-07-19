@@ -33,7 +33,6 @@ export default function Layout({ setStorePage }) {
   } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
-  console.log(selectedData, "selectedData11");
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));

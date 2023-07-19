@@ -1,16 +1,14 @@
-import { backendURL, createSlug } from "../common";
+import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect, useState } from "react";
 export const useFetchDataDefault = () => {
-  console.log("first  hook");
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${backendURL}/layouts`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {
@@ -38,7 +36,6 @@ export const useFetchSingleDefault = (id) => {
       const response = await axios.get(`${backendURL}/layouts/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : null;
       } else {
@@ -82,7 +79,6 @@ export const useFetchSingleDefault = (id) => {
 };
 export const useEditDefault = () => {
   const handleEdit = async (updatedDefault) => {
-    console.log(updatedDefault, "updatedDefault in hooks");
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(

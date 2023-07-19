@@ -10,11 +10,9 @@ import { useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  console.log(clientDetailOpen, "clientDetailOpen in mobile view");
   const handleClose = () => setClientDetailOpen(false);
   const handleOpen = () => setClientDetailOpen(true);
   const Navigation = useSelector(getPageNavigation);
-  console.log(Navigation, "Navigation ");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",

@@ -115,11 +115,9 @@ const CampanySetting = () => {
   };
   const handleEditSetting = (props) => {
     let id = settingData._id;
-    console.log(settingData._id, "edit id for setting");
     editFinish({ data: props, id: settingData._id });
     reFetchDataSetting();
   };
-  console.log(settingData, "settingDatasettingData");
   return (
     <form>
       <Box

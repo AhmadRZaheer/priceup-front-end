@@ -10,11 +10,8 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import {
   CircularProgress,
-  FormControl,
-  IconButton,
   TextField,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateTeamMembers,
@@ -83,12 +80,10 @@ export default function AddTeamMembers({
   }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "props for creat hook in model");
     addTeamMembers(props);
   };
 
   const handleEditClick = (props) => {
-    console.log(props, "props for edit to refetch");
     const id = data;
     editTeamMembers(props, id);
   };

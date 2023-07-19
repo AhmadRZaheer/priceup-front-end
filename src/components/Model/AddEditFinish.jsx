@@ -10,17 +10,14 @@ import { useState } from "react";
 import {
   CircularProgress,
   FormControl,
-  IconButton,
   TextField,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
 
 import {
   useCreateFinish,
   useEditFinish,
 } from "../../utilities/ApiHooks/Finishes";
-import Snackbars from "./SnackBar";
 
 const style = {
   position: "absolute",
@@ -44,8 +41,6 @@ export default function AddEditFinish({
   finishesRefetch,
   showSnackbar,
 }) {
-  // console.log(data, "data not id");
-  // const [openSnackBarAlert, setOpenSnakbarAlert] = React.useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -85,14 +80,11 @@ export default function AddEditFinish({
   }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "props for creat hook in model");
     addFinish(props);
   };
 
   const handleEditClick = (props) => {
-    console.log(props, "props for edit to refetch");
     const id = data;
-    // console.log(id, "id2 for edit hook");
     editFinish(props, id);
   };
 

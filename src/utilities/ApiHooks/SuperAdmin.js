@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
-import { backendURL, createSlug } from "../common";
-import { Mutation, useMutation, useQuery } from "@tanstack/react-query";
+import { backendURL } from "../common";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
@@ -11,7 +10,6 @@ export const useFetchDataAdmin = () => {
       const response = await axios.get(`${backendURL}/users`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log(response, "response");
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : [];
       } else {
@@ -31,10 +29,8 @@ export const useFetchDataAdmin = () => {
 
 export const useCreateAdminsMembers = () => {
   const handleCreate = async (props) => {
-    console.log(props, "hook props in create hook");
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
-    console.log(decodedToken, "parseJwt");
 
     try {
       const response = await axios.post(
@@ -66,7 +62,6 @@ export const useCreateAdminsMembers = () => {
 
 export const useUserStatus = () => {
   const handleEdit = async (status) => {
-    console.log(status, "status in hooks");
 
     const token = localStorage.getItem("token");
 

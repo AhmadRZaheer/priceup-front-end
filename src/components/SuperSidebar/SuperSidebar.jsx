@@ -24,7 +24,6 @@ const SuperSidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
-    console.log("hello world");
     dispatch(logoutHandler());
 
     navigate("/adminlogin");

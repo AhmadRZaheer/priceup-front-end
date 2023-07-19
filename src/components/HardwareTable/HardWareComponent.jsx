@@ -85,7 +85,6 @@ const HardWareComponent = ({ type }) => {
       showSnackbar("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
-  console.log(hardwareFetching, "hardwareData12 form api hardware component");
 
   const handleAddFormEntryItems = (id, event) => {
     dispatch(

@@ -33,7 +33,6 @@ const Index = () => {
   const handleClose = () => setClientDetailOpen(false);
   const handleOpen = () => setClientDetailOpen(true);
   const Navigation = useSelector(getPageNavigation);
-  console.log(Navigation, "Navigation ");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",

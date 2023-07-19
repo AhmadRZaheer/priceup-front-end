@@ -35,7 +35,6 @@ const DefaultComponent = ({ showSnackbar }) => {
     isFetching: isfetchingDefaultSingle,
     refetch,
   } = useFetchSingleDefault(defaultId);
-  console.log(singleDefault, "singleDefault test");
   const formik = useFormik({
     initialValues: {
       // image: singleDefault?.layoutData?.image,
@@ -114,7 +113,6 @@ const DefaultComponent = ({ showSnackbar }) => {
     enableReinitialize: true,
     onSubmit: (values) => {},
   });
-  console.log(formik.values, "formik values to check image");
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
 

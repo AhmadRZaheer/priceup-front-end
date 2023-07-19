@@ -1,5 +1,4 @@
 //temporary data
-import { FormControlLabel, Switch } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 
@@ -133,7 +132,6 @@ export const CustomerColumns = [
     headerName: "Name",
     width: 330,
     renderCell: (params) => {
-      console.log(params,"image I")
       return (
         <div className="cellWrapper">
           <div className="customerImg">

@@ -19,7 +19,6 @@ const FinishesTable = () => {
     message: "",
     severity: "",
   });
-  console.log(snackbar, "snackbar snackbar");
   const { data: finishesData, refetch: finishesRefetch } =
     useFetchDataFinishes();
   const {
@@ -28,7 +27,6 @@ const FinishesTable = () => {
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteFinishes();
-  console.log(finishesData, "data");
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);

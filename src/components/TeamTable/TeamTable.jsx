@@ -49,7 +49,6 @@ const TeamTable = () => {
       open: false,
     }));
   };
-  console.log(teamData, "teamDatateamData");
   // const actionColumn = [
   //   {
   //     field: "action",

@@ -28,11 +28,9 @@ const AddOnsTable = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDelete = (id) => {
-    console.log(id, "clicked deleted button");
     dispatch(deleteHardware(id));
   };
   const handleEdit = (updatedHardware) => {
-    console.log(updatedHardware, "clicked Edit button");
 
     dispatch(editHardware(updatedHardware));
   };
@@ -53,7 +51,6 @@ const AddOnsTable = () => {
     dispatch(addHardware(newHardware));
   };
   const handleHeaderClick = (selectedImage) => {
-    console.log("handleHeaderClick Edit button");
     const newId = Date.now() % 10000;
     const newHardware = {
       id: newId,
@@ -95,12 +92,6 @@ const AddOnsTable = () => {
       },
     },
   ];
-
-  //get header data from api
-
-  // const { data: hardwareCategoryData, refetch: hardwareCategoryRefetch } =
-  //   useFetchDatahardware("add-ons");
-  // console.log(hardwareCategoryData, "hardwareCategoryDatahardwareCategoryData");
   return (
     <>
     <Box sx={{

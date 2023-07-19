@@ -6,7 +6,6 @@ import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import Snackbars from "../Model/SnackBar";
-import { setNavigation } from "../../redux/estimateCalculations";
 import desktopImage from "../../Assets/desktop.svg"
 
 const Login = (props) => {
@@ -32,15 +31,12 @@ const Login = (props) => {
       })
       .then((response) => {
         localStorage.setItem("email", email);
-
-        console.log(response.data, "response");
         dispatch(loginHandler(response.data.data));
         window.location.href = "/";
       })
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        console.log(error.response.data, "erorrr");
         showSnackbar(errorMessage, "error");
       });
   };
@@ -56,14 +52,12 @@ const Login = (props) => {
       .then((response) => {
         localStorage.setItem("email", email);
 
-        console.log(response.data, "response");
         dispatch(loginHandler(response.data.data));
         window.location.href = "/staff";
       })
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        console.log(error.response.data, "erorrr");
         showSnackbar(errorMessage, "error");
       });
   };

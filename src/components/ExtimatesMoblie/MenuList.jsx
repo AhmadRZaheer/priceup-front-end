@@ -38,7 +38,6 @@ const MenuList = ({
   const [towelBarsCount, setTowelBarsCount] = useState(0);
 
   const selectedContent = useSelector(getContent);
-  console.log(selectedContent.hardwareFinishes, "selectedContent12");
 
   // Handle functions for each item
   // const [mountingType, setmountingType] = useState(
@@ -84,7 +83,6 @@ const MenuList = ({
       setAnchorEl(!anchorEl);
     else showSnackbar("Please select 'hardwareFinishes' first", "warning");
   };
-console.log(menuOptions, "menuOptions")
   return (
     <Box>
       <Box

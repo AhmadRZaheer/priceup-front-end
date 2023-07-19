@@ -1,4 +1,4 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 
 const formSlice = createSlice({
   name: "form",
@@ -30,7 +30,6 @@ const formSlice = createSlice({
 
     addItems: (state, action) => {
       const { id, data } = action.payload;
-      console.log(id, "id for new item to be pushed");
 
       const entry = state.entries.find((entry) => entry.id === id);
 
@@ -39,19 +38,7 @@ const formSlice = createSlice({
       }
     },
 
-    // deleteItem: (state, action) => {
-    //   const id = action.payload;
-    //   console.log(id, "id deleted ");
-
-    //   // return state.entries[0].items.filter((hardware) => hardware.id !== id);
-
-    //   state.entries[0].items = state.entries[0].items.filter(
-    //     (hardware) => hardware.id !== id
-    //   );
-    // },
-
     handleToggle: (state, action) => {
-      console.log(action, "checing for toogle id ");
     },
   },
 });

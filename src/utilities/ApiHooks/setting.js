@@ -1,4 +1,4 @@
-import { backendURL, createSlug } from "../common";
+import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
@@ -34,7 +34,6 @@ export const useFetchDataSetting = () => {
 
 export const useEditSetting = () => {
   const handleEditSetting = async (editedData) => {
-    console.log(editedData.data, "updatedSetting in hooks and id");
 
     const token = localStorage.getItem("token");
 

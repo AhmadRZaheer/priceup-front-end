@@ -46,7 +46,6 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
     initialValues: {},
     validationSchema,
     onSubmit: async (values, resetForm) => {
-      console.log(values, "formik values in mobiel");
       const measurementsArray = Object.entries(values)
         .filter(([key, value]) => value !== "")
         .map(([key, value]) => ({
@@ -61,7 +60,6 @@ const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
       resetForm();
     },
   });
-  console.log(formik.values, "formik values");
   const dispatch = useDispatch();
   return (
     <>

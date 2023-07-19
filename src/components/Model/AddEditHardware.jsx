@@ -9,18 +9,9 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import {
   CircularProgress,
-  FormControl,
-  IconButton,
   TextField,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-
-import {
-  useCreateFinish,
-  useEditFinish,
-} from "../../utilities/ApiHooks/Finishes";
-import Snackbars from "./SnackBar";
 import {
   useCreateHardware,
   useEditHardware,
@@ -49,8 +40,6 @@ export default function AddEditHardware({
   showSnackbar,
   categorySlug,
 }) {
-  // console.log(data, "data not id");
-  // const [openSnackBarAlert, setOpenSnakbarAlert] = React.useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -100,12 +89,10 @@ export default function AddEditHardware({
   }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "props for creat hook in model");
     addHardware(props);
   };
 
   const handleEditClick = (props) => {
-    console.log(props, "props for edit to refetch");
     const id = data;
     editHardware(props, id);
   };

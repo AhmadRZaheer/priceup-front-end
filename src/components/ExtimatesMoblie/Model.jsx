@@ -53,7 +53,6 @@ export default function ClientDetailsModel({
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
-  console.log(estimatesContent?.addOns, "addon in model");
   const data = estimatesContent?.addOns;
   const addOnIds = data.map((obj) => obj._id);
   const dispatch = useDispatch();
@@ -66,7 +65,6 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
       const estimate = {
         layout_id: estimatesLayout?._id,
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
@@ -139,7 +137,6 @@ export default function ClientDetailsModel({
       showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfully, ErrorForAdd]);
-  console.log(formik.values);
 
   return (
     <div>

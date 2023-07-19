@@ -32,7 +32,6 @@ const Sidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
-    console.log("hello world");
     dispatch(logoutHandler());
 
     navigate("/login");

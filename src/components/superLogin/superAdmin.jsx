@@ -32,14 +32,12 @@ const SuperAdminLogin = (props) => {
       .then((response) => {
         localStorage.setItem("email", email);
 
-        console.log(response.data, "response");
         dispatch(loginHandler(response.data.data));
         window.location.href = "/admin";
       })
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        console.log(error.response.data, "erorrr");
         showSnackbar(errorMessage, "error");
       });
   };

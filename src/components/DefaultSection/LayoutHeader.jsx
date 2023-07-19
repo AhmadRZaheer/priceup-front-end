@@ -31,14 +31,12 @@ const LayoutHeader = () => {
     dispatch(setDefaultId(id));
   };
   const renderSliderItems = (items) => {
-    console.log(items, "itemsss");
     return items?.map((item, index) => (
       <div key={index}>{renderSliderItem(item)}</div>
     ));
   };
 
   const renderSliderItem = (props) => (
-    console.log(props, "options to show handles"),
     (
       <Box
         onClick={() => showMore(props._id)}

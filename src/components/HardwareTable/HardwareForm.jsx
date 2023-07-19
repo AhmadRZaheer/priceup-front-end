@@ -49,7 +49,6 @@ const HardwareForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
     },
   });
   const handleAddFormEntry = () => {
@@ -73,7 +72,6 @@ const HardwareForm = () => {
         const response = await axios.get(
           `${backendURL}/hardwares/category/${type}`
         );
-        console.log(response, "response form api1123");
 
         if (response.status === 200) {
           setHardwareDetail(response.data.data);
@@ -89,7 +87,6 @@ const HardwareForm = () => {
     fetchData();
   }, []);
 
-  console.log(hardwareDetail, "hardwareDetail form api123");
   return (
     <div>
       <form onSubmit={formik.handleSubmit}>
