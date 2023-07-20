@@ -17,6 +17,11 @@ export default function ExitingQuotes() {
   const { data: estimates, isFetching } = useGetEstimates();
 
   const dispatch = useDispatch();
+  console.log(estimates, "selectedQuote ");
+  const handleIconButtonClick = (itemId) => {
+    setSelectedQuote(itemId);
+    // dispatch(setNavigation("review"));
+  };
 
   return (
     <>
@@ -76,11 +81,10 @@ export default function ExitingQuotes() {
                     {new Date(item?.updatedAt).toLocaleString()}
                   </Typography>
                   <Box sx={{ display: "flex" }}>
-                    <Typography color="red" marginRight={3}>
-                    </Typography>
+                    <Typography color="red" marginRight={3}></Typography>
 
                     <IconButton
-                      onClick={() => setSelectedQuote(item?._id)}
+                      onClick={() => handleIconButtonClick(item?._id)}
                       sx={{ marginRight: 1, height: 25 }}
                     >
                       <img src={pencil} alt="image of pencil" />
