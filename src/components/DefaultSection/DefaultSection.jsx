@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./hardwareTable.scss";
 
 import { Box, Typography } from "@mui/material";

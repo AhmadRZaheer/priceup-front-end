@@ -1,17 +1,12 @@
 import { useState } from "react";
-
 import Button from "@mui/material/Button";
-
 import MenuItem from "@mui/material/MenuItem";
-
 import {
   AddCircleOutline,
   ChevronRight,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-
 import { Box, CircularProgress, TextField, Typography } from "@mui/material";
-
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -38,11 +33,6 @@ const MenuList = ({
   const [towelBarsCount, setTowelBarsCount] = useState(0);
 
   const selectedContent = useSelector(getContent);
-
-  // Handle functions for each item
-  // const [mountingType, setmountingType] = useState(
-  //   selectedContent.mounting.activeType || "clamps"
-  // );
 
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
@@ -157,13 +147,13 @@ const MenuList = ({
               variant="outlined"
               InputProps={{
                 style: {
-                  color: "white", // Change the color of the input text
+                  color: "white",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
               InputLabelProps={{
                 style: {
-                  color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                  color: "rgba(255, 255, 255, 0.5)",
                 },
               }}
               sx={{
@@ -174,26 +164,17 @@ const MenuList = ({
                 width: "100%",
                 mb: 1,
               }}
-              // style={{ width: "100%", background: "white" }}
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
-              // onChange={formik.handleChange} ()=>handleThicknessSet()
-              // onBlur={formik.handleBlur}
             >
               <MenuItem
                 key="1/2"
-                // selected={thickness === "1/2"}
                 value="1/2"
               >
                 1/2
               </MenuItem>
               <MenuItem
                 key="3/8"
-                // selected={thickness === "3/8"}
-                // selected={
-                //   singleDefault?.layoutData?.settings
-                //     ?.hardwareFinishes === option?._id
-                // }
                 value="3/8"
               >
                 3/8
@@ -237,7 +218,6 @@ const MenuList = ({
                       : "1px solid #EAECF0",
                   boxShadow:
                     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                  // border: "1px solid #EAECF0",
                   p: 2,
                   display: "flex",
                   gap: 2,

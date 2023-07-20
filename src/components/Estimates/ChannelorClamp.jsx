@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
@@ -10,9 +9,6 @@ import {
   getContent,
   setActiveMounting,
   setContent,
-  setCounters,
-  setThickness,
-  updateAddOnCount,
 } from "../../redux/estimateCalculations";
 import MenuList from "./MenuList";
 
@@ -21,53 +17,20 @@ const ChannelTypeDesktop = ({
   title,
   type,
   showSnackbar,
-  count,
-  thickness,
   estimatesData,
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
-  const [countVal, setCountVal] = useState(count || 0);
-  const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState("channel");
-  const [sleeveOverCount, setSleeveOverCount] = useState(0);
-  const [towelBarsCount, setTowelBarsCount] = useState(0);
   const selectedContent = useSelector(getContent);
-
-  // Handle functions for each item
-  const handleSleeveOverCount = (count) => {
-    if (count >= 0) {
-      setSleeveOverCount(count);
-      dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
-    }
-  };
-
-  const handleTowelBarsCount = (count) => {
-    if (count >= 0) {
-      setTowelBarsCount(count);
-      dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
-    }
-  };
 
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
       dispatch(setContent({ type: type, activeType: item }));
-      setSelectedItem(item);
     } else {
       dispatch(setActiveMounting(item.toLowerCase()));
     }
   };
 
-  const handleCountSet = (value) => {
-    if (value >= 0) {
-      setCountVal(value);
-      dispatch(setCounters({ type: type, value: value }));
-    }
-  };
-  const handleThicknessSet = (thickness) => {
-    setThicknessVal(thickness);
-    dispatch(setThickness(thickness));
-  };
   const opneClose = () => {
     if (
       selectedContent.hardwareFinishes !== null ||
@@ -76,7 +39,6 @@ const ChannelTypeDesktop = ({
       setAnchorEl(!anchorEl);
     else showSnackbar("Please select 'hardwareFinishes' first", "warning");
   };
-
   return (
     <Box>
       <Box
@@ -114,7 +76,6 @@ const ChannelTypeDesktop = ({
             color: { md: "#000000", xs: "white" },
             display: "flex",
             flexDirection: "column",
-            // backgroundColor: "red",
             width: "100%",
           }}
         >
@@ -122,8 +83,6 @@ const ChannelTypeDesktop = ({
             sx={{
               display: "flex",
               width: "100%",
-              // backgroundColor: "red",
-              // width: "95vw",
             }}
           >
             {menuOptions?.map((item, index) => (
@@ -133,12 +92,11 @@ const ChannelTypeDesktop = ({
                     width: "200px",
                     borderRadius: "12px",
                     border:
-                      item === selectedContent?.mounting?.activeType
+                      item.toLowerCase() === selectedContent?.mounting?.activeType
                         ? "2px solid blue"
-                        : "1px solid black",
+                        : "",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                    // border: "1px solid #EAECF0",
                     p: 2,
                     display: "flex",
                     gap: 2,
@@ -151,7 +109,6 @@ const ChannelTypeDesktop = ({
                     <img
                       width={"25px"}
                       height={"25px"}
-                      // src={`${backendURL}/${item?.image}`}
                       src={Logo}
                       alt="Selected"
                     />

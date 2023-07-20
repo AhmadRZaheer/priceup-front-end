@@ -1,7 +1,6 @@
-import { Delete, Edit, ToggleOff, ToggleOn } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Box,
-  Checkbox,
   CircularProgress,
   FormControl,
   FormControlLabel,
@@ -22,13 +21,11 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
-    isError: ErrorForDelete,
     isSuccess: SuccessForDelete,
   } = useDeleteHardwareFinish();
   const {
     mutate: editFinish,
     isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditHardware();
   const validationSchema = Yup.object().shape({
@@ -44,8 +41,6 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
     },
     validationSchema,
     onSubmit: async (values, resetForm) => {
-      // Handle form submission
-      // const updatedData = {
       const finishes = {
         [index]: {
           partNumber: values.partNumber,
@@ -53,7 +48,6 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
           status: values.status,
         },
       };
-      // };
       editFinish({ finishesData: finishes, id: hardwareId });
       resetForm();
     },
@@ -148,18 +142,9 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
               padding: 4,
               display: "flex",
               alignItems: "center",
-              // background: "red",
               justifyContent: "center",
             }}
           >
-            {/* <Box style={{ marginTop: "18px" }}>
-                        <FormControlLabel
-                            control={
-                                <Checkbox color="primary" name="isChecked" />
-                            }
-                            label="Price by sqft"
-                        />
-                    </Box> */}
             <Box
               style={{
                 width: "150px",

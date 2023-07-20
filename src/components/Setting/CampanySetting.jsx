@@ -1,8 +1,5 @@
-import { Add, PlusOne } from "@mui/icons-material";
 import imageUploader from "../../Assets/imageUploader.svg";
-import door from "../../Assets/profile.jpg";
 import { useFormik } from "formik";
-import * as yup from "yup";
 
 import {
   Box,
@@ -23,11 +20,8 @@ import Snackbars from "../Model/SnackBar";
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
-  console.log(settingData, "settingData");
   const {
     mutate: editFinish,
-    isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -96,7 +90,6 @@ const CampanySetting = () => {
           settingData?.fabricatingPricing?.polishPricePerThreeByEightInch,
       },
     },
-    // validationSchema: validationSchema,
     enableReinitialize: true,
     onSubmit: (values) => {
       handleEditSetting(values);
@@ -237,7 +230,6 @@ const CampanySetting = () => {
             </Box>
           </Box>
         </Box>
-        {/* misc and price */}
 
         <Box
           sx={{
@@ -267,22 +259,6 @@ const CampanySetting = () => {
                 value={formik.values?.miscPricing?.pricingFactor}
                 onChange={formik.handleChange}
               />
-              {/* <Box sx={{ display: "flex" }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      color="primary"
-                      checked={
-                        formik.values?.miscPricing?.pricingFactorStatus || false
-                      }
-                      onChange={(event) => {
-                        const newValue = event.target.checked;
-                      }}
-                    />
-                  }
-                  label={"active"}
-                />
-              </Box> */}
 
               <Box sx={{ display: "flex" }}>
                 <FormControlLabel
@@ -293,7 +269,7 @@ const CampanySetting = () => {
                         formik.values?.miscPricing?.pricingFactorStatus || false
                       }
                       onChange={formik.handleChange}
-                      name="miscPricing.pricingFactorStatus" // Add the name attribute to link the input to Formik's values
+                      name="miscPricing.pricingFactorStatus"
                     />
                   }
                   label="active"
@@ -327,7 +303,6 @@ const CampanySetting = () => {
             </Box>
           </Box>
         </Box>
-        {/* Fabrication Pricing */}
         <Typography variant="h6">Fabrication Pricing</Typography>
 
         <Box

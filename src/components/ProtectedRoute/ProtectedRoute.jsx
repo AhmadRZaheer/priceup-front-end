@@ -4,15 +4,14 @@ const ProtectedRoute = ({ component: Component, paths, ...rest }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("token"); // Retrieve the token from local storage
+    const token = localStorage.getItem("token"); 
 
     if (!token) {
       setIsAuthenticated(false);
       return;
     }
 
-    // Verify the token on the server-side or decode it using the JWT library
-    // ...
+
 
     setIsAuthenticated(true);
   }, []);

@@ -1,5 +1,4 @@
-import { Add } from "@mui/icons-material";
-import { Button, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 import LayoutHeader from "./LayoutHeader";
 
 const DefaultComponentHeader = ({ selected, handleEditClick }) => {
@@ -18,8 +17,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
           paddingLeft: "10px",
           paddingRight: "10px",
           marginTop: '1rem',
-
-          // background: "red",
         }}
       >
         {" "}
@@ -35,7 +32,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         <div
           style={{
             width: "250px",
-
             padding: 4,
           }}
         >

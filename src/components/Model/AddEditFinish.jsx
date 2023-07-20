@@ -50,18 +50,14 @@ export default function AddEditFinish({
   };
 
   const { getInputProps } = useDropzone({ onDrop });
-  // hook for add
   const {
     mutate: addFinish,
     isLoading: LoadingForAdd,
-    isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateFinish();
-  // hook for edit
   const {
     mutate: editFinish,
     isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditFinish();
 
@@ -91,23 +87,6 @@ export default function AddEditFinish({
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
-    // .required("Image is required")
-    // .test(
-    //   "fileType",
-    //   "Only image files are allowed (JPEG, PNG, GIF)",
-    //   (value) => {
-    //     if (value) {
-    //       const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-    //       return supportedFormats.includes(value.type);
-    //     }
-    //     return false;
-    //   }
-    // )
-    // .test(
-    //   "fileSize",
-    //   "Image size should be less than 5MB",
-    //   (value) => value && value.size <= 5 * 1024 * 1024
-    // ),
     thickness: Yup.string().required("Thickness is required"),
   });
 
@@ -139,11 +118,10 @@ export default function AddEditFinish({
     <div>
       <Modal
         open={open}
-        // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", // Apply blur effect to the backdrop
+          backdropFilter: "blur(2px)", 
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -204,11 +182,7 @@ export default function AddEditFinish({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-                    {/* <Typography sx={{ color: "#667085" }}>
-                      or drag and drop
-                    </Typography> */}
                   </span>
-                  {/* <Typography sx={{color: "#8477DA"}}>Click to Upload</Typography> */}
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
                   </Typography>

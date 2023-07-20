@@ -32,7 +32,6 @@ const HardWareComponentHeader = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-          // background: "red",
         }}
       >
         {" "}
@@ -67,8 +66,6 @@ const HardWareComponentHeader = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-
-          // background: "red",
         }}
       >
         {" "}
@@ -99,15 +96,6 @@ const HardWareComponentHeader = ({ type }) => {
         >
           Cost
         </div>
-        {/* <div
-          style={{
-            width: "250px",
-
-            padding: 4,
-          }}
-        >
-          Price
-        </div>{" "} */}
         <div
           style={{
             width: "250px",

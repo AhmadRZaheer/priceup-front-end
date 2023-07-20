@@ -1,7 +1,6 @@
 import React from "react";
 import "./customers.scss";
 import Sidebar from "../../components/Sidebar/Sidebar";
-import { Box } from "@mui/material";
 import Index from "../../components/Estimates/Index";
 
 const Estimates = () => {

@@ -76,7 +76,6 @@ const estimateCalcSlice = createSlice({
   },
   reducers: {
     setContent: (state, action) => {
-      //   state.(action.payload);
       const { type, item } = action.payload;
 
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
@@ -121,7 +120,6 @@ const estimateCalcSlice = createSlice({
           }
         }
       } else {
-        // for others
         state.content = {
           ...state.content,
           [type]: {
@@ -134,7 +132,6 @@ const estimateCalcSlice = createSlice({
     setCounters: (state, action) => {
       const { type, value } = action.payload;
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
-        // for mounting clamps
         state.content = {
           ...state.content,
           mounting: {
@@ -149,7 +146,6 @@ const estimateCalcSlice = createSlice({
           },
         };
       } else {
-        // for others
         state.content = {
           ...state.content,
           [type]: {

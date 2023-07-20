@@ -23,7 +23,6 @@ const Login = (props) => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // try {
     axios
       .post(`${backendURL}/users/login`, {
         email,
@@ -43,7 +42,6 @@ const Login = (props) => {
 
   const handleLoginAgent = (e) => {
     e.preventDefault();
-    // try {
     axios
       .post(`${backendURL}/staffs/login`, {
         email,

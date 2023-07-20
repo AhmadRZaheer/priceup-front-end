@@ -1,8 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import door from "../../Assets/door.png";
-// import { FieldArray,  } from "formik";
-import { useFormik, Field, ErrorMessage, FieldArray } from "formik";
-import * as Yup from "yup";
+import { useFormik } from "formik";
 import {
   Button,
   CircularProgress,
@@ -18,15 +16,12 @@ import {
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import { getDefaultId, getRefetch, setRefetch } from "../../redux/defaultSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { backendURL } from "../../utilities/common";
 const DefaultComponent = ({ showSnackbar }) => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
   const refetchDefault = useSelector(getRefetch);
   const {
     mutate: updateDefault,
-    isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditDefault();
 
@@ -37,7 +32,6 @@ const DefaultComponent = ({ showSnackbar }) => {
   } = useFetchSingleDefault(defaultId);
   const formik = useFormik({
     initialValues: {
-      // image: singleDefault?.layoutData?.image,
       image: null,
       name: singleDefault?.layoutData?.name,
       handles: {
@@ -46,7 +40,6 @@ const DefaultComponent = ({ showSnackbar }) => {
       },
 
       hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
-      // hardwareFinishes: "64a276b30336b4e1e0846c3f",
 
       hinges: {
         hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
@@ -167,7 +160,6 @@ const DefaultComponent = ({ showSnackbar }) => {
             overflowY: "scroll",
           }}
         >
-          {/* image Section*/}
 
           <Box>
             <Box
@@ -226,7 +218,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                         width={"100%"}
                         height={"400px"}
                         src={URL.createObjectURL(formik.values.image)}
-                        // src={`${backendURL}/${formik.values.image}`}
                         alt="Selected"
                       />
                     ) : (
@@ -249,25 +240,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                     >
                       Upload Image
                     </Button>
-                    {/* <Button
-                      style={{
-                        width: "100%",
-                        boxShadow: "0px 0px 2px blue",
-                        color: "#000000",
-                        backgroundColor: "rgba(132, 119, 218, 0.14)",
-                      }}
-                      component="span"
-                      onClick={handleEditClick}
-                    >
-                      Update Data
-                    </Button> */}
+
                   </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
           <Box>
-            {/* Hardware Finishes */}
 
             <div
               style={{
@@ -306,10 +285,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                     {singleDefault?.listData?.hardwareFinishes.map((option) => (
                       <MenuItem
                         key={option.name}
-                        // selected={
-                        //   singleDefault?.layoutData?.settings
-                        //     ?.hardwareFinishes === option?._id
-                        // }
                         value={option?._id}
                       >
                         {option.name}
@@ -462,7 +437,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                 />
               </Box>
             </div>
-            {/* Pivot Hinge Option */}
             <div
               style={{
                 display: "flex",
@@ -1005,10 +979,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               </Box>
             </div>
 
-            {/*  clamps ends here*/}
-
-            {/* Glass type*/}
-
             <div
               style={{
                 display: "flex",
@@ -1031,24 +1001,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   width: "250px",
                 }}
               >
-                {/* <Box sx={{ width: "220px" }}>
-              <TextField
-                select
-                size="small"
-                variant="outlined"
-                name="glassType.type"
-                style={{ width: "100%" }}
-                value={formik.values.glassType.type}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              >
-                {singleDefault?.listData?.glassType.map((option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.name}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Box> */}
                 <Box sx={{ width: "220px" }}>
                   <TextField
                     select
@@ -1070,27 +1022,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   </TextField>
                 </Box>
               </div>
-              {/* <Box sx={{ width: "250px" }}>
-            <TextField
-              select
-              size="small"
-              variant="outlined"
-              name="glassType.thickness"
-              style={{ width: "100%" }}
-              value={formik.values.glassType.thickness}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            >
-              {singleDefault?.listData?.glassType?.[0].options?.map(
-                (option) => (
-                  <MenuItem key={option._id} value={option._id}>
-                    {option.thickness}
-                  </MenuItem>
-                )
-              )}
-           
-            </TextField>
-          </Box> */}
               <Box sx={{ width: "250px" }}>
                 <TextField
                   select
@@ -1225,7 +1156,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               ></Box>
             </div>
 
-            {/* Transom (if full height) */}
 
             <div
               style={{
@@ -1275,7 +1205,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               ></div>
             </div>
-            {/* Header (if not full height) */}
 
             <div
               style={{
@@ -1328,7 +1257,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               ></div>{" "}
             </div>
 
-            {/* Glass Treatment */}
 
             <div
               style={{
@@ -1386,7 +1314,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               ></div>{" "}
             </div>
 
-            {/*  Other*/}
 
             <Box display="flex" alignItems="center" padding="15px 10px">
               <Box style={{ width: "250px", padding: 4 }}>Other</Box>

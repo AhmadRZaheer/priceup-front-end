@@ -28,16 +28,14 @@ export const boxStyles = {
   gap: { md: 2, xs: 1 },
   flexDirection: "column",
   cursor: "pointer",
-  // position: "relative",
 };
 const Layout = () => {
-  const { data: layouts, refetch: defaultDataRefetch, isFetching: loading } = useFetchDataDefault();
+  const { data: layouts, isFetching: loading } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));
-    // dispatch(setNavigation("measurements"));
   };
   return (
     <>
@@ -48,9 +46,7 @@ const Layout = () => {
           alignItems: "center",
           flexDirection: "column",
           background: "#18133b",
-
           height: "98vh",
-          // overflowY: "scroll",
           paddingY: { md: 4, sx: 0 },
         }}
       >
@@ -61,21 +57,18 @@ const Layout = () => {
             height: "100%",
             display: "flex",
             alignItems: { md: "center", xs: "start" },
-            //   background: "blue",
             marginTop: { md: 15, sx: 0 },
             flexDirection: "column",
             p: { md: 2, sx: 0 },
             gap: { md: 4, xs: 0 },
           }}
         >
-          {/* create New Quotes  header with back arrow*/}
           <Box
             sx={{
               display: { md: "none", xs: "flex" },
               zIndex: 1,
               justifyContent: { md: "center", xs: "start" },
               background: "#18133b",
-              // height: "100%",
               width: "100%",
               color: "white",
               paddingY: 1.2,
@@ -150,7 +143,6 @@ const Layout = () => {
               {layouts.map((layout) => (
                 <Box
                   key={layout._id}
-                  // sx={boxStyles}
                   sx={{
                     ...boxStyles,
                     backgroundColor:
@@ -168,7 +160,6 @@ const Layout = () => {
                       width: "70px",
                       height: "120px",
                     }}
-                    // src={layout.imageSrc}
                     src={`${backendURL}/${layout?.image}`}
                     alt="Selected"
                   />
@@ -187,7 +178,6 @@ const Layout = () => {
                 position: "fixed",
                 bottom: 0,
                 left: 0,
-                // justifyContent: { md: "end", xs: "center" },
                 backgroundColor: "#18133b",
                 width: "92.6%",
                 padding: 2,

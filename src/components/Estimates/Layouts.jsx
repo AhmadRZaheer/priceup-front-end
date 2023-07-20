@@ -28,7 +28,6 @@ export default function Layout({ setStorePage }) {
   };
   const {
     data: layouts,
-    refetch: defaultDataRefetch,
     isFetching: loading,
   } = useFetchDataDefault();
   const dispatch = useDispatch();
@@ -36,7 +35,6 @@ export default function Layout({ setStorePage }) {
 
   const handleBoxClick = (layout) => {
     dispatch(addSelectedItem(layout));
-    // dispatch(setNavigation("measurements"));
   };
   return (
     <>
@@ -47,9 +45,7 @@ export default function Layout({ setStorePage }) {
           alignItems: "center",
           flexDirection: "column",
           background: "white",
-
           height: "98vh",
-          // overflowY: "scroll",
           paddingY: 0,
         }}
       >
@@ -65,7 +61,6 @@ export default function Layout({ setStorePage }) {
             gap: { md: 4, xs: 0 },
           }}
         >
-          {/* create New Quotes  header with back arrow*/}
           <Typography
             sx={{ display: { md: "block", xs: "none" } }}
             textAlign={"center"}
@@ -129,7 +124,6 @@ export default function Layout({ setStorePage }) {
                 {layouts.map((layout) => (
                   <Box
                     key={layout._id}
-                    // sx={boxStyles}
                     sx={{
                       ...boxStyles,
                       backgroundColor:
@@ -148,7 +142,6 @@ export default function Layout({ setStorePage }) {
                         width: "70px",
                         height: "120px",
                       }}
-                      // src={layout.imageSrc}
                       src={`${backendURL}/${layout?.image}`}
                       alt="Selected"
                     />
@@ -166,7 +159,6 @@ export default function Layout({ setStorePage }) {
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <NavLink to="/Estimates">
                 <Button
-                  // href="/Existing"
                   sx={{
                     width: 180,
                     color: "black",
@@ -183,9 +175,6 @@ export default function Layout({ setStorePage }) {
               </NavLink>
               <Button
                 disabled={selectedData?.length < 1}
-                //    onClick={() => {
-                //      dispatch(setNavigation("measurements"));
-                //    }}
                 sx={{
                   width: 180,
                   backgroundColor: "#8477DA",

@@ -6,7 +6,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-
 import {
   useDeleteFinishes,
   useFetchDataFinishes,
@@ -23,7 +22,6 @@ const FinishesTable = () => {
     useFetchDataFinishes();
   const {
     mutate: deleteFinish,
-    error: finishDeleteError,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteFinishes();
@@ -57,11 +55,6 @@ const FinishesTable = () => {
   const actionColumn = [
     {
       field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;

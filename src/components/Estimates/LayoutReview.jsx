@@ -5,9 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
 import {
   getContent,
-  getTotal,
   setInputContent,
-  setNavigation,
   setTotal,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
@@ -15,18 +13,13 @@ import Summary from "./Summery";
 import ChannelTypeDesktop from "./ChannelorClamp";
 
 const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
-  const { data: estimatesData, refetch: estimatesRefetch } =
+  const { data: estimatesData } =
     useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
-  const totalPrice = useSelector(getTotal);
 
   const dispatch = useDispatch();
-  // const [mountingType, setmountingType] = useState(
-  //   selectedContent.mounting.activeType || "clamps"
-  // );
 
   useEffect(() => {
-    // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
     const handlePrice = selectedContent?.handles?.item
       ? (selectedContent?.handles?.item?.finishes?.find(
           (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -87,7 +80,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
 
     let fabricationPrice = 0;
     if (selectedContent.glassType.thickness === "1/2") {
-      // for 1/2 price
       fabricationPrice =
         Number(selectedContent?.oneInchHoles) *
           estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
@@ -126,16 +118,12 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
       selectedContent?.hours *
       estimatesData?.miscPricing?.hourlyRate;
 
-    // total formula = (hardware's cost + glass cost + add-ons cost + fabrication + fabrication 1/2) * Company pricing factor + Labor result
     const total =
       (hardwareTotals + fabricationPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
   }, [selectedContent]);
-  const handleBoxClick = () => {
-    dispatch(setNavigation("summary"));
-  };
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -220,7 +208,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               paddingY: { md: 4, xs: 0 },
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
-              // gap: 6,
               maxHeight: 1400,
               borderRadius: "8px",
               justifyContent: "space-between",
@@ -229,7 +216,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               overflow: "auto",
             }}
           >
-            {/* LeftSide */}
 
             <Box
               sx={{
@@ -246,12 +232,10 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   gap: 1,
                 }}
               >
-                {/* <MenuList /> */}
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -266,7 +250,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                     />
                   </Box>
                 </Box>
@@ -274,7 +257,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -288,7 +270,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Handles"}
                       type={"handles"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.handles.count}
                     />
                   </Box>
@@ -297,7 +278,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -311,62 +291,19 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Hinges"}
                       type={"hinges"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.hinges.count}
                     />
                   </Box>
                 </Box>
                 <Box
                   sx={{
-                    // display: "flex",
                     alignItems: "center",
-                    // gap: 4,
-                    // justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
                 >
-                  {/* mouting channel */}
-                  {/* <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <MenuList
-                        menuOptions={estimatesData?.wallClamp}
-                        title={"Wall Clamps"}
-                        type={"wallClamp"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={selectedContent.mounting.clamps.wallClamp.count}
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.sleeveOver}
-                        title={"Sleeve Over"}
-                        type={"sleeveOver"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={selectedContent.mounting.clamps.sleeveOver.count}
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.glassToGlass}
-                        title={"Glass to Glass"}
-                        type={"glassToGlass"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={
-                          selectedContent.mounting.clamps.glassToGlass.count
-                        }
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.mountingChannel}
-                        title={"Channel"}
-                        type={"channel"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                      />
-                    </Box>
-                  </Box> */}
-
                   <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
                       <ChannelTypeDesktop
@@ -376,55 +313,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                         showSnackbar={showSnackbar}
                         estimatesData={estimatesData}
                       />
-                      {/* <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          alignContent: "space-between",
-                        }}
-                      >
-                        {selectedContent.mounting.activeType === "clamps" && (
-                         <>
-                            <MenuList
-                              menuOptions={estimatesData?.wallClamp}
-                              title={"Wall Clamps"}
-                              type={"wallClamp"}
-                              showSnackbar={showSnackbar}
-                              count={
-                                selectedContent.mounting.clamps.wallClamp.count
-                              }
-                            />
-                            <MenuList
-                              menuOptions={estimatesData?.sleeveOver}
-                              title={"Sleeve Over"}
-                              type={"sleeveOver"}
-                              showSnackbar={showSnackbar}
-                              count={
-                                selectedContent.mounting.clamps.sleeveOver.count
-                              }
-                            />
-                            <MenuList
-                              menuOptions={estimatesData?.glassToGlass}
-                              title={"Glass to Glass"}
-                              type={"glassToGlass"}
-                              showSnackbar={showSnackbar}
-                              count={
-                                selectedContent.mounting.clamps.glassToGlass
-                                  .count
-                              }
-                            />
-                          </>
-                        )} 
-
-                        {selectedContent.mounting.activeType === "channel" && (
-                          <MenuList
-                            menuOptions={estimatesData?.mountingChannel}
-                            title={"Channel"}
-                            type={"channel"}
-                            showSnackbar={showSnackbar}
-                          />
-                        )}
-                      </Box> */}
                     </Box>
                   </Box>
                 </Box>
@@ -432,7 +320,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -446,7 +333,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={" Glass type"}
                       type={"glassType"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       thickness={selectedContent.glassType.thickness}
                     />
                   </Box>
@@ -455,7 +341,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -469,7 +354,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
                     />
                   </Box>
@@ -478,7 +362,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -492,7 +375,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Header"}
                       type={"header"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
                     />
                   </Box>
@@ -501,7 +383,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -515,7 +396,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Glass treatment"}
                       type={"glassTreatment"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                     />
                   </Box>
                 </Box>
@@ -523,7 +403,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -540,12 +419,10 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                     />
                   </Box>
                 </Box>
-                {/* holes onword */}
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -568,7 +445,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   >
                     <TextField
                       type="number"
-                      // InputProps={{ inputProps: { min: 0, max: 50 } }}
                       InputProps={{
                         style: {
                           color: "black",
@@ -605,7 +481,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -664,7 +539,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -717,7 +591,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                         )
                       }
 
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, clampCut: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -725,7 +598,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -777,7 +649,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, notch: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -785,7 +656,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -837,8 +707,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, outages: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -846,7 +714,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -899,7 +766,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                         )
                       }
 
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, mitre: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -907,7 +773,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -959,8 +824,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, polish: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -968,7 +831,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -1021,7 +883,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                         )
                       }
 
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, people: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -1029,7 +890,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -1082,13 +942,11 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                         )
                       }
 
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, hours: event.target.value }))}
                     />
                   </Box>
                 </Box>
               </Box>
             </Box>
-            {/* rightSide */}
             <Box sx={{ width: "46%" }}>
               <Summary />
             </Box>
@@ -1096,7 +954,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
           <Box
             sx={{
               display: "flex",
-              // gap: 2,
               justifyContent: "space-between",
               width: "96%",
               paddingX: 2,
@@ -1106,9 +963,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               <Button
                 fullWidth
                 onClick={() => setHandleEstimatesPages("Measurments")}
-                // onClick={() => {
-                //   dispatch(setNavigation("measurements"));
-                // }}
                 sx={{
                   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                   color: "#344054",

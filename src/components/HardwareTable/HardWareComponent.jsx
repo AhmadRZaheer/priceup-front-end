@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from "react";
-import wheel from "../../Assets/wheel.svg";
-
 import {
   Box,
-  Checkbox,
   CircularProgress,
-  FormControl,
-  FormControlLabel,
   IconButton,
-  MenuItem,
-  TextField,
-  Typography,
 } from "@mui/material";
-import { Add, Delete, Edit, ToggleOff, ToggleOn } from "@mui/icons-material";
-import { useDispatch, useSelector } from "react-redux";
-import { addItems } from "../../redux/formSlice";
+import { Add, Delete, Edit} from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-import axios from "axios";
 import {
   useDeleteHardwares,
   useFetchDatahardware,
@@ -45,7 +34,6 @@ const HardWareComponent = ({ type }) => {
       open: false,
     }));
   };
-  const dispatch = useDispatch();
 
   const {
     data: hardwareData,
@@ -54,9 +42,7 @@ const HardWareComponent = ({ type }) => {
   } = useFetchDatahardware(type);
   const {
     mutate: deleteHardware,
-    error: hardwareDeleteError,
     isSuccess: deleteSuccess,
-    isLoading: loaderForDelete,
   } = useDeleteHardwares();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
@@ -86,22 +72,7 @@ const HardWareComponent = ({ type }) => {
     }
   }, [deleteSuccess]);
 
-  const handleAddFormEntryItems = (id, event) => {
-    dispatch(
-      addItems({
-        id: id,
-        data: {
-          id: Date.now() % 10000,
-          additionalFinishType: "",
-          hardwarePartNumber: "",
-          cost: "",
-          price: "",
-          isChecked: "",
-          thickness: "",
-        },
-      })
-    );
-  };
+
 
   return (
     <>
@@ -114,7 +85,6 @@ const HardWareComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-          // background: "red",
         }}
       >
         {" "}
@@ -148,8 +118,6 @@ const HardWareComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-
-          // background: "red",
         }}
       >
         {" "}
@@ -180,15 +148,6 @@ const HardWareComponent = ({ type }) => {
         >
           Cost
         </div>
-        {/* <div
-          style={{
-            width: "250px",
-
-            padding: 4,
-          }}
-        >
-          Price
-        </div>{" "} */}
         <div
           style={{
             width: "250px",
@@ -219,8 +178,6 @@ const HardWareComponent = ({ type }) => {
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            // background: "red",
-
             maxHeight: "600px",
             overflowY: "scroll",
           }}
@@ -232,8 +189,6 @@ const HardWareComponent = ({ type }) => {
             >
               <Box
                 sx={{
-                  // background: "red",
-
                   display: "flex",
                   justifyContent: "space-between",
                   alignContent: "center",
@@ -242,10 +197,8 @@ const HardWareComponent = ({ type }) => {
               >
                 {" "}
                 <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  {/* <div className="customerImg"> */}
                   <img
                     className="cellImg"
-                    // src={wheel}
                     src={`${backendURL}/${entry.image}`}
                     alt=""
                   />
@@ -255,13 +208,11 @@ const HardWareComponent = ({ type }) => {
                 <Box>
                   <IconButton>
                     <Delete
-                      // style={{ color: "rgb(65, 106, 238)" }}
                       onClick={() => handleHardwareDelete(entry._id)}
                     />
                   </IconButton>
                   <IconButton>
                     <Edit
-                      // style={{ color: "rgb(65, 106, 238)" }}
                       onClick={() => handleOpenEdit(entry)}
                     />
                   </IconButton>

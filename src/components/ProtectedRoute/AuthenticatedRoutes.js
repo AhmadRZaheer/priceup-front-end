@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route } from "react-router-dom";
 import Overview from "../../pages/home/Overview";
 import Customers from "../../pages/Customers/Customers";
 import Single from "../../pages/singlle/Single";
@@ -10,9 +10,6 @@ import Finishes from "../../pages/Finishes/Finishes";
 import Defaults from "../../pages/Layouts/Defaults";
 import Estimates from "../../pages/Estimates/Estimates";
 import Settings from "../../pages/Settings/Settings";
-import Staff from "../../pages/EstimatesMobile/Staff";
-import SuperAdminTable from "../SuperAdmin/SuperAdmin";
-import Admin from "../../pages/Admin/Admin";
 import AddOns from "../../pages/AddOns/addOns";
 import GlassType from "../../pages/GlassType/glassType";
 import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
@@ -23,7 +20,6 @@ const AuthenticatedRoutesAdmin = () => {
     <Routes>
       <Route path="/">
         <Route index element={<Overview />} />
-        {/* <Route path="estimates" element={<Estimates />} /> */}
         <Route path="/Estimates/">
           <Route index element={<Existing />} />
           <Route path="Steps" element={<Estimates />} />

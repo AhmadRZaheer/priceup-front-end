@@ -20,14 +20,10 @@ const style = {
   display: "flex",
   flexDirection: "column",
   gap: 3,
-  // top: { md: "50%", xs: "76%" },
-  // left: { md: "50%", xs: "50%" },
   top: "30%",
   left: "40%",
-  // transform: "translate(-50%, -50%)",
   width: 400,
   height: "auto",
-  // bgcolor: "red",
   borderRadius: { md: "4px" },
   backgroundColor: "white",
   zIndex: 2,
@@ -131,14 +127,12 @@ export default function ClientDetailsModel({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
-      // window.location.href = "/";
       dispatch(setNavigation("existing"));
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
       showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfully, ErrorForAdd]);
-  console.log(formik.values);
 
   return (
     <div>
@@ -360,7 +354,6 @@ export default function ClientDetailsModel({
                   justifyContent: "end",
                 }}
               >
-                {/* <Box onClick={handleCancel}> */}
                 <Button
                   type="submit"
                   sx={{
@@ -372,11 +365,9 @@ export default function ClientDetailsModel({
                   }}
                   fullWidth
                   variant="contained"
-                  // onClick={handleCancel}
                 >
                   Save
                 </Button>
-                {/* </Box> */}
               </Box>
             </Box>
           </Box>

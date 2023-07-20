@@ -1,22 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./SuperAdmin.scss";
-import { AdminColumns, teamColumns } from "../../customerTableSource";
+import { AdminColumns } from "../../customerTableSource";
 
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
   Button,
-  FormControlLabel,
-  Switch,
   Typography,
 } from "@mui/material";
 import Snackbars from "../Model/SnackBar";
 import {
   useFetchDataAdmin,
-  useUserStatus,
 } from "../../utilities/ApiHooks/SuperAdmin";
 import AddSuperAdminModel from "../Model/AddSuperAdminModel";
-import { Delete } from "@mui/icons-material";
 import TableRow from "./TableRow";
 
 const SuperAdminTable = () => {
@@ -49,15 +45,10 @@ const SuperAdminTable = () => {
   const actionColumn = [
     {
       field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
+
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
-        // const isMatchingId = id === matchingId;
 
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
