@@ -9,6 +9,7 @@ import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
 export default function ExistingQuotes() {
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
+  console.log(estimates, "estimates")
   return (
     <>
       <Box
@@ -18,9 +19,11 @@ export default function ExistingQuotes() {
           justifyContent: "start",
           alignItems: "center",
           width: "100%",
-          height: 884,
+          height: "96vh",
           overflow: "auto",
           backgroundColor: "#f5f5f5",
+          borderTopLeftRadius: 30,
+          borderBottomLeftRadius: 30,
           gap: 5,
           pt: 4,
         }}

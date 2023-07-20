@@ -1,6 +1,5 @@
 import React from "react";
 import "./AddOns.scss";
-
 import { useDispatch } from "react-redux";
 import {
   addHardware,

@@ -3,7 +3,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Logo from "../../Assets/purplelogo.svg";
 import "./MobileNavBar.scss";
 import React, { useState } from "react";
-import { Drawer, IconButton, Backdrop, Box, Button } from "@mui/material";
+import { Drawer, IconButton, Backdrop, Box, Button, Tooltip } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
@@ -110,6 +110,7 @@ function MobileBar() {
               }}
             >
               <Box>
+              <Tooltip title="Logout" placement="top" arrow >
                 <Button
                   sx={{
                     width: 240,
@@ -123,6 +124,7 @@ function MobileBar() {
                 >
                   Logout
                 </Button>
+                </Tooltip>
               </Box>
               <div className="bottom">
                 <div className="UserIcon">

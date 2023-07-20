@@ -14,11 +14,14 @@ import DefaltIcon from "../../Assets/columns.svg"
 import SettingsIcon from "../../Assets/settings.svg"
 import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { backendURL } from "../../utilities/common";
+import { makeStyles } from "@material-ui/core";
 
 const Sidebar = () => {
+
+
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -231,11 +234,11 @@ const Sidebar = () => {
             {decodedToken?.name}
             <div className="emailUser">{decodedToken?.email}</div>
           </div>
+          <Tooltip title="Logout" placement="top-start" arrow >
           <div className="logOutIcon" onClick={() => setOpen(!open)}>
-            {/* <a href="/login"> */}
             <img src={logout} alt="image" />
-            {/* </a> */}
           </div>
+          </Tooltip>
         </div>
       </div>
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />

@@ -242,7 +242,7 @@ const LayoutReview = () => {
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
-              maxHeight: "60vh",
+              maxHeight: "54ffvh",
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
@@ -341,7 +341,7 @@ const LayoutReview = () => {
                 >
                   <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <Box sx={{  width: "100%", display: "flex", flexDirection: "column" }}>
                         <ChannelType
                           menuOptions={estimatesData?.channelOrClamps}
                           title={"Mounting"}
