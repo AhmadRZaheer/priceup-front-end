@@ -202,6 +202,19 @@ const estimateCalcSlice = createSlice({
         activeType: payload,
       };
     },
+    reinitializeState:(state,action) => {
+      const {estimateData,listData} = action.payload;
+      console.log(listData,'list')
+      let hardwareFinishes = null;
+      hardwareFinishes = listData?.hardwareFinishes?.find((item)=>
+              item._id === estimateData?.hardwareFinishes
+      )
+      
+      state.content = {
+        ...state.content,
+        hardwareFinishes
+      }
+    }
   },
 });
 export const {
@@ -215,5 +228,6 @@ export const {
   addSelectedItem,
   setNavigation,
   setActiveMounting,
+  reinitializeState
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

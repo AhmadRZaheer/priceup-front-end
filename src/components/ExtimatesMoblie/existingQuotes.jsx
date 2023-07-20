@@ -7,19 +7,20 @@ import {
 } from "@mui/material";
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { useDispatch } from "react-redux";
-import { setNavigation } from "../../redux/estimateCalculations";
-import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
+import { reinitializeState, setNavigation } from "../../redux/estimateCalculations";
+import { useFetchDataEstimate, useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 import { useState } from "react";
 
 export default function ExitingQuotes() {
   const [selectedQuote, setSelectedQuote] = useState(null);
-
+  console.log(selectedQuote);
   const { data: estimates, isFetching } = useGetEstimates();
-
+  const { data: estimateListData} = useFetchDataEstimate();
   const dispatch = useDispatch();
-  console.log(estimates, "selectedQuote ");
-  const handleIconButtonClick = (itemId) => {
-    setSelectedQuote(itemId);
+  console.log(estimateListData, "selectedQuote ");
+  const handleIconButtonClick = (item) => {
+    setSelectedQuote(item);
+    dispatch(reinitializeState({estimateData:item,listData:estimateListData}));
     // dispatch(setNavigation("review"));
   };
 
@@ -84,7 +85,7 @@ export default function ExitingQuotes() {
                     <Typography color="red" marginRight={3}></Typography>
 
                     <IconButton
-                      onClick={() => handleIconButtonClick(item?._id)}
+                      onClick={() => handleIconButtonClick(item)}
                       sx={{ marginRight: 1, height: 25 }}
                     >
                       <img src={pencil} alt="image of pencil" />
