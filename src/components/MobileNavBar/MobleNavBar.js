@@ -20,7 +20,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
 }));
-
 function MobileBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const classes = useStyles();
@@ -28,16 +27,13 @@ function MobileBar() {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
   const handleBackdropClick = () => {
     setIsSidebarOpen(false);
   };
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-
     navigate("/login");
   };
   const token = localStorage.getItem("token");
@@ -103,7 +99,7 @@ function MobileBar() {
                 display: "flex",
                 justifyContent: "end",
                 alignItems: "start",
-                height: "78%",
+                height: "70vh",
                 width: "100%",
                 flexDirection: "column",
                 backgroundColor: "#100d24",
@@ -141,7 +137,6 @@ function MobileBar() {
             </Box>
           </Box>
         </Drawer>
-
         <Backdrop
           open={isSidebarOpen}
           onClick={handleBackdropClick}
