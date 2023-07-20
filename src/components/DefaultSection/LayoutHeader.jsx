@@ -87,7 +87,7 @@ const LayoutHeader = () => {
   return (
     <div
       style={{
-        maxWidth: "78vw",
+        maxWidth: "75vw",
         margin: "0 auto",
       }}
     >

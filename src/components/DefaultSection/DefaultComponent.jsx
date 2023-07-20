@@ -123,6 +123,7 @@ const DefaultComponent = ({ showSnackbar }) => {
 
     const id = defaultId;
     updateDefault({ settings: updatedValues, id: id });
+    formik.resetForm();
   };
   useEffect(() => {
     if (SuccessForEdit) {
@@ -639,7 +640,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   type="number"
                   size="small"
                   variant="outlined"
-                  name="heavyPivot.countOne"
+                  name="heavyPivotOption.height"
                   style={{
                     width: "120px",
                   }}
@@ -655,7 +656,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   type="number"
                   size="small"
                   variant="outlined"
-                  name="heavyPivot.countTwo"
+                  name="heavyPivotOption.threshold"
                   style={{
                     width: "120px",
 
