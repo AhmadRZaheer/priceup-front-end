@@ -60,7 +60,7 @@ export default function ExitingQuotes() {
           </Box>
 
           <Box
-            sx={{ paddingX: 2, marginTop: 2, height: "40vh", overflow: "auto" }}
+            sx={{ paddingX: 2, marginTop: 2, height: "60vh", overflow: "auto" }}
           >
             {isFetching ? (
               <Box
@@ -129,7 +129,6 @@ export default function ExitingQuotes() {
               "&:hover": { background: "#8477DA", color: "white" },
             }}
           >
-            {" "}
             Create New Qoute
           </Button>
         </Box>
