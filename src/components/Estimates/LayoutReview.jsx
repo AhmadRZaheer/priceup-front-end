@@ -137,9 +137,9 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
      const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
      const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
      let otherAddons = 0;
-     selectedContent.addOns.map((item)=>
+     selectedContent.addOns?.map((item)=>
       {
-       const price = item.finishes.find((finish)=>finish.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0;
+       const price = item?.finishes?.find((finish)=>finish.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0;
        otherAddons = otherAddons + (price * priceBySqft);
       }
      );

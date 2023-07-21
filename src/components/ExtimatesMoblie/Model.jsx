@@ -50,7 +50,7 @@ export default function ClientDetailsModel({
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
   const data = estimatesContent?.addOns;
-  const addOnIds = data.map((obj) => obj._id);
+  const addOnIds = data?.map((obj) => obj._id);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {

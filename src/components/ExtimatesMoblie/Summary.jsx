@@ -175,13 +175,16 @@ const Summary = ({ handleOpen }) => {
                 </Typography>
                 {selectedContent?.mounting?.activeType === "channel" ? (
                   <Typography>
-                    Channel: {selectedContent?.mounting?.channel?.type?.name}
+                    Channel: {selectedContent?.mounting?.channel?.item?.name}
                   </Typography>
                 ) : (
                   <Typography>
-                    Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.name}{" "}
-                    / {selectedContent?.mounting?.clamps?.sleeveOver?.name} /{" "}
-                    {selectedContent?.mounting?.clamps?.glassToGlass?.name}
+                    Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.item?.name} (
+                  {selectedContent?.mounting?.clamps?.wallClamp?.count}){" "}
+                    / {selectedContent?.mounting?.clamps?.sleeveOver?.item?.name} (
+                  {selectedContent?.mounting?.clamps?.sleeveOver?.count}) /{" "}
+                    {selectedContent?.mounting?.clamps?.glassToGlass?.item?.name} (
+                  {selectedContent?.mounting?.clamps?.glassToGlass?.count})
                   </Typography>
                 )}
                 <Typography>
@@ -198,9 +201,9 @@ const Summary = ({ handleOpen }) => {
                   {selectedContent?.header?.count})
                 </Typography>
                 <Typography>
-                  Glass Treatment: {selectedContent?.glassTreatment?.name}
+                  Glass Treatment: {selectedContent?.glassTreatment?.item?.name}
                 </Typography>
-                <Typography variant="h6">Add ons: </Typography>
+                <Typography variant="h6">Add ons: {selectedContent?.addOns?.map((item)=> ` ${item?.name}`)} Towel Bars ({selectedContent?.towelBarsCount}) Sleeve Over ({selectedContent?.sleeveOverCount})</Typography>
                 <Typography>People: {selectedContent?.people}</Typography>
                 <Typography>Hours: {selectedContent?.hours}</Typography>
                 <Typography> </Typography>
@@ -215,7 +218,7 @@ const Summary = ({ handleOpen }) => {
                   }}
                 >
                   <Typography>Price</Typography>
-                  <Typography variant="h6">${totalPrice}</Typography>
+                  <Typography variant="h6">${totalPrice?.toFixed(2) || 0}</Typography>
                 </Box>{" "}
               </Box>
             </Box>

@@ -1,8 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./MenuList";
-import {
-  ChevronLeftOutlined,
-} from "@mui/icons-material";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,14 +18,13 @@ import { evaluateFormula } from "../../utilities/common";
 import { useMemo } from "react";
 
 const LayoutReview = () => {
-  const { data: estimatesData } =
-    useFetchDataEstimate();
+  const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const measurementSides = useSelector(getMeasumentSide);
   const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
-  const priceBySqft = useMemo(()=>{
-   const measurementObject = measurementSides.reduce((obj, item) => {
+  const priceBySqft = useMemo(() => {
+    const measurementObject = measurementSides.reduce((obj, item) => {
       const { key, value } = item;
       if (!obj[key]) {
         obj[key] = [];
@@ -35,8 +32,16 @@ const LayoutReview = () => {
       obj[key].push(value);
       return obj;
     }, {});
-    return evaluateFormula(currentLayout?.settings?.priceBySqftFormula,measurementObject?.a,measurementObject?.b,measurementObject?.c,measurementObject?.d,measurementObject?.e,measurementObject?.f);
-  },[measurementSides,currentLayout]);
+    return evaluateFormula(
+      currentLayout?.settings?.priceBySqftFormula,
+      measurementObject?.a,
+      measurementObject?.b,
+      measurementObject?.c,
+      measurementObject?.d,
+      measurementObject?.e,
+      measurementObject?.f
+    );
+  }, [measurementSides, currentLayout]);
 
   useEffect(() => {
     // hardware
@@ -135,25 +140,45 @@ const LayoutReview = () => {
     }
 
     //addons
-    const towelBar = estimatesData?.addOns?.find((item)=>item.slug === 'towel-bars');
-    const sleeveOver = estimatesData?.addOns?.find((item)=>item.slug === 'sleeve-over');
-    const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
-    const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
-    let otherAddons = 0;
-    selectedContent.addOns.map((item)=>
-     {
-      const price = item.finishes.find((finish)=>finish.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0;
-      otherAddons = otherAddons + (price * priceBySqft);
-     }
+    const towelBar = estimatesData?.addOns?.find(
+      (item) => item.slug === "towel-bars"
     );
-    const addOnsTotal = (towelBarFinish * selectedContent.towelBarsCount) + (sleeveOverFinish * selectedContent.sleeveOverCount) + otherAddons;
+    const sleeveOver = estimatesData?.addOns?.find(
+      (item) => item.slug === "sleeve-over"
+    );
+    const towelBarFinish =
+      towelBar?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    const sleeveOverFinish =
+      sleeveOver?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    let otherAddons = 0;
+    selectedContent?.addOns?.map((item) => {
+      const price =
+        item.finishes.find(
+          (finish) => finish.finish_id === selectedContent?.hardwareFinishes?._id
+        )?.cost || 0;
+      otherAddons = otherAddons + price * priceBySqft;
+    });
+    const addOnsTotal =
+      towelBarFinish * selectedContent?.towelBarsCount +
+      sleeveOverFinish * selectedContent?.sleeveOverCount +
+      otherAddons;
 
     //glass
-    const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0)* priceBySqft;
-    
+    const glassPrice =
+      (selectedContent?.glassType?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0) * priceBySqft;
+
     //glassTreatment
-    const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0);
-    
+    const glassTreatmentPrice =
+      selectedContent?.glassTreatment?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0;
+
     //labor price
     const laborPrice =
       selectedContent?.people *
@@ -161,7 +186,11 @@ const LayoutReview = () => {
       estimatesData?.miscPricing?.hourlyRate;
 
     const total =
-      (hardwareTotals + fabricationPrice + addOnsTotal + glassPrice + glassTreatmentPrice) *
+      (hardwareTotals +
+        fabricationPrice +
+        addOnsTotal +
+        glassPrice +
+        glassTreatmentPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
@@ -289,7 +318,6 @@ const LayoutReview = () => {
               overflow: "auto",
             }}
           >
-
             <Box
               sx={{
                 display: "flex",
@@ -324,6 +352,7 @@ const LayoutReview = () => {
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
                       estimatesData={estimatesData}
+                      item={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -366,6 +395,7 @@ const LayoutReview = () => {
                       type={"hinges"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.hinges.count}
+                      item={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>
@@ -380,7 +410,13 @@ const LayoutReview = () => {
                 >
                   <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box sx={{  width: "100%", display: "flex", flexDirection: "column" }}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
                         <ChannelType
                           menuOptions={estimatesData?.channelOrClamps}
                           title={"Mounting"}
@@ -523,13 +559,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -581,13 +617,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -639,7 +675,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -697,7 +733,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -755,13 +791,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -782,7 +818,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -814,7 +849,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -841,7 +876,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -873,13 +907,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -900,7 +934,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -932,13 +965,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -959,7 +992,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -991,13 +1023,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -1018,13 +1050,11 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
               </Box>
             </Box>
-
           </Box>
         </Box>
         <Box
