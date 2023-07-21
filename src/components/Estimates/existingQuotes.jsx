@@ -43,7 +43,7 @@ export default function ExistingQuotes() {
             }}
           >
             <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image1} alt="" />
+            <img style={{ width: "60%", height: "100%" }} src={image1} alt="" />
             <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
                 {estimates?.length}
               </Typography>
@@ -69,13 +69,13 @@ export default function ExistingQuotes() {
             }}
           >
             <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image2} alt="" />
+            <img style={{ width: "60%", height: "100%" }} src={image2} alt="" />
             <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
                 0
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+              <Typography sx={{ fontSize: 18 }}>
               Approved
               </Typography>
             </Box>
@@ -95,13 +95,13 @@ export default function ExistingQuotes() {
             }}
           >
             <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image3} alt="" />
+            <img style={{ width: "60%", height: "100%" }} src={image3} alt="" />
             <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
             131
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+              <Typography sx={{ fontSize: 18}}>
               Voided
               </Typography>
             </Box>
@@ -122,12 +122,12 @@ export default function ExistingQuotes() {
           >
             <Box sx={{width: 60}}>
             <img style={{ width: "80%", height: "100%" }} src={image4} alt="" />
-            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
+            <Typography pl={0.8}  fontSize={26} fontWeight="bold">
             $28,956.00
               </Typography>
             </Box>
-            <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
+            <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
+              <Typography sx={{ fontSize: 18,  }}>
               Invoice Total
               </Typography>
             </Box>
