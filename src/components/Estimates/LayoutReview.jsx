@@ -134,22 +134,22 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
      //addons
      const towelBar = estimatesData?.addOns?.find((item)=>item.slug === 'towel-bars');
      const sleeveOver = estimatesData?.addOns?.find((item)=>item.slug === 'sleeve-over');
-     const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
-     const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
+     const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
+     const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
      let otherAddons = 0;
      selectedContent.addOns.map((item)=>
       {
-       const price = item.finishes.find((finish)=>finish.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0;
+       const price = item.finishes.find((finish)=>finish.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0;
        otherAddons = otherAddons + (price * priceBySqft);
       }
      );
      const addOnsTotal = (towelBarFinish * selectedContent.towelBarsCount) + (sleeveOverFinish * selectedContent.sleeveOverCount) + otherAddons;
  
      //glass
-     const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0)* priceBySqft;
+     const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0)* priceBySqft;
      
      //glassTreatment
-     const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0);
+     const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0);
      
      //labor price
     const laborPrice =
