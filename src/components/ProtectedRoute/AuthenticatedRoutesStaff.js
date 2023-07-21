@@ -1,9 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
 import Staff from "../../pages/EstimatesMobile/Staff";
 import Login from "../Login/login";
-
 const AuthenticatedRouteStaff = () => {
   return (
     <Routes>
@@ -15,5 +13,4 @@ const AuthenticatedRouteStaff = () => {
     </Routes>
   );
 };
-
 export default AuthenticatedRouteStaff;

@@ -6,18 +6,37 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  getMeasumentSide,
+  selectedItem,
   setInputContent,
   setNavigation,
   setTotal,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
+import { evaluateFormula } from "../../utilities/common";
+import { useMemo } from "react";
 
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
+  const measurementSides = useSelector(getMeasumentSide);
+  const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
+  const priceBySqft = useMemo(()=>{
+   const measurementObject = measurementSides.reduce((obj, item) => {
+      const { key, value } = item;
+      if (!obj[key]) {
+        obj[key] = [];
+      }
+      obj[key].push(value);
+      return obj;
+    }, {});
+    return evaluateFormula(currentLayout?.settings?.priceBySqftFormula,measurementObject?.a,measurementObject?.b,measurementObject?.c,measurementObject?.d,measurementObject?.e,measurementObject?.f);
+  },[measurementSides,currentLayout]);
+
   useEffect(() => {
+    // hardware
     const handlePrice = selectedContent?.handles?.item
       ? (selectedContent?.handles?.item?.finishes?.find(
           (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -76,6 +95,7 @@ const LayoutReview = () => {
       slidingDoorSystemPrice +
       headerPrice;
 
+    // fabricating
     let fabricationPrice = 0;
     if (selectedContent.glassType.thickness === "1/2") {
       fabricationPrice =
@@ -111,13 +131,34 @@ const LayoutReview = () => {
           estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
     }
 
+    //addons
+    const towelBar = estimatesData?.addOns?.find((item)=>item.slug === 'towel-bars');
+    const sleeveOver = estimatesData?.addOns?.find((item)=>item.slug === 'sleeve-over');
+    const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
+    const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
+    let otherAddons = 0;
+    selectedContent.addOns.map((item)=>
+     {
+      const price = item.finishes.find((finish)=>finish.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0;
+      otherAddons = otherAddons + (price * priceBySqft);
+     }
+    );
+    const addOnsTotal = (towelBarFinish * selectedContent.towelBarsCount) + (sleeveOverFinish * selectedContent.sleeveOverCount) + otherAddons;
+
+    //glass
+    const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0)* priceBySqft;
+    
+    //glassTreatment
+    const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0);
+    
+    //labor price
     const laborPrice =
       selectedContent?.people *
       selectedContent?.hours *
       estimatesData?.miscPricing?.hourlyRate;
 
     const total =
-      (hardwareTotals + fabricationPrice) *
+      (hardwareTotals + fabricationPrice + addOnsTotal + glassPrice + glassTreatmentPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
