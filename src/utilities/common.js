@@ -12,3 +12,35 @@ export function createSlug(string) {
 }
 
 export const backendURL = "http://localhost:5000";
+
+export const evaluateFormula = (
+  formulaString,
+  a = 0,
+  b = 0,
+  c = 0,
+  d = 0,
+  e = 0,
+  f = 0
+) => {
+  try {
+    if (formulaString.length) {
+      // Replace 'a', 'b', and 'c' in the formula string with their respective values
+      const substitutedFormula = formulaString
+        .replace(/a/g, a)
+        .replace(/b/g, b)
+        .replace(/c/g, c)
+        .replace(/d/g, d)
+        .replace(/e/g, e)
+        .replace(/f/g, f);
+
+      // Evaluate the formula using eval()
+      const result = eval(substitutedFormula);
+      return result;
+    } else {
+      return 0;
+    }
+  } catch (error) {
+    console.error("Error evaluating formula:", error);
+    return 0;
+  }
+};
