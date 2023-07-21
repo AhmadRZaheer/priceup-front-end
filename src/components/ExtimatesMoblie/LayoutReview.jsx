@@ -23,8 +23,8 @@ const LayoutReview = () => {
   const measurementSides = useSelector(getMeasumentSide);
   const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
-  const priceBySqft = useMemo(()=>{
-   const measurementObject = measurementSides.reduce((obj, item) => {
+  const priceBySqft = useMemo(() => {
+    const measurementObject = measurementSides.reduce((obj, item) => {
       const { key, value } = item;
       if (!obj[key]) {
         obj[key] = [];
@@ -32,8 +32,16 @@ const LayoutReview = () => {
       obj[key].push(value);
       return obj;
     }, {});
-    return evaluateFormula(currentLayout?.settings?.priceBySqftFormula,measurementObject?.a,measurementObject?.b,measurementObject?.c,measurementObject?.d,measurementObject?.e,measurementObject?.f);
-  },[measurementSides,currentLayout]);
+    return evaluateFormula(
+      currentLayout?.settings?.priceBySqftFormula,
+      measurementObject?.a,
+      measurementObject?.b,
+      measurementObject?.c,
+      measurementObject?.d,
+      measurementObject?.e,
+      measurementObject?.f
+    );
+  }, [measurementSides, currentLayout]);
 
   useEffect(() => {
     // hardware
@@ -132,25 +140,45 @@ const LayoutReview = () => {
     }
 
     //addons
-    const towelBar = estimatesData?.addOns?.find((item)=>item.slug === 'towel-bars');
-    const sleeveOver = estimatesData?.addOns?.find((item)=>item.slug === 'sleeve-over');
-    const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
-    const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0)
-    let otherAddons = 0;
-    selectedContent.addOns.map((item)=>
-     {
-      const price = item.finishes.find((finish)=>finish.finish_id === selectedContent.hardwareFinishes._id)?.cost || 0;
-      otherAddons = otherAddons + (price * priceBySqft);
-     }
+    const towelBar = estimatesData?.addOns?.find(
+      (item) => item.slug === "towel-bars"
     );
-    const addOnsTotal = (towelBarFinish * selectedContent.towelBarsCount) + (sleeveOverFinish * selectedContent.sleeveOverCount) + otherAddons;
+    const sleeveOver = estimatesData?.addOns?.find(
+      (item) => item.slug === "sleeve-over"
+    );
+    const towelBarFinish =
+      towelBar?.finishes?.find(
+        (item) => item.finish_id === selectedContent.hardwareFinishes._id
+      )?.cost || 0;
+    const sleeveOverFinish =
+      sleeveOver?.finishes?.find(
+        (item) => item.finish_id === selectedContent.hardwareFinishes._id
+      )?.cost || 0;
+    let otherAddons = 0;
+    selectedContent.addOns.map((item) => {
+      const price =
+        item.finishes.find(
+          (finish) => finish.finish_id === selectedContent.hardwareFinishes._id
+        )?.cost || 0;
+      otherAddons = otherAddons + price * priceBySqft;
+    });
+    const addOnsTotal =
+      towelBarFinish * selectedContent.towelBarsCount +
+      sleeveOverFinish * selectedContent.sleeveOverCount +
+      otherAddons;
 
     //glass
-    const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0)* priceBySqft;
-    
+    const glassPrice =
+      (selectedContent?.glassType?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent.glassType.thickness
+      )?.cost || 0) * priceBySqft;
+
     //glassTreatment
-    const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent.glassType.thickness)?.cost || 0);
-    
+    const glassTreatmentPrice =
+      selectedContent?.glassTreatment?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent.glassType.thickness
+      )?.cost || 0;
+
     //labor price
     const laborPrice =
       selectedContent?.people *
@@ -158,7 +186,11 @@ const LayoutReview = () => {
       estimatesData?.miscPricing?.hourlyRate;
 
     const total =
-      (hardwareTotals + fabricationPrice + addOnsTotal + glassPrice + glassTreatmentPrice) *
+      (hardwareTotals +
+        fabricationPrice +
+        addOnsTotal +
+        glassPrice +
+        glassTreatmentPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
@@ -320,6 +352,7 @@ const LayoutReview = () => {
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
                       estimatesData={estimatesData}
+                      item={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -362,6 +395,7 @@ const LayoutReview = () => {
                       type={"hinges"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.hinges.count}
+                      item={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>

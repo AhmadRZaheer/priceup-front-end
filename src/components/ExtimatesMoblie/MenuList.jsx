@@ -24,11 +24,12 @@ const MenuList = ({
   showSnackbar,
   count,
   thickness,
+  item,
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(item || null);
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
   const selectedContent = useSelector(getContent);
@@ -162,16 +163,10 @@ const MenuList = ({
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
             >
-              <MenuItem
-                key="1/2"
-                value="1/2"
-              >
+              <MenuItem key="1/2" value="1/2">
                 1/2
               </MenuItem>
-              <MenuItem
-                key="3/8"
-                value="3/8"
-              >
+              <MenuItem key="3/8" value="3/8">
                 3/8
               </MenuItem>
             </TextField>
@@ -186,82 +181,56 @@ const MenuList = ({
             color: { md: "#000000", xs: "white" },
           }}
         >
-           {menuOptions ===  undefined ? (
-                  <Box
-                    sx={{
-                      width: 40,
-                      m: "auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 150,
-                    }}
-                  >
-                    <CircularProgress />
-               </Box>
-                ) : (
-          menuOptions?.map((item) => (
-            <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
-              <Box
-                sx={{
-                  width: "200px",
-                  borderRadius: "12px",
-                  border:
-                    item === selectedItem
-                      ? "2px solid blue"
-                      : "1px solid #EAECF0",
-                  boxShadow:
-                    "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                  p: 2,
-                  display: "flex",
-                  gap: 2,
-                  alignItems: "center",
-                  width: { md: "100%", xs: "95%" },
-                  justifyContent: "space-between",
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  <img
-                    width={"25px"}
-                    height={"25px"}
-                    src={`${backendURL}/${item?.image}`}
-                    alt="Selected"
-                  />
-                  <Typography>{item?.name}</Typography>
-                </Box>
-                <Box>
-                  {item?.slug === "sleeve-over" && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-around",
-                        gap: 2,
-                        color: { md: "#000000  ", xs: "white" },
-                        alignSelf: "flex-end",
-                      }}
-                    >
-                      <AddCircleOutline
-                        onClick={() =>
-                          handleSleeveOverCount(sleeveOverCount + 1)
-                        }
-                        sx={{ color: "#98A2B3" }}
-                      />
-                      <Typography>{sleeveOverCount}</Typography>
-                      <RemoveCircleOutline
-                        onClick={() =>
-                          handleSleeveOverCount(sleeveOverCount - 1)
-                        }
-                        sx={{ color: "#98A2B3" }}
-                      />
-                    </Box>
-                  )}
+          {menuOptions === undefined ? (
+            <Box
+              sx={{
+                width: 40,
+                m: "auto",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: 150,
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) : (
+            menuOptions?.map((item) => (
+              <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
+                <Box
+                  sx={{
+                    width: "200px",
+                    borderRadius: "12px",
+                    border:
+                      item === selectedItem
+                        ? "2px solid blue"
+                        : "1px solid #EAECF0",
+                    boxShadow:
+                      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                    p: 2,
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    width: { md: "100%", xs: "95%" },
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <img
+                      width={"25px"}
+                      height={"25px"}
+                      src={`${backendURL}/${item?.image}`}
+                      alt="Selected"
+                    />
+                    <Typography>{item?.name}</Typography>
+                  </Box>
                   <Box>
-                    {item?.slug === "towel-bars" && (
+                    {item?.slug === "sleeve-over" && (
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
+                          justifyContent: "space-around",
                           gap: 2,
                           color: { md: "#000000  ", xs: "white" },
                           alignSelf: "flex-end",
@@ -269,24 +238,50 @@ const MenuList = ({
                       >
                         <AddCircleOutline
                           onClick={() =>
-                            handleTowelBarsCount(towelBarsCount + 1)
+                            handleSleeveOverCount(sleeveOverCount + 1)
                           }
                           sx={{ color: "#98A2B3" }}
                         />
-                        <Typography>{towelBarsCount}</Typography>
+                        <Typography>{sleeveOverCount}</Typography>
                         <RemoveCircleOutline
                           onClick={() =>
-                            handleTowelBarsCount(towelBarsCount - 1)
+                            handleSleeveOverCount(sleeveOverCount - 1)
                           }
                           sx={{ color: "#98A2B3" }}
                         />
                       </Box>
                     )}
+                    <Box>
+                      {item?.slug === "towel-bars" && (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            color: { md: "#000000  ", xs: "white" },
+                            alignSelf: "flex-end",
+                          }}
+                        >
+                          <AddCircleOutline
+                            onClick={() =>
+                              handleTowelBarsCount(towelBarsCount + 1)
+                            }
+                            sx={{ color: "#98A2B3" }}
+                          />
+                          <Typography>{towelBarsCount}</Typography>
+                          <RemoveCircleOutline
+                            onClick={() =>
+                              handleTowelBarsCount(towelBarsCount - 1)
+                            }
+                            sx={{ color: "#98A2B3" }}
+                          />
+                        </Box>
+                      )}
+                    </Box>
                   </Box>
                 </Box>
-              </Box>
-            </MenuItem>
-          ))
+              </MenuItem>
+            ))
           )}
         </Box>
       ) : (
