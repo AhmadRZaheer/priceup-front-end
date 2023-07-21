@@ -9,7 +9,7 @@ const AuthenticatedRouteStaff = () => {
         <Route path="/" element={<Staff />} />
         <Route path="/login" element={<Login />} />
       </Route>
-      <Route path="*" element={<Login />}></Route>
+      <Route path="*" element={<Staff />}></Route>
     </Routes>
   );
 };
