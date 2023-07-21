@@ -7,21 +7,29 @@ import {
 } from "@mui/material";
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { useDispatch } from "react-redux";
-import { reinitializeState, setNavigation } from "../../redux/estimateCalculations";
-import { useFetchDataEstimate, useGetEstimates } from "../../utilities/ApiHooks/Estimate";
+import {
+  reinitializeState,
+  setNavigation,
+} from "../../redux/estimateCalculations";
+import {
+  useFetchDataEstimate,
+  useGetEstimates,
+} from "../../utilities/ApiHooks/Estimate";
 import { useState } from "react";
 
 export default function ExitingQuotes() {
   const [selectedQuote, setSelectedQuote] = useState(null);
   console.log(selectedQuote);
   const { data: estimates, isFetching } = useGetEstimates();
-  const { data: estimateListData} = useFetchDataEstimate();
+  const { data: estimateListData } = useFetchDataEstimate();
   const dispatch = useDispatch();
   console.log(estimateListData, "selectedQuote ");
   const handleIconButtonClick = (item) => {
     setSelectedQuote(item);
-    dispatch(reinitializeState({estimateData:item,listData:estimateListData}));
-    // dispatch(setNavigation("review"));
+    dispatch(
+      reinitializeState({ estimateData: item, listData: estimateListData })
+    );
+    dispatch(setNavigation("review"));
   };
 
   return (

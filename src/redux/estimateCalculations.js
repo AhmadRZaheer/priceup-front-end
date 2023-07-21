@@ -11,7 +11,6 @@ const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
     handlePageNavigation: "existing",
-
     measuments: [],
     selectedItem: [],
     content: {
@@ -202,19 +201,170 @@ const estimateCalcSlice = createSlice({
         activeType: payload,
       };
     },
-    reinitializeState:(state,action) => {
-      const {estimateData,listData} = action.payload;
-      console.log(listData,'list')
+    reinitializeState: (state, action) => {
+      const { estimateData, listData } = action.payload;
+      console.log(listData, "list");
       let hardwareFinishes = null;
-      hardwareFinishes = listData?.hardwareFinishes?.find((item)=>
-              item._id === estimateData?.hardwareFinishes
-      )
-      
+      hardwareFinishes = listData?.hardwareFinishes?.find(
+        (item) => item._id === estimateData?.hardwareFinishes
+      );
+
       state.content = {
         ...state.content,
-        hardwareFinishes
-      }
-    }
+        hardwareFinishes,
+      };
+
+      // let glassTreatment = null;
+      // glassTreatment = listData?.glassTreatment?.find(
+      //   (item) => item._id === estimateData?.glassTreatment
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   glassTreatment,
+      // };
+
+      // let hinges = null;
+      // hinges = listData?.hinges?.find(
+      //   (item) => item._id === estimateData?.hinges
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   hinges,
+      // };
+
+      // let handles = null;
+      // handles = listData?.handles?.find(
+      //   (item) => item._id === estimateData?.handles
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   handles,
+      // };
+      // let oneInchHoles = null;
+      // oneInchHoles = listData?.oneInchHoles?.find(
+      //   (item) => item._id === estimateData?.oneInchHoles
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   oneInchHoles,
+      // };
+      // let hingeCut = null;
+      // hingeCut = listData?.hingeCut?.find(
+      //   (item) => item._id === estimateData?.hingeCut
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   hingeCut,
+      // };
+      // let clampCut = null;
+      // clampCut = listData?.clampCut?.find(
+      //   (item) => item._id === estimateData?.clampCut
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   clampCut,
+      // };
+
+      // let notch = null;
+      // notch = listData?.notch?.find(
+      //   (item) => item._id === estimateData?.notch
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   notch,
+      // };
+
+      // let outages = null;
+      // outages = listData?.outages?.find(
+      //   (item) => item._id === estimateData?.outages
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   outages,
+      // };
+      // let mitre = null;
+      // mitre = listData?.mitre?.find(
+      //   (item) => item._id === estimateData?.mitre
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   mitre,
+      // };
+      // let polish = null;
+      // polish = listData?.polish?.find(
+      //   (item) => item._id === estimateData?.polish
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   polish,
+      // };
+      // let people = null;
+      // people = listData?.people?.find(
+      //   (item) => item._id === estimateData?.people
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   people,
+      // };
+
+      let hours = null;
+      hours = listData?.hours?.find((item) => item._id === estimateData?.hours);
+
+      state.content = {
+        ...state.content,
+        hours,
+      };
+
+      // let sleeveOverCount = null;
+      // sleeveOverCount = listData?.sleeveOverCount?.find(
+      //   (item) => item._id === estimateData?.sleeveOverCount
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   sleeveOverCount,
+      // };
+
+      // let towelBarsCount = null;
+      // towelBarsCount = listData?.towelBarsCount?.find(
+      //   (item) => item._id === estimateData?.towelBarsCount
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   towelBarsCount,
+      // };
+
+      // let addOns = null;
+      // addOns = listData?.addOns?.find(
+      //   (item) => item._id === estimateData?.addOns
+      // );
+
+      // state.content = {
+      //   ...state.content,
+      //   addOns,
+      // };
+
+      let totalPrice = null;
+      totalPrice = listData?.totalPrice?.find(
+        (item) => item._id === estimateData?.totalPrice
+      );
+      state.content = {
+        ...state.content,
+        totalPrice,
+      };
+    },
   },
 });
 export const {
@@ -228,6 +378,6 @@ export const {
   addSelectedItem,
   setNavigation,
   setActiveMounting,
-  reinitializeState
+  reinitializeState,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
