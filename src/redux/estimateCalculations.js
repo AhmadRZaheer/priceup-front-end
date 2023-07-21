@@ -254,15 +254,17 @@ const estimateCalcSlice = createSlice({
       activeType = listData?.mountingChannel?.find(
         (item) => item._id === estimateData?.mounting?.clamps?.activeType
       );
-
+       console.log(hardwareFinishes,'hardware finish', handleType,'handle type')
       state.content = {
         ...state.content,
-        hardwareFinishes,
+        hardwareFinishes:hardwareFinishes,
         handles: {
+          ...state.handles,
           item: handleType,
           count: estimateData?.handles?.count,
         },
         hinges: {
+          ...state.hinges,
           item: hingesType,
           count: estimateData?.hinges?.count,
         },
