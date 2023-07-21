@@ -13,6 +13,56 @@ import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 import { useState } from "react";
 
 export default function ExitingQuotes() {
+  // let a = [1, 2, 3];
+
+  // let t = [1, 2, 3];
+
+  // const newarray = a.filter((item) => item !== t);
+
+  // console.log(newarray, "newarray");
+  // console.log(a, "a")
+
+  // let a = [1, 2, 3];
+
+  // let b = [1, 2, 3];
+
+  // const newarray = a.map((item) => item + b);
+
+  // const newarray2 = b.find((item) => item === 2);
+  // const newarray3 = b.find((item) => item === a);
+  // const c = b[2];
+  // const newarray4 = b.find((item) => item === c);
+
+  // const newarray5 = a.filter((item) => item === 1);
+  // const newarray6 = a.filter((item) => item === b[2]);
+  // const newarray7 = a.filter((item) => item !== b[1]);
+  // const newarray8 = a.filter((item) => item > 1);
+  // const newarray9 = a.filter((item) => item + 2);// why it dosenot add 2 in the array numbers.
+  // const newarraytest1 = a.filter((item) => item)
+  // const newarraytest2 = a.map((item) => item)
+  // const newarraytest3 = a.find((item) => item)
+
+  // console.log(newarraytest1, "newarraytest1")
+  // console.log(newarraytest2, "newarraytest2")
+  // console.log(newarraytest3, "newarraytest3")
+
+  // console.log(newarray9, "newarray9");
+
+  // console.log(newarray8, "newarray8");
+
+  // console.log(newarray7, "newarray7");
+
+  // console.log(newarray6, "newarray6");
+
+  // console.log(newarray5, "newarray5");
+
+  // console.log(newarray4, "newarray4");
+
+  // console.log(newarray3, "newarray3");
+
+  // console.log(newarray2, "newarray2");
+
+  // console.log(newarray, "newarray1");
   const [selectedQuote, setSelectedQuote] = useState(null);
 
   const { data: estimates, isLoading, isFetching } = useGetEstimates();

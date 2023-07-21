@@ -16,8 +16,11 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { SelectedImage } from "./selctedImage";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
+  console.log(selectedData, "selectedData");
 
   // const validationSchema = Yup.object().shape({
   //   a: Yup.number().required("a is required"),
@@ -60,16 +63,7 @@ const LayoutMeasurements = () => {
     },
   });
   const dispatch = useDispatch();
-  const handleBoxClick = () => {
-    // const measurementsArray = Object.entries(formik.values)
-    //   .filter(([key, value]) => value !== "")
-    //   .map(([key, value]) => ({
-    //     key,
-    //     value,
-    //   }));
-    // dispatch(updateMeasurements(measurementsArray));
-    // setHandleEstimatesPages("measurements");
-  };
+
   return (
     <>
       <Box
@@ -173,7 +167,7 @@ const LayoutMeasurements = () => {
                 background: { md: "#D9D9D9", xs: "#100D24" },
                 gap: 4,
                 borderRadius: "8px",
-                overflow: "auto"
+                overflow: "auto",
               }}
             >
               <Box
@@ -251,7 +245,7 @@ const LayoutMeasurements = () => {
                   order: { md: 2, xs: -1 },
                 }}
               >
-                {selectedData?.image ===  "" ? (
+                {selectedData?.image === "" ? (
                   <Box
                     sx={{
                       width: 40,
@@ -265,13 +259,7 @@ const LayoutMeasurements = () => {
                     <CircularProgress />
                   </Box>
                 ) : (
-                  <img
-                    width="150px"
-                    height="300px"
-                    // src={door}
-                    src={`${backendURL}/${selectedData?.image}`}
-                    alt="Selected"
-                  />
+                  <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
               </Box>
             </Box>
