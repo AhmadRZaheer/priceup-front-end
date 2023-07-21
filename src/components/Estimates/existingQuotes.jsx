@@ -9,7 +9,6 @@ import { useGetEstimates } from "../../utilities/ApiHooks/Estimate";
 
 export default function ExistingQuotes() {
   const { data: estimates, isLoading, isFetching } = useGetEstimates();
-  console.log(estimates.length, "estimates")
   return (
     <>
       <Box
@@ -39,12 +38,16 @@ export default function ExistingQuotes() {
               alignItems: "start",
               backgroundColor: "white",
               boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
-              borderRadius: 2
+              borderRadius: 2,
             }}
           >
-            <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image1} alt="" />
-            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
+            <Box sx={{ width: 60 }}>
+              <img
+                style={{ width: "80%", height: "100%" }}
+                src={image1}
+                alt=""
+              />
+              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
                 {estimates?.length}
               </Typography>
             </Box>
@@ -65,18 +68,22 @@ export default function ExistingQuotes() {
               alignItems: "start",
               backgroundColor: "white",
               boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
-              borderRadius: 2
+              borderRadius: 2,
             }}
           >
-            <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image2} alt="" />
-            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
+            <Box sx={{ width: 60 }}>
+              <img
+                style={{ width: "80%", height: "100%" }}
+                src={image2}
+                alt=""
+              />
+              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
                 0
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
               <Typography sx={{ fontSize: 18, color: "#575761" }}>
-              Approved
+                Approved
               </Typography>
             </Box>
           </Box>
@@ -91,18 +98,22 @@ export default function ExistingQuotes() {
               alignItems: "start",
               backgroundColor: "white",
               boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
-              borderRadius: 2
+              borderRadius: 2,
             }}
           >
-            <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image3} alt="" />
-            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
-            131
+            <Box sx={{ width: 60 }}>
+              <img
+                style={{ width: "80%", height: "100%" }}
+                src={image3}
+                alt=""
+              />
+              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
+                131
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
               <Typography sx={{ fontSize: 18, color: "#575761" }}>
-              Voided
+                Voided
               </Typography>
             </Box>
           </Box>
@@ -117,18 +128,22 @@ export default function ExistingQuotes() {
               alignItems: "start",
               backgroundColor: "white",
               boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
-              borderRadius: 2
+              borderRadius: 2,
             }}
           >
-            <Box sx={{width: 60}}>
-            <img style={{ width: "80%", height: "100%" }} src={image4} alt="" />
-            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
-            $28,956.00
+            <Box sx={{ width: 60 }}>
+              <img
+                style={{ width: "80%", height: "100%" }}
+                src={image4}
+                alt=""
+              />
+              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
+                $28,956.00
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
               <Typography sx={{ fontSize: 18, color: "#575761" }}>
-              Invoice Total
+                Invoice Total
               </Typography>
             </Box>
           </Box>
@@ -167,7 +182,9 @@ export default function ExistingQuotes() {
               <Typography sx={{ width: 180 }}></Typography>
               <Typography sx={{ width: 180 }}></Typography>
               <CreateOutlined sx={{ color: "gray", fontSize: 25 }} />
-              <DeleteOutline sx={{ color: "rgb(255, 103, 96)", fontSize: 25 }} />
+              <DeleteOutline
+                sx={{ color: "rgb(255, 103, 96)", fontSize: 25 }}
+              />
             </Box>
           ))}
         </Box>
