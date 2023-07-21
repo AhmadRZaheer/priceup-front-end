@@ -1,9 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-
 import Staff from "../../pages/EstimatesMobile/Staff";
 import Login from "../Login/login";
-
 const AuthenticatedRouteStaff = () => {
   return (
     <Routes>
@@ -11,9 +9,8 @@ const AuthenticatedRouteStaff = () => {
         <Route path="/" element={<Staff />} />
         <Route path="/login" element={<Login />} />
       </Route>
-      <Route path="*" element={<Staff />}></Route>
+      <Route path="*" element={<Login />}></Route>
     </Routes>
   );
 };
-
 export default AuthenticatedRouteStaff;
