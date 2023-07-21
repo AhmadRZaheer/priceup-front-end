@@ -41,13 +41,9 @@ export default function ExistingQuotes() {
               borderRadius: 2,
             }}
           >
-            <Box sx={{ width: 60 }}>
-              <img
-                style={{ width: "80%", height: "100%" }}
-                src={image1}
-                alt=""
-              />
-              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
+            <Box sx={{width: 60}}>
+            <img style={{ width: "60%", height: "100%" }} src={image1} alt="" />
+            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
                 {estimates?.length}
               </Typography>
             </Box>
@@ -71,19 +67,15 @@ export default function ExistingQuotes() {
               borderRadius: 2,
             }}
           >
-            <Box sx={{ width: 60 }}>
-              <img
-                style={{ width: "80%", height: "100%" }}
-                src={image2}
-                alt=""
-              />
-              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
+            <Box sx={{width: 60}}>
+            <img style={{ width: "60%", height: "100%" }} src={image2} alt="" />
+            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
                 0
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
-                Approved
+              <Typography sx={{ fontSize: 18 }}>
+              Approved
               </Typography>
             </Box>
           </Box>
@@ -101,19 +93,15 @@ export default function ExistingQuotes() {
               borderRadius: 2,
             }}
           >
-            <Box sx={{ width: 60 }}>
-              <img
-                style={{ width: "80%", height: "100%" }}
-                src={image3}
-                alt=""
-              />
-              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                131
+            <Box sx={{width: 60}}>
+            <img style={{ width: "60%", height: "100%" }} src={image3} alt="" />
+            <Typography pt={0.5} pl={0.8}  fontSize={26} fontWeight="bold">
+            131
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
-                Voided
+              <Typography sx={{ fontSize: 18}}>
+              Voided
               </Typography>
             </Box>
           </Box>
@@ -131,19 +119,15 @@ export default function ExistingQuotes() {
               borderRadius: 2,
             }}
           >
-            <Box sx={{ width: 60 }}>
-              <img
-                style={{ width: "80%", height: "100%" }}
-                src={image4}
-                alt=""
-              />
-              <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                $28,956.00
+            <Box sx={{width: 60}}>
+            <img style={{ width: "80%", height: "100%" }} src={image4} alt="" />
+            <Typography pl={0.8}  fontSize={26} fontWeight="bold">
+            $28,956.00
               </Typography>
             </Box>
-            <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-              <Typography sx={{ fontSize: 18, color: "#575761" }}>
-                Invoice Total
+            <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
+              <Typography sx={{ fontSize: 18,  }}>
+              Invoice Total
               </Typography>
             </Box>
           </Box>
