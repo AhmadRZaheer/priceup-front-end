@@ -23,6 +23,7 @@ const estimateCalcSlice = createSlice({
         item: null,
         count: 0,
       },
+
       mounting: {
         clamps: {
           wallClamp: {
@@ -44,6 +45,7 @@ const estimateCalcSlice = createSlice({
         },
         activeType: "clamps",
       },
+
       header: {
         item: null,
         count: 0,
@@ -56,7 +58,6 @@ const estimateCalcSlice = createSlice({
         item: null,
         thickness: "1/2",
       },
-
       glassTreatment: null,
       oneInchHoles: "",
       hingeCut: "",
@@ -204,165 +205,114 @@ const estimateCalcSlice = createSlice({
     reinitializeState: (state, action) => {
       const { estimateData, listData } = action.payload;
       console.log(listData, "list");
+      console.log(estimateData, "list2");
+
       let hardwareFinishes = null;
       hardwareFinishes = listData?.hardwareFinishes?.find(
         (item) => item._id === estimateData?.hardwareFinishes
+      );
+      let handleType = null;
+      handleType = listData?.handles?.find(
+        (item) => item._id === estimateData?.handles
+      );
+      let hingesType = null;
+      hingesType = listData?.hinges?.find(
+        (item) => item._id === estimateData?.hinges
+      );
+      let slidingDoorSystemType = null;
+      slidingDoorSystemType = listData?.slidingDoorSystem?.find(
+        (item) => item._id === estimateData?.slidingDoorSystem
+      );
+
+      let headerType = null;
+      headerType = listData?.header?.find(
+        (item) => item._id === estimateData?.header
+      );
+
+      let glassTypee = null;
+      glassTypee = listData?.glassType?.find(
+        (item) => item._id === estimateData?.glassType
+      );
+
+      let wallClampItem = null;
+      wallClampItem = listData?.mountingChannel?.find(
+        (item) => item._id === estimateData?.mounting?.clamps?.wallClamp
+      );
+      let sleeveOverItem = null;
+      sleeveOverItem = listData?.mountingChannel?.find(
+        (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver
+      );
+      let glassToGlassItem = null;
+      glassToGlassItem = listData?.mountingChannel?.find(
+        (item) => item._id === estimateData?.mounting?.clamps?.glassToGlass
+      );
+      let channelItem = null;
+      channelItem = listData?.mountingChannel?.find(
+        (item) => item._id === estimateData?.mounting?.clamps?.channel
+      );
+      let activeType = null;
+      activeType = listData?.mountingChannel?.find(
+        (item) => item._id === estimateData?.mounting?.clamps?.activeType
       );
 
       state.content = {
         ...state.content,
         hardwareFinishes,
-      };
+        handles: {
+          item: handleType,
+          count: estimateData?.handles?.count,
+        },
+        hinges: {
+          item: hingesType,
+          count: estimateData?.hinges?.count,
+        },
+        header: {
+          item: headerType,
+          count: estimateData?.header?.count,
+        },
+        slidingDoorSystem: {
+          item: slidingDoorSystemType,
+          count: estimateData?.slidingDoorSystem?.count,
+        },
+        glassType: {
+          item: glassTypee,
+          thickness: estimateData?.glassType?.thickness,
+        },
 
-      // let glassTreatment = null;
-      // glassTreatment = listData?.glassTreatment?.find(
-      //   (item) => item._id === estimateData?.glassTreatment
-      // );
+        mounting: {
+          clamps: {
+            wallClamp: {
+              item: wallClampItem,
+              count: estimateData?.mounting?.clamps?.wallClamp?.count,
+            },
+            sleeveOver: {
+              item: sleeveOverItem,
+              count: estimateData?.mounting?.clamps?.sleeveOver?.count,
+            },
+            glassToGlass: {
+              item: glassToGlassItem,
+              count: estimateData?.mounting?.clamps?.glassToGlass?.count,
+            },
+          },
+          channel: {
+            item: channelItem,
+            count: estimateData?.mounting?.channel?.count,
+          },
+          activeType: activeType,
+        },
 
-      // state.content = {
-      //   ...state.content,
-      //   glassTreatment,
-      // };
-
-      // let hinges = null;
-      // hinges = listData?.hinges?.find(
-      //   (item) => item._id === estimateData?.hinges
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   hinges,
-      // };
-
-      // let handles = null;
-      // handles = listData?.handles?.find(
-      //   (item) => item._id === estimateData?.handles
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   handles,
-      // };
-      // let oneInchHoles = null;
-      // oneInchHoles = listData?.oneInchHoles?.find(
-      //   (item) => item._id === estimateData?.oneInchHoles
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   oneInchHoles,
-      // };
-      // let hingeCut = null;
-      // hingeCut = listData?.hingeCut?.find(
-      //   (item) => item._id === estimateData?.hingeCut
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   hingeCut,
-      // };
-      // let clampCut = null;
-      // clampCut = listData?.clampCut?.find(
-      //   (item) => item._id === estimateData?.clampCut
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   clampCut,
-      // };
-
-      // let notch = null;
-      // notch = listData?.notch?.find(
-      //   (item) => item._id === estimateData?.notch
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   notch,
-      // };
-
-      // let outages = null;
-      // outages = listData?.outages?.find(
-      //   (item) => item._id === estimateData?.outages
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   outages,
-      // };
-      // let mitre = null;
-      // mitre = listData?.mitre?.find(
-      //   (item) => item._id === estimateData?.mitre
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   mitre,
-      // };
-      // let polish = null;
-      // polish = listData?.polish?.find(
-      //   (item) => item._id === estimateData?.polish
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   polish,
-      // };
-      // let people = null;
-      // people = listData?.people?.find(
-      //   (item) => item._id === estimateData?.people
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   people,
-      // };
-
-      let hours = null;
-      hours = listData?.hours?.find((item) => item._id === estimateData?.hours);
-
-      state.content = {
-        ...state.content,
-        hours,
-      };
-
-      // let sleeveOverCount = null;
-      // sleeveOverCount = listData?.sleeveOverCount?.find(
-      //   (item) => item._id === estimateData?.sleeveOverCount
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   sleeveOverCount,
-      // };
-
-      // let towelBarsCount = null;
-      // towelBarsCount = listData?.towelBarsCount?.find(
-      //   (item) => item._id === estimateData?.towelBarsCount
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   towelBarsCount,
-      // };
-
-      // let addOns = null;
-      // addOns = listData?.addOns?.find(
-      //   (item) => item._id === estimateData?.addOns
-      // );
-
-      // state.content = {
-      //   ...state.content,
-      //   addOns,
-      // };
-
-      let totalPrice = null;
-      totalPrice = listData?.totalPrice?.find(
-        (item) => item._id === estimateData?.totalPrice
-      );
-      state.content = {
-        ...state.content,
-        totalPrice,
+        hingeCut: estimateData?.hingeCut,
+        people: estimateData?.people,
+        hours: estimateData?.hours,
+        glassTreatment: estimateData?.glassTreatment,
+        oneInchHoles: estimateData?.oneInchHoles,
+        clampCut: estimateData?.clampCut,
+        notch: estimateData?.notch,
+        outages: estimateData?.outages,
+        mitre: estimateData?.mitre,
+        polish: estimateData?.polish,
+        sleeveOverCount: estimateData?.sleeveOverCount,
+        towelBarsCount: estimateData?.towelBarsCount,
       };
     },
   },

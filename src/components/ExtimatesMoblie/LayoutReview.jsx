@@ -1,8 +1,6 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./MenuList";
-import {
-  ChevronLeftOutlined,
-} from "@mui/icons-material";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,12 +14,9 @@ import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
 
 const LayoutReview = () => {
-  const { data: estimatesData } =
-    useFetchDataEstimate();
+  const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     const handlePrice = selectedContent?.handles?.item
       ? (selectedContent?.handles?.item?.finishes?.find(
@@ -250,7 +245,6 @@ const LayoutReview = () => {
               overflow: "auto",
             }}
           >
-
             <Box
               sx={{
                 display: "flex",
@@ -341,7 +335,13 @@ const LayoutReview = () => {
                 >
                   <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box sx={{  width: "100%", display: "flex", flexDirection: "column" }}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
                         <ChannelType
                           menuOptions={estimatesData?.channelOrClamps}
                           title={"Mounting"}
@@ -484,13 +484,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -542,13 +542,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -600,7 +600,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -658,7 +658,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -716,13 +716,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -743,7 +743,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -775,7 +774,7 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -802,7 +801,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -834,13 +832,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -861,7 +859,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -893,13 +890,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -920,7 +917,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -952,13 +948,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", 
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -979,13 +975,11 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
               </Box>
             </Box>
-
           </Box>
         </Box>
         <Box

@@ -31,26 +31,21 @@ const MenuList = ({
   const [selectedItem, setSelectedItem] = useState(null);
   const [sleeveOverCount, setSleeveOverCount] = useState(0);
   const [towelBarsCount, setTowelBarsCount] = useState(0);
-
   const selectedContent = useSelector(getContent);
-
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
       dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
     }
   };
-
   const handleTowelBarsCount = (count) => {
     if (count >= 0) {
       setTowelBarsCount(count);
       dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
     }
   };
-
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-   
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };
@@ -183,7 +178,6 @@ const MenuList = ({
           </Box>
         )}
       </Box>
-      
       {anchorEl ? (
         <Box
           sx={{
