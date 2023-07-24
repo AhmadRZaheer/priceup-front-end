@@ -254,7 +254,7 @@ const LayoutMeasurements = () => {
                   //   src={`${backendURL}/${selectedData?.image}`}
                   //   alt="Selected"
                   // />
-                  <SelectedImage imageSides={5} />
+                  <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
 
               </Box>
