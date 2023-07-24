@@ -8,10 +8,12 @@ import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
+  initializeStateForCreateQuote,
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
 import QuotesHeader from "./QuotesHeader";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },
@@ -31,16 +33,18 @@ export const boxStyles = {
   cursor: "pointer",
 };
 const Layout = () => {
-  const { data: layouts, isFetching: loading } = useFetchDataDefault();
+  const { data: layouts, isFetching: layoutFetching } = useFetchDataDefault();
+  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
 
   const handleBoxClick = (layout) => {
+    dispatch(initializeStateForCreateQuote({ layoutData: layout, listData: estimateListData }));
     dispatch(addSelectedItem(layout));
   };
   return (
     <>
-      <Box
+     <Box
         sx={{
           width: "100%",
           display: "flex",
@@ -101,7 +105,7 @@ const Layout = () => {
                 collaborate on this project.
               </Typography>
             </Box>
-            {loading ? (
+            {layoutFetching || estimateDataFetching ? (
               <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 700}}>
               <CircularProgress />
               </Box>

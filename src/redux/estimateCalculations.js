@@ -207,7 +207,121 @@ const estimateCalcSlice = createSlice({
         activeType: payload,
       };
     },
-    reinitializeState: (state, action) => {
+    initializeStateForCreateQuote: (state,action) => {
+      const { layoutData, listData } = action.payload;
+      console.log(listData, "list");
+      console.log(layoutData, "layout");
+      let hardwareFinishes = null;
+      hardwareFinishes = listData?.hardwareFinishes?.find(
+        (item) => item._id === layoutData?.settings?.hardwareFinishes
+      );
+      let handleType = null;
+      handleType = listData?.handles?.find(
+        (item) => item._id === layoutData?.settings?.handles?.handleType
+      );
+      let hingesType = null;
+      hingesType = listData?.hinges?.find(
+        (item) => item._id === layoutData?.settings?.hinges?.hingesType
+      );
+      let slidingDoorSystemType = null;
+      slidingDoorSystemType = listData?.slidingDoorSystem?.find(
+        (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
+      );
+      let headerType = null;
+      headerType = listData?.header?.find(
+        (item) => item._id === layoutData?.settings?.header
+      );
+    
+
+      let glassType = null;
+      glassType = listData?.glassType?.find(
+        (item) => item._id === layoutData?.settings?.glassType?.type
+      );
+
+      let glassTreatment = null;
+      glassTreatment = listData?.glassTreatment?.find(
+        (item) => item._id === layoutData?.settings?.glassTreatment
+      );
+
+      let wallClampItem = null;
+      wallClampItem = listData?.mountingChannel?.find(
+        (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
+      );
+      let sleeveOverItem = null;
+      sleeveOverItem = listData?.mountingChannel?.find(
+        (item) => item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
+      );
+      let glassToGlassItem = null;
+      glassToGlassItem = listData?.mountingChannel?.find(
+        (item) => item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
+      );
+      let channelItem = null;
+      channelItem = listData?.mountingChannel?.find(
+        (item) => item._id === layoutData?.settings?.mountingChannel
+      );
+
+      state.content = {
+        ...state.content,
+        hardwareFinishes:hardwareFinishes,
+        handles: {
+          item: handleType || null,
+          count: layoutData?.settings?.handles?.count,
+        },
+        hinges: {
+          item: hingesType || null,
+          count: layoutData?.settings?.handles?.count,
+        },
+        header: {
+          item: headerType || null,
+          count: headerType ? 1 : 0,
+        },
+        slidingDoorSystem: {
+          item: slidingDoorSystemType || null,
+          count: layoutData?.settings?.slidingDoorSystem?.count,
+        },
+        glassType: {
+          item: glassType || null,
+          thickness: layoutData?.settings?.glassType?.thickness,
+        },
+
+        mounting: {
+          clamps: {
+            wallClamp: {
+              item: wallClampItem || null,
+              count: layoutData?.settings?.wallClamp?.count,
+            },
+            sleeveOver: {
+              item: sleeveOverItem || null,
+              count: layoutData?.settings?.sleeveOver?.count,
+            },
+            glassToGlass: {
+              item: glassToGlassItem || null,
+              count: layoutData?.settings?.glassToGlass?.count,
+            },
+          },
+          channel: {
+            item: channelItem || null,
+            count: channelItem ? 1 : 0,
+          },
+          activeType: layoutData?.settings?.channelOrClamps ? layoutData?.settings?.channelOrClamps?.toLowerCase() : "clamps",
+        },
+
+        // hingeCut: estimateData?.hingeCut,
+        people: layoutData?.settings?.other?.people,
+        hours: layoutData?.settings?.other?.hours,
+        glassTreatment: glassTreatment || null,
+        // oneInchHoles: estimateData?.oneInchHoles,
+        // clampCut: estimateData?.clampCut,
+        // notch: estimateData?.notch,
+        outages: layoutData?.settings?.outages,
+        // mitre: estimateData?.mitre,
+        // polish: layoutData?.settings?.polish,
+        // sleeveOverCount: estimateData?.sleeveOverCount,
+        // towelBarsCount: estimateData?.towelBarsCount,
+        // addOns: addOns
+      };
+    },
+    initializeStateForEditQuote: (state, action) => {
       const { estimateData, listData, quoteState } = action.payload;
       console.log(listData, "list");
       console.log(estimateData, "list2");
@@ -237,6 +351,11 @@ const estimateCalcSlice = createSlice({
       let glassTypee = null;
       glassTypee = listData?.glassType?.find(
         (item) => item._id === estimateData?.glassType?.type
+      );
+
+      let glassTreatment = null;
+      glassTreatment = listData?.glassTreatment?.find(
+        (item) => item._id === estimateData?.glassTreatment
       );
 
       let wallClampItem = null;
@@ -309,7 +428,7 @@ const estimateCalcSlice = createSlice({
         hingeCut: estimateData?.hingeCut,
         people: estimateData?.people,
         hours: estimateData?.hours,
-        glassTreatment: estimateData?.glassTreatment,
+        glassTreatment: glassTreatment,
         oneInchHoles: estimateData?.oneInchHoles,
         clampCut: estimateData?.clampCut,
         notch: estimateData?.notch,
@@ -336,6 +455,7 @@ export const {
   setNavigation,
   setQuoteState,
   setActiveMounting,
-  reinitializeState,
+  initializeStateForCreateQuote,
+  initializeStateForEditQuote
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

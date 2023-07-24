@@ -323,7 +323,7 @@ const LayoutReview = () => {
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
                       estimatesData={estimatesData}
-                      item={selectedContent?.hardwareFinishes}
+                      currentItem={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -345,7 +345,7 @@ const LayoutReview = () => {
                       type={"handles"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.handles.count}
-                      item={selectedContent?.handles?.item}
+                      currentItem={selectedContent?.handles?.item}
                     />
                   </Box>
                 </Box>
@@ -367,7 +367,7 @@ const LayoutReview = () => {
                       type={"hinges"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.hinges.count}
-                      item={selectedContent?.hinges?.item}
+                      currentItem={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>
@@ -418,7 +418,7 @@ const LayoutReview = () => {
                       type={"glassType"}
                       showSnackbar={showSnackbar}
                       thickness={selectedContent.glassType.thickness}
-                      item={selectedContent?.glassType?.item}
+                      currentItem={selectedContent?.glassType?.item}
                     />
                   </Box>
                 </Box>
@@ -440,7 +440,7 @@ const LayoutReview = () => {
                       type={"slidingDoorSystem"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.slidingDoorSystem.count}
-                      item={selectedContent?.slidingDoorSystem?.item}
+                      currentItem={selectedContent?.slidingDoorSystem?.item}
                     />
                   </Box>
                 </Box>
@@ -462,7 +462,7 @@ const LayoutReview = () => {
                       type={"header"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.header.count}
-                      item={selectedContent?.header?.item}
+                      currentItem={selectedContent?.header?.item}
                     />
                   </Box>
                 </Box>
@@ -483,7 +483,7 @@ const LayoutReview = () => {
                       title={"Glass treatment"}
                       type={"glassTreatment"}
                       showSnackbar={showSnackbar}
-                      item={selectedContent?.glassTreatment}
+                      currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>

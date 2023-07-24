@@ -8,7 +8,7 @@ import {
 import pencil from "../../Assets/estimates/edit-2.svg";
 import { useDispatch } from "react-redux";
 import {
-  reinitializeState,
+  initializeStateForEditQuote,
   setNavigation,
   setQuoteState,
 } from "../../redux/estimateCalculations";
@@ -27,7 +27,7 @@ export default function ExitingQuotes() {
   // console.log(estimateListData, "selectedQuote ");
   const handleIconButtonClick = (item) => {
     // setSelectedQuote(item);
-    dispatch(reinitializeState({ estimateData: item, listData: estimateListData }));
+    dispatch(initializeStateForEditQuote({ estimateData: item, listData: estimateListData }));
     dispatch(setNavigation("review"));
   };
   const handleCreateQuote = () => {
