@@ -1,4 +1,3 @@
-//temporary data
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 
@@ -6,17 +5,11 @@ import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
 
 export const teamColumns = [
-  // {
-  //   field: "id",
-  //   headerName: "ID",
-  //   width: 70,
-  // },
   {
     field: "name",
     headerName: "Name",
     width: 230,
     renderCell: (params) => { 
-      console.log(params, "params.row.image")
 
       return (
         <div className="cellWrapper">
@@ -26,20 +19,6 @@ export const teamColumns = [
           <div className="customerNameTable">
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
-            
-            {/* <FormControlLabel
-                      
-                      control={
-                          <Switch
-                              color="primary"
-                              // checked={formik.values.status}
-                              // onChange={formik.handleChange}
-                              // onBlur={formik.handleBlur}
-                              name="status"
-                          />
-                      }
-              label={"active"}
-           /> */}
           </div>
         </div>
       );
@@ -63,17 +42,11 @@ export const teamColumns = [
   },
 ];
 export const AdminColumns = [
-  // {
-  //   field: "id",
-  //   headerName: "ID",
-  //   width: 70,
-  // },
   {
     field: "name",
     headerName: "Name",
     width: 230,
     renderCell: (params) => { 
-      // console.log(params, "params.row.id")
       
 
       return (
@@ -84,20 +57,6 @@ export const AdminColumns = [
           <div className="customerNameTable">
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
-            
-            {/* <FormControlLabel
-                      
-                      control={
-                          <Switch
-                              color="primary"
-                              // checked={formik.values.status}
-                              // onChange={formik.handleChange}
-                              // onBlur={formik.handleBlur}
-                              name="status"
-                          />
-                      }
-              label={"active"}
-           /> */}
           </div>
         </div>
       );
@@ -122,11 +81,6 @@ export const AdminColumns = [
 ];
 
 export const CustomerColumns = [
-  // {
-  //   field: "id",
-  //   headerName: "ID",
-  //   width: 70,
-  // },
   {
     field: "name",
     headerName: "Name",
@@ -271,11 +225,6 @@ export const userRows = [
 ];
 
 export const userColumnsHardware = [
-  // {
-  //   field: "id",
-  //   headerName: "ID",
-  //   width: 70,
-  // },
   {
     field: "name",
     headerName: "Name",
@@ -292,16 +241,11 @@ export const userColumnsHardware = [
           </div>
           <div className="hardwareNameTable">
             {params.row.name}
-            {/* {`${backendURL}/${params.row.image}`} */}
-            {/* <div className="userNameTable">{params.row.username}</div> */}
           </div>
         </div>
       );
     },
   },
-  // { field: "name", headerName: "Name ", width: 330 },
-
-  // { field: "Thickness", headerName: "Thickness ", width: 330 },
 
   { field: "PartNumber", headerName: "Part number", width: 330 },
 
@@ -320,16 +264,6 @@ export const userColumnsHardware = [
     headerName: "Status",
     width: 80,
   },
-  // {
-  //   field: "addMore",
-  //   headerName: <img src={plus} alt="Last Quoted On" />,
-  //   width: 180,
-  //   renderCell: (params) => {
-  //     const handleAddMoreClick = () => {
-  //       console.log(params);
-  //     };
-  //   },
-  // },
 ];
 
 export const userRowsHardware = [
@@ -344,13 +278,7 @@ export const userRowsHardware = [
     Status: "",
   },
 ];
-//handles table data
 export const columnsHardwareHandle = [
-  // {
-  //   field: "id",
-  //   headerName: "ID",
-  //   width: 70,
-  // },
   {
     field: "name",
     headerName: "Name",
@@ -382,16 +310,6 @@ export const columnsHardwareHandle = [
     headerName: "Status",
     width: 80,
   },
-  // {
-  //   field: "addMore",
-  //   headerName: <img src={plus} alt="Last Quoted On" />,
-  //   width: 180,
-  //   renderCell: (params) => {
-  //     const handleAddMoreClick = () => {
-  //       console.log(params);
-  //     };
-  //   },
-  // },
 ];
 
 export const rowsHardwareHandle = [

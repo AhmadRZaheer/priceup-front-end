@@ -6,7 +6,6 @@ const TableRow = ({ row, refetch }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useUserStatus();
   const [active, setActive] = useState(row.status);
@@ -24,7 +23,6 @@ const TableRow = ({ row, refetch }) => {
       <div className="deleteButton"></div>
       <div
         className="viewButton"
-        // onClick={() => handleOpenEdit(params.row)}
       >
         {LoadingForEdit ? (
           <CircularProgress size={24} color="warning" />

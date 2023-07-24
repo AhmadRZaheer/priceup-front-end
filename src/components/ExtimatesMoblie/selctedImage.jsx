@@ -8,19 +8,9 @@ import { Box, Typography } from "@mui/material";
 import { backendURL } from "../../utilities/common";
 import { useSelector } from "react-redux";
 import { selectedItem } from "../../redux/estimateCalculations";
-import EstImage from "../../Assets/est-image5.png";
+import EstImage from "../../Assets/estimates/custom copy.jpg";
 
 export const SelectedImage = ({ imageSides }) => {
-  let Name = null;
-  // const a = [{ name: "Aa" }, { name: "Sam" }];
-  // const b = [{ name: "Aa" }, { name: "Sam" }];
-  // const NameData = a.find((itemA) => b.map((itemB) => console.log(itemB, "itemB"), console.log(itemA, "itemA"))  );
-
-  // Name = NameData;
-
-  console.log(Name, "Name");
-  // console.log(NameData2, "NameData2")
-  const selectedData = useSelector(selectedItem);
   // if (imageSides === 2) {
   //   return (
   //     <>
@@ -589,7 +579,9 @@ export const SelectedImage = ({ imageSides }) => {
 
   return (
     <>
-      <Typography>{Name}</Typography>
+      <Box>
+        <img src={EstImage} alt="image of the layout" />
+      </Box>
     </>
   );
 };

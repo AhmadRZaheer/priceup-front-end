@@ -48,18 +48,14 @@ export default function AddTeamMembers({
   };
 
   const { getInputProps } = useDropzone({ onDrop });
-  // hook for add
   const {
     mutate: addTeamMembers,
     isLoading: LoadingForAdd,
-    isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateTeamMembers();
-  // hook for edit
   const {
     mutate: editTeamMembers,
     isLoading: LoadingForEdit,
-    isError: ErrorForEdit,
     isSuccess: SuccessForEdit,
   } = useEditTeamMembers();
 
@@ -92,26 +88,8 @@ export default function AddTeamMembers({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address"),
 
-    // password: Yup.string().required("Name is required"),
 
     image: Yup.mixed(),
-    // .required("Image is required")
-    // .test(
-    //   "fileType",
-    //   "Only image files are allowed (JPEG, PNG, GIF)",
-    //   (value) => {
-    //     if (value) {
-    //       const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-    //       return supportedFormats.includes(value.type);
-    //     }
-    //     return false;
-    //   }
-    // )
-    // .test(
-    //   "fileSize",
-    //   "Image size should be less than 5MB",
-    //   (value) => value && value.size <= 5 * 1024 * 1024
-    // ),
   });
 
   const formik = useFormik({
@@ -119,15 +97,12 @@ export default function AddTeamMembers({
       ? {
           name: data?.name,
           email: data?.email,
-          // password: data?.password,
-
           image: "",
         }
       : {
           name: "",
           image: "",
           email: "",
-          // password: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -147,11 +122,10 @@ export default function AddTeamMembers({
     <div>
       <Modal
         open={open}
-        // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", // Apply blur effect to the backdrop
+          backdropFilter: "blur(2px)", 
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -214,11 +188,7 @@ export default function AddTeamMembers({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-                    {/* <Typography sx={{ color: "#667085" }}>
-                      or drag and drop
-                    </Typography> */}
                   </span>
-                  {/* <Typography sx={{color: "#8477DA"}}>Click to Upload</Typography> */}
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
                   </Typography>
@@ -254,20 +224,6 @@ export default function AddTeamMembers({
               fullWidth
             />
           </Box>
-          {/* <Box>
-            <Typography>Password</Typography>
-            <TextField
-              placeholder="Password"
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-              variant="outlined"
-              fullWidth
-            />
-          </Box> */}
           <Box
             onClick={formik.handleSubmit}
             sx={{ display: "flex", gap: 2, marginTop: 2 }}

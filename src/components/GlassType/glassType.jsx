@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-// import "./glassType.scss";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid } from "@mui/x-data-grid";
@@ -18,7 +17,6 @@ const GlassTypeTable = () => {
   const { data: GlassTypeData, refetch: glassTypeRefetch } = useFetchDataGlassType();
   const {
     mutate: deleteFinish,
-    error: finishDeleteError,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteGlassType();
@@ -52,11 +50,7 @@ const GlassTypeTable = () => {
   const actionColumn = [
     {
       field: " ",
-      // headerName: (
-      //   // <div onClick={handleOpen}>
-      //   //   <img src={plus} alt="Add More" />
-      //   // </div>
-      // ),
+
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;

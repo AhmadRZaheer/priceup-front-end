@@ -9,26 +9,9 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import {
   CircularProgress,
-  FormControl,
-  IconButton,
   TextField,
 } from "@mui/material";
-import { Close } from "@mui/icons-material";
 import { useDropzone } from "react-dropzone";
-
-import {
-  useCreateFinish,
-  useEditFinish,
-} from "../../utilities/ApiHooks/Finishes";
-import Snackbars from "./SnackBar";
-import {
-  useCreateHardware,
-  useEditHardware,
-} from "../../utilities/ApiHooks/Hardware";
-import {
-  useCreateTeamMembers,
-  useEditTeamMembers,
-} from "../../utilities/ApiHooks/Team";
 import { useCreateAdminsMembers } from "../../utilities/ApiHooks/SuperAdmin";
 
 const style = {
@@ -61,14 +44,11 @@ export default function AddSuperAdminModel({
   };
 
   const { getInputProps } = useDropzone({ onDrop });
-  // hook for add
   const {
     mutate: addTeamAdminsMembers,
     isLoading: LoadingForAdd,
-    isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateAdminsMembers();
-  // hook for edit
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -85,27 +65,7 @@ export default function AddSuperAdminModel({
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address"),
-
-    // password: Yup.string().required("Name is required"),
-
     image: Yup.mixed(),
-    // .required("Image is required")
-    // .test(
-    //   "fileType",
-    //   "Only image files are allowed (JPEG, PNG, GIF)",
-    //   (value) => {
-    //     if (value) {
-    //       const supportedFormats = ["image/jpeg", "image/png", "image/gif"];
-    //       return supportedFormats.includes(value.type);
-    //     }
-    //     return false;
-    //   }
-    // )
-    // .test(
-    //   "fileSize",
-    //   "Image size should be less than 5MB",
-    //   (value) => value && value.size <= 5 * 1024 * 1024
-    // ),
   });
 
   const formik = useFormik({
@@ -114,7 +74,6 @@ export default function AddSuperAdminModel({
           name: data?.name,
           email: data?.email,
           password: data?.password,
-
           image: "",
         }
       : {
@@ -136,11 +95,10 @@ export default function AddSuperAdminModel({
     <div>
       <Modal
         open={open}
-        // onClose={close}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", // Apply blur effect to the backdrop
+          backdropFilter: "blur(2px)", 
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -203,11 +161,7 @@ export default function AddSuperAdminModel({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-                    {/* <Typography sx={{ color: "#667085" }}>
-                      or drag and drop
-                    </Typography> */}
                   </span>
-                  {/* <Typography sx={{color: "#8477DA"}}>Click to Upload</Typography> */}
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
                   </Typography>

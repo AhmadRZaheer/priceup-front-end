@@ -6,33 +6,11 @@ import LayoutReview from "./LayoutReview";
 import Layout from "./Layouts";
 
 import Snackbars from "../Model/SnackBar";
-import { getPageNavigation } from "../../redux/estimateCalculations";
-import { useSelector } from "react-redux";
+import { evaluateFormula } from "../../utilities/common";
 
 const Index = () => {
-  const boxStyles = {
-    minHeight: "182px",
-    minWidth: "180px",
-    margin: "auto",
-    borderRadius: "12px",
-    boxShadow:
-      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-    border: "1px solid #EAECF0",
-    p: 2,
-    background: "#D9D9D9",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 3,
-    flexDirection: "column",
-    cursor: "pointer",
-  };
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [layoutMeasurementsOpen, SetlayoutMeasurementsOpen] = useState(true);
   const [StorePage, setStorePage] = useState("Layout");
-  const handleClose = () => setClientDetailOpen(false);
-  const handleOpen = () => setClientDetailOpen(true);
-  const Navigation = useSelector(getPageNavigation);
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -81,7 +59,6 @@ const Index = () => {
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
-        SetlayoutMeasurementsOpen={SetlayoutMeasurementsOpen}
         showSnackbar={showSnackbar}
       />
             <Snackbars

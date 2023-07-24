@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "../../customerTableSource";
 
@@ -8,30 +8,8 @@ import { useFetchDataCustomer } from "../../utilities/ApiHooks/Customer";
 
 
 const CustomerTable = () => {
-  const { data: CustomerData, refetch: CustomerMemberRefetch } = useFetchDataCustomer();
-  const [matchingId, setMatchingId] = useState("");
+  const { data: CustomerData} = useFetchDataCustomer();
 
-
-  const actionColumn = [
-    {
-      field: " ",
-      width: 200,
-      renderCell: (params) => {
-        const id = params.row._id;
-        const isMatchingId = id === matchingId;
-        return (
-          <div className="cellAction">
-            <div
-              className="deleteButton"
-             
-            >
-             
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
   return (
     <>
     <Box sx={{borderTopLeftRadius: 30, borderBottomLeftRadius: 30, backgroundColor: "white", height: "98.2vh", paddingLeft: 1, pt: 2}}>

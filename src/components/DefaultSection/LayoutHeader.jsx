@@ -1,7 +1,6 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { items } from "../../data/data";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getDefaultId,
@@ -11,7 +10,6 @@ import {
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import {
-  useEditDefault,
   useFetchDataDefault,
 } from "../../utilities/ApiHooks/DefaultLayouts";
 import { useEffect } from "react";
@@ -91,7 +89,6 @@ const LayoutHeader = () => {
       style={{
         maxWidth: "75vw",
         margin: "0 auto",
-        // backgroundColor: "green",
       }}
     >
       <Slider {...sliderSettings}>{renderSliderItems(types)}</Slider>

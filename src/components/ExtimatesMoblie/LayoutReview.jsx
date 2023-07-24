@@ -1,34 +1,50 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./MenuList";
-import {
-  ChevronLeftOutlined,
-} from "@mui/icons-material";
+import { ChevronLeftOutlined } from "@mui/icons-material";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
-  getTotal,
+  getMeasumentSide,
+  selectedItem,
   setInputContent,
   setNavigation,
   setTotal,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
+import { evaluateFormula } from "../../utilities/common";
+import { useMemo } from "react";
 
 const LayoutReview = () => {
-  const { data: estimatesData, refetch: estimatesRefetch } =
-    useFetchDataEstimate();
+  const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
-  const totalPrice = useSelector(getTotal);
-
+  const measurementSides = useSelector(getMeasumentSide);
+  const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
-  // const [mountingType, setmountingType] = useState(
-  //   selectedContent.mounting.activeType || "clamps"
-  // );
+  const priceBySqft = useMemo(() => {
+    const measurementObject = measurementSides.reduce((obj, item) => {
+      const { key, value } = item;
+      if (!obj[key]) {
+        obj[key] = [];
+      }
+      obj[key].push(value);
+      return obj;
+    }, {});
+    return evaluateFormula(
+      currentLayout?.settings?.priceBySqftFormula,
+      measurementObject?.a,
+      measurementObject?.b,
+      measurementObject?.c,
+      measurementObject?.d,
+      measurementObject?.e,
+      measurementObject?.f
+    );
+  }, [measurementSides, currentLayout]);
 
   useEffect(() => {
-    // hardware formula = ( handle finish price * handle count ) + (hinges finish price * hinges count) + ((mountingChannel * count)*active) + (((clamps1 * count) + (clamps2 * count) + (clamps3 * count))*active) + (bars finish price * hinges count) + (headers finish price * hinges count)
+    // hardware
     const handlePrice = selectedContent?.handles?.item
       ? (selectedContent?.handles?.item?.finishes?.find(
           (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -87,9 +103,9 @@ const LayoutReview = () => {
       slidingDoorSystemPrice +
       headerPrice;
 
+    // fabricating
     let fabricationPrice = 0;
     if (selectedContent.glassType.thickness === "1/2") {
-      // for 1/2 price
       fabricationPrice =
         Number(selectedContent?.oneInchHoles) *
           estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
@@ -123,14 +139,58 @@ const LayoutReview = () => {
           estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
     }
 
+    //addons
+    const towelBar = estimatesData?.addOns?.find(
+      (item) => item.slug === "towel-bars"
+    );
+    const sleeveOver = estimatesData?.addOns?.find(
+      (item) => item.slug === "sleeve-over"
+    );
+    const towelBarFinish =
+      towelBar?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    const sleeveOverFinish =
+      sleeveOver?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    let otherAddons = 0;
+    selectedContent?.addOns?.map((item) => {
+      const price =
+        item.finishes.find(
+          (finish) => finish.finish_id === selectedContent?.hardwareFinishes?._id
+        )?.cost || 0;
+      otherAddons = otherAddons + price * priceBySqft;
+    });
+    const addOnsTotal =
+      towelBarFinish * selectedContent?.towelBarsCount +
+      sleeveOverFinish * selectedContent?.sleeveOverCount +
+      otherAddons;
+
+    //glass
+    const glassPrice =
+      (selectedContent?.glassType?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0) * priceBySqft;
+
+    //glassTreatment
+    const glassTreatmentPrice =
+      selectedContent?.glassTreatment?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0;
+
+    //labor price
     const laborPrice =
       selectedContent?.people *
       selectedContent?.hours *
       estimatesData?.miscPricing?.hourlyRate;
 
-    // total formula = (hardware's cost + glass cost + add-ons cost + fabrication + fabrication 1/2) * Company pricing factor + Labor result
     const total =
-      (hardwareTotals + fabricationPrice) *
+      (hardwareTotals +
+        fabricationPrice +
+        addOnsTotal +
+        glassPrice +
+        glassTreatmentPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
@@ -250,7 +310,7 @@ const LayoutReview = () => {
               paddingX: { md: 2, xs: 0 },
               background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
               gap: 4,
-              maxHeight: "60vh",
+              maxHeight: "54ffvh",
               borderRadius: "8px",
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
@@ -258,15 +318,11 @@ const LayoutReview = () => {
               overflow: "auto",
             }}
           >
-            {/* LeftSide */}
-
             <Box
               sx={{
                 display: "flex",
                 width: { md: "40.5%", xs: "100%" },
                 flexDirection: "column",
-
-                // background: "red",
               }}
             >
               <Box
@@ -277,12 +333,10 @@ const LayoutReview = () => {
                   gap: 1,
                 }}
               >
-                {/* <MenuList /> */}
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -298,7 +352,7 @@ const LayoutReview = () => {
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
                       estimatesData={estimatesData}
-                      // setSelectedContent={setSelectedContent}
+                      item={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -306,7 +360,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -320,7 +373,6 @@ const LayoutReview = () => {
                       title={"Handles"}
                       type={"handles"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.handles.count}
                     />
                   </Box>
@@ -329,7 +381,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -343,64 +394,29 @@ const LayoutReview = () => {
                       title={"Hinges"}
                       type={"hinges"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.hinges.count}
+                      item={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>
                 <Box
                   sx={{
-                    // display: "flex",
                     alignItems: "center",
-                    // gap: 4,
-                    // justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
                 >
-                  {/* mouting channel */}
-                  {/* <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column" }}>
-                      <MenuList
-                        menuOptions={estimatesData?.wallClamp}
-                        title={"Wall Clamps"}
-                        type={"wallClamp"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={selectedContent.mounting.clamps.wallClamp.count}
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.sleeveOver}
-                        title={"Sleeve Over"}
-                        type={"sleeveOver"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={selectedContent.mounting.clamps.sleeveOver.count}
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.glassToGlass}
-                        title={"Glass to Glass"}
-                        type={"glassToGlass"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                        count={
-                          selectedContent.mounting.clamps.glassToGlass.count
-                        }
-                      />
-                      <MenuList
-                        menuOptions={estimatesData?.mountingChannel}
-                        title={"Channel"}
-                        type={"channel"}
-                        showSnackbar={showSnackbar}
-                        // setSelectedContent={setSelectedContent}
-                      />
-                    </Box>
-                  </Box> */}
                   <Box sx={{ width: "100%", display: "flex" }}>
                     <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box sx={{ display: "flex", flexDirection: "column" }}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
                         <ChannelType
                           menuOptions={estimatesData?.channelOrClamps}
                           title={"Mounting"}
@@ -408,58 +424,6 @@ const LayoutReview = () => {
                           showSnackbar={showSnackbar}
                           estimatesData={estimatesData}
                         />
-                        {/* <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            alignContent: "space-between",
-                          }}
-                        >
-                          {selectedContent.mounting.activeType === "clamps" && (
-                            <>
-                              <MenuList
-                                menuOptions={estimatesData?.wallClamp}
-                                title={"Wall Clamps"}
-                                type={"wallClamp"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.wallClamp
-                                    .count
-                                }
-                              />
-                              <MenuList
-                                menuOptions={estimatesData?.sleeveOver}
-                                title={"Sleeve Over"}
-                                type={"sleeveOver"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.sleeveOver
-                                    .count
-                                }
-                              />
-                              <MenuList
-                                menuOptions={estimatesData?.glassToGlass}
-                                title={"Glass to Glass"}
-                                type={"glassToGlass"}
-                                showSnackbar={showSnackbar}
-                                count={
-                                  selectedContent.mounting.clamps.glassToGlass
-                                    .count
-                                }
-                              />
-                            </>
-                          )}
-
-                          {selectedContent.mounting.activeType ===
-                            "channel" && (
-                            <MenuList
-                              menuOptions={estimatesData?.mountingChannel}
-                              title={"Channel"}
-                              type={"channel"}
-                              showSnackbar={showSnackbar}
-                            />
-                          )}
-                        </Box> */}
                       </Box>
                     </Box>
                   </Box>
@@ -481,7 +445,6 @@ const LayoutReview = () => {
                       title={" Glass type"}
                       type={"glassType"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       thickness={selectedContent.glassType.thickness}
                     />
                   </Box>
@@ -490,7 +453,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -504,7 +466,6 @@ const LayoutReview = () => {
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.slidingDoorSystem.count}
                     />
                   </Box>
@@ -513,7 +474,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -527,7 +487,6 @@ const LayoutReview = () => {
                       title={"Header"}
                       type={"header"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                       count={selectedContent.header.count}
                     />
                   </Box>
@@ -536,7 +495,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -550,7 +508,6 @@ const LayoutReview = () => {
                       title={"Glass treatment"}
                       type={"glassTreatment"}
                       showSnackbar={showSnackbar}
-                      // setSelectedContent={setSelectedContent}
                     />
                   </Box>
                 </Box>
@@ -558,7 +515,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -575,12 +531,10 @@ const LayoutReview = () => {
                     />
                   </Box>
                 </Box>
-                {/* holes onword */}
                 <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -603,16 +557,15 @@ const LayoutReview = () => {
                   >
                     <TextField
                       type="number"
-                      // InputProps={{ inputProps: { min: 0, max: 50 } }}
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -640,7 +593,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -665,13 +617,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -699,7 +651,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -724,13 +675,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -751,8 +702,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, clampCut: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -760,7 +709,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -785,13 +733,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -812,7 +760,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, notch: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -820,7 +767,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -845,13 +791,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -872,8 +818,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, outages: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -881,7 +825,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -906,13 +849,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -933,8 +876,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, mitre: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -942,7 +883,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -967,13 +907,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -994,8 +934,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, polish: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -1003,7 +941,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -1028,13 +965,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -1055,8 +992,6 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, people: event.target.value }))}
                     />
                   </Box>
                 </Box>
@@ -1064,7 +999,6 @@ const LayoutReview = () => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    // gap: 4,
                     justifyContent: "space-between",
                     borderBottom: {
                       md: "2px solid #D0D5DD",
@@ -1089,13 +1023,13 @@ const LayoutReview = () => {
                       type="number"
                       InputProps={{
                         style: {
-                          color: "white", // Change the color of the input text
+                          color: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
                       InputLabelProps={{
                         style: {
-                          color: "rgba(255, 255, 255, 0.5)", // Change the color of the placeholder text
+                          color: "rgba(255, 255, 255, 0.5)",
                         },
                       }}
                       sx={{
@@ -1116,83 +1050,11 @@ const LayoutReview = () => {
                           })
                         )
                       }
-
-                      // onChange={(event) => setSelectedContent((prevState) => ({ ...prevState, hours: event.target.value }))}
                     />
                   </Box>
                 </Box>
               </Box>
             </Box>
-            {/* rightSide */}
-            {/* <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: {md:"45.5%", xs: "100%"},
-                background: {md:"#ffff", xs: "#100d24"},
-                p: {md: 3, xs: 0},
-                borderRadius: "8px",
-                color: {md: "black", xs: "white"}
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  width: "89%",
-                  justifyContent: "center",
-                  background: "#D9D9D9",
-                  borderRadius: "8px",
-                  p: 3,
-                  // height: "250px",
-                }}
-              >
-                <img
-                  // width={"350px"}
-                  // height={"250px"}
-                  src={door}
-                  alt="Selected"
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: "89%",
-
-                  borderRadius: "8px",
-                  p: 3,
-                  // height: "250px",
-                }}
-              >
-                <Typography>12’’/ 12’’/ 12’’ </Typography>
-                <Typography variant="h6">Summary </Typography>
-                <Typography> Finish: Polished Chrome</Typography>
-                <Typography>Handles: 8 by 8 D-Pull </Typography>
-                <Typography>Hinges: STD Bevel </Typography>
-                <Typography> Channel </Typography>
-                <Typography>Glass Type:Clear (3/8)</Typography>
-                <Typography> Bars</Typography>
-                <Typography>Transom </Typography>
-                <Typography>Header </Typography>
-                <Typography>Glass Treatment </Typography>
-                <Typography variant="h6">Add ons </Typography>
-                <Typography> People: 2</Typography>
-                <Typography> Hours: 2 </Typography>
-                <Typography> </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    // gap: 4,
-                    justifyContent: "space-between",
-                    borderTop: "2px solid #D0D5DD",
-                    marginTop: 1,
-                    paddingY: 1,
-                  }}
-                >
-                  <Typography>Price</Typography>
-                  <Typography variant="h6">$895</Typography>
-                </Box>{" "}
-              </Box>
-            </Box> */}
           </Box>
         </Box>
         <Box
@@ -1212,7 +1074,6 @@ const LayoutReview = () => {
           <Box sx={{ width: { md: "150px", xs: "50%" } }}>
             <Button
               fullWidth
-              // onClick={() => setHandleEstimatesPages("measurements")}
               onClick={() => {
                 dispatch(setNavigation("measurements"));
               }}

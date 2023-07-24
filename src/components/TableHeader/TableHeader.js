@@ -1,9 +1,8 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { items } from "../../data/data";
 import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
@@ -63,12 +62,12 @@ const TableHeader = ({ showMore, types }) => {
       <ArrowBackIosNewIcon
         sx={{ color: "black", "&:hover": { color: "black" } }}
       />
-    ), // Replace default prevArrow with a custom one
+    ), 
     nextArrow: (
       <ArrowForwardIosIcon
         sx={{ color: "black", "&:hover": { color: "black" } }}
       />
-    ), // Replace default nextArrow with a custom one
+    ),
     adaptiveHeight: true,
   };
 
@@ -77,7 +76,6 @@ const TableHeader = ({ showMore, types }) => {
       style={{
         maxWidth: "75vw",
         margin: "0 auto",
-        // backgroundColor: "green",
       }}
     >
       <Slider {...sliderSettings}>{renderSliderItems(types)}</Slider>
