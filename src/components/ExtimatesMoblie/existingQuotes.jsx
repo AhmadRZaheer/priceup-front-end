@@ -10,31 +10,36 @@ import { useDispatch } from "react-redux";
 import {
   reinitializeState,
   setNavigation,
+  setQuoteState,
 } from "../../redux/estimateCalculations";
 import {
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
-import { useState } from "react";
+// import { useState } from "react";
 
 export default function ExitingQuotes() {
-  const [selectedQuote, setSelectedQuote] = useState(null);
-  console.log(selectedQuote);
+  // const [selectedQuote, setSelectedQuote] = useState(null);
+  // console.log(selectedQuote);
   const { data: estimates, isFetching } = useGetEstimates();
-  const { data: estimateListData } = useFetchDataEstimate();
+  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
   const dispatch = useDispatch();
-  console.log(estimateListData, "selectedQuote ");
+  // console.log(estimateListData, "selectedQuote ");
   const handleIconButtonClick = (item) => {
-    setSelectedQuote(item);
-    dispatch(
-      reinitializeState({ estimateData: item, listData: estimateListData })
-    );
+    // setSelectedQuote(item);
+    dispatch(reinitializeState({ estimateData: item, listData: estimateListData }));
     dispatch(setNavigation("review"));
   };
-
+  const handleCreateQuote = () => {
+    dispatch(setQuoteState("create"));
+    dispatch(setNavigation("layout"));
+  }
   return (
     <>
-      <Box
+      {isFetching || estimateDataFetching ? 
+      <Box sx={{ width: 40, m: "auto", display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
+        <CircularProgress />
+      </Box> : <Box
         sx={{
           marginTop: 8,
           height: "92.8vh",
@@ -95,6 +100,7 @@ export default function ExitingQuotes() {
                     <IconButton
                       onClick={() => handleIconButtonClick(item)}
                       sx={{ marginRight: 1, height: 25 }}
+                      disabled={estimateDataFetching}
                     >
                       <img src={pencil} alt="image of pencil" />
                     </IconButton>
@@ -116,9 +122,8 @@ export default function ExitingQuotes() {
           }}
         >
           <Button
-            onClick={() => {
-              dispatch(setNavigation("layout"));
-            }}
+            onClick={handleCreateQuote}
+            disabled={estimateDataFetching}
             color="primary"
             sx={{
               textTransform: "capitalize",
@@ -132,7 +137,7 @@ export default function ExitingQuotes() {
             Create New Qoute
           </Button>
         </Box>
-      </Box>
+      </Box>}
     </>
   );
 }

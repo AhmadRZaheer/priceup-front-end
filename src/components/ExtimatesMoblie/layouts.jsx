@@ -11,6 +11,7 @@ import {
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
+import QuotesHeader from "./QuotesHeader";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },
@@ -63,40 +64,7 @@ const Layout = () => {
             gap: { md: 4, xs: 0 },
           }}
         >
-          <Box
-            sx={{
-              display: { md: "none", xs: "flex" },
-              zIndex: 1,
-              justifyContent: { md: "center", xs: "start" },
-              background: "#18133b",
-              width: "100%",
-              color: "white",
-              paddingY: 1.2,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              marginTop: 7.6,
-              borderTop: "2px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            <Box sx={{ display: { md: "none", xs: "block" } }}>
-              <ChevronLeftOutlinedIcon
-                onClick={() => {
-                  dispatch(setNavigation("existing"));
-                }}
-                sx={{ fontSize: 34, paddingTop: 0.4 }}
-              />
-            </Box>
-            <Typography textAlign={"center"} variant="h4">
-              Create New Qoute
-            </Typography>
-          </Box>
-          <Typography
-            sx={{ display: { md: "block", xs: "none" } }}
-            textAlign={"center"}
-            variant="h4"
-          >
-            Create New Qoute
-          </Typography>
+        <QuotesHeader navigateTo={"existing"}/>
           <Box
             sx={{
               width: { md: "94%", sm: "98%", xs: "91.3%" },

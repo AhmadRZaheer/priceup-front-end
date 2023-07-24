@@ -49,8 +49,7 @@ export default function ClientDetailsModel({
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
-  const data = estimatesContent?.addOns;
-  const addOnIds = data?.map((obj) => obj._id);
+  
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -61,6 +60,8 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
+      const data = estimatesContent?.addOns;
+  const addOnIds = data?.map((obj) => obj?._id);
       const estimate = {
         layout_id: estimatesLayout?._id,
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
