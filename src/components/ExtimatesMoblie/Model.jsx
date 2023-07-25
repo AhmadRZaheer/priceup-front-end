@@ -6,7 +6,10 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
-import { useCreateEstimates, useEditEstimates } from "../../utilities/ApiHooks/Estimate";
+import {
+  useCreateEstimates,
+  useEditEstimates,
+} from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -134,6 +137,15 @@ export default function ClientDetailsModel({
     },
   });
 
+  React.useEffect(() => {
+    if (CreatedSuccessfullyEdit) {
+      showSnackbar("Estimate created successfully", "success");
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");

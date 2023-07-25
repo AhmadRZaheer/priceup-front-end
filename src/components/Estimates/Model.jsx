@@ -6,7 +6,10 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
-import { useCreateEstimates, useEditEstimates } from "../../utilities/ApiHooks/Estimate";
+import {
+  useCreateEstimates,
+  useEditEstimates,
+} from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -55,7 +58,7 @@ export default function ClientDetailsModel({
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
-  const updatecheck = useSelector(getQuoteState)
+  const updatecheck = useSelector(getQuoteState);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -135,7 +138,15 @@ export default function ClientDetailsModel({
       window.location.href = "/Estimates";
     },
   });
-
+  React.useEffect(() => {
+    if (CreatedSuccessfullyEdit) {
+      showSnackbar("Estimate created successfully", "success");
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
@@ -198,10 +209,10 @@ export default function ClientDetailsModel({
                       variant="outlined"
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  4,
+                          color: "black",
+                          borderRadius: 4,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -247,10 +258,10 @@ export default function ClientDetailsModel({
                       onChange={formik.handleChange}
                       InputProps={{
                         style: {
-                          color: "black", 
-                          borderRadius:  4,
+                          color: "black",
+                          borderRadius: 4,
                           border: "1px solid #cccccc",
-                          backgroundColor: "white"
+                          backgroundColor: "white",
                         },
                         inputProps: { min: 0, max: 50 },
                       }}
@@ -293,10 +304,10 @@ export default function ClientDetailsModel({
                   value={formik.values.email}
                   InputProps={{
                     style: {
-                      color: "black", 
-                      borderRadius:  4,
+                      color: "black",
+                      borderRadius: 4,
                       border: "1px solid #cccccc",
-                      backgroundColor: "white"
+                      backgroundColor: "white",
                     },
                     inputProps: { min: 0, max: 50 },
                   }}
@@ -335,10 +346,10 @@ export default function ClientDetailsModel({
                   value={formik.values.address}
                   InputProps={{
                     style: {
-                      color: "black", 
-                      borderRadius:  4,
+                      color: "black",
+                      borderRadius: 4,
                       border: "1px solid #cccccc",
-                      backgroundColor: "white"
+                      backgroundColor: "white",
                     },
                     inputProps: { min: 0, max: 50 },
                   }}
