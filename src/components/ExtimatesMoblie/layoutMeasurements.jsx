@@ -18,6 +18,7 @@ import {
 } from "../../redux/estimateCalculations";
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { SelectedImage } from "./selctedImage";
+import QuotesHeader from "./QuotesHeader";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
   console.log(selectedData, "selectedData");
@@ -70,39 +71,7 @@ const LayoutMeasurements = () => {
           height: "40vh",
         }}
       >
-        <Box
-          sx={{
-            display: { md: "none", xs: "flex" },
-            zIndex: 1,
-            justifyContent: { md: "center", xs: "start" },
-            background: "#18133b",
-            width: "100%",
-            color: "white",
-            paddingY: 1.2,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            marginTop: 7.6,
-          }}
-        >
-          <Box sx={{ display: { md: "none", xs: "block" } }}>
-            <ChevronLeftOutlinedIcon
-              onClick={() => {
-                dispatch(setNavigation("layout"));
-              }}
-              sx={{ fontSize: 34, paddingTop: 0.4 }}
-            />
-          </Box>
-          <Typography textAlign={"center"} variant="h4">
-            Create New Qoute
-          </Typography>
-        </Box>
-        <Typography
-          sx={{ display: { md: "block", xs: "none" } }}
-          textAlign={"center"}
-          variant="h4"
-        >
-          Create New Qoute
-        </Typography>
+        <QuotesHeader navigateTo={"layout"}/>
         <form onSubmit={formik.handleSubmit}>
           <Box
             sx={{

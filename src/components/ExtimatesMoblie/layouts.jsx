@@ -8,9 +8,12 @@ import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
+  initializeStateForCreateQuote,
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
+import QuotesHeader from "./QuotesHeader";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },
@@ -30,16 +33,18 @@ export const boxStyles = {
   cursor: "pointer",
 };
 const Layout = () => {
-  const { data: layouts, isFetching: loading } = useFetchDataDefault();
+  const { data: layouts, isFetching: layoutFetching } = useFetchDataDefault();
+  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
 
   const handleBoxClick = (layout) => {
+    dispatch(initializeStateForCreateQuote({ layoutData: layout, listData: estimateListData }));
     dispatch(addSelectedItem(layout));
   };
   return (
     <>
-      <Box
+     <Box
         sx={{
           width: "100%",
           display: "flex",
@@ -63,40 +68,7 @@ const Layout = () => {
             gap: { md: 4, xs: 0 },
           }}
         >
-          <Box
-            sx={{
-              display: { md: "none", xs: "flex" },
-              zIndex: 1,
-              justifyContent: { md: "center", xs: "start" },
-              background: "#18133b",
-              width: "100%",
-              color: "white",
-              paddingY: 1.2,
-              borderBottomLeftRadius: 20,
-              borderBottomRightRadius: 20,
-              marginTop: 7.6,
-              borderTop: "2px solid rgba(255, 255, 255, 0.2)",
-            }}
-          >
-            <Box sx={{ display: { md: "none", xs: "block" } }}>
-              <ChevronLeftOutlinedIcon
-                onClick={() => {
-                  dispatch(setNavigation("existing"));
-                }}
-                sx={{ fontSize: 34, paddingTop: 0.4 }}
-              />
-            </Box>
-            <Typography textAlign={"center"} variant="h4">
-              Create New Qoute
-            </Typography>
-          </Box>
-          <Typography
-            sx={{ display: { md: "block", xs: "none" } }}
-            textAlign={"center"}
-            variant="h4"
-          >
-            Create New Qoute
-          </Typography>
+        <QuotesHeader navigateTo={"existing"}/>
           <Box
             sx={{
               width: { md: "94%", sm: "98%", xs: "91.3%" },
@@ -133,7 +105,7 @@ const Layout = () => {
                 collaborate on this project.
               </Typography>
             </Box>
-            {loading ? (
+            {layoutFetching || estimateDataFetching ? (
               <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 700}}>
               <CircularProgress />
               </Box>

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getMeasumentSide,
+  getQuoteState,
   selectedItem,
   setInputContent,
   setNavigation,
@@ -16,6 +17,7 @@ import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
 import { evaluateFormula } from "../../utilities/common";
 import { useMemo } from "react";
+import QuotesHeader from "./QuotesHeader";
 
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
@@ -23,6 +25,7 @@ const LayoutReview = () => {
   const measurementSides = useSelector(getMeasumentSide);
   const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
+  const quoteState = useSelector(getQuoteState);
   const priceBySqft = useMemo(() => {
     const measurementObject = measurementSides.reduce((obj, item) => {
       const { key, value } = item;
@@ -157,8 +160,8 @@ const LayoutReview = () => {
     let otherAddons = 0;
     selectedContent?.addOns?.map((item) => {
       const price =
-        item.finishes.find(
-          (finish) => finish.finish_id === selectedContent?.hardwareFinishes?._id
+        item?.finishes?.find(
+          (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
         )?.cost || 0;
       otherAddons = otherAddons + price * priceBySqft;
     });
@@ -233,39 +236,7 @@ const LayoutReview = () => {
           gap: { md: 4, xs: 0 },
         }}
       >
-        <Box
-          sx={{
-            display: { md: "none", xs: "flex" },
-            zIndex: 1,
-            justifyContent: { md: "center", xs: "start" },
-            background: "#18133b",
-            width: "100%",
-            color: "white",
-            paddingY: 1.2,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            marginTop: 7.6,
-          }}
-        >
-          <Box sx={{ display: { md: "none", xs: "block" } }}>
-            <ChevronLeftOutlined
-              onClick={() => {
-                dispatch(setNavigation("measurements"));
-              }}
-              sx={{ fontSize: 34, paddingTop: 0.4 }}
-            />
-          </Box>
-          <Typography textAlign={"center"} variant="h4">
-            Create New Quote
-          </Typography>
-        </Box>
-        <Typography
-          sx={{ display: { md: "block", xs: "none" } }}
-          textAlign={"center"}
-          variant="h4"
-        >
-          Create New Qoute
-        </Typography>
+        <QuotesHeader navigateTo={quoteState === "create" ? "measurements" : "existing"}/>
         <Box
           sx={{
             width: { md: "94%", sm: "100%", xs: "100%" },
@@ -352,7 +323,7 @@ const LayoutReview = () => {
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
                       estimatesData={estimatesData}
-                      item={selectedContent?.hardwareFinishes}
+                      currentItem={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -374,6 +345,7 @@ const LayoutReview = () => {
                       type={"handles"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.handles.count}
+                      currentItem={selectedContent?.handles?.item}
                     />
                   </Box>
                 </Box>
@@ -395,7 +367,7 @@ const LayoutReview = () => {
                       type={"hinges"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.hinges.count}
-                      item={selectedContent?.hinges?.item}
+                      currentItem={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>
@@ -446,6 +418,7 @@ const LayoutReview = () => {
                       type={"glassType"}
                       showSnackbar={showSnackbar}
                       thickness={selectedContent.glassType.thickness}
+                      currentItem={selectedContent?.glassType?.item}
                     />
                   </Box>
                 </Box>
@@ -467,6 +440,7 @@ const LayoutReview = () => {
                       type={"slidingDoorSystem"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.slidingDoorSystem.count}
+                      currentItem={selectedContent?.slidingDoorSystem?.item}
                     />
                   </Box>
                 </Box>
@@ -488,6 +462,7 @@ const LayoutReview = () => {
                       type={"header"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.header.count}
+                      currentItem={selectedContent?.header?.item}
                     />
                   </Box>
                 </Box>
@@ -508,6 +483,7 @@ const LayoutReview = () => {
                       title={"Glass treatment"}
                       type={"glassTreatment"}
                       showSnackbar={showSnackbar}
+                      currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>

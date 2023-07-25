@@ -5,9 +5,7 @@ import {
   ArrowRight,
 } from "@mui/icons-material";
 import { Box, Typography } from "@mui/material";
-import { backendURL } from "../../utilities/common";
-import { useSelector } from "react-redux";
-import { selectedItem } from "../../redux/estimateCalculations";
+
 import EstImage1 from "../../Assets/estimates/a.png";
 import EstImage2 from "../../Assets/estimates/a5.png";
 import EstImage3 from "../../Assets/estimates/a (1).png";

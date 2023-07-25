@@ -24,15 +24,16 @@ const MenuList = ({
   showSnackbar,
   count,
   thickness,
-  item,
+  currentItem,
 }) => {
+  const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState(item || null);
-  const [sleeveOverCount, setSleeveOverCount] = useState(0);
-  const [towelBarsCount, setTowelBarsCount] = useState(0);
-  const selectedContent = useSelector(getContent);
+  const [selectedItem, setSelectedItem] = useState(currentItem || null);
+  // const [addonsSelectedItems,setAddonsSelectedItem] = useState(selectedContent?.addOns || []);
+  const [sleeveOverCount, setSleeveOverCount] = useState(selectedContent?.sleeveOverCount || 0);
+  const [towelBarsCount, setTowelBarsCount] = useState(selectedContent?.towelBarsCount || 0);
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
@@ -201,8 +202,7 @@ const MenuList = ({
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border:
-                      item === selectedItem
+                    border: (type === 'addOns' ? selectedContent?.addOns.some((selectedItem) => selectedItem?._id === item?._id) : item === selectedItem)
                         ? "2px solid blue"
                         : "1px solid #EAECF0",
                     boxShadow:
