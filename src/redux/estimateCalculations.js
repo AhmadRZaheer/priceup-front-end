@@ -6,6 +6,8 @@ export const getMeasumentSide = (state) =>
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;
+  export const getPageDesktopNavigation = (state) =>
+  state.estimateCalculations.handlePageDesktopNavigation;
 export const getQuoteState = (state) => 
 state.estimateCalculations.quoteState;
 const estimateCalcSlice = createSlice({
@@ -13,6 +15,7 @@ const estimateCalcSlice = createSlice({
   initialState: {
     quoteState:"create",
     handlePageNavigation: "existing",
+    handlePageDesktopNavigation: "Layout",
     measuments: [],
     selectedItem: [],
     content: {
@@ -197,6 +200,9 @@ const estimateCalcSlice = createSlice({
     setNavigation: (state, action) => {
       state.handlePageNavigation = action.payload;
     },
+    setNavigationDesktop: (state, action) => {
+      state.handlePageDesktopNavigation = action.payload;
+    },
     setQuoteState: (state, action) => {
       state.quoteState = action.payload;
     },
@@ -376,7 +382,6 @@ const estimateCalcSlice = createSlice({
       );
       let addOns = estimateData?.addOns?.map((id)=> listData?.addOns?.find((item)=>item?._id===id));
 
-      //  console.log(addOns,'reinit addons')
       state.content = {
         ...state.content,
         hardwareFinishes:hardwareFinishes,
@@ -452,6 +457,7 @@ export const {
   updateAddOnCount,
   updateMeasurements,
   addSelectedItem,
+  setNavigationDesktop,
   setNavigation,
   setQuoteState,
   setActiveMounting,

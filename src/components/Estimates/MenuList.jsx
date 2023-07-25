@@ -24,31 +24,28 @@ const MenuList = ({
   showSnackbar,
   count,
   thickness,
+  currentItem,
 }) => {
+  const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [sleeveOverCount, setSleeveOverCount] = useState(0);
-  const [towelBarsCount, setTowelBarsCount] = useState(0);
-
-  const selectedContent = useSelector(getContent);
-
-
+  const [selectedItem, setSelectedItem] = useState(currentItem || null);
+  // const [addonsSelectedItems,setAddonsSelectedItem] = useState(selectedContent?.addOns || []);
+  const [sleeveOverCount, setSleeveOverCount] = useState(selectedContent?.sleeveOverCount || 0);
+  const [towelBarsCount, setTowelBarsCount] = useState(selectedContent?.towelBarsCount || 0);
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
       dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
     }
   };
-
   const handleTowelBarsCount = (count) => {
     if (count >= 0) {
       setTowelBarsCount(count);
       dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
     }
   };
-
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     dispatch(setContent({ type: type, item: item }));
@@ -147,10 +144,7 @@ const MenuList = ({
               variant="outlined"
               InputProps={{
                 style: {
-                  color: "black",
-                  borderRadius: 10,
-                  border: "1px solid #cccccc",
-                  backgroundColor: "white",
+                  color: "white",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
@@ -160,29 +154,26 @@ const MenuList = ({
                 },
               }}
               sx={{
+                border: { md: "none", xs: "2px solid #423f57" },
+                borderRadius: { md: 0, xs: 2 },
                 color: { md: "black", xs: "white" },
+                background: "#14112c",
                 width: "100%",
+                mb: 1,
               }}
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
             >
-              <MenuItem
-                key="1/2"
-                value="1/2"
-              >
+              <MenuItem key="1/2" value="1/2">
                 1/2
               </MenuItem>
-              <MenuItem
-                key="3/8"
-                value="3/8"
-              >
+              <MenuItem key="3/8" value="3/8">
                 3/8
               </MenuItem>
             </TextField>
           </Box>
         )}
       </Box>
-
       {anchorEl ? (
         <Box
           sx={{
@@ -211,8 +202,7 @@ const MenuList = ({
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border:
-                      item === selectedItem
+                    border: (type === 'addOns' ? selectedContent?.addOns.some((selectedItem) => selectedItem?._id === item?._id) : item === selectedItem)
                         ? "2px solid blue"
                         : "1px solid #EAECF0",
                     boxShadow:

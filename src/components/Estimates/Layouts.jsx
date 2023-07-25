@@ -6,9 +6,15 @@ import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import {
   addSelectedItem,
   selectedItem,
+  setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 
-export default function Layout({ setStorePage }) {
+export default function Layout() {
+
+  const setStorePage = () => {
+    dispatch(setNavigationDesktop("Measurments"))
+
+  };
   const boxStyles = {
     minHeight: "182px",
     minWidth: "180px",
@@ -28,7 +34,7 @@ export default function Layout({ setStorePage }) {
   };
   const {
     data: layouts,
-    isFetching: loading,
+    isFetching: loading
   } = useFetchDataDefault();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
@@ -181,7 +187,7 @@ export default function Layout({ setStorePage }) {
                   fontSize: 18,
                   "&:hover": { backgroundColor: "#8477DA" },
                 }}
-                onClick={() => setStorePage("Measurments")}
+                onClick={setStorePage}
                 fullWidth
                 variant="contained"
               >

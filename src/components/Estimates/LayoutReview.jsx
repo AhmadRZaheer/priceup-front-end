@@ -8,6 +8,7 @@ import {
   getMeasumentSide,
   selectedItem,
   setInputContent,
+  setNavigationDesktop,
   setTotal,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
@@ -16,24 +17,34 @@ import ChannelTypeDesktop from "./ChannelorClamp";
 import { evaluateFormula } from "../../utilities/common";
 import { useMemo } from "react";
 
-const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
-  const { data: estimatesData } =
-    useFetchDataEstimate();
+const LayoutReview = ({ setClientDetailOpen }) => {
+  const setHandleEstimatesPages = () => {
+    dispatch(setNavigationDesktop("Measurments"));
+  };
+  const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const measurementSides = useSelector(getMeasumentSide);
   const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
-  const priceBySqft = useMemo(()=>{
+  const priceBySqft = useMemo(() => {
     const measurementObject = measurementSides.reduce((obj, item) => {
-       const { key, value } = item;
-       if (!obj[key]) {
-         obj[key] = [];
-       }
-       obj[key].push(value);
-       return obj;
-     }, {});
-     return evaluateFormula(currentLayout?.settings?.priceBySqftFormula,measurementObject?.a,measurementObject?.b,measurementObject?.c,measurementObject?.d,measurementObject?.e,measurementObject?.f);
-   },[measurementSides,currentLayout]);
+      const { key, value } = item;
+      if (!obj[key]) {
+        obj[key] = [];
+      }
+      obj[key].push(value);
+      return obj;
+    }, {});
+    return evaluateFormula(
+      currentLayout?.settings?.priceBySqftFormula,
+      measurementObject?.a,
+      measurementObject?.b,
+      measurementObject?.c,
+      measurementObject?.d,
+      measurementObject?.e,
+      measurementObject?.f
+    );
+  }, [measurementSides, currentLayout]);
 
   useEffect(() => {
     // hardware
@@ -95,7 +106,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
       slidingDoorSystemPrice +
       headerPrice;
 
-      // fabricating
+    // fabricating
     let fabricationPrice = 0;
     if (selectedContent.glassType.thickness === "1/2") {
       fabricationPrice =
@@ -131,34 +142,59 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
           estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
     }
 
-     //addons
-     const towelBar = estimatesData?.addOns?.find((item)=>item.slug === 'towel-bars');
-     const sleeveOver = estimatesData?.addOns?.find((item)=>item.slug === 'sleeve-over');
-     const towelBarFinish = (towelBar?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
-     const sleeveOverFinish = (sleeveOver?.finishes?.find((item)=>item.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0)
-     let otherAddons = 0;
-     selectedContent.addOns?.map((item)=>
-      {
-       const price = item?.finishes?.find((finish)=>finish.finish_id === selectedContent?.hardwareFinishes?._id)?.cost || 0;
-       otherAddons = otherAddons + (price * priceBySqft);
-      }
-     );
-     const addOnsTotal = (towelBarFinish * selectedContent.towelBarsCount) + (sleeveOverFinish * selectedContent.sleeveOverCount) + otherAddons;
- 
-     //glass
-     const glassPrice = (selectedContent?.glassType?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0)* priceBySqft;
-     
-     //glassTreatment
-     const glassTreatmentPrice = (selectedContent?.glassTreatment?.item?.options?.find((glass)=>glass.thickness === selectedContent?.glassType?.thickness)?.cost || 0);
-     
-     //labor price
+    //addons
+    const towelBar = estimatesData?.addOns?.find(
+      (item) => item.slug === "towel-bars"
+    );
+    const sleeveOver = estimatesData?.addOns?.find(
+      (item) => item.slug === "sleeve-over"
+    );
+    const towelBarFinish =
+      towelBar?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    const sleeveOverFinish =
+      sleeveOver?.finishes?.find(
+        (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      )?.cost || 0;
+    let otherAddons = 0;
+    selectedContent.addOns?.map((item) => {
+      const price =
+        item?.finishes?.find(
+          (finish) =>
+            finish.finish_id === selectedContent?.hardwareFinishes?._id
+        )?.cost || 0;
+      otherAddons = otherAddons + price * priceBySqft;
+    });
+    const addOnsTotal =
+      towelBarFinish * selectedContent.towelBarsCount +
+      sleeveOverFinish * selectedContent.sleeveOverCount +
+      otherAddons;
+
+    //glass
+    const glassPrice =
+      (selectedContent?.glassType?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0) * priceBySqft;
+
+    //glassTreatment
+    const glassTreatmentPrice =
+      selectedContent?.glassTreatment?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0;
+
+    //labor price
     const laborPrice =
       selectedContent?.people *
       selectedContent?.hours *
       estimatesData?.miscPricing?.hourlyRate;
 
     const total =
-    (hardwareTotals + fabricationPrice + addOnsTotal + glassPrice + glassTreatmentPrice) *
+      (hardwareTotals +
+        fabricationPrice +
+        addOnsTotal +
+        glassPrice +
+        glassTreatmentPrice) *
         estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
@@ -255,7 +291,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
               overflow: "auto",
             }}
           >
-
             <Box
               sx={{
                 display: "flex",
@@ -289,6 +324,8 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
                       showSnackbar={showSnackbar}
+                      estimatesData={estimatesData}
+                      currentItem={selectedContent?.hardwareFinishes}
                     />
                   </Box>
                 </Box>
@@ -310,6 +347,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       type={"handles"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.handles.count}
+                      currentItem={selectedContent?.handles?.item}
                     />
                   </Box>
                 </Box>
@@ -331,6 +369,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       type={"hinges"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.hinges.count}
+                      currentItem={selectedContent?.hinges?.item}
                     />
                   </Box>
                 </Box>
@@ -344,7 +383,13 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                   }}
                 >
                   <Box sx={{ width: "100%", display: "flex" }}>
-                    <Box sx={{ width: "100%", display: "flex", flexDirection: "column" }}>
+                    <Box
+                      sx={{
+                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <ChannelTypeDesktop
                         menuOptions={estimatesData?.channelOrClamps}
                         title={"Mounting"}
@@ -373,6 +418,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       type={"glassType"}
                       showSnackbar={showSnackbar}
                       thickness={selectedContent.glassType.thickness}
+                      currentItem={selectedContent?.glassType?.item}
                     />
                   </Box>
                 </Box>
@@ -394,6 +440,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       type={"slidingDoorSystem"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.slidingDoorSystem.count}
+                      currentItem={selectedContent?.slidingDoorSystem?.item}
                     />
                   </Box>
                 </Box>
@@ -415,6 +462,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       type={"header"}
                       showSnackbar={showSnackbar}
                       count={selectedContent.header.count}
+                      currentItem={selectedContent?.header?.item}
                     />
                   </Box>
                 </Box>
@@ -435,6 +483,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                       title={"Glass treatment"}
                       type={"glassTreatment"}
                       showSnackbar={showSnackbar}
+                      currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>
@@ -629,7 +678,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -804,7 +852,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -921,7 +968,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -980,7 +1026,6 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
                           })
                         )
                       }
-
                     />
                   </Box>
                 </Box>
@@ -1001,7 +1046,7 @@ const LayoutReview = ({ setClientDetailOpen, setHandleEstimatesPages }) => {
             <Box sx={{ width: { md: "150px", xs: "50%" } }}>
               <Button
                 fullWidth
-                onClick={() => setHandleEstimatesPages("Measurments")}
+                onClick={setHandleEstimatesPages}
                 sx={{
                   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                   color: "#344054",

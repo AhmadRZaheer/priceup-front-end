@@ -13,11 +13,19 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectedItem,
   setNavigation,
+  setNavigationDesktop,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { backendURL } from "../../utilities/common";
 
-const LayoutMeasurements = ({ setHandleEstimatesPages }) => {
+const LayoutMeasurements = () => {
+
+  const setHandleEstimatesPages = (item) => {
+    dispatch(setNavigationDesktop(item))
+
+  };
+
+
   const selectedData = useSelector(selectedItem);
 
   const validationSchema = Yup.object().shape({

@@ -6,11 +6,13 @@ import LayoutReview from "./LayoutReview";
 import Layout from "./Layouts";
 
 import Snackbars from "../Model/SnackBar";
-import { evaluateFormula } from "../../utilities/common";
+import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
+import { useSelector } from "react-redux";
 
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const [StorePage, setStorePage] = useState("Layout");
+  const Navigation = useSelector(getPageDesktopNavigation);
+  console.log(Navigation,'nv')
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -47,12 +49,12 @@ const Index = () => {
           borderBottomLeftRadius: 30,
         }}
       >
-        {StorePage === "Layout" && <Layout setStorePage={setStorePage} />}
-        {StorePage === "Measurments" && (
-          <LayoutMeasurements setHandleEstimatesPages={setStorePage} />
+        {Navigation === "Layout" && <Layout  />}
+        {Navigation === "Measurments" && (
+          <LayoutMeasurements  />
         )}
-        {StorePage === "review" && (        
-          <LayoutReview setHandleEstimatesPages={setStorePage} setClientDetailOpen={setClientDetailOpen} />
+        {Navigation === "review" && (        
+          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
         )}
       </Box>
 
