@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
-import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
+import { useCreateEstimates, useEditEstimates } from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -45,11 +45,16 @@ export default function ClientDetailsModel({
     isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateEstimates();
+  const {
+    mutateEdit,
+    isError: ErrorForAddEidt,
+    isSuccess: CreatedSuccessfullyEdit,
+  } = useEditEstimates();
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
-  
+  const updatecheck = useSelector(getQuoteState);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -61,7 +66,7 @@ export default function ClientDetailsModel({
     validationSchema,
     onSubmit: (values) => {
       const data = estimatesContent?.addOns;
-  const addOnIds = data?.map((obj) => obj?._id);
+      const addOnIds = data?.map((obj) => obj?._id);
       const estimate = {
         layout_id: estimatesLayout?._id,
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
@@ -119,7 +124,11 @@ export default function ClientDetailsModel({
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
       };
-      mutate({ customerData: values, estimateData: estimate });
+      if (updatecheck === "create") {
+        mutate({ customerData: values, estimateData: estimate });
+      } else {
+        mutateEdit({ customerData: values, estimateData: estimate });
+      }
       handleCancel();
     },
   });
@@ -187,12 +196,12 @@ export default function ClientDetailsModel({
                       InputProps={{
                         style: {
                           color: "white",
-                          paddingY: 30, 
+                          paddingY: 30,
                         },
                       }}
                       style={{
                         height: 40,
-                        border:  "2px solid #423f57",
+                        border: "2px solid #423f57",
                         borderRadius: 3,
                         color: { md: "black", xs: "white" },
                         backgroundColor: "rgba(22,19,48)",
@@ -232,12 +241,12 @@ export default function ClientDetailsModel({
                       InputProps={{
                         style: {
                           color: "white",
-                          paddingY: 30, 
+                          paddingY: 30,
                         },
                       }}
                       style={{
                         height: 40,
-                        border:  "2px solid #423f57",
+                        border: "2px solid #423f57",
                         borderRadius: 3,
                         color: { md: "black", xs: "white" },
                         backgroundColor: "rgba(22,19,48)",
@@ -274,12 +283,12 @@ export default function ClientDetailsModel({
                   InputProps={{
                     style: {
                       color: "white",
-                      paddingY: 30, 
+                      paddingY: 30,
                     },
                   }}
                   style={{
                     height: 40,
-                    border:  "2px solid #423f57",
+                    border: "2px solid #423f57",
                     borderRadius: 3,
                     color: { md: "black", xs: "white" },
                     backgroundColor: "rgba(22,19,48)",
@@ -312,12 +321,12 @@ export default function ClientDetailsModel({
                   InputProps={{
                     style: {
                       color: "white",
-                      paddingY: 30, 
+                      paddingY: 30,
                     },
                   }}
                   style={{
                     height: 40,
-                    border:  "2px solid #423f57",
+                    border: "2px solid #423f57",
                     borderRadius: 3,
                     color: { md: "black", xs: "white" },
                     backgroundColor: "rgba(22,19,48)",
