@@ -16,9 +16,12 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
+import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
+import { SelectedImage } from "./selctedImage";
 import QuotesHeader from "./QuotesHeader";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
+  console.log(selectedData, "selectedData");
 
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
@@ -123,7 +126,7 @@ const LayoutMeasurements = () => {
                 background: { md: "#D9D9D9", xs: "#100D24" },
                 gap: 4,
                 borderRadius: "8px",
-                overflow: "auto"
+                overflow: "auto",
               }}
             >
               <Box
@@ -200,7 +203,7 @@ const LayoutMeasurements = () => {
                   order: { md: 2, xs: -1 },
                 }}
               >
-                {selectedData?.image ===  "" ? (
+                {selectedData?.image === "" ? (
                   <Box
                     sx={{
                       width: 40,
@@ -214,13 +217,17 @@ const LayoutMeasurements = () => {
                     <CircularProgress />
                   </Box>
                 ) : (
+                  <Box>
                   <img
-                    width="150px"
-                    height="300px"
+                    width="300px"
+                    height="350px"
                     src={`${backendURL}/${selectedData?.image}`}
                     alt="Selected"
                   />
+                  </Box>
+                  // <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
+
               </Box>
             </Box>
 
