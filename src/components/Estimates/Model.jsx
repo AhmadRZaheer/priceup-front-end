@@ -6,11 +6,12 @@ import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import { TextField } from "@material-ui/core";
-import { useCreateEstimates } from "../../utilities/ApiHooks/Estimate";
+import { useCreateEstimates, useEditEstimates } from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getMeasumentSide,
+  getQuoteState,
   getTotal,
   selectedItem,
   setNavigation,
@@ -45,10 +46,16 @@ export default function ClientDetailsModel({
     isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateEstimates();
+  const {
+    mutateEdit,
+    isError: ErrorForAddEidt,
+    isSuccess: CreatedSuccessfullyEdit,
+  } = useEditEstimates();
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
+  const updatecheck = useSelector(getQuoteState)
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -118,7 +125,12 @@ export default function ClientDetailsModel({
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
       };
-      mutate({ customerData: values, estimateData: estimate });
+      if (updatecheck === "create") {
+        mutate({ customerData: values, estimateData: estimate });
+      } else {
+        mutateEdit({ customerData: values, estimateData: estimate });
+      }
+      // mutate({ customerData: values, estimateData: estimate });
       handleCancel();
       window.location.href = "/Estimates";
     },

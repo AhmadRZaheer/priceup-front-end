@@ -82,3 +82,34 @@ export const useCreateEstimates = () => {
 
   return useMutation(handleCreate);
 };
+
+export const useEditEstimates = () => {
+  const handleEdit = async (updatedEstimate) => {
+
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/estimates/${updatedEstimate?.id}`,
+        {
+          name: updatedEstimate?.hardwareLabel,
+          Email: updatedEstimate?.thickness,
+          passowrd: updatedEstimate?.passowrd,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
