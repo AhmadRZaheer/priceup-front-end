@@ -217,13 +217,15 @@ const LayoutMeasurements = () => {
                     <CircularProgress />
                   </Box>
                 ) : (
-                  // <img
-                  //   width="150px"
-                  //   height="300px"
-                  //   src={`${backendURL}/${selectedData?.image}`}
-                  //   alt="Selected"
-                  // />
-                  <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
+                  <Box>
+                  <img
+                    width="300px"
+                    height="350px"
+                    src={`${backendURL}/${selectedData?.image}`}
+                    alt="Selected"
+                  />
+                  </Box>
+                  // <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
 
               </Box>
