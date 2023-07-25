@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getMeasumentSide,
+  getQuoteState,
   getTotal,
   selectedItem,
   setNavigation,
