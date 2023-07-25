@@ -53,8 +53,8 @@ const LayoutMeasurements = () => {
           value,
         }));
       dispatch(updateMeasurements(measurementsArray));
-
-      dispatch(setNavigation("review"));
+      setHandleEstimatesPages("review");
+      // dispatch(setNavigation("review"));
       resetForm();
     },
   });
@@ -282,9 +282,9 @@ const LayoutMeasurements = () => {
                     disabled={Object.keys(formik.values).some(
                       (key) => !formik.values[key]
                     )}
-                    onClick={() => {
-                      setHandleEstimatesPages("review");
-                    }}
+                    // onClick={() => {
+                    //   setHandleEstimatesPages("review");
+                    // }}
                     sx={{
                       height: 40,
                       fontSize: 20,

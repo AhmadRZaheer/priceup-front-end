@@ -412,6 +412,23 @@ const CampanySetting = () => {
               justifyContent: "space-between",
             }}
           >
+            <Typography>Hinge Cutout (3/8in)</Typography>
+            <TextField
+              sx={{ paddingRight: 19 }}
+              size="small"
+              type="number"
+              name="fabricatingPricing.hingeCutoutThreeByEightInch"
+              value={formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch}
+              onChange={formik.handleChange}
+            />
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography>Miter (1/2in)</Typography>
             <TextField
               sx={{ paddingRight: 19 }}
