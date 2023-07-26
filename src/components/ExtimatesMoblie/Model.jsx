@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getMeasumentSide,
+  getQuoteId,
   getQuoteState,
   getTotal,
   selectedItem,
@@ -50,7 +51,7 @@ export default function ClientDetailsModel({
     isSuccess: CreatedSuccessfully,
   } = useCreateEstimates();
   const {
-    mutateEdit,
+    mutate: mutateEdit,
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
@@ -59,6 +60,8 @@ export default function ClientDetailsModel({
   const estimatesLayout = useSelector(selectedItem);
   const measurements = useSelector(getMeasumentSide);
   const updatecheck = useSelector(getQuoteState);
+  const quoteId = useSelector(getQuoteId);
+
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -71,8 +74,8 @@ export default function ClientDetailsModel({
     onSubmit: (values) => {
       const data = estimatesContent?.addOns;
       const addOnIds = data?.map((obj) => obj?._id);
-      const estimate = {
-        layout_id: estimatesLayout?._id,
+      let estimate = {
+        
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
         handles: {
           type: estimatesContent?.handles?.item?._id,
@@ -129,17 +132,19 @@ export default function ClientDetailsModel({
         measurements: measurements,
       };
       if (updatecheck === "create") {
-        mutate({ customerData: values, estimateData: estimate });
+        mutate({ customerData: values, estimateData: {...estimate,layout_id: estimatesLayout?._id} });
       } else {
-        mutateEdit({ customerData: values, estimateData: estimate });
+        mutateEdit({ customerData: values, estimateData: estimate,id:quoteId });
       }
+      // mutateEdit({ customerData: values, estimateData: estimate });
+// 
       handleCancel();
     },
   });
 
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      showSnackbar("Estimate created successfully", "success");
+      showSnackbar("Estimate Updated successfully", "success");
       dispatch(setNavigation("existing"));
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";

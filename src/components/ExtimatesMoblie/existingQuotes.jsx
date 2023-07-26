@@ -16,18 +16,13 @@ import {
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
-// import { useState } from "react";
 
 export default function ExitingQuotes() {
-  // const [selectedQuote, setSelectedQuote] = useState(null);
-  // console.log(selectedQuote);
   const { data: estimates, isFetching } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
   const dispatch = useDispatch();
-  // console.log(estimateListData, "selectedQuote ");
   const handleIconButtonClick = (item) => {
-    // setSelectedQuote(item);
-    dispatch(initializeStateForEditQuote({ estimateData: item, listData: estimateListData }));
+    dispatch(initializeStateForEditQuote({ estimateData: item, listData: estimateListData, quotesId : item._id }));
     dispatch(setNavigation("review"));
   };
   const handleCreateQuote = () => {

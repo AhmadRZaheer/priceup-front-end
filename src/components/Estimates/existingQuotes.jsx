@@ -22,20 +22,15 @@ export default function ExistingQuotes() {
     useFetchDataEstimate();
   const dispatch = useDispatch();
 
+  // const dispatch = useDispatch();
   const handleIconButtonClick = (item) => {
-    console.log(item);
-    dispatch(
-      initializeStateForEditQuote({
-        estimateData: item,
-        listData: estimateListData,
-      })
-    );
+    dispatch(initializeStateForEditQuote({ estimateData: item, listData: estimateListData, quotesId : item._id }));
     dispatch(setNavigationDesktop("review"));
   };
   const handleCreateQuote = () => {
     dispatch(setQuoteState("create"));
-    window.location.href = "/Estimates/Steps";
-  };
+    dispatch(setNavigationDesktop("Layout"));
+  }
   return (
     <>
       {isFetching || estimateDataFetching ? (

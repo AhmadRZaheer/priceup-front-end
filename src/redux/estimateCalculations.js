@@ -8,11 +8,14 @@ export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;
   export const getPageDesktopNavigation = (state) =>
   state.estimateCalculations.handlePageDesktopNavigation;
+export const getQuoteId = (state) => 
+state.estimateCalculations.quoteId
 export const getQuoteState = (state) => 
 state.estimateCalculations.quoteState;
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
+    quoteId: null,
     quoteState:"create",
     handlePageNavigation: "existing",
     handlePageDesktopNavigation: "Layout",
@@ -328,9 +331,11 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      const { estimateData, listData, quoteState } = action.payload;
+      const { estimateData, listData, quoteState , quotesId } = action.payload;
       console.log(listData, "list");
       console.log(estimateData, "list2");
+       
+      state.quoteId = quotesId
 
       let hardwareFinishes = null;
       hardwareFinishes = listData?.hardwareFinishes?.find(

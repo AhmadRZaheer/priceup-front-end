@@ -144,7 +144,10 @@ const MenuList = ({
               variant="outlined"
               InputProps={{
                 style: {
-                  color: "white",
+                  color: "black",
+                  borderRadius: 10,
+                  border: "1px solid #cccccc",
+                  backgroundColor: "white",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
@@ -157,7 +160,7 @@ const MenuList = ({
                 border: { md: "none", xs: "2px solid #423f57" },
                 borderRadius: { md: 0, xs: 2 },
                 color: { md: "black", xs: "white" },
-                background: "#14112c",
+                // background: "#14112c",
                 width: "100%",
                 mb: 1,
               }}

@@ -84,17 +84,18 @@ export const useCreateEstimates = () => {
 };
 
 export const useEditEstimates = () => {
-  const handleEdit = async (updatedEstimate) => {
-
+  const handleEditEstimate = async (updatedEstimate) => {
+    console.log(updatedEstimate, "up")
     const token = localStorage.getItem("token");
+
+    const decodedToken = parseJwt(token);
 
     try {
       const response = await axios.put(
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
-          name: updatedEstimate?.hardwareLabel,
-          Email: updatedEstimate?.thickness,
-          passowrd: updatedEstimate?.passowrd,
+          customerData: updatedEstimate.customerData,
+          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -111,5 +112,5 @@ export const useEditEstimates = () => {
     }
   };
 
-  return useMutation(handleEdit);
+  return useMutation(handleEditEstimate);
 };
