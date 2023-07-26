@@ -3,7 +3,14 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Logo from "../../Assets/purplelogo.svg";
 import "./MobileNavBar.scss";
 import React, { useState } from "react";
-import { Drawer, IconButton, Backdrop, Box, Button, Tooltip } from "@mui/material";
+import {
+  Drawer,
+  IconButton,
+  Backdrop,
+  Box,
+  Button,
+  Tooltip,
+} from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
@@ -34,7 +41,8 @@ function MobileBar() {
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-    navigate("/login");
+    // navigate("/login");
+    window.location.href = "/login";
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
@@ -106,20 +114,20 @@ function MobileBar() {
               }}
             >
               <Box>
-              <Tooltip title="Logout" placement="top" arrow >
-                <Button
-                  sx={{
-                    width: 240,
-                    color: "white",
-                    margin: 2,
+                <Tooltip title="Logout" placement="top" arrow>
+                  <Button
+                    sx={{
+                      width: 240,
+                      color: "white",
+                      margin: 2,
 
-                    backgroundColor: "#8477da",
-                  }}
-                  variant="contained"
-                  onClick={Logout}
-                >
-                  Logout
-                </Button>
+                      backgroundColor: "#8477da",
+                    }}
+                    variant="contained"
+                    onClick={Logout}
+                  >
+                    Logout
+                  </Button>
                 </Tooltip>
               </Box>
               <div className="bottom">
