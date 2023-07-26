@@ -37,7 +37,7 @@ export default function AddEditGlassType({
   close,
   isEdit,
   data,
-  finishesRefetch,
+  refetch,
   showSnackbar,
 }) {
 
@@ -62,13 +62,13 @@ export default function AddEditGlassType({
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
-      finishesRefetch();
+      refetch();
       showSnackbar("Created Successfully ", "success");
       close();
     }
 
     if (SuccessForEdit) {
-      finishesRefetch();
+      refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
     }
@@ -79,28 +79,28 @@ export default function AddEditGlassType({
   };
 
   const handleEditClick = (props) => {
-    const id = data;
-    editGlassType(props, id);
+    
+    editGlassType({glassTypeData:props, id:data?._id});
   };
 
   const validationSchema = Yup.object().shape({
-    hardwareLabel: Yup.string().required("Hardware Label is required"),
+    // hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
-    thickness: Yup.string().required("Thickness is required"),
+    // thickness: Yup.string().required("Thickness is required"),
   });
 
   const formik = useFormik({
     initialValues: isEdit
       ? {
-          hardwareLabel: data?.name,
+          name: data?.name,
           image: "",
-          thickness: data?.holesNeeded,
+          // thickness: data?.holesNeeded,
           id: data?._id,
         }
       : {
-          hardwareLabel: "",
+          name: "",
           image: "",
-          thickness: "",
+          // thickness: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -192,25 +192,25 @@ export default function AddEditGlassType({
             )}
           </Box>
           <Box>
-            <Typography>Hardware Label</Typography>
+            <Typography>Name</Typography>
             <TextField
-              placeholder="Hardware Label"
-              name="hardwareLabel"
-              value={formik.values.hardwareLabel}
+              placeholder="Name"
+              name="name"
+              value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={
-                formik.touched.hardwareLabel &&
-                Boolean(formik.errors.hardwareLabel)
+                formik.touched.name &&
+                Boolean(formik.errors.name)
               }
               helperText={
-                formik.touched.hardwareLabel && formik.errors.hardwareLabel
+                formik.touched.name && formik.errors.name
               }
               variant="outlined"
               fullWidth
             />
           </Box>
-
+{/* 
           <Box>
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
@@ -229,7 +229,7 @@ export default function AddEditGlassType({
                 helperText={formik.touched.thickness && formik.errors.thickness}
               />
             </FormControl>
-          </Box>
+          </Box> */}
           <Box
             onClick={formik.handleSubmit}
             sx={{ display: "flex", gap: 2, marginTop: 2 }}

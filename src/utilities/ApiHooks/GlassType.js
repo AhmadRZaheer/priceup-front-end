@@ -27,12 +27,34 @@ export const useFetchDataGlassType = () => {
   });
 };
 
-
 export const useDeleteGlassType = () => {
-  const handleDelete = async (id) => {
+  const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`${backendURL}/glassTypes/${id}`, {
+      const response = await axios.delete(
+        `${backendURL}/glassTypes/${props.glassTypeId}/${props.optionId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+export const useDeleteGlassTypeFull = () => {
+  const handleDelete = async (props) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/glassTypes/${props}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
@@ -61,9 +83,9 @@ export const useCreateGlassType = () => {
         {
           name: props.hardwareLabel,
           company_id: decodedToken?.company_id,
-          thickness: "both",
+          // thickness: "both",
           slug: slug,
-          holesNeeded: props.thickness,
+          // holesNeeded: props.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -84,16 +106,17 @@ export const useCreateGlassType = () => {
 };
 
 export const useEditGlassType = () => {
-  const handleEdit = async (updatedHardware) => {
-
+  const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-
+    // console.log(updatedHardware, "hardwair input");
     try {
       const response = await axios.put(
-        `${backendURL}/glassTypes/${updatedHardware?.id}`,
+        `${backendURL}/glassTypes/${props?.id}`,
         {
-          name: updatedHardware?.hardwareLabel,
-          holesNeeded: updatedHardware?.thickness,
+          ...(props.optionsData ? { options: props.optionsData } : {}),
+          ...(props.glassTypeData
+            ? { name: props.glassTypeData.name, image: props.glassTypeData.image }
+            : {}),
         },
         {
           headers: { Authorization: `Bearer ${token}` },

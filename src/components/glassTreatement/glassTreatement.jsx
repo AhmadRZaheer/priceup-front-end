@@ -1,158 +1,69 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import "./glassTreatement.scss";
-import ModeIcon from "@mui/icons-material/Mode";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { DataGrid } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import { useDeleteGlassTreatement, useFetchDataGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
-import { userColumnsHardware } from "../../customerTableSource";
-import AddEditGlassTreatement from "../Model/AddGlassTreatement";
-import Snackbars from "../Model/SnackBar";
-
+import { useDispatch } from "react-redux";
+import {
+  addHardware,
+} from "../../redux/hardwareSlice";
+import { Box } from "@mui/material";
+import userImg from "../../Assets/username1.svg";
+import AddEditModel from "../Model/AddEditFinish";
+import GlassTreatementComponent from "./glassTreatementComponent";
 
 const GlassTreatementTable = () => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const { data: glassTreatementData, refetch: glassTreatementRefetch } =
-    useFetchDataGlassTreatement();
-  const {
-    mutate: deleteGlassTreatement,
-    isSuccess: deleteSuccess,
-    isLoading: loaderForDelete,
-  } = useDeleteGlassTreatement();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
-  const [edit, setEdit] = React.useState(null);
-  const [isEdit, setIsEdit] = React.useState(false);
-  const [matchingId, setMatchingId] = useState("");
-
-  const handleOpen = () => {
-    setOpen(true);
-    setIsEdit(false);
-  };
   const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data, isEditAble) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
+
+  const handleHeaderClick = (selectedImage) => {
+    const newId = Date.now() % 10000;
+    const newHardware = {
+      id: newId,
+      name: "new ",
+      img: userImg,
+      username: "New",
+      PartNumber: "",
+      Cost: "",
+      Price: "",
+      Status: "",
+    };
+
+    dispatch(addHardware(newHardware));
   };
 
-  const handleFinishDelete = (id) => {
-    deleteGlassTreatement(id);
-    setMatchingId(id);
-  };
-
-  useEffect(() => {
-    if (deleteSuccess) {
-      glassTreatementRefetch();
-      showSnackbar("Finish is Deleted Successfully ", "error");
-    }
-  }, [deleteSuccess]);
-  const actionColumn = [
-    {
-      field: " ",
-      width: 200,
-      renderCell: (params) => {
-        const id = params.row._id;
-        const isMatchingId = id === matchingId;
-        return (
-          <div className="cellAction">
-            <div
-              className="deleteButton"
-              onClick={() => handleFinishDelete(id)}
-            >
-              {isMatchingId && loaderForDelete ? (
-                <CircularProgress size={24} color="warning" />
-              ) : (
-                <DeleteIcon />
-              )}
-            </div>
-            <div
-              className="viewButton"
-              onClick={() => handleOpenEdit(params.row)}
-            >
-              <ModeIcon />
-            </div>
-          </div>
-        );
-      },
-    },
-  ];
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
   return (
     <>
     <Box sx={{
        backgroundColor: "white",
-       height: "100vh",
+       height: "98.2vh",
        borderTopLeftRadius: 30,
        borderBottomLeftRadius: 30,
-       pl: 1
+       paddingTop: 2,
+       paddingLeft: 1
     }}>
-      <div className="page-title">
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignContent: "center",
-            paddingTop: 15,
-            paddingBottom: 15,
-            paddingLeft: "10px",
-            paddingRight: "10px",
-          }}
-        >
-          <Typography sx={{fontSize: 30}}>GlassTreatement</Typography>
-          <div
-            style={{
-              padding: 4,
-            }}
-          >
-            <IconButton onClick={handleOpen}>
-              <Add style={{ color: "rgb(65, 106, 238)" }} />
-            </IconButton>
-          </div>{" "}
-        </div>
+      <div
+        style={{
+          marginLeft: "15px",
+          marginRight: "15px",
+          background: "rgb(232, 232, 232)",
+        }}
+      >
       </div>
-      <Box sx={{ border: "1px solid #EAECF0", margin: 2 }}>
+      <Box
+        sx={{
+          border: "1px solid rgb(232, 232, 232)",
+          margin: 2,
+        }}
+      >
         <div className="hardwareTable">
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={glassTreatementData}
-            columns={userColumnsHardware.concat(actionColumn)}
-            paginationModel={{ page: 0, pageSize: 8 }}
-          />
+          <div className="hardwareTable">
+            <GlassTreatementComponent type={"Glass Treatement"} />
+          </div>
         </div>
       </Box>
-
-      <AddEditGlassTreatement
+      <AddEditModel
         open={open}
         close={handleClose}
-        data={edit}
-        isEdit={isEdit}
-        finishesRefetch={glassTreatementRefetch}
-        showSnackbar={showSnackbar}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
+        handleHeaderClick={handleHeaderClick}
       />
       </Box>
     </>

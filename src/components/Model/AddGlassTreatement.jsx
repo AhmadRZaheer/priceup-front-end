@@ -9,14 +9,10 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import {
   CircularProgress,
-  FormControl,
   TextField,
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import {
-  useCreateGlassTreatement,
-  useEditGlassTreatement,
-} from "../../utilities/ApiHooks/GlassTreatement";
+import { useCreateGlassTreatement, useEditGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
 
 const style = {
   position: "absolute",
@@ -37,7 +33,7 @@ export default function AddEditGlassTreatement({
   close,
   isEdit,
   data,
-  finishesRefetch,
+  refetch,
   showSnackbar,
 }) {
 
@@ -60,16 +56,15 @@ export default function AddEditGlassTreatement({
     isSuccess: SuccessForEdit,
   } = useEditGlassTreatement();
 
-
   React.useEffect(() => {
     if (CreatedSuccessfully) {
-      finishesRefetch();
+      refetch();
       showSnackbar("Created Successfully ", "success");
       close();
     }
 
     if (SuccessForEdit) {
-      finishesRefetch();
+      refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
     }
@@ -80,29 +75,29 @@ export default function AddEditGlassTreatement({
   };
 
   const handleEditClick = (props) => {
-    const id = data;
-    editGlassTreatement(props, id);
+    editGlassTreatement({glassTreatementData:props, id:data?._id});
+    // editGlassTreatement(props, id);
   };
 
   const validationSchema = Yup.object().shape({
-    hardwareLabel: Yup.string().required("Hardware Label is required"),
+    // hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
-    thickness: Yup.string().required("Thickness is required"),
+    // thickness: Yup.string().required("Thickness is required"),
   });
 
   const formik = useFormik({
     initialValues: isEdit
-      ? {
-          hardwareLabel: data?.name,
-          image: "",
-          thickness: data?.holesNeeded,
-          id: data?._id,
-        }
-      : {
-          hardwareLabel: "",
-          image: "",
-          thickness: "",
-        },
+    ? {
+      name: data?.name,
+      image: "",
+      // thickness: data?.holesNeeded,
+      id: data?._id,
+    }
+  : {
+      name: "",
+      image: "",
+      // thickness: "",
+    },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -121,7 +116,7 @@ export default function AddEditGlassTreatement({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)",
+          backdropFilter: "blur(2px)", 
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -134,6 +129,7 @@ export default function AddEditGlassTreatement({
             }}
           >
             <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
+
           </Box>
 
           <Box>
@@ -182,6 +178,7 @@ export default function AddEditGlassTreatement({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
+
                   </span>
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -191,25 +188,25 @@ export default function AddEditGlassTreatement({
             )}
           </Box>
           <Box>
-            <Typography>Hardware Label</Typography>
+            <Typography>Name</Typography>
             <TextField
-              placeholder="Hardware Label"
-              name="hardwareLabel"
-              value={formik.values.hardwareLabel}
+              placeholder="Name"
+              name="name"
+              value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={
-                formik.touched.hardwareLabel &&
-                Boolean(formik.errors.hardwareLabel)
+                formik.touched.name &&
+                Boolean(formik.errors.name)
               }
               helperText={
-                formik.touched.hardwareLabel && formik.errors.hardwareLabel
+                formik.touched.name && formik.errors.name
               }
               variant="outlined"
               fullWidth
             />
           </Box>
-
+{/* 
           <Box>
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
@@ -228,7 +225,7 @@ export default function AddEditGlassTreatement({
                 helperText={formik.touched.thickness && formik.errors.thickness}
               />
             </FormControl>
-          </Box>
+          </Box> */}
           <Box
             onClick={formik.handleSubmit}
             sx={{ display: "flex", gap: 2, marginTop: 2 }}

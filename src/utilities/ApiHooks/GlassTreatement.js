@@ -29,10 +29,31 @@ export const useFetchDataGlassTreatement = () => {
 
 
 export const useDeleteGlassTreatement = () => {
-  const handleDelete = async (id) => {
+  const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`${backendURL}/glassTreatments/${id}`, {
+      const response = await axios.delete(`${backendURL}/glassTreatments/${props.glassTreatementId}/${props.optionId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      console.error("Delete failed", error);
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+export const useDeleteGlassTreatementFull = () => {
+  const handleDelete = async (props) => {
+    console.log(props ,"full delete")
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/glassTreatments/${props}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
@@ -84,16 +105,18 @@ export const useCreateGlassTreatement = () => {
 };
 
 export const useEditGlassTreatement = () => {
-  const handleEdit = async (updatedHardware) => {
+  const handleEdit = async (props) => {
 
     const token = localStorage.getItem("token");
-
+    console.log(props,"data edit")
     try {
       const response = await axios.put(
-        `${backendURL}/glassTreatments/${updatedHardware?.id}`,
+        `${backendURL}/glassTreatments/${props?.id}`,
         {
-          name: updatedHardware?.hardwareLabel,
-          holesNeeded: updatedHardware?.thickness,
+          ...(props.optionsData ? { options: props.optionsData } : {}),
+          ...(props.glassTreatementData
+            ? { name: props.glassTreatementData.name, image: props.glassTreatementData.image }
+            : {}),
         },
         {
           headers: { Authorization: `Bearer ${token}` },
