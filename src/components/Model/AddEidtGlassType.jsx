@@ -7,11 +7,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import {
-  CircularProgress,
-  FormControl,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, FormControl, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateGlassType,
@@ -40,9 +36,8 @@ export default function AddEditGlassType({
   refetch,
   showSnackbar,
 }) {
-
   const [selectedImage, setSelectedImage] = useState(null);
-
+  console.log(isEdit, "isedit");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -66,21 +61,22 @@ export default function AddEditGlassType({
       showSnackbar("Created Successfully ", "success");
       close();
     }
+  }, [CreatedSuccessfully]);
 
+  React.useEffect(() => {
     if (SuccessForEdit) {
       refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
     }
-  }, [CreatedSuccessfully, SuccessForEdit]);
+  }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
     addGlassType(props);
   };
 
   const handleEditClick = (props) => {
-    
-    editGlassType({glassTypeData:props, id:data?._id});
+    editGlassType({ glassTypeData: props, id: data?._id });
   };
 
   const validationSchema = Yup.object().shape({
@@ -120,7 +116,7 @@ export default function AddEditGlassType({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", 
+          backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -133,7 +129,6 @@ export default function AddEditGlassType({
             }}
           >
             <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
-
           </Box>
 
           <Box>
@@ -182,7 +177,6 @@ export default function AddEditGlassType({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-
                   </span>
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -199,18 +193,13 @@ export default function AddEditGlassType({
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={
-                formik.touched.name &&
-                Boolean(formik.errors.name)
-              }
-              helperText={
-                formik.touched.name && formik.errors.name
-              }
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
               variant="outlined"
               fullWidth
             />
           </Box>
-{/* 
+          {/* 
           <Box>
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
@@ -230,10 +219,7 @@ export default function AddEditGlassType({
               />
             </FormControl>
           </Box> */}
-          <Box
-            onClick={formik.handleSubmit}
-            sx={{ display: "flex", gap: 2, marginTop: 2 }}
-          >
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
@@ -243,6 +229,7 @@ export default function AddEditGlassType({
             </Button>
             <Button
               fullWidth
+              onClick={formik.handleSubmit}
               variant="contained"
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}

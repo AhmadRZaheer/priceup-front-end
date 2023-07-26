@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
-import { Add, Delete, Edit} from "@mui/icons-material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 // import {
 //   useDeleteHardwares,
@@ -13,7 +9,11 @@ import { backendURL } from "../../utilities/common";
 import AddEditHardware from "../Model/AddEditHardware";
 import Snackbars from "../Model/SnackBar";
 // import FinishItem from "./FinishItem";
-import { useDeleteGlassType, useDeleteGlassTypeFull, useFetchDataGlassType } from "../../utilities/ApiHooks/GlassType";
+import {
+  useDeleteGlassType,
+  useDeleteGlassTypeFull,
+  useFetchDataGlassType,
+} from "../../utilities/ApiHooks/GlassType";
 import FinishItem from "../HardwareTable/FinishItem";
 import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Model/AddEidtGlassType";
@@ -44,14 +44,12 @@ const GlassTypeComponent = ({ type }) => {
     refetch: GlassTypeRefetch,
     isFetching: GlassTypeFetching,
   } = useFetchDataGlassType(type);
-  const {
-    mutate: deleteGlassType,
-    isSuccess: deleteSuccess,
-  } = useDeleteGlassTypeFull();
+  const { mutate: deleteGlassType, isSuccess: deleteSuccess } =
+    useDeleteGlassTypeFull();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-  console.log(GlassTypeData, "GlassTypeData")
+  console.log(GlassTypeData, "GlassTypeData");
 
   const handleOpen = (data) => {
     setOpen(true);
@@ -76,8 +74,6 @@ const GlassTypeComponent = ({ type }) => {
       showSnackbar("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
-
-
 
   return (
     <>
@@ -183,7 +179,8 @@ const GlassTypeComponent = ({ type }) => {
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            maxHeight: "600px",
+            // minHeight: "100px"
+            height: "75vh",
             overflowY: "scroll",
           }}
         >
@@ -212,14 +209,10 @@ const GlassTypeComponent = ({ type }) => {
                 </Box>
                 <Box>
                   <IconButton>
-                    <Delete
-                      onClick={() => handleHardwareDelete(entry._id)}
-                    />
+                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
                   <IconButton>
-                    <Edit
-                      onClick={() => handleOpenEdit(entry)}
-                    />
+                    <Edit onClick={() => handleOpenEdit(entry)} />
                   </IconButton>
                 </Box>
               </Box>

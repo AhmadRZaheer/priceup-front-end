@@ -7,11 +7,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import {
-  CircularProgress,
-  FormControl,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, FormControl, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 
 import {
@@ -41,7 +37,6 @@ export default function AddEditFinish({
   finishesRefetch,
   showSnackbar,
 }) {
-
   const [selectedImage, setSelectedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
@@ -121,7 +116,7 @@ export default function AddEditFinish({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", 
+          backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -229,10 +224,7 @@ export default function AddEditFinish({
               />
             </FormControl>
           </Box>
-          <Box
-            onClick={formik.handleSubmit}
-            sx={{ display: "flex", gap: 2, marginTop: 2 }}
-          >
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
@@ -243,6 +235,7 @@ export default function AddEditFinish({
             <Button
               fullWidth
               variant="contained"
+              onClick={formik.handleSubmit}
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >

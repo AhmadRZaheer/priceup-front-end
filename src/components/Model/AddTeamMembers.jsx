@@ -8,10 +8,7 @@ import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 
 import { useState } from "react";
-import {
-  CircularProgress,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateTeamMembers,
@@ -88,7 +85,6 @@ export default function AddTeamMembers({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address"),
 
-
     image: Yup.mixed(),
   });
 
@@ -125,7 +121,7 @@ export default function AddTeamMembers({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", 
+          backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -224,10 +220,7 @@ export default function AddTeamMembers({
               fullWidth
             />
           </Box>
-          <Box
-            onClick={formik.handleSubmit}
-            sx={{ display: "flex", gap: 2, marginTop: 2 }}
-          >
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
@@ -238,6 +231,7 @@ export default function AddTeamMembers({
             <Button
               fullWidth
               variant="contained"
+              onClick={formik.handleSubmit}
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >

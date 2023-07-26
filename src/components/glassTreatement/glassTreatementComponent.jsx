@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
-import { Add, Delete, Edit} from "@mui/icons-material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import Snackbars from "../Model/SnackBar";
-import { useDeleteGlassTreatementFull, useFetchDataGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
+import {
+  useDeleteGlassTreatementFull,
+  useFetchDataGlassTreatement,
+} from "../../utilities/ApiHooks/GlassTreatement";
 import GlassTreatementItem from "./glassTreatementItems";
 import AddEditGlassTreatement from "../Model/AddGlassTreatement";
 
@@ -37,10 +36,8 @@ const GlassTreatementComponent = ({ type }) => {
     refetch: GlassTreatementRefetch,
     isFetching: GlassTreatementFetching,
   } = useFetchDataGlassTreatement(type);
-  const {
-    mutate: deleteGlassTreatement,
-    isSuccess: deleteSuccess,
-  } = useDeleteGlassTreatementFull();
+  const { mutate: deleteGlassTreatement, isSuccess: deleteSuccess } =
+    useDeleteGlassTreatementFull();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -65,12 +62,10 @@ const GlassTreatementComponent = ({ type }) => {
 
   useEffect(() => {
     if (deleteSuccess) {
-        GlassTreatementRefetch();
+      GlassTreatementRefetch();
       showSnackbar("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
-
-
 
   return (
     <>
@@ -176,7 +171,7 @@ const GlassTreatementComponent = ({ type }) => {
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            maxHeight: "600px",
+            height: "75vh",
             overflowY: "scroll",
           }}
         >
@@ -205,14 +200,10 @@ const GlassTreatementComponent = ({ type }) => {
                 </Box>
                 <Box>
                   <IconButton>
-                    <Delete
-                      onClick={() => handleHardwareDelete(entry._id)}
-                    />
+                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
                   <IconButton>
-                    <Edit
-                      onClick={() => handleOpenEdit(entry)}
-                    />
+                    <Edit onClick={() => handleOpenEdit(entry)} />
                   </IconButton>
                 </Box>
               </Box>

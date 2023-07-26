@@ -1,46 +1,42 @@
-.hardwareTable{
-    .cellWrapper{
-        display: flex;
-        align-items: center;
+.hardwareTable {
+  .cellWrapper {
+    display: flex;
+    align-items: center;
 
-        .hardwareImg{
-            margin-right: 10px;
-        }
-        .hardwareNameTable{
-            font-weight: 500;
-
-            .userNameTable{
-                font-size: 11px;
-                color: #667085 ;
-            }
-        }
+    .hardwareImg {
+      margin-right: 10px;
     }
+    .hardwareNameTable {
+      font-weight: 500;
 
-    .cellAction{
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
-        .viewButton {
-          
-            cursor: pointer;
-            color:#667085;
-          
-        }
-        .deleteButton{
-            color:#667085;
-            cursor: pointer;
-        }
+      .userNameTable {
+        font-size: 11px;
+        color: #667085;
+      }
     }
+  }
 
+  .cellAction {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 
+    .viewButton {
+      cursor: pointer;
+      color: #667085;
+    }
+    .deleteButton {
+      color: #667085;
+      cursor: pointer;
+    }
+  }
 }
 
-.page-title{
-    padding: 20px; 
-    h2 {
-        font-size: 25px;
-        font-weight: 500;
-        color: #101828;
-    }
+.page-title {
+  padding: 20px;
+  h2 {
+    font-size: 25px;
+    font-weight: 500;
+    color: #101828;
+  }
 }

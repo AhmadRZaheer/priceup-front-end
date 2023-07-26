@@ -12,9 +12,18 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
-import { useDeleteGlassTreatement, useEditGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
+import {
+  useDeleteGlassTreatement,
+  useEditGlassTreatement,
+} from "../../utilities/ApiHooks/GlassTreatement";
 
-const GlassTreatementItem = ({ data, index, refetch, glassTreatementId, showSnackbar }) => {
+const GlassTreatementItem = ({
+  data,
+  index,
+  refetch,
+  glassTreatementId,
+  showSnackbar,
+}) => {
   const {
     mutate: deleteGlassTreatement,
     isLoading: LoadingForDelete,
@@ -45,24 +54,30 @@ const GlassTreatementItem = ({ data, index, refetch, glassTreatementId, showSnac
           status: values.status,
         },
       };
-      editGlassTreatement({ optionsData: glassTreatement, id: glassTreatementId });
+      editGlassTreatement({
+        optionsData: glassTreatement,
+        id: glassTreatementId,
+      });
       resetForm();
     },
   });
 
   const handleFinishDelete = (event) => {
     event.preventDefault();
-    deleteGlassTreatement({ glassTreatementId: glassTreatementId, optionId: data._id });
+    deleteGlassTreatement({
+      glassTreatementId: glassTreatementId,
+      optionId: data._id,
+    });
   };
 
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if(SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error")
+      if (SuccessForDelete) {
+        showSnackbar("Deleted Successfully", "error");
       }
       if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success")
+        showSnackbar("Edit Successfully", "success");
       }
     }
   }, [SuccessForEdit, SuccessForDelete]);
@@ -85,8 +100,7 @@ const GlassTreatementItem = ({ data, index, refetch, glassTreatementId, showSnac
               padding: 4,
               alignItems: "center",
             }}
-          >
-          </Box>
+          ></Box>
 
           <Box
             style={{
@@ -149,7 +163,7 @@ const GlassTreatementItem = ({ data, index, refetch, glassTreatementId, showSnac
               }}
             >
               <FormControl style={{ width: "100%" }} size="small">
-                 <Typography>Thickness</Typography>
+                <Typography>Thickness</Typography>
                 <Typography variant="h6">{data?.thickness}</Typography>
               </FormControl>
             </Box>

@@ -12,7 +12,10 @@ import {
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
-import { useDeleteGlassType, useEditGlassType } from "../../utilities/ApiHooks/GlassType";
+import {
+  useDeleteGlassType,
+  useEditGlassType,
+} from "../../utilities/ApiHooks/GlassType";
 
 const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
   const {
@@ -45,7 +48,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
           status: values.status,
         },
       };
-      console.log(glassType, "glasstype input")
+      console.log(glassType, "glasstype input");
       editFinish({ optionsData: glassType, id: glassTypeId });
       resetForm();
     },
@@ -59,11 +62,11 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if(SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error")
+      if (SuccessForDelete) {
+        showSnackbar("Deleted Successfully", "error");
       }
       if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success")
+        showSnackbar("Edit Successfully", "success");
       }
     }
   }, [SuccessForEdit, SuccessForDelete]);
@@ -86,8 +89,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
               padding: 4,
               alignItems: "center",
             }}
-          >
-          </Box>
+          ></Box>
 
           <Box
             style={{
@@ -150,7 +152,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
               }}
             >
               <FormControl style={{ width: "100%" }} size="small">
-                 <Typography>Thickness</Typography>
+                <Typography>Thickness</Typography>
                 <Typography variant="h6">{data?.thickness}</Typography>
               </FormControl>
             </Box>

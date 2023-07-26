@@ -27,14 +27,16 @@ export const useFetchDataGlassTreatement = () => {
   });
 };
 
-
 export const useDeleteGlassTreatement = () => {
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`${backendURL}/glassTreatments/${props.glassTreatementId}/${props.optionId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.delete(
+        `${backendURL}/glassTreatments/${props.glassTreatementId}/${props.optionId}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -50,12 +52,15 @@ export const useDeleteGlassTreatement = () => {
 };
 export const useDeleteGlassTreatementFull = () => {
   const handleDelete = async (props) => {
-    console.log(props ,"full delete")
+    console.log(props, "full delete");
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`${backendURL}/glassTreatments/${props}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.delete(
+        `${backendURL}/glassTreatments/${props}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -73,18 +78,18 @@ export const useDeleteGlassTreatementFull = () => {
 export const useCreateGlassTreatement = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
-    const slug = createSlug(props.hardwareLabel);
+    const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
 
     try {
       const response = await axios.post(
         `${backendURL}/glassTreatments/save`,
         {
-          name: props.hardwareLabel,
+          name: props.name,
           company_id: decodedToken?.company_id,
-          thickness: "both",
+          // thickness: "both",
           slug: slug,
-          holesNeeded: props.thickness,
+          // holesNeeded: props.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -106,16 +111,18 @@ export const useCreateGlassTreatement = () => {
 
 export const useEditGlassTreatement = () => {
   const handleEdit = async (props) => {
-
     const token = localStorage.getItem("token");
-    console.log(props,"data edit")
+    console.log(props, "data edit");
     try {
       const response = await axios.put(
         `${backendURL}/glassTreatments/${props?.id}`,
         {
           ...(props.optionsData ? { options: props.optionsData } : {}),
           ...(props.glassTreatementData
-            ? { name: props.glassTreatementData.name, image: props.glassTreatementData.image }
+            ? {
+                name: props.glassTreatementData.name,
+                image: props.glassTreatementData.image,
+              }
             : {}),
         },
         {

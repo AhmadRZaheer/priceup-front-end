@@ -52,6 +52,7 @@ const GlassTreatementTable = () => {
         sx={{
           border: "1px solid rgb(232, 232, 232)",
           margin: 2,
+          height: "90vh"
         }}
       >
         <div className="hardwareTable">

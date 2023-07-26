@@ -74,14 +74,15 @@ export const useDeleteGlassTypeFull = () => {
 export const useCreateGlassType = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
-    const slug = createSlug(props.hardwareLabel);
+    const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
+    console.log(props, "data Create");
 
     try {
       const response = await axios.post(
         `${backendURL}/glassTypes/save`,
         {
-          name: props.hardwareLabel,
+          name: props.name,
           company_id: decodedToken?.company_id,
           // thickness: "both",
           slug: slug,
@@ -115,7 +116,10 @@ export const useEditGlassType = () => {
         {
           ...(props.optionsData ? { options: props.optionsData } : {}),
           ...(props.glassTypeData
-            ? { name: props.glassTypeData.name, image: props.glassTypeData.image }
+            ? {
+                name: props.glassTypeData.name,
+                image: props.glassTypeData.image,
+              }
             : {}),
         },
         {

@@ -7,12 +7,12 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import {
-  CircularProgress,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import { useCreateGlassTreatement, useEditGlassTreatement } from "../../utilities/ApiHooks/GlassTreatement";
+import {
+  useCreateGlassTreatement,
+  useEditGlassTreatement,
+} from "../../utilities/ApiHooks/GlassTreatement";
 
 const style = {
   position: "absolute",
@@ -36,9 +36,8 @@ export default function AddEditGlassTreatement({
   refetch,
   showSnackbar,
 }) {
-
   const [selectedImage, setSelectedImage] = useState(null);
-
+  console.log(isEdit, "is edit");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -62,20 +61,23 @@ export default function AddEditGlassTreatement({
       showSnackbar("Created Successfully ", "success");
       close();
     }
+  }, [CreatedSuccessfully]);
 
+  React.useEffect(() => {
     if (SuccessForEdit) {
       refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
     }
-  }, [CreatedSuccessfully, SuccessForEdit]);
+  }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
+    console.log(props, "handle create");
     addGlassTreatement(props);
   };
 
   const handleEditClick = (props) => {
-    editGlassTreatement({glassTreatementData:props, id:data?._id});
+    editGlassTreatement({ glassTreatementData: props, id: data?._id });
     // editGlassTreatement(props, id);
   };
 
@@ -87,17 +89,17 @@ export default function AddEditGlassTreatement({
 
   const formik = useFormik({
     initialValues: isEdit
-    ? {
-      name: data?.name,
-      image: "",
-      // thickness: data?.holesNeeded,
-      id: data?._id,
-    }
-  : {
-      name: "",
-      image: "",
-      // thickness: "",
-    },
+      ? {
+          name: data?.name,
+          image: "",
+          // thickness: data?.holesNeeded,
+          id: data?._id,
+        }
+      : {
+          name: "",
+          image: "",
+          // thickness: "",
+        },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -116,7 +118,7 @@ export default function AddEditGlassTreatement({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)", 
+          backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
@@ -129,7 +131,6 @@ export default function AddEditGlassTreatement({
             }}
           >
             <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
-
           </Box>
 
           <Box>
@@ -178,7 +179,6 @@ export default function AddEditGlassTreatement({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-
                   </span>
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -195,18 +195,13 @@ export default function AddEditGlassTreatement({
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={
-                formik.touched.name &&
-                Boolean(formik.errors.name)
-              }
-              helperText={
-                formik.touched.name && formik.errors.name
-              }
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
               variant="outlined"
               fullWidth
             />
           </Box>
-{/* 
+          {/* 
           <Box>
             <Typography>Holes Nedeed</Typography>
             <FormControl style={{ width: "100%" }} size="small">
@@ -226,10 +221,7 @@ export default function AddEditGlassTreatement({
               />
             </FormControl>
           </Box> */}
-          <Box
-            onClick={formik.handleSubmit}
-            sx={{ display: "flex", gap: 2, marginTop: 2 }}
-          >
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
@@ -239,6 +231,7 @@ export default function AddEditGlassTreatement({
             </Button>
             <Button
               fullWidth
+              onClick={formik.handleSubmit}
               variant="contained"
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}

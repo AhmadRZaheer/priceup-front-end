@@ -7,10 +7,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import {
-  CircularProgress,
-  TextField,
-} from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateHardware,
@@ -40,7 +37,6 @@ export default function AddEditHardware({
   showSnackbar,
   categorySlug,
 }) {
-
   const [selectedImage, setSelectedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
@@ -59,7 +55,6 @@ export default function AddEditHardware({
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useEditHardware();
-
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -133,7 +128,6 @@ export default function AddEditHardware({
             }}
           >
             <Typography>{isEdit ? "Edit Hardware" : "Add Hardware"}</Typography>
-
           </Box>
 
           <Box>
@@ -182,7 +176,6 @@ export default function AddEditHardware({
                     <Typography sx={{ color: "#8477DA" }}>
                       Click to Upload
                     </Typography>
-
                   </span>
                   <Typography variant="body2" sx={{ color: "#667085" }}>
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -205,10 +198,7 @@ export default function AddEditHardware({
               fullWidth
             />
           </Box>
-          <Box
-            onClick={formik.handleSubmit}
-            sx={{ display: "flex", gap: 2, marginTop: 2 }}
-          >
+          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
@@ -219,6 +209,7 @@ export default function AddEditHardware({
             <Button
               fullWidth
               variant="contained"
+              onClick={formik.handleSubmit}
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >
