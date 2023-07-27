@@ -7,9 +7,10 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Model/Logout";
-import { Box } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { backendURL } from "../../utilities/common";
+import TremIcon from "../../Assets/users.svg"
 
 const SuperSidebar = () => {
   const [open, setOpen] = useState(false);
@@ -31,7 +32,7 @@ const SuperSidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "space-between",
-            height: "95vh",
+            height: "100vh",
             justifyContent: "space-between",
           }}
         >
@@ -44,14 +45,20 @@ const SuperSidebar = () => {
               </div>
             </NavLink>
             <div className="center">
-              <ul style={{ marginTop: 80 }}>
+              <ul>
                 <NavLink to="/admin" className="link">
                   <li
                     className={` ${location.pathname === "/admin" ? "active" : ""
                       }`}
                   >
-                    <AdjustIcon className="icon" />
-                    <span>Admin</span>
+                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                    <img
+                    style={{ paddingRight: 10 }}
+                    src={TremIcon}
+                    alt="image of customer"
+                  />
+                    <span>Users</span>
+                    </IconButton>
                   </li>
                 </NavLink>
               </ul>

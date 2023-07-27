@@ -17,7 +17,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { logoutHandler } from "../../redux/userAuth";
-
+import EstimsteIcon from "../../Assets/bar.svg";
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: 280,
@@ -75,9 +75,12 @@ function MobileBar() {
             sx={{
               backgroundColor: "#100d24",
               width: 280,
-              height: "100%",
+              height: "100vh",
               padding: 0,
               margin: 0,
+              display:'flex',
+              flexDirection:'column',
+              justifyContent:'space-between'
             }}
           >
             <Box>
@@ -86,7 +89,7 @@ function MobileBar() {
                   <img src={Logo} alt="" />
                 </span>
               </div>
-              <Box sx={{ marginTop: 8 }}>
+              <Box sx={{ marginTop: 2 }}>
                 <Button
                   sx={{
                     width: 240,
@@ -98,7 +101,11 @@ function MobileBar() {
                     },
                   }}
                 >
-                  Staff
+                 <img
+                    style={{ paddingRight: 10 }}
+                    src={EstimsteIcon}
+                    alt="image of customer"
+                  /> Quotes
                 </Button>
               </Box>
             </Box>
@@ -107,20 +114,19 @@ function MobileBar() {
                 display: "flex",
                 justifyContent: "end",
                 alignItems: "start",
-                height: "70vh",
+                // height: "70vh",
                 width: "100%",
                 flexDirection: "column",
                 backgroundColor: "#100d24",
               }}
             >
-              <Box>
+              
                 <Tooltip title="Logout" placement="top" arrow>
                   <Button
                     sx={{
                       width: 240,
                       color: "white",
                       margin: 2,
-
                       backgroundColor: "#8477da",
                     }}
                     variant="contained"
@@ -129,7 +135,7 @@ function MobileBar() {
                     Logout
                   </Button>
                 </Tooltip>
-              </Box>
+              
               <div className="bottom">
                 <div className="UserIcon">
                   <img
