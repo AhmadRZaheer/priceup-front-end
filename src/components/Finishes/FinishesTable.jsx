@@ -75,7 +75,10 @@ const FinishesTable = () => {
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
-              <ModeIcon />
+              <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+              <ModeIcon sx={{color: "white"}} />
+              Edit
+              </IconButton>
             </div>
           </div>
         );
@@ -121,8 +124,9 @@ const FinishesTable = () => {
           >
             <Typography variant="h4">Finishes</Typography>
             <div>
-              <IconButton onClick={handleOpen}>
-                <Add style={{ color: "rgb(65, 106, 238)" }} />
+              <IconButton onClick={handleOpen} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+                <Add style={{ color: "white" }} />
+                Add
               </IconButton>
             </div>{" "}
           </div>

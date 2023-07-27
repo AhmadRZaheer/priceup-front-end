@@ -171,7 +171,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
                 label={"active"}
               />
             </Box>
-            <Box>
+            <Box sx={{display: "flex"}}>
               {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
@@ -185,8 +185,9 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
               {LoadingForEdit ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <IconButton type="submit">
-                  <Edit />
+                <IconButton type="submit" sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+                  <Edit sx={{color: "white"}}/>
+                  Update
                 </IconButton>
               )}
             </Box>

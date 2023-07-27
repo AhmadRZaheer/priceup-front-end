@@ -5,7 +5,7 @@ export const getRefetch = (state) => state.defaultSlice.refetch;
 const defaultSlice = createSlice({
   name: "default",
   initialState: {
-    defaultId: "64b1519397c2fbba74ad806b",
+    defaultId: "",
     refetch: 0,
   },
   reducers: {

@@ -61,6 +61,10 @@ export default function LagoutModal({ open, close, logout }) {
               onClick={logout}
               sx={{
                 textTransform: "initial",
+                backgroundColor: "#8477da",
+                "&:hover": {
+                  backgroundColor: "#8477da"
+                }
               }}
               fullWidth
               variant="contained"

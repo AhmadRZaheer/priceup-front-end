@@ -93,7 +93,7 @@ const ChannelTypeDesktop = ({
                     borderRadius: "12px",
                     border:
                       item.toLowerCase() === selectedContent?.mounting?.activeType
-                        ? "2px solid blue"
+                        ? "2px solid #8477da"
                         : "",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",

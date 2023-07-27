@@ -18,6 +18,7 @@ import {
 } from "../../utilities/ApiHooks/Estimate";
 import image1 from "../../Assets/username1.svg";
 import { makeStyles } from "@material-ui/core";
+import { backendURL } from "../../utilities/common";
 
 export default function ExitingQuotes() {
   const { data: estimates, isFetching } = useGetEstimates();
@@ -110,7 +111,7 @@ export default function ExitingQuotes() {
                   <CircularProgress sx={{}} />
                 </Box>
               ) : (
-                estimates?.map((item) => (
+               estimates?.map((item) => (
                   <Box
                     key={item._id}
                     sx={{
@@ -122,16 +123,16 @@ export default function ExitingQuotes() {
                   >
                     <Box sx={{ display: "flex", gap: 1 }}>
                       <Box sx={{ width: 40, height: 40, borderRadius: "100%", overflow: "hidden" }}>
-                        <img src={image1} alt="image person" />
+                        <img width={40} src={`${backendURL}/${item.creatorData.image}`} alt="image person" />
                       </Box>
 
                       <Box>
                         <Box sx={{ display: "flex", gap: 0.6 }}>
-                          <Typography  className={classes.overflowText}>Abdul Rehman</Typography>
+                          <Typography  className={classes.overflowText}>{item.creatorData.name}</Typography>
                           <Typography sx={{fontSize: 16, fontWeight: "Medium"}}> - Creator</Typography>
                         </Box>
                         <Box sx={{ display: "flex", gap: 0.6  }}>
-                          <Typography sx={{fontSize: 14}}>Name</Typography>
+                          <Typography sx={{fontSize: 14}}>{item.customerData.name}</Typography>
                           <Typography sx={{fontSize: 14}}> - Customer</Typography>
                         </Box>
                       </Box>
@@ -158,8 +159,7 @@ export default function ExitingQuotes() {
                       </Typography>
                     </Box>
                   </Box>
-                ))
-              )}
+                )))}
             </Box>
           </Box>
           <Box

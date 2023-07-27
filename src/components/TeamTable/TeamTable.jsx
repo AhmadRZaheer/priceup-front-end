@@ -5,13 +5,14 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
 import {
   useDeleteTeamMembers,
   useFetchDataTeam,
 } from "../../utilities/ApiHooks/Team";
 import AddTeamMembers from "../Model/AddTeamMembers";
 import Snackbars from "../Model/SnackBar";
+import { Add } from "@mui/icons-material";
 
 const TeamTable = () => {
   const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -19,7 +20,6 @@ const TeamTable = () => {
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
-
 
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data, isEditAble) => {
@@ -46,7 +46,6 @@ const TeamTable = () => {
       open: false,
     }));
   };
-
 
   const {
     mutate: deleteFinish,
@@ -92,7 +91,10 @@ const TeamTable = () => {
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
-              <ModeIcon />
+              <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+                <ModeIcon sx={{color: "white", fontSize: 20}} />
+               {" "}  Edit
+              </IconButton>
             </div>
           </div>
         );
@@ -116,19 +118,20 @@ const TeamTable = () => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              width: "98%"
+              width: "98%",
             }}
           >
             <Typography sx={{ fontSize: 30, pl: 2 }}>Team Memebers</Typography>
             <Box sx={{ width: "200px" }}>
-              <Button
-                sx={{ backgroundColor: "#8477DA", padding: 1.2, boxShadow: 0, }}
+              <IconButton
+                sx={{ backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 20, padding: 1, mt: 1 }}
                 fullWidth
                 variant="contained"
                 onClick={() => setOpen(true)}
               >
+                <Add sx={{color: "white"}} />
                 Add Members
-              </Button>
+              </IconButton>
             </Box>
           </Box>
         </div>

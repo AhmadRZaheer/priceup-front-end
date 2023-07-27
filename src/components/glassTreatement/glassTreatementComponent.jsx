@@ -96,8 +96,9 @@ const GlassTreatementComponent = ({ type }) => {
             padding: 4,
           }}
         >
-          <IconButton onClick={handleOpen}>
-            <Add style={{ color: "#8477DA" }} />
+          <IconButton onClick={handleOpen} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+            <Add style={{ color: "white" }} />
+            Add
           </IconButton>
         </div>{" "}
       </div>
@@ -202,8 +203,9 @@ const GlassTreatementComponent = ({ type }) => {
                   <IconButton>
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
-                  <IconButton>
+                  <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
                     <Edit onClick={() => handleOpenEdit(entry)} />
+                    Edit
                   </IconButton>
                 </Box>
               </Box>

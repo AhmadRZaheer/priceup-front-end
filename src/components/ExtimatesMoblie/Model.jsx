@@ -75,7 +75,6 @@ export default function ClientDetailsModel({
       const data = estimatesContent?.addOns;
       const addOnIds = data?.map((obj) => obj?._id);
       let estimate = {
-        
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
         handles: {
           type: estimatesContent?.handles?.item?._id,
@@ -132,12 +131,19 @@ export default function ClientDetailsModel({
         measurements: measurements,
       };
       if (updatecheck === "create") {
-        mutate({ customerData: values, estimateData: {...estimate,layout_id: estimatesLayout?._id} });
+        mutate({
+          customerData: values,
+          estimateData: { ...estimate, layout_id: estimatesLayout?._id },
+        });
       } else {
-        mutateEdit({ customerData: values, estimateData: estimate,id:quoteId });
+        mutateEdit({
+          customerData: values,
+          estimateData: estimate,
+          id: quoteId,
+        });
       }
       // mutateEdit({ customerData: values, estimateData: estimate });
-// 
+      //
       handleCancel();
     },
   });
@@ -362,9 +368,22 @@ export default function ClientDetailsModel({
                   display: "flex",
                   gap: 1,
                   marginTop: 2,
-                  justifyContent: "end",
+                  justifyContent: "space-between",
                 }}
               >
+                <Button
+                  onClick={handleCancel}
+                  variant="contained"
+                  sx={{
+                    width: "48%",
+                    textTransform: "initial",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      backgroundColor: "white",
+                    },
+                    color: "black"
+                  }}
+                > Back</Button>
                 <Button
                   type="submit"
                   sx={{
@@ -373,6 +392,7 @@ export default function ClientDetailsModel({
                     "&:hover": {
                       backgroundColor: "#8477da",
                     },
+                    width: "48%",
                   }}
                   fullWidth
                   variant="contained"

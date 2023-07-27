@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-} from "@mui/material";
-import { Add, Delete, Edit} from "@mui/icons-material";
+import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import {
   useDeleteHardwares,
@@ -40,10 +36,8 @@ const HardWareComponent = ({ type }) => {
     refetch: hardwareRefetch,
     isFetching: hardwareFetching,
   } = useFetchDatahardware(type);
-  const {
-    mutate: deleteHardware,
-    isSuccess: deleteSuccess,
-  } = useDeleteHardwares();
+  const { mutate: deleteHardware, isSuccess: deleteSuccess } =
+    useDeleteHardwares();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -72,8 +66,6 @@ const HardWareComponent = ({ type }) => {
     }
   }, [deleteSuccess]);
 
-
-
   return (
     <>
       <div
@@ -81,7 +73,7 @@ const HardWareComponent = ({ type }) => {
           display: "flex",
           justifyContent: "space-between",
           alignContent: "center",
-          paddingTop: 15,
+          paddingTop: 20,
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
@@ -96,15 +88,27 @@ const HardWareComponent = ({ type }) => {
             textTransform: "uppercase",
           }}
         >
-          {type}
+          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10}}>{type}</p>
         </div>
         <div
           style={{
             padding: 4,
           }}
         >
-          <IconButton onClick={handleOpen}>
-            <Add style={{ color: "rgb(65, 106, 238)" }} />
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              backgroundColor: "#8477DA",
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 17,
+              padding: 1,
+            }}
+          >
+            <Add style={{ color: "white" }} />
+            Add
           </IconButton>
         </div>{" "}
       </div>
@@ -207,14 +211,21 @@ const HardWareComponent = ({ type }) => {
                 </Box>
                 <Box>
                   <IconButton>
-                    <Delete
-                      onClick={() => handleHardwareDelete(entry._id)}
-                    />
+                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
-                  <IconButton>
-                    <Edit
-                      onClick={() => handleOpenEdit(entry)}
-                    />
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 2,
+                      fontSize: 17,
+                      padding: 1,
+                    }}
+                  >
+                    <Edit onClick={() => handleOpenEdit(entry)} color="white" />
+                    Edit
                   </IconButton>
                 </Box>
               </Box>

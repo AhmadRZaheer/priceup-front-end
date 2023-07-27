@@ -9,12 +9,9 @@ import {
 } from "../../redux/defaultSlice";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import {
-  useFetchDataDefault,
-} from "../../utilities/ApiHooks/DefaultLayouts";
+import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
-
 const LayoutHeader = () => {
   const { data: types, refetch: defaultDataRefetch } = useFetchDataDefault();
   const refetch = useSelector(getRefetch);
@@ -24,47 +21,47 @@ const LayoutHeader = () => {
     defaultDataRefetch();
   }, [refetch]);
   const dispatch = useDispatch();
-
   const showMore = (id) => {
     dispatch(setDefaultId(id));
   };
+  useEffect(() => {
+    if (defaultId.length <= 0 && types?.length) {
+      dispatch(setDefaultId(types[0]._id));
+    }
+  }, [types]);
   const renderSliderItems = (items) => {
     return items?.map((item, index) => (
       <div key={index}>{renderSliderItem(item)}</div>
     ));
   };
-
   const renderSliderItem = (props) => (
-    (
-      <Box
-        onClick={() => showMore(props._id)}
-        sx={{
-          paddingLeft: "15px",
-          paddingRight: "15px",
-          minHeight: "50px",
-          marginRight: 2,
-          backgroundColor:
-            props?._id === defaultId ? "#8477DA" : "",
+    <Box
+      onClick={() => showMore(props._id)}
+      sx={{
+        paddingLeft: "15px",
+        paddingRight: "15px",
+        minHeight: "50px",
+        marginRight: 2,
+        backgroundColor: props?._id === defaultId ? "#8477DA" : "",
 
-          "&:hover": {
-            backgroundColor: "#8477DA",
-            color: "white"
-          },
-          "&:active": {
-            backgroundColor: "#8477DA",
-            color: "white"
-          },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          color: props?._id === defaultId ? "white" : "black",
-          borderRadius: "4px",
-        }}
-      >
-        <h3>{props?.name}</h3>
-      </Box>
-    )
+        "&:hover": {
+          backgroundColor: "#8477DA",
+          color: "white",
+        },
+        "&:active": {
+          backgroundColor: "#8477DA",
+          color: "white",
+        },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        color: props?._id === defaultId ? "white" : "black",
+        borderRadius: "4px",
+      }}
+    >
+      <h3>{props?.name}</h3>
+    </Box>
   );
 
   const sliderSettings = {

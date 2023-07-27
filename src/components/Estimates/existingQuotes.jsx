@@ -1,8 +1,8 @@
 import { AddCircle, CreateOutlined, DeleteOutline } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import image1 from "../../Assets/hourglass.svg";
-import image2 from "../../Assets/ok.svg";
-import image3 from "../../Assets/cancel.svg";
+import image1 from "../../Assets/test.png";
+import image2 from "../../Assets/ok.png";
+import image3 from "../../Assets/cancel.png";
 import image4 from "../../Assets/calculator.svg";
 import {
   useFetchDataEstimate,
@@ -14,39 +14,18 @@ import {
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
+
+import ExistingTable from "./esistingTable";
 import { Link } from "react-router-dom";
+// import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/estimate-card";
 
 export default function ExistingQuotes() {
-  const { data: estimates, isFetching } = useGetEstimates();
+  const { data , isFetching } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
-  const dispatch = useDispatch();
-
-  // const dispatch = useDispatch();
-  const handleIconButtonClick = (item) => {
-    dispatch(initializeStateForEditQuote({ estimateData: item, listData: estimateListData, quotesId : item._id }));
-    dispatch(setNavigationDesktop("review"));
-  };
-  const handleCreateQuote = () => {
-    dispatch(setQuoteState("create"));
-    dispatch(setNavigationDesktop("Layout"));
-  }
   return (
     <>
-      {isFetching || estimateDataFetching ? (
-        <Box
-          sx={{
-            width: 40,
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      ) : (
+
         <Box
           sx={{
             display: "flex",
@@ -56,7 +35,7 @@ export default function ExistingQuotes() {
             width: "100%",
             height: "96vh",
             overflow: "auto",
-            backgroundColor: "#f5f5f5",
+            backgroundColor: "white",
             borderTopLeftRadius: 30,
             borderBottomLeftRadius: 30,
             gap: 5,
@@ -79,12 +58,12 @@ export default function ExistingQuotes() {
             >
               <Box sx={{ width: 60 }}>
                 <img
-                  style={{ width: "60%", height: "100%" }}
+                  style={{ width: "75%", height: "100%" }}
                   src={image1}
                   alt=""
                 />
                 <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                  {estimates?.length}
+                  {data?.pending}
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -109,12 +88,12 @@ export default function ExistingQuotes() {
             >
               <Box sx={{ width: 60 }}>
                 <img
-                  style={{ width: "60%", height: "100%" }}
+                  style={{ width: "75%", height: "100%" }}
                   src={image2}
                   alt=""
                 />
                 <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                  0
+                {data?.approved}
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -137,12 +116,13 @@ export default function ExistingQuotes() {
             >
               <Box sx={{ width: 60 }}>
                 <img
-                  style={{ width: "60%", height: "100%" }}
+                  style={{ width: "76%", height: "100%" }}
                   src={image3}
                   alt=""
                 />
                 <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                  131
+                {data?.voided}
+                  
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -165,12 +145,12 @@ export default function ExistingQuotes() {
             >
               <Box sx={{ width: 60 }}>
                 <img
-                  style={{ width: "80%", height: "100%" }}
+                  style={{ width: "76%", height: "100%" }}
                   src={image4}
                   alt=""
                 />
                 <Typography pl={0.8} fontSize={26} fontWeight="bold">
-                  $28,956.00
+                  ${data?.total}
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
@@ -178,66 +158,10 @@ export default function ExistingQuotes() {
               </Box>
             </Box>
           </Box>
-
-          <Box sx={{ backgroundColor: "white", width: "92%" }}>
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", p: 2 }}
-            >
-              <Typography sx={{ fontSize: 18, fontWeight: "bold" }}>
-                Estimates Queue
-              </Typography>
-
-              <IconButton
-                onClick={handleCreateQuote}
-                disabled={estimateDataFetching}
-              >
-                <AddCircle sx={{ fontSize: 30, color: "#8477DA" }} />
-              </IconButton>
+            <Box sx={{width: "92%"}}>
+              <ExistingTable />
             </Box>
-
-            <Box sx={{ display: "flex", backgroundColor: "#e8e8e8", p: 2 }}>
-              <Typography sx={{ width: 340 }}>Customer Name</Typography>
-              <Typography sx={{ width: 300 }}>Email</Typography>
-              <Typography sx={{ width: 180 }}>Date Quoted</Typography>
-              <Typography sx={{ width: 190 }}>Estimated Total</Typography>
-              <Typography sx={{ width: 180 }}>Measurer</Typography>
-              <Typography sx={{ width: 180 }}>Status</Typography>
-              <Typography sx={{ width: 60 }}></Typography>
-            </Box>
-
-            {estimates?.map((item) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  borderBottom: "1px solid #f0ecec",
-                  p: 2,
-                }}
-              >
-                <Typography sx={{ width: 340 }}></Typography>
-                <Typography sx={{ width: 300 }}></Typography>
-                <Typography sx={{ width: 180 }}>
-                  {new Date(item?.updatedAt).toLocaleString()}
-                </Typography>
-                <Typography sx={{ width: 190 }}></Typography>
-                <Typography sx={{ width: 180 }}></Typography>
-                <Typography sx={{ width: 180 }}></Typography>
-                <IconButton
-                  onClick={() => handleIconButtonClick(item)}
-                  sx={{ marginRight: 1, height: 25 }}
-                  disabled={estimateDataFetching}
-                >
-                   <Link to="/Estimates/Steps">
-                  <CreateOutlined sx={{ color: "gray", fontSize: 25 }} />
-                  </Link>
-                </IconButton>
-                <DeleteOutline
-                  sx={{ color: "rgb(255, 103, 96)", fontSize: 25 }}
-                />
-              </Box>
-            ))}
-          </Box>
         </Box>
-      )}
     </>
   );
 }

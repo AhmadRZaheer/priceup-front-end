@@ -16,23 +16,25 @@ import {
 import DefaultComponentHeader from "./DefaultComponentHeader";
 import { getDefaultId, getRefetch, setRefetch } from "../../redux/defaultSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { backendURL } from "../../utilities/common";
 const DefaultComponent = ({ showSnackbar }) => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
   const refetchDefault = useSelector(getRefetch);
-  const {
-    mutate: updateDefault,
-    isSuccess: SuccessForEdit,
-  } = useEditDefault();
-
+  const { mutate: updateDefault, isSuccess: SuccessForEdit } = useEditDefault();
   const {
     data: singleDefault,
     isFetching: isfetchingDefaultSingle,
     refetch,
   } = useFetchSingleDefault(defaultId);
+  console.log(
+    singleDefault?.layoutData?.image,
+    "singleDefault?.layoutData?.image"
+  );
+
   const formik = useFormik({
     initialValues: {
-      image: null,
+      image: singleDefault?.layoutData?.image,
       name: singleDefault?.layoutData?.name,
       handles: {
         handleType: singleDefault?.layoutData?.settings?.handles.handleType,
@@ -160,7 +162,6 @@ const DefaultComponent = ({ showSnackbar }) => {
             overflowY: "scroll",
           }}
         >
-
           <Box>
             <Box
               style={{
@@ -217,16 +218,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                       <img
                         width={"100%"}
                         height={"400px"}
-                        src={URL.createObjectURL(formik.values.image)}
+                        src={`${backendURL}/${formik.values.image}`}
                         alt="Selected"
                       />
                     ) : (
-                      <img
-                        width={"100%"}
-                        height={"400px"}
-                        src={door}
-                        alt="Selected"
-                      />
+                      <Box sx={{width: "100%", height: "400px", textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                        <CircularProgress size={24} color="warning" />
+                      </Box>
                     )}
                     <Button
                       style={{
@@ -235,22 +233,20 @@ const DefaultComponent = ({ showSnackbar }) => {
                         color: "white",
                         backgroundColor: "#8477DA",
                         "&:hover": {
-                          backgroundColor: "#8477DA"
-                        }
+                          backgroundColor: "#8477DA",
+                        },
                       }}
                       component="span"
                       onClick={handleFileUpload}
                     >
                       Upload Image
                     </Button>
-
                   </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
           <Box>
-
             <div
               style={{
                 display: "flex",
@@ -286,10 +282,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onBlur={formik.handleBlur}
                   >
                     {singleDefault?.listData?.hardwareFinishes.map((option) => (
-                      <MenuItem
-                        key={option.name}
-                        value={option?._id}
-                      >
+                      <MenuItem key={option.name} value={option?._id}>
                         {option.name}
                       </MenuItem>
                     ))}
@@ -1159,7 +1152,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               ></Box>
             </div>
 
-
             <div
               style={{
                 display: "flex",
@@ -1260,7 +1252,6 @@ const DefaultComponent = ({ showSnackbar }) => {
               ></div>{" "}
             </div>
 
-
             <div
               style={{
                 display: "flex",
@@ -1316,7 +1307,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               ></div>{" "}
             </div>
-
 
             <Box display="flex" alignItems="center" padding="15px 10px">
               <Box style={{ width: "250px", padding: 4 }}>Other</Box>

@@ -32,7 +32,7 @@ const Summary = ({ handleOpen }) => {
           gap: { md: 4, xs: 0 },
         }}
       >
-        <QuotesHeader navigateTo={"review"}/>
+        <QuotesHeader navigateTo={"review"} />
         <Box
           sx={{
             width: { md: "94%", sm: "100%", xs: "100%" },
@@ -54,7 +54,7 @@ const Summary = ({ handleOpen }) => {
           <Box sx={{ width: { md: "100%", xs: "90%" }, margin: "auto" }}>
             <Typography
               sx={{
-                fontSize: { md: "18px", xs: "18px" },
+                fontSize: { md: "18px", xs: "25px" },
                 color: { md: "black", xs: "white" },
                 paddingBottom: 1,
               }}
@@ -80,8 +80,8 @@ const Summary = ({ handleOpen }) => {
               justifyContent: "space-between",
               flexDirection: { md: "row", xs: "column" },
               minHeight: "50vh",
-              maxHeight: "62vh",
-              overflow: "auto"
+              maxHeight: "61vh",
+              overflow: "auto",
             }}
           >
             <Box
@@ -106,8 +106,8 @@ const Summary = ({ handleOpen }) => {
                 }}
               >
                 <img
-                  width={"100px"}
-                  height={"110px"}
+                  width={"200px"}
+                  height={"210px"}
                   src={`${backendURL}/${selectedData?.image}`}
                   alt="Selected"
                 />
@@ -130,51 +130,114 @@ const Summary = ({ handleOpen }) => {
                     .join("’’/ ")}
                   ’’
                 </Typography>
-                <Typography variant="h6">Summary </Typography>
-                <Typography>
-                  Finish: {selectedContent?.hardwareFinishes?.name}
+                <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                  Summary{" "}
                 </Typography>
-                <Typography>
-                  Handles: {selectedContent?.handles?.item?.name} (
-                  {selectedContent?.handles?.count})
-                </Typography>
-                <Typography>
-                  Hinges: {selectedContent?.hinges?.item?.name} (
-                  {selectedContent?.hinges?.count})
-                </Typography>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
+                  <Typography>
+                    {selectedContent?.hardwareFinishes?.name}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Handles:</Typography>
+                  <Typography>
+                    {selectedContent?.handles?.item?.name} (
+                    {selectedContent?.handles?.count})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Hinges:</Typography>
+                  <Typography>
+                    {selectedContent?.hinges?.item?.name} (
+                    {selectedContent?.hinges?.count})
+                  </Typography>
+                </Box>
                 {selectedContent?.mounting?.activeType === "channel" ? (
-                  <Typography>
-                    Channel: {selectedContent?.mounting?.channel?.item?.name}
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Channel:
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.mounting?.channel?.item?.name}
+                    </Typography>
+                  </Box>
                 ) : (
-                  <Typography>
-                    Clamps: {selectedContent?.mounting?.clamps?.wallClamp?.item?.name} (
-                  {selectedContent?.mounting?.clamps?.wallClamp?.count}){" "}
-                    / {selectedContent?.mounting?.clamps?.sleeveOver?.item?.name} (
-                  {selectedContent?.mounting?.clamps?.sleeveOver?.count}) /{" "}
-                    {selectedContent?.mounting?.clamps?.glassToGlass?.item?.name} (
-                  {selectedContent?.mounting?.clamps?.glassToGlass?.count})
-                  </Typography>
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Clamps:{" "}
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.mounting?.clamps?.wallClamp?.item?.name}{" "}
+                      ({selectedContent?.mounting?.clamps?.wallClamp?.count}) /{" "}
+                      {
+                        selectedContent?.mounting?.clamps?.sleeveOver?.item
+                          ?.name
+                      }{" "}
+                      ({selectedContent?.mounting?.clamps?.sleeveOver?.count}) /{" "}
+                      {
+                        selectedContent?.mounting?.clamps?.glassToGlass?.item
+                          ?.name
+                      }{" "}
+                      ({selectedContent?.mounting?.clamps?.glassToGlass?.count})
+                    </Typography>
+                  </Box>
                 )}
-                <Typography>
-                  Glass Type:{selectedContent?.glassType?.item?.name} (
-                  {selectedContent?.glassType?.thickness})
-                </Typography>
-                <Typography>
-                  Bars: {selectedContent?.slidingDoorSystem?.item?.name} (
-                  {selectedContent?.slidingDoorSystem?.count})
-                </Typography>
-                <Typography>Transom: </Typography>
-                <Typography>
-                  Header: {selectedContent?.header?.item?.name} (
-                  {selectedContent?.header?.count})
-                </Typography>
-                <Typography>
-                  Glass Treatment: {selectedContent?.glassTreatment?.item?.name}
-                </Typography>
-                <Typography variant="h6">Add ons: {selectedContent?.addOns?.map((item)=> ` ${item?.name}`)} Towel Bars ({selectedContent?.towelBarsCount}) Sleeve Over ({selectedContent?.sleeveOverCount})</Typography>
-                <Typography>People: {selectedContent?.people}</Typography>
-                <Typography>Hours: {selectedContent?.hours}</Typography>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Glass Type:
+                  </Typography>
+                  <Typography>
+                    {selectedContent?.glassType?.item?.name} (
+                    {selectedContent?.glassType?.thickness})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Bars:</Typography>
+                  <Typography>
+                    {selectedContent?.slidingDoorSystem?.item?.name} (
+                    {selectedContent?.slidingDoorSystem?.count})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Transom: </Typography>
+                  <Typography></Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Header:</Typography>
+                  <Typography>
+                    {selectedContent?.header?.item?.name} (
+                    {selectedContent?.header?.count})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Glass Treatment:
+                  </Typography>
+                  <Typography>
+                    {selectedContent?.glassTreatment?.item?.name}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Add ons: </Typography>
+                  <Typography>
+                    {selectedContent?.addOns?.map((item) => ` ${item?.name}`)}{" "}
+                    Towel Bars ({selectedContent?.towelBarsCount}) Sleeve Over (
+                    {selectedContent?.sleeveOverCount})
+                  </Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>People: </Typography>
+                  <Typography>{selectedContent?.people}</Typography>
+                </Box>
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Hours: </Typography>
+                  <Typography>{selectedContent?.hours}</Typography>
+                </Box>
                 <Typography> </Typography>
                 <Box
                   sx={{
@@ -186,8 +249,10 @@ const Summary = ({ handleOpen }) => {
                     paddingY: 1,
                   }}
                 >
-                  <Typography>Price</Typography>
-                  <Typography variant="h6">${totalPrice?.toFixed(2) || 0}</Typography>
+                  <Typography sx={{ fontWeight: "bold" }}>Price</Typography>
+                  <Typography variant="h6">
+                    ${totalPrice?.toFixed(2) || 0}
+                  </Typography>
                 </Box>{" "}
               </Box>
             </Box>

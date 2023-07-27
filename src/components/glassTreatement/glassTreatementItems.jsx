@@ -7,7 +7,9 @@ import {
   IconButton,
   Switch,
   TextField,
+  ThemeProvider,
   Typography,
+  createTheme,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -81,6 +83,20 @@ const GlassTreatementItem = ({
       }
     }
   }, [SuccessForEdit, SuccessForDelete]);
+  const theme = createTheme({
+    components: {
+      MuiSwitch: {
+        styleOverrides: {
+          root: {
+            color: "#8477DA", // Change this color to your desired custom color
+            "&.Mui-checked": {
+              color: "#8477DA", // Change this color to your desired custom color when the switch is checked
+            },
+          },
+        },
+      },
+    },
+  });
 
   return (
     <Box key={index}>
@@ -169,20 +185,21 @@ const GlassTreatementItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="primary"
-                    checked={formik.values.status}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    name="status"
-                  />
-                }
-                label={"active"}
-              />
+              <ThemeProvider theme={theme}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={formik.values.status}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      name="status"
+                    />
+                  }
+                  label={"active"}
+                />
+              </ThemeProvider>
             </Box>
-            <Box>
+            <Box sx={{ display: "flex" }}>
               {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
@@ -196,8 +213,20 @@ const GlassTreatementItem = ({
               {LoadingForEdit ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <IconButton type="submit">
+                <IconButton
+                  type="submit"
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 2,
+                    fontSize: 17,
+                    padding: 1,
+                  }}
+                >
                   <Edit />
+                  Update
                 </IconButton>
               )}
             </Box>

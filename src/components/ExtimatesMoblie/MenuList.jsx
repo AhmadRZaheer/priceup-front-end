@@ -203,7 +203,7 @@ const MenuList = ({
                     width: "200px",
                     borderRadius: "12px",
                     border: (type === 'addOns' ? selectedContent?.addOns.some((selectedItem) => selectedItem?._id === item?._id) : item === selectedItem)
-                        ? "2px solid blue"
+                        ? "2px solid #8477da"
                         : "1px solid #EAECF0",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",

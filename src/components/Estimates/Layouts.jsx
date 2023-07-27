@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import {
   addSelectedItem,
+  initializeStateForCreateQuote,
   selectedItem,
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 
 export default function Layout() {
 
@@ -32,14 +34,12 @@ export default function Layout() {
     flexDirection: "column",
     cursor: "pointer",
   };
-  const {
-    data: layouts,
-    isFetching: loading
-  } = useFetchDataDefault();
+  const { data: layouts, isFetching: loading } = useFetchDataDefault();
+  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
-
   const handleBoxClick = (layout) => {
+    dispatch(initializeStateForCreateQuote({ layoutData: layout, listData: estimateListData }));
     dispatch(addSelectedItem(layout));
   };
   return (
@@ -108,7 +108,7 @@ export default function Layout() {
                 collaborate on this project.
               </Typography>
             </Box>
-            {loading ? (
+            {loading || estimateDataFetching ? (
               <Box
                 sx={{
                   width: 40,

@@ -63,7 +63,7 @@ export const useCreateEstimates = () => {
         `${backendURL}/estimates/save`,
         {
           customerData: props.customerData,
-          estimateData: { ...props.estimateData, creator_id: decodedToken.id },
+          estimateData: { ...props.estimateData, creator_id: decodedToken.id, creator_type: decodedToken.role, status: "pending" },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -87,15 +87,13 @@ export const useEditEstimates = () => {
   const handleEditEstimate = async (updatedEstimate) => {
     console.log(updatedEstimate, "up")
     const token = localStorage.getItem("token");
-
     const decodedToken = parseJwt(token);
-
     try {
       const response = await axios.put(
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
           customerData: updatedEstimate.customerData,
-          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id },
+          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id , creator_type: decodedToken.role },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
