@@ -21,7 +21,7 @@ import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 
 export default function ExitingQuotes() {
-  const { data: estimates, isFetching } = useGetEstimates();
+  const { data, isFetching } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
   const dispatch = useDispatch();
@@ -111,7 +111,7 @@ export default function ExitingQuotes() {
                   <CircularProgress sx={{}} />
                 </Box>
               ) : (
-               estimates?.map((item) => (
+               data?.estimates?.map((item) => (
                   <Box
                     key={item._id}
                     sx={{
