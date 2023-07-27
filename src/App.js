@@ -18,7 +18,6 @@ function App() {
     <div className="App">
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-
           <AppRoutes />
           <AuthVerify logOut={logOut} />
         </BrowserRouter>

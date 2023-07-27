@@ -18,8 +18,8 @@ const SuperSidebar = () => {
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-
-    navigate("/adminlogin");
+    // navigate("/adminlogin");
+    window.location.href = '/adminlogin';
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);

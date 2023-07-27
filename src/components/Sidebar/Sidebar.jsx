@@ -28,8 +28,8 @@ const Sidebar = () => {
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-
-    navigate("/login");
+    // navigate("/login");
+    window.location.href = '/login';
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
@@ -45,11 +45,10 @@ const Sidebar = () => {
         </NavLink>
         <div className="center">
           <ul>
-          <NavLink to="/" className="link">
+            <NavLink to="/" className="link">
               <li
-                className={`estimates ${
-                  location.pathname === "/" ? "active" : ""
-                }`}
+                className={`estimates ${location.pathname === "/" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -64,9 +63,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/Estimates" className="link">
               <li
-                className={` ${
-                  location.pathname === "/Estimates" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/Estimates" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -81,9 +79,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/Customers" className="link">
               <li
-                className={` ${
-                  location.pathname === "/Customers" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/Customers" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -113,9 +110,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/hardware" className="link">
               <li
-                className={` ${
-                  location.pathname === "/hardware" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/hardware" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -130,12 +126,11 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/finishes" className="link">
               <li
-                className={` ${
-                  location.pathname === "/finishes" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/finishes" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
-                <FormatColorFillIcon sx={{fontSize: 30, marginLeft: -0.2, p: 0,marginRight: 0.8 }} />
+                  <FormatColorFillIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
 
                   <span>Finishes</span>
                 </IconButton>
@@ -143,12 +138,11 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/Addons" className="link">
               <li
-                className={` ${
-                  location.pathname === "/Addons" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/Addons" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
-                  <LayersOutlinedIcon sx={{fontSize: 30, marginLeft: -0.2, p: 0,marginRight: 0.8 }} />
+                  <LayersOutlinedIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
 
                   <span>Add ons</span>
                 </IconButton>
@@ -156,9 +150,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/GlassType" className="link">
               <li
-                className={` ${
-                  location.pathname === "/GlassType" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/GlassType" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -173,9 +166,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/GlassTreatement" className="link">
               <li
-                className={` ${
-                  location.pathname === "/GlassTreatement" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/GlassTreatement" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -190,9 +182,8 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/Defaults" className="link">
               <li
-                className={` ${
-                  location.pathname === "/Defaults" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/Defaults" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -208,9 +199,8 @@ const Sidebar = () => {
             <NavLink to="/settings" className="link">
               <li
                 style={{ marginTop: "120px" }}
-                className={` ${
-                  location.pathname === "/settings" ? "active" : ""
-                }`}
+                className={` ${location.pathname === "/settings" ? "active" : ""
+                  }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
                   <img
@@ -235,9 +225,9 @@ const Sidebar = () => {
             <div className="emailUser">{decodedToken?.email}</div>
           </div>
           <Tooltip title="Logout" placement="top-start" arrow >
-          <div className="logOutIcon" onClick={() => setOpen(!open)}>
-            <img src={logout} alt="image" />
-          </div>
+            <div className="logOutIcon" onClick={() => setOpen(!open)}>
+              <img src={logout} alt="image" />
+            </div>
           </Tooltip>
         </div>
       </div>
