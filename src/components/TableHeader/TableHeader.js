@@ -31,19 +31,21 @@ const TableHeader = ({ showMore, types }) => {
           marginRight: 2,
           backgroundColor:
             selectedOption === option
-              ? "rgba(132, 119, 218, 0.2)"
+              ? "#8477DA"
               : "transparent",
           "&:hover": {
-            backgroundColor: "rgba(132, 119, 218, 0.2)",
+            backgroundColor: "#8477DA",
+            color: "white"
           },
           "&:active": {
-            backgroundColor: "rgba(132, 119, 218, 0.2)",
+            backgroundColor: "#8477DA",
+            color: "white"
           },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           cursor: "pointer",
-
+          color: selectedOption === option ? "white": "black",
           borderRadius: "4px",
         }}
       >

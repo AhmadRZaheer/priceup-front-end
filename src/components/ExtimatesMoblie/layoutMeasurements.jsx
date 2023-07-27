@@ -19,6 +19,7 @@ import {
 import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
 import { SelectedImage } from "./selctedImage";
 import QuotesHeader from "./QuotesHeader";
+import QuotesFooter from "./QuotesFooter";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
   console.log(selectedData, "selectedData");
@@ -71,7 +72,7 @@ const LayoutMeasurements = () => {
           height: "40vh",
         }}
       >
-        <QuotesHeader navigateTo={"layout"}/>
+        <QuotesHeader navigateTo={"layout"} />
         <form onSubmit={formik.handleSubmit}>
           <Box
             sx={{
@@ -171,7 +172,7 @@ const LayoutMeasurements = () => {
                       placeholder={String.fromCharCode(97 + index)}
                       InputProps={{
                         style: {
-                          color: "white", 
+                          color: "white",
                         },
                       }}
                       InputLabelProps={{
@@ -218,16 +219,15 @@ const LayoutMeasurements = () => {
                   </Box>
                 ) : (
                   <Box>
-                  <img
-                    width="300px"
-                    height="350px"
-                    src={`${backendURL}/${selectedData?.image}`}
-                    alt="Selected"
-                  />
+                    <img
+                      width="300px"
+                      height="350px"
+                      src={`${backendURL}/${selectedData?.image}`}
+                      alt="Selected"
+                    />
                   </Box>
                   // <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
-
               </Box>
             </Box>
 
@@ -238,8 +238,7 @@ const LayoutMeasurements = () => {
                 maxWidth: "100%",
               }}
             >
-
-              <Box
+              {/* <Box
                 sx={{
                   display: { md: "none", xs: "flex" },
                   gap: 2,
@@ -293,7 +292,15 @@ const LayoutMeasurements = () => {
                     Next
                   </Button>
                 </Box>
-              </Box>
+              </Box> */}
+              <QuotesFooter
+                navigateNext={"review"}
+                type={"submit"}
+                navigateBack={"layout"}
+                disabled={Object.keys(formik.values).some(
+                  (key) => !formik.values[key]
+                )}
+              />
             </Box>
           </Box>
         </form>

@@ -14,6 +14,7 @@ import {
 } from "../../redux/estimateCalculations";
 import QuotesHeader from "./QuotesHeader";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
+import QuotesFooter from "./QuotesFooter";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },

@@ -18,6 +18,7 @@ import ChannelType from "./channelOrClamp";
 import { evaluateFormula } from "../../utilities/common";
 import { useMemo } from "react";
 import QuotesHeader from "./QuotesHeader";
+import QuotesFooter from "./QuotesFooter";
 
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
@@ -1033,57 +1034,7 @@ const LayoutReview = () => {
             </Box>
           </Box>
         </Box>
-        <Box
-          sx={{
-            display: { md: "none", xs: "flex" },
-            gap: 2,
-            justifyContent: "center",
-            width: "93%",
-            paddingX: 2,
-            paddingY: 2,
-            position: "fixed",
-            bottom: 0,
-            backgroundColor: "#100d24",
-            borderTop: "1px solid #423f57",
-          }}
-        >
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              onClick={() => {
-                dispatch(setNavigation("measurements"));
-              }}
-              sx={{
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                color: "#344054",
-                textTransform: "initial",
-                border: "1px solid #D0D5DD",
-                backgroundColor: { md: "transparent", xs: "white" },
-              }}
-            >
-              {" "}
-              Back
-            </Button>
-          </Box>
-
-          <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-            <Button
-              fullWidth
-              disabled={selectedContent?.hardwareFinishes === null}
-              variant="contained"
-              onClick={handleBoxClick}
-              sx={{
-                backgroundColor: "#8477da",
-                "&:hover": {
-                  backgroundColor: "#8477da",
-                },
-              }}
-            >
-              {" "}
-              Next
-            </Button>
-          </Box>
-        </Box>
+          <QuotesFooter navigateNext={"summary"} navigateBack={quoteState === "create" ? "measurements" : "existing"} disabled={selectedContent?.hardwareFinishes === null} />
         <Snackbars
           open={snackbar.open}
           message={snackbar.message}

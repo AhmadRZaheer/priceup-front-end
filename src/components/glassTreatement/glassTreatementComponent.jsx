@@ -97,7 +97,7 @@ const GlassTreatementComponent = ({ type }) => {
           }}
         >
           <IconButton onClick={handleOpen}>
-            <Add style={{ color: "rgb(65, 106, 238)" }} />
+            <Add style={{ color: "#8477DA" }} />
           </IconButton>
         </div>{" "}
       </div>

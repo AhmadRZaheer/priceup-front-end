@@ -232,8 +232,11 @@ const DefaultComponent = ({ showSnackbar }) => {
                       style={{
                         width: "100%",
                         boxShadow: "0px 0px 2px blue",
-                        color: "#000000",
-                        backgroundColor: "rgba(132, 119, 218, 0.14)",
+                        color: "white",
+                        backgroundColor: "#8477DA",
+                        "&:hover": {
+                          backgroundColor: "#8477DA"
+                        }
                       }}
                       component="span"
                       onClick={handleFileUpload}

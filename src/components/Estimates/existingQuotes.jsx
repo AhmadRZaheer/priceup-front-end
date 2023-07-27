@@ -191,7 +191,7 @@ export default function ExistingQuotes() {
                 onClick={handleCreateQuote}
                 disabled={estimateDataFetching}
               >
-                <AddCircle sx={{ fontSize: 30, color: "#6676f2" }} />
+                <AddCircle sx={{ fontSize: 30, color: "#8477DA" }} />
               </IconButton>
             </Box>
 

@@ -44,19 +44,21 @@ const LayoutHeader = () => {
           minHeight: "50px",
           marginRight: 2,
           backgroundColor:
-            props?._id === defaultId ? "rgba(132, 119, 218, 0.2)" : "",
+            props?._id === defaultId ? "#8477DA" : "",
 
           "&:hover": {
-            backgroundColor: "rgba(132, 119, 218, 0.2)",
+            backgroundColor: "#8477DA",
+            color: "white"
           },
           "&:active": {
-            backgroundColor: "rgba(132, 119, 218, 0.2)",
+            backgroundColor: "#8477DA",
+            color: "white"
           },
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           cursor: "pointer",
-
+          color: props?._id === defaultId ? "white" : "black",
           borderRadius: "4px",
         }}
       >
