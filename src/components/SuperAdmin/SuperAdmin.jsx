@@ -3,17 +3,12 @@ import "./SuperAdmin.scss";
 import { AdminColumns } from "../../customerTableSource";
 
 import { DataGrid } from "@mui/x-data-grid";
-import {
-  Box,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import Snackbars from "../Model/SnackBar";
-import {
-  useFetchDataAdmin,
-} from "../../utilities/ApiHooks/SuperAdmin";
+import { useFetchDataAdmin } from "../../utilities/ApiHooks/SuperAdmin";
 import AddSuperAdminModel from "../Model/AddSuperAdminModel";
 import TableRow from "./TableRow";
+import { Add } from "@mui/icons-material";
 
 const SuperAdminTable = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -44,8 +39,8 @@ const SuperAdminTable = () => {
 
   const actionColumn = [
     {
-      field: " ",
-
+      field: "Status",
+      paddingLeft: 3,
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
@@ -61,11 +56,28 @@ const SuperAdminTable = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            width: "98%",
+            margin: "auto",
+            mt: 2,
           }}
         >
-          <Typography Boxvariant="h3">Users</Typography>
+          <Typography variant="h4">Users</Typography>
           <Box sx={{ width: "200px" }}>
-            <Button fullWidth variant="contained" onClick={() => setOpen(true)}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={() => setOpen(true)}
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 17,
+                padding: 1,
+              }}
+            >
+              <Add color="white" />
               Add Users
             </Button>
           </Box>

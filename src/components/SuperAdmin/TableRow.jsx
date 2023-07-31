@@ -20,9 +20,8 @@ const TableRow = ({ row, refetch }) => {
   }, [SuccessForEdit]);
   return (
     <div className="cellAction">
-      <div className="deleteButton"></div>
       <div
-        className="viewButton"
+       
       >
         {LoadingForEdit ? (
           <CircularProgress size={24} color="warning" />

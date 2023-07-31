@@ -9,12 +9,16 @@ export const teamColumns = [
     field: "name",
     headerName: "Name",
     width: 230,
-    renderCell: (params) => { 
-
+    renderCell: (params) => {
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img style={{width: 34, height: 34}} className="cellImg" src={`${backendURL}/${params.row.image}`} alt="dd" />
+            <img
+              style={{ width: 34, height: 34 }}
+              className="cellImg"
+              src={`${backendURL}/${params.row.image}`}
+              alt="dd"
+            />
           </div>
           <div className="customerNameTable">
             {params.row.name}
@@ -46,13 +50,17 @@ export const AdminColumns = [
     field: "name",
     headerName: "Name",
     width: 230,
-    renderCell: (params) => { 
-      
-
+    renderCell: (params) => {
+      console.log(params, "date");
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img className="cellImg" src={`${backendURL}/`} alt="" />
+            <img
+              className="cellImg"
+              style={{ width: 40, height: 40 }}
+              src={`${backendURL}/${params.row.image}`}
+              alt=""
+            />
           </div>
           <div className="customerNameTable">
             {params.row.name}
@@ -66,18 +74,13 @@ export const AdminColumns = [
   {
     field: "dateAdded",
     headerName: "Date added",
-    width: 120,
+    width: 220,
+    renderCell: (params) => {
+      console.log(params, "date");
+      return <div className="userNameTable">{new Date(params.row.updatedAt).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>;
+    },
   },
-  {
-    field: "LastQuote",
-    headerName: "Last Quoted",
-    width: 180,
-  },
-  {
-    field: "TotalQuote",
-    headerName: "Total Quoted ",
-    width: 180,
-  },
+
 ];
 
 export const CustomerColumns = [
@@ -89,7 +92,11 @@ export const CustomerColumns = [
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img style={{width: 30, height: 30}} src={`${backendURL}/${params.row.image}`} alt="" />
+            <img
+              style={{ width: 30, height: 30 }}
+              src={`${backendURL}/${params.row.image}`}
+              alt=""
+            />
             {/* <img style={{}} src={wheel} alt="" /> */}
           </div>
           <div className="customerNameTable">
@@ -110,7 +117,8 @@ export const CustomerColumns = [
     field: "lastQuotedOn",
     headerName: "Last Quoted on",
     width: 220,
-  },,
+  },
+  ,
 ];
 export const userColumns = [
   {
@@ -239,9 +247,7 @@ export const userColumnsHardware = [
               alt=""
             />
           </div>
-          <div className="hardwareNameTable">
-            {params.row.name}
-          </div>
+          <div className="hardwareNameTable">{params.row.name}</div>
         </div>
       );
     },
