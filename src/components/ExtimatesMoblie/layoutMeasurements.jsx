@@ -22,7 +22,6 @@ import QuotesHeader from "./QuotesHeader";
 import QuotesFooter from "./QuotesFooter";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
-  console.log(selectedData, "selectedData");
 
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
@@ -49,7 +48,6 @@ const LayoutMeasurements = () => {
           value,
         }));
       dispatch(updateMeasurements(measurementsArray));
-
       dispatch(setNavigation("review"));
       resetForm();
     },

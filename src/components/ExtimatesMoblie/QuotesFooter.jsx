@@ -4,7 +4,11 @@ import { useDispatch } from "react-redux";
 
 const QuotesFooter = ({ navigateNext,type, navigateBack, disabled }) => {
   const dispatch = useDispatch();
-  
+  const nextClickHandler = () => {
+    if(type !== "submit"){
+      dispatch(setNavigation(navigateNext));
+    }
+  }
   return (
     <Box
       sx={{
@@ -45,9 +49,7 @@ const QuotesFooter = ({ navigateNext,type, navigateBack, disabled }) => {
           disabled={disabled}
           type={type}
           variant="contained"
-          onClick={() => {
-            dispatch(setNavigation(navigateNext));
-          }}
+          onClick={nextClickHandler}
           sx={{
             backgroundColor: "#8477da",
             "&:hover": {

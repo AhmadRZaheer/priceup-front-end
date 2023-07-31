@@ -278,7 +278,7 @@ const estimateCalcSlice = createSlice({
         },
         hinges: {
           item: hingesType || null,
-          count: layoutData?.settings?.handles?.count,
+          count: layoutData?.settings?.hinges?.count,
         },
         header: {
           item: headerType || null,
