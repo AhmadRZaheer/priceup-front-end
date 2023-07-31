@@ -32,8 +32,12 @@ const MenuList = ({
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(currentItem || null);
   // const [addonsSelectedItems,setAddonsSelectedItem] = useState(selectedContent?.addOns || []);
-  const [sleeveOverCount, setSleeveOverCount] = useState(selectedContent?.sleeveOverCount || 0);
-  const [towelBarsCount, setTowelBarsCount] = useState(selectedContent?.towelBarsCount || 0);
+  const [sleeveOverCount, setSleeveOverCount] = useState(
+    selectedContent?.sleeveOverCount || 0
+  );
+  const [towelBarsCount, setTowelBarsCount] = useState(
+    selectedContent?.towelBarsCount || 0
+  );
   const handleSleeveOverCount = (count) => {
     if (count >= 0) {
       setSleeveOverCount(count);
@@ -117,13 +121,14 @@ const MenuList = ({
               py: 1.5,
             }}
           >
-            <AddCircleOutline
-              onClick={() => handleCountSet(countVal + 1)}
+            <RemoveCircleOutline
+              onClick={() => handleCountSet(countVal - 1)}
               sx={{ color: "#98A2B3" }}
             />
             <Typography>{countVal}</Typography>
-            <RemoveCircleOutline
-              onClick={() => handleCountSet(countVal - 1)}
+
+            <AddCircleOutline
+              onClick={() => handleCountSet(countVal + 1)}
               sx={{ color: "#98A2B3" }}
             />
           </Box>
@@ -202,9 +207,15 @@ const MenuList = ({
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border: (type === 'addOns' ? selectedContent?.addOns.some((selectedItem) => selectedItem?._id === item?._id) : item === selectedItem)
-                        ? "2px solid #8477da"
-                        : "1px solid #EAECF0",
+                    border: (
+                      type === "addOns"
+                        ? selectedContent?.addOns.some(
+                            (selectedItem) => selectedItem?._id === item?._id
+                          )
+                        : item === selectedItem
+                    )
+                      ? "2px solid blue"
+                      : "1px solid #EAECF0",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                     p: 2,

@@ -14,7 +14,7 @@ import DefaltIcon from "../../Assets/columns.svg"
 import SettingsIcon from "../../Assets/settings.svg"
 import LayersOutlinedIcon from '@mui/icons-material/LayersOutlined';
 import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
-import { IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { backendURL } from "../../utilities/common";
 import { makeStyles } from "@material-ui/core";
@@ -36,6 +36,16 @@ const Sidebar = () => {
   return (
     <>
       <div className="sidebar">
+      <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "space-between",
+            height: "100vh",
+            justifyContent: "space-between",
+          }}
+        >
+          <Box sx={{ marginTop: 2 }}>
         <NavLink to="/">
           <div className="top">
             <span className="logo">
@@ -198,7 +208,6 @@ const Sidebar = () => {
             </NavLink>
             <NavLink to="/settings" className="link">
               <li
-                style={{ marginTop: "120px" }}
                 className={` ${location.pathname === "/settings" ? "active" : ""
                   }`}
               >
@@ -215,6 +224,8 @@ const Sidebar = () => {
             </NavLink>
           </ul>
         </div>
+        </Box>
+        <Box>
         <div className="line"></div>
         <div className="bottom">
           <div className="UserIcon">
@@ -230,6 +241,8 @@ const Sidebar = () => {
             </div>
           </Tooltip>
         </div>
+        </Box>
+        </Box>
       </div>
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>

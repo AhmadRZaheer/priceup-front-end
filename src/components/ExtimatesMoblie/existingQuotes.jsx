@@ -19,9 +19,10 @@ import {
 import image1 from "../../Assets/username1.svg";
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
+import ModeIcon from "@mui/icons-material/Mode";
 
 export default function ExitingQuotes() {
-  const { data: estimates, isFetching } = useGetEstimates();
+  const { data, isFetching } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
   const dispatch = useDispatch();
@@ -111,7 +112,7 @@ export default function ExitingQuotes() {
                   <CircularProgress sx={{}} />
                 </Box>
               ) : (
-               estimates?.map((item) => (
+               data?.estimates?.map((item) => (
                   <Box
                     key={item._id}
                     sx={{
@@ -147,13 +148,15 @@ export default function ExitingQuotes() {
                     >
                       <Typography color="red" marginRight={3}></Typography>
 
-                      <IconButton
+                      <Button
                         onClick={() => handleIconButtonClick(item)}
-                        sx={{ marginRight: 1, height: 25 }}
+                        sx={{ height: 25,color:'white',background: "#8477DA","&:hover": { background: "#8477DA",},width:'fit-content',margin:'0px auto' }}
                         disabled={estimateDataFetching}
                       >
-                        <img src={pencil} alt="image of pencil" />
-                      </IconButton>
+                        <ModeIcon sx={{color: "white",fontSize:'17px',marginRight:'5px'}} />
+                        Edit
+                        {/* <img src={pencil} alt="image of pencil" /> */}
+                      </Button>
                       <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
                         {new Date(item?.updatedAt).toDateString()}
                       </Typography>

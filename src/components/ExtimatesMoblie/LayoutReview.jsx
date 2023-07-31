@@ -51,59 +51,59 @@ const LayoutReview = () => {
     // hardware
     const handlePrice = selectedContent?.handles?.item
       ? (selectedContent?.handles?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent.handles.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent.handles.count
       : 0;
     const hingesPrice = selectedContent?.hinges?.item
       ? (selectedContent?.hinges?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent.hinges.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent.hinges.count
       : 0;
     const mountingChannel = selectedContent?.mounting?.channel.item
       ? selectedContent?.mounting?.channel?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0
       : 0;
     const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp
       ?.item
       ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
       : 0;
     const mountingsleeveOver = selectedContent?.mounting?.clamps?.sleeveOver
       ?.item
       ? (selectedContent?.mounting?.clamps?.sleeveOver?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
       : 0;
     const mountingglassToGlass = selectedContent?.mounting?.clamps?.glassToGlass
       ?.item
       ? (selectedContent?.mounting?.clamps?.glassToGlass?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
       : 0;
     const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
       ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent.slidingDoorSystem.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent.slidingDoorSystem.count
       : 0;
     const headerPrice = selectedContent?.header?.item
       ? (selectedContent?.header?.item?.finishes?.find(
-          (item) => selectedContent.hardwareFinishes._id === item.finish_id
-        )?.cost || 0) * selectedContent.header.count
+        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      )?.cost || 0) * selectedContent.header.count
       : 0;
 
     const hardwareTotals =
       handlePrice +
       hingesPrice +
-      (mountingChannel * selectedContent?.mounting?.activeType === "channel"
+      (mountingChannel * (selectedContent?.mounting?.activeType === "channel"
         ? 1
-        : 0) +
+        : 0)) +
       ((mountingWallClamps + mountingglassToGlass + mountingsleeveOver) *
-        selectedContent?.mounting?.activeType ===
-      "clamps"
-        ? 1
-        : 0) +
+        (selectedContent?.mounting?.activeType ===
+          "clamps"
+          ? 1
+          : 0)) +
       slidingDoorSystemPrice +
       headerPrice;
 
@@ -112,35 +112,35 @@ const LayoutReview = () => {
     if (selectedContent.glassType.thickness === "1/2") {
       fabricationPrice =
         Number(selectedContent?.oneInchHoles) *
-          estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
+        estimatesData?.fabricatingPricing?.oneHoleOneByTwoInchGlass +
         Number(selectedContent?.hingeCut) *
-          estimatesData?.fabricatingPricing?.hingeCutoutOneByTwoInch +
+        estimatesData?.fabricatingPricing?.hingeCutoutOneByTwoInch +
         Number(selectedContent?.clampCut) *
-          estimatesData?.fabricatingPricing?.clampCutoutOneByTwoInch +
+        estimatesData?.fabricatingPricing?.clampCutoutOneByTwoInch +
         Number(selectedContent?.notch) *
-          estimatesData?.fabricatingPricing?.notchOneByTwoInch +
+        estimatesData?.fabricatingPricing?.notchOneByTwoInch +
         Number(selectedContent?.outages) *
-          estimatesData?.fabricatingPricing?.outageOneByTwoInch +
+        estimatesData?.fabricatingPricing?.outageOneByTwoInch +
         Number(selectedContent?.mitre) *
-          estimatesData?.fabricatingPricing?.minterOneByTwoInch +
+        estimatesData?.fabricatingPricing?.minterOneByTwoInch +
         Number(selectedContent?.polish) *
-          estimatesData?.fabricatingPricing?.polishPricePerOneByTwoInch;
+        estimatesData?.fabricatingPricing?.polishPricePerOneByTwoInch;
     } else if (selectedContent.glassType.thickness === "3/8") {
       fabricationPrice =
         Number(selectedContent?.oneInchHoles) *
-          estimatesData?.fabricatingPricing?.oneHoleThreeByEightInchGlass +
+        estimatesData?.fabricatingPricing?.oneHoleThreeByEightInchGlass +
         Number(selectedContent?.hingeCut) *
-          estimatesData?.fabricatingPricing?.hingeCutoutThreeByEightInch +
+        estimatesData?.fabricatingPricing?.hingeCutoutThreeByEightInch +
         Number(selectedContent?.clampCut) *
-          estimatesData?.fabricatingPricing?.clampCutoutThreeByEightInch +
+        estimatesData?.fabricatingPricing?.clampCutoutThreeByEightInch +
         Number(selectedContent?.notch) *
-          estimatesData?.fabricatingPricing?.notchThreeByEightInch +
+        estimatesData?.fabricatingPricing?.notchThreeByEightInch +
         Number(selectedContent?.outages) *
-          estimatesData?.fabricatingPricing?.outageThreeByEightInch +
+        estimatesData?.fabricatingPricing?.outageThreeByEightInch +
         Number(selectedContent?.mitre) *
-          estimatesData?.fabricatingPricing?.minterThreeByEightInch +
+        estimatesData?.fabricatingPricing?.minterThreeByEightInch +
         Number(selectedContent?.polish) *
-          estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
+        estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
     }
 
     //addons
@@ -195,7 +195,7 @@ const LayoutReview = () => {
         addOnsTotal +
         glassPrice +
         glassTreatmentPrice) *
-        estimatesData?.miscPricing?.pricingFactor +
+      estimatesData?.miscPricing?.pricingFactor +
       laborPrice;
     dispatch(setTotal(total));
   }, [selectedContent]);
@@ -237,7 +237,7 @@ const LayoutReview = () => {
           gap: { md: 4, xs: 0 },
         }}
       >
-        <QuotesHeader navigateTo={quoteState === "create" ? "measurements" : "existing"}/>
+        <QuotesHeader navigateTo={quoteState === "create" ? "measurements" : "existing"} />
         <Box
           sx={{
             width: { md: "94%", sm: "100%", xs: "100%" },
@@ -1034,7 +1034,7 @@ const LayoutReview = () => {
             </Box>
           </Box>
         </Box>
-          <QuotesFooter navigateNext={"summary"} navigateBack={quoteState === "create" ? "measurements" : "existing"} disabled={selectedContent?.hardwareFinishes === null} />
+        <QuotesFooter navigateNext={"summary"} navigateBack={quoteState === "create" ? "measurements" : "existing"} disabled={selectedContent?.hardwareFinishes === null} />
         <Snackbars
           open={snackbar.open}
           message={snackbar.message}
