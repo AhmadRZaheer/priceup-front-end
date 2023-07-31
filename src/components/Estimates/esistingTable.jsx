@@ -81,11 +81,11 @@ export default function ExistingTable() {
           </Box>
 
           <Box sx={{ display: "flex", backgroundColor: "#e8e8e8", p: 2 }}>
-            <Typography sx={{ width: 300 }}>Creator Name</Typography>
-            <Typography sx={{ width: 200 }}>Customer Name</Typography>
-            <Typography sx={{ width: 240 }}>Customer Email</Typography>
+            <Typography sx={{ width: 280 }}>Creator Name</Typography>
+            <Typography sx={{ width: 220 }}>Customer Name</Typography>
+            <Typography sx={{ width: 250 }}>Customer Email</Typography>
             <Typography sx={{ width: 180 }}>Date Quoted</Typography>
-            <Typography sx={{ width: 190 }}>Estimated Total</Typography>
+            <Typography sx={{ width: 200 }}>Estimated Total</Typography>
             {/* <Typography sx={{ width: 180 }}>Measurer</Typography> */}
             <Typography sx={{ width: 180 }}>Status</Typography>
             <Typography sx={{ width: 60 }}></Typography>
@@ -99,7 +99,7 @@ export default function ExistingTable() {
                 p: 2,
               }}
             >
-              <Box sx={{ width: 320, display: "flex", gap: 1 }}>
+              <Box sx={{ width: 290, display: "flex", gap: 1 }}>
                 <Box
                   sx={{
                     width: 40,
