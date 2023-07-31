@@ -6,6 +6,7 @@ import CustomerTable from "../../components/CustomerTable/Customertable";
 import ExistingTable from "../../components/Estimates/esistingTable";
 import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/Estimatedata-card";
 import ExistingQuotes from "../../components/Estimates/existingQuotes";
+import ExistingQuotes2 from "../../components/Estimates/existingTable2";
 
 const Overview = () => {
   const { data , isFetching } = useFetchDataEstimateCard();
@@ -28,7 +29,7 @@ console.log()
         <div className="page-title">
           <h2>Estimates</h2>
         </div>
-        <ExistingQuotes />
+        <ExistingQuotes2 />
       </div>
     </div>
   );

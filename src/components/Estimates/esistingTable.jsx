@@ -82,7 +82,7 @@ export default function ExistingTable() {
 
           <Box sx={{ display: "flex", backgroundColor: "#e8e8e8", p: 2 }}>
             <Typography sx={{ width: 300 }}>Creator Name</Typography>
-            <Typography sx={{ width: 240 }}>Customer Name</Typography>
+            <Typography sx={{ width: 200 }}>Customer Name</Typography>
             <Typography sx={{ width: 240 }}>Customer Email</Typography>
             <Typography sx={{ width: 180 }}>Date Quoted</Typography>
             <Typography sx={{ width: 190 }}>Estimated Total</Typography>
@@ -119,7 +119,7 @@ export default function ExistingTable() {
                 <Typography sx={{fontSize: 13, p:0, mt: -0.4}}>{item.creatorData.email}</Typography>
                 </Box>
               </Box>
-              <Typography sx={{ width: 250, py: 1 }}>
+              <Typography sx={{ width: 210, py: 1 }}>
                 {item.customerData.name}
               </Typography>
               <Typography sx={{ width: 250, py: 1 }}>
