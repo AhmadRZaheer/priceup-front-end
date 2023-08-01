@@ -2,7 +2,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
   getContent,
-  getMeasumentSide,
+  getMeasurementSide,
   getTotal,
   selectedItem,
   setNavigation,
@@ -15,7 +15,7 @@ const Summary = ({ handleOpen }) => {
   const dispatch = useDispatch();
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
-  const measurements = useSelector(getMeasumentSide);
+  const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
 
   return (

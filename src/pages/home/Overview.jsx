@@ -26,7 +26,7 @@ const Overview = () => {
           <Widget value={data?.estimates || 0} type="estimates" />
           <Widget value={data?.customers || 0} type="customers" />
           <Widget value={data?.staff || 0} type="team" />
-          <Widget value={data?.total || 0} type="invoice" />
+          {/* <Widget value={data?.total || 0} type="invoice" /> */}
         </div>
         <div className="page-title">
           <h2>Estimates</h2>

@@ -13,6 +13,7 @@ import { backendURL, calculateAreaOrPerimeter } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectedItem,
+  setLayoutArea,
   setLayoutPerimeter,
   setNavigation,
   updateMeasurements,
@@ -48,7 +49,9 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const perimeter = calculateAreaOrPerimeter(measurementsArray,selectedData?.settings?.perimeterFormula);
+      const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
+      const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
+      dispatch(setLayoutArea(sqftArea));
       dispatch(setLayoutPerimeter(perimeter));
       dispatch(updateMeasurements(measurementsArray));
       dispatch(setNavigation("review"));

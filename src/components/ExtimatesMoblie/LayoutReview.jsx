@@ -6,8 +6,9 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  getLayoutArea,
   getLayoutPerimeter,
-  getMeasumentSide,
+  getMeasurementSide,
   getQuoteState,
   selectedItem,
   setInputContent,
@@ -24,17 +25,18 @@ import QuotesFooter from "./QuotesFooter";
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
-  const measurementSides = useSelector(getMeasumentSide);
-  const perimeter = useSelector(getLayoutPerimeter);
-  const currentLayout = useSelector(selectedItem);
+  const sqftArea = useSelector(getLayoutArea);
+  // const measurementSides = useSelector(getMeasurementSide);
+  // const perimeter = useSelector(getLayoutPerimeter);
+  // const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
   const quoteState = useSelector(getQuoteState);
-  const priceBySqft = useMemo(() => {
-    return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
-  }, [measurementSides, currentLayout]);
-
+  // const priceBySqft = useMemo(() => {
+  //   return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
+  // }, [measurementSides, currentLayout]);
+  // console.log(priceBySqft,'sqft');
   useEffect(() => {
-    const total = calculateTotal(selectedContent, priceBySqft, estimatesData);
+    const total = calculateTotal(selectedContent, sqftArea, estimatesData);
     dispatch(setTotal(total));
   }, [selectedContent]);
 

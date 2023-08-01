@@ -13,7 +13,9 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
-  getMeasumentSide,
+  getLayoutArea,
+  getLayoutPerimeter,
+  getMeasurementSide,
   getQuoteId,
   getQuoteState,
   getTotal,
@@ -58,7 +60,9 @@ export default function ClientDetailsModel({
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
-  const measurements = useSelector(getMeasumentSide);
+  const measurements = useSelector(getMeasurementSide);
+  const perimeter = useSelector(getLayoutPerimeter);
+  const sqftArea = useSelector(getLayoutArea);
   const updatecheck = useSelector(getQuoteState);
   const quoteId = useSelector(getQuoteId);
 
@@ -104,7 +108,7 @@ export default function ClientDetailsModel({
         },
         glassType: {
           type: estimatesContent?.glassType?.item?._id,
-          thickness: estimatesContent?.glassType?.count,
+          thickness: estimatesContent?.glassType?.thickness,
         },
         glassTreatment: estimatesContent?.glassTreatment?._id,
         slidingDoorSystem: {
@@ -129,6 +133,8 @@ export default function ClientDetailsModel({
         sleeveOverCount: estimatesContent?.sleeveOverCount,
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
+        perimeter: perimeter,
+        sqftArea: sqftArea
       };
       if (updatecheck === "create") {
         mutate({

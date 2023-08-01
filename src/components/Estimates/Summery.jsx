@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import {
   getContent,
-  getMeasumentSide,
+  getMeasurementSide,
   getTotal,
   selectedItem,
 } from "../../redux/estimateCalculations";
@@ -11,7 +11,7 @@ import { backendURL } from "../../utilities/common";
 const Summary = () => {
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
-  const measurements = useSelector(getMeasumentSide);
+  const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
 
   return (

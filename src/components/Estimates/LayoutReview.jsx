@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
 import {
   getContent,
-  getMeasumentSide,
+  getLayoutArea,
+  getMeasurementSide,
   selectedItem,
   setInputContent,
   setNavigationDesktop,
@@ -23,15 +24,16 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   };
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
-  const measurementSides = useSelector(getMeasumentSide);
-  const currentLayout = useSelector(selectedItem);
+  const sqftArea = useSelector(getLayoutArea);
+  // const measurementSides = useSelector(getMeasurementSide);
+  // const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
-  const priceBySqft = useMemo(() => {
-    return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
-  }, [measurementSides, currentLayout]);
+  // const priceBySqft = useMemo(() => {
+  //   return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
+  // }, [measurementSides, currentLayout]);
 
   useEffect(() => {
-    const total = calculateTotal(selectedContent, priceBySqft, estimatesData);
+    const total = calculateTotal(selectedContent, sqftArea, estimatesData);
     dispatch(setTotal(total));
   }, [selectedContent]);
   const [snackbar, setSnackbar] = useState({

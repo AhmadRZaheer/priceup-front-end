@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
-export const getMeasumentSide = (state) =>
-  state.estimateCalculations.measuments;
+export const getMeasurementSide = (state) =>
+  state.estimateCalculations.measurements;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;
@@ -12,6 +12,7 @@ export const getQuoteId = (state) => state.estimateCalculations.quoteId;
 export const getQuoteState = (state) => state.estimateCalculations.quoteState;
 export const getLayoutPerimeter = (state) =>
   state.estimateCalculations.perimeter;
+export const getLayoutArea = (state) => state.estimateCalculations.sqftArea;
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
@@ -20,7 +21,8 @@ const estimateCalcSlice = createSlice({
     handlePageNavigation: "existing",
     handlePageDesktopNavigation: "Layout",
     perimeter: 0,
-    measuments: [],
+    sqftArea: 0,
+    measurements: [],
     selectedItem: [],
     content: {
       hardwareFinishes: null,
@@ -187,18 +189,15 @@ const estimateCalcSlice = createSlice({
     },
     updateMeasurements: (state, action) => {
       const newMeasurements = action.payload;
-
-      state.measuments = newMeasurements;
+      state.measurements = newMeasurements;
     },
 
     updateAddOnCount: (state, action) => {
       const { type, count } = action.payload;
-
       state.content[type] = count;
     },
     addSelectedItem: (state, action) => {
       const itemData = action.payload;
-
       state.selectedItem = itemData;
     },
     setNavigation: (state, action) => {
@@ -209,6 +208,9 @@ const estimateCalcSlice = createSlice({
     },
     setQuoteState: (state, action) => {
       state.quoteState = action.payload;
+    },
+    setLayoutArea: (state, action) => {
+      state.sqftArea = action.payload;
     },
     setLayoutPerimeter: (state, action) => {
       state.perimeter = action.payload;
@@ -399,7 +401,9 @@ const estimateCalcSlice = createSlice({
       let addOns = estimateData?.addOns?.map((id) =>
         listData?.addOns?.find((item) => item?._id === id)
       );
-
+      const measurements = estimateData.measurements.map(
+        ({ _id, ...rest }) => rest
+      );
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -463,10 +467,15 @@ const estimateCalcSlice = createSlice({
         addOns: addOns,
       };
       state.quoteState = quoteState;
+      state.measurements = measurements;
+      state.perimeter = estimateData.perimeter;
+      state.sqftArea = estimateData.sqftArea;
+      state.selectedItem = estimateData.layoutData;
     },
   },
 });
 export const {
+  setLayoutArea,
   setLayoutPerimeter,
   setContent,
   setTotal,

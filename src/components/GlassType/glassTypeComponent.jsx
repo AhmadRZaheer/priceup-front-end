@@ -212,8 +212,8 @@ const GlassTypeComponent = ({ type }) => {
                   <IconButton>
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
-                  <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                    <Edit onClick={() => handleOpenEdit(entry)} color="white" />
+                  <IconButton onClick={() => handleOpenEdit(entry)} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, }}>
+                    <Edit color="white" />
                     Edit
                   </IconButton>
                 </Box>

@@ -12,6 +12,7 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectedItem,
+  setLayoutArea,
   setLayoutPerimeter,
   setNavigation,
   setNavigationDesktop,
@@ -53,7 +54,9 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const perimeter = calculateAreaOrPerimeter(measurementsArray,selectedData?.settings?.perimeterFormula);
+      const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
+      const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
+      dispatch(setLayoutArea(sqftArea));
       dispatch(setLayoutPerimeter(perimeter));
       dispatch(updateMeasurements(measurementsArray));
       setHandleEstimatesPages("review");

@@ -132,9 +132,9 @@ export default function ExistingTable() {
               {/* <Typography sx={{ width: 180 }}></Typography> */}
               <Typography sx={{ width: 170, py: 1 }}>{item?.status}</Typography>
 
-              <DeleteOutline
+              {/* <DeleteOutline
                 sx={{ color: "rgb(255, 103, 96)", fontSize: 25, py: 0.8 }}
-              />
+              /> */}
               <Link to="/Estimates/Steps">
                 <IconButton
                   onClick={() => handleIconButtonClick(item)}

@@ -50,7 +50,8 @@ const HardWareComponent = ({ type }) => {
     setOpen(false);
   };
 
-  const handleOpenEdit = (data, isEditAble) => {
+  const handleOpenEdit = (data) => {
+    console.log(data,'inside edit click')
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -214,6 +215,7 @@ const HardWareComponent = ({ type }) => {
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
                   <IconButton
+                  onClick={() => handleOpenEdit(entry)}
                     sx={{
                       backgroundColor: "#8477DA",
                       "&:hover": { backgroundColor: "#8477DA" },
@@ -221,10 +223,10 @@ const HardWareComponent = ({ type }) => {
                       textTransform: "capitalize",
                       borderRadius: 2,
                       fontSize: 17,
-                      padding: 1,
+                      // padding: 1,
                     }}
                   >
-                    <Edit onClick={() => handleOpenEdit(entry)} color="white" />
+                    <Edit  color="white" />
                     Edit
                   </IconButton>
                 </Box>
