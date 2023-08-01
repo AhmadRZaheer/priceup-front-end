@@ -9,10 +9,11 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-import { backendURL } from "../../utilities/common";
+import { backendURL, calculateAreaOrPerimeter } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectedItem,
+  setLayoutPerimeter,
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
@@ -47,6 +48,8 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
+      const perimeter = calculateAreaOrPerimeter(measurementsArray,selectedData?.settings?.perimeterFormula);
+      dispatch(setLayoutPerimeter(perimeter));
       dispatch(updateMeasurements(measurementsArray));
       dispatch(setNavigation("review"));
       resetForm();

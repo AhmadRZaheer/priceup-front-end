@@ -150,7 +150,7 @@ export default function ExistingQuotes() {
                   alt=""
                 />
                 <Typography pl={0.8} fontSize={26} fontWeight="bold">
-                  ${data?.total}
+                  ${data?.total?.toFixed(2) || 0}
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 1.5 }}>

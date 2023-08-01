@@ -6,19 +6,20 @@ export const getMeasumentSide = (state) =>
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
 export const getPageNavigation = (state) =>
   state.estimateCalculations.handlePageNavigation;
-  export const getPageDesktopNavigation = (state) =>
+export const getPageDesktopNavigation = (state) =>
   state.estimateCalculations.handlePageDesktopNavigation;
-export const getQuoteId = (state) => 
-state.estimateCalculations.quoteId
-export const getQuoteState = (state) => 
-state.estimateCalculations.quoteState;
+export const getQuoteId = (state) => state.estimateCalculations.quoteId;
+export const getQuoteState = (state) => state.estimateCalculations.quoteState;
+export const getLayoutPerimeter = (state) =>
+  state.estimateCalculations.perimeter;
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState: {
     quoteId: null,
-    quoteState:"create",
+    quoteState: "create",
     handlePageNavigation: "existing",
     handlePageDesktopNavigation: "Layout",
+    perimeter: 0,
     measuments: [],
     selectedItem: [],
     content: {
@@ -209,6 +210,13 @@ const estimateCalcSlice = createSlice({
     setQuoteState: (state, action) => {
       state.quoteState = action.payload;
     },
+    setLayoutPerimeter: (state, action) => {
+      state.perimeter = action.payload;
+      state.content = {
+        ...state.content,
+        polish: action.payload,
+      };
+    },
     setActiveMounting: (state, action) => {
       const { payload } = action;
       state.content.mounting = {
@@ -216,7 +224,7 @@ const estimateCalcSlice = createSlice({
         activeType: payload,
       };
     },
-    initializeStateForCreateQuote: (state,action) => {
+    initializeStateForCreateQuote: (state, action) => {
       const { layoutData, listData } = action.payload;
       console.log(listData, "list");
       console.log(layoutData, "layout");
@@ -240,7 +248,6 @@ const estimateCalcSlice = createSlice({
       headerType = listData?.header?.find(
         (item) => item._id === layoutData?.settings?.header
       );
-    
 
       let glassType = null;
       glassType = listData?.glassType?.find(
@@ -262,7 +269,8 @@ const estimateCalcSlice = createSlice({
       );
       let glassToGlassItem = null;
       glassToGlassItem = listData?.mountingChannel?.find(
-        (item) => item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
+        (item) =>
+          item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
       );
       let channelItem = null;
       channelItem = listData?.mountingChannel?.find(
@@ -271,7 +279,7 @@ const estimateCalcSlice = createSlice({
 
       state.content = {
         ...state.content,
-        hardwareFinishes:hardwareFinishes,
+        hardwareFinishes: hardwareFinishes,
         handles: {
           item: handleType || null,
           count: layoutData?.settings?.handles?.count,
@@ -312,7 +320,9 @@ const estimateCalcSlice = createSlice({
             item: channelItem || null,
             count: channelItem ? 1 : 0,
           },
-          activeType: layoutData?.settings?.channelOrClamps ? layoutData?.settings?.channelOrClamps?.toLowerCase() : "clamps",
+          activeType: layoutData?.settings?.channelOrClamps
+            ? layoutData?.settings?.channelOrClamps?.toLowerCase()
+            : "clamps",
         },
 
         // hingeCut: estimateData?.hingeCut,
@@ -331,11 +341,11 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      const { estimateData, listData, quoteState , quotesId } = action.payload;
+      const { estimateData, listData, quoteState, quotesId } = action.payload;
       console.log(listData, "list");
       console.log(estimateData, "list2");
-       
-      state.quoteId = quotesId
+
+      state.quoteId = quotesId;
 
       let hardwareFinishes = null;
       hardwareFinishes = listData?.hardwareFinishes?.find(
@@ -379,17 +389,20 @@ const estimateCalcSlice = createSlice({
       );
       let glassToGlassItem = null;
       glassToGlassItem = listData?.mountingChannel?.find(
-        (item) => item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
+        (item) =>
+          item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
       );
       let channelItem = null;
       channelItem = listData?.mountingChannel?.find(
         (item) => item._id === estimateData?.mounting?.channel
       );
-      let addOns = estimateData?.addOns?.map((id)=> listData?.addOns?.find((item)=>item?._id===id));
+      let addOns = estimateData?.addOns?.map((id) =>
+        listData?.addOns?.find((item) => item?._id === id)
+      );
 
       state.content = {
         ...state.content,
-        hardwareFinishes:hardwareFinishes,
+        hardwareFinishes: hardwareFinishes,
         handles: {
           ...state.handles,
           item: handleType,
@@ -447,13 +460,14 @@ const estimateCalcSlice = createSlice({
         polish: estimateData?.polish,
         sleeveOverCount: estimateData?.sleeveOverCount,
         towelBarsCount: estimateData?.towelBarsCount,
-        addOns: addOns
+        addOns: addOns,
       };
-      state.quoteState = quoteState
+      state.quoteState = quoteState;
     },
   },
 });
 export const {
+  setLayoutPerimeter,
   setContent,
   setTotal,
   setCounters,
@@ -467,6 +481,6 @@ export const {
   setQuoteState,
   setActiveMounting,
   initializeStateForCreateQuote,
-  initializeStateForEditQuote
+  initializeStateForEditQuote,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

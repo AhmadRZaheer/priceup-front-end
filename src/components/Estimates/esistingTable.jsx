@@ -128,7 +128,7 @@ export default function ExistingTable() {
               <Typography sx={{ width: 190, py: 1 }}>
               {new Date(item?.updatedAt).toDateString()}
               </Typography>
-              <Typography sx={{ width: 200, py: 1 }}>${item.cost}</Typography>
+              <Typography sx={{ width: 200, py: 1 }}>${item?.cost?.toFixed(2) || 0}</Typography>
               {/* <Typography sx={{ width: 180 }}></Typography> */}
               <Typography sx={{ width: 170, py: 1 }}>{item?.status}</Typography>
 

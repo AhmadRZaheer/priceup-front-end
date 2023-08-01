@@ -124,16 +124,16 @@ export default function ExitingQuotes() {
                   >
                     <Box sx={{ display: "flex", gap: 1 }}>
                       <Box sx={{ width: 40, height: 40, borderRadius: "100%", overflow: "hidden" }}>
-                        <img width={40} src={`${backendURL}/${item.creatorData.image}`} alt="image person" />
+                        <img width={40} src={`${backendURL}/${item?.creatorData?.image}`} alt="image person" />
                       </Box>
 
                       <Box>
                         <Box sx={{ display: "flex", gap: 0.6 }}>
-                          <Typography  className={classes.overflowText}>{item.creatorData.name}</Typography>
+                          <Typography  className={classes.overflowText}>{item?.creatorData?.name}</Typography>
                           <Typography sx={{fontSize: 16, fontWeight: "Medium"}}> - Creator</Typography>
                         </Box>
                         <Box sx={{ display: "flex", gap: 0.6  }}>
-                          <Typography sx={{fontSize: 14}}>{item.customerData.name}</Typography>
+                          <Typography sx={{fontSize: 14}}>{item?.customerData?.name}</Typography>
                           <Typography sx={{fontSize: 14}}> - Customer</Typography>
                         </Box>
                       </Box>

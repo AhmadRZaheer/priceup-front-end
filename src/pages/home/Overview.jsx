@@ -7,17 +7,19 @@ import ExistingTable from "../../components/Estimates/esistingTable";
 import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/Estimatedata-card";
 import ExistingQuotes from "../../components/Estimates/existingQuotes";
 import ExistingQuotes2 from "../../components/Estimates/existingTable2";
+import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
 const Overview = () => {
-  const { data , isFetching } = useFetchDataEstimateCard();
-console.log()
+  const { data, isFetching } = useFetchDataEstimateCard();
+  const token = localStorage.getItem("token");
+  const { name } = parseJwt(token);
   return (
     <div className="overview">
       <Sidebar />
       <div className="overviewContainer">
         <div className="page-title">
-          <h2>Welcome back, Olivis</h2>
-          
+          <h2>Welcome back, {name}</h2>
+
           <p>Tract, manage and forecast your customers and orders.</p>
         </div>
         <div className="widgets">
