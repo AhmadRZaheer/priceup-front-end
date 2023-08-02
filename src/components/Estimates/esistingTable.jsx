@@ -84,7 +84,6 @@ export default function ExistingTable() {
             <Typography sx={{ width: 250 }}>Customer Email</Typography>
             <Typography sx={{ width: 180 }}>Date Quoted</Typography>
             <Typography sx={{ width: 200 }}>Estimated Total</Typography>
-            {/* <Typography sx={{ width: 180 }}>Measurer</Typography> */}
             <Typography sx={{ width: 180 }}>Status</Typography>
             <Typography sx={{ width: 60 }}></Typography>
           </Box>

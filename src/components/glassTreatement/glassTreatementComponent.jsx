@@ -216,6 +216,7 @@ const GlassTreatementComponent = ({ type }) => {
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
                   <IconButton
+                    onClick={() => handleOpenEdit(entry)}
                     sx={{
                       backgroundColor: "#8477DA",
                       "&:hover": { backgroundColor: "#8477DA" },
@@ -226,7 +227,7 @@ const GlassTreatementComponent = ({ type }) => {
                       padding: 1,
                     }}
                   >
-                    <Edit onClick={() => handleOpenEdit(entry)} sx={{fontSize: 18, mr: 0.4}} />
+                    <Edit sx={{ fontSize: 18, mr: 0.4 }} />
                     Edit
                   </IconButton>
                 </Box>

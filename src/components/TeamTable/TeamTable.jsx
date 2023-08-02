@@ -26,7 +26,9 @@ const TeamTable = () => {
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
+    
   };
+  console.log(isEdit, "isedia")
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -127,7 +129,7 @@ const TeamTable = () => {
                 sx={{ backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 20, padding: 1, mt: 1 }}
                 fullWidth
                 variant="contained"
-                onClick={() => setOpen(true)}
+                onClick={() => (setOpen(true), setIsEdit(false))}
               >
                 <Add sx={{color: "white"}} />
                 Add Members

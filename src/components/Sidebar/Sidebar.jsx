@@ -138,7 +138,7 @@ const Sidebar = () => {
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/Addons" className="link">
+            {/* <NavLink to="/Addons" className="link">
               <li
                 className={` ${location.pathname === "/Addons" ? "active" : ""
                   }`}
@@ -149,7 +149,7 @@ const Sidebar = () => {
                   <span>Add ons</span>
                 </IconButton>
               </li>
-            </NavLink>
+            </NavLink> */}
             <NavLink to="/GlassType" className="link">
               <li
                 className={` ${location.pathname === "/GlassType" ? "active" : ""

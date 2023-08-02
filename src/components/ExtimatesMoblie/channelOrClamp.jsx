@@ -26,7 +26,6 @@ const ChannelType = ({
 
 
 
-
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {

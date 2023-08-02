@@ -133,12 +133,19 @@ export default function ClientDetailsModel({
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
         perimeter: perimeter,
-        sqftArea: sqftArea
+        sqftArea: sqftArea,
       };
       if (updatecheck === "create") {
-        mutate({ customerData: values, estimateData: {...estimate,layout_id: estimatesLayout?._id} });
+        mutate({
+          customerData: values,
+          estimateData: { ...estimate, layout_id: estimatesLayout?._id },
+        });
       } else {
-        mutateEdit({ customerData: values, estimateData: estimate,id:quoteId });
+        mutateEdit({
+          customerData: values,
+          estimateData: estimate,
+          id: quoteId,
+        });
       }
       handleCancel();
       window.location.href = "/Estimates";
@@ -380,19 +387,36 @@ export default function ClientDetailsModel({
                   display: "flex",
                   gap: 1,
                   marginTop: 2,
-                  justifyContent: "end",
+                  justifyContent: "space-between",
                 }}
               >
                 <Button
+                  onClick={handleCancel}
+                  variant="contained"
+                  sx={{
+                    width: "48%",
+                    textTransform: "initial",
+                    backgroundColor: "white",
+                    "&:hover": {
+                      backgroundColor: "white",
+                    },
+                    color: "black",
+                  }}
+                >
+                  {" "}
+                  Back
+                </Button>
+                <Button
                   type="submit"
                   sx={{
+                    width: "48%",
                     textTransform: "initial",
                     backgroundColor: "#8477da",
                     "&:hover": {
                       backgroundColor: "#8477da",
                     },
+                    
                   }}
-                  fullWidth
                   variant="contained"
                 >
                   Save

@@ -33,9 +33,10 @@ const FinishesTable = () => {
   const handleOpen = () => {
     setOpen(true);
     setIsEdit(false);
+ 
   };
   const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data, isEditAble) => {
+  const handleOpenEdit = (data) => {
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -73,9 +74,9 @@ const FinishesTable = () => {
             </div>
             <div
               className="viewButton"
-              onClick={() => handleOpenEdit(params.row)}
+              
             >
-              <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+              <IconButton onClick={() => handleOpenEdit(params.row)} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
               <ModeIcon sx={{color: "white", fontSize: 18, mr: 0.4}} />
               Edit
               </IconButton>
