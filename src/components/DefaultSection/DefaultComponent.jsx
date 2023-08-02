@@ -106,7 +106,7 @@ const DefaultComponent = ({ showSnackbar }) => {
       },
     },
     enableReinitialize: true,
-    onSubmit: (values) => {},
+    onSubmit: (values) => { },
   });
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
@@ -222,7 +222,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                         alt="Selected"
                       />
                     ) : (
-                      <Box sx={{width: "100%", height: "400px", textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center"}}>
+                      <Box sx={{ width: "100%", height: "400px", textAlign: "center", display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <CircularProgress size={24} color="warning" />
                       </Box>
                     )}
@@ -1025,19 +1025,17 @@ const DefaultComponent = ({ showSnackbar }) => {
                   variant="outlined"
                   name="glassType.thickness"
                   style={{ width: "100%" }}
-                  value={formik.values.glassType.thickness}
+                  value={formik.values.glassType.thickness || ""}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
+                  required={true}
                 >
-                  {singleDefault?.listData?.glassType
-                    ?.find(
-                      (option) => option._id === formik.values.glassType.type
-                    )
-                    ?.options?.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.thickness}
-                      </MenuItem>
-                    ))}
+                  <MenuItem key="1/2" value="1/2">
+                    1/2
+                  </MenuItem>
+                  <MenuItem key="3/8" value="3/8">
+                    3/8
+                  </MenuItem>
                 </TextField>
               </Box>
             </div>
