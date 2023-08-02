@@ -145,8 +145,8 @@ export default function Layout() {
                       style={{
                         position: "relative",
                         zIndex: 1,
-                        width: "70px",
-                        height: "120px",
+                        width: "120px",
+                        height: "140px",
                       }}
                       src={`${backendURL}/${layout?.image}`}
                       alt="Selected"
