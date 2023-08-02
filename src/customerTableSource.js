@@ -51,7 +51,6 @@ export const AdminColumns = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
-      console.log(params, "date");
       return (
         <div className="cellWrapper">
           <div className="customerImg">
@@ -76,7 +75,6 @@ export const AdminColumns = [
     headerName: "Date added",
     width: 220,
     renderCell: (params) => {
-      console.log(params, "date");
       return <div className="userNameTable">{new Date(params.row.updatedAt).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>;
     },
   },

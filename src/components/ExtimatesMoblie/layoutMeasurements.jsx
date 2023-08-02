@@ -8,7 +8,6 @@ import {
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
 import { backendURL, calculateAreaOrPerimeter } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,8 +17,6 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
-import { ArrowDropDown, ArrowDropUp } from "@mui/icons-material";
-import { SelectedImage } from "./selctedImage";
 import QuotesHeader from "./QuotesHeader";
 import QuotesFooter from "./QuotesFooter";
 const LayoutMeasurements = () => {
@@ -242,61 +239,6 @@ const LayoutMeasurements = () => {
                 maxWidth: "100%",
               }}
             >
-              {/* <Box
-                sx={{
-                  display: { md: "none", xs: "flex" },
-                  gap: 2,
-                  justifyContent: "center",
-                  width: "92%",
-                  paddingX: 2,
-                  paddingY: 2,
-                  position: "fixed",
-                  bottom: 0,
-                  backgroundColor: "#100d24",
-                  borderTop: "1px solid #423f57",
-                }}
-              >
-                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                  <Button
-                    fullWidth
-                    onClick={() => {
-                      dispatch(setNavigation("layout"));
-                    }}
-                    sx={{
-                      boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                      color: "#344054",
-                      textTransform: "initial",
-                      border: "1px solid #D0D5DD",
-                      backgroundColor: { md: "transparent", xs: "white" },
-                      height: 40,
-                      fontSize: 20,
-                    }}
-                  >
-                    {" "}
-                    Back
-                  </Button>
-                </Box>
-                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={Object.keys(formik.values).some(
-                      (key) => !formik.values[key]
-                    )}
-                    sx={{
-                      height: 40,
-                      fontSize: 20,
-                      backgroundColor: "#8477da",
-                      "&:hover": {
-                        backgroundColor: "#8477da",
-                      },
-                    }}
-                    variant="contained"
-                  >
-                    Next
-                  </Button>
-                </Box>
-              </Box> */}
               <QuotesFooter
                 navigateNext={"review"}
                 type={"submit"}

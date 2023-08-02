@@ -1,8 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React from "react";
-
-import ChevronLeftOutlinedIcon from "@mui/icons-material/ChevronLeftOutlined";
-
 import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +11,6 @@ import {
 } from "../../redux/estimateCalculations";
 import QuotesHeader from "./QuotesHeader";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
-import QuotesFooter from "./QuotesFooter";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },

@@ -79,7 +79,6 @@ const HardwareForm = () => {
         }
       } catch (error) {
         setError("An error occurred while fetching the data.");
-        console.error(error);
       }
     };
 

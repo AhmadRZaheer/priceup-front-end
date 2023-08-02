@@ -57,7 +57,6 @@ export const useCreateEstimates = () => {
     const token = localStorage.getItem("token");
     // const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
-    console.log(props.estimateData,'in hook estimate')
     try {
       const response = await axios.post(
         `${backendURL}/estimates/save`,
@@ -85,7 +84,6 @@ export const useCreateEstimates = () => {
 
 export const useEditEstimates = () => {
   const handleEditEstimate = async (updatedEstimate) => {
-    console.log(updatedEstimate, "up")
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
     try {

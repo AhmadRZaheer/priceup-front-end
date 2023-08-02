@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import "./hardwareTable.scss";
-
 import { Box, Typography } from "@mui/material";
-
 import DefaultComponent from "./DefaultComponent";
-
 import Snackbars from "../Model/SnackBar";
 
 const DefaultSection = () => {
@@ -31,9 +28,10 @@ const DefaultSection = () => {
     <>
       <Box
         sx={{
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
-          pt: 2,
+          // borderTopLeftRadius: 30,
+          // borderBottomLeftRadius: 30,
+          backgroundColor: "white",
+          pt: 1,
         }}
       >
         <div className="page-title">

@@ -6,8 +6,7 @@ import Snackbars from "../Model/SnackBar";
 import {
   getContent,
   getLayoutArea,
-  getMeasurementSide,
-  selectedItem,
+  getQuoteState,
   setInputContent,
   setNavigationDesktop,
   setTotal,
@@ -15,22 +14,25 @@ import {
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import Summary from "./Summery";
 import ChannelTypeDesktop from "./ChannelorClamp";
-import { calculateAreaOrPerimeter, calculateTotal } from "../../utilities/common";
+import {
+  calculateTotal,
+} from "../../utilities/common";
 import { useMemo } from "react";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
+  const quoteState = useSelector(getQuoteState);
   const setHandleEstimatesPages = () => {
-    dispatch(setNavigationDesktop("Measurments"));
+    dispatch(
+      setNavigationDesktop(
+        quoteState === "create" ? "Measurments" : "existing"
+      )
+    );
   };
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const sqftArea = useSelector(getLayoutArea);
-  // const measurementSides = useSelector(getMeasurementSide);
-  // const currentLayout = useSelector(selectedItem);
+
   const dispatch = useDispatch();
-  // const priceBySqft = useMemo(() => {
-  //   return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
-  // }, [measurementSides, currentLayout]);
 
   useEffect(() => {
     const total = calculateTotal(selectedContent, sqftArea, estimatesData);
@@ -64,9 +66,9 @@ const LayoutReview = ({ setClientDetailOpen }) => {
 
           display: "flex",
           alignItems: "center",
-
+          height: "96vh",
           flexDirection: "column",
-          p: 2,
+          p: 4,
           gap: 4,
         }}
       >

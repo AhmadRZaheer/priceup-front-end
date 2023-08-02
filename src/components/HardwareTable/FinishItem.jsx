@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -188,7 +188,6 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <IconButton type="submit" sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                  <Edit />
                   Update
                 </IconButton>
               )}

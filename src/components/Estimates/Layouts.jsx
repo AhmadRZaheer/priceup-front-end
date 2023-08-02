@@ -52,7 +52,7 @@ export default function Layout() {
           flexDirection: "column",
           background: "white",
           height: "98vh",
-          paddingY: 0,
+          paddingY: 4,
         }}
       >
         <Box

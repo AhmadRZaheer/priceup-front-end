@@ -1,8 +1,5 @@
 import {
   Add,
-  AddCircle,
-  CreateOutlined,
-  DeleteOutline,
   Edit,
 } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
@@ -25,7 +22,6 @@ export default function ExistingTable() {
     useFetchDataEstimate();
   const dispatch = useDispatch();
 
-  // const dispatch = useDispatch();
   const handleIconButtonClick = (item) => {
     dispatch(
       initializeStateForEditQuote({
@@ -51,7 +47,7 @@ export default function ExistingTable() {
             justifyContent: "center",
             alignItems: "center",
             maxHeight: "70vh",
-            minHeight: "50vh",
+            minHeight: "40vh",
           }}
         >
           <CircularProgress />
@@ -137,12 +133,10 @@ export default function ExistingTable() {
               {/* <DeleteOutline
                 sx={{ color: "rgb(255, 103, 96)", fontSize: 25, py: 0.8 }}
               /> */}
-              <Link to="/Estimates/Steps">
+              <Link to="/Estimates/Steps" style={{marginLeft: 2, marginRight: 1,}} >
                 <IconButton
                   onClick={() => handleIconButtonClick(item)}
                   sx={{
-                    marginRight: 1,
-                    ml: 2,
                     backgroundColor: "#8477DA",
                     "&:hover": { backgroundColor: "#8477DA" },
                     color: "white",

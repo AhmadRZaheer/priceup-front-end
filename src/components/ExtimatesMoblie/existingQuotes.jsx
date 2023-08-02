@@ -2,10 +2,8 @@ import {
   Box,
   Button,
   CircularProgress,
-  IconButton,
   Typography,
 } from "@mui/material";
-import pencil from "../../Assets/estimates/edit-2.svg";
 import { useDispatch } from "react-redux";
 import {
   initializeStateForEditQuote,
@@ -16,7 +14,6 @@ import {
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
-import image1 from "../../Assets/username1.svg";
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import ModeIcon from "@mui/icons-material/Mode";
@@ -155,7 +152,6 @@ export default function ExitingQuotes() {
                       >
                         <ModeIcon sx={{color: "white",fontSize:'17px',marginRight:'5px'}} />
                         Edit
-                        {/* <img src={pencil} alt="image of pencil" /> */}
                       </Button>
                       <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
                         {new Date(item?.updatedAt).toDateString()}

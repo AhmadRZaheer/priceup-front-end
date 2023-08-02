@@ -39,7 +39,7 @@ const Summary = () => {
             justifyContent: "space-between",
             flexDirection: { md: "row", xs: "column" },
             minHeight: "50vh",
-            maxHeight: "69vh",
+            maxHeight: "79vh",
           }}
         >
           <Box
@@ -63,8 +63,8 @@ const Summary = () => {
               }}
             >
               <img
-                width={"200px"}
-                height={"210px"}
+                width={"300px"}
+                height={"310px"}
                 src={`${backendURL}/${selectedData?.image}`}
                 alt="Selected"
               />

@@ -51,7 +51,6 @@ const HardWareComponent = ({ type }) => {
   };
 
   const handleOpenEdit = (data) => {
-    console.log(data,'inside edit click')
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -208,7 +207,6 @@ const HardWareComponent = ({ type }) => {
                     alt=""
                   />
                   {entry.name}
-                  {/* </div> */}
                 </Box>
                 <Box>
                   <IconButton>
@@ -223,10 +221,9 @@ const HardWareComponent = ({ type }) => {
                       textTransform: "capitalize",
                       borderRadius: 2,
                       fontSize: 17,
-                      // padding: 1,
                     }}
                   >
-                    <Edit  color="white" />
+                    <Edit  color="white" sx={{fontSize: 18, pr: 0.4}} />
                     Edit
                   </IconButton>
                 </Box>

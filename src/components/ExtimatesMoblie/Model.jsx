@@ -148,8 +148,6 @@ export default function ClientDetailsModel({
           id: quoteId,
         });
       }
-      // mutateEdit({ customerData: values, estimateData: estimate });
-      //
       handleCancel();
     },
   });

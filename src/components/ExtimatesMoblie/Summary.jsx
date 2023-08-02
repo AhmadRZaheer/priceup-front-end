@@ -1,5 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import { ChevronLeftOutlined } from "@mui/icons-material";
 import {
   getContent,
   getMeasurementSide,

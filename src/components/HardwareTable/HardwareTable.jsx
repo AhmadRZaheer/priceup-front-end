@@ -5,7 +5,7 @@ import { useDispatch} from "react-redux";
 import {
   addHardware,
 } from "../../redux/hardwareSlice";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import Header from "../TableHeader/TableHeader";
 import HardWareComponent from "./HardWareComponent";
@@ -45,14 +45,14 @@ const HardwareTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
+          // borderTopLeftRadius: 30,
+          // borderBottomLeftRadius: 30,
           paddingLeft: 1,
           pt: 2,
         }}
       >
         <div className="page-title">
-          <h2 style={{ fontSize: 30, paddingLeft: 10 }}>Hardware</h2>
+          <Typography style={{ fontSize: 30, paddingLeft: 10 }}>Hardware</Typography>
         </div>
         <Box
           sx={{

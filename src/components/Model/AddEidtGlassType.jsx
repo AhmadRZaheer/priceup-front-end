@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import { CircularProgress, FormControl, TextField } from "@mui/material";
+import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateGlassType,
@@ -37,7 +37,6 @@ export default function AddEditGlassType({
   showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log(isEdit, "isedit");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -80,9 +79,7 @@ export default function AddEditGlassType({
   };
 
   const validationSchema = Yup.object().shape({
-    // hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
-    // thickness: Yup.string().required("Thickness is required"),
   });
 
   const formik = useFormik({
@@ -90,13 +87,11 @@ export default function AddEditGlassType({
       ? {
           name: data?.name,
           image: "",
-          // thickness: data?.holesNeeded,
           id: data?._id,
         }
       : {
           name: "",
           image: "",
-          // thickness: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -199,26 +194,6 @@ export default function AddEditGlassType({
               fullWidth
             />
           </Box>
-          {/* 
-          <Box>
-            <Typography>Holes Nedeed</Typography>
-            <FormControl style={{ width: "100%" }} size="small">
-              <TextField
-                type="number"
-                size="small"
-                variant="outlined"
-                name="thickness"
-                style={{ width: "100%" }}
-                value={formik.values.thickness}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.thickness && Boolean(formik.errors.thickness)
-                }
-                helperText={formik.touched.thickness && formik.errors.thickness}
-              />
-            </FormControl>
-          </Box> */}
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"

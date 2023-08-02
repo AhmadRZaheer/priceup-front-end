@@ -56,7 +56,6 @@ const GlassTreatementComponent = ({ type }) => {
     setIsEdit(true);
   };
   const handleHardwareDelete = (id) => {
-    // console.log(id, "id")
     deleteGlassTreatement(id);
   };
 
@@ -89,14 +88,27 @@ const GlassTreatementComponent = ({ type }) => {
             textTransform: "uppercase",
           }}
         >
-          {type}
+          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
+            {type}
+          </p>
         </div>
         <div
           style={{
             padding: 4,
           }}
         >
-          <IconButton onClick={handleOpen} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              backgroundColor: "#8477DA",
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 17,
+              padding: 1,
+            }}
+          >
             <Add style={{ color: "white" }} />
             Add
           </IconButton>
@@ -203,8 +215,18 @@ const GlassTreatementComponent = ({ type }) => {
                   <IconButton>
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
-                  <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                    <Edit onClick={() => handleOpenEdit(entry)} />
+                  <IconButton
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 2,
+                      fontSize: 17,
+                      padding: 1,
+                    }}
+                  >
+                    <Edit onClick={() => handleOpenEdit(entry)} sx={{fontSize: 18, mr: 0.4}} />
                     Edit
                   </IconButton>
                 </Box>

@@ -14,7 +14,6 @@ import {
   selectedItem,
   setLayoutArea,
   setLayoutPerimeter,
-  setNavigation,
   setNavigationDesktop,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
@@ -60,7 +59,6 @@ const LayoutMeasurements = () => {
       dispatch(setLayoutPerimeter(perimeter));
       dispatch(updateMeasurements(measurementsArray));
       setHandleEstimatesPages("review");
-      // dispatch(setNavigation("review"));
       resetForm();
     },
   });
@@ -75,7 +73,7 @@ const LayoutMeasurements = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          p: { md: 2, sx: 0 },
+          p: { md: 6, sx: 0 },
           gap: { md: 4, xs: 0 },
           height: "100vh",
         }}
@@ -237,8 +235,8 @@ const LayoutMeasurements = () => {
                   </Box>
                 ) : (
                   <img
-                    width="150px"
-                    height="300px"
+                    width="300px"
+                    height="340px"
                     src={`${backendURL}/${selectedData?.image}`}
                     alt="Selected"
                   />
@@ -288,9 +286,6 @@ const LayoutMeasurements = () => {
                     disabled={Object.keys(formik.values).some(
                       (key) => !formik.values[key]
                     )}
-                    // onClick={() => {
-                    //   setHandleEstimatesPages("review");
-                    // }}
                     sx={{
                       height: 40,
                       fontSize: 20,

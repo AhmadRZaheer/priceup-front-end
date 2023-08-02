@@ -1,5 +1,4 @@
-import { AddCircle, CreateOutlined, DeleteOutline } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import image1 from "../../Assets/test.png";
 import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
@@ -8,21 +7,11 @@ import {
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
-import { useDispatch } from "react-redux";
-import {
-  initializeStateForEditQuote,
-  setNavigationDesktop,
-  setQuoteState,
-} from "../../redux/estimateCalculations";
 
 import ExistingTable from "./esistingTable";
-import { Link } from "react-router-dom";
-// import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/estimate-card";
 
 export default function ExistingQuotes2() {
-  const { data , isFetching } = useGetEstimates();
-  const { data: estimateListData, isFetching: estimateDataFetching } =
-    useFetchDataEstimate();
+  const { data  } = useGetEstimates();
   return (
     <>
 
@@ -35,15 +24,13 @@ export default function ExistingQuotes2() {
             width: "100%",
             height: "auto",
             overflow: "auto",
-            // backgroundColor: "white",
-            borderTopLeftRadius: 30,
+            // borderTopLeftRadius: 30,
             // borderBottomLeftRadius: 30,
             gap: 5,
-            // pt: 4,
           }}
         >
            
-          <Box sx={{ display: "flex", gap: 2,  width: "98%", }}>
+          <Box sx={{ display: "flex", width: "98%", justifyContent: "space-between" }}>
             <Box
               sx={{
                 width: 320,
@@ -68,7 +55,7 @@ export default function ExistingQuotes2() {
                 </Typography>
               </Box>
               <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
-                <Typography sx={{ fontSize: 18, color: "#575761" }}>
+                <Typography sx={{ fontSize: 18 }}>
                   Pending
                 </Typography>
               </Box>
@@ -159,7 +146,7 @@ export default function ExistingQuotes2() {
               </Box>
             </Box>
           </Box>
-            <Box sx={{width: "97%"}}>
+            <Box sx={{width: "98%"}}>
               <ExistingTable />
             </Box>
         </Box>

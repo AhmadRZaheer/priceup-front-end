@@ -3,7 +3,6 @@
     color: #F2F4F7;
     height: 100vh;
     .top{
-        // height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -18,16 +17,12 @@
         border: 1px solid #475467;
         width: 85%;
         margin:0px auto;
-        // margin-left: 20px;
-        // margin-right: 20px;    
     }
     .center{
-        // padding-left: 20px;
 
         ul{
             list-style: none;
             margin: 0;
-            // margin-left: -20px;
             padding: 0;
 
             .estimates{

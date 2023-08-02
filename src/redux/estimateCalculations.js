@@ -228,8 +228,6 @@ const estimateCalcSlice = createSlice({
     },
     initializeStateForCreateQuote: (state, action) => {
       const { layoutData, listData } = action.payload;
-      console.log(listData, "list");
-      console.log(layoutData, "layout");
       let hardwareFinishes = null;
       hardwareFinishes = listData?.hardwareFinishes?.find(
         (item) => item._id === layoutData?.settings?.hardwareFinishes
@@ -327,25 +325,14 @@ const estimateCalcSlice = createSlice({
             : "clamps",
         },
 
-        // hingeCut: estimateData?.hingeCut,
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
         glassTreatment: glassTreatment || null,
-        // oneInchHoles: estimateData?.oneInchHoles,
-        // clampCut: estimateData?.clampCut,
-        // notch: estimateData?.notch,
         outages: layoutData?.settings?.outages,
-        // mitre: estimateData?.mitre,
-        // polish: layoutData?.settings?.polish,
-        // sleeveOverCount: estimateData?.sleeveOverCount,
-        // towelBarsCount: estimateData?.towelBarsCount,
-        // addOns: addOns
       };
     },
     initializeStateForEditQuote: (state, action) => {
       const { estimateData, listData, quoteState, quotesId } = action.payload;
-      console.log(listData, "list");
-      console.log(estimateData, "list2");
 
       state.quoteId = quotesId;
 

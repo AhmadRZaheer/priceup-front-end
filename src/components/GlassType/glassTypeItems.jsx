@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -48,7 +48,6 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
           status: values.status,
         },
       };
-      console.log(glassType, "glasstype input");
       editFinish({ optionsData: glassType, id: glassTypeId });
       resetForm();
     },
@@ -186,7 +185,6 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <IconButton type="submit" sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                  <Edit sx={{color: "white"}}/>
                   Update
                 </IconButton>
               )}

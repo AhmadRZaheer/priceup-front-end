@@ -31,7 +31,6 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(currentItem || null);
-  // const [addonsSelectedItems,setAddonsSelectedItem] = useState(selectedContent?.addOns || []);
   const [sleeveOverCount, setSleeveOverCount] = useState(
     selectedContent?.sleeveOverCount || 0
   );

@@ -76,7 +76,6 @@ export const useCreateGlassType = () => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
-    console.log(props, "data Create");
 
     try {
       const response = await axios.post(
@@ -84,9 +83,7 @@ export const useCreateGlassType = () => {
         {
           name: props.name,
           company_id: decodedToken?.company_id,
-          // thickness: "both",
           slug: slug,
-          // holesNeeded: props.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -109,7 +106,6 @@ export const useCreateGlassType = () => {
 export const useEditGlassType = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-    // console.log(updatedHardware, "hardwair input");
     try {
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,
