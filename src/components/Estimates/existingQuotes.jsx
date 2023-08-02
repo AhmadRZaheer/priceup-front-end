@@ -36,13 +36,14 @@ export default function ExistingQuotes() {
             height: "96vh",
             overflow: "auto",
             backgroundColor: "white",
-            borderTopLeftRadius: 30,
-            borderBottomLeftRadius: 30,
             gap: 5,
-            pt: 4,
+            pt: 2,
           }}
         >
-          <Box sx={{ display: "flex", gap: 2 }}>
+          <Box sx={{textAlign: "start", width: "96.4%" }}>
+            <Typography sx={{ fontSize: 30}}>Estimates</Typography> 
+        </Box>
+          <Box sx={{ display: "flex", width: "96.8%", justifyContent: "space-between" }}>
             <Box
               sx={{
                 width: 300,
@@ -158,7 +159,7 @@ export default function ExistingQuotes() {
               </Box>
             </Box>
           </Box>
-            <Box sx={{width: "92%"}}>
+            <Box sx={{width: "97%"}}>
               <ExistingTable />
             </Box>
         </Box>

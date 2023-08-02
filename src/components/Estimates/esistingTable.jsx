@@ -3,6 +3,7 @@ import {
   AddCircle,
   CreateOutlined,
   DeleteOutline,
+  Edit,
 } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import {
@@ -49,13 +50,14 @@ export default function ExistingTable() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "70vh",
+            maxHeight: "70vh",
+            minHeight: "50vh",
           }}
         >
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ backgroundColor: "white", width: "100%" }}>
+        <Box sx={{ backgroundColor: "white", width: "100%", border: "1px solid #f0ecec" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
               Estimates Queue
@@ -152,7 +154,7 @@ export default function ExistingTable() {
                   }}
                   disabled={estimateDataFetching}
                 >
-                  <CreateOutlined sx={{ color: "white", fontSize: 20 ,mr: 0.4}} />
+                  <Edit sx={{ color: "white", fontSize: 18 ,mr: 0.4}} />
                   Edit
                 </IconButton>
               </Link>
