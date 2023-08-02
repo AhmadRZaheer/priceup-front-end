@@ -33,11 +33,8 @@ const formSlice = createSlice({
         entry.items.push(data);
       }
     },
-
-    handleToggle: (state, action) => {
-    },
   },
 });
 
-export const { addFormEntry, addItems, handleToggle } = formSlice.actions;
+export const { addFormEntry, addItems} = formSlice.actions;
 export default formSlice.reducer;

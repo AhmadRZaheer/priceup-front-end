@@ -29,10 +29,8 @@ const TableRow = ({ row, refetch }) => {
           <FormControlLabel
             control={
               <Switch
-                // defaultValue={params.row.status}
                 color="primary"
                 checked={active}
-                // onChange={() => setStatus(!status)}
                 onClick={() => handleSwitch()}
                 name="status"
               />

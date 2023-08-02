@@ -114,7 +114,6 @@ function MobileBar() {
                 display: "flex",
                 justifyContent: "end",
                 alignItems: "start",
-                // height: "70vh",
                 width: "100%",
                 flexDirection: "column",
                 backgroundColor: "#100d24",

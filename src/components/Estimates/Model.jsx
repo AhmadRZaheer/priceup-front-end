@@ -140,7 +140,6 @@ export default function ClientDetailsModel({
       } else {
         mutateEdit({ customerData: values, estimateData: estimate,id:quoteId });
       }
-      // mutate({ customerData: values, estimateData: estimate });
       handleCancel();
       window.location.href = "/Estimates";
     },

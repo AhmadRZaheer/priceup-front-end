@@ -2,19 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-// import {
-//   useDeleteHardwares,
-//   useFetchDatahardware,
-// } from "../../utilities/ApiHooks/Hardware";
-import AddEditHardware from "../Model/AddEditHardware";
 import Snackbars from "../Model/SnackBar";
-// import FinishItem from "./FinishItem";
 import {
-  useDeleteGlassType,
   useDeleteGlassTypeFull,
   useFetchDataGlassType,
 } from "../../utilities/ApiHooks/GlassType";
-import FinishItem from "../HardwareTable/FinishItem";
 import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Model/AddEidtGlassType";
 
@@ -49,7 +41,6 @@ const GlassTypeComponent = ({ type }) => {
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-  console.log(GlassTypeData, "GlassTypeData");
 
   const handleOpen = (data) => {
     setOpen(true);
@@ -97,14 +88,27 @@ const GlassTypeComponent = ({ type }) => {
             textTransform: "uppercase",
           }}
         >
-          {type}
+          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
+            {type}
+          </p>
         </div>
         <div
           style={{
             padding: 4,
           }}
         >
-          <IconButton onClick={handleOpen} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              backgroundColor: "#8477DA",
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 17,
+              padding: 1,
+            }}
+          >
             <Add style={{ color: "white" }} />
             Add
           </IconButton>
@@ -180,7 +184,6 @@ const GlassTypeComponent = ({ type }) => {
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            // minHeight: "100px"
             height: "75vh",
             overflowY: "scroll",
           }}
@@ -206,14 +209,23 @@ const GlassTypeComponent = ({ type }) => {
                     alt=""
                   />
                   {entry.name}
-                  {/* </div> */}
                 </Box>
                 <Box>
                   <IconButton>
                     <Delete onClick={() => handleHardwareDelete(entry._id)} />
                   </IconButton>
-                  <IconButton onClick={() => handleOpenEdit(entry)} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, }}>
-                    <Edit color="white" />
+                  <IconButton
+                    onClick={() => handleOpenEdit(entry)}
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 2,
+                      fontSize: 17,
+                    }}
+                  >
+                    <Edit color="white" sx={{fontSize: 18, mr: 0.4}} />
                     Edit
                   </IconButton>
                 </Box>

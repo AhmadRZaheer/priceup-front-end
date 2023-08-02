@@ -52,7 +52,6 @@ export const useDeleteGlassTreatement = () => {
 };
 export const useDeleteGlassTreatementFull = () => {
   const handleDelete = async (props) => {
-    console.log(props, "full delete");
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
@@ -87,9 +86,7 @@ export const useCreateGlassTreatement = () => {
         {
           name: props.name,
           company_id: decodedToken?.company_id,
-          // thickness: "both",
           slug: slug,
-          // holesNeeded: props.thickness,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -112,7 +109,6 @@ export const useCreateGlassTreatement = () => {
 export const useEditGlassTreatement = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-    console.log(props, "data edit");
     try {
       const response = await axios.put(
         `${backendURL}/glassTreatments/${props?.id}`,

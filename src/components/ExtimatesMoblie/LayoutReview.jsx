@@ -1,24 +1,18 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 import MenuList from "./MenuList";
-import { ChevronLeftOutlined } from "@mui/icons-material";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getLayoutArea,
-  getLayoutPerimeter,
-  getMeasurementSide,
   getQuoteState,
-  selectedItem,
   setInputContent,
-  setNavigation,
   setTotal,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Model/SnackBar";
 import ChannelType from "./channelOrClamp";
-import { calculateAreaOrPerimeter, calculateTotal } from "../../utilities/common";
-import { useMemo } from "react";
+import { calculateTotal } from "../../utilities/common";
 import QuotesHeader from "./QuotesHeader";
 import QuotesFooter from "./QuotesFooter";
 
@@ -26,23 +20,13 @@ const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const sqftArea = useSelector(getLayoutArea);
-  // const measurementSides = useSelector(getMeasurementSide);
-  // const perimeter = useSelector(getLayoutPerimeter);
-  // const currentLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
   const quoteState = useSelector(getQuoteState);
-  // const priceBySqft = useMemo(() => {
-  //   return calculateAreaOrPerimeter(measurementSides, currentLayout?.settings?.priceBySqftFormula);
-  // }, [measurementSides, currentLayout]);
-  // console.log(priceBySqft,'sqft');
   useEffect(() => {
     const total = calculateTotal(selectedContent, sqftArea, estimatesData);
     dispatch(setTotal(total));
   }, [selectedContent]);
 
-  const handleBoxClick = () => {
-    dispatch(setNavigation("summary"));
-  };
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",

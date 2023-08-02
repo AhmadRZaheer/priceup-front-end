@@ -5,7 +5,7 @@ import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, CircularProgress, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import {
   useDeleteTeamMembers,
   useFetchDataTeam,
@@ -92,7 +92,7 @@ const TeamTable = () => {
               onClick={() => handleOpenEdit(params.row)}
             >
               <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                <ModeIcon sx={{color: "white", fontSize: 20}} />
+                <ModeIcon sx={{color: "white", fontSize: 18, pr: 0.4}} />
                {" "}  Edit
               </IconButton>
             </div>
@@ -107,8 +107,8 @@ const TeamTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
+          // borderTopLeftRadius: 30,
+          // borderBottomLeftRadius: 30,
           paddingLeft: 1,
           pt: 2,
         }}

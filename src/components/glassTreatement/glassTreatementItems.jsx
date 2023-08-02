@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -88,9 +88,9 @@ const GlassTreatementItem = ({
       MuiSwitch: {
         styleOverrides: {
           root: {
-            color: "#8477DA", // Change this color to your desired custom color
+            color: "#8477DA", 
             "&.Mui-checked": {
-              color: "#8477DA", // Change this color to your desired custom color when the switch is checked
+              color: "#8477DA", 
             },
           },
         },
@@ -225,7 +225,6 @@ const GlassTreatementItem = ({
                     padding: 1,
                   }}
                 >
-                  <Edit />
                   Update
                 </IconButton>
               )}

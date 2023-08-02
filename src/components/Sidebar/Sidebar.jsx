@@ -17,18 +17,14 @@ import FormatColorFillIcon from '@mui/icons-material/FormatColorFill';
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/AuthVerify";
 import { backendURL } from "../../utilities/common";
-import { makeStyles } from "@material-ui/core";
+import { AttachMoney } from "@mui/icons-material";
 
 const Sidebar = () => {
-
-
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-    // navigate("/login");
     window.location.href = '/login';
   };
   const token = localStorage.getItem("token");
@@ -77,11 +73,7 @@ const Sidebar = () => {
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2 }}>
-                  <img
-                    style={{ paddingRight: 10 }}
-                    src={EstimsteIcon}
-                    alt="image of customer"
-                  />
+                  <AttachMoney />
 
                   <span>Estimates</span>
                 </IconButton>

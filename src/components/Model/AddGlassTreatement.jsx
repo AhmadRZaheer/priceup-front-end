@@ -37,7 +37,6 @@ export default function AddEditGlassTreatement({
   showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  console.log(isEdit, "is edit");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -72,19 +71,15 @@ export default function AddEditGlassTreatement({
   }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    console.log(props, "handle create");
     addGlassTreatement(props);
   };
 
   const handleEditClick = (props) => {
     editGlassTreatement({ glassTreatementData: props, id: data?._id });
-    // editGlassTreatement(props, id);
   };
 
   const validationSchema = Yup.object().shape({
-    // hardwareLabel: Yup.string().required("Hardware Label is required"),
     image: Yup.mixed(),
-    // thickness: Yup.string().required("Thickness is required"),
   });
 
   const formik = useFormik({
@@ -92,13 +87,11 @@ export default function AddEditGlassTreatement({
       ? {
           name: data?.name,
           image: "",
-          // thickness: data?.holesNeeded,
           id: data?._id,
         }
       : {
           name: "",
           image: "",
-          // thickness: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -201,26 +194,6 @@ export default function AddEditGlassTreatement({
               fullWidth
             />
           </Box>
-          {/* 
-          <Box>
-            <Typography>Holes Nedeed</Typography>
-            <FormControl style={{ width: "100%" }} size="small">
-              <TextField
-                type="number"
-                size="small"
-                variant="outlined"
-                name="thickness"
-                style={{ width: "100%" }}
-                value={formik.values.thickness}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.thickness && Boolean(formik.errors.thickness)
-                }
-                helperText={formik.touched.thickness && formik.errors.thickness}
-              />
-            </FormControl>
-          </Box> */}
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"

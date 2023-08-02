@@ -7,7 +7,6 @@ import InvoiceIcon from "../../Assets/invoice.svg";
 import image1 from "../../Assets/test.png";
 import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
-import image4 from "../../Assets/calculator.svg";
 
 const widget = ({ type , value }) => {
   let data;
@@ -86,7 +85,7 @@ const widget = ({ type , value }) => {
       <div className="left">
         <div className="estimate-card">
           <img width={50} src={data.iconTitle} alt="" />
-          <span>{data.title}</span>
+          <span style={{fontSize: 18}}>{data.title}</span>
         </div>
         <div className="card-num">
           {data.isMoney && "$"} {data.cardNum}

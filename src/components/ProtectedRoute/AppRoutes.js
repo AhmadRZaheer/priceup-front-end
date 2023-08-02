@@ -26,17 +26,14 @@ const AppRoutes = () => {
     return parseJwt(token);
   }, [token]);
 
-  // Function to check if the user is authenticated based on the presence of the JWT token
   const isAuthenticated = () => {
     return !!decodedToken;
   };
 
-  // Function to check if the user is a Super Admin
   const isSuperAdmin = () => {
     return decodedToken?.role === "super_admin";
   };
 
-  // Function to check if the user is an Admin or Staff
   const isAdmin = () => {
     return decodedToken?.role === "admin";
   };
@@ -45,7 +42,6 @@ const AppRoutes = () => {
     return decodedToken?.role === "staff";
   };
 
-  // Function to get the appropriate homepage URL based on the user role
   const getHomepageURL = () => {
     if (isSuperAdmin()) {
       return "/admin";
@@ -54,7 +50,7 @@ const AppRoutes = () => {
     } else if (isStaff()) {
       return "/staff";
     } else {
-      return "/login"; // Redirect to login page for unauthenticated users
+      return "/login"; 
     }
   };
 
@@ -112,7 +108,6 @@ const AppRoutes = () => {
       ) : (
         ''
       )}
-      {/* Catch-all route for wrong URLs */}
       <Route path="*" element={<Navigate to={getHomepageURL()} />} />
     </Routes>
   );

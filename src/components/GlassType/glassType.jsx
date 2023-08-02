@@ -5,7 +5,6 @@ import { addHardware } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import AddEditModel from "../Model/AddEditFinish";
-import HardWareComponent from "../HardwareTable/HardWareComponent";
 import GlassTypeComponent from "./glassTypeComponent";
 
 const GlassTypeTable = () => {
@@ -35,8 +34,8 @@ const GlassTypeTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
+          // borderTopLeftRadius: 30,
+          // borderBottomLeftRadius: 30,
           paddingTop: 2,
           paddingLeft: 1,
         }}

@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
 import { backendURL, createSlug } from "../common";
-import { Mutation, useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
@@ -41,7 +40,6 @@ export const useDeleteFinishes = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
       throw error;
     }
   };

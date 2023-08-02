@@ -76,7 +76,7 @@ const FinishesTable = () => {
               onClick={() => handleOpenEdit(params.row)}
             >
               <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-              <ModeIcon sx={{color: "white"}} />
+              <ModeIcon sx={{color: "white", fontSize: 18, mr: 0.4}} />
               Edit
               </IconButton>
             </div>
@@ -105,8 +105,6 @@ const FinishesTable = () => {
         sx={{
           backgroundColor: "white",
           height: "100vh",
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
           pl: 1
         }}
       >

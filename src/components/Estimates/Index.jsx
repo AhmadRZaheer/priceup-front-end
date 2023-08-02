@@ -4,15 +4,14 @@ import ClientDetailsModel from "./Model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./LayoutReview";
 import Layout from "./Layouts";
-
 import Snackbars from "../Model/SnackBar";
 import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
+import ExistingQuotes from "./existingQuotes";
 
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const Navigation = useSelector(getPageDesktopNavigation);
-  console.log(Navigation,'nv')
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -42,13 +41,12 @@ const Index = () => {
           alignItems: "center",
           flexDirection: "column",
           background: "white",
-          height: "93.3vh",
+          height: "100vh",
           overflowY: "scroll",
-          paddingY: 4,
-          borderTopLeftRadius: 30,
-          borderBottomLeftRadius: 30,
+          // borderTopLeftRadius: 30,
+          // borderBottomLeftRadius: 30,
         }}
-      >
+      >{Navigation === "existing" && <ExistingQuotes />}
         {Navigation === "Layout" && <Layout  />}
         {Navigation === "Measurments" && (
           <LayoutMeasurements  />

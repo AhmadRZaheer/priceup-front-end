@@ -1,8 +1,6 @@
 import {
   Add,
-  AddCircle,
-  CreateOutlined,
-  DeleteOutline,
+  Edit,
 } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import {
@@ -24,7 +22,6 @@ export default function ExistingTable() {
     useFetchDataEstimate();
   const dispatch = useDispatch();
 
-  // const dispatch = useDispatch();
   const handleIconButtonClick = (item) => {
     dispatch(
       initializeStateForEditQuote({
@@ -49,13 +46,14 @@ export default function ExistingTable() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            height: "70vh",
+            maxHeight: "70vh",
+            minHeight: "40vh",
           }}
         >
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ backgroundColor: "white", width: "100%" }}>
+        <Box sx={{ backgroundColor: "white", width: "100%", border: "1px solid #f0ecec" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
               Estimates Queue
@@ -135,12 +133,10 @@ export default function ExistingTable() {
               {/* <DeleteOutline
                 sx={{ color: "rgb(255, 103, 96)", fontSize: 25, py: 0.8 }}
               /> */}
-              <Link to="/Estimates/Steps">
+              <Link to="/Estimates/Steps" style={{marginLeft: 2, marginRight: 1,}} >
                 <IconButton
                   onClick={() => handleIconButtonClick(item)}
                   sx={{
-                    marginRight: 1,
-                    ml: 2,
                     backgroundColor: "#8477DA",
                     "&:hover": { backgroundColor: "#8477DA" },
                     color: "white",
@@ -152,7 +148,7 @@ export default function ExistingTable() {
                   }}
                   disabled={estimateDataFetching}
                 >
-                  <CreateOutlined sx={{ color: "white", fontSize: 20 ,mr: 0.4}} />
+                  <Edit sx={{ color: "white", fontSize: 18 ,mr: 0.4}} />
                   Edit
                 </IconButton>
               </Link>

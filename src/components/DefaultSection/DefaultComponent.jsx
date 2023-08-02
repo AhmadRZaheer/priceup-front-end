@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from "react";
-import door from "../../Assets/door.png";
 import { useFormik } from "formik";
 import {
   Button,
@@ -27,10 +26,6 @@ const DefaultComponent = ({ showSnackbar }) => {
     isFetching: isfetchingDefaultSingle,
     refetch,
   } = useFetchSingleDefault(defaultId);
-  console.log(
-    singleDefault?.layoutData?.image,
-    "singleDefault?.layoutData?.image"
-  );
 
   const formik = useFormik({
     initialValues: {

@@ -31,7 +31,6 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(currentItem || null);
-  // const [addonsSelectedItems,setAddonsSelectedItem] = useState(selectedContent?.addOns || []);
   const [sleeveOverCount, setSleeveOverCount] = useState(
     selectedContent?.sleeveOverCount || 0
   );
@@ -166,7 +165,6 @@ const MenuList = ({
                 border: { md: "none", xs: "2px solid #423f57" },
                 borderRadius: { md: 0, xs: 2 },
                 color: { md: "black", xs: "white" },
-                // background: "#14112c",
                 width: "100%",
                 mb: 1,
               }}
