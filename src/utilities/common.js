@@ -11,7 +11,8 @@ export function createSlug(string) {
     .replace(/^-+|-+$/g, ""); // Trim leading and trailing hyphens
 }
 
-export const backendURL = "http://localhost:5000";
+export const backendURL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 export const evaluateFormula = (
   formulaString,
@@ -45,7 +46,7 @@ export const evaluateFormula = (
   }
 };
 
-export const calculateTotal = (selectedContent,priceBySqft,estimatesData) => {
+export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(
@@ -192,7 +193,7 @@ export const calculateTotal = (selectedContent,priceBySqft,estimatesData) => {
   return total;
 };
 
-export const calculateAreaOrPerimeter = (measurementSides,formula) => {
+export const calculateAreaOrPerimeter = (measurementSides, formula) => {
   const measurementObject = measurementSides.reduce((obj, item) => {
     const { key, value } = item;
     if (!obj[key]) {
@@ -210,4 +211,4 @@ export const calculateAreaOrPerimeter = (measurementSides,formula) => {
     measurementObject?.e,
     measurementObject?.f
   );
-}
+};
