@@ -22,7 +22,7 @@ const TeamTable = () => {
   const [matchingId, setMatchingId] = useState("");
 
   const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data, isEditAble) => {
+  const handleOpenEdit = (data) => {
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -132,7 +132,7 @@ const TeamTable = () => {
                 onClick={() => (setOpen(true), setIsEdit(false))}
               >
                 <Add sx={{color: "white"}} />
-                Add Members
+                Add Member
               </IconButton>
             </Box>
           </Box>

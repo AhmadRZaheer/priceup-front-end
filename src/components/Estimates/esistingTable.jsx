@@ -1,9 +1,7 @@
-import {
-  Add,
-  Edit,
-} from "@mui/icons-material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import {
+  useDeleteEstimates,
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
@@ -17,10 +15,18 @@ import { Link } from "react-router-dom";
 import { backendURL } from "../../utilities/common";
 
 export default function ExistingTable() {
-  const { data , isFetching } = useGetEstimates();
+  const { data, isFetching } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
+
+  const { mutate: deleteEstimates, isSuccess: deletedSuccesfully } =
+    useDeleteEstimates();
   const dispatch = useDispatch();
+
+  const handleDeleteEstimate = (id) => {
+    // console.log(id, "deleted id")
+    deleteEstimates(id);
+  };
 
   const handleIconButtonClick = (item) => {
     dispatch(
@@ -53,7 +59,13 @@ export default function ExistingTable() {
           <CircularProgress />
         </Box>
       ) : (
-        <Box sx={{ backgroundColor: "white", width: "100%", border: "1px solid #f0ecec" }}>
+        <Box
+          sx={{
+            backgroundColor: "white",
+            width: "100%",
+            border: "1px solid #f0ecec",
+          }}
+        >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
               Estimates Queue
@@ -112,8 +124,10 @@ export default function ExistingTable() {
                   />
                 </Box>
                 <Box>
-                <Typography>{item.creatorData.name}</Typography>
-                <Typography sx={{fontSize: 13, p:0, mt: -0.4}}>{item.creatorData.email}</Typography>
+                  <Typography>{item.creatorData.name}</Typography>
+                  <Typography sx={{ fontSize: 13, p: 0, mt: -0.4 }}>
+                    {item.creatorData.email}
+                  </Typography>
                 </Box>
               </Box>
               <Typography sx={{ width: 210, py: 1 }}>
@@ -123,16 +137,31 @@ export default function ExistingTable() {
                 {item.customerData.email}
               </Typography>
               <Typography sx={{ width: 190, py: 1 }}>
-              {new Date(item?.updatedAt).toDateString()}
+                {new Date(item?.updatedAt).toDateString()}
               </Typography>
-              <Typography sx={{ width: 200, py: 1 }}>${item?.cost?.toFixed(2) || 0}</Typography>
+              <Typography sx={{ width: 200, py: 1 }}>
+                ${item?.cost?.toFixed(2) || 0}
+              </Typography>
               {/* <Typography sx={{ width: 180 }}></Typography> */}
               <Typography sx={{ width: 170, py: 1 }}>{item?.status}</Typography>
-
-              {/* <DeleteOutline
-                sx={{ color: "rgb(255, 103, 96)", fontSize: 25, py: 0.8 }}
-              /> */}
-              <Link to="/Estimates/Steps" style={{marginLeft: 2, marginRight: 1,}} >
+              <IconButton
+                onClick={() => handleDeleteEstimate(item._id)}
+                sx={{
+                  padding: 0,
+                  margin: 0,
+                  borderRadius: "100%",
+                  mt: -1,
+                  mr: 1,
+                  "&:hover": { backgroundColor: "white" },
+                  "&:active": { backgroundColor: "white" },
+                }}
+              >
+                <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
+              </IconButton>
+              <Link
+                to="/Estimates/Steps"
+                style={{ marginLeft: 2, marginRight: 1 }}
+              >
                 <IconButton
                   onClick={() => handleIconButtonClick(item)}
                   sx={{
@@ -147,7 +176,7 @@ export default function ExistingTable() {
                   }}
                   disabled={estimateDataFetching}
                 >
-                  <Edit sx={{ color: "white", fontSize: 18 ,mr: 0.4}} />
+                  <Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
                   Edit
                 </IconButton>
               </Link>

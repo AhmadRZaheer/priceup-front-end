@@ -4,7 +4,6 @@ import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
 
 export const useFetchDataEstimate = () => {
-
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
@@ -110,3 +109,24 @@ export const useEditEstimates = () => {
 
   return useMutation(handleEditEstimate);
 };
+
+export const useDeleteEstimates = () => {
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/estimates/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
