@@ -149,6 +149,7 @@ export default function ExistingQuotes() {
             </Box>
           </Box>
         </Box>
+        
         <Box sx={{ width: "97%" }}>
           <ExistingTable />
         </Box>

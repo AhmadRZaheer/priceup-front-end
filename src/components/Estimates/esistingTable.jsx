@@ -99,89 +99,99 @@ export default function ExistingTable() {
             <Typography sx={{ width: 180 }}>Status</Typography>
             <Typography sx={{ width: 60 }}></Typography>
           </Box>
-
-          {data?.estimates?.map((item) => (
-            <Box
-              sx={{
-                display: "flex",
-                borderBottom: "1px solid #f0ecec",
-                p: 2,
-              }}
-            >
-              <Box sx={{ width: 290, display: "flex", gap: 1 }}>
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "100%",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    width={40}
-                    src={`${backendURL}/${item.creatorData.image}`}
-                    alt="image person"
-                  />
-                </Box>
-                <Box>
-                  <Typography>{item.creatorData.name}</Typography>
-                  <Typography sx={{ fontSize: 13, p: 0, mt: -0.4 }}>
-                    {item.creatorData.email}
-                  </Typography>
-                </Box>
-              </Box>
-              <Typography sx={{ width: 210, py: 1 }}>
-                {item.customerData.name}
-              </Typography>
-              <Typography sx={{ width: 250, py: 1 }}>
-                {item.customerData.email}
-              </Typography>
-              <Typography sx={{ width: 190, py: 1 }}>
-                {new Date(item?.updatedAt).toDateString()}
-              </Typography>
-              <Typography sx={{ width: 200, py: 1 }}>
-                ${item?.cost?.toFixed(2) || 0}
-              </Typography>
-              {/* <Typography sx={{ width: 180 }}></Typography> */}
-              <Typography sx={{ width: 170, py: 1 }}>{item?.status}</Typography>
-              <IconButton
-                onClick={() => handleDeleteEstimate(item._id)}
+          {data?.estimates?.length >= 1 ? (
+            data?.estimates?.map((item) => (
+              <Box
                 sx={{
-                  padding: 0,
-                  margin: 0,
-                  borderRadius: "100%",
-                  mt: -1,
-                  mr: 1,
-                  "&:hover": { backgroundColor: "white" },
-                  "&:active": { backgroundColor: "white" },
+                  display: "flex",
+                  borderBottom: "1px solid #f0ecec",
+                  p: 2,
                 }}
               >
-                <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
-              </IconButton>
-              <Link
-                to="/Estimates/Steps"
-                style={{ marginLeft: 2, marginRight: 1 }}
-              >
+                <Box sx={{ width: 290, display: "flex", gap: 1 }}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <img
+                      width={40}
+                      src={`${backendURL}/${item.creatorData.image}`}
+                      alt="image person"
+                    />
+                  </Box>
+                  <Box>
+                    <Typography>{item.creatorData.name}</Typography>
+                    <Typography sx={{ fontSize: 13, p: 0, mt: -0.4 }}>
+                      {item.creatorData.email}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Typography sx={{ width: 210, py: 1 }}>
+                  {item.customerData.name}
+                </Typography>
+                <Typography sx={{ width: 250, py: 1 }}>
+                  {item.customerData.email}
+                </Typography>
+                <Typography sx={{ width: 190, py: 1 }}>
+                  {new Date(item?.updatedAt).toDateString()}
+                </Typography>
+                <Typography sx={{ width: 200, py: 1 }}>
+                  ${item?.cost?.toFixed(2) || 0}
+                </Typography>
+                <Typography sx={{ width: 170, py: 1 }}>
+                  {item?.status}
+                </Typography>
                 <IconButton
-                  onClick={() => handleIconButtonClick(item)}
+                  onClick={() => handleDeleteEstimate(item._id)}
                   sx={{
-                    backgroundColor: "#8477DA",
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    color: "white",
-                    textTransform: "capitalize",
-                    borderRadius: 1,
-                    fontSize: 16,
-                    paddingY: 0.8,
-                    px: 0.8,
+                    padding: 0,
+                    margin: 0,
+                    borderRadius: "100%",
+                    mt: -1,
+                    mr: 1,
+                    "&:hover": { backgroundColor: "white" },
+                    "&:active": { backgroundColor: "white" },
                   }}
-                  disabled={estimateDataFetching}
                 >
-                  <Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
-                  Edit
+                  <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
                 </IconButton>
-              </Link>
+                <Link
+                  to="/Estimates/Steps"
+                  style={{ marginLeft: 2, marginRight: 1 }}
+                >
+                  <IconButton
+                    onClick={() => handleIconButtonClick(item)}
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 1,
+                      fontSize: 16,
+                      paddingY: 0.8,
+                      px: 0.8,
+                    }}
+                    disabled={estimateDataFetching}
+                  >
+                    <Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
+                    Edit
+                  </IconButton>
+                </Link>
+              </Box>
+            ))
+          ) : (
+            <Box>
+              <Typography
+                sx={{ py: 1, fontSize: 18, color: "gray", textAlign: "center" }}
+              >
+                No Estimates Found
+              </Typography>
             </Box>
-          ))}
+          )}
         </Box>
       )}
     </>

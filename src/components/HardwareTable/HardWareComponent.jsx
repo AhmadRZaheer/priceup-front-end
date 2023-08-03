@@ -77,6 +77,7 @@ const HardWareComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
+          height: "100%",
         }}
       >
         {" "}
@@ -170,7 +171,7 @@ const HardWareComponent = ({ type }) => {
             padding: "20px",
             alignItems: "center",
 
-            height: "56vh",
+            height: "100%",
           }}
         >
           <CircularProgress size={24} color="warning" />
