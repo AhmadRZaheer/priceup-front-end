@@ -36,7 +36,8 @@ const CustomerTable = () => {
               getRowId={(row) => row._id}
               rows={CustomerData}
               columns={CustomerColumns}
-              paginationModel={{ page: 0, pageSize: 8 }}
+              pagination
+              paginationModel={{ page: 2, pageSize: 8 }}
             />
           ) : (
             <Typography sx={{tesxtAlign: "center", fontSize: 20, color: "gray", py: 2}}>No Customer Found</Typography>

@@ -13,11 +13,15 @@ import {
 } from "../../redux/estimateCalculations";
 import { Link } from "react-router-dom";
 import { backendURL } from "../../utilities/common";
+import { useEffect } from "react";
 
 export default function ExistingTable() {
-  const { data, isFetching } = useGetEstimates();
-  const { data: estimateListData, isFetching: estimateDataFetching } =
-    useFetchDataEstimate();
+  const { data, isFetching, refetch } = useGetEstimates();
+  const {
+    data: estimateListData,
+    isFetching: estimateDataFetching,
+    refetch: Refetched,
+  } = useFetchDataEstimate();
 
   const { mutate: deleteEstimates, isSuccess: deletedSuccesfully } =
     useDeleteEstimates();
@@ -26,7 +30,11 @@ export default function ExistingTable() {
   const handleDeleteEstimate = (id) => {
     // console.log(id, "deleted id")
     deleteEstimates(id);
+    // Refetched();
   };
+  useEffect(() => {
+    refetch()
+  }, [deletedSuccesfully])
 
   const handleIconButtonClick = (item) => {
     dispatch(
@@ -145,20 +153,20 @@ export default function ExistingTable() {
                 <Typography sx={{ width: 170, py: 1 }}>
                   {item?.status}
                 </Typography>
-                <IconButton
-                  onClick={() => handleDeleteEstimate(item._id)}
-                  sx={{
-                    padding: 0,
-                    margin: 0,
-                    borderRadius: "100%",
-                    mt: -1,
-                    mr: 1,
-                    "&:hover": { backgroundColor: "white" },
-                    "&:active": { backgroundColor: "white" },
-                  }}
-                >
-                  <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
-                </IconButton>
+                  <IconButton
+                    onClick={() => handleDeleteEstimate(item._id)}
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                      borderRadius: "100%",
+                      mt: -1,
+                      mr: 1,
+                      "&:hover": { backgroundColor: "white" },
+                      "&:active": { backgroundColor: "white" },
+                    }}
+                  >
+                    <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
+                  </IconButton>
                 <Link
                   to="/Estimates/Steps"
                   style={{ marginLeft: 2, marginRight: 1 }}

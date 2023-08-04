@@ -9,6 +9,8 @@ import { TextField } from "@material-ui/core";
 import {
   useCreateEstimates,
   useEditEstimates,
+  useFetchDataEstimate,
+  useGetEstimates,
 } from "../../utilities/ApiHooks/Estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -149,8 +151,17 @@ export default function ClientDetailsModel({
       }
       handleCancel();
       window.location.href = "/Estimates";
+      Refetched();
+
+
     },
   });
+  const { data, isFetching, refetch } = useGetEstimates();
+  const {
+    data: estimateListData,
+    isFetching: estimateDataFetching,
+    refetch: Refetched,
+  } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
@@ -415,7 +426,6 @@ export default function ClientDetailsModel({
                     "&:hover": {
                       backgroundColor: "#8477da",
                     },
-                    
                   }}
                   variant="contained"
                 >
