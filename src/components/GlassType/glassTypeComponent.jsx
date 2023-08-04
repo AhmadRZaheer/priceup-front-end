@@ -9,6 +9,7 @@ import {
 } from "../../utilities/ApiHooks/GlassType";
 import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Model/AddEidtGlassType";
+import GlassTypeDataItem from "./glassTypeData";
 
 const GlassTypeComponent = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -48,15 +49,6 @@ const GlassTypeComponent = ({ type }) => {
   };
   const handleClose = () => {
     setOpen(false);
-  };
-
-  const handleOpenEdit = (data, isEditAble) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
-  const handleHardwareDelete = (id) => {
-    deleteGlassType(id);
   };
 
   useEffect(() => {
@@ -189,60 +181,12 @@ const GlassTypeComponent = ({ type }) => {
           }}
         >
           {GlassTypeData?.map((entry, mainIndex) => (
-            <div
-              style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
-              key={mainIndex}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignContent: "center",
-                  p: 2,
-                }}
-              >
-                {" "}
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <img
-                    className="cellImg"
-                    src={`${backendURL}/${entry.image}`}
-                    alt=""
-                  />
-                  {entry.name}
-                </Box>
-                <Box>
-                  <IconButton>
-                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleOpenEdit(entry)}
-                    sx={{
-                      backgroundColor: "#8477DA",
-                      "&:hover": { backgroundColor: "#8477DA" },
-                      color: "white",
-                      textTransform: "capitalize",
-                      borderRadius: 2,
-                      fontSize: 17,
-                    }}
-                  >
-                    <Edit color="white" sx={{fontSize: 18, mr: 0.4}} />
-                    Edit
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box sx={{ p: 2 }}>
-                {entry?.options?.map((finish, index) => (
-                  <GlassTypeItem
-                    data={finish}
-                    key={index}
-                    index={index}
-                    refetch={GlassTypeRefetch}
-                    glassTypeId={entry._id}
-                    showSnackbar={showSnackbar}
-                  />
-                ))}
-              </Box>
-            </div>
+           <GlassTypeDataItem
+           entry={entry}
+           mainIndex={mainIndex}
+           GlassTypeRefetch={GlassTypeRefetch}
+           showSnackbar={showSnackbar}
+           type={type} />
           ))}
         </div>
       )}

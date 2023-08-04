@@ -17,7 +17,7 @@ import {
   useEditGlassType,
 } from "../../utilities/ApiHooks/GlassType";
 
-const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
+const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUpdateValue, UpdateValue}) => {
   const {
     mutate: deleteGlassType,
     isLoading: LoadingForDelete,
@@ -55,6 +55,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
 
   const handleFinishDelete = (event) => {
     event.preventDefault();
+    console.log(glassTypeId, data._id, "id")
     deleteGlassType({ glassTypeId: glassTypeId, optionId: data._id });
   };
 
@@ -70,6 +71,32 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
     }
   }, [SuccessForEdit, SuccessForDelete]);
 
+  const handlePartChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, partNumber: value };
+      SetUpdateValue(originalArray);
+    }
+  };
+  const handleStatusChange = (event) => {
+    console.log(event.target.checked, "status");
+    formik.handleChange(event);
+    const value = event.target.checked;
+    const originalArray = [...UpdateValue];
+    originalArray[index] = { ...data, status: value };
+    SetUpdateValue(originalArray);
+  };
+  const handleCostChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, cost: value };
+      SetUpdateValue(originalArray);
+    }
+  };
   return (
     <Box key={index}>
       <form onSubmit={formik.handleSubmit}>
@@ -102,10 +129,11 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
               size="small"
               variant="outlined"
               name="partNumber"
+              type="number"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
               value={formik.values.partNumber}
-              onChange={formik.handleChange}
+              onChange={(event) => handlePartChange(event)}
               onBlur={formik.handleBlur}
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
@@ -124,10 +152,11 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
               size="small"
               variant="outlined"
               name="cost"
+              type="number"
               placeholder="Cost"
               style={{ width: "100%" }}
               value={formik.values.cost}
-              onChange={formik.handleChange}
+              onChange={(event) => handleCostChange(event)}
               onBlur={formik.handleBlur}
               error={formik.touched.cost && formik.errors.cost}
               helperText={formik.touched.cost && formik.errors.cost}
@@ -162,7 +191,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar }) => {
                   <Switch
                     color="primary"
                     checked={formik.values.status}
-                    onChange={formik.handleChange}
+                    onChange={(event) => handleStatusChange(event)}
                     onBlur={formik.handleBlur}
                     name="status"
                   />

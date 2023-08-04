@@ -9,6 +9,7 @@ import {
 } from "../../utilities/ApiHooks/GlassTreatement";
 import GlassTreatementItem from "./glassTreatementItems";
 import AddEditGlassTreatement from "../Model/AddGlassTreatement";
+import GlassTreatementDataItem from "./glassTreatementData";
 
 const GlassTreatementComponent = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -189,62 +190,13 @@ const GlassTreatementComponent = ({ type }) => {
           }}
         >
           {GlassTreatementData?.map((entry, mainIndex) => (
-            <div
-              style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
-              key={mainIndex}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignContent: "center",
-                  p: 2,
-                }}
-              >
-                {" "}
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <img
-                    className="cellImg"
-                    src={`${backendURL}/${entry.image}`}
-                    alt=""
-                  />
-                  {entry.name}
-                  {/* </div> */}
-                </Box>
-                <Box>
-                  <IconButton>
-                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleOpenEdit(entry)}
-                    sx={{
-                      backgroundColor: "#8477DA",
-                      "&:hover": { backgroundColor: "#8477DA" },
-                      color: "white",
-                      textTransform: "capitalize",
-                      borderRadius: 2,
-                      fontSize: 17,
-                      padding: 1,
-                    }}
-                  >
-                    <Edit sx={{ fontSize: 18, mr: 0.4 }} />
-                    Edit
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box sx={{ p: 2 }}>
-                {entry?.options?.map((finish, index) => (
-                  <GlassTreatementItem
-                    data={finish}
-                    key={index}
-                    index={index}
-                    refetch={GlassTreatementRefetch}
-                    glassTreatementId={entry._id}
-                    showSnackbar={showSnackbar}
-                  />
-                ))}
-              </Box>
-            </div>
+            <GlassTreatementDataItem
+              entry={entry}
+              mainIndex={mainIndex}
+              GlassTreatementRefetch={GlassTreatementRefetch}
+              showSnackbar={showSnackbar}
+              type={type}
+            />
           ))}
         </div>
       )}

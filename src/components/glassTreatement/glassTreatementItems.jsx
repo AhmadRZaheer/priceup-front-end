@@ -9,7 +9,6 @@ import {
   TextField,
   ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -25,7 +24,10 @@ const GlassTreatementItem = ({
   refetch,
   glassTreatementId,
   showSnackbar,
+  SetUpdateValue,
+  UpdateValue,
 }) => {
+  console.log(data, "data")
   const {
     mutate: deleteGlassTreatement,
     isLoading: LoadingForDelete,
@@ -65,7 +67,8 @@ const GlassTreatementItem = ({
   });
 
   const handleFinishDelete = (event) => {
-    event.preventDefault();
+    // event.preventDefault();
+    console.log(glassTreatementId, data._id, "id of data")
     deleteGlassTreatement({
       glassTreatementId: glassTreatementId,
       optionId: data._id,
@@ -79,24 +82,37 @@ const GlassTreatementItem = ({
         showSnackbar("Deleted Successfully", "error");
       }
       if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success");
+        showSnackbar("Updated Successfully", "success");
       }
     }
   }, [SuccessForEdit, SuccessForDelete]);
-  const theme = createTheme({
-    components: {
-      MuiSwitch: {
-        styleOverrides: {
-          root: {
-            color: "#8477DA", 
-            "&.Mui-checked": {
-              color: "#8477DA", 
-            },
-          },
-        },
-      },
-    },
-  });
+
+  const handlePartChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, partNumber: value };
+      SetUpdateValue(originalArray);
+    }
+  };
+  const handleStatusChange = (event) => {
+    console.log(event.target.checked, "status");
+    formik.handleChange(event);
+    const value = event.target.checked;
+    const originalArray = [...UpdateValue];
+    originalArray[index] = { ...data, status: value };
+    SetUpdateValue(originalArray);
+  };
+  const handleCostChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, cost: value };
+      SetUpdateValue(originalArray);
+    }
+  };
 
   return (
     <Box key={index}>
@@ -129,11 +145,12 @@ const GlassTreatementItem = ({
             <TextField
               size="small"
               variant="outlined"
+              type="number"
               name="partNumber"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
               value={formik.values.partNumber}
-              onChange={formik.handleChange}
+              onChange={(event) => handlePartChange(event)}
               onBlur={formik.handleBlur}
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
@@ -154,8 +171,9 @@ const GlassTreatementItem = ({
               name="cost"
               placeholder="Cost"
               style={{ width: "100%" }}
+              type="number"
               value={formik.values.cost}
-              onChange={formik.handleChange}
+              onChange={(event) => handleCostChange(event)}
               onBlur={formik.handleBlur}
               error={formik.touched.cost && formik.errors.cost}
               helperText={formik.touched.cost && formik.errors.cost}
@@ -185,12 +203,12 @@ const GlassTreatementItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <ThemeProvider theme={theme}>
+              <ThemeProvider >
                 <FormControlLabel
                   control={
                     <Switch
                       checked={formik.values.status}
-                      onChange={formik.handleChange}
+                      onChange={(event) => handleStatusChange(event)}
                       onBlur={formik.handleBlur}
                       name="status"
                     />

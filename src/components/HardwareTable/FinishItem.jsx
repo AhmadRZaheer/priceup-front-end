@@ -143,6 +143,7 @@ const FinishItem = ({
             <TextField
               size="small"
               variant="outlined"
+              type="number"
               name="partNumber"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
@@ -167,6 +168,7 @@ const FinishItem = ({
             <TextField
               size="small"
               variant="outlined"
+              type="number"
               name="cost"
               placeholder="Cost"
               style={{ width: "100%" }}
