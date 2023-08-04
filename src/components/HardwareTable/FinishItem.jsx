@@ -17,7 +17,15 @@ import {
 } from "../../utilities/ApiHooks/Hardware";
 import { useEffect } from "react";
 
-const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdate }) => {
+const FinishItem = ({
+  data,
+  index,
+  refetch,
+  hardwareId,
+  showSnackbar,
+  SetUpdateValue,
+  UpdateValue,
+}) => {
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
@@ -35,9 +43,9 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
   });
   const formik = useFormik({
     initialValues: {
-      partNumber: data.partNumber,
-      cost: data.cost,
-      status: data.status,
+      partNumber: data?.partNumber,
+      cost: data?.cost,
+      status: data?.status,
     },
     validationSchema,
     onSubmit: async (values, resetForm) => {
@@ -52,13 +60,11 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
       resetForm();
     },
   });
-  
-  useEffect(() => {
-    valueUpdate(formik.values)
-    console.log(formik.values, "formik.values")
-  }, [formik.values])
 
-  
+  // useEffect(() => {
+  //   valueUpdate(formik.values)
+  //   console.log(formik.values, "formik.values")
+  // }, [formik.values])
 
   const handleFinishDelete = (event) => {
     event.preventDefault();
@@ -68,15 +74,41 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if(SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error")
+      if (SuccessForDelete) {
+        showSnackbar("Deleted Successfully", "error");
       }
       if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success")
+        showSnackbar("Updated Successfully", "success");
       }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 
+  const handlePartChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, partNumber: value };
+      SetUpdateValue(originalArray);
+    }
+  };
+  const handleStatusChange = (event) => {
+    console.log(event.target.checked, "status");
+    formik.handleChange(event);
+    const value = event.target.checked;
+    const originalArray = [...UpdateValue];
+    originalArray[index] = { ...data, status: value };
+    SetUpdateValue(originalArray);
+  };
+  const handleCostChange = (event) => {
+    formik.handleChange(event);
+    const value = event.target.value;
+    if (value.length > 0) {
+      const originalArray = [...UpdateValue];
+      originalArray[index] = { ...data, cost: value };
+      SetUpdateValue(originalArray);
+    }
+  };
   return (
     <Box key={index}>
       <form onSubmit={formik.handleSubmit}>
@@ -115,7 +147,9 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
               value={formik.values.partNumber}
-              onChange={formik.handleChange}
+              onChange={(event) => {
+                handlePartChange(event);
+              }}
               onBlur={formik.handleBlur}
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
@@ -137,7 +171,7 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
               placeholder="Cost"
               style={{ width: "100%" }}
               value={formik.values.cost}
-              onChange={formik.handleChange}
+              onChange={(event) => handleCostChange(event)}
               onBlur={formik.handleBlur}
               error={formik.touched.cost && formik.errors.cost}
               helperText={formik.touched.cost && formik.errors.cost}
@@ -161,7 +195,6 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
               }}
             >
               <FormControl style={{ width: "100%" }} size="small">
-
                 <Typography variant="h6">{data?.thickness}</Typography>
               </FormControl>
             </Box>
@@ -172,7 +205,7 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
                   <Switch
                     color="primary"
                     checked={formik.values.status}
-                    onChange={formik.handleChange}
+                    onChange={(event) => handleStatusChange(event)}
                     onBlur={formik.handleBlur}
                     name="status"
                   />
@@ -180,7 +213,7 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
                 label={"active"}
               />
             </Box>
-            <Box sx={{display: "flex"}}>
+            <Box sx={{ display: "flex" }}>
               {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
@@ -194,7 +227,18 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdat
               {LoadingForEdit ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <IconButton type="submit" sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+                <IconButton
+                  type="submit"
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 2,
+                    fontSize: 17,
+                    padding: 1,
+                  }}
+                >
                   Update
                 </IconButton>
               )}

@@ -56,7 +56,7 @@ const Sidebar = () => {
                 className={`estimates ${location.pathname === "/" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={EstimsteIcon}
@@ -72,7 +72,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/Estimates" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <AttachMoney />
 
                   <span>Estimates</span>
@@ -84,7 +84,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/Customers" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={CustomerIcon}
@@ -99,7 +99,7 @@ const Sidebar = () => {
               <li
                 className={` ${location.pathname === "/team" ? "active" : ""}`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={TremIcon}
@@ -115,7 +115,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/hardware" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={HardWairIcon}
@@ -131,7 +131,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/finishes" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <FormatColorFillIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
 
                   <span>Finishes</span>
@@ -155,7 +155,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/GlassType" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={HardWairIcon}
@@ -171,7 +171,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/GlassTreatement" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={HardWairIcon}
@@ -187,7 +187,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/Defaults" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={DefaltIcon}
@@ -203,7 +203,7 @@ const Sidebar = () => {
                 className={` ${location.pathname === "/settings" ? "active" : ""
                   }`}
               >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
                   <img
                     style={{ paddingRight: 10 }}
                     src={SettingsIcon}

@@ -11,6 +11,7 @@ import AddEditHardware from "../Model/AddEditHardware";
 import Snackbars from "../Model/SnackBar";
 import "./hardwareTable.scss";
 import FinishItem from "./FinishItem";
+import HardwareItem from "./HardwreItem";
 
 const HardWareComponent = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -38,8 +39,7 @@ const HardWareComponent = ({ type }) => {
     refetch: hardwareRefetch,
     isFetching: hardwareFetching,
   } = useFetchDatahardware(type);
-  const { mutate: deleteHardware, isSuccess: deleteSuccess } =
-    useDeleteHardwares();
+ 
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -52,34 +52,19 @@ const HardWareComponent = ({ type }) => {
     setOpen(false);
   };
 
-  const handleOpenEdit = (data) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
-  const handleHardwareDelete = (id) => {
-    deleteHardware(id);
-  };
+  
+ 
 
-  useEffect(() => {
-    if (deleteSuccess) {
-      hardwareRefetch();
-      showSnackbar("Deleted Successfully ", "error");
-    }
-  }, [deleteSuccess]);
+  // useEffect(() => {
+  //   if (deleteSuccess) {
+  //     hardwareRefetch();
+  //     showSnackbar("Deleted Successfully ", "error");
+  //   }
+  // }, [deleteSuccess]);
 
-  const {
-    mutate: editFinish,
-  } = useEditHardware();
+ 
 
-  const [UpdateValue, SetUpdateValue] = useState();
-
-  const handleOpenUpdate = (id) => {
-console.log(UpdateValue, "UpdateValue")
-    // const id = hardwareData;
-    console.log(id)
-    editFinish({ finishesData: UpdateValue, id: id });
-  };
+  
 
   return (
     <>
@@ -208,74 +193,7 @@ console.log(UpdateValue, "UpdateValue")
           }}
         >
           {hardwareData?.map((entry, mainIndex) => (
-            <div
-              style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
-              key={mainIndex}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignContent: "center",
-                  p: 2,
-                }}
-              >
-                {" "}
-                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-                  <img
-                    className="cellImg"
-                    src={`${backendURL}/${entry.image}`}
-                    alt=""
-                  />
-                  {entry.name}
-                  <IconButton
-                    onClick={() => handleOpenEdit(entry)}
-                    sx={{
-                      backgroundColor: "#8477DA",
-                      "&:hover": { backgroundColor: "#8477DA" },
-                      color: "white",
-                      textTransform: "capitalize",
-                      borderRadius: 2,
-                      fontSize: 17,
-                    }}
-                  >
-                    <Edit color="white" sx={{ fontSize: 18, pr: 0.4 }} />
-                    Edit
-                  </IconButton>
-                </Box>
-                <Box>
-                  <IconButton>
-                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleOpenUpdate(entry._id)}
-                    sx={{
-                      backgroundColor: "#8477DA",
-                      "&:hover": { backgroundColor: "#8477DA" },
-                      color: "white",
-                      textTransform: "capitalize",
-                      borderRadius: 2,
-                      fontSize: 17,
-                    }}
-                  >
-                    Update
-                  </IconButton>
-                </Box>
-              </Box>
-              <Box sx={{ p: 2 }}>
-                {entry?.finishes?.map((finish, index) => (
-                  <FinishItem
-                    data={finish}
-                    key={index}
-                    index={index}
-                    refetch={hardwareRefetch}
-                    hardwareId={entry._id}
-                    showSnackbar={showSnackbar}
-                    valueUpdate={SetUpdateValue}
-                  />
-                ))}
-              </Box>
-            </div>
+            <HardwareItem entry={entry} mainIndex={mainIndex} hardwareRefetch={hardwareRefetch} showSnackbar={showSnackbar} type={type}/>
           ))}
         </div>
       ) : (
