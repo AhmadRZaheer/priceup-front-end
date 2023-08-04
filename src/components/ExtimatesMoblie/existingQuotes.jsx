@@ -65,7 +65,7 @@ export default function ExitingQuotes() {
         <Box
           sx={{
             marginTop: 8,
-            height: "92.8vh",
+            height: "92.9vh",
             color: "#ffff",
             backgroundColor: "rgba(16, 13, 36, 1)",
             display: "flex",

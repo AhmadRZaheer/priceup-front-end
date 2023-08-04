@@ -8,6 +8,7 @@ import { getPageNavigation } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
 import Snackbars from "../Model/SnackBar";
+import { Box } from "@mui/material";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const handleClose = () => setClientDetailOpen(false);
@@ -35,6 +36,7 @@ const IndexMobile = () => {
 
   return (
     <>
+    <Box sx={{backgroundColor: "black"}}>
       {Navigation == "existing" && <ExitingQuotes />}
       {Navigation == "layout" && <Layout />}
       {Navigation == "measurements" && <LayoutMeasurements />}
@@ -52,6 +54,7 @@ const IndexMobile = () => {
         severity={snackbar.severity}
         closeSnackbar={closeSnackbar}
       />
+      </Box>
     </>
   );
 };
