@@ -17,7 +17,7 @@ import {
 } from "../../utilities/ApiHooks/Hardware";
 import { useEffect } from "react";
 
-const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
+const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar, valueUpdate }) => {
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
@@ -52,6 +52,13 @@ const FinishItem = ({ data, index, refetch, hardwareId, showSnackbar }) => {
       resetForm();
     },
   });
+  
+  useEffect(() => {
+    valueUpdate(formik.values)
+    console.log(formik.values, "formik.values")
+  }, [formik.values])
+
+  
 
   const handleFinishDelete = (event) => {
     event.preventDefault();

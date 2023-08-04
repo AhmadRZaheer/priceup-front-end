@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import {
   useDeleteHardwares,
+  useEditHardware,
   useFetchDatahardware,
 } from "../../utilities/ApiHooks/Hardware";
 import AddEditHardware from "../Model/AddEditHardware";
 import Snackbars from "../Model/SnackBar";
+import "./hardwareTable.scss";
 import FinishItem from "./FinishItem";
 
 const HardWareComponent = ({ type }) => {
@@ -66,6 +68,19 @@ const HardWareComponent = ({ type }) => {
     }
   }, [deleteSuccess]);
 
+  const {
+    mutate: editFinish,
+  } = useEditHardware();
+
+  const [UpdateValue, SetUpdateValue] = useState();
+
+  const handleOpenUpdate = (id) => {
+console.log(UpdateValue, "UpdateValue")
+    // const id = hardwareData;
+    console.log(id)
+    editFinish({ finishesData: UpdateValue, id: id });
+  };
+
   return (
     <>
       <div
@@ -77,7 +92,9 @@ const HardWareComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-          height: "100%",
+          // height: "100%",
+          // height: calc("100vh" - "200px"),
+          alignItems: "start",
         }}
       >
         {" "}
@@ -89,7 +106,9 @@ const HardWareComponent = ({ type }) => {
             textTransform: "uppercase",
           }}
         >
-          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10}}>{type}</p>
+          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
+            {type}
+          </p>
         </div>
         <div
           style={{
@@ -170,20 +189,21 @@ const HardWareComponent = ({ type }) => {
             justifyContent: "center",
             padding: "20px",
             alignItems: "center",
-
-            height: "100%",
+            height: "60%",
           }}
         >
           <CircularProgress size={24} color="warning" />
         </Box>
-      ) : (
+      ) : hardwareData?.length >= 1 ? (
         <div
+          className="HardwareTable"
           style={{
             display: "flex",
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            maxHeight: "600px",
+            // maxHeight: "600px",
+            // height: "100%",
             overflowY: "scroll",
           }}
         >
@@ -208,13 +228,8 @@ const HardWareComponent = ({ type }) => {
                     alt=""
                   />
                   {entry.name}
-                </Box>
-                <Box>
-                  <IconButton>
-                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
-                  </IconButton>
                   <IconButton
-                  onClick={() => handleOpenEdit(entry)}
+                    onClick={() => handleOpenEdit(entry)}
                     sx={{
                       backgroundColor: "#8477DA",
                       "&:hover": { backgroundColor: "#8477DA" },
@@ -224,8 +239,26 @@ const HardWareComponent = ({ type }) => {
                       fontSize: 17,
                     }}
                   >
-                    <Edit  color="white" sx={{fontSize: 18, pr: 0.4}} />
+                    <Edit color="white" sx={{ fontSize: 18, pr: 0.4 }} />
                     Edit
+                  </IconButton>
+                </Box>
+                <Box>
+                  <IconButton>
+                    <Delete onClick={() => handleHardwareDelete(entry._id)} />
+                  </IconButton>
+                  <IconButton
+                    onClick={() => handleOpenUpdate(entry._id)}
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 2,
+                      fontSize: 17,
+                    }}
+                  >
+                    Update
                   </IconButton>
                 </Box>
               </Box>
@@ -238,12 +271,19 @@ const HardWareComponent = ({ type }) => {
                     refetch={hardwareRefetch}
                     hardwareId={entry._id}
                     showSnackbar={showSnackbar}
+                    valueUpdate={SetUpdateValue}
                   />
                 ))}
               </Box>
             </div>
           ))}
         </div>
+      ) : (
+        <Typography
+          sx={{ textAlign: "center", py: 2, fontSize: 20, color: "gray" }}
+        >
+          No {type} Found
+        </Typography>
       )}
 
       <AddEditHardware

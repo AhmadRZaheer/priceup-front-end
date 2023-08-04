@@ -26,9 +26,8 @@ const TeamTable = () => {
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
-    
   };
-  console.log(isEdit, "isedia")
+  console.log(isEdit, "isedia");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -93,9 +92,18 @@ const TeamTable = () => {
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
-              <IconButton sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-                <ModeIcon sx={{color: "white", fontSize: 18, pr: 0.4}} />
-               {" "}  Edit
+              <IconButton
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 2,
+                  fontSize: 17,
+                  padding: 1,
+                }}
+              >
+                <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} /> Edit
               </IconButton>
             </div>
           </div>
@@ -126,24 +134,41 @@ const TeamTable = () => {
             <Typography sx={{ fontSize: 30, pl: 2 }}>Team Memebers</Typography>
             <Box sx={{ width: "200px" }}>
               <IconButton
-                sx={{ backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 20, padding: 1, mt: 1 }}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 2,
+                  fontSize: 20,
+                  padding: 1,
+                  mt: 1,
+                }}
                 fullWidth
                 variant="contained"
                 onClick={() => (setOpen(true), setIsEdit(false))}
               >
-                <Add sx={{color: "white"}} />
+                <Add sx={{ color: "white" }} />
                 Add Member
               </IconButton>
             </Box>
           </Box>
         </div>
         <div className="CustomerTable">
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={teamData}
-            columns={teamColumns.concat(actionColumn)}
-            paginationModel={{ page: 0, pageSize: 8 }}
-          />
+          {teamData?.length >= 1 ? (
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={teamData}
+              columns={teamColumns.concat(actionColumn)}
+              paginationModel={{ page: 0, pageSize: 8 }}
+            />
+          ) : (
+            <Typography
+              sx={{ textAlign: "center", py: 2, fontSize: 20, color: "gray" }}
+            >
+              Team Member not Found
+            </Typography>
+          )}
         </div>
 
         <AddTeamMembers

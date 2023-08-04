@@ -75,10 +75,18 @@ export const AdminColumns = [
     headerName: "Date added",
     width: 220,
     renderCell: (params) => {
-      return <div className="userNameTable">{new Date(params.row.updatedAt).toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</div>;
+      return (
+        <div className="userNameTable">
+          {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </div>
+      );
     },
   },
-
 ];
 
 export const CustomerColumns = [
@@ -88,20 +96,22 @@ export const CustomerColumns = [
     width: 330,
     renderCell: (params) => {
       return (
-        <div className="cellWrapper">
-          <div className="customerImg">
-            <img
-              style={{ width: 30, height: 30 }}
-              src={`${backendURL}/${params.row.image}`}
-              alt=""
-            />
-            {/* <img style={{}} src={wheel} alt="" /> */}
+        <>
+          <div className="cellWrapper">
+            <div className="customerImg">
+              <img
+                style={{ width: 30, height: 30 }}
+                src={`${backendURL}/${params.row.image}`}
+                alt=""
+              />
+              {/* <img style={{}} src={wheel} alt="" /> */}
+            </div>
+            <div className="customerNameTable">
+              {params.row.name}
+              <div className="userNameTable">{params.row.username}</div>
+            </div>
           </div>
-          <div className="customerNameTable">
-            {params.row.name}
-            <div className="userNameTable">{params.row.username}</div>
-          </div>
-        </div>
+        </>
       );
     },
   },

@@ -19,7 +19,7 @@ const HardwareTable = () => {
   const handleClose = () => setOpen(false);
 
 
-  const handleHeaderClick = (selectedImage) => {
+  const handleHeaderClick = () => {
     const newId = Date.now() % 10000;
     const newHardware = {
       id: newId,
@@ -54,11 +54,13 @@ const HardwareTable = () => {
         <div className="page-title">
           <Typography style={{ fontSize: 30, paddingLeft: 10 }}>Hardware</Typography>
         </div>
-        <Box
-          sx={{
+        <div
+          style={{
             border: "1px solid rgb(232, 232, 232)",
-            marginX: 2,
+            marginLeft: 18,
+            marginRight: 18,
           }}
+          className="HardWareComponent"
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
@@ -74,10 +76,14 @@ const HardwareTable = () => {
               >
                 <Header types={hardwareCategoryData} showMore={SetShowNext} />
               </div>
+              <div >
               <HardWareComponent type={showNext} />
+
+              </div>
+              
             </div>
           </div>
-        </Box>
+        </div>
         <AddEditModel
           open={open}
           close={handleClose}

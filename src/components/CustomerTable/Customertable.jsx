@@ -31,12 +31,16 @@ const CustomerTable = () => {
           </Box>
         </div>
         <div className="CustomerTable">
-          <DataGrid
-            getRowId={(row) => row._id}
-            rows={CustomerData}
-            columns={CustomerColumns}
-            paginationModel={{ page: 0, pageSize: 8 }}
-          />
+          {CustomerData?.length >= 1 ? (
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={CustomerData}
+              columns={CustomerColumns}
+              paginationModel={{ page: 0, pageSize: 8 }}
+            />
+          ) : (
+            <Typography sx={{tesxtAlign: "center", fontSize: 20, color: "gray", py: 2}}>No Customer Found</Typography>
+          )}
         </div>
       </Box>
     </>
