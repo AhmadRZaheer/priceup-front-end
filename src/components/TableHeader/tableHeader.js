@@ -1,7 +1,7 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
@@ -21,51 +21,103 @@ const TableHeader = ({ showMore, types }) => {
   };
 
   const renderSliderItem = (title, option) => (
-    (
-      <Box
-        onClick={() => handleItemClick(option)}
-        sx={{
+    <Box
+      onClick={() => handleItemClick(option)}
+      sx={{
+        paddingLeft: "15px",
+        paddingRight: "15px",
+        minHeight: "50px",
+        marginRight: 2,
+        backgroundColor: selectedOption === option ? "#8477DA" : "transparent",
+        "&:hover": {
+          backgroundColor: "#8477DA",
+          color: "white",
           paddingLeft: "15px",
           paddingRight: "15px",
-          minHeight: "50px",
-          marginRight: 2,
-          backgroundColor:
-            selectedOption === option
-              ? "#8477DA"
-              : "transparent",
-          "&:hover": {
-            backgroundColor: "#8477DA",
-            color: "white"
-          },
-          "&:active": {
-            backgroundColor: "#8477DA",
-            color: "white"
-          },
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          cursor: "pointer",
-          color: selectedOption === option ? "white": "black",
-          borderRadius: "4px",
-          
-        }}
-      >
-        <h3 style={{minWidth: 200, textAlign: "center"}}>{title?.name}</h3>
-      </Box>
-    )
+        },
+        "&:active": {
+          backgroundColor: "#8477DA",
+          color: "white",
+          paddingLeft: "15px",
+          paddingRight: "15px",
+        },
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        cursor: "pointer",
+        color: selectedOption === option ? "white" : "black",
+        borderRadius: "4px",
+        // width: 200,
+        whiteSpace: "nowrap",
+        fontWeight: "bold",
+        fontSize: 18,
+      }}
+    >
+      {title?.name}
+    </Box>
   );
 
+  // const sliderSettings = {
+  //   speed: 500,
+  //   arrows: true,
+  //   slidesToShow: 6,
+  //   vertical: false,
+  //   slidesToScroll: 1,
+  //   responsive: [
+  //     {
+  //       breakpoint: 1724,
+  //       settings: {
+  //         slidesToShow: 5,       
+  //         slidesToScroll: 1,   
+  //       },
+  //     },
+  //     {
+  //       breakpoint: 768,
+  //       settings: {
+  //         slidesToShow: 2,       
+  //         slidesToScroll: 1,     
+  //       },
+  //     },
+  //   ],
+  //   prevArrow: (
+  //     <ArrowBackIosNewIcon
+  //       sx={{ color: "black", "&:hover": { color: "black" } }}
+  //     />
+  //   ),
+  //   nextArrow: (
+  //     <ArrowForwardIosIcon
+  //       sx={{ color: "black", "&:hover": { color: "black" } }}
+  //     />
+  //   ),
+  //   adaptiveHeight: true,
+  // };
   const sliderSettings = {
     speed: 500,
     arrows: true,
     slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
+    responsive: [
+      {
+        breakpoint: 1724,
+        settings: {
+          slidesToShow: 5,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 1068,
+        settings: {
+          slidesToShow: 4,
+          slidesToScroll: 1,
+        },
+      },
+    ],
     prevArrow: (
       <ArrowBackIosNewIcon
         sx={{ color: "black", "&:hover": { color: "black" } }}
       />
-    ), 
+    ),
     nextArrow: (
       <ArrowForwardIosIcon
         sx={{ color: "black", "&:hover": { color: "black" } }}
@@ -73,11 +125,13 @@ const TableHeader = ({ showMore, types }) => {
     ),
     adaptiveHeight: true,
   };
+  
 
   return (
     <div
       style={{
         maxWidth: "75vw",
+        // minWith: "500px",
         margin: "0 auto",
       }}
     >
