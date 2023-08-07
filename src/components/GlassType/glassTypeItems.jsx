@@ -17,7 +17,15 @@ import {
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
 
-const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUpdateValue, UpdateValue}) => {
+const GlassTypeItem = ({
+  data,
+  index,
+  refetch,
+  glassTypeId,
+  showSnackbar,
+  SetUpdateValue,
+  UpdateValue,
+}) => {
   const {
     mutate: deleteGlassType,
     isLoading: LoadingForDelete,
@@ -66,7 +74,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
   }, []);
   const handleFinishDelete = (event) => {
     event.preventDefault();
-    console.log(glassTypeId, data._id, "id")
+    console.log(glassTypeId, data._id, "id");
     deleteGlassType({ glassTypeId: glassTypeId, optionId: data._id });
   };
 
@@ -87,7 +95,12 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
     const value = event.target.value;
     if (value.length > 0) {
       const originalArray = [...UpdateValue];
-      originalArray[index] = { ...data, partNumber: value };
+      originalArray[index] = {
+        ...data,
+        partNumber: value,
+        cost: formik.values.cost,
+        status: formik.values.status,
+      };
       SetUpdateValue(originalArray);
     }
   };
@@ -96,7 +109,12 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
     formik.handleChange(event);
     const value = event.target.checked;
     const originalArray = [...UpdateValue];
-    originalArray[index] = { ...data, status: value };
+    originalArray[index] = {
+      ...data,
+      status: value,
+      cost: formik.values.cost,
+      partNumber: formik.values.partNumber,
+    };
     SetUpdateValue(originalArray);
   };
   const handleCostChange = (event) => {
@@ -104,7 +122,12 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
     const value = event.target.value;
     if (value.length > 0) {
       const originalArray = [...UpdateValue];
-      originalArray[index] = { ...data, cost: value };
+      originalArray[index] = {
+        ...data,
+        cost: value,
+        partNumber: formik.values.partNumber,
+        status: formik.values.status,
+      };
       SetUpdateValue(originalArray);
     }
   };
@@ -210,7 +233,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
                 label={"active"}
               />
             </Box>
-            <Box sx={{display: "flex"}}>
+            <Box sx={{ display: "flex" }}>
               {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
@@ -224,7 +247,18 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
               {LoadingForEdit ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <IconButton type="submit" sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+                <IconButton
+                  type="submit"
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 2,
+                    fontSize: 17,
+                    padding: 1,
+                  }}
+                >
                   Update
                 </IconButton>
               )}

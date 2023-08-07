@@ -27,7 +27,7 @@ const GlassTreatementItem = ({
   SetUpdateValue,
   UpdateValue,
 }) => {
-  console.log(data, "data")
+  console.log(data, "data");
   const {
     mutate: deleteGlassTreatement,
     isLoading: LoadingForDelete,
@@ -61,7 +61,6 @@ const GlassTreatementItem = ({
       editGlassTreatement({
         optionsData: glassTreatement,
         id: glassTreatementId,
-        
       });
       localStorage.setItem("scrollToIndex", glassTreatementId);
       resetForm();
@@ -80,7 +79,7 @@ const GlassTreatementItem = ({
   }, []);
   const handleFinishDelete = (event) => {
     // event.preventDefault();
-    console.log(glassTreatementId, data._id, "id of data")
+    console.log(glassTreatementId, data._id, "id of data");
     deleteGlassTreatement({
       glassTreatementId: glassTreatementId,
       optionId: data._id,
@@ -104,7 +103,12 @@ const GlassTreatementItem = ({
     const value = event.target.value;
     if (value.length > 0) {
       const originalArray = [...UpdateValue];
-      originalArray[index] = { ...data, partNumber: value };
+      originalArray[index] = {
+        ...data,
+        partNumber: value,
+        cost: formik.values.cost,
+        status: formik.values.status,
+      };
       SetUpdateValue(originalArray);
     }
   };
@@ -113,7 +117,12 @@ const GlassTreatementItem = ({
     formik.handleChange(event);
     const value = event.target.checked;
     const originalArray = [...UpdateValue];
-    originalArray[index] = { ...data, status: value };
+    originalArray[index] = {
+      ...data,
+      status: value,
+      cost: formik.values.cost,
+      partNumber: formik.values.partNumber,
+    };
     SetUpdateValue(originalArray);
   };
   const handleCostChange = (event) => {
@@ -121,7 +130,12 @@ const GlassTreatementItem = ({
     const value = event.target.value;
     if (value.length > 0) {
       const originalArray = [...UpdateValue];
-      originalArray[index] = { ...data, cost: value };
+      originalArray[index] = {
+        ...data,
+        cost: value,
+        partNumber: formik.values.partNumber,
+        status: formik.values.status,
+      };
       SetUpdateValue(originalArray);
     }
   };
@@ -215,7 +229,7 @@ const GlassTreatementItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <ThemeProvider >
+              <ThemeProvider>
                 <FormControlLabel
                   control={
                     <Switch
