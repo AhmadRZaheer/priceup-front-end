@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import {
   useDeleteGlassType,
   useEditGlassType,
-} from "../../utilities/ApiHooks/GlassType";
+} from "../../utilities/ApiHooks/glassType";
 
 const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUpdateValue, UpdateValue}) => {
   const {
@@ -49,10 +49,21 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
         },
       };
       editFinish({ optionsData: glassType, id: glassTypeId });
+      localStorage.setItem("scrollToIndex", glassTypeId);
       resetForm();
     },
   });
 
+  useEffect(() => {
+    const scrollToIndex = localStorage.getItem("scrollToIndex");
+    if (scrollToIndex) {
+      const updateButton = document.getElementById(scrollToIndex);
+      if (updateButton) {
+        updateButton.scrollIntoView({ behavior: "smooth" });
+        localStorage.removeItem("scrollToIndex");
+      }
+    }
+  }, []);
   const handleFinishDelete = (event) => {
     event.preventDefault();
     console.log(glassTypeId, data._id, "id")
@@ -98,7 +109,7 @@ const GlassTypeItem = ({ data, index, refetch, glassTypeId, showSnackbar,  SetUp
     }
   };
   return (
-    <Box key={index}>
+    <Box key={index} id={glassTypeId}>
       <form onSubmit={formik.handleSubmit}>
         <Box
           style={{

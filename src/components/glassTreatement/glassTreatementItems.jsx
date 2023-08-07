@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import {
   useDeleteGlassTreatement,
   useEditGlassTreatement,
-} from "../../utilities/ApiHooks/GlassTreatement";
+} from "../../utilities/ApiHooks/glassTreatement";
 
 const GlassTreatementItem = ({
   data,
@@ -61,11 +61,23 @@ const GlassTreatementItem = ({
       editGlassTreatement({
         optionsData: glassTreatement,
         id: glassTreatementId,
+        
       });
+      localStorage.setItem("scrollToIndex", glassTreatementId);
       resetForm();
     },
   });
 
+  useEffect(() => {
+    const scrollToIndex = localStorage.getItem("scrollToIndex");
+    if (scrollToIndex) {
+      const updateButton = document.getElementById(scrollToIndex);
+      if (updateButton) {
+        updateButton.scrollIntoView({ behavior: "smooth" });
+        localStorage.removeItem("scrollToIndex");
+      }
+    }
+  }, []);
   const handleFinishDelete = (event) => {
     // event.preventDefault();
     console.log(glassTreatementId, data._id, "id of data")
@@ -115,7 +127,7 @@ const GlassTreatementItem = ({
   };
 
   return (
-    <Box key={index}>
+    <Box key={index} id={glassTreatementId}>
       <form onSubmit={formik.handleSubmit}>
         <Box
           style={{

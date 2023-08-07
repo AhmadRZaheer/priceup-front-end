@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-import Snackbars from "../Model/SnackBar";
+import Snackbars from "../Model/snackBar";
 import {
   useDeleteGlassTreatementFull,
   useFetchDataGlassTreatement,
-} from "../../utilities/ApiHooks/GlassTreatement";
+} from "../../utilities/ApiHooks/glassTreatement";
 import GlassTreatementItem from "./glassTreatementItems";
-import AddEditGlassTreatement from "../Model/AddGlassTreatement";
+import AddEditGlassTreatement from "../Model/addGlassTreatement";
 import GlassTreatementDataItem from "./glassTreatementData";
 
 const GlassTreatementComponent = ({ type }) => {

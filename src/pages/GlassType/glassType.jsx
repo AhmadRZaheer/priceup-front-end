@@ -1,6 +1,6 @@
 import React from "react";
 import "./glassType.scss";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../components/Sidebar/sidebar";
 import GlassTypeTable from "../../components/GlassType/glassType";
 const GlassType = () => {
   return (

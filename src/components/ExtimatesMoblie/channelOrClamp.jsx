@@ -12,7 +12,7 @@ import {
   setActiveMounting,
   setContent,
 } from "../../redux/estimateCalculations";
-import MenuList from "./MenuList";
+import MenuList from "./menuList";
 
 const ChannelType = ({
   menuOptions,

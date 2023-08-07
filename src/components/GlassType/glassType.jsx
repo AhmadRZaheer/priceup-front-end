@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addHardware } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/AddEditFinish";
+import AddEditModel from "../Model/addEditFinish";
 import GlassTypeComponent from "./glassTypeComponent";
 
 const GlassTypeTable = () => {

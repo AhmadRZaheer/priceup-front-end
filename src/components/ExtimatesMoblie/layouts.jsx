@@ -1,6 +1,6 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React from "react";
-import { useFetchDataDefault } from "../../utilities/ApiHooks/DefaultLayouts";
+import { useFetchDataDefault } from "../../utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -9,8 +9,8 @@ import {
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
-import QuotesHeader from "./QuotesHeader";
-import { useFetchDataEstimate } from "../../utilities/ApiHooks/Estimate";
+import QuotesHeader from "./quotesHeader";
+import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 export const boxStyles = {
   minHeight: "172px",
   minWidth: { md: "180px", xs: "140px" },

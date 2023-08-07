@@ -3,8 +3,8 @@ import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import AppRoutes from "./components/ProtectedRoute/AppRoutes";
-import AuthVerify from "./components/ProtectedRoute/AuthVerify";
+import AppRoutes from "./components/ProtectedRoute/appRoutes";
+import AuthVerify from "./components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { logoutHandler } from "./redux/userAuth";
 

@@ -4,7 +4,7 @@ import {
   useDeleteEstimates,
   useFetchDataEstimate,
   useGetEstimates,
-} from "../../utilities/ApiHooks/Estimate";
+} from "../../utilities/ApiHooks/estimate";
 import { useDispatch } from "react-redux";
 import {
   initializeStateForEditQuote,
@@ -76,7 +76,7 @@ export default function ExistingTable() {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
-              Estimates Queue
+              Estimates Quotes
             </Typography>
             <Link to="/Estimates/Steps">
               <IconButton

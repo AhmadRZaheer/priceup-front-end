@@ -1,7 +1,7 @@
 import React from "react";
 import "./addOns.scss";
-import Sidebar from "../../components/Sidebar/Sidebar";
-import AddOnsTable from "../../components/AddOns/AddOns";
+import Sidebar from "../../components/Sidebar/sidebar";
+import AddOnsTable from "../../components/AddOns/addOns";
 const AddOns = () => {
   return (
     <div className="Customers">

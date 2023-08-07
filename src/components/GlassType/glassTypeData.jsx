@@ -1,11 +1,12 @@
 import { Box, IconButton } from "@mui/material";
 import { backendURL } from "../../utilities/common";
 import { Delete, Edit } from "@mui/icons-material";
-
-
 import React, { useEffect, useState } from "react";
-import { useDeleteGlassTypeFull, useEditGlassType } from "../../utilities/ApiHooks/GlassType";
-import AddEditGlassType from "../Model/AddEidtGlassType";
+import {
+  useDeleteGlassTypeFull,
+  useEditGlassType,
+} from "../../utilities/ApiHooks/glassType";
+import AddEditGlassType from "../Model/addEidtGlassType";
 import GlassTypeItem from "./glassTypeItems";
 
 const GlassTypeDataItem = ({
@@ -45,7 +46,20 @@ const GlassTypeDataItem = ({
 
   const handleOpenUpdate = (id) => {
     editGlassType({ optionsData: UpdateValue, id: id });
+    localStorage.setItem("scrollToIndex", id);
   };
+
+  useEffect(() => {
+    const scrollToIndex = localStorage.getItem("scrollToIndex");
+    if (scrollToIndex) {
+      const updateButton = document.getElementById(scrollToIndex);
+      if (updateButton) {
+        updateButton.scrollIntoView({ behavior: "smooth" });
+        localStorage.removeItem("scrollToIndex");
+      }
+    }
+  }, []);
+
   return (
     <>
       <div
@@ -89,6 +103,7 @@ const GlassTypeDataItem = ({
               <Delete onClick={() => handleHardwareDelete(entry._id)} />
             </IconButton>
             <IconButton
+            id={entry._id}
               onClick={() => handleOpenUpdate(entry._id)}
               sx={{
                 backgroundColor: "#8477DA",

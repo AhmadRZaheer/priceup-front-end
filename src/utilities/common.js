@@ -145,11 +145,11 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   );
   const towelBarFinish =
     towelBar?.finishes?.find(
-      (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
     )?.cost || 0;
   const sleeveOverFinish =
     sleeveOver?.finishes?.find(
-      (item) => item.finish_id === selectedContent?.hardwareFinishes?._id
+      (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
     )?.cost || 0;
   let otherAddons = 0;
   selectedContent?.addOns?.map((item) => {

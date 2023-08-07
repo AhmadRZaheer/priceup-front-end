@@ -17,8 +17,8 @@ import {
   setNavigation,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
-import QuotesHeader from "./QuotesHeader";
-import QuotesFooter from "./QuotesFooter";
+import QuotesHeader from "./quotesHeader";
+import QuotesFooter from "./quotesFooter";
 const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
 

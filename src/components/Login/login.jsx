@@ -5,7 +5,7 @@ import axios from "axios";
 import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
-import Snackbars from "../Model/SnackBar";
+import Snackbars from "../Model/snackBar";
 import desktopImage from "../../Assets/desktop.svg"
 
 const Login = (props) => {

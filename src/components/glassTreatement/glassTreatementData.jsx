@@ -6,9 +6,9 @@ import {
   useDeleteGlassTreatement,
   useDeleteGlassTreatementFull,
   useEditGlassTreatement,
-} from "../../utilities/ApiHooks/GlassTreatement";
+} from "../../utilities/ApiHooks/glassTreatement";
 import React, { useEffect, useState } from "react";
-import AddEditGlassTreatement from "../Model/AddGlassTreatement";
+import AddEditGlassTreatement from "../Model/addGlassTreatement";
 
 const GlassTreatementDataItem = ({
   entry,
@@ -47,7 +47,20 @@ const GlassTreatementDataItem = ({
 
   const handleOpenUpdate = (id) => {
     editGlassTreatement({ optionsData: UpdateValue, id: id });
+    localStorage.setItem("scrollToIndex", id);
   };
+
+  useEffect(() => {
+    const scrollToIndex = localStorage.getItem("scrollToIndex");
+    if (scrollToIndex) {
+      const updateButton = document.getElementById(scrollToIndex);
+      if (updateButton) {
+        updateButton.scrollIntoView({ behavior: "smooth" });
+        localStorage.removeItem("scrollToIndex");
+      }
+    }
+  }, []);
+
   return (
     <>
       <div
@@ -91,6 +104,7 @@ const GlassTreatementDataItem = ({
               <Delete onClick={() => handleHardwareDelete(entry._id)} />
             </IconButton>
             <IconButton
+            id={entry._id}
               onClick={() => handleOpenUpdate(entry._id)}
               sx={{
                 backgroundColor: "#8477DA",

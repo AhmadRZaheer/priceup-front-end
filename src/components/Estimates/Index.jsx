@@ -1,10 +1,10 @@
 import { Box } from "@mui/material";
 import React, { useState } from "react";
-import ClientDetailsModel from "./Model";
+import ClientDetailsModel from "./model";
 import LayoutMeasurements from "./layoutMeasurements";
-import LayoutReview from "./LayoutReview";
-import Layout from "./Layouts";
-import Snackbars from "../Model/SnackBar";
+import LayoutReview from "./layoutReview";
+import Layout from "./layouts";
+import Snackbars from "../Model/snackBar";
 import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import ExistingQuotes from "./existingQuotes";

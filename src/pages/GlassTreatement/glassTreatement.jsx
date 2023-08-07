@@ -1,6 +1,6 @@
 import React from "react";
 import "./glassTreatement.scss";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import Sidebar from "../../components/Sidebar/sidebar";
 import GlassTreatementTable from "../../components/glassTreatement/glassTreatement";
 
 const GlassTreatement = () => {

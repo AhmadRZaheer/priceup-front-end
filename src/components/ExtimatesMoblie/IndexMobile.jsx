@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Model from "./Model";
+import Model from "./model";
 import LayoutMeasurements from "./layoutMeasurements";
-import LayoutReview from "./LayoutReview";
-import Summary from "./Summary";
+import LayoutReview from "./layoutReview";
+import Summary from "./summary";
 import ExitingQuotes from "./existingQuotes";
 import { getPageNavigation } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
-import Snackbars from "../Model/SnackBar";
+import Snackbars from "../Model/snackBar";
 import { Box } from "@mui/material";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);

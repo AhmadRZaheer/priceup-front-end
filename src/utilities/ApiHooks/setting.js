@@ -1,7 +1,7 @@
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { parseJwt } from "../../components/ProtectedRoute/AuthVerify";
+import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 
 export const useFetchDataSetting = () => {
   async function fetchData() {
