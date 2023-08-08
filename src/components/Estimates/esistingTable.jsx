@@ -76,7 +76,7 @@ export default function ExistingTable() {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
-              Estimates Quotes
+              Estimates 
             </Typography>
             <Link to="/Estimates/Steps">
               <IconButton

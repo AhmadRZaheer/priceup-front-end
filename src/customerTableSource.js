@@ -29,21 +29,6 @@ export const teamColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 330 },
-  {
-    field: "dateAdded",
-    headerName: "Date added",
-    width: 120,
-  },
-  {
-    field: "LastQuote",
-    headerName: "Last Quoted",
-    width: 180,
-  },
-  {
-    field: "TotalQuote",
-    headerName: "Total Quoted ",
-    width: 180,
-  },
 ];
 export const AdminColumns = [
   {
@@ -261,23 +246,7 @@ export const userColumnsHardware = [
     },
   },
 
-  { field: "PartNumber", headerName: "Part number", width: 330 },
 
-  {
-    field: "Cost",
-    headerName: "Cost",
-    width: 120,
-  },
-  {
-    field: "Price",
-    headerName: "Price",
-    width: 180,
-  },
-  {
-    field: "Status",
-    headerName: "Status",
-    width: 80,
-  },
 ];
 
 export const userRowsHardware = [

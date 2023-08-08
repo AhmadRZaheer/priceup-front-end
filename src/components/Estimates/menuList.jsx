@@ -184,7 +184,8 @@ const MenuList = ({
       {anchorEl ? (
         <Box
           sx={{
-            height: "150px",
+            maxHeight: "250px",
+            minHeight: '150px',
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
           }}

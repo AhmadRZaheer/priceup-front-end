@@ -55,7 +55,7 @@ const FinishesTable = () => {
   }, [deleteSuccess]);
   const actionColumn = [
     {
-      field: " ",
+      field: "Status ",
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;

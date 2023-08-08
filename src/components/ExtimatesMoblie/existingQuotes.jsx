@@ -83,7 +83,7 @@ export default function ExitingQuotes() {
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-                Existing Quotes
+                Exstimates
               </Typography>
             </Box>
 
@@ -185,7 +185,7 @@ export default function ExitingQuotes() {
                 "&:hover": { background: "#8477DA", color: "white" },
               }}
             >
-              Create New Qoute
+              Create New Exstimates
             </Button>
           </Box>
         </Box>

@@ -95,6 +95,7 @@ function MobileBar() {
                     width: 240,
                     color: "white",
                     margin: 2,
+                    textTransform: "capitalize",
                     backgroundColor: "#8477da",
                     ":hover": {
                       backgroundColor: "#8477da",
@@ -105,7 +106,7 @@ function MobileBar() {
                     style={{ paddingRight: 10 }}
                     src={EstimsteIcon}
                     alt="image of customer"
-                  /> Quotes
+                  /> Exstimates
                 </Button>
               </Box>
             </Box>
@@ -127,6 +128,9 @@ function MobileBar() {
                       color: "white",
                       margin: 2,
                       backgroundColor: "#8477da",
+                      ":hover": {
+                        backgroundColor: "#8477da",
+                      },
                     }}
                     variant="contained"
                     onClick={Logout}
