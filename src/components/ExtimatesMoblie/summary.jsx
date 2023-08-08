@@ -218,7 +218,7 @@ const Summary = ({ handleOpen }) => {
                     Glass Treatment:
                   </Typography>
                   <Typography>
-                    {selectedContent?.glassTreatment?.item?.name}
+                    {selectedContent?.glassTreatment?.name}
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>

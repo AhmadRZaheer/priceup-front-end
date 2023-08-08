@@ -13,6 +13,7 @@ import {
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
 import { useDispatch, useSelector } from "react-redux";
+// import { useHistory } from 'react-router-dom';
 import {
   getContent,
   getLayoutArea,
@@ -24,6 +25,7 @@ import {
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
+import { Link, useNavigate } from "react-router-dom";
 const style = {
   position: "absolute",
   display: "flex",
@@ -149,23 +151,23 @@ export default function ClientDetailsModel({
           id: quoteId,
         });
       }
-      handleCancel();
-      window.location.href = "/Estimates";
-      Refetched();
 
-
+      // window.location.
+// href = "/Estimates";window.location.href = "/Estimates";
+      // Refetched();
     },
   });
-  const { data, isFetching, refetch } = useGetEstimates();
+  const navigate = useNavigate()
   const {
-    data: estimateListData,
-    isFetching: estimateDataFetching,
     refetch: Refetched,
   } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       dispatch(setNavigation("existing"));
+      handleCancel();
+      Refetched();
+      navigate('/Estimates');
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -175,6 +177,9 @@ export default function ClientDetailsModel({
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
       dispatch(setNavigation("existing"));
+      handleCancel();
+      Refetched();
+      navigate('/Estimates');
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -417,20 +422,22 @@ export default function ClientDetailsModel({
                   {" "}
                   Back
                 </Button>
-                <Button
-                  type="submit"
-                  sx={{
-                    width: "48%",
-                    textTransform: "initial",
-                    backgroundColor: "#8477da",
-                    "&:hover": {
+                {/* <Link to={"/Estimates"} style={{width: "48%"}}> */}
+                  <Button
+                    type="submit" 
+                    sx={{
+                      width: "48%",
+                      textTransform: "initial",
                       backgroundColor: "#8477da",
-                    },
-                  }}
-                  variant="contained"
-                >
-                  Save
-                </Button>
+                      "&:hover": {
+                        backgroundColor: "#8477da",
+                      },
+                    }}
+                    variant="contained"
+                  >
+                    Save
+                  </Button>
+                {/* </Link> */}
               </Box>
             </Box>
           </Box>

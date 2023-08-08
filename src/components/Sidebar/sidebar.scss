@@ -1,110 +1,117 @@
-.sidebar {
-  // flex:1.3;
-  background-color: red;
-  color: #f2f4f7;
-  // min-height: 90vh;
-  height: 98vh !important;
-  display: flex;
-  flex-direction: column;
-  .top {
-    // height: 50px;
+.sidebar{
+    // flex:1.3;
+    background-color: #100D24 ;
+    color: #F2F4F7;
+    // min-height: 90vh;
+    height: 100% !important;
     display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .logo {
-      padding: 0px;
-      margin-top: 10px;
-    }
-  }
-  .line {
-    height: 0;
-    border: 1px solid #475467;
-    width: 85%;
-    margin: 0px auto;
-    // margin-left: 20px;
-    // margin-right: 20px;
-  }
-  .center {
-    // padding-left: 20px;
-
-    ul {
-      list-style: none;
-      margin-top: 0px !important;
-      // margin-left: -20px;
-      padding: 0;
-
-      .estimates {
-        margin-top: 30px;
-      }
-      .setting {
-        margin-top: 0px;
-      }
-
-      li {
+    flex-direction: column;
+    .top{
+        // height: 50px;
         display: flex;
-        align-items: baseline;
-        padding: 7px;
+        align-items: center;
+        justify-content: center;
+
+        .logo{
+            padding: 0px;
+            margin-top: 10px; 
+        }
+    }
+    .line{
+        height: 0;
+        border: 1px solid #475467;
+        width: 85%;
+        padding: 0 !important;
+        margin:0px auto;
+        // margin-left: 20px;
+        // margin-right: 20px;
+    }
+    .center{
+        // padding-left: 20px;
+
+        ul{
+            list-style: none;
+            margin-top: 0px  !important;
+            // margin-left: -20px;
+            // padding: 0 !important;
+
+            .estimates{
+                margin-top: 30px;
+                // padding: 0 !important;
+            }
+            .setting{
+                margin-top: 0px !important;
+                // padding: 0 !important;
+            }
+
+            li {
+                display: flex;
+                align-items: baseline;
+                padding: 7px;
+                cursor: pointer;
+                margin: 10px ;
+                border-radius: 5px;
+
+                &:hover{
+                    background-color: 
+                    #8477DA;
+
+                }
+                &.active {
+                    background-color: #8477DA;
+                  }
+
+                .icon{
+                    font-size: 16px;
+                    margin-right: 10px;
+                }
+
+                span {
+                    font-size: 18px;
+                    font-weight: 500;
+                }
+            }
+
+        }
+    }
+    .bottom{
+        display: flex;
+        align-items: center;
+        margin: 0px;
+        padding: 20px;
+        // margin-left: 20px !important;
         cursor: pointer;
-        margin: 10px;
-        border-radius: 5px;
 
-        &:hover {
-          background-color: #8477da;
+        .UserIcon{
+            margin-right: 16px !important;
         }
-        &.active {
-          background-color: #8477da;
+        .userInSidebar{
+            font-size: 18px !important;
+            
         }
-
-        .icon {
-          font-size: 16px;
-          margin-right: 10px;
+        .emailUser{
+            font-size: 16px !important;
+            color: #F2F4F7;
         }
-
-        span {
-          font-size: 18px;
-          font-weight: 500;
+        .logOutIcon{
+            font-size: 16px;
+            margin-left: 20px !important;
+            width: 50px !important;
+            height: 30px !important;
+            text-align: center;
         }
+    }
+    .link {
+        text-decoration: none;
+        color: inherit;
       }
-    }
-  }
-  .bottom {
-    display: flex;
-    align-items: center;
-    margin: 0px;
-    padding: 0px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-    // margin-left: 20px !important;
-    cursor: pointer;
+      .active {
+        font-weight: 800;
+      }
+      .link-settings{
+        text-decoration: none;
+        color: inherit;
+      }
 
-    .UserIcon {
-      margin-right: 16px !important;
-    }
-    .userInSidebar {
-      font-size: 18px !important;
-    }
-    .emailUser {
-      font-size: 16px !important;
-      color: #f2f4f7;
-    }
-    .logOutIcon {
-      font-size: 16px;
-      margin-left: 20px !important;
-      width: 50px !important;
-      height: 30px !important;
-      text-align: center;
-    }
-  }
-  .link {
-    text-decoration: none;
-    color: inherit;
-  }
-  .active {
-    font-weight: 800;
-  }
-  .link-settings {
-    text-decoration: none;
-    color: inherit;
-  }
 }
+

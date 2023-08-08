@@ -37,7 +37,7 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "space-between",
-            height: "96vh",
+            height: "100vh",
             justifyContent: "space-between",
           }}
         >
@@ -53,6 +53,7 @@ const Sidebar = () => {
           <ul>
             <NavLink to="/" className="link">
               <li
+              style={{padding: 10}}
                 className={`estimates ${location.pathname === "/" ? "active" : ""
                   }`}
               >
@@ -219,20 +220,30 @@ const Sidebar = () => {
         </Box>
         <Box>
         <div className="line"></div>
-        <div className="bottom">
-          <div className="UserIcon">
+        <Box sx={{
+          display: "flex",
+          alignItems: "center",
+          padding: 2
+        }}>
+          <Box sx={{marginRight: 1}}>
             <img src={`${backendURL}/${decodedToken?.image}`} width="50" height="50" alt="no" />
-          </div>
-          <div className="userInSidebar">
+          </Box>
+          <Box sx={{ fontSize: 18}}>
             {decodedToken?.name}
-            <div className="emailUser">{decodedToken?.email}</div>
-          </div>
+            <Box sx={{fontSize: 16, color: "white",}}> {decodedToken?.email}</Box>
+          </Box>
           <Tooltip title="Logout" placement="top-start" arrow >
-            <div className="logOutIcon" onClick={() => setOpen(!open)}>
+            <Box sx={{
+                fontSize: 16,
+                marginLeft: 2,
+                width: 50,
+                height: 30,
+                textAlign: "center"
+            }} onClick={() => setOpen(!open)}>
               <img src={logout} alt="image" />
-            </div>
+            </Box>
           </Tooltip>
-        </div>
+        </Box>
         </Box>
         </Box>
       </div>

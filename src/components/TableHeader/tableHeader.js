@@ -28,7 +28,7 @@ const TableHeader = ({ showMore, types }) => {
         paddingRight: "15px",
         minHeight: "50px",
         marginRight: 2,
-        backgroundColor: selectedOption === option ? "#8477DA" : "transparent",
+        backgroundColor: selectedOption === option ? "#8477DA" : "rgba(132, 119, 218, 0.2)",
         "&:hover": {
           backgroundColor: "#8477DA",
           color: "white",
