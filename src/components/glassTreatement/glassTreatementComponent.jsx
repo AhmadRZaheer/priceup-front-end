@@ -144,7 +144,7 @@ const GlassTreatementComponent = ({ type }) => {
             padding: 4,
           }}
         >
-          PartNnumber{" "}
+          Part Number{" "}
         </div>{" "}
         <div
           style={{

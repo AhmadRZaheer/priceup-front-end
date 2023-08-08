@@ -37,7 +37,7 @@ const Sidebar = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "space-between",
-            height: "100vh",
+            height: "96vh",
             justifyContent: "space-between",
           }}
         >
