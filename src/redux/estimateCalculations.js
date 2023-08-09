@@ -327,7 +327,6 @@ const estimateCalcSlice = createSlice({
 
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
-        // glassTreatment: glassTreatment || null,
         glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
         outages: layoutData?.settings?.outages,
       };
@@ -443,7 +442,6 @@ const estimateCalcSlice = createSlice({
         hingeCut: estimateData?.hingeCut,
         people: estimateData?.people,
         hours: estimateData?.hours,
-        // glassTreatment: glassTreatment,
         glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
         oneInchHoles: estimateData?.oneInchHoles,
         clampCut: estimateData?.clampCut,

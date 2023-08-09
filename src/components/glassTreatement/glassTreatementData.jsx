@@ -24,7 +24,6 @@ const GlassTreatementDataItem = ({
   const { mutate: deleteGlassTreatement, isSuccess: deleteSuccess } =
     useDeleteGlassTreatementFull();
   const handleHardwareDelete = (id) => {
-    console.log(id, "id full");
     deleteGlassTreatement(id);
   };
   const { mutate: editGlassTreatement, isSuccess: GlassTeatementEditSuccess } =

@@ -13,7 +13,6 @@ import {
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
 import { useDispatch, useSelector } from "react-redux";
-// import { useHistory } from 'react-router-dom';
 import {
   getContent,
   getLayoutArea,
@@ -151,10 +150,6 @@ export default function ClientDetailsModel({
           id: quoteId,
         });
       }
-
-      // window.location.
-// href = "/Estimates";window.location.href = "/Estimates";
-      // Refetched();
     },
   });
   const navigate = useNavigate()

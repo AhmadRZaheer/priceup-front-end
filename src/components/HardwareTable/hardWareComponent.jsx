@@ -54,18 +54,6 @@ const HardWareComponent = ({ type }) => {
 
   
  
-
-  // useEffect(() => {
-  //   if (deleteSuccess) {
-  //     hardwareRefetch();
-  //     showSnackbar("Deleted Successfully ", "error");
-  //   }
-  // }, [deleteSuccess]);
-
- 
-
-  
-
   return (
     <>
       <div
@@ -77,8 +65,6 @@ const HardWareComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
-          // height: "100%",
-          // height: calc("100vh" - "200px"),
           alignItems: "start",
         }}
       >
@@ -187,8 +173,6 @@ const HardWareComponent = ({ type }) => {
             flexDirection: "column",
             gap: 8,
             marginTop: 4,
-            // maxHeight: "600px",
-            // height: "100%",
             overflowY: "scroll",
           }}
         >

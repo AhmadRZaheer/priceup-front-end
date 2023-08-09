@@ -37,7 +37,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
-            // padding: 4,
           }}
         >
           Setting
@@ -48,7 +47,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
-            // padding: 4,
           }}
         >
           Default
@@ -57,7 +55,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
           style={{
             width: "40%",
 
-            // padding: 4,
             fontSize: 18,
             display: "flex",
             justifyContent: "space-between",

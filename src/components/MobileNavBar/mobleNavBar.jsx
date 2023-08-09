@@ -41,7 +41,6 @@ function MobileBar() {
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-    // navigate("/login");
     window.location.href = "/login";
   };
   const token = localStorage.getItem("token");

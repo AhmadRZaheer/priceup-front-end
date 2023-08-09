@@ -43,8 +43,6 @@ const Index = () => {
           background: "white",
           height: "100vh",
           overflowY: "scroll",
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
         }}
       >{Navigation === "existing" && <ExistingQuotes />}
         {Navigation === "Layout" && <Layout  />}

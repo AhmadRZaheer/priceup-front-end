@@ -42,7 +42,7 @@ const LayoutHeader = () => {
         paddingRight: "15px",
         minHeight: "50px",
         marginRight: 2,
-        backgroundColor: props?._id === defaultId ? "#8477DA" : "",
+        backgroundColor: props?._id === defaultId ? "#8477DA" : "rgba(132, 119, 218, 0.2)",
 
         "&:hover": {
           backgroundColor: "#8477DA",

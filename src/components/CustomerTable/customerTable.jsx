@@ -13,8 +13,6 @@ const CustomerTable = () => {
     <>
       <Box
         sx={{
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
           backgroundColor: "white",
           height: "98.2vh",
           paddingLeft: 1,

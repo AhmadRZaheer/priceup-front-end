@@ -47,7 +47,6 @@ const TableHeader = ({ showMore, types }) => {
         cursor: "pointer",
         color: selectedOption === option ? "white" : "black",
         borderRadius: "4px",
-        // width: 200,
         whiteSpace: "nowrap",
         fontWeight: "bold",
         fontSize: 18,
@@ -57,40 +56,6 @@ const TableHeader = ({ showMore, types }) => {
     </Box>
   );
 
-  // const sliderSettings = {
-  //   speed: 500,
-  //   arrows: true,
-  //   slidesToShow: 6,
-  //   vertical: false,
-  //   slidesToScroll: 1,
-  //   responsive: [
-  //     {
-  //       breakpoint: 1724,
-  //       settings: {
-  //         slidesToShow: 5,       
-  //         slidesToScroll: 1,   
-  //       },
-  //     },
-  //     {
-  //       breakpoint: 768,
-  //       settings: {
-  //         slidesToShow: 2,       
-  //         slidesToScroll: 1,     
-  //       },
-  //     },
-  //   ],
-  //   prevArrow: (
-  //     <ArrowBackIosNewIcon
-  //       sx={{ color: "black", "&:hover": { color: "black" } }}
-  //     />
-  //   ),
-  //   nextArrow: (
-  //     <ArrowForwardIosIcon
-  //       sx={{ color: "black", "&:hover": { color: "black" } }}
-  //     />
-  //   ),
-  //   adaptiveHeight: true,
-  // };
   const sliderSettings = {
     speed: 500,
     arrows: true,
@@ -131,7 +96,6 @@ const TableHeader = ({ showMore, types }) => {
     <div
       style={{
         maxWidth: "75vw",
-        // minWith: "500px",
         margin: "0 auto",
       }}
     >

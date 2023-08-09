@@ -54,7 +54,6 @@ export const useGetEstimates = () => {
 export const useCreateEstimates = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
-    // const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
     try {
       const response = await axios.post(

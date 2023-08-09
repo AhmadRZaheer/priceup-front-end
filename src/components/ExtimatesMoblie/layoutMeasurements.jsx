@@ -227,7 +227,6 @@ const LayoutMeasurements = () => {
                       alt="Selected"
                     />
                   </Box>
-                  // <SelectedImage imageSides={selectedData?.settings?.measurementSides} />
                 )}
               </Box>
             </Box>

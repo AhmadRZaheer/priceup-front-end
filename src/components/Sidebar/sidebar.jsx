@@ -179,7 +179,7 @@ const Sidebar = () => {
                     alt="image of customer"
                   />
 
-                  <span>Glass Treatement</span>
+                  <span>Glass Treatments</span>
                 </IconButton>
               </li>
             </NavLink>
@@ -195,7 +195,7 @@ const Sidebar = () => {
                     alt="image of customer"
                   />
 
-                  <span>Default</span>
+                  <span>Layouts</span>
                 </IconButton>
               </li>
             </NavLink>

@@ -24,8 +24,6 @@ export default function ExistingQuotes2() {
             width: "100%",
             height: "auto",
             overflow: "auto",
-            // borderTopLeftRadius: 30,
-            // borderBottomLeftRadius: 30,
             gap: 5,
           }}
         >

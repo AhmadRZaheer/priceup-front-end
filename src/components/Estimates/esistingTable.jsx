@@ -28,9 +28,7 @@ export default function ExistingTable() {
   const dispatch = useDispatch();
 
   const handleDeleteEstimate = (id) => {
-    // console.log(id, "deleted id")
     deleteEstimates(id);
-    // Refetched();
   };
   useEffect(() => {
     refetch()

@@ -1084,7 +1084,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   type="number"
                   size="small"
                   variant="outlined"
-                  // type="number"
                   name="slidingDoorSystem.count"
                   style={{
                     width: "250px",

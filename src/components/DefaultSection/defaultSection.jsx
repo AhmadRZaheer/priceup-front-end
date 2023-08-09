@@ -28,14 +28,12 @@ const DefaultSection = () => {
     <>
       <Box
         sx={{
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
           backgroundColor: "white",
           pt: 1,
         }}
       >
         <div className="page-title">
-          <Typography sx={{ fontSize: 30, pl: 1 }}>Default</Typography>
+          <Typography sx={{ fontSize: 30, pl: 1 }}>Layouts</Typography>
         </div>
 
         <Box

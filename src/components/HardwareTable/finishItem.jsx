@@ -72,10 +72,7 @@ const FinishItem = ({
       }
     }
   }, []);
-  // useEffect(() => {
-  //   valueUpdate(formik.values)
-  //   console.log(formik.values, "formik.values")
-  // }, [formik.values])
+
 
   const handleFinishDelete = (event) => {
     event.preventDefault();
@@ -109,7 +106,6 @@ const FinishItem = ({
     }
   };
   const handleStatusChange = (event) => {
-    console.log(event.target.checked, "status");
     formik.handleChange(event);
     const value = event.target.checked;
     const originalArray = [...UpdateValue];

@@ -39,8 +39,6 @@ const HardwareTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
           paddingLeft: 1,
           pt: 2,
         }}

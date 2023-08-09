@@ -74,7 +74,6 @@ const GlassTypeItem = ({
   }, []);
   const handleFinishDelete = (event) => {
     event.preventDefault();
-    console.log(glassTypeId, data._id, "id");
     deleteGlassType({ glassTypeId: glassTypeId, optionId: data._id });
   };
 
@@ -105,7 +104,6 @@ const GlassTypeItem = ({
     }
   };
   const handleStatusChange = (event) => {
-    console.log(event.target.checked, "status");
     formik.handleChange(event);
     const value = event.target.checked;
     const originalArray = [...UpdateValue];

@@ -27,7 +27,6 @@ const GlassTreatementItem = ({
   SetUpdateValue,
   UpdateValue,
 }) => {
-  console.log(data, "data");
   const {
     mutate: deleteGlassTreatement,
     isLoading: LoadingForDelete,
@@ -78,8 +77,6 @@ const GlassTreatementItem = ({
     }
   }, []);
   const handleFinishDelete = (event) => {
-    // event.preventDefault();
-    console.log(glassTreatementId, data._id, "id of data");
     deleteGlassTreatement({
       glassTreatementId: glassTreatementId,
       optionId: data._id,
@@ -113,7 +110,6 @@ const GlassTreatementItem = ({
     }
   };
   const handleStatusChange = (event) => {
-    console.log(event.target.checked, "status");
     formik.handleChange(event);
     const value = event.target.checked;
     const originalArray = [...UpdateValue];

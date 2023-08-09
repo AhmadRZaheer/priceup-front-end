@@ -23,7 +23,6 @@ const GlassTypeDataItem = ({
   const { mutate: deleteGlassType, isSuccess: deleteSuccess } =
     useDeleteGlassTypeFull();
   const handleHardwareDelete = (id) => {
-    console.log(id, "id full");
     deleteGlassType(id);
   };
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =

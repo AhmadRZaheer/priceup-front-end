@@ -34,8 +34,6 @@ const GlassTypeTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
           paddingTop: 2,
           paddingLeft: 1,
         }}

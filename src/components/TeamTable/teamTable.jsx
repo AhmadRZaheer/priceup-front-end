@@ -27,7 +27,6 @@ const TeamTable = () => {
     setEdit(data);
     setIsEdit(true);
   };
-  console.log(isEdit, "isedia");
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -117,8 +116,6 @@ const TeamTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          // borderTopLeftRadius: 30,
-          // borderBottomLeftRadius: 30,
           paddingLeft: 1,
           pt: 2,
         }}
