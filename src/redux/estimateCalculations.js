@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { layoutVariants } from "../utilities/constants";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
 export const getMeasurementSide = (state) =>
@@ -329,6 +330,8 @@ const estimateCalcSlice = createSlice({
         hours: layoutData?.settings?.other?.hours,
         glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
         outages: layoutData?.settings?.outages,
+        hingeCut:layoutData?.settings?.hinges?.count,
+        oneInchHoles: (layoutData?.settings?.handles?.count * 2) + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN ? 6 : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN ? 8 : 0)
       };
     },
     initializeStateForEditQuote: (state, action) => {
