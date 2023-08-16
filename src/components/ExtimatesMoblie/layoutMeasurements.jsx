@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { backendURL, calculateAreaOrPerimeter } from "../../utilities/common";
+import { backendURL, calculateAreaAndPerimeter, calculateAreaOrPerimeter } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectedItem,
@@ -46,10 +46,11 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
-      const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
-      dispatch(setLayoutArea(sqftArea));
-      dispatch(setLayoutPerimeter(perimeter));
+      // const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
+      // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
+      const result = calculateAreaAndPerimeter(measurementsArray, selectedData?.settings?.variant);
+      dispatch(setLayoutArea(result.areaSqft));
+      dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
       dispatch(setNavigation("review"));
       resetForm();
