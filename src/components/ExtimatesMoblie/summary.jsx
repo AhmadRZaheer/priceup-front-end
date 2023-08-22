@@ -132,27 +132,27 @@ const Summary = ({ handleOpen }) => {
                 <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                   Summary{" "}
                 </Typography>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                {selectedContent?.hardwareFinishes && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
                   <Typography>
                     {selectedContent?.hardwareFinishes?.name}
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {selectedContent?.handles?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Handles:</Typography>
                   <Typography>
                     {selectedContent?.handles?.item?.name} (
                     {selectedContent?.handles?.count})
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {selectedContent?.hinges?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Hinges:</Typography>
                   <Typography>
                     {selectedContent?.hinges?.item?.name} (
                     {selectedContent?.hinges?.count})
                   </Typography>
-                </Box>
-                {selectedContent?.mounting?.activeType === "channel" ? (
+                </Box>}
+                {selectedContent?.mounting?.activeType === "channel" && selectedContent?.mounting?.channel?.item ? (
                   <Box
                     sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
                   >
@@ -163,7 +163,7 @@ const Summary = ({ handleOpen }) => {
                       {selectedContent?.mounting?.channel?.item?.name}
                     </Typography>
                   </Box>
-                ) : (
+                ) : selectedContent?.mounting?.clamps?.wallClamp?.item || selectedContent?.mounting?.clamps?.sleeveOver?.item || selectedContent?.mounting?.clamps?.glassToGlass?.item ? (
                   <Box
                     sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
                   >
@@ -185,8 +185,8 @@ const Summary = ({ handleOpen }) => {
                       ({selectedContent?.mounting?.clamps?.glassToGlass?.count})
                     </Typography>
                   </Box>
-                )}
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                ) : ''}
+                {selectedContent?.glassType?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>
                     Glass Type:
                   </Typography>
@@ -194,41 +194,41 @@ const Summary = ({ handleOpen }) => {
                     {selectedContent?.glassType?.item?.name} (
                     {selectedContent?.glassType?.thickness})
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Bars:</Typography>
+                </Box>}
+                {selectedContent?.slidingDoorSystem?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Sliding Door System:</Typography>
                   <Typography>
                     {selectedContent?.slidingDoorSystem?.item?.name} (
                     {selectedContent?.slidingDoorSystem?.count})
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {selectedContent?.transom && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Transom: </Typography>
                   <Typography></Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {selectedContent?.header?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Header:</Typography>
                   <Typography>
                     {selectedContent?.header?.item?.name} (
                     {selectedContent?.header?.count})
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {selectedContent?.glassTreatment && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>
                     Glass Treatment:
                   </Typography>
                   <Typography>
                     {selectedContent?.glassTreatment?.name}
                   </Typography>
-                </Box>
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                </Box>}
+                {(selectedContent?.addOns?.length > 0 || selectedContent?.towelBarsCount > 0 || selectedContent?.sleeveOverCount > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Add ons: </Typography>
                   <Typography>
                     {selectedContent?.addOns?.map((item) => ` ${item?.name}`)}{" "}
                     Towel Bars ({selectedContent?.towelBarsCount}) Sleeve Over (
                     {selectedContent?.sleeveOverCount})
                   </Typography>
-                </Box>
+                </Box>}
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>People: </Typography>
                   <Typography>{selectedContent?.people}</Typography>

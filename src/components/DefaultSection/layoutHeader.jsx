@@ -41,16 +41,21 @@ const LayoutHeader = () => {
         paddingLeft: "15px",
         paddingRight: "15px",
         minHeight: "50px",
-        marginRight: 2,
+        marginLeft: 1,
+        marginRight: 1,
         backgroundColor: props?._id === defaultId ? "#8477DA" : "rgba(132, 119, 218, 0.2)",
 
         "&:hover": {
           backgroundColor: "#8477DA",
           color: "white",
+          paddingLeft: "15px",
+          paddingRight: "15px",
         },
         "&:active": {
           backgroundColor: "#8477DA",
           color: "white",
+          paddingLeft: "15px",
+          paddingRight: "15px",
         },
         display: "flex",
         alignItems: "center",
@@ -58,6 +63,9 @@ const LayoutHeader = () => {
         cursor: "pointer",
         color: props?._id === defaultId ? "white" : "black",
         borderRadius: "4px",
+        whiteSpace: "nowrap",
+        fontWeight: "bold",
+        fontSize: 18,
       }}
     >
       <h3>{props?.name}</h3>
@@ -70,6 +78,7 @@ const LayoutHeader = () => {
     slidesToShow: 6,
     vertical: false,
     slidesToScroll: 1,
+    variableWidth: true,
     prevArrow: (
       <ArrowBackIosNewIcon
         sx={{ color: "black", "&:hover": { color: "black" } }}
@@ -86,7 +95,7 @@ const LayoutHeader = () => {
   return (
     <div
       style={{
-        maxWidth: "75vw",
+        maxWidth: "78vw",
         margin: "0 auto",
       }}
     >

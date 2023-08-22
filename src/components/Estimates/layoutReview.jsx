@@ -12,12 +12,11 @@ import {
   setTotal,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
-import Summary from "./summery";
+import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import {
   calculateTotal,
 } from "../../utilities/common";
-import { useMemo } from "react";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
   const quoteState = useSelector(getQuoteState);

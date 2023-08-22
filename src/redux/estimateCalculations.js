@@ -71,13 +71,13 @@ const estimateCalcSlice = createSlice({
         thickness: "1/2",
       },
       glassTreatment: null,
-      oneInchHoles: "",
-      hingeCut: "",
-      clampCut: "",
-      notch: "",
-      outages: "",
-      mitre: "",
-      polish: "",
+      oneInchHoles: 0,
+      hingeCut: 0,
+      clampCut: 0,
+      notch: 0,
+      outages: 0,
+      mitre: 0,
+      polish: 0,
       people: 0,
       hours: 0,
       sleeveOverCount: 0,
@@ -261,15 +261,15 @@ const estimateCalcSlice = createSlice({
       );
 
       let wallClampItem = null;
-      wallClampItem = listData?.mountingChannel?.find(
+      wallClampItem = listData?.wallClamp?.find(
         (item) => item._id === layoutData?.settings?.wallClamp?.wallClampType
       );
       let sleeveOverItem = null;
-      sleeveOverItem = listData?.mountingChannel?.find(
+      sleeveOverItem = listData?.sleeveOver?.find(
         (item) => item._id === layoutData?.settings?.sleeveOver?.sleeveOverType
       );
       let glassToGlassItem = null;
-      glassToGlassItem = listData?.mountingChannel?.find(
+      glassToGlassItem = listData?.glassToGlass?.find(
         (item) =>
           item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
       );
@@ -331,7 +331,8 @@ const estimateCalcSlice = createSlice({
         glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
         outages: layoutData?.settings?.outages,
         hingeCut:layoutData?.settings?.hinges?.count,
-        oneInchHoles: (layoutData?.settings?.handles?.count * 2) + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN ? 6 : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN ? 8 : 0)
+        oneInchHoles: (layoutData?.settings?.handles?.count * 2) + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN ? 6 : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN ? 8 : 0),
+        clampCut:layoutData?.settings?.wallClamp?.count + layoutData?.settings?.sleeveOver?.count + layoutData?.settings?.glassToGlass?.count
       };
     },
     initializeStateForEditQuote: (state, action) => {
@@ -372,15 +373,15 @@ const estimateCalcSlice = createSlice({
       );
 
       let wallClampItem = null;
-      wallClampItem = listData?.mountingChannel?.find(
+      wallClampItem = listData?.wallClamp?.find(
         (item) => item._id === estimateData?.mounting?.clamps?.wallClamp?.type
       );
       let sleeveOverItem = null;
-      sleeveOverItem = listData?.mountingChannel?.find(
+      sleeveOverItem = listData?.sleeveOver?.find(
         (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver?.type
       );
       let glassToGlassItem = null;
-      glassToGlassItem = listData?.mountingChannel?.find(
+      glassToGlassItem = listData?.glassToGlass?.find(
         (item) =>
           item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
       );
