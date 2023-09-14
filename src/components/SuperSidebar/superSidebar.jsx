@@ -5,7 +5,7 @@ import logout from "../../Assets/logout.svg";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
-import LagoutModal from "../Model/logOut";
+import LagoutModal from "../Modal/logOut";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";

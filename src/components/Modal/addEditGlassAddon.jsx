@@ -10,9 +10,9 @@ import { useState } from "react";
 import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
-  useCreateGlassTreatement,
-  useEditGlassTreatement,
-} from "../../utilities/ApiHooks/glassTreatement";
+  useCreateGlassAddon,
+  useEditGlassAddon,
+} from "../../utilities/ApiHooks/glassAddon";
 
 const style = {
   position: "absolute",
@@ -28,7 +28,7 @@ const style = {
   p: 4,
 };
 
-export default function AddEditGlassTreatement({
+export default function AddEditGlassAddon({
   open,
   close,
   isEdit,
@@ -44,15 +44,15 @@ export default function AddEditGlassTreatement({
 
   const { getInputProps } = useDropzone({ onDrop });
   const {
-    mutate: addGlassTreatement,
+    mutate: addGlassAddon,
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
-  } = useCreateGlassTreatement();
+  } = useCreateGlassAddon();
   const {
-    mutate: editGlassTreatement,
+    mutate: editGlassAddon,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
-  } = useEditGlassTreatement();
+  } = useEditGlassAddon();
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -71,11 +71,11 @@ export default function AddEditGlassTreatement({
   }, [SuccessForEdit]);
 
   const handleCreateClick = (props) => {
-    addGlassTreatement(props);
+    addGlassAddon(props);
   };
 
   const handleEditClick = (props) => {
-    editGlassTreatement({ glassTreatementData: props, id: data?._id });
+    editGlassAddon({ glassAddonData: props, id: data?._id });
   };
 
   const validationSchema = Yup.object().shape({
@@ -85,14 +85,14 @@ export default function AddEditGlassTreatement({
   const formik = useFormik({
     initialValues: isEdit
       ? {
-          name: data?.name,
-          image: "",
-          id: data?._id,
-        }
+        name: data?.name,
+        image: "",
+        id: data?._id,
+      }
       : {
-          name: "",
-          image: "",
-        },
+        name: "",
+        image: "",
+      },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {

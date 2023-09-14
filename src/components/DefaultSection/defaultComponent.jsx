@@ -93,7 +93,7 @@ const DefaultComponent = ({ showSnackbar }) => {
       outages: singleDefault?.layoutData?.settings?.outages,
       transom: singleDefault?.layoutData?.settings?.transom,
       header: singleDefault?.layoutData?.settings?.header,
-      glassTreatment: singleDefault?.layoutData?.settings?.glassTreatment,
+      glassAddon: singleDefault?.layoutData?.settings?.glassAddon,
 
       other: {
         people: singleDefault?.layoutData?.settings?.other?.people,
@@ -103,6 +103,7 @@ const DefaultComponent = ({ showSnackbar }) => {
     enableReinitialize: true,
     onSubmit: (values) => { },
   });
+  console.log(formik.values,'value')
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
 
@@ -1262,7 +1263,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   padding: 4,
                 }}
               >
-                Glass Treatment
+                Glass Addon
               </div>{" "}
               <div
                 style={{
@@ -1274,22 +1275,22 @@ const DefaultComponent = ({ showSnackbar }) => {
                     select
                     size="small"
                     variant="outlined"
-                    name="glassTreatment"
+                    name="glassAddon"
                     style={{ width: "100%" }}
-                    value={formik.values.glassTreatment}
+                    value={formik.values.glassAddon}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    {singleDefault?.listData?.glassTreatment.map((option) => (
+                    {singleDefault?.listData?.glassAddons.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
                       </MenuItem>
                     ))}
                   </TextField>
-                  {formik.touched.glassTreatment &&
-                    formik.errors.glassTreatment && (
+                  {formik.touched.glassAddon &&
+                    formik.errors.glassAddon && (
                       <Box style={{ color: "red" }}>
-                        {formik.errors.glassTreatment}
+                        {formik.errors.glassAddon}
                       </Box>
                     )}
                 </Box>

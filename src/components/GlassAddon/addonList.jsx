@@ -1,19 +1,19 @@
 import { Box, IconButton } from "@mui/material";
 import { backendURL } from "../../utilities/common";
 import { Delete, Edit } from "@mui/icons-material";
-import GlassTreatementItem from "./glassTreatementItems";
+import ListOption from "./listOption";
 import {
-  useDeleteGlassTreatement,
-  useDeleteGlassTreatementFull,
-  useEditGlassTreatement,
-} from "../../utilities/ApiHooks/glassTreatement";
+  useDeleteGlassAddonOption,
+  useDeleteGlassAddon,
+  useEditGlassAddon,
+} from "../../utilities/ApiHooks/glassAddon";
 import React, { useEffect, useState } from "react";
-import AddEditGlassTreatement from "../Model/addGlassTreatement";
+import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 
-const GlassTreatementDataItem = ({
+const AddonList = ({
   entry,
   mainIndex,
-  GlassTreatementRefetch,
+  refetch,
   showSnackbar,
   type,
 }) => {
@@ -21,31 +21,31 @@ const GlassTreatementDataItem = ({
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteGlassTreatement, isSuccess: deleteSuccess } =
-    useDeleteGlassTreatementFull();
+  const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
+  useDeleteGlassAddon();
   const handleHardwareDelete = (id) => {
-    deleteGlassTreatement(id);
+    deleteGlassAddon(id);
   };
-  const { mutate: editGlassTreatement, isSuccess: GlassTeatementEditSuccess } =
-    useEditGlassTreatement();
+  const { mutate: editGlassAddon, isSuccess: glassAddonEditSuccess } =
+    useEditGlassAddon();
   const handleOpenEdit = () => {
     setOpen(true);
   };
   useEffect(() => {
-    if (GlassTeatementEditSuccess || deleteSuccess) {
+    if (glassAddonEditSuccess || deleteSuccess) {
       if (deleteSuccess) {
         showSnackbar("Deleted Successfully", "error");
       }
-      if (GlassTeatementEditSuccess) {
+      if (glassAddonEditSuccess) {
         showSnackbar("Updated Successfully", "success");
       }
-      GlassTreatementRefetch();
+      refetch();
     }
-  }, [GlassTeatementEditSuccess, deleteSuccess]);
+  }, [glassAddonEditSuccess, deleteSuccess]);
   const [UpdateValue, SetUpdateValue] = useState(entry.options);
 
   const handleOpenUpdate = (id) => {
-    editGlassTreatement({ optionsData: UpdateValue, id: id });
+    editGlassAddon({ optionsData: UpdateValue, id: id });
     localStorage.setItem("scrollToIndex", id);
   };
 
@@ -121,12 +121,12 @@ const GlassTreatementDataItem = ({
         </Box>
         <Box sx={{ p: 2 }}>
           {entry?.options?.map((finish, index) => (
-            <GlassTreatementItem
+            <ListOption
               data={finish}
               key={index}
               index={index}
-              refetch={GlassTreatementRefetch}
-              glassTreatementId={entry._id}
+              refetch={refetch}
+              glassAddonId={entry._id}
               showSnackbar={showSnackbar}
               SetUpdateValue={SetUpdateValue}
               UpdateValue={UpdateValue}
@@ -134,12 +134,12 @@ const GlassTreatementDataItem = ({
           ))}
         </Box>
       </div>
-      <AddEditGlassTreatement
+      <AddEditGlassAddon
         open={open}
         close={handleClose}
         data={entry}
         isEdit={true}
-        refetch={GlassTreatementRefetch}
+        refetch={refetch}
         showSnackbar={showSnackbar}
         categorySlug={type}
       />
@@ -147,4 +147,4 @@ const GlassTreatementDataItem = ({
   );
 };
 
-export default GlassTreatementDataItem;
+export default AddonList;

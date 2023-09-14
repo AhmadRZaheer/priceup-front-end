@@ -3,11 +3,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 
-export const useFetchDataGlassTreatement = () => {
+export const useFetchGlassAddons = () => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
-      const response = await axios.get(`${backendURL}/glassTreatments`, {
+      const response = await axios.get(`${backendURL}/glassAddons`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data && response.data.code === 200) {
@@ -27,12 +27,12 @@ export const useFetchDataGlassTreatement = () => {
   });
 };
 
-export const useDeleteGlassTreatement = () => {
+export const useDeleteGlassAddonOption = () => {
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `${backendURL}/glassTreatments/${props.glassTreatementId}/${props.optionId}`,
+        `${backendURL}/glassAddons/${props.glassAddonId}/${props.optionId}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -50,12 +50,12 @@ export const useDeleteGlassTreatement = () => {
 
   return useMutation(handleDelete);
 };
-export const useDeleteGlassTreatementFull = () => {
+export const useDeleteGlassAddon = () => {
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.delete(
-        `${backendURL}/glassTreatments/${props}`,
+        `${backendURL}/glassAddons/${props}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -74,7 +74,7 @@ export const useDeleteGlassTreatementFull = () => {
   return useMutation(handleDelete);
 };
 
-export const useCreateGlassTreatement = () => {
+export const useCreateGlassAddon = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
@@ -82,7 +82,7 @@ export const useCreateGlassTreatement = () => {
 
     try {
       const response = await axios.post(
-        `${backendURL}/glassTreatments/save`,
+        `${backendURL}/glassAddons/save`,
         {
           name: props.name,
           company_id: decodedToken?.company_id,
@@ -106,18 +106,18 @@ export const useCreateGlassTreatement = () => {
   return useMutation(handleCreate);
 };
 
-export const useEditGlassTreatement = () => {
+export const useEditGlassAddon = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.put(
-        `${backendURL}/glassTreatments/${props?.id}`,
+        `${backendURL}/glassAddons/${props?.id}`,
         {
           ...(props.optionsData ? { options: props.optionsData } : {}),
-          ...(props.glassTreatementData
+          ...(props.glassAddonData
             ? {
-                name: props.glassTreatementData.name,
-                image: props.glassTreatementData.image,
+                name: props.glassAddonData.name,
+                image: props.glassAddonData.image,
               }
             : {}),
         },

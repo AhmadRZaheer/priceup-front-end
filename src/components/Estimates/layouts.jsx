@@ -72,7 +72,7 @@ export default function Layout() {
             textAlign={"center"}
             variant="h4"
           >
-            Create New Qoute
+            Create New Estimate
           </Typography>
           <Box
             sx={{
@@ -163,7 +163,7 @@ export default function Layout() {
               </Grid>
             )}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <NavLink to="/Estimates">
+              <NavLink to="/estimates">
                 <Button
                   sx={{
                     width: 180,

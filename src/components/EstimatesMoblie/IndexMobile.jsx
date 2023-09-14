@@ -7,7 +7,7 @@ import ExitingQuotes from "./existingQuotes";
 import { getPageNavigation } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import { Box } from "@mui/material";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);

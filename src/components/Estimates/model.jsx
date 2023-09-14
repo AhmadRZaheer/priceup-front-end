@@ -162,7 +162,7 @@ export default function ClientDetailsModel({
       dispatch(setNavigation("existing"));
       handleCancel();
       Refetched();
-      navigate('/Estimates');
+      navigate('/estimates');
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -174,7 +174,7 @@ export default function ClientDetailsModel({
       dispatch(setNavigation("existing"));
       handleCancel();
       Refetched();
-      navigate('/Estimates');
+      navigate('/estimates');
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
       showSnackbar(errorMessage, "error");

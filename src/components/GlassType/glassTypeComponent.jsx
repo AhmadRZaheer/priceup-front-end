@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import {
   useDeleteGlassTypeFull,
   useFetchDataGlassType,
 } from "../../utilities/ApiHooks/glassType";
 import GlassTypeItem from "./glassTypeItems";
-import AddEditGlassType from "../Model/addEidtGlassType";
+import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeDataItem from "./glassTypeData";
 
 const GlassTypeComponent = ({ type }) => {

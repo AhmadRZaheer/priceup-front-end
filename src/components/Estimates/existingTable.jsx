@@ -76,7 +76,7 @@ export default function ExistingTable() {
             <Typography sx={{ fontSize: 18, fontWeight: "bold", mt: 0.6 }}>
               Estimates 
             </Typography>
-            <Link to="/Estimates/Steps">
+            <Link to="/estimates/steps">
               <IconButton
                 onClick={handleCreateQuote}
                 disabled={estimateDataFetching}
@@ -101,7 +101,7 @@ export default function ExistingTable() {
             <Typography sx={{ width: 220 }}>Customer Name</Typography>
             <Typography sx={{ width: 250 }}>Customer Email</Typography>
             <Typography sx={{ width: 180 }}>Date Quoted</Typography>
-            <Typography sx={{ width: 200 }}>Estimated Total</Typography>
+            <Typography sx={{ width: 200 }}>Total</Typography>
             <Typography sx={{ width: 180 }}>Status</Typography>
             <Typography sx={{ width: 60 }}></Typography>
           </Box>
@@ -166,7 +166,7 @@ export default function ExistingTable() {
                     <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
                   </IconButton>
                 <Link
-                  to="/Estimates/Steps"
+                  to="/estimates/steps"
                   style={{ marginLeft: 2, marginRight: 1 }}
                 >
                   <IconButton

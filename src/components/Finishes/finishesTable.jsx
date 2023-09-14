@@ -10,8 +10,8 @@ import {
   useDeleteFinishes,
   useFetchDataFinishes,
 } from "../../utilities/ApiHooks/finishes";
-import Snackbars from "../Model/snackBar";
-import AddEditFinish from "../Model/addEditFinish";
+import Snackbars from "../Modal/snackBar";
+import AddEditFinish from "../Modal/addEditFinish";
 const FinishesTable = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,

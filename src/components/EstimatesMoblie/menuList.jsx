@@ -106,9 +106,9 @@ const MenuList = ({
         {![
           "hardwareFinishes",
           "channel",
-          "glassTreatment",
+          "glassAddons",
           "glassType",
-          "addOns",
+          "hardwareAddons",
         ].includes(type) && (
           <Box
             sx={{
@@ -207,8 +207,10 @@ const MenuList = ({
                     width: "200px",
                     borderRadius: "12px",
                     border: (
-                      type === "addOns"
-                        ? selectedContent?.addOns.some(
+                      type === "hardwareAddons"
+                        ? selectedContent?.hardwareAddons.some(
+                            (selectedItem) => selectedItem?._id === item?._id
+                          ) : type === "glassAddons" ?  selectedContent?.glassAddons.some(
                             (selectedItem) => selectedItem?._id === item?._id
                           )
                         : item === selectedItem

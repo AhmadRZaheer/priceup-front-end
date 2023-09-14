@@ -14,29 +14,29 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useEffect } from "react";
 import {
-  useDeleteGlassTreatement,
-  useEditGlassTreatement,
-} from "../../utilities/ApiHooks/glassTreatement";
+  useDeleteGlassAddonOption,
+  useEditGlassAddon,
+} from "../../utilities/ApiHooks/glassAddon";
 
-const GlassTreatementItem = ({
+const ListOption = ({
   data,
   index,
   refetch,
-  glassTreatementId,
+  glassAddonId,
   showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
   const {
-    mutate: deleteGlassTreatement,
+    mutate: deleteGlassAddon,
     isLoading: LoadingForDelete,
     isSuccess: SuccessForDelete,
-  } = useDeleteGlassTreatement();
+  } = useDeleteGlassAddonOption();
   const {
-    mutate: editGlassTreatement,
+    mutate: editGlassAddon,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
-  } = useEditGlassTreatement();
+  } = useEditGlassAddon();
   const validationSchema = Yup.object().shape({
     partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
@@ -50,18 +50,18 @@ const GlassTreatementItem = ({
     },
     validationSchema,
     onSubmit: async (values, resetForm) => {
-      const glassTreatement = {
+      const glassAddon = {
         [index]: {
           partNumber: values.partNumber,
           cost: values.cost,
           status: values.status,
         },
       };
-      editGlassTreatement({
-        optionsData: glassTreatement,
-        id: glassTreatementId,
+      editGlassAddon({
+        optionsData: glassAddon,
+        id: glassAddonId,
       });
-      localStorage.setItem("scrollToIndex", glassTreatementId);
+      localStorage.setItem("scrollToIndex", glassAddonId);
       resetForm();
     },
   });
@@ -77,8 +77,8 @@ const GlassTreatementItem = ({
     }
   }, []);
   const handleFinishDelete = (event) => {
-    deleteGlassTreatement({
-      glassTreatementId: glassTreatementId,
+    deleteGlassAddon({
+      glassAddonId: glassAddonId,
       optionId: data._id,
     });
   };
@@ -137,7 +137,7 @@ const GlassTreatementItem = ({
   };
 
   return (
-    <Box key={index} id={glassTreatementId}>
+    <Box key={index} id={glassAddonId}>
       <form onSubmit={formik.handleSubmit}>
         <Box
           style={{
@@ -210,7 +210,7 @@ const GlassTreatementItem = ({
               justifyContent: "center",
             }}
           >
-            <Box
+            {/* <Box
               style={{
                 width: "150px",
                 padding: 4,
@@ -222,7 +222,7 @@ const GlassTreatementItem = ({
                 <Typography>Thickness</Typography>
                 <Typography variant="h6">{data?.thickness}</Typography>
               </FormControl>
-            </Box>
+            </Box> */}
 
             <Box style={{ marginTop: "18px" }}>
               <ThemeProvider>
@@ -276,4 +276,4 @@ const GlassTreatementItem = ({
   );
 };
 
-export default GlassTreatementItem;
+export default ListOption;

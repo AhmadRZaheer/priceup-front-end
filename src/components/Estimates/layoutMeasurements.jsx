@@ -94,7 +94,7 @@ const LayoutMeasurements = () => {
           }}
         >
           <Typography textAlign={"center"} variant="h4">
-            Create New Qoute
+            Create New Estimate
           </Typography>
         </Box>
         <Typography
@@ -102,7 +102,7 @@ const LayoutMeasurements = () => {
           textAlign={"center"}
           variant="h4"
         >
-          Create New Qoute
+          Create New Estimate
         </Typography>
         <form onSubmit={formik.handleSubmit}>
           <Box

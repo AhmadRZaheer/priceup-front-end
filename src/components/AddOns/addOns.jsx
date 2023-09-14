@@ -6,7 +6,7 @@ import {
 } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import HardWareComponent from "../HardwareTable/hardWareComponent";
 
 const AddOnsTable = () => {

@@ -5,7 +5,7 @@ import logout from "../../Assets/logout.svg";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
-import LagoutModal from "../Model/logOut";
+import LagoutModal from "../Modal/logOut";
 import EstimsteIcon from "../../Assets/bar.svg";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
 import TremIcon from "../../Assets/users.svg"
@@ -68,9 +68,9 @@ const Sidebar = () => {
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/Estimates" className="link">
+            <NavLink to="/estimates" className="link">
               <li
-                className={` ${location.pathname === "/Estimates" ? "active" : ""
+                className={` ${location.pathname === "/estimates" ? "active" : ""
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
@@ -80,9 +80,9 @@ const Sidebar = () => {
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/Customers" className="link">
+            <NavLink to="/customers" className="link">
               <li
-                className={` ${location.pathname === "/Customers" ? "active" : ""
+                className={` ${location.pathname === "/customers" ? "active" : ""
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
@@ -151,9 +151,9 @@ const Sidebar = () => {
                 </IconButton>
               </li>
             </NavLink> */}
-            <NavLink to="/GlassType" className="link">
+            <NavLink to="/glass-types" className="link">
               <li
-                className={` ${location.pathname === "/GlassType" ? "active" : ""
+                className={` ${location.pathname === "/glass-types" ? "active" : ""
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
@@ -163,13 +163,13 @@ const Sidebar = () => {
                     alt="image of customer"
                   />
 
-                  <span>Glass Type</span>
+                  <span>Glass Types</span>
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/GlassTreatement" className="link">
+            <NavLink to="/glass-addons" className="link">
               <li
-                className={` ${location.pathname === "/GlassTreatement" ? "active" : ""
+                className={` ${location.pathname === "/glass-addons" ? "active" : ""
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
@@ -179,13 +179,13 @@ const Sidebar = () => {
                     alt="image of customer"
                   />
 
-                  <span>Glass Treatments</span>
+                  <span>Glass Addons</span>
                 </IconButton>
               </li>
             </NavLink>
-            <NavLink to="/Defaults" className="link">
+            <NavLink to="/layouts" className="link">
               <li
-                className={` ${location.pathname === "/Defaults" ? "active" : ""
+                className={` ${location.pathname === "/layouts" ? "active" : ""
                   }`}
               >
                 <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>

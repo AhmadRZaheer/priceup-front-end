@@ -1,17 +1,17 @@
 import React from "react";
-import "./glassTreatement.scss";
+import "./glassAddon.scss";
 import Sidebar from "../../components/Sidebar/sidebar";
-import GlassTreatementTable from "../../components/glassTreatement/glassTreatement";
+import GlassAddonComponent from "../../components/GlassAddon";
 
-const GlassTreatement = () => {
+const GlassAddon = () => {
   return (
     <div className="Customers">
       <Sidebar />
       <div className="customersContainer">
-        <GlassTreatementTable />
+        <GlassAddonComponent />
       </div>
     </div>
   );
 };
 
-export default GlassTreatement;
+export default GlassAddon;

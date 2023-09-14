@@ -7,7 +7,7 @@ import {
   useDeleteHardwares,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
-import AddEditHardware from "../Model/addEditHardware";
+import AddEditHardware from "../Modal/addEditHardware";
 
 const HardwareItem = ({
   entry,

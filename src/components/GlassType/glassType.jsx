@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { addHardware } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import GlassTypeComponent from "./glassTypeComponent";
 
 const GlassTypeTable = () => {
@@ -54,7 +54,7 @@ const GlassTypeTable = () => {
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
-              <GlassTypeComponent type={"Glass Type"} />
+              <GlassTypeComponent type={"Glass Types"} />
             </div>
           </div>
         </Box>

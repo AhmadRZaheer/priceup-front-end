@@ -7,8 +7,8 @@ import {
   useEditHardware,
   useFetchDatahardware,
 } from "../../utilities/ApiHooks/hardware";
-import AddEditHardware from "../Model/addEditHardware";
-import Snackbars from "../Model/snackBar";
+import AddEditHardware from "../Modal/addEditHardware";
+import Snackbars from "../Modal/snackBar";
 import "./hardwareTable.scss";
 import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";

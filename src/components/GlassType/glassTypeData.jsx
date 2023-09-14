@@ -6,7 +6,7 @@ import {
   useDeleteGlassTypeFull,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
-import AddEditGlassType from "../Model/addEidtGlassType";
+import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeItem from "./glassTypeItems";
 
 const GlassTypeDataItem = ({

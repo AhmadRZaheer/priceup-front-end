@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./hardwareTable.scss";
 import { Box, Typography } from "@mui/material";
 import DefaultComponent from "./defaultComponent";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 
 const DefaultSection = () => {
   const [snackbar, setSnackbar] = useState({

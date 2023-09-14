@@ -12,7 +12,7 @@ import Estimates from "../../pages/Estimates/estimates";
 import Settings from "../../pages/Settings/settings";
 import AddOns from "../../pages/AddOns/addOns";
 import GlassType from "../../pages/GlassType/glassType";
-import GlassTreatement from "../../pages/GlassTreatement/glassTreatement";
+import GlassAddon from "../../pages/GlassAddon/glassAddon";
 import Existing from "../../pages/Existing/existing";
 import Login from "../Login/login";
 import SuperAdminLogin from "../superLogin/superAdmin";
@@ -75,9 +75,9 @@ const AppRoutes = () => {
       {isAdmin() ? (
         <Route path="/">
           <Route index element={<Overview />} />
-          <Route path="/Estimates/">
+          <Route path="/estimates/">
             <Route index element={<Existing />} />
-            <Route path="Steps" element={<Estimates />} />
+            <Route path="steps" element={<Estimates />} />
           </Route>
           <Route path="customers">
             <Route index element={<Customers />} />
@@ -88,11 +88,11 @@ const AppRoutes = () => {
           <Route path="hardware" element={<Hardware />} />
           <Route path="finishes" element={<Finishes />} />
 
-          <Route path="defaults" element={<Defaults />} />
+          <Route path="layouts" element={<Defaults />} />
           <Route path="settings" element={<Settings />} />
-          <Route path="Addons" element={<AddOns />} />
-          <Route path="GlassType" element={<GlassType />} />
-          <Route path="GlassTreatement" element={<GlassTreatement />} />
+          <Route path="hardware-addons" element={<AddOns />} />
+          <Route path="glass-types" element={<GlassType />} />
+          <Route path="glass-addons" element={<GlassAddon />} />
           <Route path="*" element={<Overview />}></Route>
         </Route>
       ) : isStaff() ? (

@@ -4,9 +4,9 @@ import { AdminColumns } from "../../customerTableSource";
 
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Typography } from "@mui/material";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import AddSuperAdminModel from "../Model/addSuperAdminModel";
+import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
 import { Add } from "@mui/icons-material";
 

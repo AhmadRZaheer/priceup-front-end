@@ -15,7 +15,7 @@ import {
   useFetchDataSetting,
 } from "../../utilities/ApiHooks/setting";
 import { backendURL } from "../../utilities/common";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =

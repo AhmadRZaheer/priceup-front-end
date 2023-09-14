@@ -4,7 +4,7 @@ import ClientDetailsModel from "./model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./layoutReview";
 import Layout from "./layouts";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import ExistingQuotes from "./existingQuotes";

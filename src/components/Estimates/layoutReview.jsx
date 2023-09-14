@@ -2,7 +2,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import {
   getContent,
   getLayoutArea,
@@ -76,7 +76,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           textAlign={"center"}
           variant="h4"
         >
-          Create New Qoute
+          Create New Estimate
         </Typography>
         <Box
           sx={{
@@ -317,11 +317,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={estimatesData?.glassTreatment}
-                      title={"Glass treatment"}
-                      type={"glassTreatment"}
+                      menuOptions={estimatesData?.glassAddons}
+                      title={"Glass Addons"}
+                      type={"glassAddons"}
                       showSnackbar={showSnackbar}
-                      currentItem={selectedContent?.glassTreatment}
+                      // currentItem={selectedContent?.glassAddons}
                     />
                   </Box>
                 </Box>
@@ -338,9 +338,9 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={estimatesData?.addOns}
-                      title={"Add ons"}
-                      type={"addOns"}
+                      menuOptions={estimatesData?.hardwareAddOns}
+                      title={"Hardware Addons"}
+                      type={"hardwareAddons"}
                       showSnackbar={showSnackbar}
                     />
                   </Box>

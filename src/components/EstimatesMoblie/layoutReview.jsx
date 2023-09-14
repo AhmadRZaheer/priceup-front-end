@@ -10,7 +10,7 @@ import {
   setInputContent,
   setTotal,
 } from "../../redux/estimateCalculations";
-import Snackbars from "../Model/snackBar";
+import Snackbars from "../Modal/snackBar";
 import ChannelType from "./channelOrClamp";
 import { calculateTotal } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
@@ -304,11 +304,11 @@ const LayoutReview = () => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={estimatesData?.glassTreatment}
-                      title={"Glass treatment"}
-                      type={"glassTreatment"}
+                      menuOptions={estimatesData?.glassAddons}
+                      title={"Glass Addons"}
+                      type={"glassAddons"}
                       showSnackbar={showSnackbar}
-                      currentItem={selectedContent?.glassTreatment}
+                      // currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>
@@ -325,9 +325,9 @@ const LayoutReview = () => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={estimatesData?.addOns}
-                      title={"Add ons"}
-                      type={"addOns"}
+                      menuOptions={estimatesData?.hardwareAddons}
+                      title={"Hardware Addons"}
+                      type={"hardwareAddons"}
                       showSnackbar={showSnackbar}
                     />
                   </Box>

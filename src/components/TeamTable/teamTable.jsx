@@ -10,8 +10,8 @@ import {
   useDeleteTeamMembers,
   useFetchDataTeam,
 } from "../../utilities/ApiHooks/team";
-import AddTeamMembers from "../Model/addTeamMembers";
-import Snackbars from "../Model/snackBar";
+import AddTeamMembers from "../Modal/addTeamMembers";
+import Snackbars from "../Modal/snackBar";
 import { Add } from "@mui/icons-material";
 
 const TeamTable = () => {

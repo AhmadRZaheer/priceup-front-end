@@ -7,7 +7,7 @@ import { Box, Typography } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import Header from "../TableHeader/tableHeader";
 import HardWareComponent from "./hardWareComponent";
-import AddEditModel from "../Model/addEditFinish";
+import AddEditModel from "../Modal/addEditFinish";
 import { useFetchDatahardwareCategory } from "../../utilities/ApiHooks/hardware";
 
 const HardwareTable = () => {

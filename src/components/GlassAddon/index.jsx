@@ -1,15 +1,15 @@
 import React from "react";
-import "./glassTreatement.scss";
+import "./style.scss";
 import { useDispatch } from "react-redux";
 import {
   addHardware,
 } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
-import AddEditModel from "../Model/addEditFinish";
-import GlassTreatementComponent from "./glassTreatementComponent";
+import AddEditModel from "../Modal/addEditFinish";
+import GlassAddonGrid from "./glassAddonGrid";
 
-const GlassTreatementTable = () => {
+const GlassAddonComponent = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const handleClose = () => setOpen(false);
@@ -55,7 +55,7 @@ const GlassTreatementTable = () => {
       >
         <div className="hardwareTable">
           <div className="hardwareTable">
-            <GlassTreatementComponent type={"Glass Treatments"} />
+            <GlassAddonGrid type={"Glass Addons"} />
           </div>
         </div>
       </Box>
@@ -68,4 +68,5 @@ const GlassTreatementTable = () => {
     </>
   );
 };
-export default GlassTreatementTable;
+
+export default GlassAddonComponent;

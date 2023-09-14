@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { backendURL } from "../../utilities/common";
-import Snackbars from "../Model/snackBar";
+import { Add} from "@mui/icons-material";
+import Snackbars from "../Modal/snackBar";
 import {
-  useDeleteGlassTreatementFull,
-  useFetchDataGlassTreatement,
-} from "../../utilities/ApiHooks/glassTreatement";
-import GlassTreatementItem from "./glassTreatementItems";
-import AddEditGlassTreatement from "../Model/addGlassTreatement";
-import GlassTreatementDataItem from "./glassTreatementData";
+  useDeleteGlassAddon,
+  useFetchGlassAddons,
+} from "../../utilities/ApiHooks/glassAddon";
+import AddEditGlassAddon from "../Modal/addEditGlassAddon";
+import AddonList from "./addonList";
 
-const GlassTreatementComponent = ({ type }) => {
+const GlassAddonGrid = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
@@ -33,12 +31,12 @@ const GlassTreatementComponent = ({ type }) => {
   };
 
   const {
-    data: GlassTreatementData,
-    refetch: GlassTreatementRefetch,
-    isFetching: GlassTreatementFetching,
-  } = useFetchDataGlassTreatement(type);
-  const { mutate: deleteGlassTreatement, isSuccess: deleteSuccess } =
-    useDeleteGlassTreatementFull();
+    data: glassAddons,
+    refetch: glassAddonRefetch,
+    isFetching: glassAddonFetching,
+  } = useFetchGlassAddons(type);
+  const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
+  useDeleteGlassAddon();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -57,12 +55,12 @@ const GlassTreatementComponent = ({ type }) => {
     setIsEdit(true);
   };
   const handleHardwareDelete = (id) => {
-    deleteGlassTreatement(id);
+    deleteGlassAddon(id);
   };
 
   useEffect(() => {
     if (deleteSuccess) {
-      GlassTreatementRefetch();
+      glassAddonRefetch();
       showSnackbar("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
@@ -165,7 +163,7 @@ const GlassTreatementComponent = ({ type }) => {
           Status
         </div>{" "}
       </div>
-      {GlassTreatementFetching ? (
+      {glassAddonFetching ? (
         <Box
           sx={{
             display: "flex",
@@ -189,11 +187,11 @@ const GlassTreatementComponent = ({ type }) => {
             overflowY: "scroll",
           }}
         >
-          {GlassTreatementData?.map((entry, mainIndex) => (
-            <GlassTreatementDataItem
+          {glassAddons?.map((entry, mainIndex) => (
+            <AddonList
               entry={entry}
               mainIndex={mainIndex}
-              GlassTreatementRefetch={GlassTreatementRefetch}
+              refetch={glassAddonRefetch}
               showSnackbar={showSnackbar}
               type={type}
             />
@@ -201,12 +199,12 @@ const GlassTreatementComponent = ({ type }) => {
         </div>
       )}
 
-      <AddEditGlassTreatement
+      <AddEditGlassAddon
         open={open}
         close={handleClose}
         data={edit}
         isEdit={isEdit}
-        refetch={GlassTreatementRefetch}
+        refetch={glassAddonRefetch}
         showSnackbar={showSnackbar}
         categorySlug={type}
       />
@@ -221,4 +219,4 @@ const GlassTreatementComponent = ({ type }) => {
   );
 };
 
-export default GlassTreatementComponent;
+export default GlassAddonGrid;

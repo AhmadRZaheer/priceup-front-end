@@ -138,11 +138,11 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
   }
 
-  //addons
-  const towelBar = estimatesData?.addOns?.find(
+  //hardware Addons
+  const towelBar = estimatesData?.hardwareAddons?.find(
     (item) => item.slug === "towel-bars"
   );
-  const sleeveOver = estimatesData?.addOns?.find(
+  const sleeveOver = estimatesData?.hardwareAddons?.find(
     (item) => item.slug === "sleeve-over"
   );
   const towelBarFinish =
@@ -154,14 +154,14 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
     )?.cost || 0;
   let otherAddons = 0;
-  selectedContent?.addOns?.map((item) => {
+  selectedContent?.hardwareAddons?.map((item) => {
     const price =
       item?.finishes?.find(
         (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
       )?.cost || 0;
     otherAddons = otherAddons + price * priceBySqft;
   });
-  const addOnsTotal =
+  const hardwareAddOnsTotal =
     towelBarFinish * selectedContent?.towelBarsCount +
     sleeveOverFinish * selectedContent?.sleeveOverCount +
     otherAddons;
@@ -172,11 +172,19 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       (glass) => glass.thickness === selectedContent?.glassType?.thickness
     )?.cost || 0) * priceBySqft;
 
-  //glassTreatment
-  const glassTreatmentPrice =
-    selectedContent?.glassTreatment?.item?.options?.find(
-      (glass) => glass.thickness === selectedContent?.glassType?.thickness
-    )?.cost || 0;
+  //glassAddons
+  let glassAddonsPrice = 0;
+  selectedContent?.glassAddons?.map((item) => {
+    let price = 0;
+    if(item?.options?.length){
+      price = item?.options[0]?.cost || 0;
+    }
+    glassAddonsPrice = glassAddonsPrice + price * priceBySqft;    
+  });
+  // const glassTreatmentPrice =
+  //   selectedContent?.glassTreatment?.item?.options?.find(
+  //     (glass) => glass.thickness === selectedContent?.glassType?.thickness
+  //   )?.cost || 0;
 
   //labor price
   const laborPrice =
@@ -187,9 +195,9 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   const total =
     (hardwareTotals +
       fabricationPrice +
-      addOnsTotal +
+      hardwareAddOnsTotal +
       glassPrice +
-      glassTreatmentPrice) *
+      glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +
     laborPrice;
   return total;

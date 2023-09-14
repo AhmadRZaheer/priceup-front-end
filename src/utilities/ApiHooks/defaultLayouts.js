@@ -143,7 +143,7 @@ export const useEditDefault = () => {
             outages: updatedDefault.settings?.outages,
             transom: updatedDefault.settings?.transom,
             header: updatedDefault.settings?.header,
-            glassTreatment: updatedDefault.settings?.glassTreatment,
+            glassAddon: updatedDefault.settings?.glassAddon,
             other: {
               people: updatedDefault.settings?.other?.people,
               hours: updatedDefault.settings?.other?.hours,

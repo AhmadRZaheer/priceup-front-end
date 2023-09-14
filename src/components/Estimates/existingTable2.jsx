@@ -4,11 +4,11 @@ import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
 import image4 from "../../Assets/calculator.svg";
 import {
-  useFetchDataEstimate,
+  // useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
 
-import ExistingTable from "./esistingTable";
+import ExistingTable from "./existingTable";
 
 export default function ExistingQuotes2() {
   const { data  } = useGetEstimates();
