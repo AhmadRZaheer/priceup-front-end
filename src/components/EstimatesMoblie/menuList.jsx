@@ -16,6 +16,7 @@ import {
   setThickness,
   updateAddOnCount,
 } from "../../redux/estimateCalculations";
+import OptionWithCounter from "../Estimates/optionWithCounter";
 
 const MenuList = ({
   menuOptions,
@@ -31,24 +32,24 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(currentItem || null);
-  const [sleeveOverCount, setSleeveOverCount] = useState(
-    selectedContent?.sleeveOverCount || 0
-  );
-  const [towelBarsCount, setTowelBarsCount] = useState(
-    selectedContent?.towelBarsCount || 0
-  );
-  const handleSleeveOverCount = (count) => {
-    if (count >= 0) {
-      setSleeveOverCount(count);
-      dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
-    }
-  };
-  const handleTowelBarsCount = (count) => {
-    if (count >= 0) {
-      setTowelBarsCount(count);
-      dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
-    }
-  };
+  // const [sleeveOverCount, setSleeveOverCount] = useState(
+  //   selectedContent?.sleeveOverCount || 0
+  // );
+  // const [towelBarsCount, setTowelBarsCount] = useState(
+  //   selectedContent?.towelBarsCount || 0
+  // );
+  // const handleSleeveOverCount = (count) => {
+  //   if (count >= 0) {
+  //     setSleeveOverCount(count);
+  //     dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
+  //   }
+  // };
+  // const handleTowelBarsCount = (count) => {
+  //   if (count >= 0) {
+  //     setTowelBarsCount(count);
+  //     dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
+  //   }
+  // };
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     dispatch(setContent({ type: type, item: item }));
@@ -58,7 +59,7 @@ const MenuList = ({
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-      dispatch(setCounters({ type: type, value: value }));
+      dispatch(setCounters({ parentType: null, type: type, value: value }));
     }
   };
   const handleThicknessSet = (thickness) => {
@@ -106,6 +107,9 @@ const MenuList = ({
         {![
           "hardwareFinishes",
           "channel",
+          "wallClamp",
+          "sleeveOver",
+          "glassToGlass",
           "glassAddons",
           "glassType",
           "hardwareAddons",
@@ -212,6 +216,12 @@ const MenuList = ({
                             (selectedItem) => selectedItem?._id === item?._id
                           ) : type === "glassAddons" ?  selectedContent?.glassAddons.some(
                             (selectedItem) => selectedItem?._id === item?._id
+                          ) : type === "wallClamp" ?  selectedContent?.mountingClamps?.wallClamp.some(
+                            (selectedItem) => selectedItem?._id === item?._id
+                          ) : type === "sleeveOver" ?  selectedContent?.mountingClamps?.sleeveOver.some(
+                            (selectedItem) => selectedItem?._id === item?._id
+                          ) : type === "glassToGlass" ?  selectedContent?.mountingClamps?.glassToGlass.some(
+                            (selectedItem) => selectedItem?._id === item?._id
                           )
                         : item === selectedItem
                     )
@@ -238,56 +248,66 @@ const MenuList = ({
                   </Box>
                   <Box>
                     {item?.slug === "sleeve-over" && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-around",
-                          gap: 2,
-                          color: { md: "#000000  ", xs: "white" },
-                          alignSelf: "flex-end",
-                        }}
-                      >
-                        <AddCircleOutline
-                          onClick={() =>
-                            handleSleeveOverCount(sleeveOverCount + 1)
-                          }
-                          sx={{ color: "#98A2B3" }}
-                        />
-                        <Typography>{sleeveOverCount}</Typography>
-                        <RemoveCircleOutline
-                          onClick={() =>
-                            handleSleeveOverCount(sleeveOverCount - 1)
-                          }
-                          sx={{ color: "#98A2B3" }}
-                        />
-                      </Box>
+                      <OptionWithCounter parentType={'sleeveOverCount'} type={'sleeveOverCount'} counter={selectedContent?.sleeveOverCount}/>
+                      // <Box
+                      //   sx={{
+                      //     display: "flex",
+                      //     alignItems: "center",
+                      //     justifyContent: "space-around",
+                      //     gap: 2,
+                      //     color: { md: "#000000  ", xs: "white" },
+                      //     alignSelf: "flex-end",
+                      //   }}
+                      // >
+                      //   <AddCircleOutline
+                      //     onClick={() =>
+                      //       handleSleeveOverCount(sleeveOverCount + 1)
+                      //     }
+                      //     sx={{ color: "#98A2B3" }}
+                      //   />
+                      //   <Typography>{sleeveOverCount}</Typography>
+                      //   <RemoveCircleOutline
+                      //     onClick={() =>
+                      //       handleSleeveOverCount(sleeveOverCount - 1)
+                      //     }
+                      //     sx={{ color: "#98A2B3" }}
+                      //   />
+                      // </Box>
                     )}
                     <Box>
                       {item?.slug === "towel-bars" && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            color: { md: "#000000  ", xs: "white" },
-                            alignSelf: "flex-end",
-                          }}
-                        >
-                          <AddCircleOutline
-                            onClick={() =>
-                              handleTowelBarsCount(towelBarsCount + 1)
-                            }
-                            sx={{ color: "#98A2B3" }}
-                          />
-                          <Typography>{towelBarsCount}</Typography>
-                          <RemoveCircleOutline
-                            onClick={() =>
-                              handleTowelBarsCount(towelBarsCount - 1)
-                            }
-                            sx={{ color: "#98A2B3" }}
-                          />
-                        </Box>
+                      <OptionWithCounter parentType={'towelBarsCount'} type={'towelBarsCount'} counter={selectedContent?.towelBarsCount}/>
+                        // <Box
+                        //   sx={{
+                        //     display: "flex",
+                        //     alignItems: "center",
+                        //     gap: 2,
+                        //     color: { md: "#000000  ", xs: "white" },
+                        //     alignSelf: "flex-end",
+                        //   }}
+                        // >
+                        //   <AddCircleOutline
+                        //     onClick={() =>
+                        //       handleTowelBarsCount(towelBarsCount + 1)
+                        //     }
+                        //     sx={{ color: "#98A2B3" }}
+                        //   />
+                        //   <Typography>{towelBarsCount}</Typography>
+                        //   <RemoveCircleOutline
+                        //     onClick={() =>
+                        //       handleTowelBarsCount(towelBarsCount - 1)
+                        //     }
+                        //     sx={{ color: "#98A2B3" }}
+                        //   />
+                        // </Box>
+                      )}
+                    </Box>
+                    <Box>
+                      {item?.slug === "beveled-wall-clamp" && (
+                        <OptionWithCounter parentType={type} type={'beveled-wall-clamp'} counter={selectedContent?.mountingClamps?.[type]?.find((row)=>row.item.slug === 'beveled-wall-clamp')?.count} />
+                      )}
+                      {item?.slug === "corner-clamp" && (
+                        <OptionWithCounter parentType={type} type={'corner-clamp'} counter={selectedContent?.mountingClamps?.[type]?.find((row)=>row.item.slug === 'corner-clamp')?.count} />
                       )}
                     </Box>
                   </Box>

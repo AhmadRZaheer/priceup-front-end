@@ -35,29 +35,30 @@ const estimateCalcSlice = createSlice({
         item: null,
         count: 0,
       },
-
-      mounting: {
-        clamps: {
-          wallClamp: {
-            item: null,
-            count: 0,
-          },
-          sleeveOver: {
-            item: null,
-            count: 0,
-          },
-          glassToGlass: {
-            item: null,
-            count: 0,
-          },
-        },
-        channel: {
-          item: null,
-          count: 0,
-        },
-        activeType: "clamps",
+      mountingClamps: {
+        wallClamp: [
+          // {
+          //   item: null,
+          //   count: 0,
+          // },
+        ],
+        sleeveOver: [
+          // {
+          //   item: null,
+          //   count: 0,
+          // },
+        ],
+        glassToGlass: [
+          // {
+          //   item: null,
+          //   count: 0,
+          // },
+        ],
       },
-
+      mountingChannel: {
+        item: null,
+        count: 0,
+      },
       header: {
         item: null,
         count: 0,
@@ -83,36 +84,42 @@ const estimateCalcSlice = createSlice({
       sleeveOverCount: 0,
       towelBarsCount: 0,
       hardwareAddons: [],
+      mountingState: "channel",
     },
     totalPrice: 0,
   },
   reducers: {
     setContent: (state, action) => {
       const { type, item } = action.payload;
-      console.log(type,item,'type')
+      console.log(type, item, "type");
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
-        state.content = {
-          ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            clamps: {
-              ...state.content.mounting.clamps,
-              [type]: {
-                ...state.content.mounting.clamps[type],
-                item: item,
-              },
-            },
-          },
-        };
+        console.log("Nice Try.");
+        // const existing = state.content.mountingClamps[type];
+        //   const foundIndex = existing.findIndex((row) => row?.item?.slug === item?.slug);
+        //   if(foundIndex !== -1){
+        //     // existing[foundIndex].item = null;
+        //     existing.splice(foundIndex,1);
+        //   }
+        //   else{
+        //     existing.push({item:item,count:1});
+        //   }
+        // state.content = {
+        //   ...state.content,
+        //   mountingClamps: {
+        //     ...state.content.mountingClamps,
+        //       [type]: existing
+        //       // {
+        //       //   ...state.content.mountingClamps[type],
+        //       //   item: item,
+        //       // },
+        //   },
+        // };
       } else if (["channel"].includes(type)) {
         state.content = {
           ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            channel: {
-              ...state.content.mounting.channel,
-              item: item,
-            },
+          mountingChannel: {
+            item: item,
+            count: 1,
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
@@ -138,7 +145,7 @@ const estimateCalcSlice = createSlice({
         if (foundIndex !== -1) {
           state.content.glassAddons.splice(foundIndex, 1);
         } else {
-            state.content.glassAddons.push(item);
+          state.content.glassAddons.push(item);
         }
       } else {
         state.content = {
@@ -151,21 +158,30 @@ const estimateCalcSlice = createSlice({
       }
     },
     setCounters: (state, action) => {
-      const { type, value } = action.payload;
+      const { type, value, item } = action.payload;
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
+        let existing = state.content.mountingClamps[type];
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value });
+        }
         state.content = {
           ...state.content,
-          mounting: {
-            ...state.content.mounting,
-            clamps: {
-              ...state.content.mounting.clamps,
-              [type]: {
-                ...state.content.mounting.clamps[type],
-                count: value,
-              },
-            },
+          mountingClamps: {
+            ...state.content.mountingClamps,
+            [type]: existing,
           },
         };
+      } else if (["sleeveOverCount", "towelBarsCount"].includes(type)) {
+        state.content[type] = value;
       } else {
         state.content = {
           ...state.content,
@@ -202,10 +218,10 @@ const estimateCalcSlice = createSlice({
       state.measurements = newMeasurements;
     },
 
-    updateAddOnCount: (state, action) => {
-      const { type, count } = action.payload;
-      state.content[type] = count;
-    },
+    // updateAddOnCount: (state, action) => {
+    //   const { type, count } = action.payload;
+    //   state.content[type] = count;
+    // },
     addSelectedItem: (state, action) => {
       const itemData = action.payload;
       state.selectedItem = itemData;
@@ -231,14 +247,10 @@ const estimateCalcSlice = createSlice({
     },
     setActiveMounting: (state, action) => {
       const { payload } = action;
-      state.content.mounting = {
-        ...state.content.mounting,
-        activeType: payload,
-      };
+      state.content.mountingState = payload;
     },
     initializeStateForCreateQuote: (state, action) => {
       const { layoutData, listData } = action.payload;
-      console.log(layoutData, listData,'data')
       let hardwareFinishes = null;
       hardwareFinishes = listData?.hardwareFinishes?.find(
         (item) => item._id === layoutData?.settings?.hardwareFinishes
@@ -311,38 +323,51 @@ const estimateCalcSlice = createSlice({
           item: glassType || null,
           thickness: layoutData?.settings?.glassType?.thickness,
         },
-
-        mounting: {
-          clamps: {
-            wallClamp: {
-              item: wallClampItem || null,
-              count: layoutData?.settings?.wallClamp?.count,
-            },
-            sleeveOver: {
-              item: sleeveOverItem || null,
-              count: layoutData?.settings?.sleeveOver?.count,
-            },
-            glassToGlass: {
-              item: glassToGlassItem || null,
-              count: layoutData?.settings?.glassToGlass?.count,
-            },
-          },
-          channel: {
-            item: channelItem || null,
-            count: channelItem ? 1 : 0,
-          },
-          activeType: layoutData?.settings?.channelOrClamps
-            ? layoutData?.settings?.channelOrClamps?.toLowerCase()
-            : "clamps",
+        mountingChannel: {
+          item: channelItem || null,
+          count: channelItem ? 1 : 0,
         },
-
+        mountingClamps: {
+          wallClamp: wallClampItem
+            ? [{
+                item: wallClampItem,
+                count: layoutData?.settings?.wallClamp?.count,
+              }]
+            : [],
+          sleeveOver: sleeveOverItem
+            ? [{
+                item: sleeveOverItem,
+                count: layoutData?.settings?.sleeveOver?.count,
+              }]
+            : [],
+          glassToGlass: glassToGlassItem
+            ? [{
+                item: glassToGlassItem,
+                count: layoutData?.settings?.glassToGlass?.count,
+              }]
+            : [],
+        },
+        mountingState: channelItem
+          ? "channel"
+          : wallClampItem || sleeveOverItem || glassToGlassItem
+          ? "clamps"
+          : "",
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
         glassAddons: glassAddon ? [glassAddon] : [listData.glassAddons[0]],
         outages: layoutData?.settings?.outages,
-        hingeCut:layoutData?.settings?.hinges?.count,
-        oneInchHoles: (layoutData?.settings?.handles?.count * 2) + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN ? 6 : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN ? 8 : 0),
-        clampCut:layoutData?.settings?.wallClamp?.count + layoutData?.settings?.sleeveOver?.count + layoutData?.settings?.glassToGlass?.count
+        hingeCut: layoutData?.settings?.hinges?.count,
+        oneInchHoles:
+          layoutData?.settings?.handles?.count * 2 +
+          (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
+            ? 6
+            : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
+            ? 8
+            : 0),
+        clampCut:
+          layoutData?.settings?.wallClamp?.count +
+          layoutData?.settings?.sleeveOver?.count +
+          layoutData?.settings?.glassToGlass?.count,
       };
     },
     initializeStateForEditQuote: (state, action) => {
@@ -377,31 +402,58 @@ const estimateCalcSlice = createSlice({
         (item) => item._id === estimateData?.glassType?.type
       );
 
-      let glassTreatment = null;
-      glassTreatment = listData?.glassTreatment?.find(
-        (item) => item._id === estimateData?.glassTreatment
-      );
-
-      let wallClampItem = null;
-      wallClampItem = listData?.wallClamp?.find(
-        (item) => item._id === estimateData?.mounting?.clamps?.wallClamp?.type
-      );
-      let sleeveOverItem = null;
-      sleeveOverItem = listData?.sleeveOver?.find(
-        (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver?.type
-      );
-      let glassToGlassItem = null;
-      glassToGlassItem = listData?.glassToGlass?.find(
-        (item) =>
-          item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
-      );
+      let glassAddons = [];
+      // glassTreatment = listData?.glassTreatment?.find(
+      //   (item) => item._id === estimateData?.glassTreatment
+      // );
+      glassAddons = estimateData?.glassAddons?.map((item) => {
+        const record = listData?.glassAddons.find(
+          (addon) => addon._id === item
+        );
+        return record;
+      });
+      let wallClampArray = [];
+      wallClampArray = estimateData?.mountingClamps?.wallClamp?.map((row) => {
+        const record = listData?.wallClamp?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return {item:record,count:row.count};
+      });
+      let sleeveOverArray = [];
+      sleeveOverArray = estimateData?.mountingClamps?.sleeveOver?.map((row) => {
+        const record = listData?.sleeveOver?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return {item:record,count:row.count};
+      });
+      let glassToGlassArray = [];
+      glassToGlassArray = estimateData?.mountingClamps?.glassToGlass?.map((row) => {
+        const record = listData?.glassToGlass?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return {item:record,count:row.count};
+      });
+      // let wallClampItem = null;
+      // wallClampItem = listData?.wallClamp?.find(
+      //   (item) => item._id === estimateData?.mounting?.clamps?.wallClamp?.type
+      // );
+      // let sleeveOverItem = null;
+      // sleeveOverItem = listData?.sleeveOver?.find(
+      //   (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver?.type
+      // );
+      // let glassToGlassItem = null;
+      // glassToGlassItem = listData?.glassToGlass?.find(
+      //   (item) =>
+      //     item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
+      // );
       let channelItem = null;
       channelItem = listData?.mountingChannel?.find(
-        (item) => item._id === estimateData?.mounting?.channel
+        (item) => item._id === estimateData?.mountingChannel
       );
-      let addOns = estimateData?.addOns?.map((id) =>
-        listData?.addOns?.find((item) => item?._id === id)
+      let hardwareAddons = estimateData?.hardwareAddons?.map((id) =>
+        listData?.hardwareAddons?.find((item) => item?._id === id)
       );
+
       const measurements = estimateData.measurements.map(
         ({ _id, ...rest }) => rest
       );
@@ -431,32 +483,26 @@ const estimateCalcSlice = createSlice({
           thickness: estimateData?.glassType?.thickness,
         },
 
-        mounting: {
-          clamps: {
-            wallClamp: {
-              item: wallClampItem,
-              count: estimateData?.mounting?.clamps?.wallClamp?.count,
-            },
-            sleeveOver: {
-              item: sleeveOverItem,
-              count: estimateData?.mounting?.clamps?.sleeveOver?.count,
-            },
-            glassToGlass: {
-              item: glassToGlassItem,
-              count: estimateData?.mounting?.clamps?.glassToGlass?.count,
-            },
-          },
-          channel: {
-            item: channelItem,
-            count: channelItem ? 1 : 0,
-          },
-          activeType: estimateData?.mounting?.activeType,
+        mountingClamps: {
+          wallClamp: [...wallClampArray],
+          sleeveOver: [...sleeveOverArray],
+          glassToGlass: [...glassToGlassArray]
         },
-
+        mountingChannel: {
+          item: channelItem || null,
+          count: channelItem ? 1 : 0,
+        },
+        mountingState: channelItem
+          ? "channel"
+          : wallClampArray?.length || sleeveOverArray?.length || glassToGlassArray?.length
+          ? "clamps"
+          : "",
         hingeCut: estimateData?.hingeCut,
         people: estimateData?.people,
         hours: estimateData?.hours,
-        glassTreatment: glassTreatment ? glassTreatment : listData.glassTreatment[0],
+        glassAddons: glassAddons?.length
+          ? [...glassAddons]
+          : listData.glassAddons[0],
         oneInchHoles: estimateData?.oneInchHoles,
         clampCut: estimateData?.clampCut,
         notch: estimateData?.notch,
@@ -465,7 +511,7 @@ const estimateCalcSlice = createSlice({
         polish: estimateData?.polish,
         sleeveOverCount: estimateData?.sleeveOverCount,
         towelBarsCount: estimateData?.towelBarsCount,
-        addOns: addOns,
+        hardwareAddons: hardwareAddons,
       };
       state.quoteState = quoteState;
       state.measurements = measurements;
@@ -483,7 +529,7 @@ export const {
   setCounters,
   setInputContent,
   setThickness,
-  updateAddOnCount,
+  // updateAddOnCount,
   updateMeasurements,
   addSelectedItem,
   setNavigationDesktop,

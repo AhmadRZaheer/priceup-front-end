@@ -60,27 +60,43 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0) * selectedContent.hinges.count
     : 0;
-  const mountingChannel = selectedContent?.mounting?.channel.item
-    ? selectedContent?.mounting?.channel?.item?.finishes?.find(
+  const mountingChannel = selectedContent?.mountingChannel.item
+    ? selectedContent?.mountingChannel?.item?.finishes?.find(
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0
     : 0;
-  const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
-    ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
-    : 0;
-  const mountingsleeveOver = selectedContent?.mounting?.clamps?.sleeveOver?.item
-    ? (selectedContent?.mounting?.clamps?.sleeveOver?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
-    : 0;
-  const mountingglassToGlass = selectedContent?.mounting?.clamps?.glassToGlass
-    ?.item
-    ? (selectedContent?.mounting?.clamps?.glassToGlass?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
-      )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
-    : 0;
+    console.log(selectedContent?.mountingClamps?.wallClamp,'fgfd');
+  let mountingWallClamps = 0;
+  selectedContent?.mountingClamps?.wallClamp?.map((row)=>{
+      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
+      mountingWallClamps += price ? (price * row.count) : 0;
+  });
+  let mountingsleeveOver = 0;
+  selectedContent?.mountingClamps?.sleeveOver?.map((row)=>{
+      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
+      mountingsleeveOver += price ? (price * row.count) : 0;
+  });
+  let mountingglassToGlass = 0;
+  selectedContent?.mountingClamps?.glassToGlass?.map((row)=>{
+      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
+      mountingglassToGlass += price ? (price * row.count) : 0;
+  });
+  // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
+  //   ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
+  //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
+  //     )?.cost || 0) * selectedContent?.mounting?.clamps?.wallClamp?.count
+  //   : 0;
+  // const mountingsleeveOver = selectedContent?.mounting?.clamps?.sleeveOver?.item
+  //   ? (selectedContent?.mounting?.clamps?.sleeveOver?.item?.finishes?.find(
+  //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
+  //     )?.cost || 0) * selectedContent?.mounting?.clamps?.sleeveOver?.count
+  //   : 0;
+  // const mountingglassToGlass = selectedContent?.mounting?.clamps?.glassToGlass
+  //   ?.item
+  //   ? (selectedContent?.mounting?.clamps?.glassToGlass?.item?.finishes?.find(
+  //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
+  //     )?.cost || 0) * selectedContent?.mounting?.clamps?.glassToGlass?.count
+  //   : 0;
   const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
     ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -95,12 +111,11 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   const hardwareTotals =
     handlePrice +
     hingesPrice +
-    mountingChannel *
-      (selectedContent?.mounting?.activeType === "channel" ? 1 : 0) +
-    (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) *
-      (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0) +
-    slidingDoorSystemPrice +
-    headerPrice;
+    mountingChannel 
+    // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0) 
+    + (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) 
+    // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0) 
+    + slidingDoorSystemPrice + headerPrice;
 
   // fabricating
   let fabricationPrice = 0;

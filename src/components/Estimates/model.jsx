@@ -78,8 +78,27 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      const data = estimatesContent?.addOns;
-      const addOnIds = data.map((obj) => obj?._id);
+      const data = estimatesContent?.hardwareAddons;
+      const addOnIds = data?.map((obj) => obj?._id);
+      const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
+        return {
+          type: row.item._id,
+          count:row.count
+        }
+      });
+      const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row)=>{
+        return {
+          type: row.item._id,
+          count:row.count
+        }
+      });
+      const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row)=>{
+        return {
+          type: row.item._id,
+          count:row.count
+        }
+      });
+      const glassAddonsArray = estimatesContent?.glassAddons?.map((item)=>item?._id);
       const estimate = {
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
         handles: {
@@ -90,29 +109,17 @@ export default function ClientDetailsModel({
           type: estimatesContent?.hinges?.item?._id,
           count: estimatesContent?.hinges?.count,
         },
-        mounting: {
-          clamps: {
-            wallClamp: {
-              type: estimatesContent?.mounting?.clamps?.wallClamp?.item?._id,
-              count: estimatesContent?.mounting?.clamps?.wallClamp?.count,
-            },
-            sleeveOver: {
-              type: estimatesContent?.mounting?.clamps?.sleeveOver?.item?._id,
-              count: estimatesContent?.mounting?.clamps?.sleeveOver?.count,
-            },
-            glassToGlass: {
-              type: estimatesContent?.mounting?.clamps?.glassToGlass?.item?._id,
-              count: estimatesContent?.mounting?.clamps?.glassToGlass?.count,
-            },
-          },
-          channel: estimatesContent?.mounting?.channel?.item?._id,
-          activeType: estimatesContent?.mounting?.activeType,
+        mountingClamps: {
+            wallClamp: [...wallClampArray],
+            sleeveOver: [...sleeveOverArray],
+            glassToGlass: [...glassToGlassArray],
         },
+        mountingChannel: estimatesContent?.mountingChannel?.item?._id,
         glassType: {
           type: estimatesContent?.glassType?.item?._id,
           thickness: estimatesContent?.glassType?.thickness,
         },
-        glassTreatment: estimatesContent?.glassTreatment?._id,
+        glassAddons: [...glassAddonsArray],
         slidingDoorSystem: {
           type: estimatesContent?.slidingDoorSystem?.item?._id,
           count: estimatesContent?.slidingDoorSystem?.count,
@@ -131,7 +138,7 @@ export default function ClientDetailsModel({
         people: estimatesContent?.people,
         hours: estimatesContent?.hours,
         cost: Number(estimatesTotal),
-        addOns: [...addOnIds],
+        hardwareAddons: [...addOnIds],
         sleeveOverCount: estimatesContent?.sleeveOverCount,
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,

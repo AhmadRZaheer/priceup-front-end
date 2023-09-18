@@ -92,7 +92,7 @@ const ChannelTypeDesktop = ({
                     width: "200px",
                     borderRadius: "12px",
                     border:
-                      item.toLowerCase() === selectedContent?.mounting?.activeType
+                      item.toLowerCase() === selectedContent?.mountingState
                         ? "2px solid #8477da"
                         : "",
                     boxShadow:
@@ -125,42 +125,42 @@ const ChannelTypeDesktop = ({
               alignContent: "space-between",
             }}
           >
-            {selectedContent.mounting.activeType === "clamps" && (
+            {selectedContent.mountingState === "clamps" && (
               <>
                 <MenuList
                   menuOptions={estimatesData?.wallClamp}
                   title={"Wall Clamps"}
                   type={"wallClamp"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.wallClamp.count}
-                  currentItem={selectedContent?.mounting?.clamps?.wallClamp?.item}
+                  // count={selectedContent.mounting.clamps.wallClamp.count}
+                  // currentItem={selectedContent?.mounting?.clamps?.wallClamp?.item}
                 />
                 <MenuList
                   menuOptions={estimatesData?.sleeveOver}
                   title={"Sleeve Over"}
                   type={"sleeveOver"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.sleeveOver.count}
-                  currentItem={selectedContent?.mounting?.clamps?.sleeveOver?.item}
+                  // count={selectedContent.mounting.clamps.sleeveOver.count}
+                  // currentItem={selectedContent?.mounting?.clamps?.sleeveOver?.item}
                 />
                 <MenuList
                   menuOptions={estimatesData?.glassToGlass}
                   title={"Glass to Glass"}
                   type={"glassToGlass"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.glassToGlass.count}
-                  currentItem={selectedContent?.mounting?.clamps?.glassToGlass?.item}
+                  // count={selectedContent.mounting.clamps.glassToGlass.count}
+                  // currentItem={selectedContent?.mounting?.clamps?.glassToGlass?.item}
                 />
               </>
             )}
 
-            {selectedContent.mounting.activeType === "channel" && (
+            {selectedContent.mountingState === "channel" && (
               <MenuList
                 menuOptions={estimatesData?.mountingChannel}
                 title={"Channel"}
                 type={"channel"}
                 showSnackbar={showSnackbar}
-                currentItem={selectedContent?.mounting?.channel?.item}
+                currentItem={selectedContent?.mountingChannel?.item}
               />
             )}
           </Box>

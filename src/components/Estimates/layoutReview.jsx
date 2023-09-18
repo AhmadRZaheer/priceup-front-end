@@ -34,7 +34,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const total = calculateTotal(selectedContent, sqftArea, estimatesData);
+    const total = calculateTotal(selectedContent, sqftArea, estimatesData, quoteState);
     dispatch(setTotal(total));
   }, [selectedContent]);
   const [snackbar, setSnackbar] = useState({
