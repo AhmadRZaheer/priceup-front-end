@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   selectedItem,
+  setListData,
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
@@ -39,7 +40,8 @@ export default function Layout() {
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    dispatch(initializeStateForCreateQuote({ layoutData: layout, listData: estimateListData }));
+    dispatch(setListData(estimateListData));
+    dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
   };
   return (

@@ -8,6 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import {
   initializeStateForEditQuote,
+  setListData,
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
@@ -35,10 +36,10 @@ export default function ExistingTable() {
   }, [deletedSuccesfully])
 
   const handleIconButtonClick = (item) => {
+    dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({
         estimateData: item,
-        listData: estimateListData,
         quotesId: item._id,
       })
     );

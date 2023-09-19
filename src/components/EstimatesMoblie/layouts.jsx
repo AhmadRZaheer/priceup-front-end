@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   selectedItem,
+  setListData,
   setNavigation,
 } from "../../redux/estimateCalculations";
 import QuotesHeader from "./quotesHeader";
@@ -36,7 +37,8 @@ const Layout = () => {
   const selectedData = useSelector(selectedItem);
 
   const handleBoxClick = (layout) => {
-    dispatch(initializeStateForCreateQuote({ layoutData: layout, listData: estimateListData }));
+    dispatch(setListData(estimateListData));
+    dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
   };
   return (

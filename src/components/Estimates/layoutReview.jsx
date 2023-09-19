@@ -338,7 +338,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 >
                   <Box sx={{ width: "100%" }}>
                     <MenuList
-                      menuOptions={estimatesData?.hardwareAddOns}
+                      menuOptions={estimatesData?.hardwareAddons}
                       title={"Hardware Addons"}
                       type={"hardwareAddons"}
                       showSnackbar={showSnackbar}
