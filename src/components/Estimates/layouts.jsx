@@ -11,13 +11,19 @@ import {
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
+import { useState } from "react";
 
 export default function Layout() {
-
   const setStorePage = () => {
-    dispatch(setNavigationDesktop("Measurments"))
-
+    if (selectCustom) {
+      dispatch(setNavigationDesktop("custom"));
+    } else dispatch(setNavigationDesktop("Measurments"));
   };
+  const [selectCustom, setselectCustom] = useState(false);
+  const handleselectcustom = () => {
+    setselectCustom(true);
+  };
+
   const boxStyles = {
     minHeight: "182px",
     minWidth: "180px",
@@ -36,7 +42,8 @@ export default function Layout() {
     cursor: "pointer",
   };
   const { data: layouts, isFetching: loading } = useFetchDataDefault();
-  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
+  const { data: estimateListData, isFetching: estimateDataFetching } =
+    useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
@@ -159,7 +166,14 @@ export default function Layout() {
                   </Box>
                 ))}
 
-                <Box sx={boxStyles}>
+                <Box
+                  onClick={handleselectcustom}
+                  sx={{
+                    ...boxStyles,
+                    backgroundColor: selectCustom ? "#8477DA" : "#D9D9D9",
+                    color: selectCustom ? "white" : "black",
+                  }}
+                >
                   <Typography sx={{ font: "18px" }}>Custom</Typography>
                 </Box>
               </Grid>
@@ -182,7 +196,7 @@ export default function Layout() {
                 </Button>
               </NavLink>
               <Button
-                disabled={selectedData?.length < 1}
+                disabled={selectedData?.length < 1 && selectCustom === false }
                 sx={{
                   width: 180,
                   backgroundColor: "#8477DA",

@@ -31,7 +31,7 @@ const QuotesHeader = ({navigateTo}) => {
             />
         </Box>
         <Typography textAlign={"center"} variant="h4">
-            {quoteState === "create" ? "Create New Quote" : "Edit Quote"}
+            {quoteState === "create" ? "Create New Estimate" : "Edit Estimate"}
         </Typography>
         </Box>
         <Typography
@@ -39,7 +39,7 @@ const QuotesHeader = ({navigateTo}) => {
             textAlign={"center"}
             variant="h4"
         >
-            {quoteState === "create" ? "Create New Quote" : "Edit Quote"}
+            {quoteState === "create" ? "Create New Estimate" : "Edit Estimate"}
         </Typography></Box>)
 }
 export default QuotesHeader;

@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -32,7 +32,8 @@ export const boxStyles = {
 };
 const Layout = () => {
   const { data: layouts, isFetching: layoutFetching } = useFetchDataDefault();
-  const { data: estimateListData, isFetching: estimateDataFetching } = useFetchDataEstimate();
+  const { data: estimateListData, isFetching: estimateDataFetching } =
+    useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
 
@@ -41,9 +42,20 @@ const Layout = () => {
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
   };
+
+  const setStorePage = () => {
+    if (selectCustom) {
+      dispatch(setNavigation("custom"));
+    } else dispatch(setNavigation("measurments"));
+  };
+  const [selectCustom, setselectCustom] = useState(false);
+  const handleselectcustom = () => {
+    setselectCustom(true);
+  };
+
   return (
     <>
-     <Box
+      <Box
         sx={{
           width: "100%",
           display: "flex",
@@ -67,7 +79,7 @@ const Layout = () => {
             gap: { md: 4, xs: 0 },
           }}
         >
-        <QuotesHeader navigateTo={"existing"}/>
+          <QuotesHeader navigateTo={"existing"} />
           <Box
             sx={{
               width: { md: "94%", sm: "98%", xs: "91.3%" },
@@ -105,43 +117,63 @@ const Layout = () => {
               </Typography>
             </Box>
             {layoutFetching || estimateDataFetching ? (
-              <Box sx={{width: 40, m: "auto" , display: "flex", justifyContent: "center", alignItems: "center", height: 700}}>
-              <CircularProgress />
+              <Box
+                sx={{
+                  width: 40,
+                  m: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  height: 700,
+                }}
+              >
+                <CircularProgress />
               </Box>
             ) : (
-            <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
-              
-              {layouts.map((layout) => (
+              <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
+                {layouts.map((layout) => (
+                  <Box
+                    key={layout._id}
+                    sx={{
+                      ...boxStyles,
+                      backgroundColor:
+                        selectedData?._id !== layout._id
+                          ? "rgba(36, 28, 52,0.5)"
+                          : "#8477DA",
+                      color:
+                        selectedData?._id !== layout._id ? "white" : "black",
+                    }}
+                    onClick={() => handleBoxClick(layout)}
+                  >
+                    <img
+                      style={{
+                        position: "relative",
+                        zIndex: 1,
+                        width: "70px",
+                        height: "120px",
+                      }}
+                      src={`${backendURL}/${layout?.image}`}
+                      alt="Selected"
+                    />
+                    <Typography sx={{ font: "18px" }}>
+                      {layout?.name}
+                    </Typography>
+                  </Box>
+                ))}
+
                 <Box
-                  key={layout._id}
+                  onClick={handleselectcustom}
                   sx={{
                     ...boxStyles,
-                    backgroundColor:
-                      selectedData?._id !== layout._id
-                        ? "rgba(36, 28, 52,0.5)"
-                        : "#8477DA",
-                    color: selectedData?._id !== layout._id ? "white" : "black",
+                    backgroundColor: selectCustom
+                      ? "#8477DA"
+                      : "rgba(36, 28, 52,0.5)",
+                    color: selectCustom ? "black" : "white",
                   }}
-                  onClick={() => handleBoxClick(layout)}
                 >
-                  <img
-                    style={{
-                      position: "relative",
-                      zIndex: 1,
-                      width: "70px",
-                      height: "120px",
-                    }}
-                    src={`${backendURL}/${layout?.image}`}
-                    alt="Selected"
-                  />
-                  <Typography sx={{ font: "18px" }}>{layout?.name}</Typography>
+                  <Typography sx={{ font: "18px" }}>Custom</Typography>
                 </Box>
-              ))}
-              
-              <Box sx={boxStyles}>
-                <Typography sx={{ font: "18px" }}>Custom</Typography>
-              </Box>
-            </Grid>
+              </Grid>
             )}
             <Box
               sx={{
@@ -155,10 +187,8 @@ const Layout = () => {
               }}
             >
               <Button
-                disabled={selectedData?.length < 1}
-                onClick={() => {
-                  dispatch(setNavigation("measurements"));
-                }}
+                disabled={selectedData?.length < 1 && selectCustom === false}
+                onClick={setStorePage}
                 color="primary"
                 sx={{
                   textTransform: "capitalize",
