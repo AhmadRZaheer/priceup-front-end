@@ -8,6 +8,7 @@ import Snackbars from "../Modal/snackBar";
 import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import ExistingQuotes from "./existingQuotes";
+import CustomLayout from "../CustomLayout/customLayout";
 
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
@@ -51,6 +52,9 @@ const Index = () => {
         )}
         {Navigation === "review" && (        
           <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+        )}
+        {Navigation === "custom" && (        
+          <CustomLayout />
         )}
       </Box>
 

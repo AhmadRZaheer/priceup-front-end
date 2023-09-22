@@ -9,6 +9,7 @@ import Layout from "./layouts";
 import { useSelector } from "react-redux";
 import Snackbars from "../Modal/snackBar";
 import { Box } from "@mui/material";
+import CustomLayout from "../CustomLayout/customLayout";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const handleClose = () => setClientDetailOpen(false);
@@ -36,24 +37,25 @@ const IndexMobile = () => {
 
   return (
     <>
-    <Box sx={{backgroundColor: "black"}}>
-      {Navigation == "existing" && <ExitingQuotes />}
-      {Navigation == "layout" && <Layout />}
-      {Navigation == "measurements" && <LayoutMeasurements />}
-      {Navigation == "review" && <LayoutReview />}
-      {Navigation == "summary" && <Summary handleOpen={handleOpen} />}
+      <Box sx={{ backgroundColor: "black" }}>
+        {Navigation == "existing" && <ExitingQuotes />}
+        {Navigation == "layout" && <Layout />}
+        {Navigation == "measurements" && <LayoutMeasurements />}
+        {Navigation == "review" && <LayoutReview />}
+        {Navigation == "summary" && <Summary handleOpen={handleOpen} />}
+        {Navigation === "custom" && <CustomLayout />}
 
-      <Model
-        open={clientDetailOpen}
-        handleCancel={handleClose}
-        showSnackbar={showSnackbar}
-      />
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
-      />
+        <Model
+          open={clientDetailOpen}
+          handleCancel={handleClose}
+          showSnackbar={showSnackbar}
+        />
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
+        />
       </Box>
     </>
   );
