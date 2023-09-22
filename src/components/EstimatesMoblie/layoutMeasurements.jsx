@@ -74,7 +74,7 @@ const LayoutMeasurements = () => {
           height: "40vh",
         }}
       >
-        <QuotesHeader navigateTo={"layout"} />
+        <QuotesHeader navigateTo={"layouts"} />
         <form onSubmit={formik.handleSubmit}>
           <Box
             sx={{
@@ -242,7 +242,7 @@ const LayoutMeasurements = () => {
               <QuotesFooter
                 navigateNext={"review"}
                 type={"submit"}
-                navigateBack={"layout"}
+                navigateBack={"layouts"}
                 disabled={Object.keys(formik.values).some(
                   (key) => !formik.values[key]
                 )}

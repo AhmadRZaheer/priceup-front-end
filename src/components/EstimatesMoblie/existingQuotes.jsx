@@ -36,7 +36,7 @@ export default function ExitingQuotes() {
   };
   const handleCreateQuote = () => {
     dispatch(setQuoteState("create"));
-    dispatch(setNavigation("layout"));
+    dispatch(setNavigation("layouts"));
   };
   const useStyles = makeStyles({
     overflowText: {
@@ -84,7 +84,7 @@ export default function ExitingQuotes() {
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-                Exstimates
+                Estimates
               </Typography>
             </Box>
 
@@ -186,7 +186,7 @@ export default function ExitingQuotes() {
                 "&:hover": { background: "#8477DA", color: "white" },
               }}
             >
-              Create New Exstimates
+              Create New Estimate
             </Button>
           </Box>
         </Box>

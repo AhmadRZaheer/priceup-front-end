@@ -39,7 +39,7 @@ const IndexMobile = () => {
     <>
       <Box sx={{ backgroundColor: "black" }}>
         {Navigation == "existing" && <ExitingQuotes />}
-        {Navigation == "layout" && <Layout />}
+        {Navigation == "layouts" && <Layout />}
         {Navigation == "measurements" && <LayoutMeasurements />}
         {Navigation == "review" && <LayoutReview />}
         {Navigation == "summary" && <Summary handleOpen={handleOpen} />}

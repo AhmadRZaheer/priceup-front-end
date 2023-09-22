@@ -105,7 +105,7 @@ function MobileBar() {
                     style={{ paddingRight: 10 }}
                     src={EstimsteIcon}
                     alt="image of customer"
-                  /> Exstimates
+                  /> Estimates
                 </Button>
               </Box>
             </Box>

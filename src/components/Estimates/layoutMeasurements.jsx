@@ -264,7 +264,7 @@ const LayoutMeasurements = () => {
                   <Button
                     fullWidth
                     onClick={() => {
-                      setHandleEstimatesPages("Layout");
+                      setHandleEstimatesPages("layouts");
                     }}
                     sx={{
                       boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",

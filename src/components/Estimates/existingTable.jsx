@@ -47,7 +47,7 @@ export default function ExistingTable() {
   };
   const handleCreateQuote = () => {
     dispatch(setQuoteState("create"));
-    dispatch(setNavigationDesktop("Layout"));
+    dispatch(setNavigationDesktop("layouts"));
   };
   return (
     <>

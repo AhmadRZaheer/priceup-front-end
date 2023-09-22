@@ -46,7 +46,7 @@ const Index = () => {
           overflowY: "scroll",
         }}
       >{Navigation === "existing" && <ExistingQuotes />}
-        {Navigation === "Layout" && <Layout  />}
+        {Navigation === "layouts" && <Layout  />}
         {Navigation === "Measurments" && (
           <LayoutMeasurements  />
         )}

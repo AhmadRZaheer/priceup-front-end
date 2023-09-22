@@ -9,6 +9,7 @@ import {
   selectedItem,
   setListData,
   setNavigation,
+  setQuoteState,
 } from "../../redux/estimateCalculations";
 import QuotesHeader from "./quotesHeader";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
@@ -36,20 +37,28 @@ const Layout = () => {
     useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
+  const [selectCustom, setselectCustom] = useState(false);
 
   const handleBoxClick = (layout) => {
+    console.log('box click');
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
+    if(selectCustom){
+      console.log('custom remove')
+      setselectCustom(false);
+      dispatch(setQuoteState("create"));
+    }
   };
 
   const setStorePage = () => {
     if (selectCustom) {
       dispatch(setNavigation("custom"));
-    } else dispatch(setNavigation("measurments"));
+    } else dispatch(setNavigation("measurements"));
   };
-  const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
+    dispatch(addSelectedItem(null));
+    dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
 

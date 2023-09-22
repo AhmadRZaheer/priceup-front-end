@@ -21,7 +21,7 @@ const estimateCalcSlice = createSlice({
     quoteId: null,
     quoteState: "create",
     handlePageNavigation: "existing",
-    handlePageDesktopNavigation: "Layout",
+    handlePageDesktopNavigation: "layouts",
     perimeter: 0,
     sqftArea: 0,
     measurements: [],

@@ -40,7 +40,7 @@ const ChannelType = ({
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
-      dispatch(setContent({ type: type, activeType: item }));
+      dispatch(setContent({ type: type, item: item }));
     } else {
       dispatch(setActiveMounting(item.toLowerCase()));
     }
@@ -111,7 +111,7 @@ const ChannelType = ({
                     width: "200px",
                     borderRadius: "12px",
                     border:
-                      item.toLowerCase() === selectedContent?.mounting?.activeType
+                      item.toLowerCase() === selectedContent?.mountingState
                         ? "2px solid #8477da"
                         : "1px solid #EAECF0",
                     boxShadow:
@@ -144,33 +144,30 @@ const ChannelType = ({
               alignContent: "space-between",
             }}
           >
-            {selectedContent.mounting.activeType === "clamps" && (
+            {selectedContent.mountingState === "clamps" && (
               <>
                 <MenuList
                   menuOptions={estimatesData?.wallClamp}
                   title={"Wall Clamps"}
                   type={"wallClamp"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.wallClamp.count}
                 />
                 <MenuList
                   menuOptions={estimatesData?.sleeveOver}
                   title={"Sleeve Over"}
                   type={"sleeveOver"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.sleeveOver.count}
                 />
                 <MenuList
                   menuOptions={estimatesData?.glassToGlass}
                   title={"Glass to Glass"}
                   type={"glassToGlass"}
                   showSnackbar={showSnackbar}
-                  count={selectedContent.mounting.clamps.glassToGlass.count}
                 />
               </>
             )}
 
-            {selectedContent.mounting.activeType === "channel" && (
+            {selectedContent.mountingState === "channel" && (
               <MenuItem key={activeChannel?.id} onClick={() => handleChannelSelect(activeChannel)}>
               <Box
                 sx={{

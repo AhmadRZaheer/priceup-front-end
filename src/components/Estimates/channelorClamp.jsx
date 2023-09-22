@@ -38,7 +38,7 @@ const ChannelTypeDesktop = ({
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
-      dispatch(setContent({ type: type, activeType: item }));
+      dispatch(setContent({ type: type, item: item }));
     } else {
       dispatch(setActiveMounting(item.toLowerCase()));
     }

@@ -9,6 +9,7 @@ import {
   selectedItem,
   setListData,
   setNavigationDesktop,
+  setQuoteState,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import { useState } from "react";
@@ -21,6 +22,8 @@ export default function Layout() {
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
+    dispatch(addSelectedItem(null));
+    dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
 
@@ -50,6 +53,8 @@ export default function Layout() {
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
+    dispatch(setQuoteState("create"));
+    setselectCustom(false);
   };
   return (
     <>

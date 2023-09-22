@@ -3,20 +3,44 @@ import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 import { KeyboardArrowLeft } from "@mui/icons-material";
-import { setNavigation } from "../../redux/estimateCalculations";
+import { setNavigation, setNavigationDesktop } from "../../redux/estimateCalculations";
 import { useDispatch } from "react-redux";
-
+const customInitalValues = {
+  aWidth: '',
+  aHeight: '',
+  bWidth: '',
+  bHeight: '',
+  cWidth: '',
+  cHeight: '',
+  dWidth: '',
+  dHeight: '',
+  eWidth: '',
+  eHeight: '',
+  fWidth: '',
+  fHeight: '',
+  gWidth: '',
+  gHeight: '',
+  hWidth: '',
+  hHeight: '',
+}
 const CustomLayout = () => {
   const formik = useFormik({
-    initialValues: {},
+    initialValues: { ...customInitalValues },
     onSubmit: async (values, resetForm) => {
-        console.log(values)
+      console.log(values)
+      // dispatch(setNavigation("review"));
+      // dispatch(setNavigationDesktop("review"));
     },
   });
   const dispatch = useDispatch()
   const handleback = () => {
-    dispatch(setNavigation("layout"));
-
+    dispatch(setNavigation("layouts"));
+    dispatch(setNavigationDesktop("layouts"));
+  }
+  const handleReset = () => {
+    formik.resetForm({
+      values: { ...customInitalValues },
+    });
   }
   return (
     <>
@@ -53,7 +77,9 @@ const CustomLayout = () => {
             textAlign={"center"}
             sx={{ fontSize: { md: 42, xs: 30 } }}
           >
-            <KeyboardArrowLeft sx={{ fontSize: 30, mb: -0.6 }} />
+            <KeyboardArrowLeft onClick={() => {
+              dispatch(setNavigation('layouts'));
+            }} sx={{ fontSize: 30, mb: -0.6 }} />
             Create New Estimate
           </Typography>
         </Box>
@@ -171,7 +197,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="a-width"
+                    name="aWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -179,7 +205,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.aWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -187,7 +213,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="a-height"
+                    name="aHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -195,7 +221,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.aHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -213,7 +239,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="b-width"
+                    name="bWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -221,7 +247,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.bWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -229,7 +255,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="b-height"
+                    name="bHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -237,7 +263,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.bHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -255,7 +281,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="c-width"
+                    name="cWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -263,7 +289,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.cWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -271,7 +297,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="c-height"
+                    name="cHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -279,7 +305,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.cHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -297,7 +323,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="d-width"
+                    name="dWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -305,7 +331,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.dWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -313,7 +339,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="d-height"
+                    name="dHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -321,7 +347,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.dHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -339,7 +365,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="e-width"
+                    name="eWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -347,7 +373,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.eWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -355,7 +381,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="e-height"
+                    name="eHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -363,7 +389,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.eHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -381,7 +407,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="f-width"
+                    name="fWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -389,7 +415,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.fWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -397,7 +423,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="f-height"
+                    name="fHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -405,7 +431,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.fHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -423,7 +449,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="g-width"
+                    name="gWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -431,7 +457,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.gWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -439,7 +465,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="g-height"
+                    name="gHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -447,7 +473,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.gHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -465,7 +491,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="h-width"
+                    name="hWidth"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -473,7 +499,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.hWidth}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -481,7 +507,7 @@ const CustomLayout = () => {
                     type="number"
                     size="small"
                     variant="outlined"
-                    name="h-height"
+                    name="hHeight"
                     placeholder="0"
                     style={{
                       background: "white",
@@ -489,7 +515,7 @@ const CustomLayout = () => {
                       border: "1px solid #D0D5DD",
                       width: { md: "28%", xs: "50%" },
                     }}
-                    value={formik.values[String.fromCharCode()]}
+                    value={formik.values.hHeight}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
@@ -535,7 +561,7 @@ const CustomLayout = () => {
               >
                 <Button
                   fullWidth
-                  //   onClick={}
+                  onClick={handleReset}
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                     color: "#344054",
