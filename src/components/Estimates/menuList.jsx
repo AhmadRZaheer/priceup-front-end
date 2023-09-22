@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import {
@@ -14,7 +14,6 @@ import {
   setContent,
   setCounters,
   setThickness,
-  updateAddOnCount,
 } from "../../redux/estimateCalculations";
 import OptionWithCounter from "./optionWithCounter";
 
@@ -32,34 +31,6 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(currentItem || null);
-//   const mountingClamps = useMemo(()=>{
-//     return selectedContent.mountingClamps;
-// },[selectedContent.mountingClamps]);
-
-  // const [sleeveOverCount, setSleeveOverCount] = useState(
-  //   selectedContent?.sleeveOverCount || 0
-  // );
-  // const [towelBarsCount, setTowelBarsCount] = useState(
-  //   selectedContent?.towelBarsCount || 0
-  // );
-  // const sleeveOverCount = useMemo(()=>{
-  //   return selectedContent?.sleeveOverCount || 0;
-  // },[selectedContent?.sleeveOverCount]); 
-  // const towelBarsCount = useMemo(()=>{
-  //   return selectedContent?.towelBarsCount || 0;
-  // },[selectedContent?.towelBarsCount]); 
-  // const handleSleeveOverCount = (count) => {
-  //   if (count >= 0) {
-  //     // setSleeveOverCount(count);
-  //     dispatch(updateAddOnCount({ type: "sleeveOverCount", count: count }));
-  //   }
-  // };
-  // const handleTowelBarsCount = (count) => {
-  //   if (count >= 0) {
-  //     // setTowelBarsCount(count);
-  //     dispatch(updateAddOnCount({ type: "towelBarsCount", count: count }));
-  //   }
-  // };
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     dispatch(setContent({ type: type, item: item }));
@@ -69,7 +40,7 @@ const MenuList = ({
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-      dispatch(setCounters({item:null, type: type, value: value }));
+      dispatch(setCounters({ item: null, type: type, value: value }));
     }
   };
   const handleThicknessSet = (thickness) => {
@@ -124,29 +95,27 @@ const MenuList = ({
           "glassType",
           "hardwareAddons",
         ].includes(type) && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              color: { md: "#000000  ", xs: "white" },
-              alignSelf: "flex-end",
-              py: 1.5,
-            }}
-          >
-            <AddCircleOutline
-              onClick={() => handleCountSet(countVal + 1)}
-              sx={{ color: "#98A2B3" }}
-            />
-
-            <Typography>{countVal}</Typography>
-
-            <RemoveCircleOutline
-              onClick={() => handleCountSet(countVal - 1)}
-              sx={{ color: "#98A2B3" }}
-            />
-          </Box>
-        )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                color: { md: "#000000  ", xs: "white" },
+                alignSelf: "flex-end",
+                py: 1.5,
+              }}
+            >
+              <AddCircleOutline
+                onClick={() => handleCountSet(countVal + 1)}
+                sx={{ color: "#98A2B3" }}
+              />
+              <Typography>{countVal}</Typography>
+              <RemoveCircleOutline
+                onClick={() => handleCountSet(countVal - 1)}
+                sx={{ color: "#98A2B3" }}
+              />
+            </Box>
+          )}
         {["glassType"].includes(type) && (
           <Box
             sx={{
@@ -218,7 +187,7 @@ const MenuList = ({
               <CircularProgress />
             </Box>
           ) : (
-            menuOptions?.map((item,index) => (
+            menuOptions?.map((item) => (
               <MenuItem key={item.id} onClick={() => handleItemSelect(item)}>
                 <Box
                   sx={{
@@ -227,17 +196,17 @@ const MenuList = ({
                     border: (
                       type === "hardwareAddons"
                         ? selectedContent?.hardwareAddons.some(
-                            (selectedItem) => selectedItem?._id === item?._id
-                          ) : type === "glassAddons" ?  selectedContent?.glassAddons.some(
-                            (selectedItem) => selectedItem?._id === item?._id
-                          ) : type === "wallClamp" ?  selectedContent?.mountingClamps?.wallClamp.some(
-                            (selectedItem) => selectedItem?.item?._id === item?._id
-                          ) : type === "sleeveOver" ?  selectedContent?.mountingClamps?.sleeveOver.some(
-                            (selectedItem) => selectedItem?.item?._id === item?._id
-                          ) : type === "glassToGlass" ?  selectedContent?.mountingClamps?.glassToGlass.some(
-                            (selectedItem) => selectedItem?.item?._id === item?._id
-                          )
-                        : item === selectedItem
+                          (row) => row?.item?._id === item?._id
+                        ) : type === "glassAddons" ? selectedContent?.glassAddons.some(
+                          (selectedItem) => selectedItem?._id === item?._id
+                        ) : type === "wallClamp" ? selectedContent?.mountingClamps?.wallClamp.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "sleeveOver" ? selectedContent?.mountingClamps?.sleeveOver.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "glassToGlass" ? selectedContent?.mountingClamps?.glassToGlass.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        )
+                          : item === selectedItem
                     )
                       ? "2px solid blue"
                       : "1px solid #EAECF0",
@@ -261,69 +230,13 @@ const MenuList = ({
                     <Typography>{item?.name}</Typography>
                   </Box>
                   <Box>
-                    {item?.slug === "sleeve-over" && (
-                      <OptionWithCounter item={item} type={'sleeveOverCount'} counter={selectedContent?.sleeveOverCount}/>
-                      // <Box
-                      //   sx={{
-                      //     display: "flex",
-                      //     alignItems: "center",
-                      //     justifyContent: "space-around",
-                      //     gap: 2,
-                      //     color: { md: "#000000  ", xs: "white" },
-                      //     alignSelf: "flex-end",
-                      //   }}
-                      // >
-                      //   <AddCircleOutline
-                      //     onClick={() =>
-                      //       handleSleeveOverCount(sleeveOverCount + 1)
-                      //     }
-                      //     sx={{ color: "#98A2B3" }}
-                      //   />
-                      //   <Typography>{sleeveOverCount}</Typography>
-                      //   <RemoveCircleOutline
-                      //     onClick={() =>
-                      //       handleSleeveOverCount(sleeveOverCount - 1)
-                      //     }
-                      //     sx={{ color: "#98A2B3" }}
-                      //   />
-                      // </Box>
+                    {type === "hardwareAddons" && (
+                      <OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.hardwareAddons?.find((row) => row?.item?.slug === item.slug)?.count} />
                     )}
-                    <Box>
-                      {item?.slug === "towel-bars" && (
-                      <OptionWithCounter item={item} type={'towelBarsCount'} counter={selectedContent?.towelBarsCount}/>
-                        // <Box
-                        //   sx={{
-                        //     display: "flex",
-                        //     alignItems: "center",
-                        //     gap: 2,
-                        //     color: { md: "#000000  ", xs: "white" },
-                        //     alignSelf: "flex-end",
-                        //   }}
-                        // >
-                        //   <AddCircleOutline
-                        //     onClick={() =>
-                        //       handleTowelBarsCount(towelBarsCount + 1)
-                        //     }
-                        //     sx={{ color: "#98A2B3" }}
-                        //   />
-                        //   <Typography>{towelBarsCount}</Typography>
-                        //   <RemoveCircleOutline
-                        //     onClick={() =>
-                        //       handleTowelBarsCount(towelBarsCount - 1)
-                        //     }
-                        //     sx={{ color: "#98A2B3" }}
-                        //   />
-                        // </Box>
-                      )}
-                    </Box>
-                    <Box>
-                      {item?.slug === "beveled-wall-clamp" && (
-                        <OptionWithCounter key={`${type}-beveled-wall-clamp`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === 'beveled-wall-clamp')?.count} />
-                      )}
-                      {item?.slug === "corner-clamp" && (
-                        <OptionWithCounter key={`${type}-corner-clamp`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === 'corner-clamp')?.count} />
-                      )}
-                    </Box>
+                    {["wallClamp",
+                      "sleeveOver",
+                      "glassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
+                    }
                   </Box>
                 </Box>
               </MenuItem>

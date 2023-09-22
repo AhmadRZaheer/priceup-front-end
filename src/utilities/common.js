@@ -65,7 +65,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0
     : 0;
-    console.log(selectedContent?.mountingClamps?.wallClamp,'fgfd');
+
   let mountingWallClamps = 0;
   selectedContent?.mountingClamps?.wallClamp?.map((row)=>{
       const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
@@ -154,32 +154,33 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   }
 
   //hardware Addons
-  const towelBar = estimatesData?.hardwareAddons?.find(
-    (item) => item.slug === "towel-bars"
-  );
-  const sleeveOver = estimatesData?.hardwareAddons?.find(
-    (item) => item.slug === "sleeve-over"
-  );
-  const towelBarFinish =
-    towelBar?.finishes?.find(
-      (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
-    )?.cost || 0;
-  const sleeveOverFinish =
-    sleeveOver?.finishes?.find(
-      (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
-    )?.cost || 0;
-  let otherAddons = 0;
-  selectedContent?.hardwareAddons?.map((item) => {
+  // const towelBar = estimatesData?.hardwareAddons?.find(
+  //   (item) => item.slug === "towel-bars"
+  // );
+  // const sleeveOver = estimatesData?.hardwareAddons?.find(
+  //   (item) => item.slug === "sleeve-over"
+  // );
+  // const towelBarFinish =
+  //   towelBar?.finishes?.find(
+  //     (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
+  //   )?.cost || 0;
+  // const sleeveOverFinish =
+  //   sleeveOver?.finishes?.find(
+  //     (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
+  //   )?.cost || 0;
+  let hardwareAddons = 0;
+  selectedContent?.hardwareAddons?.map((row) => {
     const price =
-      item?.finishes?.find(
+      row?.item?.finishes?.find(
         (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
       )?.cost || 0;
-    otherAddons = otherAddons + price * priceBySqft;
+      hardwareAddons = hardwareAddons + (price * row?.count);
+      //  * priceBySqft;  // hardware addons are not calculated by price by sqft
   });
-  const hardwareAddOnsTotal =
-    towelBarFinish * selectedContent?.towelBarsCount +
-    sleeveOverFinish * selectedContent?.sleeveOverCount +
-    otherAddons;
+  // const hardwareAddOnsTotal =
+  //   towelBarFinish * selectedContent?.towelBarsCount +
+  //   sleeveOverFinish * selectedContent?.sleeveOverCount +
+  //   otherAddons;
 
   //glass
   const glassPrice =
@@ -210,7 +211,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   const total =
     (hardwareTotals +
       fabricationPrice +
-      hardwareAddOnsTotal +
+      hardwareAddons +
       glassPrice +
       glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +

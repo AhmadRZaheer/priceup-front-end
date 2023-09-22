@@ -83,8 +83,8 @@ const estimateCalcSlice = createSlice({
       polish: 0,
       people: 0,
       hours: 0,
-      sleeveOverCount: 0,
-      towelBarsCount: 0,
+      // sleeveOverCount: 0,
+      // towelBarsCount: 0,
       hardwareAddons: [],
       mountingState: "channel",
     },
@@ -93,29 +93,8 @@ const estimateCalcSlice = createSlice({
   reducers: {
     setContent: (state, action) => {
       const { type, item } = action.payload;
-      console.log(type, item, "type");
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
         console.log("Nice Try.");
-        // const existing = state.content.mountingClamps[type];
-        //   const foundIndex = existing.findIndex((row) => row?.item?.slug === item?.slug);
-        //   if(foundIndex !== -1){
-        //     // existing[foundIndex].item = null;
-        //     existing.splice(foundIndex,1);
-        //   }
-        //   else{
-        //     existing.push({item:item,count:1});
-        //   }
-        // state.content = {
-        //   ...state.content,
-        //   mountingClamps: {
-        //     ...state.content.mountingClamps,
-        //       [type]: existing
-        //       // {
-        //       //   ...state.content.mountingClamps[type],
-        //       //   item: item,
-        //       // },
-        //   },
-        // };
       } else if (["channel"].includes(type)) {
         state.content = {
           ...state.content,
@@ -130,16 +109,7 @@ const estimateCalcSlice = createSlice({
           [type]: item,
         };
       } else if (["hardwareAddons"].includes(type)) {
-        const foundIndex = state.content.hardwareAddons?.findIndex(
-          (row) => row.slug === item.slug
-        );
-        if (foundIndex !== -1) {
-          state.content.hardwareAddons.splice(foundIndex, 1);
-        } else {
-          if (item.slug !== "sleeve-over" && item.slug !== "towel-bars") {
-            state.content.hardwareAddons.push(item);
-          }
-        }
+        console.log('Nice Try.');
       } else if (["glassAddons"].includes(type)) {
         if(item.slug === 'no-treatment'){
            state.content.glassAddons = [state.listData.glassAddons[0]]
@@ -191,9 +161,26 @@ const estimateCalcSlice = createSlice({
             [type]: existing,
           },
         };
-      } else if (["sleeveOverCount", "towelBarsCount"].includes(type)) {
-        state.content[type] = value;
-      } else {
+      } else if(["hardwareAddons"].includes(type)){
+        let existing = state.content.hardwareAddons;
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value });
+        }
+        state.content = {
+          ...state.content,
+          hardwareAddons: [...existing],
+        };
+      }
+      else {
         state.content = {
           ...state.content,
           [type]: {
@@ -232,10 +219,6 @@ const estimateCalcSlice = createSlice({
      const list = action.payload;
      state.listData = list;
     },
-    // updateAddOnCount: (state, action) => {
-    //   const { type, count } = action.payload;
-    //   state.content[type] = count;
-    // },
     addSelectedItem: (state, action) => {
       const itemData = action.payload;
       state.selectedItem = itemData;
@@ -417,9 +400,6 @@ const estimateCalcSlice = createSlice({
       );
 
       let glassAddons = [];
-      // glassTreatment = state.listData?.glassTreatment?.find(
-      //   (item) => item._id === estimateData?.glassTreatment
-      // );
       glassAddons = estimateData?.glassAddons?.map((item) => {
         const record = state.listData?.glassAddons.find(
           (addon) => addon._id === item
@@ -447,25 +427,14 @@ const estimateCalcSlice = createSlice({
         );
         return {item:record,count:row.count};
       });
-      // let wallClampItem = null;
-      // wallClampItem = state.listData?.wallClamp?.find(
-      //   (item) => item._id === estimateData?.mounting?.clamps?.wallClamp?.type
-      // );
-      // let sleeveOverItem = null;
-      // sleeveOverItem = state.listData?.sleeveOver?.find(
-      //   (item) => item._id === estimateData?.mounting?.clamps?.sleeveOver?.type
-      // );
-      // let glassToGlassItem = null;
-      // glassToGlassItem = state.listData?.glassToGlass?.find(
-      //   (item) =>
-      //     item._id === estimateData?.mounting?.clamps?.glassToGlass?.type
-      // );
       let channelItem = null;
       channelItem = state.listData?.mountingChannel?.find(
         (item) => item._id === estimateData?.mountingChannel
       );
-      let hardwareAddons = estimateData?.hardwareAddons?.map((id) =>
-        state.listData?.hardwareAddons?.find((item) => item?._id === id)
+      let hardwareAddons = [];
+      hardwareAddons = estimateData?.hardwareAddons?.map((row) =>
+       { const found = state.listData?.hardwareAddons?.find((item) => item?._id === row.type);
+          return {item:found,count:row.count}}
       );
 
       const measurements = estimateData.measurements.map(
@@ -525,7 +494,7 @@ const estimateCalcSlice = createSlice({
         polish: estimateData?.polish,
         sleeveOverCount: estimateData?.sleeveOverCount,
         towelBarsCount: estimateData?.towelBarsCount,
-        hardwareAddons: hardwareAddons,
+        hardwareAddons: [...hardwareAddons],
       };
       state.quoteState = quoteState;
       state.measurements = measurements;

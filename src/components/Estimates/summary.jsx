@@ -173,12 +173,10 @@ const Summary = () => {
                 </Typography>
                 )}
               </Box> : ''}
-              {(selectedContent?.hardwareAddons?.length > 0 || selectedContent?.towelBarsCount > 0 || selectedContent?.sleeveOverCount > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+              {(selectedContent?.hardwareAddons?.length > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                 <Typography sx={{ fontWeight: "bold" }}>Add ons: </Typography>
                 <Typography>
-                  {selectedContent?.hardwareAddons?.map((item) => ` ${item?.name}`)}{" "}
-                  Towel Bars ({selectedContent?.towelBarsCount}) Sleeve Over (
-                  {selectedContent?.sleeveOverCount})
+                  {selectedContent?.hardwareAddons?.map((row) => ` ${row?.item?.name} (${row?.count})`)}{" "}
                 </Typography>
               </Box>}
               <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>

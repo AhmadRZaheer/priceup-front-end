@@ -19,7 +19,7 @@ const ChannelTypeDesktop = ({
   showSnackbar,
   estimatesData,
 }) => {
-    const [anchorEl, setAnchorEl] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(false);
   const selectedContent = useSelector(getContent);
 
   const dispatch = useDispatch();
@@ -71,7 +71,7 @@ const ChannelTypeDesktop = ({
       {anchorEl ? (
         <Box
           sx={{
-            height: "180px",
+            height: "250px",
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
             display: "flex",
@@ -132,24 +132,18 @@ const ChannelTypeDesktop = ({
                   title={"Wall Clamps"}
                   type={"wallClamp"}
                   showSnackbar={showSnackbar}
-                  // count={selectedContent.mounting.clamps.wallClamp.count}
-                  // currentItem={selectedContent?.mounting?.clamps?.wallClamp?.item}
                 />
                 <MenuList
                   menuOptions={estimatesData?.sleeveOver}
                   title={"Sleeve Over"}
                   type={"sleeveOver"}
                   showSnackbar={showSnackbar}
-                  // count={selectedContent.mounting.clamps.sleeveOver.count}
-                  // currentItem={selectedContent?.mounting?.clamps?.sleeveOver?.item}
                 />
                 <MenuList
                   menuOptions={estimatesData?.glassToGlass}
                   title={"Glass to Glass"}
                   type={"glassToGlass"}
                   showSnackbar={showSnackbar}
-                  // count={selectedContent.mounting.clamps.glassToGlass.count}
-                  // currentItem={selectedContent?.mounting?.clamps?.glassToGlass?.item}
                 />
               </>
             )}

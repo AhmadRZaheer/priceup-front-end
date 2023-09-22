@@ -76,7 +76,7 @@ const ChannelType = ({
       {anchorEl ? (
         <Box
           sx={{
-            height: "180px",
+            height: "250px",
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
             display: "flex",

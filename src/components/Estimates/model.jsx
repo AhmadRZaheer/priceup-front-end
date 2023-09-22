@@ -78,8 +78,12 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      const data = estimatesContent?.hardwareAddons;
-      const addOnIds = data?.map((obj) => obj?._id);
+      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
+        return {
+          type: row.item._id,
+          count:row.count
+        }
+      });
       const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
         return {
           type: row.item._id,
@@ -138,7 +142,7 @@ export default function ClientDetailsModel({
         people: estimatesContent?.people,
         hours: estimatesContent?.hours,
         cost: Number(estimatesTotal),
-        hardwareAddons: [...addOnIds],
+        hardwareAddons: [...hardwareAddonsArray],
         sleeveOverCount: estimatesContent?.sleeveOverCount,
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
