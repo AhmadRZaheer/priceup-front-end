@@ -38,24 +38,9 @@ const estimateCalcSlice = createSlice({
         count: 0,
       },
       mountingClamps: {
-        wallClamp: [
-          // {
-          //   item: null,
-          //   count: 0,
-          // },
-        ],
-        sleeveOver: [
-          // {
-          //   item: null,
-          //   count: 0,
-          // },
-        ],
-        glassToGlass: [
-          // {
-          //   item: null,
-          //   count: 0,
-          // },
-        ],
+        wallClamp: [],
+        sleeveOver: [],
+        glassToGlass: [],
       },
       mountingChannel: {
         item: null,
@@ -83,8 +68,6 @@ const estimateCalcSlice = createSlice({
       polish: 0,
       people: 0,
       hours: 0,
-      // sleeveOverCount: 0,
-      // towelBarsCount: 0,
       hardwareAddons: [],
       mountingState: "channel",
     },
@@ -96,11 +79,12 @@ const estimateCalcSlice = createSlice({
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
         console.log("Nice Try.");
       } else if (["channel"].includes(type)) {
+         const found = item?._id === state.content.mountingChannel.item?._id;
         state.content = {
           ...state.content,
           mountingChannel: {
-            item: item,
-            count: 1,
+            item: found ? null : item,
+            count: found ? 0 : 1,
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
@@ -114,7 +98,7 @@ const estimateCalcSlice = createSlice({
         if(item.slug === 'no-treatment'){
            state.content.glassAddons = [state.listData.glassAddons[0]]
         }
-        else{
+        else {
           const foundIndex = state.content.glassAddons?.findIndex(
             (row) => row.slug === item.slug
           );
@@ -203,12 +187,30 @@ const estimateCalcSlice = createSlice({
     },
     setThickness: (state, action) => {
       const { payload } = action;
+      /** on change glass thickness shift active channel of layout */
+      let channel = state.content.mountingChannel.item;
+      if(payload === '1/2'){
+        if(channel){
+          channel = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-1-2');
+        }
+      }
+      else if(payload === '3/8'){
+        if(channel){
+          channel = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-3-8');
+        }
+      }
+      /** end */
+
       state.content = {
         ...state.content,
         glassType: {
           ...state.content.glassType,
           thickness: payload,
         },
+        mountingChannel:{
+          item:channel,
+          count: channel ? 1 : 0
+        }
       };
     },
     updateMeasurements: (state, action) => {
@@ -296,6 +298,14 @@ const estimateCalcSlice = createSlice({
       channelItem = state.listData?.mountingChannel?.find(
         (item) => item._id === layoutData?.settings?.mountingChannel
       );
+
+      // if(channelItem){
+      //   if(layoutData?.settings?.glassType?.thickness === '3/8'){
+      //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-3-8');
+      //   }else if(layoutData?.settings?.glassType?.thickness === '1/2'){
+      //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-1-2');
+      //   }
+      // }
 
       state.content = {
         ...state.content,
