@@ -118,7 +118,7 @@ export default function ClientDetailsModel({
             sleeveOver: [...sleeveOverArray],
             glassToGlass: [...glassToGlassArray],
         },
-        mountingChannel: estimatesContent?.mountingChannel?.item?._id,
+        mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
         glassType: {
           type: estimatesContent?.glassType?.item?._id,
           thickness: estimatesContent?.glassType?.thickness,
