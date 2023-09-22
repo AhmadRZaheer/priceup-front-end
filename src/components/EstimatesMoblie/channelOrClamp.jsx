@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,10 +9,12 @@ import { Box, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  getListData,
   setActiveMounting,
   setContent,
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
+import { backendURL } from "../../utilities/common";
 
 const ChannelType = ({
   menuOptions,
@@ -23,9 +25,18 @@ const ChannelType = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const selectedContent = useSelector(getContent);
-
-
-
+  const listData = useSelector(getListData);
+  /** Show channel item on base of active thickness fo glass */
+  const activeChannel = useMemo(() => {
+    let active = null;
+    if (selectedContent?.glassType?.thickness === '1/2') {
+      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-1-2');
+    } else if (selectedContent?.glassType?.thickness === '3/8') {
+      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-3-8');
+    }
+    return active;
+  }, [selectedContent?.glassType?.thickness]);
+  /** end */
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
@@ -34,7 +45,9 @@ const ChannelType = ({
       dispatch(setActiveMounting(item.toLowerCase()));
     }
   };
-
+  const handleChannelSelect = (item) => {
+    dispatch(setContent({ type: 'channel', item: item }));
+  }
   const opneClose = () => {
     if (
       selectedContent.hardwareFinishes !== null ||
@@ -158,12 +171,35 @@ const ChannelType = ({
             )}
 
             {selectedContent.mounting.activeType === "channel" && (
-              <MenuList
-                menuOptions={estimatesData?.mountingChannel}
-                title={"Channel"}
-                type={"channel"}
-                showSnackbar={showSnackbar}
-              />
+              <MenuItem key={activeChannel?.id} onClick={() => handleChannelSelect(activeChannel)}>
+              <Box
+                sx={{
+                  width: "200px",
+                  borderRadius: "12px",
+                  border: (activeChannel === selectedContent?.mountingChannel?.item)
+                    ? "2px solid blue"
+                    : "1px solid #EAECF0",
+                  boxShadow:
+                    "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                  p: 2,
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                  width: { md: "100%", xs: "95%" },
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <img
+                    width={"25px"}
+                    height={"25px"}
+                    src={`${backendURL}/${activeChannel?.image}`}
+                    alt="Selected"
+                  />
+                  <Typography>{activeChannel?.name}</Typography>
+                </Box>
+              </Box>
+            </MenuItem>
             )}
           </Box>
         </Box>

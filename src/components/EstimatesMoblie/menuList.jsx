@@ -14,7 +14,6 @@ import {
   setContent,
   setCounters,
   setThickness,
-  updateAddOnCount,
 } from "../../redux/estimateCalculations";
 import OptionWithCounter from "../Estimates/optionWithCounter";
 
@@ -41,7 +40,7 @@ const MenuList = ({
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-      dispatch(setCounters({ parentType: null, type: type, value: value }));
+      dispatch(setCounters({ item: null, type: type, value: value }));
     }
   };
   const handleThicknessSet = (thickness) => {

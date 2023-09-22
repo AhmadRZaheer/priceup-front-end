@@ -76,8 +76,12 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      const data = estimatesContent?.hardwareAddons;
-      const addOnIds = data?.map((obj) => obj?._id);
+      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
+        return {
+          type: row.item._id,
+          count:row.count
+        }
+      });
       const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
         return {
           type: row.item._id,
@@ -112,7 +116,7 @@ export default function ClientDetailsModel({
           sleeveOver: [...sleeveOverArray],
           glassToGlass: [...glassToGlassArray],
       },
-      mountingChannel: estimatesContent?.mountingChannel?.item?._id,
+      mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
         glassType: {
           type: estimatesContent?.glassType?.item?._id,
           thickness: estimatesContent?.glassType?.thickness,
@@ -136,7 +140,7 @@ export default function ClientDetailsModel({
         people: estimatesContent?.people,
         hours: estimatesContent?.hours,
         cost: Number(estimatesTotal),
-        addOns: [...addOnIds],
+        hardwareAddons: [...hardwareAddonsArray],
         sleeveOverCount: estimatesContent?.sleeveOverCount,
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
