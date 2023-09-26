@@ -203,7 +203,7 @@ export default function Layout() {
                 </Button>
               </NavLink>
               <Button
-                disabled={selectedData?.length < 1 && selectCustom === false }
+                disabled={selectedData || selectCustom ? false : true}
                 sx={{
                   width: 180,
                   backgroundColor: "#8477DA",

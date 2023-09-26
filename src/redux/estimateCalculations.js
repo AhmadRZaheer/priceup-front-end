@@ -25,7 +25,7 @@ const estimateCalcSlice = createSlice({
     perimeter: 0,
     sqftArea: 0,
     measurements: [],
-    selectedItem: [],
+    selectedItem: null,
     listData: null,
     content: {
       hardwareFinishes: null,

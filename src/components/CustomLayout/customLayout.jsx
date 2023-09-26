@@ -3,38 +3,44 @@ import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 import { KeyboardArrowLeft } from "@mui/icons-material";
-import { setLayoutArea, setLayoutPerimeter, setNavigation, setNavigationDesktop, updateMeasurements } from "../../redux/estimateCalculations";
+import {
+  setLayoutArea,
+  setLayoutPerimeter,
+  setNavigation,
+  setNavigationDesktop,
+  updateMeasurements,
+} from "../../redux/estimateCalculations";
 import { useDispatch } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 const customInitalValues = {
-  aWidth: '',
-  aHeight: '',
-  bWidth: '',
-  bHeight: '',
-  cWidth: '',
-  cHeight: '',
-  dWidth: '',
-  dHeight: '',
-  eWidth: '',
-  eHeight: '',
-  fWidth: '',
-  fHeight: '',
-  gWidth: '',
-  gHeight: '',
-  hWidth: '',
-  hHeight: '',
-}
+  aWidth: "",
+  aHeight: "",
+  bWidth: "",
+  bHeight: "",
+  cWidth: "",
+  cHeight: "",
+  dWidth: "",
+  dHeight: "",
+  eWidth: "",
+  eHeight: "",
+  fWidth: "",
+  fHeight: "",
+  gWidth: "",
+  gHeight: "",
+  hWidth: "",
+  hHeight: "",
+};
 const CustomLayout = () => {
   const dispatch = useDispatch();
   const handleNext = () => {
     dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
-  }
+  };
   const handleback = () => {
     dispatch(setNavigation("layouts"));
     dispatch(setNavigationDesktop("layouts"));
-  }
+  };
   const formik = useFormik({
     initialValues: { ...customInitalValues },
     onSubmit: async (values, resetForm) => {
@@ -45,14 +51,15 @@ const CustomLayout = () => {
           value,
         }));
 
-      const result = calculateAreaAndPerimeter(measurementsArray, layoutVariants.CUSTOM);
-      console.log(measurementsArray,'resul');
+      const result = calculateAreaAndPerimeter(
+        measurementsArray,
+        layoutVariants.CUSTOM
+      );
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
       handleNext();
       resetForm();
-
 
       // dispatch(setNavigation("review"));
       // dispatch(setNavigationDesktop("review"));
@@ -62,7 +69,7 @@ const CustomLayout = () => {
     formik.resetForm({
       values: { ...customInitalValues },
     });
-  }
+  };
   return (
     <>
       <Box
@@ -97,9 +104,12 @@ const CustomLayout = () => {
             textAlign={"center"}
             sx={{ fontSize: { md: 42, xs: 30 } }}
           >
-            <KeyboardArrowLeft onClick={() => {
-              dispatch(setNavigation('layouts'));
-            }} sx={{ fontSize: 30, mb: -0.6 }} />
+            <KeyboardArrowLeft
+              onClick={() => {
+                dispatch(setNavigation("layouts"));
+              }}
+              sx={{ fontSize: 30, mb: -0.6 }}
+            />
             Create New Estimate
           </Typography>
         </Box>
@@ -625,9 +635,7 @@ const CustomLayout = () => {
                   <Button
                     type="submit"
                     fullWidth
-                    // disabled={Object.keys(formik.values).some(
-                    //   (key) => !formik.values[key]
-                    // )}
+                    // disabled={}
                     sx={{
                       height: 40,
                       fontSize: 20,

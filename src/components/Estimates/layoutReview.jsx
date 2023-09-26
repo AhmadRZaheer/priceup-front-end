@@ -14,16 +14,19 @@ import {
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
-import {
-  calculateTotal,
-} from "../../utilities/common";
+import { calculateTotal } from "../../utilities/common";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
   const quoteState = useSelector(getQuoteState);
+  console.log(quoteState,'staet')
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
-        quoteState === "create" ? "Measurments" : "existing"
+        quoteState === "create"
+          ? "measurments"
+          : quoteState === "custom"
+          ? "custom"
+          : "existing"
       )
     );
   };
@@ -34,7 +37,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const total = calculateTotal(selectedContent, sqftArea, estimatesData, quoteState);
+    const total = calculateTotal(
+      selectedContent,
+      sqftArea,
+      estimatesData,
+      quoteState
+    );
     dispatch(setTotal(total));
   }, [selectedContent]);
   const [snackbar, setSnackbar] = useState({
@@ -870,7 +878,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               </Box>
             </Box>
             <Box sx={{ width: "46%" }}>
-              <Summary />
+            <Summary />
             </Box>
           </Box>
           <Box

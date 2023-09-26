@@ -61,7 +61,8 @@ const Layout = () => {
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
-
+console.log(selectedData, "selectedData")
+console.log(selectCustom, "selectCustom")
   return (
     <>
       <Box
@@ -196,7 +197,7 @@ const Layout = () => {
               }}
             >
               <Button
-                disabled={selectedData?.length < 1 && selectCustom === false}
+                disabled={selectedData || selectCustom ? false : true}
                 onClick={setStorePage}
                 color="primary"
                 sx={{

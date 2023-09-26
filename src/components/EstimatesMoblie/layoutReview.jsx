@@ -46,6 +46,7 @@ const LayoutReview = () => {
       open: false,
     }));
   };
+  console.log(quoteState, "quoteState")
   return (
     <>
       <Box
@@ -61,7 +62,15 @@ const LayoutReview = () => {
           gap: { md: 4, xs: 0 },
         }}
       >
-        <QuotesHeader navigateTo={quoteState === "create" ? "measurements" : "existing"} />
+        <QuotesHeader
+          navigateTo={
+            quoteState === "create"
+              ? "measurements"
+              : quoteState === "custom"
+              ? "custom"
+              : "existing"
+          }
+        />
         <Box
           sx={{
             width: { md: "94%", sm: "100%", xs: "100%" },
@@ -858,7 +867,17 @@ const LayoutReview = () => {
             </Box>
           </Box>
         </Box>
-        <QuotesFooter navigateNext={"summary"} navigateBack={quoteState === "create" ? "measurements" : "existing"} disabled={selectedContent?.hardwareFinishes === null} />
+        <QuotesFooter
+          navigateNext={"summary"}
+          navigateBack={
+            quoteState === "create"
+              ? "measurements"
+              : quoteState === "custom"
+              ? "custom"
+              : "existing"
+          }
+          disabled={selectedContent?.hardwareFinishes === null}
+        />
         <Snackbars
           open={snackbar.open}
           message={snackbar.message}
