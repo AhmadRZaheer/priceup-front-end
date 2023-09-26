@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
   initializeStateForCreateQuote,
+  initializeStateForCustomQuote,
   selectedItem,
   setListData,
   setNavigation,
@@ -44,11 +45,8 @@ const Layout = () => {
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
-    if(selectCustom){
-      console.log('custom remove')
-      setselectCustom(false);
-      dispatch(setQuoteState("create"));
-    }
+    dispatch(setQuoteState("create"));
+    setselectCustom(false);
   };
 
   const setStorePage = () => {
@@ -57,6 +55,8 @@ const Layout = () => {
     } else dispatch(setNavigation("measurements"));
   };
   const handleselectcustom = () => {
+    dispatch(setListData(estimateListData));
+    dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
     setselectCustom(true);

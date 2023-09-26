@@ -3,8 +3,10 @@ import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 import { KeyboardArrowLeft } from "@mui/icons-material";
-import { setNavigation, setNavigationDesktop } from "../../redux/estimateCalculations";
+import { setLayoutArea, setLayoutPerimeter, setNavigation, setNavigationDesktop, updateMeasurements } from "../../redux/estimateCalculations";
 import { useDispatch } from "react-redux";
+import { layoutVariants } from "../../utilities/constants";
+import { calculateAreaAndPerimeter } from "../../utilities/common";
 const customInitalValues = {
   aWidth: '',
   aHeight: '',
@@ -24,19 +26,38 @@ const customInitalValues = {
   hHeight: '',
 }
 const CustomLayout = () => {
-  const formik = useFormik({
-    initialValues: { ...customInitalValues },
-    onSubmit: async (values, resetForm) => {
-      console.log(values)
-      // dispatch(setNavigation("review"));
-      // dispatch(setNavigationDesktop("review"));
-    },
-  });
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const handleNext = () => {
+    dispatch(setNavigation("review"));
+    dispatch(setNavigationDesktop("review"));
+  }
   const handleback = () => {
     dispatch(setNavigation("layouts"));
     dispatch(setNavigationDesktop("layouts"));
   }
+  const formik = useFormik({
+    initialValues: { ...customInitalValues },
+    onSubmit: async (values, resetForm) => {
+      const measurementsArray = Object.entries(values)
+        .filter(([key, value]) => value !== "")
+        .map(([key, value]) => ({
+          key,
+          value,
+        }));
+
+      const result = calculateAreaAndPerimeter(measurementsArray, layoutVariants.CUSTOM);
+      console.log(measurementsArray,'resul');
+      dispatch(setLayoutArea(result.areaSqft));
+      dispatch(setLayoutPerimeter(result.perimeter));
+      dispatch(updateMeasurements(measurementsArray));
+      handleNext();
+      resetForm();
+
+
+      // dispatch(setNavigation("review"));
+      // dispatch(setNavigationDesktop("review"));
+    },
+  });
   const handleReset = () => {
     formik.resetForm({
       values: { ...customInitalValues },
@@ -69,7 +90,6 @@ const CustomLayout = () => {
             paddingY: 1,
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
-
             marginTop: 7.9,
           }}
         >

@@ -7,13 +7,14 @@ import {
 } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
+import CustomImage from "../../Assets/customlayoutimage.svg";
 
 const Summary = () => {
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
-
+  const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   return (
     <>
       <Box
@@ -65,7 +66,7 @@ const Summary = () => {
               <img
                 width={"300px"}
                 height={"310px"}
-                src={`${backendURL}/${selectedData?.image}`}
+                src={layoutImage}
                 alt="Selected"
               />
             </Box>

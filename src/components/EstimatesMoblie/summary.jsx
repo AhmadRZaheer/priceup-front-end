@@ -9,6 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
+import CustomImage from "../../Assets/customlayoutimage.svg";
 
 const Summary = ({ handleOpen }) => {
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const Summary = ({ handleOpen }) => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
+  const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
 
   return (
     <>
@@ -107,7 +109,7 @@ const Summary = ({ handleOpen }) => {
                 <img
                   width={"200px"}
                   height={"210px"}
-                  src={`${backendURL}/${selectedData?.image}`}
+                  src={layoutImage}
                   alt="Selected"
                 />
               </Box>

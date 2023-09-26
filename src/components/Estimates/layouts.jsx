@@ -6,6 +6,7 @@ import { useFetchDataDefault } from "../../utilities/ApiHooks/defaultLayouts";
 import {
   addSelectedItem,
   initializeStateForCreateQuote,
+  initializeStateForCustomQuote,
   selectedItem,
   setListData,
   setNavigationDesktop,
@@ -15,18 +16,6 @@ import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import { useState } from "react";
 
 export default function Layout() {
-  const setStorePage = () => {
-    if (selectCustom) {
-      dispatch(setNavigationDesktop("custom"));
-    } else dispatch(setNavigationDesktop("Measurments"));
-  };
-  const [selectCustom, setselectCustom] = useState(false);
-  const handleselectcustom = () => {
-    dispatch(addSelectedItem(null));
-    dispatch(setQuoteState("custom"));
-    setselectCustom(true);
-  };
-
   const boxStyles = {
     minHeight: "182px",
     minWidth: "180px",
@@ -55,6 +44,19 @@ export default function Layout() {
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
     setselectCustom(false);
+  };
+  const setStorePage = () => {
+    if (selectCustom) {
+      dispatch(setNavigationDesktop("custom"));
+    } else dispatch(setNavigationDesktop("measurments"));
+  };
+  const [selectCustom, setselectCustom] = useState(false);
+  const handleselectcustom = () => {
+    dispatch(setListData(estimateListData));
+    dispatch(initializeStateForCustomQuote());
+    dispatch(addSelectedItem(null));
+    dispatch(setQuoteState("custom"));
+    setselectCustom(true);
   };
   return (
     <>

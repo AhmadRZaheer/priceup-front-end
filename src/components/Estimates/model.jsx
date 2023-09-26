@@ -149,10 +149,10 @@ export default function ClientDetailsModel({
         perimeter: perimeter,
         sqftArea: sqftArea,
       };
-      if (updatecheck === "create") {
+      if (["create","custom"].includes(updatecheck)) {
         mutate({
           customerData: values,
-          estimateData: { ...estimate, layout_id: estimatesLayout?._id },
+          estimateData: { ...estimate, layout_id: estimatesLayout?._id || null },
         });
       } else {
         mutateEdit({

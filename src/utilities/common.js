@@ -207,7 +207,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-
+  console.log(fabricationPrice,'fabricat',glassPrice);
   const total =
     (hardwareTotals +
       fabricationPrice +
@@ -252,6 +252,7 @@ export const convertArrayKeysToObject = (array) => {
 }
 
 export const calculateAreaAndPerimeter = (measurementSides, variant) => {
+  
   const measurements = convertArrayKeysToObject(measurementSides);
 
   if(variant === layoutVariants.DOOR){
@@ -498,10 +499,44 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     };
   }
   else if (variant === layoutVariants.CUSTOM){
+    let totalSqft, totalPerimeter = 0;
+    // for panel A
+    const panelA = calculatePanel(measurements?.aWidth,measurements?.aHeight);
+     // for panel B
+    const panelB = calculatePanel(measurements?.bWidth,measurements?.bHeight);
+    // for panel C
+    const panelC = calculatePanel(measurements?.cWidth,measurements?.cHeight);
+    // for panel D
+    const panelD = calculatePanel(measurements?.dWidth,measurements?.dHeight);
+    // for panel E
+    const panelE = calculatePanel(measurements?.eWidth,measurements?.eHeight);
+    // for panel F
+    const panelF = calculatePanel(measurements?.fWidth,measurements?.fHeight);
+    // for panel G
+    const panelG = calculatePanel(measurements?.gWidth,measurements?.gHeight);
+    // for panel H
+    const panelH = calculatePanel(measurements?.hWidth,measurements?.hHeight);
 
+   totalSqft = panelA.sqft + panelB.sqft + panelC.sqft + panelD.sqft + panelE.sqft + panelF.sqft + panelG.sqft + panelH.sqft;
+   totalPerimeter = panelA.perimeter + panelB.perimeter + panelC.perimeter + panelD.perimeter + panelE.perimeter + panelF.perimeter + panelG.perimeter + panelH.perimeter;
+   console.log(panelA.sqft,panelB.sqft);
+   return {
+    areaSqft:Math.round((totalSqft + Number.EPSILON) * 100) / 100,
+    perimeter:totalPerimeter
+  };
   }
   else {
    return 0;
   }
    
 };
+
+const calculatePanel = (width,height) => {
+  let panelWidth, panelHeight, panelSqft, panelPerimeter = 0;
+  panelWidth = (width|| 0) * 2;
+  panelHeight = (height || 0) * 2;
+  panelSqft = ((width || 0)*(height || 0))/144;
+  panelSqft = Math.round((panelSqft + Number.EPSILON) * 100) / 100;  //round to two decimals point
+  panelPerimeter = panelWidth+panelHeight;
+  return {sqft:panelSqft,perimeter:panelPerimeter};
+}
