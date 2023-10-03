@@ -1,45 +1,50 @@
-.CustomerTable{
-    padding: 20px;
-    .cellWrapper{
-        display: flex;
-        align-items: center;
+.CustomerTable {
+  padding: 20px;
+  .cellWrapper {
+    display: flex;
+    align-items: center;
 
-        .customerImg{
-            margin-right: 10px;
-        }
-        .customerNameTable{
-            font-weight: 500;
-
-            .userNameTable{
-                font-size: 11px;
-                color: #667085 ;
-            }
-        }
+    .customerImg {
+      margin-right: 10px;
     }
+    .customerNameTable {
+      font-weight: 500;
 
-    .cellAction{
-        display: flex;
-        align-items: center;
-        gap: 15px;
-
-        .viewButton {
-            color: #667085;
-            cursor: pointer;
-        }
-        .deleteButton{
-            color: #667085;
-            cursor: pointer;
-        }
+      .userNameTable {
+        font-size: 11px;
+        color: #667085;
+      }
     }
+  }
 
+  .cellAction {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 
+    .viewButton {
+      color: #667085;
+      cursor: pointer;
+    }
+    .deleteButton {
+      color: #667085;
+      cursor: pointer;
+    }
+  }
 }
 
-.page-title{
-    padding: 20px; 
-    h2 {
-        font-size: 25px;
-        font-weight: 500;
-        color: #101828;
-    }
+.page-title {
+  padding: 20px;
+  h2 {
+    font-size: 25px;
+    font-weight: 500;
+    color: #101828;
+  }
+}
+.types-main-contianer {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  width: 96%;
+  margin: auto;
 }

@@ -19,6 +19,8 @@ import SuperAdminLogin from "../superLogin/superAdmin";
 import { parseJwt } from "./authVerify";
 import Admin from "../../pages/Admin/admin";
 import { useMemo } from "react";
+import SuperAdminTeam from "../SuperAdmin/superAdminTeam";
+import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -50,7 +52,7 @@ const AppRoutes = () => {
     } else if (isStaff()) {
       return "/staff";
     } else {
-      return "/login"; 
+      return "/login";
     }
   };
 
@@ -103,10 +105,11 @@ const AppRoutes = () => {
       ) : isSuperAdmin() ? (
         <Route path="/">
           <Route index element={<Admin />} />
+          <Route path="/team" element={<AdminTeam />} />
           <Route path="*" element={<Admin />} />
         </Route>
       ) : (
-        ''
+        ""
       )}
       <Route path="*" element={<Navigate to={getHomepageURL()} />} />
     </Routes>

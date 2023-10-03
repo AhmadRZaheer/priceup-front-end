@@ -54,7 +54,7 @@ export const AdminColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 330 },
+  { field: "email", headerName: "Email address", width: 200 },
   {
     field: "dateAdded",
     headerName: "Date added",
@@ -72,6 +72,7 @@ export const AdminColumns = [
       );
     },
   },
+
 ];
 
 export const CustomerColumns = [
