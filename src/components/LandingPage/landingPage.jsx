@@ -48,7 +48,7 @@ const LandingPageComponent = () => {
         {/* Section Header */}
         <Box
           sx={{
-            width: "90%",
+            width: "84%",
             m: "auto",
             backgroundImage: `url(${bg_Header})`,
             backgroundRepeat: "no-repeat",
