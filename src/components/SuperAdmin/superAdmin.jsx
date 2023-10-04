@@ -9,10 +9,9 @@ import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
-import image1 from "../../Assets/test.png";
-import image2 from "../../Assets/ok.png";
-import image3 from "../../Assets/cancel.png";
-import image4 from "../../Assets/calculator.svg";
+import image1 from "../../Assets/Active-location.png";
+import image2 from "../../Assets/Non-Active-location.png";
+import image3 from "../../Assets/Team-Members.svg";
 
 const SuperAdminTable = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -161,7 +160,7 @@ const SuperAdminTable = () => {
           >
             <img
               style={{ width: "42px", height: "100%" }}
-              src={image3}
+              src={image2}
               alt="image type"
             />
             <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
@@ -182,7 +181,7 @@ const SuperAdminTable = () => {
           >
             <img
               style={{ width: "42px", height: "100%" }}
-              src={image2}
+              src={image3}
               alt="image type"
             />
             <Typography sx={{ fontSize: 18 }}>Team Members</Typography>
