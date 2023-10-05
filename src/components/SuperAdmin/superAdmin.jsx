@@ -194,7 +194,7 @@ const SuperAdminTable = () => {
       <div className="CustomerTable">
         <DataGrid
           getRowId={(row) => row._id}
-          rows={AdminData}
+          rows={AdminData.map(data => ({...data, view: 'View Location'}))}
           columns={AdminColumns.concat(actionColumn)}
           initialState={{
             pagination: {
