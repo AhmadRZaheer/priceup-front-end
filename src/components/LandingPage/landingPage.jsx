@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, useMediaQuery } from "@mui/material";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import bg_Header from "../../Assets/bg-Header.png";
 import right_headerimage from "../../Assets/header-right-image.svg";
@@ -11,8 +11,10 @@ import facebool_logo from "../../Assets/Vector.svg";
 import twitter_logo from "../../Assets/formkit_twitter.svg";
 import linkedin_logo from "../../Assets/entypo-social_linkedin-with-circle.svg";
 import youtube_logo from "../../Assets/entypo-social_youtube-with-circle.svg";
+import { Link } from "react-router-dom";
 
 const LandingPageComponent = () => {
+  const mobile = useMediaQuery("(max-width: 900px)");
   return (
     <>
       <Box sx={{ bgcolor: "#100D24", width: "100%" }}>
@@ -29,55 +31,58 @@ const LandingPageComponent = () => {
           <Box>
             <img src={LogoNavBar} alt="logo nav bar" />
           </Box>
-          <Button
-            // size="medium"
-            sx={{
-              bgcolor: "#8477DA",
-              color: "white",
-              textTransform: "capitalize",
-              width: "190px",
-              height: "50px",
-              ":hover": {
+          <Link to="/login">
+            <Button
+              // size="medium"
+              sx={{
                 bgcolor: "#8477DA",
-              },
-            }}
-          >
-            Client Login
-          </Button>
+                color: "white",
+                textTransform: "capitalize",
+                width: { md: "190px", xs: "120px" },
+                height: { md: "50px", xs: "40px" },
+                ":hover": {
+                  bgcolor: "#8477DA",
+                },
+              }}
+            >
+              Client Login
+            </Button>
+          </Link>
         </Box>
         {/* Section Header */}
         <Box
           sx={{
-            width: "84%",
+            width: { md: "84%", xs: "90%" },
             m: "auto",
-            backgroundImage: `url(${bg_Header})`,
+            backgroundImage: { md: `url(${bg_Header})`, xs: "none" },
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            pl: 12,
-            pt: 16,
-            pb: 12,
+            pl: { md: 12, xs: 0 },
+            pt: { md: 16, xs: 0 },
+            pb: { md: 12, xs: 2 },
             mt: 3,
-            borderRadius: "77px",
+            borderRadius: { md: "77px", xs: "40px" },
             display: "flex",
+            flexDirection: { md: "row", xs: "column" },
             gap: 10,
             position: "relative",
           }}
         >
           {/* left side */}
-          <Box width={580}>
+          <Box sx={{ width: { lg: 580, md: 500 } }}>
             <Typography
               sx={{
-                fontSize: "84px",
+                fontSize: { lg: "84px", md: "70px", xs: "54px" },
                 fontWeight: 500,
                 color: "white",
-                lineHeight: "101px",
+                lineHeight: { md: "101px", xs: "70px" },
               }}
             >
               Supercharge your glass business
             </Typography>
             <Typography
               sx={{
-                fontSize: "18px",
+                fontSize: { lg: "18px", md: "16px", xs: "14px" },
                 fontWeight: "light",
                 color: "white",
                 pr: 4,
@@ -104,7 +109,15 @@ const LandingPageComponent = () => {
             </Button>
           </Box>
           {/* right side */}
-          <Box sx={{ position: "absolute", right: 200 }}>
+          <Box
+            sx={{
+              position: { md: "absolute", xs: "static" },
+              right: { lg: 200, md: 60 },
+              textAlign: { md: "end", xs: "center" },
+              width: "100%",
+              // ml: { md: 0, xs: -2.5 },
+            }}
+          >
             <img src={right_headerimage} alt="" />
           </Box>
         </Box>
@@ -116,15 +129,19 @@ const LandingPageComponent = () => {
             lineHeight: "58px",
             color: "white",
             textAlign: "center",
-            pt: 24,
+            pt: { md: 24, xs: 10 },
           }}
         >
           What will this do for you?
         </Typography>
         {/* bg of scetion 2 and 3 */}
-        <Box sx={{ backgroundImage: `url(${Rectangle_section})` }}>
+        <Box
+          sx={{
+            backgroundImage: { md: `url(${Rectangle_section})`, xs: "none" },
+          }}
+        >
           {/* servisis of section 2 */}
-          <Box sx={{ width: "90%", m: "auto", pb: 10, pt: 5 }}>
+          <Box sx={{ width: "90%", m: "auto", pb: 10, pt: { md: 5, xs: 8 } }}>
             <Grid container gap={3} justifyContent={"center"}>
               <Box
                 sx={{
@@ -246,17 +263,18 @@ const LandingPageComponent = () => {
                 color: "#D6D6D6",
               }}
             >
-              PriceUp enables your entire team to price our showers and <br />{" "}
-              custom glass jobs faster than any other method.
+              PriceUp enables your entire team to price our showers and
+              {mobile ? "" : <br />} custom glass jobs faster than any other
+              method.
             </Typography>
             <Box
               sx={{
                 backgroundImage: `url(${bg_Header})`,
                 backgroundRepeat: "no-repeat",
                 backgroundSize: "cover",
-                p: 12,
+                p: { md: 12, xs: 5 },
                 mt: 8,
-                borderRadius: "77px",
+                borderRadius: { md: "77px", xs: "60px" },
               }}
             >
               <Grid container gap={2} justifyContent={"center"}>
@@ -390,17 +408,16 @@ const LandingPageComponent = () => {
         </Box>
         {/* footer */}
 
-        <Box sx={{ bgcolor: "#1E1B2F", pt: 10 }}>
-          <Box
+        <Box sx={{ bgcolor: "#1E1B2F", pt: 10, mt: { lg: 0, md: -10 } }}>
+          <Grid
+            container
             sx={{
               width: "90%",
               m: "auto",
-              display: "flex",
-              flexGrow: "inherit",
-              gap: 15,
+              gap: { lg: 18, md: 15, sm: 10, xs: 8 },
             }}
           >
-            <Box sx={{ width: "377px" }}>
+            <Box sx={{ width: { md: "377px", xs: "300px" } }}>
               <img src={LogoNavBar} alt="logo nav bar" />
               <Typography
                 sx={{
@@ -477,16 +494,24 @@ const LandingPageComponent = () => {
                 Login
               </Typography>
             </Box>
-          </Box>
+          </Grid>
 
-          <Box sx={{ py: 2, pt: 4 }}>
+          <Box sx={{ width: "90%", pt: 4, m: "auto" }}>
             <Typography
-              sx={{ fontSize: "22px", color: "#D6D6D6", textAlign: "center" }}
+              sx={{
+                fontSize: { md: "22px", xs: "18px" },
+                color: "#D6D6D6",
+                textAlign: "center",
+              }}
             >
               Created by elix.marketing
             </Typography>
             <Typography
-              sx={{ fontSize: "22px", color: "#D6D6D6", textAlign: "center" }}
+              sx={{
+                fontSize: { md: "22px", xs: "18px" },
+                color: "#D6D6D6",
+                textAlign: "center",
+              }}
             >
               © Glass Experts, Inc. Copyright 2023
             </Typography>
