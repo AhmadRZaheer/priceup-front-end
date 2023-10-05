@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useLocation } from "react-router-dom";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 import { logoutHandler } from "./redux/userAuth";
 
 function App() {
+  
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
   const logOut = useCallback(() => {

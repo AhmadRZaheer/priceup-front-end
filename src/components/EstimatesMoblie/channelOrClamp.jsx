@@ -15,6 +15,9 @@ import {
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
 import { backendURL } from "../../utilities/common";
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 const ChannelType = ({
   menuOptions,
@@ -83,6 +86,11 @@ const ChannelType = ({
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
+                      <Tooltip title={title}>
+                        <IconButton color="primary">
+                          <InfoIcon />
+                        </IconButton>
+                      </Tooltip>
           <Typography>{title}</Typography>
         </Button>
       </Box>

@@ -16,6 +16,9 @@ import {
   setThickness,
 } from "../../redux/estimateCalculations";
 import OptionWithCounter from "../Estimates/optionWithCounter";
+import InfoIcon from '@mui/icons-material/Info';
+import Tooltip from '@mui/material/Tooltip';
+import IconButton from '@mui/material/IconButton';
 
 const MenuList = ({
   menuOptions,
@@ -83,6 +86,11 @@ const MenuList = ({
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
+                      <Tooltip title={title}>
+                        <IconButton color="primary">
+                          <InfoIcon />
+                        </IconButton>
+                      </Tooltip>
           <Typography>{title}</Typography>
         </Button>
         {![

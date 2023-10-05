@@ -1,5 +1,6 @@
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
+import {Link} from 'react-router-dom'
 
 import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
@@ -55,6 +56,20 @@ export const AdminColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 330 },
+  {
+    field: 'view',
+    headerName: 'Action',
+    sortable: false,
+    width: 150,
+    renderCell: (params) => {
+      // Customize the cell rendering here
+      return (
+        <a href={`/?adminID=${params.row._id}`}>
+          {params.value}
+        </a>
+      );
+    },
+  },
   {
     field: "dateAdded",
     headerName: "Date added",

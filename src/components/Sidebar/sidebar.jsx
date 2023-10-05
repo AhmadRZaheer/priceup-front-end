@@ -20,6 +20,7 @@ import { backendURL } from "../../utilities/common";
 import { AttachMoney } from "@mui/icons-material";
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -29,6 +30,8 @@ const Sidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+
+  const superAdminToken = localStorage.getItem('superAdminToken');
   return (
     <>
       <div className="sidebar">

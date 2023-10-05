@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
@@ -10,31 +11,130 @@ import {
   setInputContent,
   setNavigationDesktop,
   setTotal,
+  getTotal,
+  getMeasurementSide,
+  getLayoutPerimeter,
+  getQuoteId,
+  setNavigation
 } from "../../redux/estimateCalculations";
-import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
+import { useEditEstimates, useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
+import { useNavigate } from "react-router-dom";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
+const navigate = useNavigate();
+  const {
+    mutate: mutateEdit,
+    isError: ErrorForAddEidt,
+    isSuccess: CreatedSuccessfullyEdit,
+  } = useEditEstimates();
+  const estimatesContent = useSelector(getContent);
+  const estimatesTotal = useSelector(getTotal);
+  const measurements = useSelector(getMeasurementSide);
+  const perimeter = useSelector(getLayoutPerimeter);
+  const quoteId = useSelector(getQuoteId);
+  const sqftArea = useSelector(getLayoutArea);
+  const updatecheck = useSelector(getQuoteState);
+  const selectedContent = useSelector(getContent);
+
+  const dispatch = useDispatch();
+  const handleEditEstimate = () => {
+    const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
+      return {
+        type: row.item._id,
+        count:row.count
+      }
+    });
+    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
+      return {
+        type: row.item._id,
+        count:row.count
+      }
+    });
+    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row)=>{
+      return {
+        type: row.item._id,
+        count:row.count
+      }
+    });
+    const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row)=>{
+      return {
+        type: row.item._id,
+        count:row.count
+      }
+    });
+    const glassAddonsArray = estimatesContent?.glassAddons?.map((item)=>item?._id);
+    const estimate = {
+      hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
+      handles: {
+        type: estimatesContent?.handles?.item?._id,
+        count: estimatesContent?.handles?.count,
+      },
+      hinges: {
+        type: estimatesContent?.hinges?.item?._id,
+        count: estimatesContent?.hinges?.count,
+      },
+      mountingClamps: {
+          wallClamp: [...wallClampArray],
+          sleeveOver: [...sleeveOverArray],
+          glassToGlass: [...glassToGlassArray],
+      },
+      mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
+      glassType: {
+        type: estimatesContent?.glassType?.item?._id,
+        thickness: estimatesContent?.glassType?.thickness,
+      },
+      glassAddons: [...glassAddonsArray],
+      slidingDoorSystem: {
+        type: estimatesContent?.slidingDoorSystem?.item?._id,
+        count: estimatesContent?.slidingDoorSystem?.count,
+      },
+      header: {
+        type: estimatesContent?.header?.item?._id,
+        count: estimatesContent?.slidingDoorSystem?.count,
+      },
+      oneInchHoles: estimatesContent?.oneInchHoles,
+      hingeCut: estimatesContent?.hingeCut,
+      clampCut: estimatesContent?.clampCut,
+      notch: estimatesContent?.notch,
+      outages: estimatesContent?.outages,
+      mitre: estimatesContent?.mitre,
+      polish: estimatesContent?.polish,
+      people: estimatesContent?.people,
+      hours: estimatesContent?.hours,
+      cost: Number(estimatesTotal),
+      hardwareAddons: [...hardwareAddonsArray],
+      sleeveOverCount: estimatesContent?.sleeveOverCount,
+      towelBarsCount: estimatesContent?.sleeveOverCount,
+      measurements: measurements,
+      perimeter: perimeter,
+      sqftArea: sqftArea,
+    };
+
+    mutateEdit({
+      customerData: {},
+      estimateData: estimate,
+      id: quoteId,
+    });
+  }
+
+
   const quoteState = useSelector(getQuoteState);
-  console.log(quoteState,'staet')
+  console.log(quoteState, 'staet')
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
         quoteState === "create"
           ? "measurments"
           : quoteState === "custom"
-          ? "custom"
-          : "existing"
+            ? "custom"
+            : "existing"
       )
     );
   };
   const { data: estimatesData } = useFetchDataEstimate();
-  const selectedContent = useSelector(getContent);
-  const sqftArea = useSelector(getLayoutArea);
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     const total = calculateTotal(
@@ -57,7 +157,20 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       severity,
     });
   };
-
+  const {
+    refetch: Refetched,
+  } = useFetchDataEstimate();
+  React.useEffect(() => {
+    if (CreatedSuccessfullyEdit) {
+      showSnackbar("Estimate Updated successfully", "success");
+      dispatch(setNavigation("existing"));
+      Refetched();
+      navigate('/estimates');
+    } else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
   const closeSnackbar = () => {
     setSnackbar((prevState) => ({
       ...prevState,
@@ -152,7 +265,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   gap: 1,
                 }}
               >
-                <Box
+              <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -878,7 +991,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               </Box>
             </Box>
             <Box sx={{ width: "46%" }}>
-            <Summary />
+              <Summary />
             </Box>
           </Box>
           <Box
@@ -905,13 +1018,19 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 Back
               </Button>
             </Box>
-
             <Box sx={{ width: { md: "150px", xs: "50%" } }}>
               <Button
                 fullWidth
                 disabled={selectedContent?.hardwareFinishes === null}
                 variant="contained"
-                onClick={() => setClientDetailOpen(true)}
+                onClick={() => {
+                  if (["create", "custom"].includes(updatecheck)) {
+                    setClientDetailOpen(true) 
+                  }
+                  else{
+                    handleEditEstimate()
+                  }
+                }}
                 sx={{
                   backgroundColor: "#8477da",
                   "&:hover": {
@@ -923,6 +1042,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 Next
               </Button>
             </Box>
+
+
           </Box>
         </Box>
 

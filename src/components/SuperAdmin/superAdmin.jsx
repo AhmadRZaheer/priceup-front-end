@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./superAdmin.scss";
 import { AdminColumns } from "../../customerTableSource";
-
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, Typography } from "@mui/material";
 import Snackbars from "../Modal/snackBar";
@@ -83,6 +82,7 @@ const SuperAdminTable = () => {
           </Box>
         </Box>
       </div>
+      
       <div className="CustomerTable">
         <DataGrid
           getRowId={(row) => row._id}
