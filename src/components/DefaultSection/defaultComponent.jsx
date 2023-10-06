@@ -278,6 +278,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.hardwareFinishes.map((option) => (
                       <MenuItem key={option.name} value={option?._id}>
                         {option.name}
@@ -329,6 +330,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.handles.map((option) => (
                       <MenuItem key={option?._id} value={option?._id}>
                         {option?.name}
@@ -397,6 +399,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.hinges.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option?.name}
@@ -462,6 +465,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.pivotHingeOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -529,6 +533,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyDutyOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -614,6 +619,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyPivotOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -702,6 +708,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.channelOrClamps.map((option) => (
                       <MenuItem key={option} value={option}>
                         {option}
@@ -757,6 +764,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.mountingChannel.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -813,6 +821,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.wallClamp.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -878,6 +887,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.sleeveOver.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -943,6 +953,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassToGlass.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1007,6 +1018,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassType.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1027,6 +1039,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   onBlur={formik.handleBlur}
                   required={true}
                 >
+                   <MenuItem value="">Select Empty</MenuItem>
                   <MenuItem key="1/2" value="1/2">
                     1/2
                   </MenuItem>
@@ -1070,6 +1083,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.slidingDoorSystem.map(
                       (option) => (
                         <MenuItem key={option._id} value={option._id}>
@@ -1181,6 +1195,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.transom.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1231,6 +1246,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.header.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1281,6 +1297,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
+                     <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassAddons.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
