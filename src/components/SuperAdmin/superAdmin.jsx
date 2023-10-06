@@ -12,8 +12,10 @@ import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 const SuperAdminTable = () => {
+  const navigate = useNavigate()
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
 
   const [open, setOpen] = useState(false);
@@ -54,19 +56,22 @@ const SuperAdminTable = () => {
     {
       width: 140,
       renderCell: (params) => {
+        const adminID = params.row._id;
         return (
           <>
-            <Button
-              variant="text"
-              sx={{
-                p: 0.5,
-                m: 0,
-                color: "#8477DA",
-                textTransform: "capitalize",
-              }}
-            >
-              Access Location
-            </Button>
+            <Link to={`/?adminID=${adminID}`} style={{ textDecoration: 'none' }}>
+              <Button
+                variant="text"
+                sx={{
+                  p: 0.5,
+                  m: 0,
+                  color: "#8477DA",
+                  textTransform: "capitalize",
+                }}
+              >
+                Access Location
+              </Button>
+            </Link>
           </>
         );
       },
@@ -194,7 +199,7 @@ const SuperAdminTable = () => {
       <div className="CustomerTable">
         <DataGrid
           getRowId={(row) => row._id}
-          rows={AdminData.map(data => ({...data, view: 'View Location'}))}
+          rows={AdminData}
           columns={AdminColumns.concat(actionColumn)}
           initialState={{
             pagination: {
