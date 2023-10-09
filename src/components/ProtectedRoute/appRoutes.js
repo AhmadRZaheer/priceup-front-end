@@ -52,7 +52,7 @@ const AppRoutes = () => {
     } else if (isStaff()) {
       return "/staff";
     } else {
-      return "/login";
+      return "/";
     }
   };
 
