@@ -2,14 +2,19 @@ import React, { useState } from "react";
 import "./superAdmin.scss";
 import { AdminColumns } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography } from "@mui/material";
 import Snackbars from "../Modal/snackBar";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
-import { Add } from "@mui/icons-material";
+import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
+import image1 from "../../Assets/Active-location.png";
+import image2 from "../../Assets/Non-Active-location.png";
+import image3 from "../../Assets/Team-Members.svg";
+import { Link, useNavigate } from "react-router-dom";
 
 const SuperAdminTable = () => {
+  const navigate = useNavigate()
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
 
   const [open, setOpen] = useState(false);
@@ -47,6 +52,50 @@ const SuperAdminTable = () => {
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
+    {
+      width: 140,
+      renderCell: (params) => {
+        const adminID = params.row._id;
+        return (
+          <>
+            <Link to={`/?adminID=${adminID}`} style={{ textDecoration: 'none' }}>
+              <Button
+                variant="text"
+                sx={{
+                  p: 0.5,
+                  m: 0,
+                  color: "#8477DA",
+                  textTransform: "capitalize",
+                }}
+              >
+                Access Location
+              </Button>
+            </Link>
+          </>
+        );
+      },
+    },
+    {
+      field: " ",
+      width: 165,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+            >
+              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
+            </IconButton>
+            <IconButton
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+            >
+              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
+            </IconButton>
+          </>
+        );
+      },
+    },
   ];
   return (
     <>
@@ -60,7 +109,7 @@ const SuperAdminTable = () => {
             mt: 2,
           }}
         >
-          <Typography variant="h4">Users</Typography>
+          <Typography variant="h4">Locations</Typography>
           <Box sx={{ width: "200px" }}>
             <Button
               fullWidth
@@ -76,13 +125,76 @@ const SuperAdminTable = () => {
                 padding: 1,
               }}
             >
-              <Add color="white" />
-              Add Users
+              {/* <Add color="white" /> */}
+              Add Location
             </Button>
           </Box>
         </Box>
       </div>
-      
+      <div className="types-main-contianer">
+        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <img
+              style={{ width: "42px", height: "100%" }}
+              src={image1}
+              alt="image type"
+            />
+            <Typography sx={{ fontSize: 18 }}>Active Locations</Typography>
+          </Box>
+          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
+            297
+          </Typography>
+        </Box>
+
+        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <img
+              style={{ width: "42px", height: "100%" }}
+              src={image2}
+              alt="image type"
+            />
+            <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
+          </Box>
+          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
+            21
+          </Typography>
+        </Box>
+
+        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              width: "100%",
+              alignItems: "center",
+            }}
+          >
+            <img
+              style={{ width: "42px", height: "100%" }}
+              src={image3}
+              alt="image type"
+            />
+            <Typography sx={{ fontSize: 18 }}>Team Members</Typography>
+          </Box>
+          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
+            50
+          </Typography>
+        </Box>
+      </div>
       <div className="CustomerTable">
         <DataGrid
           getRowId={(row) => row._id}

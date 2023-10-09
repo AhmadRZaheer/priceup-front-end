@@ -9,7 +9,8 @@ import LagoutModal from "../Modal/logOut";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
-import TremIcon from "../../Assets/users.svg"
+import TremIcon from "../../Assets/users.svg";
+import { FmdGoodOutlined } from "@mui/icons-material";
 
 const SuperSidebar = () => {
   const [open, setOpen] = useState(false);
@@ -18,7 +19,7 @@ const SuperSidebar = () => {
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
-    window.location.href = '/adminlogin';
+    window.location.href = "/adminlogin";
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
@@ -46,16 +47,29 @@ const SuperSidebar = () => {
               <ul>
                 <NavLink to="/admin" className="link">
                   <li
-                    className={` ${location.pathname === "/admin" ? "active" : ""
-                      }`}
+                    className={` ${
+                      location.pathname === "/admin" ? "active" : ""
+                    }`}
                   >
                     <IconButton sx={{ color: "white", padding: 0.2 }}>
-                    <img
-                    style={{ paddingRight: 10 }}
-                    src={TremIcon}
-                    alt="image of customer"
-                  />
-                    <span>Users</span>
+                      <FmdGoodOutlined sx={{ color: "white", mr: 1 }} />
+                      <span>Location</span>
+                    </IconButton>
+                  </li>
+                </NavLink>
+                <NavLink to="/team" className="link">
+                  <li
+                    className={` ${
+                      location.pathname === "/team" ? "active" : ""
+                    }`}
+                  >
+                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                      <img
+                        style={{ paddingRight: 10 }}
+                        src={TremIcon}
+                        alt="image of customer"
+                      />
+                      <span>Team</span>
                     </IconButton>
                   </li>
                 </NavLink>
@@ -66,16 +80,21 @@ const SuperSidebar = () => {
             <div className="line"></div>
             <div className="bottom">
               <div className="UserIcon">
-                <img src={`${backendURL}/${decodedToken?.image}`} width="50" height="50" alt="no" />
+                <img
+                  src={`${backendURL}/${decodedToken?.image}`}
+                  width="50"
+                  height="50"
+                  alt="no"
+                />
               </div>
               <div className="userInSidebar">
                 {decodedToken?.name}
                 <div className="emailUser">{decodedToken?.email}</div>
               </div>
               <Tooltip title="Logout" arrow>
-              <div className="logOutIcon" onClick={() => setOpen(!open)}>
-                <img src={logout} alt="image" />
-              </div>
+                <div className="logOutIcon" onClick={() => setOpen(!open)}>
+                  <img src={logout} alt="image" />
+                </div>
               </Tooltip>
             </div>
           </Box>

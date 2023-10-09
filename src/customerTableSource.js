@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 import {Link} from 'react-router-dom'
@@ -37,15 +38,46 @@ export const AdminColumns = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
+      if (params.row && params.row.name) {
+        var firstNameInitial = params.row.name.charAt(0);
+      } else {
+        var firstNameInitial = "";
+      }
+      if (params.row && params.row.name) {
+        var lastNameInitial = params.row.name.charAt(1);
+      } else {
+        var lastNameInitial = "";
+      }
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img
-              className="cellImg"
-              style={{ width: 40, height: 40 }}
-              src={`${backendURL}/${params.row.image}`}
-              alt=""
-            />
+            {params.row.image !== "" ? (
+              <img
+                className="cellImg"
+                style={{ width: 40, height: 40 }}
+                src={`${backendURL}/${params.row.image}`}
+                alt=""
+              />
+            ) : (
+              <Typography
+                sx={{
+                  backgroundColor: "#F9F5FF",
+                  width: 34,
+                  height: 34,
+                  borderRadius: "100%",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#7F56D9",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                {firstNameInitial}
+                {lastNameInitial}
+              </Typography>
+            )}
           </div>
           <div className="customerNameTable">
             {params.row.name}
@@ -55,7 +87,7 @@ export const AdminColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 330 },
+  { field: "email", headerName: "Email address", width: 200 },
   {
     field: 'view',
     headerName: 'Action',
@@ -260,8 +292,6 @@ export const userColumnsHardware = [
       );
     },
   },
-
-
 ];
 
 export const userRowsHardware = [

@@ -22,6 +22,7 @@ import { AttachMoney } from "@mui/icons-material";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const superAdminToken = localStorage.getItem('superAdminToken');
   const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
@@ -30,8 +31,6 @@ const Sidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
-
-  const superAdminToken = localStorage.getItem('superAdminToken');
   return (
     <>
       <div className="sidebar">
@@ -54,6 +53,25 @@ const Sidebar = () => {
         </NavLink>
         <div className="center">
           <ul>
+              {superAdminToken && <li
+              style={{padding: 10}}
+                onClick={() => {
+                  localStorage.setItem('token', superAdminToken);
+                  localStorage.removeItem('superAdminToken');
+
+                  window.location.href = '/';
+                }}
+              >
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
+                  <img
+                    style={{ paddingRight: 10 }}
+                    src={EstimsteIcon}
+                    alt="image of customer"
+                  />
+
+                  <span>Back to Admin Dashboard</span>
+                </IconButton>
+              </li>}
             <NavLink to="/" className="link">
               <li
               style={{padding: 10}}
