@@ -19,7 +19,7 @@ import SuperAdminLogin from "../superLogin/superAdmin";
 import { parseJwt } from "./authVerify";
 import Admin from "../../pages/Admin/admin";
 import { useMemo } from "react";
-import SuperAdminTeam from "../SuperAdmin/superAdminTeam";
+import LandingPage from "../../pages/LandingPage/landingPage";
 import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 
 const AppRoutes = () => {
@@ -111,7 +111,8 @@ const AppRoutes = () => {
       ) : (
         ""
       )}
-      <Route path="*" element={<Navigate to={getHomepageURL()} />} />
+      {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
+      <Route path="/" element={<LandingPage />} />
     </Routes>
   );
 };
