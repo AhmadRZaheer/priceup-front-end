@@ -1,23 +1,151 @@
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
-import {
-  getContent,
-  getMeasurementSide,
-  getTotal,
-  selectedItem,
-  setNavigation,
-} from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
 import CustomImage from "../../Assets/customlayoutimage.svg";
+import { useEditEstimates, useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
+import { useNavigate } from 'react-router-dom';
+import {
+  selectedItem,
+  setNavigation,
+  getContent,
+  getLayoutArea,
+  getQuoteState,
+  getTotal,
+  getMeasurementSide,
+  getLayoutPerimeter,
+  getQuoteId,
+} from "../../redux/estimateCalculations";
 
-const Summary = ({ handleOpen }) => {
-  const dispatch = useDispatch();
+const Summary = ({ handleOpen, }) => {
+  const {
+    mutate: mutateEdit,
+    isError: ErrorForAddEidt,
+    isSuccess: CreatedSuccessfullyEdit,
+  } = useEditEstimates();
+  const navigate = useNavigate()
   const totalPrice = useSelector(getTotal);
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
   const selectedContent = useSelector(getContent);
-  const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
   const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
+  const estimatesContent = useSelector(getContent);
+  const estimatesTotal = useSelector(getTotal);
+  const measurements = useSelector(getMeasurementSide);
+  const perimeter = useSelector(getLayoutPerimeter);
+  const quoteId = useSelector(getQuoteId);
+  const sqftArea = useSelector(getLayoutArea);
+  const updatecheck = useSelector(getQuoteState);
+
+  const dispatch = useDispatch();
+  const handleEditEstimate = () => {
+    const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count
+      }
+    });
+    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count
+      }
+    });
+    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count
+      }
+    });
+    const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count
+      }
+    });
+    const glassAddonsArray = estimatesContent?.glassAddons?.map((item) => item?._id);
+    const estimate = {
+      hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
+      handles: {
+        type: estimatesContent?.handles?.item?._id,
+        count: estimatesContent?.handles?.count,
+      },
+      hinges: {
+        type: estimatesContent?.hinges?.item?._id,
+        count: estimatesContent?.hinges?.count,
+      },
+      mountingClamps: {
+        wallClamp: [...wallClampArray],
+        sleeveOver: [...sleeveOverArray],
+        glassToGlass: [...glassToGlassArray],
+      },
+      mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
+      glassType: {
+        type: estimatesContent?.glassType?.item?._id,
+        thickness: estimatesContent?.glassType?.thickness,
+      },
+      glassAddons: [...glassAddonsArray],
+      slidingDoorSystem: {
+        type: estimatesContent?.slidingDoorSystem?.item?._id,
+        count: estimatesContent?.slidingDoorSystem?.count,
+      },
+      header: {
+        type: estimatesContent?.header?.item?._id,
+        count: estimatesContent?.slidingDoorSystem?.count,
+      },
+      oneInchHoles: estimatesContent?.oneInchHoles,
+      hingeCut: estimatesContent?.hingeCut,
+      clampCut: estimatesContent?.clampCut,
+      notch: estimatesContent?.notch,
+      outages: estimatesContent?.outages,
+      mitre: estimatesContent?.mitre,
+      polish: estimatesContent?.polish,
+      people: estimatesContent?.people,
+      hours: estimatesContent?.hours,
+      cost: Number(estimatesTotal),
+      hardwareAddons: [...hardwareAddonsArray],
+      sleeveOverCount: estimatesContent?.sleeveOverCount,
+      towelBarsCount: estimatesContent?.sleeveOverCount,
+      measurements: measurements,
+      perimeter: perimeter,
+      sqftArea: sqftArea,
+    };
+
+    mutateEdit({
+      customerData: {},
+      estimateData: estimate,
+      id: quoteId,
+    });
+  }
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
+
+  React.useEffect(() => {
+    if (CreatedSuccessfullyEdit) {
+      showSnackbar("Estimate Updated successfully", "success");
+      dispatch(setNavigation("existing"));
+    } else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
 
   return (
     <>
@@ -290,7 +418,14 @@ const Summary = ({ handleOpen }) => {
             <Button
               fullWidth
               variant="contained"
-              onClick={handleOpen}
+              onClick={() => {
+                if (["create", "custom"].includes(updatecheck)) {
+                  handleOpen()
+                }
+                else {
+                  handleEditEstimate()
+                }
+              }}
               sx={{
                 backgroundColor: "#8477da",
                 "&:hover": {

@@ -4,7 +4,7 @@ import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./layoutReview";
 import Summary from "./summary";
 import ExitingQuotes from "./existingQuotes";
-import { getPageNavigation } from "../../redux/estimateCalculations";
+import { getPageNavigation,getQuoteState } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
 import Snackbars from "../Modal/snackBar";
@@ -14,6 +14,7 @@ const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const handleClose = () => setClientDetailOpen(false);
   const handleOpen = () => setClientDetailOpen(true);
+  const updatecheck = useSelector(getQuoteState);
   const Navigation = useSelector(getPageNavigation);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -42,7 +43,13 @@ const IndexMobile = () => {
         {Navigation == "layouts" && <Layout />}
         {Navigation == "measurements" && <LayoutMeasurements />}
         {Navigation == "review" && <LayoutReview />}
-        {Navigation == "summary" && <Summary handleOpen={handleOpen} />}
+        {Navigation === "summary" ? (
+          ["create", "custom"].includes(updatecheck) ? (
+            <Summary handleOpen={handleOpen} />
+          ) : (
+            <Summary /> // Render Summary without handleOpen
+          )
+        ) : null}
         {Navigation === "custom" && <CustomLayout />}
 
         <Model
