@@ -1,6 +1,8 @@
+import React, { useEffect, Fragment, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from 'axios';
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 
 export const useFetchDataAdmin = () => {
@@ -59,6 +61,38 @@ export const useCreateAdminsMembers = () => {
 
   return useMutation(handleCreate);
 };
+
+  export const FetchId = ({children}) => {
+  const [newToken, setNewToken] = useState(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const adminID = searchParams.get('adminID')
+  let token = newToken || localStorage.getItem("token");
+
+  useEffect(() => {
+    if (adminID) {
+      try {
+        axios.post(`${backendURL}/admins/loginAdminId`, { id: adminID }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }).then(resp => {
+          console.log({ resp })
+
+          const newToken = resp.data.data.token;
+          localStorage.setItem('superAdminToken', token);
+
+          localStorage.setItem('token', newToken);
+          setNewToken(newToken);
+        })
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    }
+  }, [adminID])
+
+  return <Fragment key={encodeURIComponent(token)}>{children}</Fragment>
+}
 
 export const useUserStatus = () => {
   const handleEdit = async (status) => {

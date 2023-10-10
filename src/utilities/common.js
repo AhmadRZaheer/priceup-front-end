@@ -13,8 +13,7 @@ export function createSlug(string) {
     .replace(/^-+|-+$/g, ""); // Trim leading and trailing hyphens
 }
 
-export const backendURL =
-  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+export const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 export const evaluateFormula = (
   formulaString,

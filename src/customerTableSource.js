@@ -34,7 +34,7 @@ export const teamColumns = [
 ];
 export const AdminColumns = [
   {
-    field: "name",
+    field: "Team Members",
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
@@ -88,20 +88,7 @@ export const AdminColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 200 },
-  {
-    field: 'view',
-    headerName: 'Action',
-    sortable: false,
-    width: 150,
-    renderCell: (params) => {
-      // Customize the cell rendering here
-      return (
-        <a href={`/?adminID=${params.row._id}`}>
-          {params.value}
-        </a>
-      );
-    },
-  },
+  { field: "user_name", headerName: "Location", width: 200 },
   {
     field: "dateAdded",
     headerName: "Date added",
