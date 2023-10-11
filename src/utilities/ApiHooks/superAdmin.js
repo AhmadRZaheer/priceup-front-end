@@ -28,6 +28,31 @@ export const useFetchDataAdmin = () => {
     placeholderData: [],
   });
 };
+export const useFetchAllStaff = () => {
+  async function fetchStaffData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/staffs/allStaff`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data && response.data.message === 'All Staff') {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching staff data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching staff data.");
+    }
+  }
+
+  return useQuery({
+    queryKey: ["staffData"],
+    queryFn: fetchStaffData,
+    enabled: true,
+    placeholderData: [],
+  });
+};
 
 export const useCreateAdminsMembers = () => {
   const handleCreate = async (props) => {

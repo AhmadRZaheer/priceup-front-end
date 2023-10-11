@@ -39,7 +39,6 @@ const MenuList = ({
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };
-
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);

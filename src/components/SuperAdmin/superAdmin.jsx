@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./superAdmin.scss";
 import { AdminColumns } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
@@ -12,12 +12,17 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link, useNavigate } from "react-router-dom";
+import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
 
 const SuperAdminTable = () => {
   const navigate = useNavigate()
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
+  const { data: staffData, refetch: teamMemberRefetch2 } = useFetchAllStaff();
 
   const [open, setOpen] = useState(false);
+  const [activeCount, setActiveCount] = useState(0);
+
+
 
   const handleClose = () => setOpen(false);
 
@@ -48,55 +53,28 @@ const SuperAdminTable = () => {
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
+        const isActive = params.row.Status === "Active";
 
-        return <TableRow row={params.row} refetch={teamMemberRefetch} />;
-      },
-    },
-    {
-      width: 140,
-      renderCell: (params) => {
-        const adminID = params.row._id;
+        const handleToggleChange = () => {
+          if (!isActive) {
+            setActiveCount((prevCount) => prevCount - 1);
+          } else {
+            setActiveCount((prevCount) => prevCount + 1);
+          }
+        };
+
+
         return (
-          <>
-            <Link to={`/?adminID=${adminID}`} style={{ textDecoration: 'none' }}>
-              <Button
-                variant="text"
-                sx={{
-                  p: 0.5,
-                  m: 0,
-                  color: "#8477DA",
-                  textTransform: "capitalize",
-                }}
-              >
-                Access Location
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-    {
-      field: " ",
-      width: 165,
-      align: "right",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
-            </IconButton>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
-            </IconButton>
-          </>
+          <TableRow
+            row={params.row}
+            refetch={teamMemberRefetch}
+            onToggleChange={handleToggleChange}
+          />
         );
       },
     },
   ];
+
   return (
     <>
       <div className="page-title">
@@ -149,7 +127,8 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            297
+          {AdminData.length}
+
           </Typography>
         </Box>
 
@@ -170,7 +149,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            21
+          {activeCount}
           </Typography>
         </Box>
 

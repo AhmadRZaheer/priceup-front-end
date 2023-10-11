@@ -1,14 +1,13 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
 
 const SuperAdminTeam = () => {
-  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-
+  const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
   const actionColumn = [
     {
       field: "Status",
@@ -71,7 +70,7 @@ const SuperAdminTeam = () => {
         <div className="CustomerTable">
           <DataGrid
             getRowId={(row) => row._id}
-            rows={AdminData}
+            rows={staffData}
             columns={AdminColumns.concat(actionColumn)}
             initialState={{
               pagination: {
