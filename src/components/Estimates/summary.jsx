@@ -303,7 +303,7 @@ const Summary = () => {
                   paddingY: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: "bold" }}>Total Price</Typography>
+                <Typography sx={{ fontWeight: "bold",fontSize:18 }}>Total Price</Typography>
                 <Typography variant="h6">
                   ${totalPrice?.toFixed(2) || 0}
                 </Typography>
