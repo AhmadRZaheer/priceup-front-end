@@ -113,16 +113,27 @@ export const useEditHardware = () => {
     const token = localStorage.getItem("token");
 
     try {
+      const formData = new FormData();
+      
+      if (props.finishesData) {
+        formData.append('finishes', JSON.stringify(props.finishesData));
+      }
+
+      if (props.hardwareData) {
+        formData.append('name', props.hardwareData.name);
+        if (props.hardwareData.image) {
+          formData.append('image', props.hardwareData.image);
+        }
+      }
+
       const response = await axios.put(
         `${backendURL}/hardwares/${props.id}`,
+        formData,
         {
-          ...(props.finishesData ? { finishes: props.finishesData } : {}),
-          ...(props.hardwareData
-            ? { name: props.hardwareData.name, image: props.hardwareData.image }
-            : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data', // Set the content type for FormData
+          },
         }
       );
 

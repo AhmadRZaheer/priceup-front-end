@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from "react";
 import "./superAdmin.scss";
-import { AdminColumns } from "../../customerTableSource";
+import { AdminColumns2 } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import Snackbars from "../Modal/snackBar";
@@ -70,6 +70,29 @@ const SuperAdminTable = () => {
             refetch={teamMemberRefetch}
             onToggleChange={handleToggleChange}
           />
+        );
+      },
+    },
+    {
+      width: 140,
+      renderCell: (params) => {
+        const adminID = params.row._id;
+        return (
+          <>
+            <Link to={`/?adminID=${adminID}`} style={{ textDecoration: 'none' }}>
+              <Button
+                variant="text"
+                sx={{
+                  p: 0.5,
+                  m: 0,
+                  color: "#8477DA",
+                  textTransform: "capitalize",
+                }}
+              >
+                Access Location
+              </Button>
+            </Link>
+          </>
         );
       },
     },
@@ -178,7 +201,7 @@ const SuperAdminTable = () => {
         <DataGrid
           getRowId={(row) => row._id}
           rows={AdminData}
-          columns={AdminColumns.concat(actionColumn)}
+          columns={AdminColumns2.concat(actionColumn)}
           initialState={{
             pagination: {
               paginationModel: {

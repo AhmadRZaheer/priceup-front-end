@@ -23,7 +23,7 @@ function App() {
           <FetchId>
             <AppRoutes />
             <AuthVerify logOut={logOut} />
-          </FetchId>y
+          </FetchId>
         </BrowserRouter>
       </QueryClientProvider>
     </div>

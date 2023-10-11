@@ -107,6 +107,80 @@ export const AdminColumns = [
     },
   },
 ];
+export const AdminColumns2 = [
+  {
+    field: "Team Members",
+    headerName: "Name",
+    width: 230,
+    renderCell: (params) => {
+      if (params.row && params.row.name) {
+        var firstNameInitial = params.row.name.charAt(0);
+      } else {
+        var firstNameInitial = "";
+      }
+      if (params.row && params.row.name) {
+        var lastNameInitial = params.row.name.charAt(1);
+      } else {
+        var lastNameInitial = "";
+      }
+      return (
+        <div className="cellWrapper">
+          <div className="customerImg">
+            {params.row.image !== "" ? (
+              <img
+                className="cellImg"
+                style={{ width: 40, height: 40 }}
+                src={`${backendURL}/${params.row.image}`}
+                alt=""
+              />
+            ) : (
+              <Typography
+                sx={{
+                  backgroundColor: "#F9F5FF",
+                  width: 34,
+                  height: 34,
+                  borderRadius: "100%",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#7F56D9",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                {firstNameInitial}
+                {lastNameInitial}
+              </Typography>
+            )}
+          </div>
+          <div className="customerNameTable">
+            {params.row.name}
+            <div className="userNameTable">{params.row.username}</div>
+          </div>
+        </div>
+      );
+    },
+  },
+  { field: "email", headerName: "Email address", width: 200 },
+  {
+    field: "dateAdded",
+    headerName: "Date added",
+    width: 220,
+    renderCell: (params) => {
+      return (
+        <div className="userNameTable">
+          {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
+            weekday: "long",
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          })}
+        </div>
+      );
+    },
+  },
+];
 
 export const CustomerColumns = [
   {
