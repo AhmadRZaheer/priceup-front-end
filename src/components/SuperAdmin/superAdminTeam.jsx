@@ -5,6 +5,7 @@ import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
+import {Link} from 'react-router-dom'
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
@@ -22,19 +23,22 @@ const SuperAdminTeam = () => {
     {
       width: 140,
       renderCell: (params) => {
+        const adminID = params.row._id;
         return (
           <>
-            <Button
-              variant="text"
-              sx={{
-                p: 0.5,
-                m: 0,
-                color: "#8477DA",
-                textTransform: "capitalize",
-              }}
-            >
-              Access Location
-            </Button>
+            <Link to={`/?adminID=${adminID}`} style={{ textDecoration: 'none' }}>
+              <Button
+                variant="text"
+                sx={{
+                  p: 0.5,
+                  m: 0,
+                  color: "#8477DA",
+                  textTransform: "capitalize",
+                }}
+              >
+                Access Location
+              </Button>
+            </Link>
           </>
         );
       },
