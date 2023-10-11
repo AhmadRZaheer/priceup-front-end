@@ -2,6 +2,14 @@ import { createSlice } from "@reduxjs/toolkit";
 import { layoutVariants } from "../utilities/constants";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
+export const getHardwareTotal = (state) => state.estimateCalculations.hardwarePrice;
+export const getGlassTotal = (state) => state.estimateCalculations.glassPrice;
+export const getGlassAddonsTotal = (state) => state.estimateCalculations.glassAddonsPrice;
+export const getFabricationTotal = (state) => state.estimateCalculations.fabricationPrice;
+export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
+export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
+
+
 export const getMeasurementSide = (state) =>
   state.estimateCalculations.measurements;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
@@ -72,6 +80,12 @@ const estimateCalcSlice = createSlice({
       mountingState: "channel",
     },
     totalPrice: 0,
+    hardwarePrice:0,
+    glassPrice:0,
+    glassAddonsPrice:0,
+    fabricationPrice:0,
+    miscPrice:0,
+    laborPrice:0
   },
   reducers: {
     setContent: (state, action) => {
@@ -216,6 +230,30 @@ const estimateCalcSlice = createSlice({
     setTotal: (state, action) => {
       const { payload } = action;
       state.totalPrice = payload;
+    },
+    setHardwarePrice: (state, action) => {
+      const { payload } = action;
+      state.hardwarePrice = payload;
+    },
+    setGlassPrice: (state, action) => {
+      const { payload } = action;
+      state.glassPrice = payload;
+    },
+    setGlassAddonsPrice: (state, action) => {
+      const { payload } = action;
+      state.glassAddonsPrice = payload;
+    },
+    setFabricationPrice: (state, action) => {
+      const { payload } = action;
+      state.fabricationPrice = payload;
+    },
+    setMiscPrice: (state, action) => {
+      const { payload } = action;
+      state.miscPrice = payload;
+    },
+    setLaborPrice: (state, action) => {
+      const { payload } = action;
+      state.laborPrice = payload;
     },
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
@@ -596,6 +634,12 @@ const estimateCalcSlice = createSlice({
   },
 });
 export const {
+  setGlassPrice,
+  setHardwarePrice,
+  setGlassAddonsPrice,
+  setFabricationPrice,
+  setMiscPrice,
+  setLaborPrice,
   setLayoutArea,
   setLayoutPerimeter,
   setContent,

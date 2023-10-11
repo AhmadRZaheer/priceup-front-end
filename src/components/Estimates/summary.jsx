@@ -1,7 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import {
   getContent,
+  getFabricationTotal,
+  getGlassAddonsTotal,
+  getGlassTotal,
+  getHardwareTotal,
+  getLaborTotal,
   getMeasurementSide,
+  getMiscTotal,
   getTotal,
   selectedItem,
 } from "../../redux/estimateCalculations";
@@ -10,6 +16,13 @@ import { backendURL } from "../../utilities/common";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 
 const Summary = () => {
+  const hardwarePrice = useSelector(getHardwareTotal);
+  const glassPrice = useSelector(getGlassTotal);
+  const glassAddonsPrice = useSelector(getGlassAddonsTotal);
+  const fabricationPrice = useSelector(getFabricationTotal);
+  const miscPrice = useSelector(getMiscTotal);
+  const laborPrice = useSelector(getLaborTotal);
+  
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
@@ -189,6 +202,7 @@ const Summary = () => {
                 <Typography>{selectedContent?.hours}</Typography>
               </Box>
               <Typography> </Typography>
+              
               <Box
                 sx={{
                   display: "flex",
@@ -199,7 +213,97 @@ const Summary = () => {
                   paddingY: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: "bold" }}>Price</Typography>
+                <Typography sx={{ fontWeight: "bold" }}>Hardware Price</Typography>
+                <Typography variant="h6">
+                  ${hardwarePrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Glass Price</Typography>
+                <Typography variant="h6">
+                  ${glassPrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Glass Addons Price</Typography>
+                <Typography variant="h6">
+                  ${glassAddonsPrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Fabrication Price</Typography>
+                <Typography variant="h6">
+                  ${fabricationPrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Misc Price</Typography>
+                <Typography variant="h6">
+                  ${miscPrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Labor Price</Typography>
+                <Typography variant="h6">
+                  ${laborPrice?.toFixed(2) || 0}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+                <Typography sx={{ fontWeight: "bold" }}>Total Price</Typography>
                 <Typography variant="h6">
                   ${totalPrice?.toFixed(2) || 0}
                 </Typography>

@@ -15,7 +15,12 @@ import {
   getMeasurementSide,
   getLayoutPerimeter,
   getQuoteId,
-  setNavigation
+  setNavigation,
+  setHardwarePrice,
+  setGlassPrice,
+  setGlassAddonsPrice,
+  setFabricationPrice,
+  setLaborPrice
 } from "../../redux/estimateCalculations";
 import { useEditEstimates, useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
@@ -137,13 +142,18 @@ const navigate = useNavigate();
   const { data: estimatesData } = useFetchDataEstimate();
 
   useEffect(() => {
-    const total = calculateTotal(
+    const prices = calculateTotal(
       selectedContent,
       sqftArea,
       estimatesData,
       quoteState
     );
-    dispatch(setTotal(total));
+  dispatch(setHardwarePrice(prices.hardwarePrice));
+  dispatch(setGlassPrice(prices.glassPrice));
+  dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
+  dispatch(setFabricationPrice(prices.fabricationPrice));
+  dispatch(setLaborPrice(prices.laborPrice))
+  dispatch(setTotal(prices.total));
   }, [selectedContent]);
   const [snackbar, setSnackbar] = useState({
     open: false,

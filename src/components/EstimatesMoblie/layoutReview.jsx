@@ -7,7 +7,12 @@ import {
   getContent,
   getLayoutArea,
   getQuoteState,
+  setFabricationPrice,
+  setGlassAddonsPrice,
+  setGlassPrice,
+  setHardwarePrice,
   setInputContent,
+  setLaborPrice,
   setTotal,
 } from "../../redux/estimateCalculations";
 import Snackbars from "../Modal/snackBar";
@@ -23,8 +28,13 @@ const LayoutReview = () => {
   const dispatch = useDispatch();
   const quoteState = useSelector(getQuoteState);
   useEffect(() => {
-    const total = calculateTotal(selectedContent, sqftArea, estimatesData);
-    dispatch(setTotal(total));
+  const prices = calculateTotal(selectedContent, sqftArea, estimatesData);
+  dispatch(setHardwarePrice(prices.hardwarePrice));
+  dispatch(setGlassPrice(prices.glassPrice));
+  dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
+  dispatch(setFabricationPrice(prices.fabricationPrice));
+  dispatch(setLaborPrice(prices.laborPrice))
+  dispatch(setTotal(prices.total));
   }, [selectedContent]);
 
   const [snackbar, setSnackbar] = useState({

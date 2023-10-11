@@ -216,7 +216,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +
     laborPrice;
-  return total;
+  return {hardwarePrice:hardwareTotals,fabricationPrice:fabricationPrice,glassPrice:glassPrice,glassAddonsPrice:glassAddonsPrice,miscPricing:0,laborPrice:laborPrice,total:total};
 };
 
 export const calculateAreaOrPerimeter = (measurementSides, formula) => {
