@@ -52,8 +52,8 @@ const Summary = () => {
             borderRadius: "8px",
             justifyContent: "space-between",
             flexDirection: { md: "row", xs: "column" },
-            minHeight: "50vh",
-            maxHeight: "79vh",
+            // minHeight: "50vh",
+            // maxHeight: "79vh",
           }}
         >
           <Box
