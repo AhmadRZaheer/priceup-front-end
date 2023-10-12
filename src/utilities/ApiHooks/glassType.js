@@ -104,34 +104,44 @@ export const useCreateGlassType = () => {
 };
 
 export const useEditGlassType = () => {
-  const handleEdit = async (props) => {
-    const token = localStorage.getItem("token");
-    try {
-      const response = await axios.put(
-        `${backendURL}/glassTypes/${props?.id}`,
-        {
-          ...(props.optionsData ? { options: props.optionsData } : {}),
-          ...(props.glassTypeData
-            ? {
-                name: props.glassTypeData.name,
-                image: props.glassTypeData.image,
-              }
-            : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+ const handleEdit = async (props) => {
+  const token = localStorage.getItem("token");
+  try {
+    const formData = new FormData();
+    formData.append('id', props.id);
 
-      if (response.data.code === 200) {
-        return response.data.data;
-      } else {
-        throw new Error("An error occurred while updating the data.");
+    if (props.glassTypeData) {
+      // Append the fields of glassTypeData individually
+      formData.append('name', props.glassTypeData.name);
+      formData.append('image', props.glassTypeData.image);
+    }
+
+    const requestData = {
+      ...(props.optionsData ? { options: props.optionsData } : {}),
+    };
+
+    const response = await axios.put(
+      `${backendURL}/glassTypes/${props.id}`,
+      formData, // Send glassTypeData as FormData
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+        },
+        params: requestData, // Send optionsData as request parameters
       }
-    } catch (error) {
+    );
+
+    if (response.data.code === 200) {
+      return response.data.data;
+    } else {
       throw new Error("An error occurred while updating the data.");
     }
-  };
+  } catch (error) {
+    throw new Error("An error occurred while updating the data.");
+  }
+};
+
 
   return useMutation(handleEdit);
 };

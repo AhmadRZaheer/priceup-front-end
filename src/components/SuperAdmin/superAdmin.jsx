@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import "./superAdmin.scss";
-import { AdminColumns } from "../../customerTableSource";
+import { AdminColumns2 } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography,Input,InputAdornment  } from "@mui/material";
 import Snackbars from "../Modal/snackBar";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
@@ -12,12 +12,18 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link, useNavigate } from "react-router-dom";
+import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
+import { Search } from '@mui/icons-material';
 
 const SuperAdminTable = () => {
   const navigate = useNavigate()
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
+  const { data: staffData, refetch: teamMemberRefetch2 } = useFetchAllStaff();
 
   const [open, setOpen] = useState(false);
+  const [activeCount, setActiveCount] = useState(0);
+  const [search, setSearch] = useState("");
+
 
   const handleClose = () => setOpen(false);
 
@@ -48,8 +54,24 @@ const SuperAdminTable = () => {
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
+        const isActive = params.row.Status === "Active";
 
-        return <TableRow row={params.row} refetch={teamMemberRefetch} />;
+        const handleToggleChange = () => {
+          if (!isActive) {
+            setActiveCount((prevCount) => prevCount - 1);
+          } else {
+            setActiveCount((prevCount) => prevCount + 1);
+          }
+        };
+
+
+        return (
+          <TableRow
+            row={params.row}
+            refetch={teamMemberRefetch}
+            onToggleChange={handleToggleChange}
+          />
+        );
       },
     },
     {
@@ -75,28 +97,11 @@ const SuperAdminTable = () => {
         );
       },
     },
-    {
-      field: " ",
-      width: 165,
-      align: "right",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
-            </IconButton>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
-            </IconButton>
-          </>
-        );
-      },
-    },
   ];
+  const filteredData = AdminData?.filter(
+    (admin) =>
+    admin.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <>
       <div className="page-title">
@@ -149,7 +154,8 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            297
+          {AdminData.length}
+
           </Typography>
         </Box>
 
@@ -170,7 +176,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            21
+          {activeCount}
           </Typography>
         </Box>
 
@@ -195,19 +201,38 @@ const SuperAdminTable = () => {
           </Typography>
         </Box>
       </div>
-      <div className="CustomerTable">
+      
+      <Input
+          placeholder="Search by Name"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            mb: 2,
+            mt: 10,
+            width: '20%', // You can adjust the width as needed
+            marginLeft: '30px', // Adjust the margin as needed
+          }}
+          endAdornment={(
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          )}
+        />
+      <div className="hardwareTable">
         <DataGrid
           getRowId={(row) => row._id}
-          rows={AdminData}
-          columns={AdminColumns.concat(actionColumn)}
+          rows={filteredData}
+          columns={AdminColumns2.concat(actionColumn)}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 10,
+                pageSize: 2,
               },
             },
           }}
-          pageSizeOptions={[10]}
+          pageSizeOptions={[2]}
         />
       </div>
 

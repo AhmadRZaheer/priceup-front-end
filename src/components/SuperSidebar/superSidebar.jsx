@@ -23,6 +23,7 @@ const SuperSidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+  const superAdminToken = localStorage.getItem('superAdminToken');
   return (
     <>
       <div className="sidebar">
@@ -45,6 +46,21 @@ const SuperSidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
+              {superAdminToken && <li
+              style={{padding: 10}}
+                onClick={() => {
+                  localStorage.setItem('token', superAdminToken);
+                  localStorage.removeItem('superAdminToken');
+
+                  window.location.href = '/';
+                }}
+              >
+                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
+
+                  <span>Back to Admin Dashboard</span>
+                </IconButton>
+              </li>}
+
                 <NavLink to="/admin" className="link">
                   <li
                     className={` ${

@@ -3,23 +3,21 @@ import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Search } from '@mui/icons-material';
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import {
-  useDeleteFinishes,
-  useFetchDataFinishes,
-} from "../../utilities/ApiHooks/finishes";
+import { Box, CircularProgress, IconButton, Typography, TextField,Input,InputAdornment } from "@mui/material";
+import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/ApiHooks/finishes";
 import Snackbars from "../Modal/snackBar";
 import AddEditFinish from "../Modal/addEditFinish";
+
 const FinishesTable = () => {
   const [snackbar, setSnackbar] = useState({
     open: false,
     message: "",
     severity: "",
   });
-  const { data: finishesData, refetch: finishesRefetch } =
-    useFetchDataFinishes();
+  const { data: finishesData, refetch: finishesRefetch } = useFetchDataFinishes();
   const {
     mutate: deleteFinish,
     isSuccess: deleteSuccess,
@@ -29,13 +27,15 @@ const FinishesTable = () => {
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
   const [matchingId, setMatchingId] = useState("");
+  const [search, setSearch] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
     setIsEdit(false);
- 
   };
+
   const handleClose = () => setOpen(false);
+
   const handleOpenEdit = (data) => {
     setOpen(true);
     setEdit(data);
@@ -50,12 +50,13 @@ const FinishesTable = () => {
   useEffect(() => {
     if (deleteSuccess) {
       finishesRefetch();
-      showSnackbar("Finish is Deleted Successfully ", "error");
+      showSnackbar("Finish is Deleted Successfully", "error");
     }
   }, [deleteSuccess]);
+
   const actionColumn = [
     {
-      field: "Status ",
+      field: "Status",
       width: 200,
       renderCell: (params) => {
         const id = params.row._id;
@@ -72,13 +73,21 @@ const FinishesTable = () => {
                 <DeleteIcon />
               )}
             </div>
-            <div
-              className="viewButton"
-              
-            >
-              <IconButton onClick={() => handleOpenEdit(params.row)} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
-              <ModeIcon sx={{color: "white", fontSize: 18, mr: 0.4}} />
-              Edit
+            <div className="viewButton">
+              <IconButton
+                onClick={() => handleOpenEdit(params.row)}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 2,
+                  fontSize: 17,
+                  padding: 1,
+                }}
+              >
+                <ModeIcon sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
+                Edit
               </IconButton>
             </div>
           </div>
@@ -86,6 +95,7 @@ const FinishesTable = () => {
       },
     },
   ];
+
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -100,13 +110,20 @@ const FinishesTable = () => {
       open: false,
     }));
   };
+
+  // Filter the finishesData based on the search input
+  const filteredData = finishesData?.filter(
+    (finish) =>
+      finish.name.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <>
       <Box
         sx={{
           backgroundColor: "white",
           height: "100vh",
-          pl: 1
+          pl: 1,
         }}
       >
         <div className="page-title">
@@ -123,18 +140,48 @@ const FinishesTable = () => {
           >
             <Typography variant="h4">Finishes</Typography>
             <div>
-              <IconButton onClick={handleOpen} sx={{backgroundColor: "#8477DA","&:hover": {backgroundColor: "#8477DA"}, color: "white", textTransform: "capitalize", borderRadius: 2, fontSize: 17, padding: 1 }}>
+              <IconButton
+                onClick={handleOpen}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 2,
+                  fontSize: 17,
+                  padding: 1,
+                }}
+              >
                 <Add style={{ color: "white" }} />
                 Add
               </IconButton>
-            </div>{" "}
+            </div>
           </div>
         </div>
+
+        <Input
+          placeholder="Search by Name"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            mb: 2,
+            width: '20%', // You can adjust the width as needed
+            marginLeft: '30px', // Adjust the margin as needed
+          }}
+          endAdornment={(
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          )}
+        />
+
         <Box sx={{ border: "1px solid #EAECF0", margin: 2, p: 0 }}>
           <div className="hardwareTable">
             <DataGrid
               getRowId={(row) => row._id}
-              rows={finishesData}
+              rows={filteredData}
               columns={userColumnsHardware.concat(actionColumn)}
               initialState={{
                 pagination: {
@@ -147,7 +194,7 @@ const FinishesTable = () => {
             />
           </div>
         </Box>
-
+        <Box />
         <AddEditFinish
           open={open}
           close={handleClose}
@@ -165,6 +212,8 @@ const FinishesTable = () => {
         />
       </Box>
     </>
-  );
+  )
 };
+
 export default FinishesTable;
+

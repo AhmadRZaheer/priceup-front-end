@@ -6,10 +6,10 @@ import AppRoutes from "./components/ProtectedRoute/appRoutes";
 import AuthVerify from "./components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { logoutHandler } from "./redux/userAuth";
-import { FetchId } from "./FetchId"; // Import the FetchId component from FetchId.js
+import { FetchId } from "./utilities/ApiHooks/superAdmin"
 
 function App() {
-  
+
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
   const logOut = useCallback(() => {

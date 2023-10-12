@@ -53,18 +53,23 @@ export const useCreateFinish = () => {
     const slug = createSlug(props.hardwareLabel);
     const decodedToken = parseJwt(token);
 
+    const formData = new FormData();
+    formData.append('name', props.hardwareLabel);
+    formData.append('image', props.image);
+    formData.append('company_id', decodedToken?.company_id);
+    formData.append('thickness', 'both');
+    formData.append('slug', slug);
+    formData.append('holesNeeded', props.thickness);
+
     try {
       const response = await axios.post(
         `${backendURL}/finishes/save`,
+        formData,
         {
-          name: props.hardwareLabel,
-          company_id: decodedToken?.company_id,
-          thickness: "both",
-          slug: slug,
-          holesNeeded: props.thickness,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data', // Set the content type for form data
+          },
         }
       );
 
@@ -83,18 +88,22 @@ export const useCreateFinish = () => {
 
 export const useEditFinish = () => {
   const handleEdit = async (updatedHardware) => {
-
     const token = localStorage.getItem("token");
+    const formData = new FormData();
+
+    formData.append('name', updatedHardware?.hardwareLabel);
+    formData.append('image', updatedHardware?.image);
+    formData.append('holesNeeded', updatedHardware?.thickness);
 
     try {
       const response = await axios.put(
         `${backendURL}/finishes/${updatedHardware?.id}`,
+        formData,
         {
-          name: updatedHardware?.hardwareLabel,
-          holesNeeded: updatedHardware?.thickness,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data', // Set the content type for form data
+          },
         }
       );
 

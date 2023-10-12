@@ -2,7 +2,12 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Logo from "../../Assets/purplelogo.svg";
 import "./mobileNavBar.scss";
+import CustomerIcon from "../../Assets/Customer-icon.svg";
+import TremIcon from "../../Assets/users.svg"
 import React, { useState } from "react";
+import {
+  setNavigation,
+} from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
@@ -45,6 +50,11 @@ function MobileBar() {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+
+  const handleCustomerClick = () => {
+
+    dispatch(setNavigation("customerTable"));
+  };
   return (
     <>
       <div className="Main">
@@ -108,7 +118,29 @@ function MobileBar() {
                   /> Estimates
                 </Button>
               </Box>
+              <Box sx={{ marginTop: -2 }}>
+                <Button
+                  sx={{
+                    width: 240,
+                    color: "white",
+                    margin: 2,
+                    textTransform: "capitalize",
+                    backgroundColor: "#8477da",
+                    ":hover": {
+                      backgroundColor: "#8477da",
+                    },
+                  }}
+                  onClick={() => handleCustomerClick()}
+                >
+                 <img
+                    style={{ paddingRight: 10 }}
+                    src={CustomerIcon}
+                    alt="image of customer"
+                  /> Customer
+                </Button>
+              </Box>
             </Box>
+            
             <Box
               sx={{
                 display: "flex",

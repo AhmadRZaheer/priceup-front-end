@@ -1,6 +1,8 @@
+import React, { useEffect, Fragment, useState } from "react";
+import { useLocation } from "react-router-dom";
+import axios from 'axios';
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 
 export const useFetchDataAdmin = () => {
@@ -22,6 +24,31 @@ export const useFetchDataAdmin = () => {
   return useQuery({
     queryKey: ["teamData"],
     queryFn: fetchData,
+    enabled: true,
+    placeholderData: [],
+  });
+};
+export const useFetchAllStaff = () => {
+  async function fetchStaffData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/staffs/allStaff`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data && response.data.message === 'All Staff') {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching staff data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching staff data.");
+    }
+  }
+
+  return useQuery({
+    queryKey: ["staffData"],
+    queryFn: fetchStaffData,
     enabled: true,
     placeholderData: [],
   });
@@ -59,6 +86,38 @@ export const useCreateAdminsMembers = () => {
 
   return useMutation(handleCreate);
 };
+
+  export const FetchId = ({children}) => {
+  const [newToken, setNewToken] = useState(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const adminID = searchParams.get('adminID')
+  let token = newToken || localStorage.getItem("token");
+
+  useEffect(() => {
+    if (adminID) {
+      try {
+        axios.post(`${backendURL}/admins/loginAdminId`, { id: adminID }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          },
+        }).then(resp => {
+          console.log({ resp })
+
+          const newToken = resp.data.data.token;
+          localStorage.setItem('superAdminToken', token);
+
+          localStorage.setItem('token', newToken);
+          setNewToken(newToken);
+        })
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
+    }
+  }, [adminID])
+
+  return <Fragment key={encodeURIComponent(token)}>{children}</Fragment>
+}
 
 export const useUserStatus = () => {
   const handleEdit = async (status) => {

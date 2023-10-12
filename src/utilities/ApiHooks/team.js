@@ -58,7 +58,6 @@ export const useCreateTeamMembers = () => {
         `${backendURL}/staffs/save`,
         {
           name: props.name,
-
           company_id: decodedToken?.company_id,
           password: "",
           email: props.email,
