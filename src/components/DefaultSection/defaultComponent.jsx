@@ -675,7 +675,7 @@ const DefaultComponent = ({ showSnackbar }) => {
 
             {/* Channel or Clamps */}
 
-            <div
+            {/* <div
               style={{
                 display: "flex",
                 gap: 4,
@@ -727,7 +727,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   padding: 4,
                 }}
               ></div>
-            </div>
+            </div> */}
             {/* Mounting Channel */}
 
             <div
