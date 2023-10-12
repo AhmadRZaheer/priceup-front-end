@@ -159,6 +159,7 @@ export default function ExitingQuotes() {
                       </Typography>
                     </Box>
                   </Box>
+                  
                 )))}
             </Box>
           </Box>

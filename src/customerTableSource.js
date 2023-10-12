@@ -154,7 +154,7 @@ export const AdminColumns2 = [
               </Typography>
             )}
           </div>
-          <div className="customerNameTable">
+          <div className="customerNameTable" style={{marginLeft: "10px"}}>
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
           </div>

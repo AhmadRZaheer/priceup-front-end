@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import "./superAdmin.scss";
 import { AdminColumns2 } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, Button, IconButton, Typography,Input,InputAdornment  } from "@mui/material";
 import Snackbars from "../Modal/snackBar";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
@@ -13,6 +13,7 @@ import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
+import { Search } from '@mui/icons-material';
 
 const SuperAdminTable = () => {
   const navigate = useNavigate()
@@ -21,7 +22,7 @@ const SuperAdminTable = () => {
 
   const [open, setOpen] = useState(false);
   const [activeCount, setActiveCount] = useState(0);
-
+  const [search, setSearch] = useState("");
 
 
   const handleClose = () => setOpen(false);
@@ -97,7 +98,10 @@ const SuperAdminTable = () => {
       },
     },
   ];
-
+  const filteredData = AdminData?.filter(
+    (admin) =>
+    admin.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <>
       <div className="page-title">
@@ -197,19 +201,38 @@ const SuperAdminTable = () => {
           </Typography>
         </Box>
       </div>
-      <div className="CustomerTable">
+      
+      <Input
+          placeholder="Search by Name"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            mb: 2,
+            mt: 10,
+            width: '20%', // You can adjust the width as needed
+            marginLeft: '30px', // Adjust the margin as needed
+          }}
+          endAdornment={(
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          )}
+        />
+      <div className="hardwareTable">
         <DataGrid
           getRowId={(row) => row._id}
-          rows={AdminData}
+          rows={filteredData}
           columns={AdminColumns2.concat(actionColumn)}
           initialState={{
             pagination: {
               paginationModel: {
-                pageSize: 10,
+                pageSize: 2,
               },
             },
           }}
-          pageSizeOptions={[10]}
+          pageSizeOptions={[2]}
         />
       </div>
 

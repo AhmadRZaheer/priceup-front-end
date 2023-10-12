@@ -1,4 +1,5 @@
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { useState } from "react";
+import { Box, Button, IconButton, Typography,Input,InputAdornment } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
@@ -7,10 +8,12 @@ import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
 import {Link} from 'react-router-dom'
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import { Search } from '@mui/icons-material';
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
   const { data: AdminData, refetch: adminMember } = useFetchDataAdmin();
+  const [search, setSearch] = useState("");
   const actionColumn = [
     {
       field: "Status",
@@ -44,25 +47,47 @@ const SuperAdminTeam = () => {
       },
     },
   ];
+  const filteredData = staffData?.filter(
+    (staff) =>
+    staff.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
     <>
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
         <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
           Team
         </Typography>
+        <Input
+          placeholder="Search by Name"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            mb: 2,
+            mt: 10,
+            width: '20%', // You can adjust the width as needed
+            marginLeft: '30px', // Adjust the margin as needed
+          }}
+          endAdornment={(
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          )}
+        />
         <div className="CustomerTable">
           <DataGrid
             getRowId={(row) => row._id}
-            rows={staffData}
+            rows={filteredData}
             columns={AdminColumns.concat(actionColumn)}
             initialState={{
               pagination: {
                 paginationModel: {
-                  pageSize: 10,
+                  pageSize: 2,
                 },
               },
             }}
-            pageSizeOptions={[10]}
+            pageSizeOptions={[2]}
           />
         </div>
       </Box>

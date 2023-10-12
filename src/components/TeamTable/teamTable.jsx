@@ -3,9 +3,9 @@ import "./teamTable.scss";
 import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import { Search } from '@mui/icons-material';
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography,Input,InputAdornment } from "@mui/material";
 import {
   useDeleteTeamMembers,
   useFetchDataTeam,
@@ -16,11 +16,16 @@ import { Add } from "@mui/icons-material";
 
 const TeamTable = () => {
   const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
-
+  const filteredData = teamData?.filter(
+    (team) =>
+    team.name.toLowerCase().includes(search.toLowerCase()) ||
+    team.email.toLowerCase().includes(search.toLowerCase())
+  );
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
     setOpen(true);
@@ -151,26 +156,43 @@ const TeamTable = () => {
             </Box>
           </Box>
         </div>
-        <div className="CustomerTable">
-          {teamData?.length >= 1 ? (
+        <Input
+          placeholder="Search by Name or Email"
+          variant="outlined"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            mb: 2,
+            width: '20%', // You can adjust the width as needed
+            marginLeft: '30px', // Adjust the margin as needed
+          }}
+          endAdornment={(
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          )}
+        />
+      <div className="CustomerTable">
+          {filteredData.length >= 1 ? (
             <DataGrid
               getRowId={(row) => row._id}
-              rows={teamData}
-              columns={teamColumns.concat(actionColumn)}
+              rows={filteredData}
+              columns={teamColumns}
               initialState={{
                 pagination: {
                   paginationModel: {
-                    pageSize: 10,
+                    pageSize: 2,
                   },
                 },
               }}
-              pageSizeOptions={[10]}
+              pageSizeOptions={[2]}
             />
           ) : (
             <Typography
-              sx={{ textAlign: "center", py: 2, fontSize: 20, color: "gray" }}
+              sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
             >
-              Team Member not Found
+              No Team Found
             </Typography>
           )}
         </div>
