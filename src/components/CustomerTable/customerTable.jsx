@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, Typography, Input,InputAdornment } from "@mui/material";
+import { Box, Typography, Input,InputAdornment,IconButton } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { Search } from '@mui/icons-material';
+import { EditOutlined } from "@mui/icons-material";
 
 const CustomerTable = () => {
   const { data: customerData } = useFetchDataCustomer();
@@ -16,6 +17,30 @@ const CustomerTable = () => {
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  const actionColumn = [
+    {
+      field: "Status",
+      align: "left",
+      minWidth: "280px",
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+            sx={{
+              backgroundColor: "#8477DA",
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 15,
+            }}
+            >Check Quote</IconButton>
+          </>
+        );
+      },
+    },
+  ];
 
   return (
     <>
@@ -60,7 +85,7 @@ const CustomerTable = () => {
             <DataGrid
               getRowId={(row) => row._id}
               rows={filteredData}
-              columns={CustomerColumns}
+              columns={CustomerColumns.concat(actionColumn)}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -69,6 +94,7 @@ const CustomerTable = () => {
                 },
               }}
               pageSizeOptions={[2]}
+              sx={{width: "100%"}}
             />
           ) : (
             <Typography

@@ -6,12 +6,14 @@ import {
     Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
-import { CustomerColumns } from "../../customerTableSource";
+import {
+    useFetchDataTeam,
+  } from "../../utilities/ApiHooks/team";
+  import { teamColumns } from "../../customerTableSource";
 import './customerTable.css'
 
 export default function ExitingQuotes() {
-    const { data: customerData } = useFetchDataCustomer();
+    const { data: staffData } =     useFetchDataTeam();
     return (
         <>
             <Box
@@ -45,8 +47,8 @@ export default function ExitingQuotes() {
                             margin: "auto"
                         }}
                             getRowId={(row) => row._id}
-                            rows={customerData}
-                            columns={CustomerColumns}
+                            rows={staffData}
+                            columns={teamColumns}
                             initialState={{
                                 pagination: {
                                     paginationModel: {
@@ -57,11 +59,11 @@ export default function ExitingQuotes() {
                             pageSizeOptions={[2]}
                             style={{ backgroundColor: 'white' }}
                         />
-                        <Typography
+                        {/* <Typography
                             sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
                         >
                             No Customer Found
-                        </Typography>
+                        </Typography> */}
                     </div>
 
 

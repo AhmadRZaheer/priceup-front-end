@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme) => ({
 function MobileBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const classes = useStyles();
+  const [activeButton, setActiveButton] = useState(null);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -52,8 +53,16 @@ function MobileBar() {
   const decodedToken = parseJwt(token);
 
   const handleCustomerClick = () => {
-
+    setActiveButton("customr");
     dispatch(setNavigation("customerTable"));
+  };
+  const handleStaffClick = () => {
+    setActiveButton("staff");
+    dispatch(setNavigation("staffTable"));
+  };
+  const handleEstimateClick = () => {
+    setActiveButton("esti");
+    dispatch(setNavigation("existing"));
   };
   return (
     <>
@@ -78,7 +87,7 @@ function MobileBar() {
           open={isSidebarOpen}
           onClose={toggleSidebar}
           classes={{ paper: classes.drawer }}
-          sx={{ width: 340 }}
+          sx={{ width: 380 }}
         >
           <Box
             sx={{
@@ -87,60 +96,85 @@ function MobileBar() {
               height: "100vh",
               padding: 0,
               margin: 0,
-              display:'flex',
-              flexDirection:'column',
-              justifyContent:'space-between'
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between'
             }}
           >
-            <Box>
+            <Box sx={{ height: "92vh" }}>
               <div className="top2">
                 <span className="logo2">
                   <img src={Logo} alt="" />
                 </span>
               </div>
-              <Box sx={{ marginTop: 2 }}>
-                <Button
-                  sx={{
-                    width: 240,
-                    color: "white",
-                    margin: 2,
-                    textTransform: "capitalize",
-                    backgroundColor: "#8477da",
-                    ":hover": {
-                      backgroundColor: "#8477da",
-                    },
-                  }}
-                >
-                 <img
-                    style={{ paddingRight: 10 }}
-                    src={EstimsteIcon}
-                    alt="image of customer"
-                  /> Estimates
-                </Button>
-              </Box>
-              <Box sx={{ marginTop: -2 }}>
-                <Button
-                  sx={{
-                    width: 240,
-                    color: "white",
-                    margin: 2,
-                    textTransform: "capitalize",
-                    backgroundColor: "#8477da",
-                    ":hover": {
-                      backgroundColor: "#8477da",
-                    },
-                  }}
-                  onClick={() => handleCustomerClick()}
-                >
-                 <img
-                    style={{ paddingRight: 10 }}
-                    src={CustomerIcon}
-                    alt="image of customer"
-                  /> Customer
-                </Button>
+              <Box sx={{ height: "65vh", overflow: "auto", width: 280, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
+                <Box sx={{ marginTop: 2 }}>
+                  <Button
+                    sx={{
+                      width: 200,
+                      color: "white",
+                      margin: 2,
+                      textTransform: "capitalize",
+                      backgroundColor: activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                      ":hover": {
+                        backgroundColor: activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                      },
+                    }}
+                    onClick={() => handleEstimateClick()}
+                  >
+                    <img
+                      style={{ paddingRight: 10 }}
+                      src={EstimsteIcon}
+                      alt="image of customer"
+                    /> Estimates
+                  </Button>
+                </Box>
+                <Box sx={{ marginTop: 2 }}>
+                  <Button
+                    sx={{
+                      width: 200,
+                      color: "white",
+                      margin: 2,
+                      textTransform: "capitalize",
+                      backgroundColor: activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                      ":hover": {
+                        backgroundColor: activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                      },
+                    }}
+                    onClick={() => handleCustomerClick()}
+                  >
+                    <img
+                      style={{ paddingRight: 10 }}
+                      src={CustomerIcon}
+                      alt="image of customer"
+                    /> Customer
+                  </Button>
+                </Box>
+                <Box sx={{ marginTop: 2 }}>
+                  <Button
+                    sx={{
+                      width: 200,
+                      color: "white",
+                      margin: 2,
+                      textTransform: "capitalize",
+                      backgroundColor: activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                      ":hover": {
+                        backgroundColor: activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                      },
+                    }}
+                    onClick={handleStaffClick}
+
+                  >
+                    <img
+                      style={{ paddingRight: 10 }}
+                      src={TremIcon}
+                      alt="image of customer"
+                    /> Team
+                  </Button>
+                </Box>
               </Box>
             </Box>
-            
+
             <Box
               sx={{
                 display: "flex",
@@ -151,25 +185,25 @@ function MobileBar() {
                 backgroundColor: "#100d24",
               }}
             >
-              
-                <Tooltip title="Logout" placement="top" arrow>
-                  <Button
-                    sx={{
-                      width: 240,
-                      color: "white",
-                      margin: 2,
+
+              <Tooltip title="Logout" placement="top" arrow>
+                <Button
+                  sx={{
+                    width: 240,
+                    color: "white",
+                    margin: 2,
+                    backgroundColor: "#8477da",
+                    ":hover": {
                       backgroundColor: "#8477da",
-                      ":hover": {
-                        backgroundColor: "#8477da",
-                      },
-                    }}
-                    variant="contained"
-                    onClick={Logout}
-                  >
-                    Logout
-                  </Button>
-                </Tooltip>
-              
+                    },
+                  }}
+                  variant="contained"
+                  onClick={Logout}
+                >
+                  Logout
+                </Button>
+              </Tooltip>
+
               <div className="bottom">
                 <div className="UserIcon">
                   <img
