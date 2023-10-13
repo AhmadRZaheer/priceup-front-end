@@ -5,6 +5,7 @@ import LayoutReview from "./layoutReview";
 import Summary from "./summary";
 import ExitingQuotes from "./existingQuotes";
 import CustomerTable from "./customerTable";
+import StaffTable from "./staffTable";
 import { getPageNavigation,getQuoteState } from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
@@ -42,6 +43,7 @@ const IndexMobile = () => {
       <Box sx={{ backgroundColor: "black" }}>
         {Navigation == "existing" && <ExitingQuotes />}
         {Navigation == "customerTable" && <CustomerTable />}
+        {Navigation == "staffTable" && <StaffTable />}
         {Navigation == "layouts" && <Layout />}
         {Navigation == "measurements" && <LayoutMeasurements />}
         {Navigation == "review" && <LayoutReview />}

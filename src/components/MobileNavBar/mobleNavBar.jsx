@@ -55,6 +55,10 @@ function MobileBar() {
 
     dispatch(setNavigation("customerTable"));
   };
+  const handleStaffClick = () => {
+
+    dispatch(setNavigation("customerTable"));
+  };
   return (
     <>
       <div className="Main">
@@ -78,7 +82,7 @@ function MobileBar() {
           open={isSidebarOpen}
           onClose={toggleSidebar}
           classes={{ paper: classes.drawer }}
-          sx={{ width: 340 }}
+          sx={{ width: 380 }}
         >
           <Box
             sx={{
@@ -92,22 +96,23 @@ function MobileBar() {
               justifyContent:'space-between'
             }}
           >
-            <Box>
+            <Box sx={{height:"92vh"}}>
               <div className="top2">
                 <span className="logo2">
                   <img src={Logo} alt="" />
                 </span>
               </div>
+              <Box sx={{height:"65vh",overflow: "auto",width: 280,display: "flex",flexDirection: "column",justifyContent: "center",alignItems: "center" }}>
               <Box sx={{ marginTop: 2 }}>
                 <Button
                   sx={{
-                    width: 240,
+                    width: 200,
                     color: "white",
                     margin: 2,
                     textTransform: "capitalize",
                     backgroundColor: "#8477da",
                     ":hover": {
-                      backgroundColor: "#8477da",
+                      backgroundColor: "#B0C4DE",
                     },
                   }}
                 >
@@ -118,19 +123,19 @@ function MobileBar() {
                   /> Estimates
                 </Button>
               </Box>
-              <Box sx={{ marginTop: -2 }}>
+              <Box sx={{ marginTop: 2 }}>
                 <Button
                   sx={{
-                    width: 240,
+                    width: 200,
                     color: "white",
                     margin: 2,
                     textTransform: "capitalize",
                     backgroundColor: "#8477da",
                     ":hover": {
-                      backgroundColor: "#8477da",
+                      backgroundColor: "#B0C4DE",
                     },
                   }}
-                  onClick={() => handleCustomerClick()}
+                  onClick = {() => handleCustomerClick()}
                 >
                  <img
                     style={{ paddingRight: 10 }}
@@ -138,6 +143,28 @@ function MobileBar() {
                     alt="image of customer"
                   /> Customer
                 </Button>
+              </Box>    
+              <Box sx={{ marginTop: 2 }}>
+                <Button
+                  sx={{
+                    width: 200,
+                    color: "white",
+                    margin: 2,
+                    textTransform: "capitalize",
+                    backgroundColor: "#8477da",
+                    ":hover": {
+                      backgroundColor: "#B0C4DE",
+                    },
+                  }}
+                  onClick = {() => handleStaffClick()}
+                >
+                 <img
+                    style={{ paddingRight: 10 }}
+                    src={TremIcon}
+                    alt="image of customer"
+                  /> Team
+                </Button>
+              </Box>       
               </Box>
             </Box>
             

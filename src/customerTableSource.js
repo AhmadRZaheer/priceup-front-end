@@ -186,7 +186,7 @@ export const CustomerColumns = [
   {
     field: "name",
     headerName: "Name",
-    width: 330,
+    width: 230,
     renderCell: (params) => {
       return (
         <>
@@ -208,11 +208,11 @@ export const CustomerColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 220 },
+  { field: "email", headerName: "Email address", width: 230 },
   {
     field: "address",
     headerName: "Address",
-    width: 330,
+    width: 230,
   },
   {
     field: "lastQuotedOn",

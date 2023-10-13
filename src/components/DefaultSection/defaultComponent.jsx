@@ -103,7 +103,7 @@ const DefaultComponent = ({ showSnackbar }) => {
     enableReinitialize: true,
     onSubmit: (values) => { },
   });
-  console.log(formik.values,'value')
+  console.log(formik.values, 'value')
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
 
@@ -326,11 +326,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="handles.handleType"
                     style={{ width: "100%" }}
-                    value={formik.values.handles.handleType || null}
-                    onChange={formik.handleChange}
+                    value={formik.values.handles.handleType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("handles.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.handles.map((option) => (
                       <MenuItem key={option?._id} value={option?._id}>
                         {option?.name}
@@ -355,15 +362,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.handles.count !== 0
+                    formik.values.handles.count !== undefined
                       ? formik.values.handles.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
 
             {/* Hinges */}
 
@@ -395,11 +403,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="hinges.hingesType"
                     style={{ width: "100%" }}
-                    value={formik.values.hinges.hingesType || null}
-                    onChange={formik.handleChange}
+                    value={formik.values.hinges.hingesType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("hinges.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.hinges.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option?.name}
@@ -424,15 +439,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.hinges.count !== 0
+                    formik.values.hinges.count !== undefined
                       ? formik.values.hinges.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
             <div
               style={{
                 display: "flex",
@@ -461,11 +477,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="pivotHinge.pivotHingeType"
                     style={{ width: "100%" }}
-                    value={formik.values.pivotHinge.pivotHingeType}
-                    onChange={formik.handleChange}
+                    value={formik.values.pivotHinge.pivotHingeType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("pivotHinge.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.pivotHingeOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -490,15 +513,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.pivotHinge.count !== 0
+                    formik.values.pivotHinge.count !== undefined
                       ? formik.values.pivotHinge.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
             {/* Heavy Duty Option */}
 
             <div
@@ -529,11 +553,19 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="heavyDutyOption.heavyDutyType"
                     style={{ width: "100%" }}
-                    value={formik.values.heavyDutyOption.heavyDutyType}
-                    onChange={formik.handleChange}
+                    value={formik.values.heavyDutyOption.heavyDutyType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextFields to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("heavyDutyOption.threshold", 0);
+                        formik.setFieldValue("heavyDutyOption.height", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyDutyOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -556,14 +588,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                   name="heavyDutyOption.threshold"
                   style={{
                     width: "120px",
-
                     padding: 1,
                     marginX: 1,
                   }}
                   value={
-                    formik.values.heavyDutyOption.threshold !== 0
+                    formik.values.heavyDutyOption.threshold !== undefined
                       ? formik.values.heavyDutyOption.threshold
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -577,15 +608,17 @@ const DefaultComponent = ({ showSnackbar }) => {
                     width: "120px",
                   }}
                   value={
-                    formik.values.heavyDutyOption.height !== 0
+                    formik.values.heavyDutyOption.height !== undefined
                       ? formik.values.heavyDutyOption.height
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
+            {/* Heavy Pivot Option */}
             {/* Heavy Pivot Option */}
             <div
               style={{
@@ -615,11 +648,19 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="heavyPivotOption.heavyPivotType"
                     style={{ width: "100%" }}
-                    value={formik.values.heavyPivotOption.heavyPivotType}
-                    onChange={formik.handleChange}
+                    value={formik.values.heavyPivotOption.heavyPivotType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextFields to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("heavyPivotOption.height", 0);
+                        formik.setFieldValue("heavyPivotOption.threshold", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyPivotOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -644,9 +685,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     width: "120px",
                   }}
                   value={
-                    formik.values.heavyPivotOption.height !== 0
+                    formik.values.heavyPivotOption.height !== undefined
                       ? formik.values.heavyPivotOption.height
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -658,20 +699,20 @@ const DefaultComponent = ({ showSnackbar }) => {
                   name="heavyPivotOption.threshold"
                   style={{
                     width: "120px",
-
                     padding: 1,
                     marginX: 1,
                   }}
                   value={
-                    formik.values.heavyPivotOption.threshold !== 0
+                    formik.values.heavyPivotOption.threshold !== undefined
                       ? formik.values.heavyPivotOption.threshold
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
 
             {/* Channel or Clamps */}
 
@@ -764,7 +805,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.mountingChannel.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -797,7 +838,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   width: "250px",
                   padding: "15px 10px 15px 10px",
                   padding: 4,
-
                   display: "flex",
                   justifyContent: "space-between",
                 }}
@@ -817,11 +857,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="wallClamp.wallClampType"
                     style={{ width: "100%" }}
-                    value={formik.values.wallClamp.wallClampType}
-                    onChange={formik.handleChange}
+                    value={formik.values.wallClamp.wallClampType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("wallClamp.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.wallClamp.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -841,15 +888,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.wallClamp.count !== 0
+                    formik.values.wallClamp.count !== undefined
                       ? formik.values.wallClamp.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
             {/* Sleeve Over */}
             <div
               style={{
@@ -864,7 +912,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   width: "250px",
                   padding: "15px 10px 15px 10px",
                   padding: 4,
-
                   display: "flex",
                   justifyContent: "end",
                 }}
@@ -883,11 +930,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="sleeveOver.sleeveOverType"
                     style={{ width: "100%" }}
-                    value={formik.values.sleeveOver.sleeveOverType}
-                    onChange={formik.handleChange}
+                    value={formik.values.sleeveOver.sleeveOverType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("sleeveOver.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.sleeveOver.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -907,15 +961,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.sleeveOver.count !== 0
+                    formik.values.sleeveOver.count !== undefined
                       ? formik.values.sleeveOver.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
             {/* Glass to Glass */}
             <div
               style={{
@@ -930,7 +985,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                   width: "250px",
                   padding: "15px 10px 15px 10px",
                   padding: 4,
-
                   display: "flex",
                   justifyContent: "end",
                 }}
@@ -949,11 +1003,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="glassToGlass.glassToGlassType"
                     style={{ width: "100%" }}
-                    value={formik.values.glassToGlass.glassToGlassType}
-                    onChange={formik.handleChange}
+                    value={formik.values.glassToGlass.glassToGlassType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === "") {
+                        formik.setFieldValue("glassToGlass.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassToGlass.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -973,9 +1034,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.glassToGlass.count !== 0
+                    formik.values.glassToGlass.count !== undefined
                       ? formik.values.glassToGlass.count
-                      : null
+                      : 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -1012,13 +1073,18 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="glassType.type"
                     style={{ width: "100%" }}
-                    value={formik.values.glassType.type}
+                    value={formik.values.glassType.type || ""}
                     onChange={(event) => {
                       formik.handleChange(event);
+
+                      // Check if the selected value is empty and set the value of "thickness" to "0"
+                      if (event.target.value === "") {
+                        formik.setFieldValue("glassType.thickness", "0");
+                      }
                     }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassType.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1039,7 +1105,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   onBlur={formik.handleBlur}
                   required={true}
                 >
-                   <MenuItem value="">Select Empty</MenuItem>
+                  <MenuItem value="0">0</MenuItem>
                   <MenuItem key="1/2" value="1/2">
                     1/2
                   </MenuItem>
@@ -1049,6 +1115,8 @@ const DefaultComponent = ({ showSnackbar }) => {
                 </TextField>
               </Box>
             </div>
+
+
             {/*   sliding Door System */}
 
             <div
@@ -1066,7 +1134,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 sliding Door System
-              </div>{" "}
+              </div>
               <div
                 style={{
                   width: "250px",
@@ -1080,17 +1148,21 @@ const DefaultComponent = ({ showSnackbar }) => {
                     name="slidingDoorSystem.type"
                     style={{ width: "100%" }}
                     value={formik.values.slidingDoorSystem.type}
-                    onChange={formik.handleChange}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+                      if (e.target.value === "") {
+                        // Set the number TextField value to 0 when "Select Empty" is chosen
+                        formik.setFieldValue("slidingDoorSystem.count", 0);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
-                    {singleDefault?.listData?.slidingDoorSystem.map(
-                      (option) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {option.name}
-                        </MenuItem>
-                      )
-                    )}
+                    <MenuItem value="">Select Empty</MenuItem>
+                    {singleDefault?.listData?.slidingDoorSystem.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
                   </TextField>
                 </Box>
               </div>
@@ -1107,13 +1179,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                   value={
                     formik.values.slidingDoorSystem.count !== 0
                       ? formik.values.slidingDoorSystem.count
-                      : null
+                      : 0 // Set the default value to 0
                   }
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                 />
               </Box>
             </div>
+
 
             {/* Outages */}
 
@@ -1195,7 +1268,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.transom.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1246,7 +1319,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.header.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1297,7 +1370,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value="">Select Empty</MenuItem>
                     {singleDefault?.listData?.glassAddons.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
