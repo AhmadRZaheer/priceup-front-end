@@ -55,12 +55,22 @@ export const useCreateEstimates = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
+    const username = decodedToken.name;
+
+    const randomNumbers = generateRandomNumbers(4);
+
     try {
       const response = await axios.post(
         `${backendURL}/estimates/save`,
         {
           customerData: props.customerData,
-          estimateData: { ...props.estimateData, creator_id: decodedToken.id, creator_type: decodedToken.role, status: "pending" },
+          estimateData: {
+            ...props.estimateData,
+            creator_id: decodedToken.id,
+            creator_type: decodedToken.role,
+            status: "pending",
+            name: `${username}${randomNumbers}`,
+          },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -70,7 +80,7 @@ export const useCreateEstimates = () => {
       if (response.data.code === 200) {
         return response.data.data;
       } else {
-        throw new Error("An error occurred while creating the data.");
+        throw Error("An error occurred while creating the data.");
       }
     } catch (error) {
       throw new Error("An error occurred while creating the data.");
@@ -79,6 +89,15 @@ export const useCreateEstimates = () => {
 
   return useMutation(handleCreate);
 };
+
+function generateRandomNumbers(count) {
+  const randomNumbers = [];
+  for (let i = 0; i < count; i++) {
+    randomNumbers.push(String(1000 + Math.floor(Math.random() * 9000)));
+  }
+  return randomNumbers.join('');
+}
+
 
 export const useEditEstimates = () => {
   const handleEditEstimate = async (updatedEstimate) => {
@@ -89,7 +108,7 @@ export const useEditEstimates = () => {
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
           customerData: updatedEstimate.customerData,
-          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id , creator_type: decodedToken.role },
+          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id, creator_type: decodedToken.role },
         },
         {
           headers: { Authorization: `Bearer ${token}` },

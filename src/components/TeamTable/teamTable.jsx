@@ -187,6 +187,7 @@ const TeamTable = () => {
                 },
               }}
               pageSizeOptions={[2]}
+              sx={{width: "100%"}}
             />
           ) : (
             <Typography
