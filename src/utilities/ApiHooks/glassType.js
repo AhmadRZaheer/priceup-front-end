@@ -104,44 +104,37 @@ export const useCreateGlassType = () => {
 };
 
 export const useEditGlassType = () => {
- const handleEdit = async (props) => {
-  const token = localStorage.getItem("token");
-  try {
-    const formData = new FormData();
-    formData.append('id', props.id);
-
-    if (props.glassTypeData) {
-      // Append the fields of glassTypeData individually
-      formData.append('name', props.glassTypeData.name);
-      formData.append('image', props.glassTypeData.image);
-    }
-
-    const requestData = {
-      ...(props.optionsData ? { options: props.optionsData } : {}),
-    };
-
-    const response = await axios.put(
-      `${backendURL}/glassTypes/${props.id}`,
-      formData, // Send glassTypeData as FormData
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        params: requestData, // Send optionsData as request parameters
+  const handleEdit = async (props) => {
+    const token = localStorage.getItem("token");
+    try {
+      let formData = new FormData();
+      if (props.optionsData) {
+        formData = { ...formData, ...{ options: props.optionsData } };
       }
-    );
+      if (props.glassTypeData) {
+        formData = { ...formData, name: props.glassTypeData.name };
+        formData.append("image", props.glassTypeData.image);
+      }
+      const response = await axios.put(
+        `${backendURL}/glassTypes/${props?.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
-    if (response.data.code === 200) {
-      return response.data.data;
-    } else {
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
       throw new Error("An error occurred while updating the data.");
     }
-  } catch (error) {
-    throw new Error("An error occurred while updating the data.");
-  }
-};
-
+  };
 
   return useMutation(handleEdit);
 };
