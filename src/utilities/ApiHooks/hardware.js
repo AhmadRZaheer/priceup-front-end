@@ -2,6 +2,7 @@ import { backendURL, createSlug } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useEffect, useState } from "react";
 
 export const useFetchDatahardwareCategory = () => {
   async function fetchData() {
@@ -28,6 +29,9 @@ export const useFetchDatahardwareCategory = () => {
 };
 
 export const useFetchDatahardware = (type) => {
+  const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isFetching, setIsFetching] = useState(true);
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
@@ -46,12 +50,37 @@ export const useFetchDatahardware = (type) => {
       throw new Error("An error occurred while fetching the data.");
     }
   }
-  return useQuery({
-    queryKey: ["hardwareData", type],
-    queryFn: fetchData,
-    enabled: true,
-    placeholderData: [],
-  });
+  const refetch = () => {
+    setIsLoading(true);
+    setIsFetching(true);
+    fetchData()
+      .then((fetchedData) => {
+        setData(fetchedData);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsFetching(false);
+      });
+  };
+
+  useEffect(() => {
+    setIsFetching(true);
+    fetchData()
+      .then((fetchedData) => {
+        setData(fetchedData);
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+      .finally(() => {
+        setIsLoading(false);
+        setIsFetching(false);
+      });
+  }, [type]);
+  return { data, isLoading, isFetching, refetch };
 };
 
 export const useDeleteHardwares = () => {

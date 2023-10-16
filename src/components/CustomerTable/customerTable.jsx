@@ -5,18 +5,26 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Typography, Input,InputAdornment,IconButton } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { Search } from '@mui/icons-material';
-import { EditOutlined } from "@mui/icons-material";
+import CustomerQoute from "../Modal/customerQuotTable";
 
 const CustomerTable = () => {
   const { data: customerData } = useFetchDataCustomer();
   const [search, setSearch] = useState("");
-
-  // Filter the customerData based on the search input
+  const [open, setOpen] = React.useState(false);
+  const [dataForQuote, setDataForQuote] = useState(null); // Store the data for the quote
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const filteredData = customerData?.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())
   );
+  const handleClose = () => setOpen(false);
+  const handleOpenEdit = (params) => {
+    setSelectedRowData(params.row); // Store the data of the selected row
+    setOpen(true);
+    // setEdit(data);
+    // setIsEdit(true);
+  };
 
   const actionColumn = [
     {
@@ -35,6 +43,7 @@ const CustomerTable = () => {
               borderRadius: 2,
               fontSize: 15,
             }}
+            onClick={() => handleOpenEdit(params.row)}
             >Check Quote</IconButton>
           </>
         );
@@ -86,6 +95,7 @@ const CustomerTable = () => {
               getRowId={(row) => row._id}
               rows={filteredData}
               columns={CustomerColumns.concat(actionColumn)}
+              onRowClick={(params) => handleOpenEdit(params)}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -104,6 +114,16 @@ const CustomerTable = () => {
             </Typography>
           )}
         </div>
+
+        <CustomerQoute
+          open={open}
+          close={handleClose}
+          data={selectedRowData}
+          // data={edit}
+          // isEdit={isEdit}
+          // finishesRefetch={finishesRefetch}
+          // showSnackbar={showSnackbar}
+        />
       </Box>
     </>
   );

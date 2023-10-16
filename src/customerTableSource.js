@@ -221,6 +221,31 @@ export const CustomerColumns = [
   },
   ,
 ];
+export const CustomerQuoteColumns = [
+  {
+    field: "name",
+    headerName: "Name",
+    width: 230,
+    renderCell: (params) => {
+      return (
+        <>
+          <div className="cellWrapper">
+            <div className="customerNameTable">
+              {params.row.name}
+              <div className="userNameTable">{params.row.username}</div>
+            </div>
+          </div>
+        </>
+      );
+    },
+  },
+  {
+    field: "lastQuotedOn",
+    headerName: "Last Quoted on",
+    width: 220,
+  },
+  ,
+];
 export const userColumns = [
   {
     field: "id",
