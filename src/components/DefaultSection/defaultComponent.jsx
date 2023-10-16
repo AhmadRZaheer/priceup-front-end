@@ -482,9 +482,6 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
-                        formik.setFieldValue("pivotHinge.count", 0);
-                      }
                     }}
                     onBlur={formik.handleBlur}
                   >
