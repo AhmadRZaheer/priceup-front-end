@@ -8,12 +8,13 @@ import { Search } from '@mui/icons-material';
 import CustomerQoute from "../Modal/customerQuotTable";
 
 const CustomerTable = () => {
-  const { data: customerData } = useFetchDataCustomer();
+  const { data: teamData } = useFetchDataCustomer();
+  console.log("data",teamData)
   const [search, setSearch] = useState("");
   const [open, setOpen] = React.useState(false);
   const [dataForQuote, setDataForQuote] = useState(null); // Store the data for the quote
   const [selectedRowData, setSelectedRowData] = useState(null);
-  const filteredData = customerData?.filter(
+  const filteredData = teamData?.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())

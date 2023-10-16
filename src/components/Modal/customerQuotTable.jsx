@@ -3,6 +3,11 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid
 import { CustomerQuoteColumns } from "../../customerTableSource";
+import { IconButton } from "@mui/material";
+import { useDispatch } from "react-redux";
+import {
+  setNavigationDesktop,
+} from "../../redux/estimateCalculations";
 const style = {
   position: "absolute",
   display: "flex",
@@ -17,11 +22,38 @@ const style = {
   p: 4,
 };
 
+
 const dataGridStyle = {
   background: "white", // Set the background to white
 };
-
 export default function AddEditFinish({ open, close, data }) {
+  const dispatch = useDispatch();
+  const handleIconButtonClick = (param) => {
+    dispatch(setNavigationDesktop("review"));
+  };
+  const actionColumn = [
+    {
+      field: "Status",
+      align: "left",
+      minWidth: "280px",
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+            sx={{
+              backgroundColor: "#8477DA",
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 15,
+            }}
+            >Update</IconButton>
+          </>
+        );
+      },
+    },
+  ];
 console.log(data)
   return (
     <div>
@@ -39,7 +71,7 @@ console.log(data)
             <DataGrid
               getRowId={(row) => row._id}
               rows={[data]} // Pass the selected row data as an array
-              columns={CustomerQuoteColumns}
+              columns={CustomerQuoteColumns.concat(actionColumn)}
               pageSize={1} // Display only one row
               autoHeight
               disableColumnFilter
@@ -49,7 +81,7 @@ console.log(data)
           <Button
             variant="outlined"
             onClick={close}
-            sx={{ color: "black", border: "1px solid #D0D5DD", width: "50%" }}
+            sx={{ color: "#fff", border: "1px solid #D0D5DD", width: "30%" }}
           >
             Cancel
           </Button>

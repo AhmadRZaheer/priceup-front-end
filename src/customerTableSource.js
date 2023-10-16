@@ -191,14 +191,13 @@ export const CustomerColumns = [
       return (
         <>
           <div className="cellWrapper">
-            <div className="customerImg">
+            {/* <div className="customerImg">
               <img
                 style={{ width: 30, height: 30 }}
                 src={`${backendURL}/${params.row.image}`}
                 alt=""
               />
-              {/* <img style={{}} src={wheel} alt="" /> */}
-            </div>
+            </div> */}
             <div className="customerNameTable">
               {params.row.name}
               <div className="userNameTable">{params.row.username}</div>
@@ -209,39 +208,17 @@ export const CustomerColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 230 },
-  {
-    field: "address",
-    headerName: "Address",
-    width: 230,
-  },
-  {
-    field: "lastQuotedOn",
-    headerName: "Last Quoted on",
-    width: 220,
-  },
   ,
 ];
 export const CustomerQuoteColumns = [
   {
-    field: "name",
-    headerName: "Name",
-    width: 230,
-    renderCell: (params) => {
-      return (
-        <>
-          <div className="cellWrapper">
-            <div className="customerNameTable">
-              {params.row.name}
-              <div className="userNameTable">{params.row.username}</div>
-            </div>
-          </div>
-        </>
-      );
-    },
+    field: "estimateName",
+    headerName: "Reffrence",
+    width: 220,
   },
-  {
+    {
     field: "lastQuotedOn",
-    headerName: "Last Quoted on",
+    headerName: "LastQuotedOn",
     width: 220,
   },
   ,
