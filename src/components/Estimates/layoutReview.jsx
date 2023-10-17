@@ -538,7 +538,7 @@ const navigate = useNavigate();
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Hinges CutOut</Typography>
+                  <Typography>Hinge CutOut</Typography>
                   <Box
                     sx={{
                       display: "flex",
