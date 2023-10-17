@@ -6,11 +6,11 @@ import { CustomerQuoteColumns } from "../../customerTableSource";
 import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { backendURL } from "../../utilities/common";
-import {
-  initializeStateForEditQuote,
-  setListData,
-  setNavigationDesktop,
-} from "../../redux/estimateCalculations";
+// import {
+//   initializeStateForEditQuote,
+//   setListData,
+//   setNavigationDesktop,
+// } from "../../redux/estimateCalculations";
 
 const style = {
   position: "absolute",
@@ -69,16 +69,16 @@ useEffect(() => {
   }
 }, [open, quoteId]);
 
-const handleIconButtonClick = (params) => {
-  dispatch(setListData(estimates));
-  dispatch(
-    initializeStateForEditQuote({
-      estimateData: params.row,
-      quotesId: params.row.id,
-    })
-  );
-  dispatch(setNavigationDesktop("review"));
-};
+// const handleIconButtonClick = (params) => {
+//   dispatch(setListData(estimates));
+//   dispatch(
+//     initializeStateForEditQuote({
+//       estimateData: params.row,
+//       quotesId: params.row.id,
+//     })
+//   );
+//   dispatch(setNavigationDesktop("review"));
+// };
   const actionColumn = [
     {
       field: "Status",
@@ -97,7 +97,7 @@ const handleIconButtonClick = (params) => {
                 borderRadius: 2,
                 fontSize: 15,
               }}
-              onClick={() => handleIconButtonClick(params)}
+              // onClick={() => handleIconButtonClick(params)}
             >
               Update
             </IconButton>
