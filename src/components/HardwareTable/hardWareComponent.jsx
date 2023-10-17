@@ -36,8 +36,8 @@ const HardWareComponent = ({ type }) => {
 
   const {
     data: hardwareData,
-    refetch: hardwareRefetch,
     isFetching: hardwareFetching,
+    refetch: hardwareRefetch
   } = useFetchDatahardware(type);
  
   const [open, setOpen] = React.useState(false);

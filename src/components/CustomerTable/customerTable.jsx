@@ -5,18 +5,26 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Typography, Input,InputAdornment,IconButton } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { Search } from '@mui/icons-material';
-import { EditOutlined } from "@mui/icons-material";
+import CustomerQoute from "../Modal/customerQuotTable";
 
 const CustomerTable = () => {
-  const { data: customerData } = useFetchDataCustomer();
-  const [search, setSearch] = useState("");
-
-  // Filter the customerData based on the search input
-  const filteredData = customerData?.filter(
+  const { data: teamData } = useFetchDataCustomer();
+  console.log("data",teamData)
+  const [search, setSearch] = React.useState("");
+  const [open, setOpen] = React.useState(false);
+  const [selectedRowData, setSelectedRowData] = React.useState(null);
+  const filteredData = teamData?.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleClose = () => setOpen(false);
+
+  const handleOpenEdit = (params) => {
+    setSelectedRowData(params.row); // Store the data of the selected row
+    setOpen(true);
+  };
 
   const actionColumn = [
     {
@@ -27,15 +35,18 @@ const CustomerTable = () => {
         return (
           <>
             <IconButton
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 15,
-            }}
-            >Check Quote</IconButton>
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 15,
+              }}
+              onClick={() => handleOpenEdit(params)}
+            >
+              Check Quote
+            </IconButton>
           </>
         );
       },
@@ -70,14 +81,14 @@ const CustomerTable = () => {
           onChange={(e) => setSearch(e.target.value)}
           sx={{
             mb: 2,
-            width: '20%', // You can adjust the width as needed
-            marginLeft: '30px', // Adjust the margin as needed
+            width: "20%",
+            marginLeft: "30px",
           }}
-          endAdornment={(
+          endAdornment={
             <InputAdornment position="end">
               <Search />
             </InputAdornment>
-          )}
+          }
         />
 
         <div className="CustomerTable">
@@ -86,6 +97,7 @@ const CustomerTable = () => {
               getRowId={(row) => row._id}
               rows={filteredData}
               columns={CustomerColumns.concat(actionColumn)}
+              onRowClick={(params) => handleOpenEdit(params)}
               initialState={{
                 pagination: {
                   paginationModel: {
@@ -94,7 +106,7 @@ const CustomerTable = () => {
                 },
               }}
               pageSizeOptions={[2]}
-              sx={{width: "100%"}}
+              sx={{ width: "100%" }}
             />
           ) : (
             <Typography
@@ -104,6 +116,8 @@ const CustomerTable = () => {
             </Typography>
           )}
         </div>
+
+        <CustomerQoute open={open} close={handleClose} quoteId={selectedRowData ? selectedRowData._id : null} />
       </Box>
     </>
   );

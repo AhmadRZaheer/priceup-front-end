@@ -21,6 +21,7 @@ import { useEffect } from "react";
 
 export default function ExistingTable() {
    const { data, isFetching, refetch } = useGetEstimates();
+   console.log("data",data)
   const {
     data: estimateListData,
     isFetching: estimateDataFetching,
@@ -33,7 +34,7 @@ export default function ExistingTable() {
   const [search, setSearch] = useState('');
   
   const filteredData = data?.estimates?.filter(item =>
-    item.customerData.name.toLowerCase().includes(search.toLowerCase())
+    item.customerData.email.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleDeleteEstimate = (id) => {

@@ -41,11 +41,12 @@ const FinishItem = ({
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
+
   const formik = useFormik({
     initialValues: {
-      partNumber: data?.partNumber,
-      cost: data?.cost,
-      status: data?.status,
+      partNumber: data?.partNumber, // Initialize with empty string
+      cost: data?.cost, // Initialize with a default value (0 in this case)
+      status: data?.status, // Initialize as false (assuming it's a boolean)
     },
     validationSchema,
     onSubmit: async (values, resetForm) => {
@@ -73,7 +74,6 @@ const FinishItem = ({
     }
   }, []);
 
-
   const handleFinishDelete = (event) => {
     event.preventDefault();
     deleteFinish({ hardwareId: hardwareId, finishId: data._id });
@@ -94,17 +94,16 @@ const FinishItem = ({
   const handlePartChange = (event) => {
     formik.handleChange(event);
     const value = event.target.value;
-    if (value.length > 0) {
-      const originalArray = [...UpdateValue];
-      originalArray[index] = {
-        ...data,
-        partNumber: value,
-        cost: formik.values.cost,
-        status: formik.values.status,
-      };
-      SetUpdateValue(originalArray);
-    }
+    const originalArray = [...UpdateValue];
+    originalArray[index] = {
+      ...data,
+      partNumber: value,
+      cost: formik.values.cost,
+      status: formik.values.status,
+    };
+    SetUpdateValue(originalArray);
   };
+
   const handleStatusChange = (event) => {
     formik.handleChange(event);
     const value = event.target.checked;
@@ -117,19 +116,18 @@ const FinishItem = ({
     };
     SetUpdateValue(originalArray);
   };
+
   const handleCostChange = (event) => {
     formik.handleChange(event);
     const value = event.target.value;
-    if (value.length > 0) {
-      const originalArray = [...UpdateValue];
-      originalArray[index] = {
-        ...data,
-        cost: value,
-        partNumber: formik.values.partNumber,
-        status: formik.values.status,
-      };
-      SetUpdateValue(originalArray);
-    }
+    const originalArray = [...UpdateValue];
+    originalArray[index] = {
+      ...data,
+      cost: value,
+      partNumber: formik.values.partNumber,
+      status: formik.values.status,
+    };
+    SetUpdateValue(originalArray);
   };
   return (
     <Box key={index} >
