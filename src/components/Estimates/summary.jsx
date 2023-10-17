@@ -100,6 +100,9 @@ const Summary = () => {
                   .map((measurement) => measurement.value)
                   .join("’’/ ")}
               </Typography>
+                            <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                Summary{" "}
+              </Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -110,13 +113,24 @@ const Summary = () => {
                   paddingY: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: "bold" }}>Price</Typography>
-                <Typography variant="h6">
+                <Typography sx={{ fontWeight: "bold",marginTop: "6px" }}>Total Price</Typography>
+                <Typography sx={{marginTop: "6px"}} variant="h6">
                   ${totalPrice?.toFixed(2) || 0}
                 </Typography>
               </Box>{" "}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  borderTop: "2px solid #D0D5DD",
+                  marginTop: 1,
+                  paddingY: 1,
+                }}
+              >
+              </Box>{" "}
               <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                Summary{" "}
+                Sub Category{" "}
               </Typography>
               {selectedContent?.hardwareFinishes && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                 <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
