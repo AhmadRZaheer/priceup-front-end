@@ -1,13 +1,17 @@
-import * as React from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
-import { DataGrid } from "@mui/x-data-grid"; // Import DataGrid
+import { DataGrid } from "@mui/x-data-grid";
 import { CustomerQuoteColumns } from "../../customerTableSource";
 import { IconButton } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  setNavigationDesktop,
-} from "../../redux/estimateCalculations";
+import { backendURL } from "../../utilities/common";
+// import {
+//   initializeStateForEditQuote,
+//   setListData,
+//   setNavigationDesktop,
+// } from "../../redux/estimateCalculations";
+
 const style = {
   position: "absolute",
   display: "flex",
@@ -22,39 +26,87 @@ const style = {
   p: 4,
 };
 
-
 const dataGridStyle = {
-  background: "white", // Set the background to white
+  background: "white",
 };
-export default function AddEditFinish({ open, close, data }) {
-  const dispatch = useDispatch();
-  const handleIconButtonClick = (param) => {
-    dispatch(setNavigationDesktop("review"));
+
+export default function AddEditFinish({ open, close, quoteId }) {
+  const [estimates, setEstimates] = useState([]); // State to store fetched data
+  const [loading, setLoading] = useState(true); // State to indicate loading
+  const [error, setError] = useState(null); // State to store error
+console.log("qutid",estimates)
+const dispatch = useDispatch();
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      // Make the API call
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${backendURL}/users/getQuote/${quoteId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const responseData = await response.json();
+
+      // Map and transform the data from the API response
+      const formattedData = responseData.data.map((item) => ({
+        id: item._id, // Replace with a unique identifier if available
+        name: item.name,
+      }));
+
+      setEstimates(formattedData);
+      setLoading(false);
+      setError(null);
+    } catch (error) {
+      setError(error);
+      setLoading(false);
+    }
   };
+
+  if (open) {
+    fetchData();
+  }
+}, [open, quoteId]);
+
+// const handleIconButtonClick = (params) => {
+//   dispatch(setListData(estimates));
+//   dispatch(
+//     initializeStateForEditQuote({
+//       estimateData: params.row,
+//       quotesId: params.row.id,
+//     })
+//   );
+//   dispatch(setNavigationDesktop("review"));
+// };
   const actionColumn = [
     {
       field: "Status",
       align: "left",
       minWidth: "280px",
       renderCell: (params) => {
+        console.log(params.row.id)
         return (
           <>
             <IconButton
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 15,
-            }}
-            >Update</IconButton>
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 15,
+              }}
+              // onClick={() => handleIconButtonClick(params)}
+            >
+              Update
+            </IconButton>
           </>
         );
       },
     },
   ];
-console.log(data)
+
   return (
     <div>
       <Modal
@@ -66,13 +118,17 @@ console.log(data)
           backgroundColor: "rgba(0, 0, 0, 0.5)",
         }}
       >
-            <div style={style}>
-          {data && (
+        <div style={style}>
+          {loading ? (
+            <p>Loading...</p>
+          ) : error ? (
+            <p>Error: {error.message}</p>
+          ) : (
             <DataGrid
-              getRowId={(row) => row._id}
-              rows={[data]} // Pass the selected row data as an array
+            getRowId={(row) => row.id}
+              rows={estimates} // Pass the fetched data as an array
               columns={CustomerQuoteColumns.concat(actionColumn)}
-              pageSize={1} // Display only one row
+              pageSize={1}
               autoHeight
               disableColumnFilter
               style={dataGridStyle}
@@ -86,7 +142,6 @@ console.log(data)
             Cancel
           </Button>
         </div>
-
       </Modal>
     </div>
   );

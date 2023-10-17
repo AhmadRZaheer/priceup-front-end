@@ -10,21 +10,20 @@ import CustomerQoute from "../Modal/customerQuotTable";
 const CustomerTable = () => {
   const { data: teamData } = useFetchDataCustomer();
   console.log("data",teamData)
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [dataForQuote, setDataForQuote] = useState(null); // Store the data for the quote
-  const [selectedRowData, setSelectedRowData] = useState(null);
+  const [selectedRowData, setSelectedRowData] = React.useState(null);
   const filteredData = teamData?.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())
   );
+
   const handleClose = () => setOpen(false);
+
   const handleOpenEdit = (params) => {
     setSelectedRowData(params.row); // Store the data of the selected row
     setOpen(true);
-    // setEdit(data);
-    // setIsEdit(true);
   };
 
   const actionColumn = [
@@ -36,16 +35,18 @@ const CustomerTable = () => {
         return (
           <>
             <IconButton
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 15,
-            }}
-            onClick={() => handleOpenEdit(params.row)}
-            >Check Quote</IconButton>
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 15,
+              }}
+              onClick={() => handleOpenEdit(params)}
+            >
+              Check Quote
+            </IconButton>
           </>
         );
       },
@@ -80,14 +81,14 @@ const CustomerTable = () => {
           onChange={(e) => setSearch(e.target.value)}
           sx={{
             mb: 2,
-            width: '20%', // You can adjust the width as needed
-            marginLeft: '30px', // Adjust the margin as needed
+            width: "20%",
+            marginLeft: "30px",
           }}
-          endAdornment={(
+          endAdornment={
             <InputAdornment position="end">
               <Search />
             </InputAdornment>
-          )}
+          }
         />
 
         <div className="CustomerTable">
@@ -105,7 +106,7 @@ const CustomerTable = () => {
                 },
               }}
               pageSizeOptions={[2]}
-              sx={{width: "100%"}}
+              sx={{ width: "100%" }}
             />
           ) : (
             <Typography
@@ -116,15 +117,7 @@ const CustomerTable = () => {
           )}
         </div>
 
-        <CustomerQoute
-          open={open}
-          close={handleClose}
-          data={selectedRowData}
-          // data={edit}
-          // isEdit={isEdit}
-          // finishesRefetch={finishesRefetch}
-          // showSnackbar={showSnackbar}
-        />
+        <CustomerQoute open={open} close={handleClose} quoteId={selectedRowData ? selectedRowData._id : null} />
       </Box>
     </>
   );

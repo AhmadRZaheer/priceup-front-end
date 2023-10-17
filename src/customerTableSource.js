@@ -208,20 +208,15 @@ export const CustomerColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 230 },
+  { field: "lastQuotedOn", headerName: "LastQuoted", width: 230 },
   ,
 ];
 export const CustomerQuoteColumns = [
   {
-    field: "estimateName",
+    field: "name",
     headerName: "Reffrence",
     width: 220,
   },
-    {
-    field: "lastQuotedOn",
-    headerName: "LastQuotedOn",
-    width: 220,
-  },
-  ,
 ];
 export const userColumns = [
   {
