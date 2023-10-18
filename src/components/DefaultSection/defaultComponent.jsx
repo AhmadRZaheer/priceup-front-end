@@ -330,7 +330,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("handles.count", 0);
                       }
                     }}
@@ -407,7 +407,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("hinges.count", 0);
                       }
                     }}
@@ -481,7 +481,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("pivotHingeOption.count", 0);
                       }
                     }}
@@ -557,7 +557,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextFields to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("heavyDutyOption.threshold", 0);
                         formik.setFieldValue("heavyDutyOption.height", 0);
                       }
@@ -652,7 +652,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextFields to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("heavyPivotOption.height", 0);
                         formik.setFieldValue("heavyPivotOption.threshold", 0);
                       }
@@ -861,7 +861,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("wallClamp.count", 0);
                       }
                     }}
@@ -934,7 +934,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("sleeveOver.count", 0);
                       }
                     }}
@@ -1007,7 +1007,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         formik.setFieldValue("glassToGlass.count", 0);
                       }
                     }}
@@ -1077,7 +1077,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       formik.handleChange(event);
 
                       // Check if the selected value is empty and set the value of "thickness" to "0"
-                      if (event.target.value === "") {
+                      if (event.target.value === null) {
                         formik.setFieldValue("glassType.thickness", "0");
                       }
                     }}
@@ -1149,7 +1149,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     value={formik.values.slidingDoorSystem.type}
                     onChange={(e) => {
                       formik.handleChange(e);
-                      if (e.target.value === "") {
+                      if (e.target.value === null) {
                         // Set the number TextField value to 0 when "Select Empty" is chosen
                         formik.setFieldValue("slidingDoorSystem.count", 0);
                       }
