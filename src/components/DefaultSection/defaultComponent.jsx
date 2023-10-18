@@ -40,10 +40,9 @@ const DefaultComponent = ({ showSnackbar }) => {
 
       hinges: {
         hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
-
         count: singleDefault?.layoutData?.settings?.hinges?.count,
       },
-      pivotHinge: {
+      pivotHingeOption: {
         pivotHingeType:
           singleDefault?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
         count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
@@ -121,7 +120,7 @@ const DefaultComponent = ({ showSnackbar }) => {
 
     const id = defaultId;
     updateDefault({ settings: updatedValues, id: id });
-    formik.resetForm();
+    // formik.resetForm();
   };
   useEffect(() => {
     if (SuccessForEdit) {
@@ -278,7 +277,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.hardwareFinishes.map((option) => (
                       <MenuItem key={option.name} value={option?._id}>
                         {option.name}
@@ -337,7 +336,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.handles.map((option) => (
                       <MenuItem key={option?._id} value={option?._id}>
                         {option?.name}
@@ -414,7 +413,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.hinges.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option?.name}
@@ -475,20 +474,20 @@ const DefaultComponent = ({ showSnackbar }) => {
                     select
                     size="small"
                     variant="outlined"
-                    name="pivotHinge.pivotHingeType"
+                    name="pivotHingeOption.pivotHingeType"
                     style={{ width: "100%" }}
-                    value={formik.values.pivotHinge.pivotHingeType || ""}
+                    value={formik.values.pivotHingeOption.pivotHingeType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === "") {
-                        formik.setFieldValue("pivotHinge.count", 0);
+                        formik.setFieldValue("pivotHingeOption.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.pivotHingeOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -507,14 +506,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                   type="number"
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.count"
+                  name="pivotHingeOption.count"
                   style={{
                     width: "250px",
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.pivotHinge.count !== undefined
-                      ? formik.values.pivotHinge.count
+                    formik.values.pivotHingeOption.count !== undefined
+                      ? formik.values.pivotHingeOption.count
                       : 0
                   }
                   onChange={formik.handleChange}
@@ -565,7 +564,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyDutyOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -660,7 +659,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.heavyPivotOption.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -805,7 +804,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.mountingChannel.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -868,7 +867,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.wallClamp.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -941,7 +940,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.sleeveOver.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1014,7 +1013,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.glassToGlass.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1084,7 +1083,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.glassType.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1157,7 +1156,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.slidingDoorSystem.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1268,7 +1267,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.transom.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1319,7 +1318,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.header.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}
@@ -1370,7 +1369,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                    <MenuItem value="">Select Empty</MenuItem>
+                    <MenuItem value={null}>Select Empty</MenuItem>
                     {singleDefault?.listData?.glassAddons.map((option) => (
                       <MenuItem key={option._id} value={option._id}>
                         {option.name}

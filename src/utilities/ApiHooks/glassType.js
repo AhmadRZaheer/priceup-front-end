@@ -107,14 +107,20 @@ export const useEditGlassType = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
     try {
-      let formData = new FormData();
-      if (props.optionsData) {
-        formData = { ...formData, ...{ options: props.optionsData } };
-      }
-      if (props.glassTypeData) {
-        formData = { ...formData, name: props.glassTypeData.name };
+      const updatedData = {
+        ...(props.optionsData ? { options: props.optionsData } : {}),
+        ...(props.glassTypeData
+          ? {
+              name: props.glassTypeData.name,
+              // image: props.glassTypeData.image,
+            }
+          : {}),
+      };
+      const formData = new FormData();
+      if (props?.glassTypeData?.image) {
         formData.append("image", props.glassTypeData.image);
       }
+      formData.append("jsonData", JSON.stringify(updatedData));
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,
         formData,
