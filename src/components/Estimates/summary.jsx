@@ -22,7 +22,7 @@ const Summary = () => {
   const fabricationPrice = useSelector(getFabricationTotal);
   const miscPrice = useSelector(getMiscTotal);
   const laborPrice = useSelector(getLaborTotal);
-  
+
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
@@ -100,7 +100,7 @@ const Summary = () => {
                   .map((measurement) => measurement.value)
                   .join("’’/ ")}
               </Typography>
-                            <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                 Summary{" "}
               </Typography>
               <Box
@@ -113,8 +113,8 @@ const Summary = () => {
                   paddingY: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: "bold",marginTop: "6px" }}>Total Price</Typography>
-                <Typography sx={{marginTop: "6px"}} variant="h6">
+                <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>Total Price</Typography>
+                <Typography variant="h6">
                   ${totalPrice?.toFixed(2) || 0}
                 </Typography>
               </Box>{" "}
@@ -129,9 +129,6 @@ const Summary = () => {
                 }}
               >
               </Box>{" "}
-              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                Sub Category{" "}
-              </Typography>
               {selectedContent?.hardwareFinishes && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                 <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
                 <Typography>
@@ -163,21 +160,21 @@ const Summary = () => {
               {selectedContent?.mountingClamps?.wallClamp?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>WallClamps: </Typography>
-                  {selectedContent?.mountingClamps?.wallClamp?.map((row)=>
+                  {selectedContent?.mountingClamps?.wallClamp?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}
               {selectedContent?.mountingClamps?.sleeveOver?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
-                  {selectedContent?.mountingClamps?.sleeveOver?.map((row)=>
+                  {selectedContent?.mountingClamps?.sleeveOver?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}
               {selectedContent?.mountingClamps?.glassToGlass?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
-                  {selectedContent?.mountingClamps?.glassToGlass?.map((row)=>
+                  {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}
@@ -210,10 +207,10 @@ const Summary = () => {
                 <Typography sx={{ fontWeight: "bold" }}>
                   Glass Addons:
                 </Typography>
-                {selectedContent?.glassAddons?.map((item)=>
+                {selectedContent?.glassAddons?.map((item) =>
                   <Typography>
-                {`${item?.name} `}
-                </Typography>
+                    {`${item?.name} `}
+                  </Typography>
                 )}
               </Box> : ''}
               {(selectedContent?.hardwareAddons?.length > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
@@ -230,8 +227,10 @@ const Summary = () => {
                 <Typography sx={{ fontWeight: "bold" }}>Hours: </Typography>
                 <Typography>{selectedContent?.hours}</Typography>
               </Box>
+              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                Pricing Sub Categories{" "}
+              </Typography>
               <Typography> </Typography>
-              
               <Box
                 sx={{
                   display: "flex",
@@ -322,21 +321,7 @@ const Summary = () => {
                   ${laborPrice?.toFixed(2) || 0}
                 </Typography>
               </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold",fontSize:18 }}>Total Price</Typography>
-                <Typography variant="h6">
-                  ${totalPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>{" "}
+
             </Box>
           </Box>
         </Box>

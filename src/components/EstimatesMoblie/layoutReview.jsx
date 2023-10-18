@@ -28,13 +28,13 @@ const LayoutReview = () => {
   const dispatch = useDispatch();
   const quoteState = useSelector(getQuoteState);
   useEffect(() => {
-  const prices = calculateTotal(selectedContent, sqftArea, estimatesData);
-  dispatch(setHardwarePrice(prices.hardwarePrice));
-  dispatch(setGlassPrice(prices.glassPrice));
-  dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
-  dispatch(setFabricationPrice(prices.fabricationPrice));
-  dispatch(setLaborPrice(prices.laborPrice))
-  dispatch(setTotal(prices.total));
+    const prices = calculateTotal(selectedContent, sqftArea, estimatesData);
+    dispatch(setHardwarePrice(prices.hardwarePrice));
+    dispatch(setGlassPrice(prices.glassPrice));
+    dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
+    dispatch(setFabricationPrice(prices.fabricationPrice));
+    dispatch(setLaborPrice(prices.laborPrice))
+    dispatch(setTotal(prices.total));
   }, [selectedContent]);
 
   const [snackbar, setSnackbar] = useState({
@@ -77,8 +77,8 @@ const LayoutReview = () => {
             quoteState === "create"
               ? "measurements"
               : quoteState === "custom"
-              ? "custom"
-              : "existing"
+                ? "custom"
+                : "existing"
           }
         />
         <Box
@@ -327,7 +327,7 @@ const LayoutReview = () => {
                       title={"Glass Addons"}
                       type={"glassAddons"}
                       showSnackbar={showSnackbar}
-                      // currentItem={selectedContent?.glassTreatment}
+                    // currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>
@@ -423,7 +423,7 @@ const LayoutReview = () => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Hinges Cut</Typography>
+                  <Typography>Hinge Cut out</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -481,7 +481,7 @@ const LayoutReview = () => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>ClampCut</Typography>
+                  <Typography>Clamp Cut out</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -883,8 +883,8 @@ const LayoutReview = () => {
             quoteState === "create"
               ? "measurements"
               : quoteState === "custom"
-              ? "custom"
-              : "existing"
+                ? "custom"
+                : "existing"
           }
           disabled={selectedContent?.hardwareFinishes === null}
         />

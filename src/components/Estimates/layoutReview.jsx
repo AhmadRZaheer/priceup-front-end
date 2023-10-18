@@ -548,7 +548,7 @@ const navigate = useNavigate();
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Hinge CutOut</Typography>
+                  <Typography>Hinge Cut out</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -606,7 +606,7 @@ const navigate = useNavigate();
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Clamp CutOut</Typography>
+                  <Typography>Clamp Cut out</Typography>
                   <Box
                     sx={{
                       display: "flex",
