@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
@@ -20,16 +20,19 @@ import {
   setGlassPrice,
   setGlassAddonsPrice,
   setFabricationPrice,
-  setLaborPrice
+  setLaborPrice,
 } from "../../redux/estimateCalculations";
-import { useEditEstimates, useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
+import {
+  useEditEstimates,
+  useFetchDataEstimate,
+} from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
 import { useNavigate } from "react-router-dom";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
-const navigate = useNavigate();
+  const navigate = useNavigate();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
@@ -46,31 +49,38 @@ const navigate = useNavigate();
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
-    const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
+    const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
-        count:row.count
-      }
+        count: row.count,
+      };
     });
-    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
-      return {
-        type: row.item._id,
-        count:row.count
+    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
+      (row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
       }
-    });
-    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row)=>{
-      return {
-        type: row.item._id,
-        count:row.count
+    );
+    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
+      (row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
       }
-    });
-    const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row)=>{
-      return {
-        type: row.item._id,
-        count:row.count
-      }
-    });
-    const glassAddonsArray = estimatesContent?.glassAddons?.map((item)=>item?._id);
+    );
+    const glassToGlassArray =
+      estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
+      });
+    const glassAddonsArray = estimatesContent?.glassAddons?.map(
+      (item) => item?._id
+    );
     const estimate = {
       hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
       handles: {
@@ -82,9 +92,9 @@ const navigate = useNavigate();
         count: estimatesContent?.hinges?.count,
       },
       mountingClamps: {
-          wallClamp: [...wallClampArray],
-          sleeveOver: [...sleeveOverArray],
-          glassToGlass: [...glassToGlassArray],
+        wallClamp: [...wallClampArray],
+        sleeveOver: [...sleeveOverArray],
+        glassToGlass: [...glassToGlassArray],
       },
       mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
       glassType: {
@@ -123,19 +133,18 @@ const navigate = useNavigate();
       estimateData: estimate,
       id: quoteId,
     });
-  }
-
+  };
 
   const quoteState = useSelector(getQuoteState);
-  console.log(quoteState, 'staet')
+  console.log(quoteState, "staet");
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
         quoteState === "create"
           ? "measurments"
           : quoteState === "custom"
-            ? "custom"
-            : "existing"
+          ? "custom"
+          : "existing"
       )
     );
   };
@@ -148,12 +157,12 @@ const navigate = useNavigate();
       estimatesData,
       quoteState
     );
-  dispatch(setHardwarePrice(prices.hardwarePrice));
-  dispatch(setGlassPrice(prices.glassPrice));
-  dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
-  dispatch(setFabricationPrice(prices.fabricationPrice));
-  dispatch(setLaborPrice(prices.laborPrice))
-  dispatch(setTotal(prices.total));
+    dispatch(setHardwarePrice(prices.hardwarePrice));
+    dispatch(setGlassPrice(prices.glassPrice));
+    dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
+    dispatch(setFabricationPrice(prices.fabricationPrice));
+    dispatch(setLaborPrice(prices.laborPrice));
+    dispatch(setTotal(prices.total));
   }, [selectedContent]);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -167,15 +176,13 @@ const navigate = useNavigate();
       severity,
     });
   };
-  const {
-    refetch: Refetched,
-  } = useFetchDataEstimate();
+  const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       dispatch(setNavigation("existing"));
       Refetched();
-      navigate('/estimates');
+      navigate("/estimates");
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -275,7 +282,7 @@ const navigate = useNavigate();
                   gap: 1,
                 }}
               >
-              <Box
+                <Box
                   sx={{
                     display: "flex",
                     alignItems: "center",
@@ -1035,10 +1042,10 @@ const navigate = useNavigate();
                 variant="contained"
                 onClick={() => {
                   if (["create", "custom"].includes(updatecheck)) {
-                    setClientDetailOpen(true) 
-                  }
-                  else{
-                    handleEditEstimate()
+                    setClientDetailOpen(true);
+                  } else {
+                    handleEditEstimate();
+                    showSnackbar("Estimate Edit successfully", "success");
                   }
                 }}
                 sx={{
@@ -1052,8 +1059,6 @@ const navigate = useNavigate();
                 Next
               </Button>
             </Box>
-
-
           </Box>
         </Box>
 

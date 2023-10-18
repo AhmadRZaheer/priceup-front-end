@@ -78,31 +78,40 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      );
+      const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      );
+      const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
-        }
-      });
-      const glassAddonsArray = estimatesContent?.glassAddons?.map((item)=>item?._id);
+      );
+      const glassToGlassArray =
+        estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        });
+      const glassAddonsArray = estimatesContent?.glassAddons?.map(
+        (item) => item?._id
+      );
       const estimate = {
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
         handles: {
@@ -114,9 +123,9 @@ export default function ClientDetailsModel({
           count: estimatesContent?.hinges?.count,
         },
         mountingClamps: {
-            wallClamp: [...wallClampArray],
-            sleeveOver: [...sleeveOverArray],
-            glassToGlass: [...glassToGlassArray],
+          wallClamp: [...wallClampArray],
+          sleeveOver: [...sleeveOverArray],
+          glassToGlass: [...glassToGlassArray],
         },
         mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
         glassType: {
@@ -149,10 +158,13 @@ export default function ClientDetailsModel({
         perimeter: perimeter,
         sqftArea: sqftArea,
       };
-      if (["create","custom"].includes(updatecheck)) {
+      if (["create", "custom"].includes(updatecheck)) {
         mutate({
           customerData: values,
-          estimateData: { ...estimate, layout_id: estimatesLayout?._id || null },
+          estimateData: {
+            ...estimate,
+            layout_id: estimatesLayout?._id || null,
+          },
         });
       } else {
         mutateEdit({
@@ -163,17 +175,16 @@ export default function ClientDetailsModel({
       }
     },
   });
-  const navigate = useNavigate()
-  const {
-    refetch: Refetched,
-  } = useFetchDataEstimate();
+  const navigate = useNavigate();
+  const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       dispatch(setNavigation("existing"));
       handleCancel();
-      Refetched();
-      navigate('/estimates');
+      //localhost:3000/customers
+      http: Refetched();
+      navigate("/estimates");
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -185,7 +196,7 @@ export default function ClientDetailsModel({
       dispatch(setNavigation("existing"));
       handleCancel();
       Refetched();
-      navigate('/estimates');
+      navigate("/estimates");
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
       showSnackbar(errorMessage, "error");
@@ -429,20 +440,20 @@ export default function ClientDetailsModel({
                   Back
                 </Button>
                 {/* <Link to={"/Estimates"} style={{width: "48%"}}> */}
-                  <Button
-                    type="submit" 
-                    sx={{
-                      width: "48%",
-                      textTransform: "initial",
+                <Button
+                  type="submit"
+                  sx={{
+                    width: "48%",
+                    textTransform: "initial",
+                    backgroundColor: "#8477da",
+                    "&:hover": {
                       backgroundColor: "#8477da",
-                      "&:hover": {
-                        backgroundColor: "#8477da",
-                      },
-                    }}
-                    variant="contained"
-                  >
-                    Save
-                  </Button>
+                    },
+                  }}
+                  variant="contained"
+                >
+                  Save
+                </Button>
                 {/* </Link> */}
               </Box>
             </Box>

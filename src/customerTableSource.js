@@ -336,6 +336,7 @@ export const userColumnsHardware = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
+      console.log("params",params.row)
       return (
         <div className="cellWrapper">
           <div className="hardwareImg">

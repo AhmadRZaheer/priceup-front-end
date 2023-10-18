@@ -49,26 +49,15 @@ export default function AddEditFinish({
     mutate: addFinish,
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
+    isError: ErrorForAdd,
   } = useCreateFinish();
   const {
     mutate: editFinish,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
+    isError: ErrorForAddEidt,
   } = useEditFinish();
 
-  React.useEffect(() => {
-    if (CreatedSuccessfully) {
-      finishesRefetch();
-      showSnackbar("Created Successfully ", "success");
-      close();
-    }
-
-    if (SuccessForEdit) {
-      finishesRefetch();
-      showSnackbar("Updated Successfully ", "success");
-      close();
-    }
-  }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
     addFinish(props);
@@ -81,9 +70,13 @@ export default function AddEditFinish({
 
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
-    image: Yup.mixed(),
+    image: Yup.mixed()
+      .test("required", "Image is required", (value) => {
+        return value !== undefined && value !== null;
+      }),
     thickness: Yup.string().required("Thickness is required"),
   });
+  
 
   const formik = useFormik({
     initialValues: isEdit
@@ -108,7 +101,26 @@ export default function AddEditFinish({
       }
     },
   });
-
+  React.useEffect(() => {
+    if (SuccessForEdit) {
+      finishesRefetch();
+      showSnackbar("Updated Successfully ", "success");
+      close();
+    }else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [SuccessForEdit, ErrorForAddEidt]);
+  React.useEffect(() => {
+    if (CreatedSuccessfully) {
+      finishesRefetch();
+      showSnackbar("Created Successfully ", "success");
+      close();
+    }else if (ErrorForAdd) {
+      const errorMessage = ErrorForAdd.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [CreatedSuccessfully, ErrorForAdd]);
   return (
     <div>
       <Modal

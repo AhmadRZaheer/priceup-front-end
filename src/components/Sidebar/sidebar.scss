@@ -1,106 +1,102 @@
-.sidebar{
-    background-color: #100D24 ;
-    color: #F2F4F7;
-    height: 100% !important;
+.sidebar {
+  background-color: #100d24;
+  color: #f2f4f7;
+  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  .top {
     display: flex;
-    flex-direction: column;
-    .top{
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      padding: 0px;
+      margin-top: 10px;
+    }
+  }
+  .line {
+    height: 0;
+    border: 1px solid #475467;
+    width: 85%;
+    padding: 0 !important;
+    margin: 0px auto;
+  }
+  .center {
+    height: 74vh;
+    overflow: auto;
+
+    ul {
+      list-style: none;
+      margin-top: 0px !important;
+
+      .estimates {
+        margin-top: 30px;
+      }
+      .setting {
+        margin-top: 0px !important;
+      }
+
+      li {
         display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .logo{
-            padding: 0px;
-            margin-top: 10px; 
-        }
-    }
-    .line{
-        height: 0;
-        border: 1px solid #475467;
-        width: 85%;
-        padding: 0 !important;
-        margin:0px auto;
-    }
-    .center{
-
-        ul{
-            list-style: none;
-            margin-top: 0px  !important;
-
-            .estimates{
-                margin-top: 30px;
-            }
-            .setting{
-                margin-top: 0px !important;
-            }
-
-            li {
-                display: flex;
-                align-items: baseline;
-                padding: 7px;
-                cursor: pointer;
-                margin: 10px ;
-                border-radius: 5px;
-
-                &:hover{
-                    background-color: 
-                    #8477DA;
-
-                }
-                &.active {
-                    background-color: #8477DA;
-                  }
-
-                .icon{
-                    font-size: 16px;
-                    margin-right: 10px;
-                }
-
-                span {
-                    font-size: 18px;
-                    font-weight: 500;
-                }
-            }
-
-        }
-    }
-    .bottom{
-        display: flex;
-        align-items: center;
-        margin: 0px;
-        padding: 20px;
+        align-items: baseline;
+        padding: 7px;
         cursor: pointer;
+        margin: 10px;
+        border-radius: 5px;
 
-        .UserIcon{
-            margin-right: 16px !important;
+        &:hover {
+          background-color: #8477da;
         }
-        .userInSidebar{
-            font-size: 18px !important;
-            
+        &.active {
+          background-color: #8477da;
         }
-        .emailUser{
-            font-size: 16px !important;
-            color: #F2F4F7;
+
+        .icon {
+          font-size: 16px;
+          margin-right: 10px;
         }
-        .logOutIcon{
-            font-size: 16px;
-            margin-left: 20px !important;
-            width: 50px !important;
-            height: 30px !important;
-            text-align: center;
+
+        span {
+          font-size: 18px;
+          font-weight: 500;
         }
+      }
     }
-    .link {
-        text-decoration: none;
-        color: inherit;
-      }
-      .active {
-        font-weight: 800;
-      }
-      .link-settings{
-        text-decoration: none;
-        color: inherit;
-      }
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    padding: 20px;
+    cursor: pointer;
 
+    .UserIcon {
+      margin-right: 16px !important;
+    }
+    .userInSidebar {
+      font-size: 18px !important;
+    }
+    .emailUser {
+      font-size: 16px !important;
+      color: #f2f4f7;
+    }
+    .logOutIcon {
+      font-size: 16px;
+      margin-left: 20px !important;
+      width: 50px !important;
+      height: 30px !important;
+      text-align: center;
+    }
+  }
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .active {
+    font-weight: 800;
+  }
+  .link-settings {
+    text-decoration: none;
+    color: inherit;
+  }
 }
-

@@ -45,17 +45,14 @@ const Index = () => {
           height: "100vh",
           overflowY: "scroll",
         }}
-      >{Navigation === "existing" && <ExistingQuotes />}
-        {Navigation === "layouts" && <Layout  />}
-        {Navigation === "measurments" && (
-          <LayoutMeasurements  />
-        )}
-        {Navigation === "review" && (        
+      >
+        {Navigation === "existing" && <ExistingQuotes />}
+        {Navigation === "layouts" && <Layout />}
+        {Navigation === "measurments" && <LayoutMeasurements />}
+        {Navigation === "review" && (
           <LayoutReview setClientDetailOpen={setClientDetailOpen} />
         )}
-        {Navigation === "custom" && (        
-          <CustomLayout />
-        )}
+        {Navigation === "custom" && <CustomLayout />}
       </Box>
 
       <ClientDetailsModel
@@ -63,7 +60,7 @@ const Index = () => {
         handleCancel={() => setClientDetailOpen(false)}
         showSnackbar={showSnackbar}
       />
-            <Snackbars
+      <Snackbars
         open={snackbar.open}
         message={snackbar.message}
         severity={snackbar.severity}

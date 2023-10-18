@@ -79,7 +79,7 @@ export const useCreateFinish = () => {
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      throw new Error("An error occurred while creating the data.");
+       console.log("Error",error)
     }
   };
 
@@ -113,7 +113,7 @@ export const useEditFinish = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      throw new Error("An error occurred while updating the data.");
+      console.log("Error",error)
     }
   };
 

@@ -3,9 +3,16 @@ import "./teamTable.scss";
 import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Search } from '@mui/icons-material';
+import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Box, CircularProgress, IconButton, Typography,Input,InputAdornment } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Typography,
+  Input,
+  InputAdornment,
+} from "@mui/material";
 import {
   useDeleteTeamMembers,
   useFetchDataTeam,
@@ -23,8 +30,8 @@ const TeamTable = () => {
   const [matchingId, setMatchingId] = useState("");
   const filteredData = teamData?.filter(
     (team) =>
-    team.name.toLowerCase().includes(search.toLowerCase()) ||
-    team.email.toLowerCase().includes(search.toLowerCase())
+      team.name.toLowerCase().includes(search.toLowerCase()) ||
+      team.email.toLowerCase().includes(search.toLowerCase())
   );
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
@@ -122,7 +129,6 @@ const TeamTable = () => {
           backgroundColor: "white",
           height: "98.2vh",
           paddingLeft: 1,
-          pt: 2,
         }}
       >
         <div className="page-title">
@@ -164,23 +170,23 @@ const TeamTable = () => {
           onChange={(e) => setSearch(e.target.value)}
           sx={{
             mb: 2,
-            width: '20%', // You can adjust the width as needed
-            marginLeft: '30px', // Adjust the margin as needed
+            width: "20%", // You can adjust the width as needed
+            marginLeft: "30px", // Adjust the margin as needed
           }}
-          endAdornment={(
+          endAdornment={
             <InputAdornment position="end">
               <Search />
             </InputAdornment>
-          )}
+          }
         />
-      <div className="CustomerTable">
+        <div className="CustomerTable">
           {filteredData.length >= 1 ? (
             <DataGrid
               getRowId={(row) => row._id}
               rows={filteredData}
               columns={teamColumns}
               pageSizeOptions={[10]}
-              sx={{width: "100%"}}
+              sx={{ width: "100%" }}
             />
           ) : (
             <Typography

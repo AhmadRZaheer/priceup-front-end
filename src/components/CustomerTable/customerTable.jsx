@@ -61,7 +61,7 @@ const CustomerTable = () => {
           backgroundColor: "white",
           height: "98.2vh",
           paddingLeft: 1,
-          pt: 2,
+          pt: 1,
         }}
       >
         <div className="page-title">
