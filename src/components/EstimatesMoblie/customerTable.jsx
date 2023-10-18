@@ -54,7 +54,7 @@ export default function ExitingQuotes() {
                                     },
                                 },
                             }}
-                            pageSizeOptions={[2]}
+                            pageSizeOptions={[10]}
                             style={{ backgroundColor: 'white' }}
                         />
                         <Typography

@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Box, Typography, Input,InputAdornment,IconButton } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { Search } from '@mui/icons-material';
-import CustomerQoute from "../Modal/customerQuotTable";
+import CustomerQoute from "../Estimates/customerQuotTable";
 
 const CustomerTable = () => {
   const { data: teamData } = useFetchDataCustomer();
@@ -30,8 +30,9 @@ const CustomerTable = () => {
     {
       field: "Status",
       align: "left",
-      minWidth: "280px",
+      width: 300,
       renderCell: (params) => {
+        console.log("customer",params.row._id)
         return (
           <>
             <IconButton
@@ -98,14 +99,7 @@ const CustomerTable = () => {
               rows={filteredData}
               columns={CustomerColumns.concat(actionColumn)}
               onRowClick={(params) => handleOpenEdit(params)}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 2,
-                  },
-                },
-              }}
-              pageSizeOptions={[2]}
+              pageSizeOptions={[10]}
               sx={{ width: "100%" }}
             />
           ) : (

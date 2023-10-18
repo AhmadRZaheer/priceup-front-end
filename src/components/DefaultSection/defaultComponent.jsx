@@ -222,7 +222,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                         <CircularProgress size={24} color="warning" />
                       </Box>
                     )}
-                    <Button
+                    {/* <Button
                       style={{
                         width: "100%",
                         boxShadow: "0px 0px 2px blue",
@@ -236,7 +236,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       onClick={handleFileUpload}
                     >
                       Upload Image
-                    </Button>
+                    </Button> */}
                   </Box>
                 </Box>
               </Box>

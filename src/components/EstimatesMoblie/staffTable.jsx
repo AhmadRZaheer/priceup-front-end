@@ -49,14 +49,7 @@ export default function ExitingQuotes() {
                             getRowId={(row) => row._id}
                             rows={staffData}
                             columns={teamColumns}
-                            initialState={{
-                                pagination: {
-                                    paginationModel: {
-                                        pageSize: 2,
-                                    },
-                                },
-                            }}
-                            pageSizeOptions={[2]}
+                            pageSizeOptions={[10]}
                             style={{ backgroundColor: 'white' }}
                         />
                         {/* <Typography

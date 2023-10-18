@@ -81,10 +81,11 @@ const AppRoutes = () => {
             <Route index element={<Existing />} />
             <Route path="steps" element={<Estimates />} />
           </Route>
-          <Route path="customers">
+          <Route path="/customers/">
             <Route index element={<Customers />} />
             <Route path=":userId" element={<Single />} />
             <Route path="new" element={<New />} />
+            <Route path="steps" element={<Estimates />} />
           </Route>
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />

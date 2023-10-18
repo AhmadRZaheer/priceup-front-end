@@ -179,14 +179,7 @@ const TeamTable = () => {
               getRowId={(row) => row._id}
               rows={filteredData}
               columns={teamColumns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 2,
-                  },
-                },
-              }}
-              pageSizeOptions={[2]}
+              pageSizeOptions={[10]}
               sx={{width: "100%"}}
             />
           ) : (

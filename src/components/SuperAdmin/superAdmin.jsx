@@ -225,14 +225,7 @@ const SuperAdminTable = () => {
           getRowId={(row) => row._id}
           rows={filteredData}
           columns={AdminColumns2.concat(actionColumn)}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: 2,
-              },
-            },
-          }}
-          pageSizeOptions={[2]}
+          pageSizeOptions={[10]}
         />
       </div>
 
