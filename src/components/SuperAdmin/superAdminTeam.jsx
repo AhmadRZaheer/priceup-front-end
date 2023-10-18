@@ -80,14 +80,7 @@ const SuperAdminTeam = () => {
             getRowId={(row) => row._id}
             rows={filteredData}
             columns={AdminColumns.concat(actionColumn)}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 2,
-                },
-              },
-            }}
-            pageSizeOptions={[2]}
+            pageSizeOptions={[10]}
           />
         </div>
       </Box>

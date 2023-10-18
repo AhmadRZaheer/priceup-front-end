@@ -183,13 +183,6 @@ const FinishesTable = () => {
               getRowId={(row) => row._id}
               rows={filteredData}
               columns={userColumnsHardware.concat(actionColumn)}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
-                  },
-                },
-              }}
               pageSizeOptions={[10]}
             />
           </div>

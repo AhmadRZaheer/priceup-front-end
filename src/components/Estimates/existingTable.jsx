@@ -46,6 +46,8 @@ export default function ExistingTable() {
   }, [deletedSuccessfully]);
 
   const handleIconButtonClick = (item) => {
+    console.log("item",item)
+        console.log("itemid",item._id)
     dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({

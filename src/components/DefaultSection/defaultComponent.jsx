@@ -43,7 +43,7 @@ const DefaultComponent = ({ showSnackbar }) => {
 
         count: singleDefault?.layoutData?.settings?.hinges?.count,
       },
-      pivotHinge: {
+      pivotHingeOption: {
         pivotHingeType:
           singleDefault?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
         count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
@@ -223,7 +223,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                         <CircularProgress size={24} color="warning" />
                       </Box>
                     )}
-                    <Button
+                    {/* <Button
                       style={{
                         width: "100%",
                         boxShadow: "0px 0px 2px blue",
@@ -237,7 +237,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       onClick={handleFileUpload}
                     >
                       Upload Image
-                    </Button>
+                    </Button> */}
                   </Box>
                 </Box>
               </Box>
@@ -475,15 +475,15 @@ const DefaultComponent = ({ showSnackbar }) => {
                     select
                     size="small"
                     variant="outlined"
-                    name="pivotHinge.pivotHingeType"
+                    name="pivotHingeOption.pivotHingeType"
                     style={{ width: "100%" }}
-                    value={formik.values.pivotHinge.pivotHingeType || ""}
+                    value={formik.values.pivotHingeOption.pivotHingeType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
                       // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === "") {
-                        formik.setFieldValue("pivotHinge.count", 0);
+                        formik.setFieldValue("pivotHingeOption.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
@@ -507,14 +507,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                   type="number"
                   size="small"
                   variant="outlined"
-                  name="pivotHinge.count"
+                  name="pivotHingeOption.count"
                   style={{
                     width: "250px",
                     paddingX: 10,
                   }}
                   value={
-                    formik.values.pivotHinge.count !== undefined
-                      ? formik.values.pivotHinge.count
+                    formik.values.pivotHingeOption.count !== undefined
+                      ? formik.values.pivotHingeOption.count
                       : 0
                   }
                   onChange={formik.handleChange}
