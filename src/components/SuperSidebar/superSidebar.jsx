@@ -6,24 +6,46 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Popover } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined } from "@mui/icons-material";
+import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import { Link } from "react-router-dom";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
 const SuperSidebar = () => {
+  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const Logout = () => {
     dispatch(logoutHandler());
     window.location.href = "/adminlogin";
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
-  const superAdminToken = localStorage.getItem('superAdminToken');
+
+  const handleSeeLocationsClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopup = () => {
+    setAnchorEl(null);
+  };
+
+  const filteredAdminData = AdminData.filter((admin) =>
+    admin.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const handleAdminNameClick = (adminId) => {
+    navigate(`/?adminID=${adminId}`);
+    const urlWithoutQuery = window.location.pathname;
+    window.history.replaceState({}, document.title, urlWithoutQuery);
+  };
   return (
     <>
       <div className="sidebar">
@@ -46,20 +68,16 @@ const SuperSidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-              {superAdminToken && <li
-              style={{padding: 10}}
-                onClick={() => {
-                  localStorage.setItem('token', superAdminToken);
-                  localStorage.removeItem('superAdminToken');
+              <li style={{ padding: 10 }}>
+                  <IconButton
+                    sx={{ color: "white", padding: 0.2 }}
+                    onClick={handleSeeLocationsClick}
+                  >
+                     <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
+                    <span>See Locations</span>
+                  </IconButton>
+                </li>
 
-                  window.location.href = '/';
-                }}
-              >
-                <IconButton sx={{ color: "white", padding: 0.2, borderRadius: 0 }}>
-
-                  <span>Back to Admin Dashboard</span>
-                </IconButton>
-              </li>}
 
                 <NavLink to="/admin" className="link">
                   <li
@@ -116,6 +134,41 @@ const SuperSidebar = () => {
           </Box>
         </Box>
       </div>
+      
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClosePopup}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <div style={{ maxHeight: "200px", overflowY: "auto", padding: "20px" }}>
+          <input
+            type="text"
+            placeholder="Search Admin Names"
+            style={{ width: "200px", padding: "8px", marginBottom: "10px" }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {filteredAdminData.map((admin) => (
+            <p key={admin.id} style={{ marginBottom: "5px",textTransform: "lowercase" }}>
+                  <a
+            onClick={() => handleAdminNameClick(admin._id)}
+            style={{ cursor: "pointer" }}
+          >
+            {admin.name}
+          </a>
+            </p>
+          ))}
+        </div>
+      </Popover>
+
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>
   );

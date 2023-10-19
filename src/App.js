@@ -6,7 +6,7 @@ import AppRoutes from "./components/ProtectedRoute/appRoutes";
 import AuthVerify from "./components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { logoutHandler } from "./redux/userAuth";
-import { FetchId } from "./utilities/ApiHooks/superAdmin"
+import { FetchId2 } from "./utilities/ApiHooks/superAdmin"
 
 function App() {
 
@@ -20,10 +20,10 @@ function App() {
     <div className="App">
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <FetchId>
+            <FetchId2>
             <AppRoutes />
             <AuthVerify logOut={logOut} />
-          </FetchId>
+            </FetchId2>
         </BrowserRouter>
       </QueryClientProvider>
     </div>
