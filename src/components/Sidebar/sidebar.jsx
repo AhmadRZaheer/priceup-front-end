@@ -14,15 +14,21 @@ import DefaltIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, IconButton, Tooltip, Popover } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import { AttachMoney } from "@mui/icons-material";
+import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import { Link } from "react-router-dom";
 
 const Sidebar = () => {
+
+  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const dispatch = useDispatch();
   const Logout = () => {
@@ -31,6 +37,22 @@ const Sidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+  const handleSeeLocationsClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopup = () => {
+    setAnchorEl(null);
+  };
+
+  const filteredAdminData = AdminData.filter((admin) =>
+    admin.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+  const handleAdminNameClick = (adminId) => {
+    navigate(`/?userID=${adminId}`);
+    const urlWithoutQuery = window.location.pathname;
+    window.history.replaceState({}, document.title, urlWithoutQuery);
+  };
   return (
     <>
       <div className="sidebar">
@@ -53,26 +75,13 @@ const Sidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-                {superAdminToken && (
-                  <li
-                    style={{ padding: 10 }}
-                    onClick={() => {
-                      localStorage.setItem("token", superAdminToken);
-                      localStorage.removeItem("superAdminToken");
-
-                      window.location.href = "/";
-                    }}
-                  >
+              {superAdminToken && (
+                  <li style={{ padding: 10 }}>
                     <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                      sx={{ color: "white", padding: 0.2 }}
+                      onClick={handleSeeLocationsClick}
                     >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={EstimsteIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Back to Admin Dashboard</span>
+                      <span>See Locations</span>
                     </IconButton>
                   </li>
                 )}
@@ -323,6 +332,54 @@ const Sidebar = () => {
           </Box>
         </Box>
       </div>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={handleClosePopup}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+        <div style={{ maxHeight: "200px", overflowY: "auto", padding: "20px" }}>
+          <div style={{display: "flex",flexDirection: 'column'}}>
+          <input
+            type="text"
+            placeholder="Search Admin Names"
+            style={{ width: "200px", padding: "8px", marginBottom: "10px" }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+           {superAdminToken && (
+          <IconButton sx={{fontSize: "15px"}}
+          onClick={() => {
+            localStorage.setItem("token", superAdminToken);
+            localStorage.removeItem("superAdminToken");
+
+            window.location.href = "/";
+          }}
+          >Back to admin</IconButton>
+           )}
+          </div>
+          {filteredAdminData.map((admin) => (
+            <p
+              key={admin.id}
+              style={{ marginBottom: "5px", textTransform: "lowercase" }}
+            >
+                         <a
+            onClick={() => handleAdminNameClick(admin._id)}
+            style={{ cursor: "pointer" }}
+          >
+            {admin.name}
+          </a>
+            </p>
+          ))}
+        </div>
+      </Popover>
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>
   );
