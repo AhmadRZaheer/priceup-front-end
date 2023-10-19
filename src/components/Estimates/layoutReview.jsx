@@ -243,13 +243,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 paddingBottom: 1,
               }}
             >
-              Review
+              Summary
             </Typography>
             <Typography
               sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
             >
-              Your new project has been created. Invite colleagues to
-              collaborate on this project.
+              Modify your estimate below to finalize the total price.
             </Typography>
           </Box>
           <Box

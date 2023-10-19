@@ -100,3 +100,15 @@
     color: inherit;
   }
 }
+.center {
+  height: 74vh;
+  overflow: auto; /* Keep the scrollbar visible */
+}
+
+.center::-webkit-scrollbar {
+  width: 5px; /* Set the width of the scrollbar */
+}
+
+.center::-webkit-scrollbar-thumb {
+  background-color: #475467; /* Set the color of the scrollbar thumb */
+}
