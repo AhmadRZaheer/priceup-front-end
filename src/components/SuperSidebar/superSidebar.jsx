@@ -148,7 +148,7 @@ const SuperSidebar = () => {
           horizontal: "left",
         }}
       >
-        <div style={{ maxHeight: "200px", overflowY: "auto", padding: "20px" }}>
+        <div style={{ maxHeight: "200px", overflowY: "auto", paddingX: "20px" }}>
           <input
             type="text"
             placeholder="Search Admin Names"

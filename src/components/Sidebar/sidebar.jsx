@@ -297,6 +297,7 @@ const Sidebar = () => {
                 display: "flex",
                 alignItems: "center",
                 paddingX: 2,
+                pt: 1
               }}
             >
               <Box sx={{ marginRight: 1 }}>
