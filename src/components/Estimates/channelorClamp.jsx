@@ -13,7 +13,7 @@ import {
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
 import { backendURL } from "../../utilities/common";
-import InfoIcon from '@mui/icons-material/Info';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 
@@ -83,12 +83,12 @@ const ChannelTypeDesktop = ({
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
-          <Tooltip title={title}>
-                        <IconButton color="primary">
-                          <InfoIcon />
+          <Typography>{title}</Typography>
+                    <Tooltip title={title}>
+                        <IconButton>
+                          <InfoOutlinedIcon />
                         </IconButton>
                       </Tooltip>
-          <Typography>{title}</Typography>
         </Button>
       </Box>
       {anchorEl ? (
