@@ -102,7 +102,7 @@ const Summary = () => {
                   .join("’’/ ")}
               </Typography>
               <Typography>
-                Full Width {doorWidth}
+                Door Width {doorWidth}
               </Typography>
               <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                 Summary{" "}

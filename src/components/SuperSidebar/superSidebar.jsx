@@ -6,14 +6,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
-import { Box, IconButton, Tooltip, Popover } from "@mui/material";
+import { Box, IconButton, Tooltip, Popover, Typography } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -68,16 +68,15 @@ const SuperSidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-              <li style={{ padding: 10 }}>
+                <li style={{ padding: 10 }}>
                   <IconButton
                     sx={{ color: "white", padding: 0.2 }}
                     onClick={handleSeeLocationsClick}
                   >
-                     <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
+                    <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
                     <span>See Locations</span>
                   </IconButton>
                 </li>
-
 
                 <NavLink to="/admin" className="link">
                   <li
@@ -134,7 +133,7 @@ const SuperSidebar = () => {
           </Box>
         </Box>
       </div>
-      
+
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -148,23 +147,48 @@ const SuperSidebar = () => {
           horizontal: "left",
         }}
       >
-          <input
-            type="text"
-            placeholder="Search Admin Names"
-            style={{ width: "200px", padding: "8px", marginBottom: "10px",marginLeft: "20px",marginRight: "20px" }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-                  <div style={{ maxHeight: "150px", overflowY: "auto", paddingX: "20px", }}>
+        <input
+          type="text"
+          placeholder="Search Admin Names"
+          style={{
+            width: "200px",
+            padding: "8px",
+            marginBottom: "10px",
+            marginLeft: "20px",
+            marginRight: "20px",
+          }}
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <div
+          style={{
+            maxHeight: "150px",
+            overflowY: "auto",
+            paddingX: "20px",
+            width: "240px",
+          }}
+        >
           {filteredAdminData.map((admin) => (
-            <p key={admin.id} style={{ marginBottom: "5px",textTransform: "lowercase",marginLeft: "20px" }}>
-                  <a
-            onClick={() => handleAdminNameClick(admin._id)}
-            style={{ cursor: "pointer" }}
-          >
-            {admin.name}
-          </a>
-            </p>
+            <Typography
+              key={admin.id}
+              sx={{
+                marginBottom: "5px",
+                textTransform: "lowercase",
+                marginLeft: "20px",
+                borderBottom: "1px solid #7d7d7d",
+                ":hover":{
+                  bgcolor: "rgba(0, 0, 0, 0.2)",
+                  cursor: "pointer"
+                }
+              }}
+            >
+              <a
+                onClick={() => handleAdminNameClick(admin._id)}
+                style={{ cursor: "pointer" }}
+              >
+                {admin.name}
+              </a>
+            </Typography>
           ))}
         </div>
       </Popover>
