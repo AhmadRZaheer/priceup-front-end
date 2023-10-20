@@ -10,6 +10,7 @@ import {
   getMiscTotal,
   getTotal,
   selectedItem,
+  getDoorWidth
 } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
@@ -22,7 +23,7 @@ const Summary = () => {
   const fabricationPrice = useSelector(getFabricationTotal);
   const miscPrice = useSelector(getMiscTotal);
   const laborPrice = useSelector(getLaborTotal);
-
+  const doorWidth = useSelector(getDoorWidth);
   const totalPrice = useSelector(getTotal);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
@@ -99,6 +100,9 @@ const Summary = () => {
                   )
                   .map((measurement) => measurement.value)
                   .join("’’/ ")}
+              </Typography>
+              <Typography>
+                Full Width {doorWidth}
               </Typography>
               <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                 Summary{" "}

@@ -148,16 +148,16 @@ const SuperSidebar = () => {
           horizontal: "left",
         }}
       >
-        <div style={{ maxHeight: "200px", overflowY: "auto", paddingX: "20px" }}>
           <input
             type="text"
             placeholder="Search Admin Names"
-            style={{ width: "200px", padding: "8px", marginBottom: "10px" }}
+            style={{ width: "200px", padding: "8px", marginBottom: "10px",marginLeft: "20px",marginRight: "20px" }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
+                  <div style={{ maxHeight: "150px", overflowY: "auto", paddingX: "20px", }}>
           {filteredAdminData.map((admin) => (
-            <p key={admin.id} style={{ marginBottom: "5px",textTransform: "lowercase" }}>
+            <p key={admin.id} style={{ marginBottom: "5px",textTransform: "lowercase",marginLeft: "20px" }}>
                   <a
             onClick={() => handleAdminNameClick(admin._id)}
             style={{ cursor: "pointer" }}

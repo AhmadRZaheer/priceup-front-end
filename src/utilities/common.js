@@ -262,10 +262,11 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     };
     const areaSqft = Math.round(((door.width*door.height)/144*doorQuantity) * 100) / 100;
     const perimeterDoor = {width:(door.width*2*doorQuantity),height:(door.height*2*doorQuantity)};
-    const perimeter = perimeterDoor.width+perimeterDoor.height;
+    const perimeter = perimeterDoor.width+perimeterDoor.height;  
     return {
       areaSqft: areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width
     };
   }
    else if (variant === layoutVariants.DOORANDPANEL){
@@ -291,7 +292,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     };
     
    }
@@ -319,7 +321,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoorLeft.width+perimeterDoorLeft.height)+(perimeterDoorRight.width+perimeterDoorRight.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: doorLeft.width 
     };
    }
    else if(variant === layoutVariants.DOORANDNIB){
@@ -345,7 +348,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     };
    }
    else if (variant === layoutVariants.DOORANDNOTCHEDPANEL){ 
@@ -372,7 +376,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     };
    }
    else if (variant === layoutVariants.DOORPANELANDRETURN){
@@ -407,7 +412,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height)+(perimeterReturn.width+perimeterReturn.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     }; 
   }
   else if (variant === layoutVariants.DOORNOTCHEDPANELANDRETURN){
@@ -442,7 +448,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height)+(perimeterReturn.width+perimeterReturn.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     }; 
   }
   else if (variant === layoutVariants.SINGLEBARN){
@@ -468,7 +475,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     };
   }
   else if (variant === layoutVariants.DOUBLEBARN){
@@ -494,7 +502,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
     return {
       areaSqft:areaSqft,
-      perimeter:perimeter
+      perimeter:perimeter,
+      doorWidth: door.width 
     };
   }
   else if (variant === layoutVariants.CUSTOM){

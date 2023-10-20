@@ -16,6 +16,7 @@ import {
   setLayoutPerimeter,
   setNavigationDesktop,
   updateMeasurements,
+  setDoorWidth
 } from "../../redux/estimateCalculations";
 import { backendURL, calculateAreaAndPerimeter, calculateAreaOrPerimeter } from "../../utilities/common";
 
@@ -56,8 +57,10 @@ const LayoutMeasurements = () => {
       // const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
       // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
       const result = calculateAreaAndPerimeter(measurementsArray, selectedData?.settings?.variant);
+      console.log("rsult",result.doorWidth)
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
+      dispatch(setDoorWidth(result.doorWidth))
       dispatch(updateMeasurements(measurementsArray));
       setHandleEstimatesPages("review");
       resetForm();

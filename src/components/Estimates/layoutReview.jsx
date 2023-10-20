@@ -46,6 +46,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const sqftArea = useSelector(getLayoutArea);
   const updatecheck = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
+  console.log("safearea",sqftArea)
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {

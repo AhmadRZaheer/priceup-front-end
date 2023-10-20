@@ -20,6 +20,7 @@ import { backendURL } from "../../utilities/common";
 import { AttachMoney } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 
 const Sidebar = () => {
 
@@ -81,6 +82,7 @@ const Sidebar = () => {
                       sx={{ color: "white", padding: 0.2 }}
                       onClick={handleSeeLocationsClick}
                     >
+                        <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
                       <span>See Locations</span>
                     </IconButton>
                   </li>
@@ -346,12 +348,11 @@ const Sidebar = () => {
           horizontal: "left",
         }}
       >
-        <div style={{ maxHeight: "200px", overflowY: "auto", padding: "20px" }}>
           <div style={{display: "flex",flexDirection: 'column'}}>
           <input
             type="text"
             placeholder="Search Admin Names"
-            style={{ width: "200px", padding: "8px", marginBottom: "10px" }}
+            style={{width: "200px", padding: "8px", marginBottom: "10px",marginLeft: "20px",marginRight: "20px" }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -366,10 +367,11 @@ const Sidebar = () => {
           >Back to admin</IconButton>
            )}
           </div>
+          <div style={{ maxHeight: "150px", overflowY: "auto", paddingX: "20px", }}>
           {filteredAdminData.map((admin) => (
             <p
               key={admin.id}
-              style={{ marginBottom: "5px", textTransform: "lowercase" }}
+              style={{ marginBottom: "5px", textTransform: "lowercase",marginLeft: "20px"  }}
             >
                          <a
             onClick={() => handleAdminNameClick(admin._id)}

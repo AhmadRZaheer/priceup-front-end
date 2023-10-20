@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { layoutVariants } from "../utilities/constants";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
+export const getDoorWidth = (state) => state.estimateCalculations.doorWidth;
 export const getHardwareTotal = (state) => state.estimateCalculations.hardwarePrice;
 export const getGlassTotal = (state) => state.estimateCalculations.glassPrice;
 export const getGlassAddonsTotal = (state) => state.estimateCalculations.glassAddonsPrice;
@@ -32,6 +33,7 @@ const estimateCalcSlice = createSlice({
     handlePageDesktopNavigation: "layouts",
     perimeter: 0,
     sqftArea: 0,
+    doorWidth: 0,
     measurements: [],
     selectedItem: null,
     listData: null,
@@ -88,6 +90,9 @@ const estimateCalcSlice = createSlice({
     laborPrice:0
   },
   reducers: {
+      setDoorWidth: (state, action) => {
+        state.doorWidth = action.payload;
+      },
     setContent: (state, action) => {
       const { type, item } = action.payload;
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
@@ -648,6 +653,7 @@ export const {
   setInputContent,
   setThickness,
   setListData,
+  setDoorWidth,
   // updateAddOnCount,
   updateMeasurements,
   addSelectedItem,
