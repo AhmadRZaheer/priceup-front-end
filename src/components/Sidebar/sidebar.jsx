@@ -14,16 +14,15 @@ import DefaltIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip, Popover } from "@mui/material";
+import { Box, IconButton, Tooltip, Popover, Typography } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import { AttachMoney } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
-import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 
 const Sidebar = () => {
-
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -76,13 +75,13 @@ const Sidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-              {superAdminToken && (
+                {superAdminToken && (
                   <li style={{ padding: 10 }}>
                     <IconButton
                       sx={{ color: "white", padding: 0.2 }}
                       onClick={handleSeeLocationsClick}
                     >
-                        <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
+                      <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
                       <span>See Locations</span>
                     </IconButton>
                   </li>
@@ -299,7 +298,7 @@ const Sidebar = () => {
                 display: "flex",
                 alignItems: "center",
                 paddingX: 2,
-                pt: 1
+                pt: 1,
               }}
             >
               <Box sx={{ marginRight: 1 }}>
@@ -348,38 +347,63 @@ const Sidebar = () => {
           horizontal: "left",
         }}
       >
-          <div style={{display: "flex",flexDirection: 'column'}}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <input
             type="text"
             placeholder="Search Admin Names"
-            style={{width: "200px", padding: "8px", marginBottom: "10px",marginLeft: "20px",marginRight: "20px" }}
+            style={{
+              width: "200px",
+              padding: "8px",
+              marginBottom: "10px",
+              marginLeft: "20px",
+              marginRight: "20px",
+            }}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-           {superAdminToken && (
-          <IconButton sx={{fontSize: "15px"}}
-          onClick={() => {
-            localStorage.setItem("token", superAdminToken);
-            localStorage.removeItem("superAdminToken");
+          {superAdminToken && (
+            <IconButton
+              sx={{ fontSize: "15px" }}
+              onClick={() => {
+                localStorage.setItem("token", superAdminToken);
+                localStorage.removeItem("superAdminToken");
 
-            window.location.href = "/";
-          }}
-          >Back to admin</IconButton>
-           )}
-          </div>
-          <div style={{ maxHeight: "150px", overflowY: "auto", paddingX: "20px", }}>
-          {filteredAdminData.map((admin) => (
-            <p
-              key={admin.id}
-              style={{ marginBottom: "5px", textTransform: "lowercase",marginLeft: "20px"  }}
+                window.location.href = "/";
+              }}
             >
-                         <a
-            onClick={() => handleAdminNameClick(admin._id)}
-            style={{ cursor: "pointer" }}
-          >
-            {admin.name}
-          </a>
-            </p>
+              Back to admin
+            </IconButton>
+          )}
+        </div>
+        <div
+          style={{
+            maxHeight: "150px",
+            overflowY: "auto",
+            paddingX: "20px",
+            width: "240px",
+          }}
+        >
+          {filteredAdminData.map((admin) => (
+            <Typography
+              key={admin.id}
+              sx={{
+                marginBottom: "5px",
+                textTransform: "lowercase",
+                marginLeft: "20px",
+                borderBottom: "1px solid #7d7d7d",
+                ":hover": {
+                  bgcolor: "rgba(0, 0, 0, 0.2)",
+                  cursor: "pointer",
+                },
+              }}
+            >
+              <a
+                onClick={() => handleAdminNameClick(admin._id)}
+                style={{ cursor: "pointer" }}
+              >
+                {admin.name}
+              </a>
+            </Typography>
           ))}
         </div>
       </Popover>
