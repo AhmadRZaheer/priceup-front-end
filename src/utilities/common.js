@@ -13,7 +13,8 @@ export function createSlug(string) {
     .replace(/^-+|-+$/g, ""); // Trim leading and trailing hyphens
 }
 
-export const backendURL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+export const backendURL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
 export const evaluateFormula = (
   formulaString,
@@ -66,19 +67,25 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     : 0;
 
   let mountingWallClamps = 0;
-  selectedContent?.mountingClamps?.wallClamp?.map((row)=>{
-      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
-      mountingWallClamps += price ? (price * row.count) : 0;
+  selectedContent?.mountingClamps?.wallClamp?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingWallClamps += price ? price * row.count : 0;
   });
   let mountingsleeveOver = 0;
-  selectedContent?.mountingClamps?.sleeveOver?.map((row)=>{
-      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
-      mountingsleeveOver += price ? (price * row.count) : 0;
+  selectedContent?.mountingClamps?.sleeveOver?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingsleeveOver += price ? price * row.count : 0;
   });
   let mountingglassToGlass = 0;
-  selectedContent?.mountingClamps?.glassToGlass?.map((row)=>{
-      const price = row.item.finishes?.find((item)=> selectedContent.hardwareFinishes._id === item.finish_id)?.cost;
-      mountingglassToGlass += price ? (price * row.count) : 0;
+  selectedContent?.mountingClamps?.glassToGlass?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingglassToGlass += price ? price * row.count : 0;
   });
   // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
   //   ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
@@ -110,11 +117,12 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   const hardwareTotals =
     handlePrice +
     hingesPrice +
-    mountingChannel 
-    // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0) 
-    + (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) 
-    // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0) 
-    + slidingDoorSystemPrice + headerPrice;
+    mountingChannel +
+    // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0)
+    (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
+    // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0)
+    slidingDoorSystemPrice +
+    headerPrice;
 
   // fabricating
   let fabricationPrice = 0;
@@ -173,8 +181,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       row?.item?.finishes?.find(
         (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
       )?.cost || 0;
-      hardwareAddons = hardwareAddons + (price * row?.count);
-      //  * priceBySqft;  // hardware addons are not calculated by price by sqft
+    hardwareAddons = hardwareAddons + price * row?.count;
+    //  * priceBySqft;  // hardware addons are not calculated by price by sqft
   });
   // const hardwareAddOnsTotal =
   //   towelBarFinish * selectedContent?.towelBarsCount +
@@ -191,10 +199,10 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   let glassAddonsPrice = 0;
   selectedContent?.glassAddons?.map((item) => {
     let price = 0;
-    if(item?.options?.length){
+    if (item?.options?.length) {
       price = item?.options[0]?.cost || 0;
     }
-    glassAddonsPrice = glassAddonsPrice + price * priceBySqft;    
+    glassAddonsPrice = glassAddonsPrice + price * priceBySqft;
   });
   // const glassTreatmentPrice =
   //   selectedContent?.glassTreatment?.item?.options?.find(
@@ -206,7 +214,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-  console.log(fabricationPrice,'fabricat',glassPrice);
+  console.log(fabricationPrice, "fabricat", glassPrice);
   const total =
     (hardwareTotals +
       fabricationPrice +
@@ -215,7 +223,15 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +
     laborPrice;
-  return {hardwarePrice:hardwareTotals,fabricationPrice:fabricationPrice,glassPrice:glassPrice,glassAddonsPrice:glassAddonsPrice,miscPricing:0,laborPrice:laborPrice,total:total};
+  return {
+    hardwarePrice: hardwareTotals,
+    fabricationPrice: fabricationPrice,
+    glassPrice: glassPrice,
+    glassAddonsPrice: glassAddonsPrice,
+    miscPricing: 0,
+    laborPrice: laborPrice,
+    total: total,
+  };
 };
 
 export const calculateAreaOrPerimeter = (measurementSides, formula) => {
@@ -239,312 +255,44 @@ export const calculateAreaOrPerimeter = (measurementSides, formula) => {
 };
 
 export const convertArrayKeysToObject = (array) => {
-  const Object = array.reduce((obj, item) => {
+  const obj = array.reduce((result, item) => {
     const { key, value } = item;
-    if (!obj[key]) {
-      obj[key] = [];
+    if (!result[key]) {
+      result[key] = [];
     }
-    obj[key].push(value);
-    return obj;
+    result[key].push(value);
+    return result;
   }, {});
-  return Object;
-}
-
-export const calculateAreaAndPerimeter = (measurementSides, variant) => {
-  
-  const measurements = convertArrayKeysToObject(measurementSides);
-
-  if(variant === layoutVariants.DOOR){
-    const doorQuantity =  measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 0 ? measurements?.b : 0,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    };
-    const areaSqft = Math.round(((door.width*door.height)/144*doorQuantity) * 100) / 100;
-    const perimeterDoor = {width:(door.width*2*doorQuantity),height:(door.height*2*doorQuantity)};
-    const perimeter = perimeterDoor.width+perimeterDoor.height;  
-    return {
-      areaSqft: areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width
-    };
-  }
-   else if (variant === layoutVariants.DOORANDPANEL){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 28 ? 28 : measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.b > 28 ? 1 : 0;
-    const panel = {
-      width:door?.width > 28 ?  measurements?.b-door?.width : (measurements?.b < 29 ? measurements?.b-door?.width : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))),
-      height:panelQuantity === 0 ? 0 : measurements?.a
-    }
-    const panleSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const areaSqft = Math.round((doorSqft+panleSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    };
-    
-   }
-   else if (variant === layoutVariants.DOUBLEDOOR)
-   {
-    const doorLeftQuantity = measurements?.b === 0 ? 0 : 1;
-    const doorLeft = {
-      width: measurements?.b / 2,
-      height: doorLeftQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorLeftSqft = ((doorLeft.width*doorLeft.height)/144*doorLeftQuantity);
-    const doorRightQuantity = measurements?.b === 0 ? 0 : 1;
-    const doorRight = {
-      width:measurements?.b-doorLeft?.width,
-      height:doorRightQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorRightSqft = ((doorRight.width*doorRight.height)/144*doorRightQuantity);
-    const areaSqft = Math.round((doorLeftSqft+doorRightSqft) * 100) / 100;
-    const perimeterDoorLeft = {
-      width: (doorLeft.width*2*doorLeftQuantity),height:(doorLeft.height*2*doorLeftQuantity)
-    }
-    const perimeterDoorRight = {
-      width: (doorRight.width*2*doorRightQuantity),height:(doorRight.height*2*doorRightQuantity)
-    }
-    const perimeter = (perimeterDoorLeft.width+perimeterDoorLeft.height)+(perimeterDoorRight.width+perimeterDoorRight.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: doorLeft.width 
-    };
-   }
-   else if(variant === layoutVariants.DOORANDNIB){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.d === 0 ? 0 : 1;
-    const panel = {
-      width: measurements?.d,
-      height: measurements?.d === 0 ? 0 : measurements?.a-measurements?.c
-    }
-    const panleSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const areaSqft = Math.round((doorSqft+panleSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    };
-   }
-   else if (variant === layoutVariants.DOORANDNOTCHEDPANEL){ 
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 28 ? 28 : measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-
-    const panelQuantity = measurements?.b > 28 ? 1 : 0;
-    const panel = {  // have some issue in width
-      width: door?.width > 28 ? (Number(measurements?.b-door?.width) + Number(measurements?.d)) : Number((measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >=28 ? (measurements?.b-door?.width) : 0) < 10 ? 10 : (measurements?.b >=28 ? (measurements?.b-door?.width) : 0)))) + Number(measurements?.d),
-      height: panelQuantity === 0 ? 0 : measurements?.a
-    }
-    const panelSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const areaSqft = Math.round((doorSqft+panelSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    };
-   }
-   else if (variant === layoutVariants.DOORPANELANDRETURN){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 28 ? 28 : measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.b > 28 ? 1 : 0;
-    const panel = {
-        width: door?.width > 28 ? (measurements?.b-door?.width) : (measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))),
-        height: panelQuantity === 0 ? 0 : measurements?.a
-      }
-    const panelSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const returnQuantity = measurements?.c === 0 ? 0 : 1;
-    const layoutReturn = {
-      width:measurements?.c === 0 ? 0 : measurements?.c,
-      height:returnQuantity === 0 ? 0 : measurements?.a
-    }
-    const returnSqft = ((layoutReturn.width*layoutReturn.height)/144*returnQuantity);
-    const areaSqft = Math.round((doorSqft+panelSqft+returnSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeterReturn = {
-      width: (layoutReturn.width*2*returnQuantity),height:(layoutReturn.height*2*returnQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height)+(perimeterReturn.width+perimeterReturn.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    }; 
-  }
-  else if (variant === layoutVariants.DOORNOTCHEDPANELANDRETURN){
-    const doorQuantity = measurements?.a === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.a > 28 ? 28 : measurements?.a,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.a > 28 ? 1 : 0;
-    const panel = {
-        width: door?.width > 28 ? (Number(measurements?.b-door?.width)+Number(measurements?.d)) : Number((measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))))+Number(measurements?.d),
-        height: panelQuantity === 0 ? 0 : measurements?.a
-      }
-    const panelSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const returnQuantity = measurements?.a === 0 ? 0 : 1;
-    const layoutReturn = {
-      width:measurements?.e === 0 ? 0 : measurements?.e,
-      height:returnQuantity === 0 ? 0 : measurements?.a-measurements?.c
-    }
-    const returnSqft = ((layoutReturn.width*layoutReturn.height)/144*returnQuantity);
-    const areaSqft = Math.round((doorSqft+panelSqft+returnSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeterReturn = {
-      width: (layoutReturn.width*2*returnQuantity),height:(layoutReturn.height*2*returnQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height)+(perimeterReturn.width+perimeterReturn.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    }; 
-  }
-  else if (variant === layoutVariants.SINGLEBARN){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 28 ? 28 : measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.b > 28 ? 1 : 0;
-    const panel = {
-      width:measurements?.b-door?.width,
-      height:panelQuantity === 0 ? 0 : measurements?.a
-    }
-    const panleSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const areaSqft = Math.round((doorSqft+panleSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    };
-  }
-  else if (variant === layoutVariants.DOUBLEBARN){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
-    const door = {
-      width: measurements?.b > 28 ? 28 : measurements?.b,
-      height: doorQuantity === 0 ? 0 : measurements?.a
-    }
-    const doorSqft = ((door.width*door.height)/144*doorQuantity);
-    const panelQuantity = measurements?.b > 28 ? 1 : 0;
-    const panel = {
-      width:measurements?.b-door?.width,
-      height:panelQuantity === 0 ? 0 : measurements?.a
-    }
-    const panleSqft = ((panel.width*panel.height)/144*panelQuantity);
-    const areaSqft = Math.round((doorSqft+panleSqft) * 100) / 100;
-    const perimeterDoor = {
-      width: (door.width*2*doorQuantity),height:(door.height*2*doorQuantity)
-    }
-    const perimeterPanel = {
-      width: (panel.width*2*panelQuantity),height:(panel.height*2*panelQuantity)
-    }
-    const perimeter = (perimeterDoor.width+perimeterDoor.height)+(perimeterPanel.width+perimeterPanel.height);
-    return {
-      areaSqft:areaSqft,
-      perimeter:perimeter,
-      doorWidth: door.width 
-    };
-  }
-  else if (variant === layoutVariants.CUSTOM){
-    let totalSqft, totalPerimeter = 0;
-    // for panel A
-    const panelA = calculatePanel(measurements?.aWidth,measurements?.aHeight);
-     // for panel B
-    const panelB = calculatePanel(measurements?.bWidth,measurements?.bHeight);
-    // for panel C
-    const panelC = calculatePanel(measurements?.cWidth,measurements?.cHeight);
-    // for panel D
-    const panelD = calculatePanel(measurements?.dWidth,measurements?.dHeight);
-    // for panel E
-    const panelE = calculatePanel(measurements?.eWidth,measurements?.eHeight);
-    // for panel F
-    const panelF = calculatePanel(measurements?.fWidth,measurements?.fHeight);
-    // for panel G
-    const panelG = calculatePanel(measurements?.gWidth,measurements?.gHeight);
-    // for panel H
-    const panelH = calculatePanel(measurements?.hWidth,measurements?.hHeight);
-
-   totalSqft = panelA.sqft + panelB.sqft + panelC.sqft + panelD.sqft + panelE.sqft + panelF.sqft + panelG.sqft + panelH.sqft;
-   totalPerimeter = panelA.perimeter + panelB.perimeter + panelC.perimeter + panelD.perimeter + panelE.perimeter + panelF.perimeter + panelG.perimeter + panelH.perimeter;
-   console.log(panelA.sqft,panelB.sqft);
-   return {
-    areaSqft:Math.round((totalSqft + Number.EPSILON) * 100) / 100,
-    perimeter:totalPerimeter
-  };
-  }
-  else {
-   return 0;
-  }
-   
+  return obj;
 };
 
-const calculatePanel = (width,height) => {
-  let panelWidth, panelHeight, panelSqft, panelPerimeter = 0;
-  panelWidth = (width|| 0) * 2;
-  panelHeight = (height || 0) * 2;
-  panelSqft = ((width || 0)*(height || 0))/144;
-  panelSqft = Math.round((panelSqft + Number.EPSILON) * 100) / 100;  //round to two decimals point
-  panelPerimeter = panelWidth+panelHeight;
-  return {sqft:panelSqft,perimeter:panelPerimeter};
-}
+export const calculateAreaAndPerimeter = (measurementSides, variant) => {
+  const measurements = convertArrayKeysToObject(measurementSides);
+  if (variant === layoutVariants.CUSTOM) {
+    let totalSqft = 0;
+    let totalPerimeter = 0;
+
+    for (const panelKey in measurements) {
+      const { width, height } = measurements[panelKey];
+      const panel = calculatePanel(width, height);
+      totalSqft += panel.sqft;
+      totalPerimeter += panel.perimeter;
+    }
+
+    return {
+      areaSqft: Math.round((totalSqft + Number.EPSILON) * 100) / 100,
+      perimeter: totalPerimeter,
+    };
+  } else {
+    return 0;
+  }
+};
+
+const calculatePanel = (width, height) => {
+  let panelWidth = (width || 0) * 2;
+  let panelHeight = (height || 0) * 2;
+  let panelSqft = ((width || 0) * (height || 0)) / 144;
+  panelSqft = Math.round((panelSqft + Number.EPSILON) * 100) / 100;
+  let panelPerimeter = panelWidth + panelHeight;
+  return { sqft: panelSqft, perimeter: panelPerimeter };
+};

@@ -1,3 +1,4 @@
+import {useState} from 'react'
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
@@ -14,25 +15,15 @@ import { useDispatch } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 const customInitalValues = {
-  aWidth: "",
-  aHeight: "",
-  bWidth: "",
-  bHeight: "",
-  cWidth: "",
-  cHeight: "",
-  dWidth: "",
-  dHeight: "",
-  eWidth: "",
-  eHeight: "",
-  fWidth: "",
-  fHeight: "",
-  gWidth: "",
-  gHeight: "",
-  hWidth: "",
-  hHeight: "",
+  width: "",
+  height: ""
 };
 const CustomLayout = () => {
   const dispatch = useDispatch();
+  const [numRows, setNumRows] = useState(1);
+  const addRow = () => {
+    setNumRows(numRows + 1);
+  };
   const handleNext = () => {
     dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
@@ -55,14 +46,13 @@ const CustomLayout = () => {
         measurementsArray,
         layoutVariants.CUSTOM
       );
+      console.log("check",setLayoutPerimeter(result.perimeter))
+      console.log("meas",updateMeasurements(measurementsArray))
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
       handleNext();
       resetForm();
-
-      // dispatch(setNavigation("review"));
-      // dispatch(setNavigationDesktop("review"));
     },
   });
   const handleReset = () => {
@@ -215,341 +205,79 @@ const CustomLayout = () => {
                   </Typography>
                 </Box>
                 {/* a */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>a</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="aWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.aWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="aHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.aHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* b */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>b</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="bWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.bWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="bHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.bHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* c */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>c</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="cWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.cWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="cHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.cHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* d */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>d</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="dWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.dWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="dHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.dHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* e */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>e</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="eWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.eWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="eHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.eHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* f */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>f</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="fWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.fWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="fHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.fHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* g */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>g</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="gWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.gWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="gHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.gHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
-                {/* h */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1.5,
-                  }}
-                >
-                  <Typography sx={{ mr: 2, width: 9 }}>h</Typography>
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="hWidth"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.hWidth}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  <TextField
-                    type="number"
-                    size="small"
-                    variant="outlined"
-                    name="hHeight"
-                    placeholder="0"
-                    style={{
-                      background: "white",
-                      borderRadius: "8px",
-                      border: "1px solid #D0D5DD",
-                      width: { md: "28%", xs: "50%" },
-                    }}
-                    value={formik.values.hHeight}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </Box>
+                {Array.from({ length: numRows }).map((_, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1.5,
+            }}
+          >
+            <Typography sx={{ mr: 2, width: 9 }}>{`a${index + 1}`}</Typography>
+            <TextField
+              type="number"
+              size="small"
+              variant="outlined"
+              name={`aWidth${index}`}
+              placeholder="0"
+              style={{
+                background: 'white',
+                borderRadius: '8px',
+                border: '1px solid #D0D5DD',
+                width: { md: '28%', xs: '50%' },
+              }}
+              value={formik.values[`aWidth${index}`]}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+            <TextField
+              type="number"
+              size="small"
+              variant="outlined"
+              name={`aHeight${index}`}
+              placeholder="0"
+              style={{
+                background: 'white',
+                borderRadius: '8px',
+                border: '1px solid #D0D5DD',
+                width: { md: '28%', xs: '50%' },
+              }}
+              value={formik.values[`aHeight${index}`]}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+            />
+                        <TextField
+              type="number"
+              size="small"
+              variant="outlined"
+              name="counter"
+              placeholder="0"
+              style={{
+                background: 'white',
+                borderRadius: '8px',
+                border: '1px solid #D0D5DD',
+                width: { md: '15%', xs: '20%' },
+              }}
+              onBlur={formik.handleBlur}
+            />
+          </Box>
+        ))}
+        <Button
+          fullWidth
+          onClick={addRow}
+          sx={{
+            boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
+            color: '#344054',
+            textTransform: 'initial',
+            border: '1px solid #D0D5DD',
+            backgroundColor: { md: 'transparent', xs: 'white' },
+            height: 40,
+            fontSize: 20,
+          }}
+        >
+          Add Row
+        </Button>
               </Box>
 
               <Box
