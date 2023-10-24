@@ -308,8 +308,17 @@ const Sidebar = () => {
               </Box>
               <Box sx={{ fontSize: 18 }}>
                 {decodedToken?.name}
-                <Box sx={{ fontSize: 16, color: "white" }}>
-                  {" "}
+                <Box
+                  sx={{
+                    fontSize: 16,
+                    color: "white",
+                    whiteSpace: "nowrap",
+                    width: 160,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap", // Added this line to ensure text doesn't wrap
+                  }}
+                >
                   {decodedToken?.email}
                 </Box>
               </Box>
