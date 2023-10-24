@@ -8,12 +8,12 @@ import { Search } from '@mui/icons-material';
 import CustomerQoute from "../Estimates/customerQuotTable";
 
 const CustomerTable = () => {
-  const { data: teamData } = useFetchDataCustomer();
-  console.log("data",teamData)
+  const { data: customerData } = useFetchDataCustomer();
+  console.log("data",customerData)
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedRowData, setSelectedRowData] = React.useState(null);
-  const filteredData = teamData?.filter(
+  const filteredData = customerData?.filter(
     (customer) =>
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())

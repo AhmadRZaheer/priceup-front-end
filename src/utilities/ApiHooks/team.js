@@ -20,7 +20,7 @@ export const useFetchDataTeam = () => {
     }
   }
   return useQuery({
-    queryKey: ["teamData"],
+    queryKey: ["stafData"],
     queryFn: fetchData,
     enabled: true,
     placeholderData: [],

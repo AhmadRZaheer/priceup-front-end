@@ -22,14 +22,14 @@ import Snackbars from "../Modal/snackBar";
 import { Add } from "@mui/icons-material";
 
 const TeamTable = () => {
-  const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
-  console.log("team",teamData)
+  const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  console.log("team",stafData)
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
-  const filteredData = teamData?.filter(
+  const filteredData = stafData?.filter(
     (team) =>
       team.name.toLowerCase().includes(search.toLowerCase()) ||
       team.email.toLowerCase().includes(search.toLowerCase())
