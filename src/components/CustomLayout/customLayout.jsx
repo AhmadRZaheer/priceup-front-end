@@ -1,4 +1,4 @@
-import {useState,useEffect} from 'react'
+import { useState, useEffect } from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
@@ -14,7 +14,7 @@ import {
 import { useDispatch } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -23,39 +23,34 @@ const getNearestSmallerKeyWithValues = (values, itrator) => {
   }
 
   return values[itr];
-}
+};
 
 const isThereHigherKeyAvailable = (values, iterator) => {
-  return Object.keys(values).some(k => k > iterator);
-}
+  return Object.keys(values).some((k) => k > iterator);
+};
 
 const CustomLayout = () => {
   const customInitalValues = {
     [1]: {
-      count: 1
-    }
+      count: 1,
+    },
   };
   const dispatch = useDispatch();
-  
-  const [values, setValues] = useState({ ...customInitalValues });
-  
-  const rows = Object.keys(values).map(key => parseInt(values[key].count) || 1);
-  const numRows = parseInt(rows.reduce((acc, val) => acc + (val), 0));
-  // useEffect(() => {
 
-  //   if (num) {
-  //     setNumRows(n => num)
-  //   }
-    
-  // }, [values, numRows])
-  console.log(numRows, 'log')
-  
+  const [values, setValues] = useState({ ...customInitalValues });
+
+  const rows = Object.keys(values).map(
+    (key) => parseInt(values[key].count) || 1
+  );
+  const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
+  console.log(numRows, "log");
+
   const addRow = () => {
-    setValues(vals => ({
+    setValues((vals) => ({
       ...vals,
-      [parseInt(numRows) + 1]: { count: 1 }
+      [parseInt(numRows) + 1]: { count: 1 },
     }));
-    console.log(numRows, 'log in add row')
+    console.log(numRows, "log in add row");
   };
   const handleNext = () => {
     dispatch(setNavigation("review"));
@@ -66,31 +61,44 @@ const CustomLayout = () => {
     dispatch(setNavigationDesktop("layouts"));
   };
   const handleSubmit = async () => {
-    const measurementsArray = Object.keys(values).map(k => values[k]).reduce((prev, current) => {
-    let count = current.count;
-      if (count === 1 ) return [...prev, current];
-      let results = [];
-      while (count >= 1) {
-        const { width, height } = current;
-        results.push({ width, height });
-        count--;
-      }
+    const measurementsArray = Object.keys(values)
+      .map((k) => values[k])
+      .reduce((prev, current) => {
+        let count = current.count;
+        if (count === 1) return [...prev, current];
+        let results = [];
+        while (count >= 1) {
+          const { width, height } = current;
+          results.push({ width, height });
+          count--;
+        }
 
-      return [...prev, ...results]
-    }, []);
+        return [...prev, ...results];
+      }, []);
 
+    const arrayForMeasurement = measurementsArray
+      .map((v) =>
+        Object.keys(v).map((k) =>
+          k !== "count" ? { value: v[k] } : { value: "" }
+        )
+      )
+      .flat();
+    console.log(
+      measurementsArray,
+      arrayForMeasurement,
+      "isdaidaskdaskdas 3sakds "
+    );
 
-
-    const arrayForMeasurement = measurementsArray.map(v => Object.keys(v).map(k => k!=='count' ? {value: v[k]} : {value: ''} ) ).flat();
-    console.log(measurementsArray, arrayForMeasurement, 'isdaidaskdaskdas 3sakds ')
-
-    const result = calculateAreaAndPerimeter(measurementsArray, layoutVariants.CUSTOM);
-    console.log("chck",updateMeasurements(measurementsArray))
+    const result = calculateAreaAndPerimeter(
+      measurementsArray,
+      layoutVariants.CUSTOM
+    );
+    console.log("chck", updateMeasurements(measurementsArray));
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(arrayForMeasurement));
-    dispatch(setNavigation('review'));
-    dispatch(setNavigationDesktop('review'));
+    dispatch(setNavigation("review"));
+    dispatch(setNavigationDesktop("review"));
 
     // Reset the form
     setValues({ ...customInitalValues });
@@ -214,15 +222,16 @@ const CustomLayout = () => {
                 borderRadius: "8px",
                 overflow: "auto",
                 mb: { md: 0, xs: 9 },
+                position: "relative"
               }}
             >
               <Box
                 sx={{
                   display: "flex",
                   width: { md: "48.5%", xs: "91.6%" },
-                  maxHeight: "100%",
-                  minHeight: 100,
+                  maxHeight: 340,
                   flexDirection: "column",
+                  overflowY: "auto",
                   gap: { md: 1, xs: 2 },
                   color: { md: "black", xs: "white" },
                   background: {
@@ -255,111 +264,143 @@ const CustomLayout = () => {
                 </Box>
                 {/* a */}
                 {Array.from({ length: numRows }).map((_, index) => (
-          <Box
-            key={index}
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1.5,
-            }}
-          >
-            <Typography sx={{ mr: 2, width: 9 }}>{`a${index + 1}`}</Typography>
-            <TextField
-              disabled={typeof values[index+1]?.count == 'undefined'}
-              type="number"
-              size="small"
-              variant="outlined"
-              name={`aWidth${index}`}
-              placeholder="0"
-              style={{
-                background: 'white',
-                borderRadius: '8px',
-                border: '1px solid #D0D5DD',
-                width: { md: '28%', xs: '50%' },
-              }}
-              value={ (getNearestSmallerKeyWithValues(values, index + 1) || values[`${index + 1}`])?.width || ''}
-              onChange={(e) => {
-                setValues(vals => ({
-                  ...vals,
-                  [index + 1]: {...vals[index + 1], width: e.target.value}
-                }))
-              }}
+                  <Box
+                    key={index}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                    }}
+                  >
+                    <Typography sx={{ mr: 2, width: 9 }}>{`a${
+                      index + 1
+                    }`}</Typography>
+                    <TextField
+                      disabled={typeof values[index + 1]?.count == "undefined"}
+                      type="number"
+                      size="small"
+                      variant="outlined"
+                      name={`aWidth${index}`}
+                      placeholder="0"
+                      style={{
+                        background: "white",
+                        borderRadius: "8px",
+                        border: "1px solid #D0D5DD",
+                        width: { md: "28%", xs: "50%" },
+                      }}
+                      value={
+                        (
+                          getNearestSmallerKeyWithValues(values, index + 1) ||
+                          values[`${index + 1}`]
+                        )?.width || ""
+                      }
+                      onChange={(e) => {
+                        setValues((vals) => ({
+                          ...vals,
+                          [index + 1]: {
+                            ...vals[index + 1],
+                            width: e.target.value,
+                          },
+                        }));
+                      }}
+                    />
+                    <TextField
+                      disabled={typeof values[index + 1]?.count == "undefined"}
+                      type="number"
+                      size="small"
+                      variant="outlined"
+                      name={`aHeight${index}`}
+                      placeholder="0"
+                      style={{
+                        background: "white",
+                        borderRadius: "8px",
+                        border: "1px solid #D0D5DD",
+                        width: { md: "28%", xs: "50%" },
+                      }}
+                      value={
+                        (
+                          getNearestSmallerKeyWithValues(values, index + 1) ||
+                          values[`${index + 1}`]
+                        )?.height || ""
+                      }
+                      onChange={(e) => {
+                        setValues((vals) => ({
+                          ...vals,
+                          [index + 1]: {
+                            ...vals[index + 1],
+                            height: e.target.value,
+                          },
+                        }));
+                      }}
+                    />
+                    {typeof values[index + 1]?.count !== "undefined" && (
+                      <>
+                        <TextField
+                          disabled={isThereHigherKeyAvailable(
+                            values,
+                            index + 1
+                          )}
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={`Count${index}`}
+                          value={values[index + 1]?.count || ""}
+                          placeholder="quantity"
+                          style={{
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: { md: "15%", xs: "20%" },
+                          }}
+                          onChange={(e) => {
+                            setValues((vals) => ({
+                              ...vals,
+                              [index + 1]: {
+                                ...vals[index + 1],
+                                count: parseInt(e.target.value),
+                              },
+                            }));
+                          }}
+                        />
+                        {Math.max(...Object.keys(values)) === index + 1 &&
+                          index + 1 !== 1 && (
+                            <a
+                              href="#"
+                              onClick={(event) => {
+                                event.preventDefault();
+                                setValues((vals) => {
+                                  const { [index + 1]: notWanted, ...rest } =
+                                    vals;
 
-            />
-            <TextField
-            disabled={typeof values[index+1]?.count == 'undefined'}
-              type="number"
-              size="small"
-              variant="outlined"
-              name={`aHeight${index}`}
-              placeholder="0"
-              style={{
-                background: 'white',
-                borderRadius: '8px',
-                border: '1px solid #D0D5DD',
-                width: { md: '28%', xs: '50%' },
-              }}
-              value={ (getNearestSmallerKeyWithValues(values, index + 1) || values[`${index + 1}`])?.height || ''}
-              onChange={(e) => {
-                setValues(vals => ({
-                  ...vals,
-                  [index + 1]: {...vals[index + 1], height: e.target.value}
-                }))
-              }}
-      
-            />
-            {
-              (typeof values[index+1]?.count !== 'undefined') && (
-                <>
-                <TextField
-                disabled={isThereHigherKeyAvailable(values, index + 1)}
-                type="number"
-                size="small"
-                variant="outlined"
-                name={`Count${index}`}
-                value={values[index+1]?.count || ''}
-                placeholder="0"
-                style={{
-                  background: 'white',
-                  borderRadius: '8px',
-                  border: '1px solid #D0D5DD',
-                  width: { md: '15%', xs: '20%' },
-                }}
-                onChange={(e) => {
-                  setValues(vals => ({
-                    ...vals,
-                    [index+1]: {...vals[index+1], count: parseInt(e.target.value)}
-                  }))
-                }}
-              />
-            { Math.max(...Object.keys(values)) === index + 1 && index + 1 !== 1 && <a href="#" onClick={(event) => {
-              event.preventDefault();
-              setValues(vals => {
-                const {[index+1]: notWanted, ...rest} = vals;
-
-                return rest;
-              })
-            }}><DeleteIcon sx={{color: 'black'}}/></a> }
-              </>
-              )
-            }
-          </Box>
-        ))}
-        <Button
-          fullWidth
-          onClick={addRow}
-          sx={{
-            boxShadow: '0px 1px 2px rgba(16, 24, 40, 0.05)',
-            color: '#344054',
-            textTransform: 'initial',
-            border: '1px solid #D0D5DD',
-            backgroundColor: { md: 'transparent', xs: 'white' },
-            height: 40,
-            fontSize: 20,
-          }}
-        >
-          Add Row
-        </Button>
+                                  return rest;
+                                });
+                              }}
+                            >
+                              <DeleteIcon sx={{ color: "black" }} />
+                            </a>
+                          )}
+                      </>
+                    )}
+                  </Box>
+                ))}
+                <Button
+                  fullWidth
+                  onClick={addRow}
+                  sx={{
+                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                    color: "#344054",
+                    textTransform: "initial",
+                    border: "1px solid #D0D5DD",
+                    backgroundColor: { md: "transparent", xs: "white" },
+                    height: 40,
+                    fontSize: 20,
+                    position: "absolute",
+                    width: 480,
+                    bottom: 30
+                  }}
+                >
+                  Add Row
+                </Button>
               </Box>
 
               <Box
