@@ -14,6 +14,7 @@ import {
 import { useDispatch } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -338,7 +339,7 @@ const CustomLayout = () => {
 
                 return rest;
               })
-            }}>Delete</a> }
+            }}><DeleteIcon sx={{color: 'black'}}/></a> }
               </>
               )
             }

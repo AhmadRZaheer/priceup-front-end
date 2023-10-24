@@ -151,7 +151,7 @@ const SuperSidebar = () => {
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: "200px",
+            width: "300px",
             padding: "8px",
             marginBottom: "10px",
             marginLeft: "20px",
@@ -165,7 +165,7 @@ const SuperSidebar = () => {
             maxHeight: "150px",
             overflowY: "auto",
             paddingX: "20px",
-            width: "240px",
+            width: "340px",
           }}
         >
           {filteredAdminData.map((admin) => (
@@ -176,18 +176,30 @@ const SuperSidebar = () => {
                 textTransform: "lowercase",
                 marginLeft: "20px",
                 borderBottom: "1px solid #7d7d7d",
-                ":hover":{
+                ":hover": {
                   bgcolor: "rgba(0, 0, 0, 0.2)",
-                  cursor: "pointer"
-                }
+                  cursor: "pointer",
+                },
               }}
             >
-              <a
-                onClick={() => handleAdminNameClick(admin._id)}
-                style={{ cursor: "pointer" }}
-              >
-                {admin.name}
-              </a>
+              <div style={{display: 'flex'}}>
+                <div className="UserIcon">
+                  <img
+                    src={`${backendURL}/${decodedToken?.image}`}
+                    width="25"
+                    height="25"
+                    alt="no"
+                  />
+                </div>
+                <div style={{paddingLeft: "10px"}} onClick={() => handleAdminNameClick(admin._id)}>
+                  <a
+                    style={{ cursor: "pointer" }}
+                  >
+                    {admin.name}
+                  </a>
+                  <p style={{fontSize: "10px"}}>{admin.email}</p>
+                </div>
+              </div>
             </Typography>
           ))}
         </div>
