@@ -267,14 +267,18 @@ export const convertArrayKeysToObject = (array) => {
 };
 
 export const calculateAreaAndPerimeter = (measurementSides, variant) => {
-  const measurements = convertArrayKeysToObject(measurementSides);
+  let measurements = convertArrayKeysToObject(measurementSides);
   if (variant === layoutVariants.CUSTOM) {
+    measurements = measurementSides;
+    console.log(measurements, 'cal')
     let totalSqft = 0;
     let totalPerimeter = 0;
 
     for (const panelKey in measurements) {
       const { width, height } = measurements[panelKey];
+      console.log({ width, height }, 'loop')
       const panel = calculatePanel(width, height);
+      console.log("panel",panel)
       totalSqft += panel.sqft;
       totalPerimeter += panel.perimeter;
     }

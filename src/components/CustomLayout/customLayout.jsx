@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useState,useEffect} from 'react'
 import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
@@ -14,15 +14,47 @@ import {
 import { useDispatch } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
-const customInitalValues = {
-  width: "",
-  height: ""
-};
+
+const getNearestSmallerKeyWithValues = (values, itrator) => {
+  let itr = itrator;
+  while (!values[itr] && itr > 0) {
+    itr--;
+  }
+
+  return values[itr];
+}
+
+const isThereHigherKeyAvailable = (values, iterator) => {
+  return Object.keys(values).some(k => k > iterator);
+}
+
 const CustomLayout = () => {
+  const customInitalValues = {
+    [1]: {
+      count: 1
+    }
+  };
   const dispatch = useDispatch();
-  const [numRows, setNumRows] = useState(1);
+  
+  const [values, setValues] = useState({ ...customInitalValues });
+  
+  const rows = Object.keys(values).map(key => parseInt(values[key].count) || 1);
+  const numRows = parseInt(rows.reduce((acc, val) => acc + (val), 0));
+  // useEffect(() => {
+
+  //   if (num) {
+  //     setNumRows(n => num)
+  //   }
+    
+  // }, [values, numRows])
+  console.log(numRows, 'log')
+  
   const addRow = () => {
-    setNumRows(numRows + 1);
+    setValues(vals => ({
+      ...vals,
+      [parseInt(numRows) + 1]: { count: 1 }
+    }));
+    console.log(numRows, 'log in add row')
   };
   const handleNext = () => {
     dispatch(setNavigation("review"));
@@ -32,34 +64,39 @@ const CustomLayout = () => {
     dispatch(setNavigation("layouts"));
     dispatch(setNavigationDesktop("layouts"));
   };
-  const formik = useFormik({
-    initialValues: { ...customInitalValues },
-    onSubmit: async (values, resetForm) => {
-      const measurementsArray = Object.entries(values)
-        .filter(([key, value]) => value !== "")
-        .map(([key, value]) => ({
-          key,
-          value,
-        }));
+  const handleSubmit = async () => {
+    const measurementsArray = Object.keys(values).map(k => values[k]);
 
-      const result = calculateAreaAndPerimeter(
-        measurementsArray,
-        layoutVariants.CUSTOM
-      );
-      console.log("check",setLayoutPerimeter(result.perimeter))
-      console.log("meas",updateMeasurements(measurementsArray))
-      dispatch(setLayoutArea(result.areaSqft));
-      dispatch(setLayoutPerimeter(result.perimeter));
-      dispatch(updateMeasurements(measurementsArray));
-      handleNext();
-      resetForm();
-    },
-  });
+
+
+    const arrayForMeasurement = measurementsArray.map(v => Object.keys(v).map(k => k!=='count' ? {value: v[k]} : {value: ''} ) ).flat();
+    console.log(measurementsArray, arrayForMeasurement, 'isdaidaskdaskdas 3sakds ')
+
+    const result = calculateAreaAndPerimeter(measurementsArray, layoutVariants.CUSTOM);
+    console.log("chck",updateMeasurements(measurementsArray))
+    dispatch(setLayoutArea(result.areaSqft));
+    dispatch(setLayoutPerimeter(result.perimeter));
+    dispatch(updateMeasurements(arrayForMeasurement));
+    dispatch(setNavigation('review'));
+    dispatch(setNavigationDesktop('review'));
+
+    // Reset the form
+    setValues({ ...customInitalValues });
+    // setNumRows(customInitalValues.count);
+  };
+
   const handleReset = () => {
-    formik.resetForm({
-      values: { ...customInitalValues },
+    setValues({ ...customInitalValues });
+    // setNumRows(customInitalValues.count);
+  };
+
+  const handleChange = (name, value) => {
+    setValues({
+      ...values,
+      [name]: value,
     });
   };
+
   return (
     <>
       <Box
@@ -110,7 +147,7 @@ const CustomLayout = () => {
         >
           Create New Estimate
         </Typography>
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <Box
             sx={{
               height: "100%",
@@ -216,6 +253,7 @@ const CustomLayout = () => {
           >
             <Typography sx={{ mr: 2, width: 9 }}>{`a${index + 1}`}</Typography>
             <TextField
+              disabled={typeof values[index+1]?.count == 'undefined'}
               type="number"
               size="small"
               variant="outlined"
@@ -227,11 +265,17 @@ const CustomLayout = () => {
                 border: '1px solid #D0D5DD',
                 width: { md: '28%', xs: '50%' },
               }}
-              value={formik.values[`aWidth${index}`]}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
+              value={ (getNearestSmallerKeyWithValues(values, index + 1) || values[`${index + 1}`])?.width || ''}
+              onChange={(e) => {
+                setValues(vals => ({
+                  ...vals,
+                  [index + 1]: {...vals[index + 1], width: e.target.value}
+                }))
+              }}
+
             />
             <TextField
+            disabled={typeof values[index+1]?.count == 'undefined'}
               type="number"
               size="small"
               variant="outlined"
@@ -243,24 +287,50 @@ const CustomLayout = () => {
                 border: '1px solid #D0D5DD',
                 width: { md: '28%', xs: '50%' },
               }}
-              value={formik.values[`aHeight${index}`]}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-            />
-                        <TextField
-              type="number"
-              size="small"
-              variant="outlined"
-              name="counter"
-              placeholder="0"
-              style={{
-                background: 'white',
-                borderRadius: '8px',
-                border: '1px solid #D0D5DD',
-                width: { md: '15%', xs: '20%' },
+              value={ (getNearestSmallerKeyWithValues(values, index + 1) || values[`${index + 1}`])?.height || ''}
+              onChange={(e) => {
+                setValues(vals => ({
+                  ...vals,
+                  [index + 1]: {...vals[index + 1], height: e.target.value}
+                }))
               }}
-              onBlur={formik.handleBlur}
+      
             />
+            {
+              (typeof values[index+1]?.count !== 'undefined') && (
+                <>
+                <TextField
+                disabled={isThereHigherKeyAvailable(values, index + 1)}
+                type="number"
+                size="small"
+                variant="outlined"
+                name={`Count${index}`}
+                value={values[index+1]?.count || ''}
+                placeholder="0"
+                style={{
+                  background: 'white',
+                  borderRadius: '8px',
+                  border: '1px solid #D0D5DD',
+                  width: { md: '15%', xs: '20%' },
+                }}
+                onChange={(e) => {
+                  setValues(vals => ({
+                    ...vals,
+                    [index+1]: {...vals[index+1], count: parseInt(e.target.value)}
+                  }))
+                }}
+              />
+            { Object.keys(values).length > 1 && index + 1 !== 1 && <a href="#" onClick={(event) => {
+              event.preventDefault();
+              setValues(vals => {
+                const {[index+1]: notWanted, ...rest} = vals;
+
+                return rest;
+              })
+            }}>Delete</a> }
+              </>
+              )
+            }
           </Box>
         ))}
         <Button
