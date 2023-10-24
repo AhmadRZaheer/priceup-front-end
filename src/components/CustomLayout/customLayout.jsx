@@ -65,7 +65,18 @@ const CustomLayout = () => {
     dispatch(setNavigationDesktop("layouts"));
   };
   const handleSubmit = async () => {
-    const measurementsArray = Object.keys(values).map(k => values[k]);
+    const measurementsArray = Object.keys(values).map(k => values[k]).reduce((prev, current) => {
+    let count = current.count;
+      if (count === 1 ) return [...prev, current];
+      let results = [];
+      while (count >= 1) {
+        const { width, height } = current;
+        results.push({ width, height });
+        count--;
+      }
+
+      return [...prev, ...results]
+    }, []);
 
 
 
@@ -320,7 +331,7 @@ const CustomLayout = () => {
                   }))
                 }}
               />
-            { Object.keys(values).length > 1 && index + 1 !== 1 && <a href="#" onClick={(event) => {
+            { Math.max(...Object.keys(values)) === index + 1 && index + 1 !== 1 && <a href="#" onClick={(event) => {
               event.preventDefault();
               setValues(vals => {
                 const {[index+1]: notWanted, ...rest} = vals;
