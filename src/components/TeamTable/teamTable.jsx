@@ -23,6 +23,7 @@ import { Add } from "@mui/icons-material";
 
 const TeamTable = () => {
   const { data: teamData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  console.log("team",teamData)
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
