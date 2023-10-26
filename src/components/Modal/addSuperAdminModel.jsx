@@ -53,14 +53,6 @@ export default function AddSuperAdminModel({
     isError: ErrorForAddEidt,
   } = useEditUser();
 
-  React.useEffect(() => {
-    if (CreatedSuccessfully) {
-      refetch();
-      showSnackbar("New User Created  ", "success");
-      close();
-    }
-  }, [CreatedSuccessfully]);
-
   const handleCreateClick = (props) => {
     addTeamAdminsMembers(props);
   };
