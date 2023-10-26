@@ -4,7 +4,7 @@ import {
   CircularProgress,
   Typography,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   initializeStateForEditQuote,
   setListData,
@@ -18,12 +18,18 @@ import {
 import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import ModeIcon from "@mui/icons-material/Mode";
+import { getDataRefetch } from "../../redux/staff";
+import { useEffect } from "react";
 
 export default function ExitingQuotes() {
-  const { data, isFetching } = useGetEstimates();
+  const refetchData = useSelector(getDataRefetch);
+  const { data, isFetching, refetch: refetchEstimates } = useGetEstimates();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
   const dispatch = useDispatch();
+  useEffect(() => {
+    refetchEstimates()
+  }, [refetchData])
   const handleIconButtonClick = (item) => {
     dispatch(setListData(estimateListData));
     dispatch(
@@ -110,7 +116,7 @@ export default function ExitingQuotes() {
                   <CircularProgress sx={{}} />
                 </Box>
               ) : (
-               data?.estimates?.map((item) => (
+                data?.estimates?.map((item) => (
                   <Box
                     key={item._id}
                     sx={{
@@ -127,12 +133,12 @@ export default function ExitingQuotes() {
 
                       <Box>
                         <Box sx={{ display: "flex", gap: 0.6 }}>
-                          <Typography  className={classes.overflowText}>{item?.creatorData?.name}</Typography>
-                          <Typography sx={{fontSize: 16, fontWeight: "Medium"}}> - Creator</Typography>
+                          <Typography className={classes.overflowText}>{item?.creatorData?.name}</Typography>
+                          <Typography sx={{ fontSize: 16, fontWeight: "Medium" }}> - Creator</Typography>
                         </Box>
-                        <Box sx={{ display: "flex", gap: 0.6  }}>
-                          <Typography sx={{fontSize: 14}}>{item?.customerData?.name}</Typography>
-                          <Typography sx={{fontSize: 14}}> - Customer</Typography>
+                        <Box sx={{ display: "flex", gap: 0.6 }}>
+                          <Typography sx={{ fontSize: 14 }}>{item?.customerData?.name}</Typography>
+                          <Typography sx={{ fontSize: 14 }}> - Customer</Typography>
                         </Box>
                       </Box>
                     </Box>
@@ -148,10 +154,10 @@ export default function ExitingQuotes() {
 
                       <Button
                         onClick={() => handleIconButtonClick(item)}
-                        sx={{ height: 25,color:'white',background: "#8477DA","&:hover": { background: "#8477DA",},width:'fit-content',margin:'0px auto' }}
+                        sx={{ height: 25, color: 'white', background: "#8477DA", "&:hover": { background: "#8477DA", }, width: 'fit-content', margin: '0px auto' }}
                         disabled={estimateDataFetching}
                       >
-                        <ModeIcon sx={{color: "white",fontSize:'17px',marginRight:'5px'}} />
+                        <ModeIcon sx={{ color: "white", fontSize: '17px', marginRight: '5px' }} />
                         Edit
                       </Button>
                       <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
@@ -159,7 +165,7 @@ export default function ExitingQuotes() {
                       </Typography>
                     </Box>
                   </Box>
-                  
+
                 )))}
             </Box>
           </Box>

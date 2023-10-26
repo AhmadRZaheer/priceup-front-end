@@ -1,6 +1,6 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
@@ -36,7 +36,7 @@ export const useFetchAllStaff = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      if (response.data && response.data.message === 'All Staff') {
+      if (response.data && response.data.message === "All Staff") {
         return response.data.data ? response.data.data : [];
       } else {
         throw new Error("An error occurred while fetching staff data.");
@@ -53,57 +53,68 @@ export const useFetchAllStaff = () => {
     placeholderData: [],
   });
 };
-export const FetchId2 = ({children}) => {
+export const FetchId2 = ({ children }) => {
   const [newToken, setNewToken] = useState(null);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const userID = searchParams.get('userID')
-  const adminId = searchParams.get('adminID')
+  const userID = searchParams.get("userID");
+  const adminId = searchParams.get("adminID");
   let token = newToken || localStorage.getItem("token");
-
 
   useEffect(() => {
     if (adminId) {
       try {
-        axios.post(`${backendURL}/admins/loginAdminId`, { id: adminId }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }).then(resp => {
-          console.log({ resp })
+        axios
+          .post(
+            `${backendURL}/admins/loginAdminId`,
+            { id: adminId },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((resp) => {
+            console.log({ resp });
 
-          const newToken = resp.data.data.token;
-          localStorage.setItem('superAdminToken', token);
+            const newToken = resp.data.data.token;
+            localStorage.setItem("superAdminToken", token);
 
-          localStorage.setItem('token', newToken);
-          setNewToken(newToken);
-        })
+            localStorage.setItem("token", newToken);
+            setNewToken(newToken);
+          });
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
       }
-    }else if(userID){
+    } else if (userID) {
       try {
-        axios.post(`${backendURL}/admins/loginAdminIdAgain`, { id: userID }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          },
-        }).then(resp => {
-          console.log({ resp })
+        axios
+          .post(
+            `${backendURL}/admins/loginAdminIdAgain`,
+            { id: userID },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          )
+          .then((resp) => {
+            console.log({ resp });
 
-          const newToken = resp.data.data.token;
-          localStorage.removeItem('token');
-          
-          localStorage.setItem('token', newToken);
-          setNewToken(newToken);
-        })
+            const newToken = resp.data.data.token;
+            localStorage.removeItem("token");
+
+            localStorage.setItem("token", newToken);
+            setNewToken(newToken);
+          });
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error("An error occurred:", error);
       }
     }
-  }, [adminId,userID])
+  }, [adminId, userID]);
 
-  return <Fragment key={encodeURIComponent(token)}>{children}</Fragment>
-}
+  return <Fragment key={encodeURIComponent(token)}>{children}</Fragment>;
+};
 export const useCreateAdminsMembers = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
@@ -137,11 +148,8 @@ export const useCreateAdminsMembers = () => {
   return useMutation(handleCreate);
 };
 
-
-
 export const useUserStatus = () => {
   const handleEdit = async (status) => {
-
     const token = localStorage.getItem("token");
 
     try {
@@ -166,4 +174,31 @@ export const useUserStatus = () => {
   };
 
   return useMutation(handleEdit);
+};
+
+export const useGiveAccessToStaff = () => {
+  const handleUpdate = async (props) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${backendURL}/admins/giveAccessToStaff/${props.staffId}`,
+        {
+          haveAccessTo: props.locationIds,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleUpdate);
 };
