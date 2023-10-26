@@ -37,6 +37,7 @@ const FinishesTable = () => {
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (data) => {
+    console.log("data",data)
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -59,6 +60,7 @@ const FinishesTable = () => {
       field: "Status",
       width: 200,
       renderCell: (params) => {
+        console.log("params",params.row)
         const id = params.row._id;
         const isMatchingId = id === matchingId;
         return (

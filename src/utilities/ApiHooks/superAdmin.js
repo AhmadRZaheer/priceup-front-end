@@ -167,3 +167,36 @@ export const useUserStatus = () => {
 
   return useMutation(handleEdit);
 };
+export const useEditUser = () => {
+  const handleEdit = async (updatedUser) => {
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+
+    formData.append('image', updatedUser?.image);
+    formData.append('name', updatedUser?.name);
+    formData.append('email', updatedUser?.email);
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/users/${updatedUser?.id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data', // Set the content type for form data
+          },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      console.log("Error",error)
+    }
+  };
+
+  return useMutation(handleEdit);
+};

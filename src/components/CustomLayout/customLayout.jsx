@@ -248,19 +248,37 @@ const CustomLayout = () => {
                 <Box
                   sx={{
                     display: "flex",
-                    gap: { md: 13, xs: 16 },
+                    alignItems: "center",
+                    gap: { md: 12, xs: 16 },
                     ml: 2,
                     justifyContent: "center",
-                    width: { md: 315, xs: "100%" },
+                    width: { md: 315, xs: "100%" },                    
+                    paddingLeft: "25px"
                   }}
                 >
+                 
+                 <Box sx={{
+                  }}> 
                   <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
                     Width
                   </Typography>
+                  </Box>
 
+                 <Box sx={{
+                    paddingLeft: "20px"
+                  }}> 
                   <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
                     Height
                   </Typography>
+                  </Box>
+                 
+                  <Box sx={{
+                    paddingLeft: "10px"
+                  }}> 
+                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
+                    Quantity
+                  </Typography>
+                  </Box>
                 </Box>
                 {/* a */}
                 {Array.from({ length: numRows }).map((_, index) => (
@@ -272,17 +290,17 @@ const CustomLayout = () => {
                       gap: 1.5,
                     }}
                   >
-                    <Typography sx={{ mr: 2, width: 9 }}>{`a${
+                    {/* <Typography sx={{ mr: 2, width: 9 }}>{`a${
                       index + 1
-                    }`}</Typography>
+                    }`}</Typography> */}
                     <TextField
-                      disabled={typeof values[index + 1]?.count == "undefined"}
                       type="number"
                       size="small"
                       variant="outlined"
                       name={`aWidth${index}`}
                       placeholder="0"
                       style={{
+                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
                         background: "white",
                         borderRadius: "8px",
                         border: "1px solid #D0D5DD",
@@ -305,13 +323,13 @@ const CustomLayout = () => {
                       }}
                     />
                     <TextField
-                      disabled={typeof values[index + 1]?.count == "undefined"}
                       type="number"
                       size="small"
                       variant="outlined"
                       name={`aHeight${index}`}
                       placeholder="0"
                       style={{
+                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
                         background: "white",
                         borderRadius: "8px",
                         border: "1px solid #D0D5DD",

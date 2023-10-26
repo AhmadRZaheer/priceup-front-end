@@ -9,7 +9,7 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import { useCreateAdminsMembers } from "../../utilities/ApiHooks/superAdmin";
+import { useCreateAdminsMembers,useEditUser } from "../../utilities/ApiHooks/superAdmin";
 
 const style = {
   position: "absolute",
@@ -46,6 +46,12 @@ export default function AddSuperAdminModel({
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateAdminsMembers();
+  const {
+    mutate: editFinish,
+    isLoading: LoadingForEdit,
+    isSuccess: SuccessForEdit,
+    isError: ErrorForAddEidt,
+  } = useEditUser();
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -57,6 +63,10 @@ export default function AddSuperAdminModel({
 
   const handleCreateClick = (props) => {
     addTeamAdminsMembers(props);
+  };
+  const handleEditClick = (props) => {
+    const id = data;
+    editFinish(props, id);
   };
 
   const validationSchema = Yup.object().shape({
@@ -72,6 +82,7 @@ export default function AddSuperAdminModel({
           email: data?.email,
           password: data?.password,
           image: "",
+          id: data?._id,
         }
       : {
           name: "",
@@ -82,12 +93,29 @@ export default function AddSuperAdminModel({
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      handleCreateClick(values);
+      isEdit ? handleEditClick(values) : handleCreateClick(values);
       setSelectedImage(null);
       resetForm();
     },
   });
 
+  React.useEffect(() => {
+    if (SuccessForEdit) {
+      refetch();
+      showSnackbar("Updated Successfully ", "success");
+      close();
+    }else if (ErrorForAddEidt) {
+      const errorMessage = ErrorForAddEidt.message || "An error occurred";
+      showSnackbar(errorMessage, "error");
+    }
+  }, [SuccessForEdit, ErrorForAddEidt]);
+  React.useEffect(() => {
+    if (CreatedSuccessfully) {
+      refetch();
+      showSnackbar("New User Created  ", "success");
+      close();
+    }
+  }, [CreatedSuccessfully]);
   return (
     <div>
       <Modal
@@ -183,6 +211,7 @@ export default function AddSuperAdminModel({
           <Box>
             <Typography>Email</Typography>
             <TextField
+            disabled
               placeholder="email"
               name="email"
               value={formik.values.email}
@@ -216,7 +245,13 @@ export default function AddSuperAdminModel({
               disabled={LoadingForAdd}
               sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >
-              {LoadingForAdd ? <CircularProgress size={24} /> : "Create"}
+                 {LoadingForEdit || LoadingForAdd ? (
+                <CircularProgress size={24} />
+              ) : isEdit ? (
+                "Update"
+              ) : (
+                "Create"
+              )}
             </Button>
           </Box>
         </Box>

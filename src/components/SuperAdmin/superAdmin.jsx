@@ -21,6 +21,7 @@ import image3 from "../../Assets/Team-Members.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
+import EditIcon from '@mui/icons-material/Edit';
 
 const SuperAdminTable = () => {
   const navigate = useNavigate();
@@ -29,9 +30,17 @@ const SuperAdminTable = () => {
 
   const [open, setOpen] = useState(false);
   const [activeCount, setActiveCount] = useState(0);
+  const [edit, setEdit] = React.useState(null);
+  const [isEdit, setIsEdit] = React.useState(false);
   const [search, setSearch] = useState("");
 
   const handleClose = () => setOpen(false);
+
+  const handleOpenEdit = (data) => {
+    setOpen(true);
+    setEdit(data);
+    setIsEdit(true);
+  };
 
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -101,6 +110,28 @@ const SuperAdminTable = () => {
                 Access Location
               </Button>
             </Link>
+          </>
+        );
+      },
+    },
+    {
+      field: " ",
+      width: 165,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+            >
+              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
+            </IconButton>
+            <IconButton
+             onClick={() => handleOpenEdit(params.row)}
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+            >
+              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
+            </IconButton>
           </>
         );
       },
@@ -240,6 +271,8 @@ const SuperAdminTable = () => {
         close={handleClose}
         refetch={teamMemberRefetch}
         showSnackbar={showSnackbar}
+        data={edit}
+        isEdit={isEdit}
       />
       <Snackbars
         open={snackbar.open}

@@ -153,7 +153,6 @@ export const useEditHardware = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -163,7 +162,6 @@ export const useEditHardware = () => {
       throw new Error("An error occurred while updating the data.");
     }
   };
-
   return useMutation(handleEdit);
 };
 
