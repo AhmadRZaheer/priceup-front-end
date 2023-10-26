@@ -1,19 +1,35 @@
 import { useState } from "react";
-import { Box, Button, IconButton, Typography,Input,InputAdornment } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Input,
+  InputAdornment,
+} from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
-import {Link} from 'react-router-dom'
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import { Search } from '@mui/icons-material';
+import { Search } from "@mui/icons-material";
+import LocationModel from "../Modal/locationModel";
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
   const { data: AdminData, refetch: adminMember } = useFetchDataAdmin();
+
   const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const openModel = () => {
+    setOpen(true);
+  };
+
+  const closeModel = () => {
+    setOpen(false);
+  };
   const actionColumn = [
     {
       field: "Status",
@@ -25,6 +41,22 @@ const SuperAdminTeam = () => {
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
+
+    {
+      field: "location",
+      width: 165,
+      align: "right",
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton onClick={openModel}>
+              <h6>Access Location</h6>
+            </IconButton>
+          </>
+        );
+      },
+    },
+
     {
       field: " ",
       width: 165,
@@ -47,8 +79,7 @@ const SuperAdminTeam = () => {
       },
     },
   ];
-  const filteredData = staffData?.filter(
-    (staff) =>
+  const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
   return (
@@ -66,14 +97,14 @@ const SuperAdminTeam = () => {
           sx={{
             mb: 2,
             mt: 10,
-            width: '20%', // You can adjust the width as needed
-            marginLeft: '30px', // Adjust the margin as needed
+            width: "20%", // You can adjust the width as needed
+            marginLeft: "30px", // Adjust the margin as needed
           }}
-          endAdornment={(
+          endAdornment={
             <InputAdornment position="end">
               <Search />
             </InputAdornment>
-          )}
+          }
         />
         <div className="CustomerTable">
           <DataGrid
@@ -83,6 +114,7 @@ const SuperAdminTeam = () => {
             pageSizeOptions={[10]}
           />
         </div>
+        <LocationModel open={open} onClose={closeModel} />
       </Box>
     </>
   );
