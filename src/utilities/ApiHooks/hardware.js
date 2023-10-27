@@ -136,21 +136,73 @@ export const useCreateHardware = () => {
 
   return useMutation(handleCreate);
 };
+// export const useEditHardware = () => {
+//   const handleEdit = async (props) => {
+//     const token = localStorage.getItem("token");
+//     try {
+//       const updatedData = {
+//         ...(props.optionsData ? { options: props.optionsData } : {}),
+//         ...(props.glassTypeData
+//           ? {
+//               name: props.glassTypeData.name,
+//               // image: props.glassTypeData.image,
+//             }
+//           : {}),
+//       };
+//       const formData = new FormData();
+//       if (props?.glassTypeData?.image) {
+//         formData.append("image", props.glassTypeData.image);
+//       }
+//       formData.append("jsonData", JSON.stringify(updatedData));
+//       const response = await axios.put(
+//         `${backendURL}/glassTypes/${props?.id}`,
+//         formData,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "multipart/form-data",
+//           },
+//         }
+//       );
+
+//       if (response.data.code === 200) {
+//         return response.data.data;
+//       } else {
+//         throw new Error("An error occurred while updating the data.");
+//       }
+//     } catch (error) {
+//       throw new Error("An error occurred while updating the data.");
+//     }
+//   };
+
+//   return useMutation(handleEdit);
+// };
 export const useEditHardware = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-
+    const updatedData = {
+      ...(props.finishesData ? { options: props.finishesData } : {}),
+      ...(props.hardwareData
+        ? {
+            name: props.hardwareData.name,
+            // image: props.glassTypeData.image,
+          }
+        : {}),
+    };
+    const formData = new FormData();
+    if (props?.hardwareData?.image) {
+      formData.append("image", props.hardwareData.image);
+    }
+    formData.append("jsonData", JSON.stringify(updatedData));
     try {
       const response = await axios.put(
         `${backendURL}/hardwares/${props.id}`,
+        formData,
         {
-          ...(props.finishesData ? { finishes: props.finishesData } : {}),
-          ...(props.hardwareData
-            ? { name: props.hardwareData.name, image: props.hardwareData.image }
-            : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       if (response.data.code === 200) {

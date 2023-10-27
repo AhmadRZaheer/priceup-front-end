@@ -211,7 +211,6 @@ export default function AddSuperAdminModel({
           <Box>
             <Typography>Email</Typography>
             <TextField
-            disabled
               placeholder="email"
               name="email"
               value={formik.values.email}
