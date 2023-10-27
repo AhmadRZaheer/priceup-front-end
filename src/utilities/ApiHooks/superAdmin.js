@@ -53,6 +53,30 @@ export const useFetchAllStaff = () => {
     placeholderData: [],
   });
 };
+
+export const useDeleteStaff = () => {
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${backendURL}/staffs/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
 export const FetchId2 = ({ children }) => {
   const [newToken, setNewToken] = useState(null);
   const location = useLocation();

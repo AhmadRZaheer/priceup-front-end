@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -9,7 +9,10 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
-import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useDeleteStaff,
+  useFetchAllStaff,
+} from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
@@ -19,16 +22,22 @@ import { Search } from "@mui/icons-material";
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
-  const { data: AdminData, refetch: adminMember } = useFetchDataAdmin();
+  const { mutate: usedelete, isSuccess } = useDeleteStaff();
+
   const [search, setSearch] = useState("");
+  const handeleDeleteStaff = (id) => {
+    usedelete(id);
+    console.log(id, "id");
+  };
+  useEffect(() => {
+    teamMemberRefetch();
+  }, [isSuccess]);
   const actionColumn = [
     {
       field: "Status",
       paddingLeft: 3,
       width: 220,
       renderCell: (params) => {
-        const id = params.row._id;
-
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
@@ -37,10 +46,14 @@ const SuperAdminTeam = () => {
       width: 165,
       align: "right",
       renderCell: (params) => {
+        console.log(params, "id");
+        const id = params.row._id;
+
         return (
           <>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+              onClick={() => handeleDeleteStaff(id)}
             >
               <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
             </IconButton>
