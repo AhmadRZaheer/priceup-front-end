@@ -13,9 +13,9 @@ import {
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
 import { backendURL } from "../../utilities/common";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 const ChannelTypeDesktop = ({
   menuOptions,
@@ -30,10 +30,14 @@ const ChannelTypeDesktop = ({
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
     let active = null;
-    if (selectedContent?.glassType?.thickness === '1/2') {
-      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-1-2');
-    } else if (selectedContent?.glassType?.thickness === '3/8') {
-      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-3-8');
+    if (selectedContent?.glassType?.thickness === "1/2") {
+      active = listData?.mountingChannel?.find(
+        (item) => item.slug === "u-channel-1-2"
+      );
+    } else if (selectedContent?.glassType?.thickness === "3/8") {
+      active = listData?.mountingChannel?.find(
+        (item) => item.slug === "u-channel-3-8"
+      );
     }
     return active;
   }, [selectedContent?.glassType?.thickness]);
@@ -47,8 +51,8 @@ const ChannelTypeDesktop = ({
     }
   };
   const handleChannelSelect = (item) => {
-    dispatch(setContent({ type: 'channel', item: item }));
-  }
+    dispatch(setContent({ type: "channel", item: item }));
+  };
   const opneClose = () => {
     if (
       selectedContent.hardwareFinishes !== null ||
@@ -84,11 +88,11 @@ const ChannelTypeDesktop = ({
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
           <Typography>{title}</Typography>
-                    <Tooltip title={title}>
-                        <IconButton>
-                          <InfoOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
+          <Tooltip title={title}>
+            <IconButton>
+              <InfoOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </Button>
       </Box>
       {anchorEl ? (
@@ -105,18 +109,25 @@ const ChannelTypeDesktop = ({
           <Box
             sx={{
               display: "flex",
-              width: "100%",
             }}
           >
             {menuOptions?.map((item, index) => (
-              <MenuItem key={index} onClick={() => handleItemSelect(item)}>
+              <MenuItem
+                sx={{ p: 0 }}
+                key={index}
+                onClick={() => handleItemSelect(item)}
+              >
                 <Box
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border:
+                    color:
                       item.toLowerCase() === selectedContent?.mountingState
-                        ? "2px solid #8477da"
+                        ? "white"
+                        : "black",
+                    bgcolor:
+                      item.toLowerCase() === selectedContent?.mountingState
+                        ? "black"
                         : "",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -172,14 +183,18 @@ const ChannelTypeDesktop = ({
             )}
 
             {selectedContent.mountingState === "channel" && (
-              <MenuItem key={activeChannel?.id} onClick={() => handleChannelSelect(activeChannel)}>
+              <MenuItem
+                key={activeChannel?.id}
+                onClick={() => handleChannelSelect(activeChannel)}
+              >
                 <Box
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border: (activeChannel === selectedContent?.mountingChannel?.item)
-                      ? "2px solid blue"
-                      : "1px solid #EAECF0",
+                    border:
+                      activeChannel === selectedContent?.mountingChannel?.item
+                        ? "2px solid blue"
+                        : "1px solid #EAECF0",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                     p: 2,
