@@ -83,6 +83,7 @@ export const useCreateTeamMembers = () => {
 
 export const useEditTeamMembers = () => {
   const handleEdit = async (editTeamMembers) => {
+    console.log("team", editTeamMembers);
     const token = localStorage.getItem("token");
 
     try {
@@ -93,6 +94,35 @@ export const useEditTeamMembers = () => {
           email: editTeamMembers?.teamData?.email,
           password: editTeamMembers?.teamData?.password,
           image: editTeamMembers?.teamData?.image,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+//new hook for update location
+export const useAddLocation = () => {
+  const handleEdit = async (editTeamMembers) => {
+    console.log(editTeamMembers?.data, "testing data");
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/staffs/${editTeamMembers?.locId}`,
+        {
+          haveAccessTo: editTeamMembers?.data,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

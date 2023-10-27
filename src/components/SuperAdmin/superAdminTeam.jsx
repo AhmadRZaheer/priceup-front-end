@@ -8,7 +8,10 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
-import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useFetchAdminLocation,
+  useFetchAllStaff,
+} from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
@@ -19,17 +22,33 @@ import LocationModel from "../Modal/locationModel";
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
   const { data: AdminData, refetch: adminMember } = useFetchDataAdmin();
+  // const { data: AdminLocations, refetch: refectLocations } =
+  //   useFetchAdminLocation();
+
+  console.log(staffData, "staffData");
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
-
-  const openModel = () => {
+  const [selectedRow, setSelectedRow] = useState(null);
+  // console.log(selectedRow, "selectedRow");
+  const openModel = (row) => {
+    setSelectedRow(row);
     setOpen(true);
   };
-
   const closeModel = () => {
     setOpen(false);
   };
+
+  // const filteredAdminData = AdminLocations.filter(
+  //   (data) => data._id === "650bfe2699342cae578a772a"
+  // );
+  // const notAdded = AdminLocations.filter(
+  //   (data) => data._id !== "650bfe2699342cae578a772a"
+  // );
+  // const filteredAdminData = AdminData.filter((data) =>
+  //   selectedRow?.haveAccessTo.includes(data._id)
+  // );
+
   const actionColumn = [
     {
       field: "Status",
@@ -49,7 +68,7 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <IconButton onClick={openModel}>
+            <IconButton onClick={() => openModel(params.row)}>
               <h6>Access Location</h6>
             </IconButton>
           </>
@@ -97,8 +116,8 @@ const SuperAdminTeam = () => {
           sx={{
             mb: 2,
             mt: 10,
-            width: "20%", // You can adjust the width as needed
-            marginLeft: "30px", // Adjust the margin as needed
+            width: "20%",
+            marginLeft: "30px",
           }}
           endAdornment={
             <InputAdornment position="end">
@@ -114,7 +133,14 @@ const SuperAdminTeam = () => {
             pageSizeOptions={[10]}
           />
         </div>
-        <LocationModel open={open} onClose={closeModel} />
+        <LocationModel
+          open={open}
+          onClose={closeModel}
+          selectedRow={selectedRow}
+          // filteredAdminData={filteredAdminData}
+          // notAdded={notAdded}
+          // AdminData={AdminData}
+        />
       </Box>
     </>
   );

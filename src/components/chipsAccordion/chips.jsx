@@ -1,21 +1,17 @@
 import * as React from "react";
 import Chip from "@mui/material/Chip";
 import { Box } from "@mui/material";
+import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 
 export default function ChipsArray() {
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: "Angular", active: true },
-    { key: 1, label: "jQuery", active: false },
-    { key: 2, label: "Polymer", active: true },
-    { key: 3, label: "React", active: true },
-    { key: 4, label: "Vue.js", active: false },
-  ]);
+  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
+
+  console.log(AdminData, "staffData");
 
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) =>
-      chips.filter((chip) => chip.key !== chipToDelete.key)
-    );
+    AdminData.filter((chip) => chip._id !== chipToDelete._id);
   };
+  const filteredAdminData = AdminData.filter((data) => data.status === true);
 
   return (
     <Box
@@ -27,12 +23,12 @@ export default function ChipsArray() {
       }}
       component="ul"
     >
-      {chipData.map((data) => {
+      {filteredAdminData.map((data) => {
         return (
-          <Box sx={{ padding: "10px", borderRadius: "7px" }} key={data.key}>
+          <Box sx={{ padding: "10px", borderRadius: "7px" }} key={data._id}>
             <Chip
-              label={data.label}
-              onDelete={data.active ? handleDelete(data) : undefined}
+              label={data.name}
+              onDelete={data.status ? handleDelete(data) : undefined}
             />
           </Box>
         );

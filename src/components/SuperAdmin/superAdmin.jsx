@@ -25,8 +25,7 @@ import { Search } from "@mui/icons-material";
 const SuperAdminTable = () => {
   const navigate = useNavigate();
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-  const { data: staffData, refetch: teamMemberRefetch2 } = useFetchAllStaff();
-
+  console.log(AdminData, "AdminData");
   const [open, setOpen] = useState(false);
   const [activeCount, setActiveCount] = useState(0);
   const [search, setSearch] = useState("");

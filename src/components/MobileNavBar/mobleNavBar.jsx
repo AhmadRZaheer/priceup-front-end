@@ -3,11 +3,9 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import Logo from "../../Assets/purplelogo.svg";
 import "./mobileNavBar.scss";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
-import TremIcon from "../../Assets/users.svg"
+import TremIcon from "../../Assets/users.svg";
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  setNavigation,
-} from "../../redux/estimateCalculations";
+import { setNavigation } from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
@@ -25,8 +23,17 @@ import { useNavigate } from "react-router-dom";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { logoutHandler } from "../../redux/userAuth";
 import EstimsteIcon from "../../Assets/bar.svg";
-import { FiberManualRecord, LocationSearching, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
-import { useFetchStaffHaveAccessTo, useSwitchStaffLocation } from "../../utilities/ApiHooks/team";
+import {
+  FiberManualRecord,
+  LocationSearching,
+  PinDrop,
+  Search,
+  UnfoldMore,
+} from "@mui/icons-material";
+import {
+  useFetchStaffHaveAccessTo,
+  useSwitchStaffLocation,
+} from "../../utilities/ApiHooks/team";
 import { setDataRefetch } from "../../redux/staff";
 
 const useStyles = makeStyles((theme) => ({
@@ -44,13 +51,22 @@ function MobileBar() {
   const [activeButton, setActiveButton] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
-  const { data: haveAccess, isFetched: haveAccessFetched } = useFetchStaffHaveAccessTo();
-  const { mutate: switchLocation, data: switchLocationData, isLoading: switchLocationLoading, isSuccess: switchLocationSuccess, isError: switchLocationError } = useSwitchStaffLocation();
+  const { data: haveAccess, isFetched: haveAccessFetched } =
+    useFetchStaffHaveAccessTo();
+  const {
+    mutate: switchLocation,
+    data: switchLocationData,
+    isLoading: switchLocationLoading,
+    isSuccess: switchLocationSuccess,
+    isError: switchLocationError,
+  } = useSwitchStaffLocation();
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
   const [activeLocation, setActiveLocation] = useState(null);
   const staffhaveAccessTo = useMemo(() => {
-    let result = haveAccess?.filter((item) => item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    let result = haveAccess?.filter((item) =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
     return result ? result : [];
   }, [haveAccess, searchQuery]);
   const handleSeeLocationsClick = (event) => {
@@ -89,20 +105,22 @@ function MobileBar() {
   const handleSwitchLocation = (location) => {
     if (location.id !== activeLocation.id) {
       setActiveLocation(location);
-      switchLocation({ staffId: decodedToken?.id, companyId: location.id })
+      switchLocation({ staffId: decodedToken?.id, companyId: location.id });
     }
-  }
+  };
   useEffect(() => {
     if (switchLocationSuccess) {
       localStorage.setItem("token", switchLocationData);
       dispatch(setDataRefetch());
     }
-  }, [switchLocationSuccess, switchLocationError])
+  }, [switchLocationSuccess, switchLocationError]);
   useEffect(() => {
     if (haveAccessFetched) {
-      setActiveLocation(haveAccess?.find((item) => item?.id === decodedToken?.company_id));
+      setActiveLocation(
+        haveAccess?.find((item) => item?.id === decodedToken?.company_id)
+      );
     }
-  }, [haveAccessFetched])
+  }, [haveAccessFetched]);
   return (
     <>
       <div className="Main">
@@ -135,9 +153,9 @@ function MobileBar() {
               height: "100vh",
               padding: 0,
               margin: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
             }}
           >
             <Box sx={{ height: "92vh" }}>
@@ -146,19 +164,45 @@ function MobileBar() {
                   <img src={Logo} alt="" />
                 </span>
               </div>
-              <Box sx={{ height: "65vh", overflow: "auto", width: 280, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
-                <Box sx={{ marginTop: 2, textAlign: 'left' }}>
+              <Box
+                sx={{
+                  height: "65vh",
+                  overflow: "auto",
+                  width: 280,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Box sx={{ marginTop: 2, textAlign: "left" }}>
                   <Tooltip title="Switch Location">
-                    <Button sx={{
-                      color: "white", padding: 0.2, width: 200, backgroundColor: "#8477da",
-                      ":hover": {
+                    <Button
+                      sx={{
+                        color: "white",
+                        padding: 0.2,
+                        width: 200,
                         backgroundColor: "#8477da",
-                      }
-                    }} onClick={handleSeeLocationsClick}>
-                      <PinDrop sx={{ color: "white", mr: 1 }} />
-                      <Box sx={{ display: 'flex', flexDirection: 'column', padding: '5px' }}>
-                        <Typography sx={{ fontSize: '16px' }}>{activeLocation?.name}</Typography>
-                        <Typography sx={{ fontSize: '12px' }}>{activeLocation?.email}</Typography>
+                        ":hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                      onClick={handleSeeLocationsClick}
+                    >
+                      <Box>
+                        <PinDrop sx={{ color: "white", mr: 1 }} />
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            padding: "5px",
+                          }}
+                        >
+                          <Typography sx={{ fontSize: "16px" }}>
+                            {activeLocation?.name}
+                          </Typography>
+                          {/* <Typography sx={{ fontSize: '12px' }}>{activeLocation?.email}</Typography> */}
+                        </Box>
                       </Box>
                       <UnfoldMore sx={{ color: "white", mr: 1 }} />
                     </Button>
@@ -171,9 +215,11 @@ function MobileBar() {
                       color: "white",
                       margin: 2,
                       textTransform: "capitalize",
-                      backgroundColor: activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                      backgroundColor:
+                        activeButton === "esti" ? "#B0C4DE" : "#8477da",
                       ":hover": {
-                        backgroundColor: activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                        backgroundColor:
+                          activeButton === "esti" ? "#B0C4DE" : "#8477da",
                       },
                     }}
                     onClick={() => handleEstimateClick()}
@@ -182,7 +228,8 @@ function MobileBar() {
                       style={{ paddingRight: 10 }}
                       src={EstimsteIcon}
                       alt="image of customer"
-                    /> Estimates
+                    />{" "}
+                    Estimates
                   </Button>
                 </Box>
                 <Box sx={{ marginTop: 2 }}>
@@ -192,9 +239,11 @@ function MobileBar() {
                       color: "white",
                       margin: 2,
                       textTransform: "capitalize",
-                      backgroundColor: activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                      backgroundColor:
+                        activeButton === "customr" ? "#B0C4DE" : "#8477da",
                       ":hover": {
-                        backgroundColor: activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                        backgroundColor:
+                          activeButton === "customr" ? "#B0C4DE" : "#8477da",
                       },
                     }}
                     onClick={() => handleCustomerClick()}
@@ -203,7 +252,8 @@ function MobileBar() {
                       style={{ paddingRight: 10 }}
                       src={CustomerIcon}
                       alt="image of customer"
-                    /> Customer
+                    />{" "}
+                    Customer
                   </Button>
                 </Box>
                 <Box sx={{ marginTop: 2 }}>
@@ -213,19 +263,21 @@ function MobileBar() {
                       color: "white",
                       margin: 2,
                       textTransform: "capitalize",
-                      backgroundColor: activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                      backgroundColor:
+                        activeButton === "staff" ? "#B0C4DE" : "#8477da",
                       ":hover": {
-                        backgroundColor: activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                        backgroundColor:
+                          activeButton === "staff" ? "#B0C4DE" : "#8477da",
                       },
                     }}
                     onClick={handleStaffClick}
-
                   >
                     <img
                       style={{ paddingRight: 10 }}
                       src={TremIcon}
                       alt="image of customer"
-                    /> Team
+                    />{" "}
+                    Team
                   </Button>
                 </Box>
               </Box>
@@ -241,7 +293,6 @@ function MobileBar() {
                 backgroundColor: "#100d24",
               }}
             >
-
               <Tooltip title="Logout" placement="top" arrow>
                 <Button
                   sx={{
@@ -295,7 +346,7 @@ function MobileBar() {
           vertical: "top",
           horizontal: "left",
         }}
-      // sx={{ up:20 }}
+        // sx={{ up:20 }}
       >
         <input
           type="text"
@@ -327,7 +378,7 @@ function MobileBar() {
             display: "flex",
             flexDirection: "column",
             gap: 5,
-            paddingBottom: 20
+            paddingBottom: 20,
           }}
         >
           <Box
@@ -359,10 +410,10 @@ function MobileBar() {
                 sx={{
                   width: "88%",
                   ml: "10px",
-                  gap: '10px',
+                  gap: "10px",
                   marginBottom: "5px",
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
+                  justifyContent: "space-between",
+                  alignItems: "center",
                   marginLeft: "20px",
                   display: "flex",
                   border: "1px solid #babab8",
@@ -387,12 +438,22 @@ function MobileBar() {
                   style={{ flexGrow: 1 }}
                   onClick={() => handleSwitchLocation(location)}
                 >
-                  <a style={{ cursor: "pointer" }}><Typography sx={{ textTransform: 'uppercase', fontSize: '16px' }}>{location?.name}</Typography></a>
-                  <Typography style={{ fontSize: "10px" }}>{location?.email}</Typography>
+                  <a style={{ cursor: "pointer" }}>
+                    <Typography
+                      sx={{ textTransform: "uppercase", fontSize: "16px" }}
+                    >
+                      {location?.name}
+                    </Typography>
+                  </a>
+                  <Typography style={{ fontSize: "10px" }}>
+                    {location?.email}
+                  </Typography>
                 </Box>
-                {activeLocation?.id === location?.id && <Box>
-                  <FiberManualRecord sx={{ color: "#5cb85c", mr: 1 }} />
-                </Box>}
+                {activeLocation?.id === location?.id && (
+                  <Box>
+                    <FiberManualRecord sx={{ color: "#5cb85c", mr: 1 }} />
+                  </Box>
+                )}
               </Box>
             ))
           )}
