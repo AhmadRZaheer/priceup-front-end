@@ -12,6 +12,7 @@ import {
   setContent,
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
+import MenuListCorner from "./MenuListCorner";
 import { backendURL } from "../../utilities/common";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';
@@ -166,6 +167,28 @@ const ChannelTypeDesktop = ({
                   menuOptions={estimatesData?.glassToGlass}
                   title={"Glass to Glass"}
                   type={"glassToGlass"}
+                  showSnackbar={showSnackbar}
+                />
+              </>
+            )}
+              {selectedContent.mountingState === "corners" && (
+              <>
+                <MenuList
+                  menuOptions={estimatesData?.wallClampCorner}
+                  title={"Wall Clamps"}
+                  type={"wallClampCorner"}
+                  showSnackbar={showSnackbar}
+                />
+                <MenuList
+                  menuOptions={estimatesData?.sleeveOverCorner}
+                  title={"Sleeve Over"}
+                  type={"sleeveOverCorner"}
+                  showSnackbar={showSnackbar}
+                />
+                <MenuList
+                  menuOptions={estimatesData?.glassToGlassCorner}
+                  title={"Glass to Glass"}
+                  type={"glassToGlassCorner"}
                   showSnackbar={showSnackbar}
                 />
               </>

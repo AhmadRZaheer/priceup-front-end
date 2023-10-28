@@ -52,6 +52,11 @@ const estimateCalcSlice = createSlice({
         sleeveOver: [],
         glassToGlass: [],
       },
+      corner: {
+        wallClamp: [],
+        sleeveOver: [],
+        glassToGlass: [],
+      },
       mountingChannel: {
         item: null,
         count: 0,
@@ -177,7 +182,40 @@ const estimateCalcSlice = createSlice({
             [type]: existing,
           },
         };
-      } else if (["hardwareAddons"].includes(type)) {
+      }else if (["wallClampCorner", "sleeveOverCorner", "glassToGlassCorner"].includes(type)) {
+        let existing = state.content.corner[type];
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value });
+        }
+        let clampCut = 0;
+        state.content.corner?.wallClampCorner?.map((row) => {
+          clampCut += row.count;
+        });
+        state.content.corner?.glassToGlassCorner?.map((row) => {
+          return (clampCut += row.count);
+        });
+        state.content.corner?.sleeveOverCorner?.map((row) => {
+          return (clampCut += row.count);
+        });
+
+        state.content = {
+          ...state.content,
+          clampCut: clampCut || 0,
+          corner: {
+            ...state.content.corner,
+            [type]: existing,
+          },
+        };
+       } else if (["hardwareAddons"].includes(type)) {
         let existing = state.content.hardwareAddons;
         const foundIndex = existing.findIndex(
           (row) => row?.item?.slug === item.slug
@@ -404,6 +442,20 @@ const estimateCalcSlice = createSlice({
         (item) =>
           item._id === layoutData?.settings?.glassToGlass?.glassToGlassType
       );
+
+      let wallClampItemCorner = null;
+      wallClampItemCorner = state.listData?.wallClampCorner?.find(
+        (item) => item._id === layoutData?.settings?.wallClampCorner?.wallClampType
+      );
+      let sleeveOverItemCorner = null;
+      sleeveOverItemCorner = state.listData?.sleeveOverCorner?.find(
+        (item) => item._id === layoutData?.settings?.sleeveOverCorner?.sleeveOverType
+      );
+      let glassToGlassItemCorner = null;
+      glassToGlassItemCorner = state.listData?.glassToGlassCorner?.find(
+        (item) =>
+          item._id === layoutData?.settings?.glassToGlassCorner?.glassToGlassType
+      );
       let channelItem = null;
       channelItem = state.listData?.mountingChannel?.find(
         (item) => item._id === layoutData?.settings?.mountingChannel
@@ -470,10 +522,38 @@ const estimateCalcSlice = createSlice({
               ]
             : [],
         },
+        corner: {
+          wallClampCorner: wallClampItemCorner
+            ? [
+                {
+                  item: wallClampItemCorner,
+                  count: layoutData?.settings?.wallClampCorner?.count,
+                },
+              ]
+            : [],
+          sleeveOverCorner: sleeveOverItemCorner
+            ? [
+                {
+                  item: sleeveOverItemCorner,
+                  count: layoutData?.settings?.sleeveOverCorner?.count,
+                },
+              ]
+            : [],
+          glassToGlassCorner: glassToGlassItemCorner
+            ? [
+                {
+                  item: glassToGlassItemCorner,
+                  count: layoutData?.settings?.glassToGlass?.glassToGlassCorner,
+                },
+              ]
+            : [],
+        },
         mountingState: channelItem
           ? "channel"
           : wallClampItem || sleeveOverItem || glassToGlassItem
           ? "clamps"
+          : wallClampItemCorner || sleeveOverItemCorner || glassToGlassItemCorner
+          ? "corners"
           : "",
         people: layoutData?.settings?.other?.people,
         hours: layoutData?.settings?.other?.hours,
@@ -557,6 +637,31 @@ const estimateCalcSlice = createSlice({
           return { item: record, count: row.count };
         }
       );
+
+
+      let wallClampCornerArray = [];
+      wallClampCornerArray = estimateData?.corner?.wallClampCorner?.map((row) => {
+        const record = state.listData?.wallClampCorner?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      });
+      let sleeveOverCornerArray = [];
+      sleeveOverCornerArray = estimateData?.corner?.sleeveOverCorner?.map((row) => {
+        const record = state.listData?.sleeveOverCorner?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      });
+      let glassToGlassCornerArray = [];
+      glassToGlassCornerArray = estimateData?.corner?.glassToGlassCorner?.map(
+        (row) => {
+          const record = state.listData?.glassToGlassCorner?.find(
+            (clamp) => clamp._id === row?.type
+          );
+          return { item: record, count: row.count };
+        }
+      );
       let channelItem = null;
       channelItem = state.listData?.mountingChannel?.find(
         (item) => item._id === estimateData?.mountingChannel
@@ -603,6 +708,11 @@ const estimateCalcSlice = createSlice({
           sleeveOver: [...sleeveOverArray],
           glassToGlass: [...glassToGlassArray],
         },
+        corner: {
+          wallClampCorner: [...wallClampCornerArray],
+          sleeveOverCorner: [...sleeveOverCornerArray],
+          glassToGlassCorner: [...glassToGlassCornerArray],
+        },
         mountingChannel: {
           item: channelItem || null,
           count: channelItem ? 1 : 0,
@@ -613,6 +723,10 @@ const estimateCalcSlice = createSlice({
             sleeveOverArray?.length ||
             glassToGlassArray?.length
           ? "clamps"
+          : wallClampCornerArray?.length ||
+          sleeveOverCornerArray?.length ||
+          glassToGlassCornerArray?.length
+        ? "corners"
           : "",
         hingeCut: estimateData?.hingeCut,
         people: estimateData?.people,

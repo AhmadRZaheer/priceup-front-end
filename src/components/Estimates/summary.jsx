@@ -102,7 +102,7 @@ const Summary = () => {
                   .join("’’/ ")}
               </Typography>
               <Typography>
-                The Door Width {doorWidth}
+                Then Door Width {doorWidth}
               </Typography>
               <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                 Summary{" "}
@@ -179,6 +179,29 @@ const Summary = () => {
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
                   {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
+                    <Typography>{row.item.name} ({row.count}) </Typography>
+                  )}
+                </Box> : ''}
+
+
+                {selectedContent?.corner?.wallClampCorner?.length ?
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>WallClampCorners: </Typography>
+                  {selectedContent?.corner?.wallClampCorner?.map((row) =>
+                    <Typography>{row.item.name} ({row.count}) </Typography>
+                  )}
+                </Box> : ''}
+              {selectedContent?.corner?.sleeveOverCorner?.length ?
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
+                  {selectedContent?.corner?.sleeveOverCorner?.map((row) =>
+                    <Typography>{row.item.name} ({row.count}) </Typography>
+                  )}
+                </Box> : ''}
+              {selectedContent?.corner?.glassToGlassCorner?.length ?
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
+                  {selectedContent?.corner?.glassToGlassCorner?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}

@@ -98,6 +98,9 @@ const MenuList = ({
           "wallClamp",
           "sleeveOver",
           "glassToGlass",
+          "wallClampCorner",
+          "sleeveOverCorner",
+          "glassToGlassCorner",
           "glassAddons",
           "glassType",
           "hardwareAddons",
@@ -212,6 +215,12 @@ const MenuList = ({
                           (selectedItem) => selectedItem?.item?._id === item?._id
                         ) : type === "glassToGlass" ? selectedContent?.mountingClamps?.glassToGlass.some(
                           (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "wallClampCorner" ? selectedContent?.corner?.wallClampCorner.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "sleeveOverCorner" ? selectedContent?.corner?.wallClampCorner.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "glassToGlassCorner" ? selectedContent?.corner?.wallClampCorner.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
                         )
                           : item === selectedItem
                     )
@@ -243,6 +252,10 @@ const MenuList = ({
                     {["wallClamp",
                       "sleeveOver",
                       "glassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
+                    }
+                                        {["wallClampCorner",
+                      "sleeveOverCorner",
+                      "glassToGlassCorner"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.corner?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
                     }
                   </Box>
                 </Box>

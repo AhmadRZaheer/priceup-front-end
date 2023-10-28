@@ -87,6 +87,28 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     )?.cost;
     mountingglassToGlass += price ? price * row.count : 0;
   });
+
+  let mountingWallClampsCorner = 0;
+  selectedContent?.corner?.wallClampCorner?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingWallClampsCorner += price ? price * row.count : 0;
+  });
+  let mountingsleeveOverCorner = 0;
+  selectedContent?.corner?.sleeveOverCorner?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingsleeveOverCorner += price ? price * row.count : 0;
+  });
+  let mountingglassToGlassCorner = 0;
+  selectedContent?.corner?.glassToGlassCorner?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    mountingglassToGlassCorner += price ? price * row.count : 0;
+  });
   // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
   //   ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
   //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -120,6 +142,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     mountingChannel +
     // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0)
     (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
+    (mountingWallClampsCorner + mountingglassToGlassCorner + mountingsleeveOverCorner) +
     // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0)
     slidingDoorSystemPrice +
     headerPrice;
