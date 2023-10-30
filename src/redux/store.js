@@ -6,6 +6,7 @@ import userAuth from "./userAuth";
 import estimateCalculations from "./estimateCalculations";
 import selectedIdSlice from "./selectedIdSlice";
 import defaultSlice from "./defaultSlice";
+import staffSlice from "./staff";
 const store = configureStore({
   reducer: {
     hardware: hardwareReducer,
@@ -14,6 +15,7 @@ const store = configureStore({
     estimateCalculations: estimateCalculations,
     selectedIdSlice: selectedIdSlice,
     defaultSlice: defaultSlice,
+    staff: staffSlice,
   },
 });
 
