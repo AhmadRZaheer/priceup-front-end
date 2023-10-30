@@ -1,10 +1,12 @@
 import { Typography } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
-import {Link} from 'react-router-dom'
+import { Link } from "react-router-dom";
 
 import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
+import { useState } from "react";
+import { useFetchAdminLocation } from "./utilities/ApiHooks/superAdmin";
 
 export const teamColumns = [
   {
@@ -88,7 +90,6 @@ export const AdminColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 200 },
-  { field: "user_name", headerName: "Location", width: 200 },
   {
     field: "dateAdded",
     headerName: "Date added",
@@ -154,7 +155,7 @@ export const AdminColumns2 = [
               </Typography>
             )}
           </div>
-          <div className="customerNameTable" style={{marginLeft: "10px"}}>
+          <div className="customerNameTable" style={{ marginLeft: "10px" }}>
             {params.row.name}
             <div className="userNameTable">{params.row.username}</div>
           </div>
@@ -336,7 +337,7 @@ export const userColumnsHardware = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
-      console.log("params",params.row)
+      console.log("params", params.row);
       return (
         <div className="cellWrapper">
           <div className="hardwareImg">

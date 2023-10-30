@@ -20,10 +20,30 @@ import { AdminColumns } from "../../customerTableSource";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";
+import Snackbars from "../Modal/snackBar";
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "",
+  });
+  const showSnackbar = (message, severity) => {
+    setSnackbar({
+      open: true,
+      message,
+      severity,
+    });
+  };
+
+  const closeSnackbar = () => {
+    setSnackbar((prevState) => ({
+      ...prevState,
+      open: false,
+    }));
+  };
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -49,13 +69,36 @@ const SuperAdminTeam = () => {
 
   const handeleDeleteStaff = (id) => {
     usedelete(id);
-    console.log(id, "id");
   };
   useEffect(() => {
     teamMemberRefetch();
   }, [isSuccess]);
 
+  const { data: locationData } = useFetchAdminLocation();
   const actionColumn = [
+    {
+      field: "user_name",
+      headerName: "Location",
+      width: 200,
+      renderCell: (params) => {
+        const { haveAccessTo } = params.row;
+
+        const matchingLocationNames = haveAccessTo
+          .map((accessToID) =>
+            locationData.find((location) => location.id === accessToID)
+          )
+          .filter((match) => match)
+          .map((match) => match.name);
+
+        return (
+          <div>
+            <Typography>
+              {matchingLocationNames.join(", ") || "No location member found"}
+            </Typography>
+          </div>
+        );
+      },
+    },
     {
       field: "Status",
       paddingLeft: 3,
@@ -72,7 +115,10 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <IconButton onClick={() => openModel(params.row,)}>
+            <IconButton
+              sx={{ borderRadius: 0 }}
+              onClick={() => openModel(params.row)}
+            >
               <h6>Access Location</h6>
             </IconButton>
           </>
@@ -146,9 +192,16 @@ const SuperAdminTeam = () => {
           onClose={closeModel}
           selectedRow={selectedRow}
           staffRefetch={teamMemberRefetch}
-        // filteredAdminData={filteredAdminData}
-        // notAdded={notAdded}
-        // AdminData={AdminData}
+          showSnackbar={showSnackbar}
+          // filteredAdminData={filteredAdminData}
+          // notAdded={notAdded}
+          // AdminData={AdminData}
+        />
+        <Snackbars
+          open={snackbar.open}
+          message={snackbar.message}
+          severity={snackbar.severity}
+          closeSnackbar={closeSnackbar}
         />
       </Box>
     </>

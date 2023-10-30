@@ -27,7 +27,13 @@ const style = {
   p: 4,
 };
 
-export default function LocationModel({ open, onClose, selectedRow, staffRefetch }) {
+export default function LocationModel({
+  open,
+  onClose,
+  selectedRow,
+  staffRefetch,
+  showSnackbar,
+}) {
   const { data: locationData } = useFetchAdminLocation();
   const {
     mutate: editTeamMembers,
@@ -37,15 +43,17 @@ export default function LocationModel({ open, onClose, selectedRow, staffRefetch
   const [haveAccessArray, setHaveAccessArray] = useState([]);
   const [giveAccessArray, setGiveAccessArray] = useState([]);
   const handleDelete = (chipToDelete) => () => {
-    const itemToRemove = haveAccessArray.find((item) => item.id === chipToDelete.id);
-    const result = haveAccessArray.filter((chip) => chip.id !== chipToDelete.id);
+    const itemToRemove = haveAccessArray.find(
+      (item) => item.id === chipToDelete.id
+    );
+    const result = haveAccessArray.filter(
+      (chip) => chip.id !== chipToDelete.id
+    );
     setHaveAccessArray(result);
     setGiveAccessArray([...giveAccessArray, itemToRemove]);
   };
 
-
   const handleAddLocation = (chipToAdd) => {
-
     if (!haveAccessArray.includes(chipToAdd.id)) {
       setHaveAccessArray([...haveAccessArray, chipToAdd]);
     }
@@ -59,6 +67,7 @@ export default function LocationModel({ open, onClose, selectedRow, staffRefetch
     const id = selectedRow?._id;
     editTeamMembers({ data: idsToAdd, locId: id });
     onClose();
+    showSnackbar("Staff info updated successfully", "success");
   };
   useEffect(() => {
     if (selectedRow) {
