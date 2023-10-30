@@ -28,6 +28,30 @@ export const useFetchDataAdmin = () => {
     placeholderData: [],
   });
 };
+
+export const useFetchAdminLocation = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/admins/allLocations `, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["locationData"],
+    queryFn: fetchData,
+    enabled: true,
+    placeholderData: [],
+  });
+};
 export const useFetchAllStaff = () => {
   async function fetchStaffData() {
     const token = localStorage.getItem("token");
@@ -53,6 +77,30 @@ export const useFetchAllStaff = () => {
     placeholderData: [],
   });
 };
+
+export const useDeleteStaff = () => {
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${backendURL}/staffs/${id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
 export const FetchId2 = ({ children }) => {
   const [newToken, setNewToken] = useState(null);
   const location = useLocation();

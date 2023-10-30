@@ -14,7 +14,7 @@ const TableRow = ({ row, refetch, onToggleChange }) => {
     setActive(!active);
     updateStatus({ status: !active, id: row._id });
     // Call the callback function to update non-active count
-    onToggleChange(!active);
+    onToggleChange(active);
   };
 
   useEffect(() => {

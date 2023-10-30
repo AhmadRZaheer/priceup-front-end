@@ -24,14 +24,21 @@ import { Search } from "@mui/icons-material";
 import EditIcon from '@mui/icons-material/Edit';
 
 const SuperAdminTable = () => {
-  const navigate = useNavigate();
-  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-  const { data: staffData, refetch: teamMemberRefetch2 } = useFetchAllStaff();
+  const {
+    data: AdminData,
+    refetch: teamMemberRefetch,
+    isFetching,
+    isFetched,
+  } = useFetchDataAdmin();
 
   const [open, setOpen] = useState(false);
+  const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
+  useEffect(() => {
+    setActiveCount(AdminData.length);
+  }, [isFetched]);
   const [search, setSearch] = useState("");
 
   const handleClose = () => setOpen(false);
@@ -69,14 +76,27 @@ const SuperAdminTable = () => {
       width: 220,
       renderCell: (params) => {
         const id = params.row._id;
-        const isActive = params.row.Status === "Active";
+        // const isActive = params.row.Status === "Active";
 
-        const handleToggleChange = () => {
-          if (!isActive) {
-            setActiveCount((prevCount) => prevCount - 1);
-          } else {
-            setActiveCount((prevCount) => prevCount + 1);
-          }
+        const handleToggleChange = (active) => {
+          setInActiveCount((prevCount) => {
+            if (!active && prevCount > 0) {
+              return prevCount - 1;
+            } else if (active) {
+              return prevCount + 1;
+            }
+            return prevCount; // No change if not active and count is 0
+          });
+
+          setActiveCount((prevCount) => {
+            if (active && prevCount > 0) {
+              return prevCount - 1;
+            } else if (!active) {
+              return prevCount + 1;
+            }
+
+            return prevCount; // No change if not active and count is 0
+          });
         };
 
         return (
@@ -192,7 +212,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {AdminData.length}
+            {activeCount}
           </Typography>
         </Box>
 
@@ -213,7 +233,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {activeCount}
+            {InactiveCount}
           </Typography>
         </Box>
 
@@ -234,7 +254,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Team Members</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            50
+            {AdminData.length}
           </Typography>
         </Box>
       </div>
@@ -263,6 +283,7 @@ const SuperAdminTable = () => {
           rows={filteredData}
           columns={AdminColumns2.concat(actionColumn)}
           pageSizeOptions={[10]}
+          sx={{ width: "97%", m: "auto" }}
         />
       </div>
 
