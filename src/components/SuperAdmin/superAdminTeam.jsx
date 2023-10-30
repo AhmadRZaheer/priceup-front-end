@@ -68,7 +68,7 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <IconButton onClick={() => openModel(params.row)}>
+            <IconButton onClick={() => openModel(params.row,)}>
               <h6>Access Location</h6>
             </IconButton>
           </>
@@ -137,9 +137,10 @@ const SuperAdminTeam = () => {
           open={open}
           onClose={closeModel}
           selectedRow={selectedRow}
-          // filteredAdminData={filteredAdminData}
-          // notAdded={notAdded}
-          // AdminData={AdminData}
+          staffRefetch={teamMemberRefetch}
+        // filteredAdminData={filteredAdminData}
+        // notAdded={notAdded}
+        // AdminData={AdminData}
         />
       </Box>
     </>

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -27,36 +27,56 @@ const style = {
   p: 4,
 };
 
-export default function LocationModel({ open, onClose, selectedRow }) {
-  var [addLocation, setAddLocation] = React.useState([]);
-  console.log("addLOca", addLocation);
+export default function LocationModel({ open, onClose, selectedRow, staffRefetch }) {
   const { data: locationData } = useFetchAdminLocation();
-  console.log("fetchuser", selectedRow);
   const {
     mutate: editTeamMembers,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useAddLocation();
+  const [haveAccessArray, setHaveAccessArray] = useState([]);
+  const [giveAccessArray, setGiveAccessArray] = useState([]);
   const handleDelete = (chipToDelete) => () => {
-    locationData.filter((chip) => chip._id !== chipToDelete._id);
+    const itemToRemove = haveAccessArray.find((item) => item.id === chipToDelete.id);
+    const result = haveAccessArray.filter((chip) => chip.id !== chipToDelete.id);
+    setHaveAccessArray(result);
+    setGiveAccessArray([...giveAccessArray, itemToRemove]);
   };
-  const filteredlocationData = locationData.filter((data) =>
-    selectedRow?.haveAccessTo.includes(data.id)
-  );
-  const excludedLocationData = locationData.filter(
-    (data) => !selectedRow?.haveAccessTo.includes(data.id)
-  );
 
-  const handleAddLocation = (dataId) => {
-    if (!addLocation.includes(dataId)) {
-      setAddLocation([...addLocation, dataId]);
+
+  const handleAddLocation = (chipToAdd) => {
+
+    if (!haveAccessArray.includes(chipToAdd.id)) {
+      setHaveAccessArray([...haveAccessArray, chipToAdd]);
     }
+    const result = giveAccessArray.filter((chip) => chip.id !== chipToAdd.id);
+    setGiveAccessArray(result);
   };
   const handleEditClick = () => {
+    const idsToAdd = haveAccessArray?.map((item) => {
+      return item.id;
+    });
     const id = selectedRow?._id;
-    editTeamMembers({ data: addLocation, locId: id });
+    editTeamMembers({ data: idsToAdd, locId: id });
     onClose();
   };
+  useEffect(() => {
+    if (selectedRow) {
+      const filteredlocationData = locationData.filter((data) =>
+        selectedRow?.haveAccessTo.includes(data.id)
+      );
+      const excludedLocationData = locationData.filter(
+        (data) => !selectedRow?.haveAccessTo.includes(data.id)
+      );
+      setHaveAccessArray(filteredlocationData);
+      setGiveAccessArray(excludedLocationData);
+    }
+  }, [locationData, selectedRow]);
+  useEffect(() => {
+    if (SuccessForEdit) {
+      staffRefetch();
+    }
+  }, [SuccessForEdit]);
   return (
     <div>
       <Modal
@@ -70,7 +90,7 @@ export default function LocationModel({ open, onClose, selectedRow }) {
       >
         <Box sx={style}>
           <Typography variant="h6">
-            Olivia is currently added in the following locations:
+            {selectedRow?.name} is currently added in the following locations:
           </Typography>
           <Box>
             <Box
@@ -82,7 +102,7 @@ export default function LocationModel({ open, onClose, selectedRow }) {
               }}
               component="ul"
             >
-              {filteredlocationData.map((data) => {
+              {haveAccessArray.map((data) => {
                 return (
                   <Box
                     sx={{ padding: "10px", borderRadius: "7px" }}
@@ -122,14 +142,14 @@ export default function LocationModel({ open, onClose, selectedRow }) {
                     }}
                     component="ul"
                   >
-                    {excludedLocationData.map((data) => {
+                    {giveAccessArray.map((data) => {
                       return (
                         <Box
                           sx={{ padding: "10px", borderRadius: "7px" }}
                           key={data.id}
                         >
                           <Chip
-                            onClick={() => handleAddLocation(data.id)}
+                            onClick={() => handleAddLocation(data)}
                             label={data.name}
                             onDelete={data.id ? undefined : handleDelete(data)}
                           />
