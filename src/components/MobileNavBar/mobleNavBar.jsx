@@ -76,7 +76,6 @@ function MobileBar() {
   const handleClosePopup = () => {
     setAnchorEl(null);
   };
-
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
@@ -189,22 +188,20 @@ function MobileBar() {
                       }}
                       onClick={handleSeeLocationsClick}
                     >
-                      <Box>
-                        <PinDrop sx={{ color: "white", mr: 1 }} />
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                            padding: "5px",
-                          }}
-                        >
-                          <Typography sx={{ fontSize: "16px" }}>
-                            {activeLocation?.name}
-                          </Typography>
-                          {/* <Typography sx={{ fontSize: '12px' }}>{activeLocation?.email}</Typography> */}
-                        </Box>
+                      <PinDrop sx={{ color: "white", }} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          padding: "8px",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "16px", mb: -0.4 }}>
+                          {activeLocation?.name}
+                        </Typography>
                       </Box>
-                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                      {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
                     </Button>
                   </Tooltip>
                 </Box>
@@ -339,7 +336,7 @@ function MobileBar() {
         anchorEl={anchorEl}
         onClose={handleClosePopup}
         anchorOrigin={{
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "right",
         }}
         transformOrigin={{
@@ -451,7 +448,9 @@ function MobileBar() {
                 </Box>
                 {activeLocation?.id === location?.id && (
                   <Box>
-                    <FiberManualRecord sx={{ color: "#5cb85c", mr: 1 }} />
+                    <FiberManualRecord
+                      sx={{ color: "#5cb85c", mr: 1, mb: -0.6 }}
+                    />
                   </Box>
                 )}
               </Box>

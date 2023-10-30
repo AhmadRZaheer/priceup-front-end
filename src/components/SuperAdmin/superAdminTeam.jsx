@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   IconButton,
   Typography,
   Input,
@@ -10,6 +11,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import {
   useFetchAdminLocation,
+  useDeleteStaff,
   useFetchAllStaff,
 } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
@@ -21,11 +23,7 @@ import LocationModel from "../Modal/locationModel";
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
-  const { data: AdminData, refetch: adminMember } = useFetchDataAdmin();
-  // const { data: AdminLocations, refetch: refectLocations } =
-  //   useFetchAdminLocation();
-
-  console.log(staffData, "staffData");
+  const { mutate: usedelete, isSuccess } = useDeleteStaff();
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -49,14 +47,20 @@ const SuperAdminTeam = () => {
   //   selectedRow?.haveAccessTo.includes(data._id)
   // );
 
+  const handeleDeleteStaff = (id) => {
+    usedelete(id);
+    console.log(id, "id");
+  };
+  useEffect(() => {
+    teamMemberRefetch();
+  }, [isSuccess]);
+
   const actionColumn = [
     {
       field: "Status",
       paddingLeft: 3,
       width: 220,
       renderCell: (params) => {
-        const id = params.row._id;
-
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
@@ -81,10 +85,14 @@ const SuperAdminTeam = () => {
       width: 165,
       align: "right",
       renderCell: (params) => {
+        console.log(params, "id");
+        const id = params.row._id;
+
         return (
           <>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+              onClick={() => handeleDeleteStaff(id)}
             >
               <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
             </IconButton>
@@ -116,8 +124,8 @@ const SuperAdminTeam = () => {
           sx={{
             mb: 2,
             mt: 10,
-            width: "20%",
-            marginLeft: "30px",
+            width: "20%", // You can adjust the width as needed
+            marginLeft: "30px", // Adjust the margin as needed
           }}
           endAdornment={
             <InputAdornment position="end">
