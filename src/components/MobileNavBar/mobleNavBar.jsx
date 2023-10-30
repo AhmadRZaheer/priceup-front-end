@@ -105,6 +105,8 @@ function MobileBar() {
     if (location.id !== activeLocation.id) {
       setActiveLocation(location);
       switchLocation({ staffId: decodedToken?.id, companyId: location.id });
+      handleClosePopup();
+      toggleSidebar();
     }
   };
   useEffect(() => {
@@ -343,7 +345,7 @@ function MobileBar() {
           vertical: "top",
           horizontal: "left",
         }}
-        // sx={{ up:20 }}
+      // sx={{ up:20 }}
       >
         <input
           type="text"
