@@ -180,20 +180,26 @@ export const useCreateHardware = () => {
 export const useEditHardware = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-    const updatedData = {
-      ...(props.finishesData ? { options: props.finishesData } : {}),
-      ...(props.hardwareData
-        ? {
-            name: props.hardwareData.name,
-            // image: props.glassTypeData.image,
-          }
-        : {}),
-    };
     const formData = new FormData();
+    
+    // Check if 'props' has 'hardwareData'
+    if (props?.hardwareData) {
+      // Update 'name' if available
+      if (props.hardwareData.name) {
+        formData.append("name", props.hardwareData.name);
+      }
+    }
+
+    // Check if 'props' has 'finishesData'
+    if (props?.finishesData) {
+      formData.append("options", JSON.stringify(props.finishesData));
+    }
+
+    // Check if 'props' has an image
     if (props?.hardwareData?.image) {
       formData.append("image", props.hardwareData.image);
     }
-    formData.append("jsonData", JSON.stringify(updatedData));
+
     try {
       const response = await axios.put(
         `${backendURL}/hardwares/${props.id}`,
@@ -205,6 +211,7 @@ export const useEditHardware = () => {
           },
         }
       );
+
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -214,8 +221,10 @@ export const useEditHardware = () => {
       throw new Error("An error occurred while updating the data.");
     }
   };
+
   return useMutation(handleEdit);
 };
+
 
 export const useDeleteHardwareFinish = () => {
   const handleDelete = async (props) => {
