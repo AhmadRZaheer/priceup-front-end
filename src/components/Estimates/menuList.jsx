@@ -217,9 +217,9 @@ const MenuList = ({
                           (selectedItem) => selectedItem?.item?._id === item?._id
                         ) : type === "wallClampCorner" ? selectedContent?.corner?.wallClampCorner.some(
                           (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "sleeveOverCorner" ? selectedContent?.corner?.wallClampCorner.some(
+                        ) : type === "sleeveOverCorner" ? selectedContent?.corner?.sleeveOverCorner.some(
                           (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "glassToGlassCorner" ? selectedContent?.corner?.wallClampCorner.some(
+                        ) : type === "glassToGlassCorner" ? selectedContent?.corner?.glassToGlassCorner.some(
                           (selectedItem) => selectedItem?.item?._id === item?._id
                         )
                           : item === selectedItem

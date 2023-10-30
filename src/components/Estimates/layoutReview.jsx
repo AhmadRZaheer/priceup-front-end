@@ -79,6 +79,31 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           count: row.count,
         };
       });
+
+
+      const wallClampArrayCorner = estimatesContent?.corner?.wallClampCorner?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const sleeveOverArrayCorner = estimatesContent?.corner?.sleeveOverCorner?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const glassToGlassArrayCorner =
+        estimatesContent?.corner?.glassToGlassCorner?.map((row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        });
     const glassAddonsArray = estimatesContent?.glassAddons?.map(
       (item) => item?._id
     );
@@ -96,6 +121,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         wallClamp: [...wallClampArray],
         sleeveOver: [...sleeveOverArray],
         glassToGlass: [...glassToGlassArray],
+      },
+      corner : {
+        wallClampCorner: [...wallClampArrayCorner],
+        sleeveOverCorner: [...sleeveOverArrayCorner],
+        glassToGlassCorner: [...glassToGlassArrayCorner],
       },
       mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
       glassType: {

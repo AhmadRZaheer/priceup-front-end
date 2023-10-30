@@ -12,7 +12,6 @@ import {
   setContent,
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
-import MenuListCorner from "./MenuListCorner";
 import { backendURL } from "../../utilities/common";
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import Tooltip from '@mui/material/Tooltip';

@@ -140,10 +140,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     handlePrice +
     hingesPrice +
     mountingChannel +
-    // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0)
     (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
     (mountingWallClampsCorner + mountingglassToGlassCorner + mountingsleeveOverCorner) +
-    // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0)
     slidingDoorSystemPrice +
     headerPrice;
 
