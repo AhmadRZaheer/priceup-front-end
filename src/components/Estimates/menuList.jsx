@@ -66,6 +66,7 @@ const MenuList = ({
           justifyContent: "space-between",
           alignItems: "center",
           pb: 1,
+          
         }}
       >
         <Button
@@ -178,7 +179,7 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "250px",
-            minHeight: '150px',
+            minHeight: '80px',
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
           }}

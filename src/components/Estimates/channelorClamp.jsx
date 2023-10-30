@@ -13,9 +13,9 @@ import {
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
 import { backendURL } from "../../utilities/common";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 const ChannelTypeDesktop = ({
   menuOptions,
@@ -30,10 +30,14 @@ const ChannelTypeDesktop = ({
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
     let active = null;
-    if (selectedContent?.glassType?.thickness === '1/2') {
-      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-1-2');
-    } else if (selectedContent?.glassType?.thickness === '3/8') {
-      active = listData?.mountingChannel?.find((item) => item.slug === 'u-channel-3-8');
+    if (selectedContent?.glassType?.thickness === "1/2") {
+      active = listData?.mountingChannel?.find(
+        (item) => item.slug === "u-channel-1-2"
+      );
+    } else if (selectedContent?.glassType?.thickness === "3/8") {
+      active = listData?.mountingChannel?.find(
+        (item) => item.slug === "u-channel-3-8"
+      );
     }
     return active;
   }, [selectedContent?.glassType?.thickness]);
@@ -47,8 +51,8 @@ const ChannelTypeDesktop = ({
     }
   };
   const handleChannelSelect = (item) => {
-    dispatch(setContent({ type: 'channel', item: item }));
-  }
+    dispatch(setContent({ type: "channel", item: item }));
+  };
   const opneClose = () => {
     if (
       selectedContent.hardwareFinishes !== null ||
@@ -84,11 +88,11 @@ const ChannelTypeDesktop = ({
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
           <Typography>{title}</Typography>
-                    <Tooltip title={title}>
-                        <IconButton>
-                          <InfoOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
+          <Tooltip title={title}>
+            <IconButton>
+              <InfoOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </Button>
       </Box>
       {anchorEl ? (
@@ -105,41 +109,56 @@ const ChannelTypeDesktop = ({
           <Box
             sx={{
               display: "flex",
-              width: "100%",
+              borderRadius: 2,
+              width: "74%",
+              border: "2px solid #8477DA",
+              pl: 1,
+              pr: 1,
+              gap: 1
             }}
           >
-            {menuOptions?.map((item, index) => (
-              <MenuItem key={index} onClick={() => handleItemSelect(item)}>
-                <Box
-                  sx={{
-                    width: "200px",
-                    borderRadius: "12px",
-                    border:
-                      item.toLowerCase() === selectedContent?.mountingState
-                        ? "2px solid #8477da"
-                        : "",
-                    boxShadow:
-                      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                    p: 2,
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    width: { md: "100%", xs: "95%" },
-                    justifyContent: "space-between",
-                  }}
+            {menuOptions
+              ?.filter((item) => item !== "Corners")
+              .map((item, index) => (
+                <MenuItem
+                  sx={{ p: 0.1 }}
+                  key={index}
+                  onClick={() => handleItemSelect(item)}
                 >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <img
-                      width={"25px"}
-                      height={"25px"}
-                      src={Logo}
-                      alt="Selected"
-                    />
-                    <Typography>{item}</Typography>
+                  <Box
+                    sx={{
+                      width: "200px",
+                      borderRadius: "12px",
+                      color:
+                        item.toLowerCase() === selectedContent?.mountingState
+                          ? "white"
+                          : "black",
+                      bgcolor:
+                        item.toLowerCase() === selectedContent?.mountingState
+                          ? "#8477DA"
+                          : "",
+                      boxShadow:
+                        "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                      p: 2,
+                      display: "flex",
+                      gap: 2,
+                      alignItems: "center",
+                      width: { md: "100%", xs: "95%" },
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <img
+                        width={"25px"}
+                        height={"25px"}
+                        src={Logo}
+                        alt="Selected"
+                      />
+                      <Typography>{item}</Typography>
+                    </Box>
                   </Box>
-                </Box>
-              </MenuItem>
-            ))}
+                </MenuItem>
+              ))}
           </Box>
           <Box
             sx={{
@@ -170,38 +189,19 @@ const ChannelTypeDesktop = ({
                 />
               </>
             )}
-              {selectedContent.mountingState === "corners" && (
-              <>
-                <MenuList
-                  menuOptions={estimatesData?.wallClampCorner}
-                  title={"Wall Clamps"}
-                  type={"wallClampCorner"}
-                  showSnackbar={showSnackbar}
-                />
-                <MenuList
-                  menuOptions={estimatesData?.sleeveOverCorner}
-                  title={"Sleeve Over"}
-                  type={"sleeveOverCorner"}
-                  showSnackbar={showSnackbar}
-                />
-                <MenuList
-                  menuOptions={estimatesData?.glassToGlassCorner}
-                  title={"Glass to Glass"}
-                  type={"glassToGlassCorner"}
-                  showSnackbar={showSnackbar}
-                />
-              </>
-            )}
-
             {selectedContent.mountingState === "channel" && (
-              <MenuItem key={activeChannel?.id} onClick={() => handleChannelSelect(activeChannel)}>
+              <MenuItem
+                key={activeChannel?.id}
+                onClick={() => handleChannelSelect(activeChannel)}
+              >
                 <Box
                   sx={{
                     width: "200px",
                     borderRadius: "12px",
-                    border: (activeChannel === selectedContent?.mountingChannel?.item)
-                      ? "2px solid blue"
-                      : "1px solid #EAECF0",
+                    border:
+                      activeChannel === selectedContent?.mountingChannel?.item
+                        ? "2px solid blue"
+                        : "1px solid #EAECF0",
                     boxShadow:
                       "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
                     p: 2,
@@ -225,6 +225,71 @@ const ChannelTypeDesktop = ({
               </MenuItem>
             )}
           </Box>
+          {menuOptions
+            ?.filter((item) => item !== "Channel")
+            ?.filter((item) => item !== "Clamps")
+            .map((item, index) => (
+              <MenuItem
+                sx={{ p: 0, width: "140px", mt: 1 }}
+                key={index}
+                onClick={() => handleItemSelect(item)}
+              >
+                <Box
+                  sx={{
+                    width: "200px",
+                    borderRadius: "12px",
+                    color:
+                      item.toLowerCase() === selectedContent?.mountingState
+                        ? "white"
+                        : "black",
+                    bgcolor:
+                      item.toLowerCase() === selectedContent?.mountingState
+                        ? "#8477DA"
+                        : "",
+                    boxShadow:
+                      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                    p: 2,
+                    display: "flex",
+                    gap: 2,
+                    alignItems: "center",
+                    width: { md: "100%", xs: "95%" },
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <img
+                      width={"25px"}
+                      height={"25px"}
+                      src={Logo}
+                      alt="Selected"
+                    />
+                    <Typography>{item}</Typography>
+                  </Box>
+                </Box>
+              </MenuItem>
+            ))}
+          {selectedContent.mountingState === "corners" && (
+            <>
+              <MenuList
+                menuOptions={estimatesData?.wallClampCorner}
+                title={"Wall Clamps"}
+                type={"wallClampCorner"}
+                showSnackbar={showSnackbar}
+              />
+              <MenuList
+                menuOptions={estimatesData?.sleeveOverCorner}
+                title={"Sleeve Over"}
+                type={"sleeveOverCorner"}
+                showSnackbar={showSnackbar}
+              />
+              <MenuList
+                menuOptions={estimatesData?.glassToGlassCorner}
+                title={"Glass to Glass"}
+                type={"glassToGlassCorner"}
+                showSnackbar={showSnackbar}
+              />
+            </>
+          )}
         </Box>
       ) : (
         ""
