@@ -81,7 +81,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       });
 
 
-      const wallClampArrayCorner = estimatesContent?.corner?.wallClampCorner?.map(
+      const cornerWallClampArray = estimatesContent?.cornerClamps?.wallClamp?.map(
         (row) => {
           return {
             type: row.item._id,
@@ -89,7 +89,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           };
         }
       );
-      const sleeveOverArrayCorner = estimatesContent?.corner?.sleeveOverCorner?.map(
+      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.sleeveOver?.map(
         (row) => {
           return {
             type: row.item._id,
@@ -97,8 +97,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           };
         }
       );
-      const glassToGlassArrayCorner =
-        estimatesContent?.corner?.glassToGlassCorner?.map((row) => {
+      const cornerGlassToGlassArray =
+        estimatesContent?.cornerClamps?.glassToGlass?.map((row) => {
           return {
             type: row.item._id,
             count: row.count,
@@ -122,10 +122,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         sleeveOver: [...sleeveOverArray],
         glassToGlass: [...glassToGlassArray],
       },
-      corner : {
-        wallClampCorner: [...wallClampArrayCorner],
-        sleeveOverCorner: [...sleeveOverArrayCorner],
-        glassToGlassCorner: [...glassToGlassArrayCorner],
+      cornerClamps : {
+        wallClamp: [...cornerWallClampArray],
+        sleeveOver: [...cornerSleeveOverArray],
+        glassToGlass: [...cornerGlassToGlassArray],
       },
       mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
       glassType: {

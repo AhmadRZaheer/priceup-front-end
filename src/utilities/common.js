@@ -88,26 +88,26 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     mountingglassToGlass += price ? price * row.count : 0;
   });
 
-  let mountingWallClampsCorner = 0;
-  selectedContent?.corner?.wallClampCorner?.map((row) => {
+  let cornerWallClamps = 0;
+  selectedContent?.cornerClamps?.wallClamp?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
-    mountingWallClampsCorner += price ? price * row.count : 0;
+    cornerWallClamps += price ? price * row.count : 0;
   });
-  let mountingsleeveOverCorner = 0;
-  selectedContent?.corner?.sleeveOverCorner?.map((row) => {
+  let cornerSleeveOver = 0;
+  selectedContent?.cornerClamps?.sleeveOver?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
-    mountingsleeveOverCorner += price ? price * row.count : 0;
+    cornerSleeveOver += price ? price * row.count : 0;
   });
-  let mountingglassToGlassCorner = 0;
-  selectedContent?.corner?.glassToGlassCorner?.map((row) => {
+  let cornerGlassToGlass = 0;
+  selectedContent?.cornerClamps?.glassToGlass?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
-    mountingglassToGlassCorner += price ? price * row.count : 0;
+    cornerGlassToGlass += price ? price * row.count : 0;
   });
   // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
   //   ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
@@ -141,7 +141,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     hingesPrice +
     mountingChannel +
     (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
-    (mountingWallClampsCorner + mountingglassToGlassCorner + mountingsleeveOverCorner) +
+    (cornerWallClamps + cornerGlassToGlass + cornerSleeveOver) +
     slidingDoorSystemPrice +
     headerPrice;
 
