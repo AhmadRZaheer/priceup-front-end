@@ -21,6 +21,7 @@ import {
   getQuoteId,
   getQuoteState,
   getTotal,
+  resetState,
   selectedItem,
   setNavigation,
 } from "../../redux/estimateCalculations";
@@ -109,6 +110,29 @@ export default function ClientDetailsModel({
             count: row.count,
           };
         });
+      const cornerWallClampArray = estimatesContent?.cornerClamps?.cornerWallClamp?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.cornerSleeveOver?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const cornerGlassToGlassArray =
+        estimatesContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        });
       const glassAddonsArray = estimatesContent?.glassAddons?.map(
         (item) => item?._id
       );
@@ -126,6 +150,11 @@ export default function ClientDetailsModel({
           wallClamp: [...wallClampArray],
           sleeveOver: [...sleeveOverArray],
           glassToGlass: [...glassToGlassArray],
+        },
+        cornerClamps: {
+          wallClamp: [...cornerWallClampArray],
+          sleeveOver: [...cornerSleeveOverArray],
+          glassToGlass: [...cornerGlassToGlassArray],
         },
         mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
         glassType: {
@@ -180,6 +209,7 @@ export default function ClientDetailsModel({
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
+      dispatch(resetState());
       dispatch(setNavigation("existing"));
       handleCancel();
       //localhost:3000/customers
@@ -193,6 +223,7 @@ export default function ClientDetailsModel({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
+      dispatch(resetState());
       dispatch(setNavigation("existing"));
       handleCancel();
       Refetched();

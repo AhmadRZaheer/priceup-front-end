@@ -89,21 +89,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   });
 
   let cornerWallClamps = 0;
-  selectedContent?.cornerClamps?.wallClamp?.map((row) => {
+  selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
-  selectedContent?.cornerClamps?.sleeveOver?.map((row) => {
+  selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
-  selectedContent?.cornerClamps?.glassToGlass?.map((row) => {
+  selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
@@ -135,13 +135,13 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
-
+  
+  let mountingPrice = selectedContent?.mountingState === 'channel' ? mountingChannel : (mountingWallClamps + mountingglassToGlass + mountingsleeveOver);
+  mountingPrice += (cornerWallClamps + cornerGlassToGlass + cornerSleeveOver);
   const hardwareTotals =
     handlePrice +
     hingesPrice +
-    mountingChannel +
-    (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
-    (cornerWallClamps + cornerGlassToGlass + cornerSleeveOver) +
+    mountingPrice +
     slidingDoorSystemPrice +
     headerPrice;
 

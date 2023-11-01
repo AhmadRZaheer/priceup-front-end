@@ -117,20 +117,30 @@ export const useEditDefault = () => {
               height: updatedDefault.settings.heavyPivotOption.height,
             },
             channelOrClamps: updatedDefault.settings?.channelOrClamps,
-            mountingChannel: updatedDefault.settings?.mountingChannel,
+            mountingChannel: updatedDefault.settings?.channelOrClamps === 'Channel' ? updatedDefault.settings?.mountingChannel : null,
             wallClamp: {
-              wallClampType: updatedDefault.settings?.wallClamp?.wallClampType,
-              count: updatedDefault.settings?.wallClamp?.count,
+              wallClampType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.wallClamp?.wallClampType : null,
+              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.wallClamp?.count : 0,
             },
             sleeveOver: {
-              sleeveOverType:
-                updatedDefault.settings?.sleeveOver?.sleeveOverType,
-              count: updatedDefault.settings?.sleeveOver?.count,
+              sleeveOverType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.sleeveOver?.sleeveOverType : null,
+              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.sleeveOver?.count : 0,
             },
             glassToGlass: {
-              glassToGlassType:
-                updatedDefault.settings?.glassToGlass?.glassToGlassType,
-              count: updatedDefault.settings?.glassToGlass?.count,
+              glassToGlassType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.glassToGlassType : 0,
+              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.count : 0,
+            },
+            cornerWallClamp: {
+              wallClampType: updatedDefault.settings?.cornerWallClamp?.wallClampType,
+              count: updatedDefault.settings?.cornerWallClamp?.count,
+            },
+            cornerSleeveOver: {
+              sleeveOverType: updatedDefault.settings?.cornerSleeveOver?.sleeveOverType,
+              count: updatedDefault.settings?.cornerSleeveOver?.count,
+            },
+            cornerGlassToGlass: {
+              glassToGlassType: updatedDefault.settings?.cornerGlassToGlass?.glassToGlassType,
+              count: updatedDefault.settings?.cornerGlassToGlass?.count,
             },
             glassType: {
               type: updatedDefault.settings?.glassType?.type,

@@ -10,6 +10,7 @@ import {
 import { useDispatch } from "react-redux";
 import {Input} from "@mui/material";
 import {
+  addSelectedItem,
   initializeStateForEditQuote,
   setListData,
   setNavigationDesktop,
@@ -46,8 +47,7 @@ export default function ExistingTable() {
   }, [deletedSuccessfully]);
 
   const handleIconButtonClick = (item) => {
-    console.log("item",item)
-        console.log("itemid",item._id)
+  
     dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({
@@ -55,6 +55,8 @@ export default function ExistingTable() {
         quotesId: item._id,
       })
     );
+    dispatch(addSelectedItem(item));
+    dispatch(setQuoteState("edit"));
     dispatch(setNavigationDesktop("review"));
   };
 

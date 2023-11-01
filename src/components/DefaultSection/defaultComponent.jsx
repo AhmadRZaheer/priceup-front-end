@@ -64,6 +64,24 @@ const DefaultComponent = ({ showSnackbar }) => {
       channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
       mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
 
+      cornerGlassToGlass: {
+        glassToGlassType:
+          singleDefault?.layoutData?.settings.cornerGlassToGlass?.glassToGlassType,
+
+        count: singleDefault?.layoutData?.settings.cornerGlassToGlass?.count,
+      },
+      cornerWallClamp: {
+        wallClampType:
+          singleDefault?.layoutData?.settings.cornerWallClamp?.wallClampType,
+
+        count: singleDefault?.layoutData?.settings.cornerWallClamp?.count,
+      },
+      cornerSleeveOver: {
+        sleeveOverType:
+          singleDefault?.layoutData?.settings.cornerSleeveOver?.sleeveOverType,
+        count: singleDefault?.layoutData?.settings.cornerSleeveOver?.count,
+      },
+
       glassToGlass: {
         glassToGlassType:
           singleDefault?.layoutData?.settings.glassToGlass?.glassToGlassType,
@@ -715,7 +733,7 @@ const DefaultComponent = ({ showSnackbar }) => {
 
             {/* Channel or Clamps */}
 
-            {/* <div
+            <div
               style={{
                 display: "flex",
                 gap: 4,
@@ -748,8 +766,8 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   >
-                     <MenuItem value="">Select Empty</MenuItem>
-                    {singleDefault?.listData?.channelOrClamps.map((option) => (
+                     {/* <MenuItem value="">Select Empty</MenuItem> */}
+                    {["Channel", "Clamps"].map((option) => (
                       <MenuItem key={option} value={option}>
                         {option}
                       </MenuItem>
@@ -767,10 +785,10 @@ const DefaultComponent = ({ showSnackbar }) => {
                   padding: 4,
                 }}
               ></div>
-            </div> */}
+            </div>
             {/* Mounting Channel */}
 
-            <div
+            {formik.values.channelOrClamps === 'Channel' && <div
               style={{
                 display: "flex",
                 gap: 4,
@@ -820,9 +838,10 @@ const DefaultComponent = ({ showSnackbar }) => {
                   padding: 4,
                 }}
               ></div>{" "}
-            </div>
+            </div>}
             {/* Clamps*/}
 
+           {formik.values.channelOrClamps === 'Clamps' && <>
             {/* Wall Clamps */}
             <div
               style={{
@@ -841,7 +860,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography>Clamps</Typography>
+                <Typography>Mounting Clamps</Typography>
                 <Typography variant="body2">Wall Clamps</Typography>
               </div>
               <div
@@ -1042,7 +1061,226 @@ const DefaultComponent = ({ showSnackbar }) => {
                 />
               </Box>
             </div>
+            </>}
+            {/* Corner Wall Clamps */}
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                alignContent: "center",
+                padding: "15px 10px 15px 10px",
+              }}
+            >
+              <div
+                style={{
+                  width: "250px",
+                  padding: "15px 10px 15px 10px",
+                  padding: 4,
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography>Corners</Typography>
+                <Typography variant="body2">Wall Clamps</Typography>
+              </div>
+              <div
+                style={{
+                  width: "250px",
+                }}
+              >
+                <Box sx={{ width: "220px" }}>
+                  <TextField
+                    select
+                    size="small"
+                    variant="outlined"
+                    name="cornerWallClamp.wallClampType"
+                    style={{ width: "100%" }}
+                    value={formik.values.cornerWallClamp.wallClampType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
 
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === null) {
+                        formik.setFieldValue("cornerWallClamp.count", 0);
+                      }
+                    }}
+                    onBlur={formik.handleBlur}
+                  >
+                    <MenuItem value={null}>Select Empty</MenuItem>
+                    {singleDefault?.listData?.cornerWallClamp.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </div>
+              <Box sx={{ width: "250px" }}>
+                <TextField
+                  type="number"
+                  size="small"
+                  variant="outlined"
+                  name="cornerWallClamp.count"
+                  style={{
+                    width: "250px",
+                    paddingX: 10,
+                  }}
+                  value={
+                    formik.values.cornerWallClamp.count !== undefined
+                      ? formik.values.cornerWallClamp.count
+                      : 0
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+            </div>
+
+            {/* Sleeve Over */}
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                alignContent: "center",
+                padding: "15px 10px 15px 10px",
+              }}
+            >
+              <div
+                style={{
+                  width: "250px",
+                  padding: "15px 10px 15px 10px",
+                  padding: 4,
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Typography variant="body2">Sleeve Over</Typography>
+              </div>
+              <div
+                style={{
+                  width: "250px",
+                }}
+              >
+                <Box sx={{ width: "220px" }}>
+                  <TextField
+                    select
+                    size="small"
+                    variant="outlined"
+                    name="cornerSleeveOver.sleeveOverType"
+                    style={{ width: "100%" }}
+                    value={formik.values.cornerSleeveOver.sleeveOverType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === null) {
+                        formik.setFieldValue("cornerSleeveOver.count", 0);
+                      }
+                    }}
+                    onBlur={formik.handleBlur}
+                  >
+                    <MenuItem value={null}>Select Empty</MenuItem>
+                    {singleDefault?.listData?.cornerSleeveOver.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </div>
+              <Box sx={{ width: "250px" }}>
+                <TextField
+                  type="number"
+                  size="small"
+                  variant="outlined"
+                  name="cornerSleeveOver.count"
+                  style={{
+                    width: "250px",
+                    paddingX: 10,
+                  }}
+                  value={
+                    formik.values.cornerSleeveOver.count !== undefined
+                      ? formik.values.cornerSleeveOver.count
+                      : 0
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+            </div>
+
+            {/* Glass to Glass */}
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                alignContent: "center",
+                padding: "15px 10px 15px 10px",
+              }}
+            >
+              <div
+                style={{
+                  width: "250px",
+                  padding: "15px 10px 15px 10px",
+                  padding: 4,
+                  display: "flex",
+                  justifyContent: "end",
+                }}
+              >
+                <Typography variant="body2">Glass to Glass</Typography>
+              </div>
+              <div
+                style={{
+                  width: "250px",
+                }}
+              >
+                <Box sx={{ width: "220px" }}>
+                  <TextField
+                    select
+                    size="small"
+                    variant="outlined"
+                    name="cornerGlassToGlass.glassToGlassType"
+                    style={{ width: "100%" }}
+                    value={formik.values.cornerGlassToGlass.glassToGlassType || ""}
+                    onChange={(e) => {
+                      formik.handleChange(e);
+
+                      // Check if the selected value is empty and set the number TextField to 0
+                      if (e.target.value === null) {
+                        formik.setFieldValue("cornerGlassToGlass.count", 0);
+                      }
+                    }}
+                    onBlur={formik.handleBlur}
+                  >
+                    <MenuItem value={null}>Select Empty</MenuItem>
+                    {singleDefault?.listData?.cornerGlassToGlass.map((option) => (
+                      <MenuItem key={option._id} value={option._id}>
+                        {option.name}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                </Box>
+              </div>
+              <Box sx={{ width: "250px" }}>
+                <TextField
+                  type="number"
+                  size="small"
+                  variant="outlined"
+                  name="cornerGlassToGlass.count"
+                  style={{
+                    width: "250px",
+                    paddingX: 10,
+                  }}
+                  value={
+                    formik.values.cornerGlassToGlass.count !== undefined
+                      ? formik.values.cornerGlassToGlass.count
+                      : 0
+                  }
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+            </div>
             <div
               style={{
                 display: "flex",

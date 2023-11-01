@@ -21,6 +21,7 @@ import {
   setGlassAddonsPrice,
   setFabricationPrice,
   setLaborPrice,
+  resetState,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
@@ -79,9 +80,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           count: row.count,
         };
       });
-
-
-      const cornerWallClampArray = estimatesContent?.cornerClamps?.wallClamp?.map(
+      const cornerWallClampArray = estimatesContent?.cornerClamps?.cornerWallClamp?.map(
         (row) => {
           return {
             type: row.item._id,
@@ -89,7 +88,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           };
         }
       );
-      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.sleeveOver?.map(
+      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.cornerSleeveOver?.map(
         (row) => {
           return {
             type: row.item._id,
@@ -98,7 +97,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         }
       );
       const cornerGlassToGlassArray =
-        estimatesContent?.cornerClamps?.glassToGlass?.map((row) => {
+        estimatesContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
           return {
             type: row.item._id,
             count: row.count,
@@ -211,6 +210,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
+      dispatch(resetState());
       dispatch(setNavigation("existing"));
       Refetched();
       navigate("/estimates");
@@ -585,7 +585,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Hinge Cut out</Typography>
+                  <Typography>Hinge Cut Out</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -643,7 +643,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Clamp Cut out</Typography>
+                  <Typography>Clamp Cut Out</Typography>
                   <Box
                     sx={{
                       display: "flex",
