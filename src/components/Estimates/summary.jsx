@@ -10,7 +10,8 @@ import {
   getMiscTotal,
   getTotal,
   selectedItem,
-  getDoorWidth
+  getDoorWidth,
+  getQuoteState
 } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
@@ -28,7 +29,9 @@ const Summary = () => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
-  const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
+  const quoteState = useSelector(getQuoteState);
+  const layoutImage = quoteState === 'create' ? `${backendURL}/${selectedData?.image}` : quoteState === 'edit' && selectedData?.layoutData?.image ? `${backendURL}/${selectedData?.layoutData?.image}` : CustomImage 
+  // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   return (
     <>
       <Box
@@ -102,7 +105,7 @@ const Summary = () => {
                   .join("’’/ ")}
               </Typography>
               <Typography>
-                Then Door Width {doorWidth}
+                Door Width {doorWidth}
               </Typography>
               <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                 Summary{" "}
@@ -153,32 +156,53 @@ const Summary = () => {
                   {selectedContent?.hinges?.count})
                 </Typography>
               </Box>}
-              {selectedContent?.mountingChannel?.item && (
+              {["channel"].includes(selectedContent?.mountingState) ? <>{selectedContent?.mountingChannel?.item && (
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>Channel:</Typography>
                   <Typography>
                     {selectedContent?.mountingChannel?.item?.name}
                   </Typography>
                 </Box>
-              )}
-              {selectedContent?.mountingClamps?.wallClamp?.length ?
+              )} </> : <> {selectedContent?.mountingClamps?.wallClamp?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>WallClamps: </Typography>
                   {selectedContent?.mountingClamps?.wallClamp?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}
-              {selectedContent?.mountingClamps?.sleeveOver?.length ?
+                {selectedContent?.mountingClamps?.sleeveOver?.length ?
+                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                    <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
+                    {selectedContent?.mountingClamps?.sleeveOver?.map((row) =>
+                      <Typography>{row.item.name} ({row.count}) </Typography>
+                    )}
+                  </Box> : ''}
+                {selectedContent?.mountingClamps?.glassToGlass?.length ?
+                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                    <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
+                    {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
+                      <Typography>{row.item.name} ({row.count}) </Typography>
+                    )}
+                  </Box> : ''} </>}
+
+              {selectedContent?.cornerClamps?.cornerWallClamp?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
-                  {selectedContent?.mountingClamps?.sleeveOver?.map((row) =>
+                  <Typography sx={{ fontWeight: "bold" }}>Corner WallClamp: </Typography>
+                  {selectedContent?.cornerClamps?.cornerWallClamp?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}
-              {selectedContent?.mountingClamps?.glassToGlass?.length ?
+              {selectedContent?.cornerClamps?.cornerSleeveOver?.length ?
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
-                  {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
+                  <Typography sx={{ fontWeight: "bold" }}>Corner Sleeve Over: </Typography>
+                  {selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) =>
+                    <Typography>{row.item.name} ({row.count}) </Typography>
+                  )}
+                </Box> : ''}
+              {selectedContent?.cornerClamps?.cornerGlassToGlass?.length ?
+                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
+                  <Typography sx={{ fontWeight: "bold" }}>Corner Glass To Glass: </Typography>
+                  {selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) =>
                     <Typography>{row.item.name} ({row.count}) </Typography>
                   )}
                 </Box> : ''}

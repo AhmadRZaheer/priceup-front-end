@@ -87,6 +87,28 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     )?.cost;
     mountingglassToGlass += price ? price * row.count : 0;
   });
+
+  let cornerWallClamps = 0;
+  selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    cornerWallClamps += price ? price * row.count : 0;
+  });
+  let cornerSleeveOver = 0;
+  selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    cornerSleeveOver += price ? price * row.count : 0;
+  });
+  let cornerGlassToGlass = 0;
+  selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+    const price = row.item.finishes?.find(
+      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+    )?.cost;
+    cornerGlassToGlass += price ? price * row.count : 0;
+  });
   // const mountingWallClamps = selectedContent?.mounting?.clamps?.wallClamp?.item
   //   ? (selectedContent?.mounting?.clamps?.wallClamp?.item?.finishes?.find(
   //       (item) => selectedContent.hardwareFinishes._id === item.finish_id
@@ -113,14 +135,13 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
-
+  
+  let mountingPrice = selectedContent?.mountingState === 'channel' ? mountingChannel : (mountingWallClamps + mountingglassToGlass + mountingsleeveOver);
+  mountingPrice += (cornerWallClamps + cornerGlassToGlass + cornerSleeveOver);
   const hardwareTotals =
     handlePrice +
     hingesPrice +
-    mountingChannel +
-    // * (selectedContent?.mounting?.activeType === "channel" ? 1 : 0)
-    (mountingWallClamps + mountingglassToGlass + mountingsleeveOver) +
-    // * (selectedContent?.mounting?.activeType === "clamps" ? 1 : 0)
+    mountingPrice +
     slidingDoorSystemPrice +
     headerPrice;
 

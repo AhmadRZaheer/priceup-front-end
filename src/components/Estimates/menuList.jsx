@@ -66,6 +66,7 @@ const MenuList = ({
           justifyContent: "space-between",
           alignItems: "center",
           pb: 1,
+          
         }}
       >
         <Button
@@ -98,6 +99,9 @@ const MenuList = ({
           "wallClamp",
           "sleeveOver",
           "glassToGlass",
+          "cornerWallClamp",
+          "cornerSleeveOver",
+          "cornerGlassToGlass",
           "glassAddons",
           "glassType",
           "hardwareAddons",
@@ -175,7 +179,7 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "250px",
-            minHeight: '150px',
+            minHeight: '80px',
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
           }}
@@ -212,6 +216,12 @@ const MenuList = ({
                           (selectedItem) => selectedItem?.item?._id === item?._id
                         ) : type === "glassToGlass" ? selectedContent?.mountingClamps?.glassToGlass.some(
                           (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "cornerWallClamp" ? selectedContent?.cornerClamps?.cornerWallClamp.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "cornerSleeveOver" ? selectedContent?.cornerClamps?.cornerSleeveOver.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
+                        ) : type === "cornerGlassToGlass" ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
+                          (selectedItem) => selectedItem?.item?._id === item?._id
                         )
                           : item === selectedItem
                     )
@@ -243,6 +253,10 @@ const MenuList = ({
                     {["wallClamp",
                       "sleeveOver",
                       "glassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
+                    }
+                                        {["cornerWallClamp",
+                      "cornerSleeveOver",
+                      "cornerGlassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.cornerClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
                     }
                   </Box>
                 </Box>

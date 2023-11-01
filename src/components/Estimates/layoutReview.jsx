@@ -21,6 +21,7 @@ import {
   setGlassAddonsPrice,
   setFabricationPrice,
   setLaborPrice,
+  resetState,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
@@ -79,6 +80,29 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           count: row.count,
         };
       });
+      const cornerWallClampArray = estimatesContent?.cornerClamps?.cornerWallClamp?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.cornerSleeveOver?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        }
+      );
+      const cornerGlassToGlassArray =
+        estimatesContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        });
     const glassAddonsArray = estimatesContent?.glassAddons?.map(
       (item) => item?._id
     );
@@ -96,6 +120,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         wallClamp: [...wallClampArray],
         sleeveOver: [...sleeveOverArray],
         glassToGlass: [...glassToGlassArray],
+      },
+      cornerClamps : {
+        wallClamp: [...cornerWallClampArray],
+        sleeveOver: [...cornerSleeveOverArray],
+        glassToGlass: [...cornerGlassToGlassArray],
       },
       mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
       glassType: {
@@ -181,6 +210,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
+      dispatch(resetState());
       dispatch(setNavigation("existing"));
       Refetched();
       navigate("/estimates");
@@ -555,7 +585,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Hinge Cut out</Typography>
+                  <Typography>Hinge Cut Out</Typography>
                   <Box
                     sx={{
                       display: "flex",
@@ -613,7 +643,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     color: { md: "#000000  ", xs: "white" },
                   }}
                 >
-                  <Typography>Clamp Cut out</Typography>
+                  <Typography>Clamp Cut Out</Typography>
                   <Box
                     sx={{
                       display: "flex",
