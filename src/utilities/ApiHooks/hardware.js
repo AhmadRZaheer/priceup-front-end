@@ -180,29 +180,18 @@ export const useCreateHardware = () => {
 export const useEditHardware = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-    const updatedData = {
-      ...(props.finishesData ? { options: props.finishesData } : {}),
-      ...(props.hardwareData
-        ? {
-            name: props.hardwareData.name,
-            // image: props.glassTypeData.image,
-          }
-        : {}),
-    };
-    const formData = new FormData();
-    if (props?.hardwareData?.image) {
-      formData.append("image", props.hardwareData.image);
-    }
-    formData.append("jsonData", JSON.stringify(updatedData));
+
     try {
       const response = await axios.put(
         `${backendURL}/hardwares/${props.id}`,
-        formData,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
+          ...(props.finishesData ? { finishes: props.finishesData } : {}),
+          ...(props.hardwareData
+            ? { name: props.hardwareData.name, image: props.hardwareData.image }
+            : {}),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
         }
       );
       if (response.data.code === 200) {
