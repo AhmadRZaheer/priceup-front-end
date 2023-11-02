@@ -369,16 +369,17 @@ const estimateCalcSlice = createSlice({
       /* switch to default selected data of a layout or existing estimate */
 
       if (["create"].includes(state.quoteState)) {
-        // let clampCutCount = 0;
-        // state.content.cornerClamps.cornerWallClamp.forEach((record) => {
-        //   clampCutCount += record.count;
-        // });
+        let clampCutCount = 0;
+        state.content.cornerClamps.cornerWallClamp.forEach((record) => {
+          clampCutCount += record.count;
+        });
         // state.content.cornerClamps.cornerSleeveOver.forEach((record) => {
         //   clampCutCount += record.count;
         // });
-        // state.content.cornerClamps.cornerGlassToGlass.forEach((record) => {
-        //   clampCutCount += record.count;
-        // });
+        state.content.cornerClamps.cornerGlassToGlass.forEach((record) => {
+          clampCutCount += record.count;
+        });
+        console.log(payload?.toLowerCase(),'channel','clamps');
         // if state is create quote
         if (["channel"].includes(payload?.toLowerCase())) {
           // for channel
@@ -393,7 +394,7 @@ const estimateCalcSlice = createSlice({
               item: channelItem || null,
               count: channelItem ? 1 : 0,
             },
-            // clampCut: clampCutCount,
+            clampCut: clampCutCount,
           };
         } else if (["clamps"].includes(payload?.toLowerCase())) {
           // for clamps
@@ -446,23 +447,23 @@ const estimateCalcSlice = createSlice({
             clampCut:
               state.selectedItem?.settings?.wallClamp?.count +
               state.selectedItem?.settings?.sleeveOver?.count +
-              state.selectedItem?.settings?.glassToGlass?.count,
-            // clampCutCount,
+              state.selectedItem?.settings?.glassToGlass?.count +
+              clampCutCount,
           };
         }
       }
       // if state is edit quote
       else if (["edit"].includes(state.quoteState)) {
-        // let clampCutCount = 0;
-        // state.content.cornerClamps.cornerWallClamp.forEach((record) => {
-        //   clampCutCount += record.count;
-        // });
+        let clampCutCount = 0;
+        state.content.cornerClamps.cornerWallClamp.forEach((record) => {
+          clampCutCount += record.count;
+        });
         // state.content.cornerClamps.cornerSleeveOver.forEach((record) => {
         //   clampCutCount += record.count;
         // });
-        // state.content.cornerClamps.cornerGlassToGlass.forEach((record) => {
-        //   clampCutCount += record.count;
-        // });
+        state.content.cornerClamps.cornerGlassToGlass.forEach((record) => {
+          clampCutCount += record.count;
+        });
         if (["channel"].includes(payload?.toLowerCase())) {
           // for channel
           let channelItem = null;
@@ -476,7 +477,7 @@ const estimateCalcSlice = createSlice({
               item: channelItem || null,
               count: channelItem ? 1 : 0,
             },
-            // clampCut: clampCutCount,
+            clampCut: clampCutCount,
           };
         } else if (["clamps"].includes(payload?.toLowerCase())) {
           // for clamps
@@ -523,7 +524,7 @@ const estimateCalcSlice = createSlice({
               sleeveOver: [...sleeveOverArray],
               glassToGlass: [...glassToGlassArray],
             },
-            clampCut: clampCutCountDefault,
+            clampCut: clampCutCountDefault + clampCutCount,
           };
         }
       }
@@ -737,8 +738,8 @@ const estimateCalcSlice = createSlice({
         clampCut:
           layoutData?.settings?.wallClamp?.count +
           layoutData?.settings?.sleeveOver?.count +
-          layoutData?.settings?.glassToGlass?.count,
-        // (layoutData?.settings?.cornerWallClamp?.count +
+          layoutData?.settings?.glassToGlass?.count +
+          layoutData?.settings?.cornerWallClamp?.count,
         //   layoutData?.settings?.cornerSleeveOver?.count +
         //   layoutData?.settings?.cornerGlassToGlass?.count),
       };
