@@ -26,6 +26,8 @@ export const getListData = (state) => state.estimateCalculations.listData;
 export const getLayoutPerimeter = (state) =>
   state.estimateCalculations.perimeter;
 export const getLayoutArea = (state) => state.estimateCalculations.sqftArea;
+export const getPanelWidth = (state) => state.estimateCalculations.panelWidth;
+
 const initialState = {
   quoteId: null,
   quoteState: "create",
@@ -34,6 +36,7 @@ const initialState = {
   perimeter: 0,
   sqftArea: 0,
   doorWidth: 0,
+  panelWidth: 0,
   measurements: [],
   selectedItem: null,
   listData: null,
@@ -101,6 +104,9 @@ const estimateCalcSlice = createSlice({
     resetState: () => initialState,
     setDoorWidth: (state, action) => {
       state.doorWidth = action.payload;
+    },
+    setPanelWidth: (state, action) => {
+      state.panelWidth = action.payload;
     },
     setContent: (state, action) => {
       const { type, item } = action.payload;
@@ -957,5 +963,6 @@ export const {
   initializeStateForCustomQuote,
   initializeStateForCreateQuote,
   initializeStateForEditQuote,
+  setPanelWidth,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

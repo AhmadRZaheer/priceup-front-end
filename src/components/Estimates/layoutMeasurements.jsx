@@ -5,7 +5,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -16,19 +16,28 @@ import {
   setLayoutPerimeter,
   setNavigationDesktop,
   updateMeasurements,
-  setDoorWidth
+  getDoorWidth,
+  setPanelWidth,
+  setDoorWidth,
 } from "../../redux/estimateCalculations";
-import { backendURL, calculateAreaAndPerimeter, calculateAreaOrPerimeter } from "../../utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  calculateAreaOrPerimeter,
+} from "../../utilities/common";
 
 const LayoutMeasurements = () => {
+  const dispatch = useDispatch();
 
   const setHandleEstimatesPages = (item) => {
-    dispatch(setNavigationDesktop(item))
-
+    dispatch(setNavigationDesktop(item));
   };
-
-
+  const [editField, setEditField] = useState(true);
   const selectedData = useSelector(selectedItem);
+  const doorWidthFromredux = useSelector(getDoorWidth);
+
+  // const [width, setWidth] = useState(doorWidthFromredux);
+  // console.log(width, "width");
 
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
@@ -60,13 +69,47 @@ const LayoutMeasurements = () => {
       console.log("rsult",result.doorWidth)
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
-      dispatch(setDoorWidth(result.doorWidth))
+
       dispatch(updateMeasurements(measurementsArray));
+      // if (!editField) {
+      //   dispatch(setDoorWidth(width));
+      // } else {
+      //   dispatch(setDoorWidth(result.doorWidth));
+      // }
+      // dispatch(setDoorWidth(doorPanel));
       setHandleEstimatesPages("review");
-      resetForm();
+      // resetForm();
+      console.log("helloo");
     },
   });
-  const dispatch = useDispatch();
+  const doorandPanel = () => {
+    const valuesOfFormik = formik.values;
+    const measurementsArray = Object.entries(valuesOfFormik)
+      .filter(([key, value]) => value !== "")
+      .map(([key, value]) => ({
+        key,
+        value,
+      }));
+    if (measurementsArray.length === selectedData?.settings?.measurementSides) {
+      const result = calculateAreaAndPerimeter(
+        measurementsArray,
+        selectedData?.settings?.variant
+      );
+      dispatch(setDoorWidth(result.doorWidth));
+      // if (result?.panelWidth) dispatch(setPanelWidth(result.panelWidth));
+
+      console.log("hello world");
+    } else {
+      console.log(
+        "Cannot calculate result as there are empty values in measurementsArray"
+      );
+    }
+  };
+
+  const handleInputChange = (event) => {
+    dispatch(setDoorWidth(event.target.value));
+  };
+
   return (
     <>
       <Box
@@ -208,12 +251,112 @@ const LayoutMeasurements = () => {
                         width: "100%",
                       }}
                       value={formik.values[String.fromCharCode(97 + index)]}
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        doorandPanel();
+                      }}
                       onBlur={formik.handleBlur}
                     />
                   </Box>
                 ))}
+
+                {[
+                  "Door & Nib",
+                  "Door & Notched Panel",
+                  "Door & Notched Panel",
+                  "Door Notched Panel & Return",
+                  "Single Barn",
+                  "Double Barn",
+                  "Door Panel & Return",
+                ].includes(selectedData.name) && (
+                  <>
+                    <Typography>
+                      If you want to edit door width click on
+                      <span
+                        style={{
+                          cursor: "pointer",
+                          height: 40,
+                          fontSize: 20,
+                          marginLeft: "5px",
+
+                          color: "#1976d2",
+                        }}
+                        onClick={() => setEditField(!editField)}
+                      >
+                        Edit
+                      </span>
+                    </Typography>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                        alignItems: "start",
+                        justifyContent: "start",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Typography
+                          sx={{ mr: 2, color: editField ? "gray" : "" }}
+                        >
+                          Door
+                        </Typography>
+                        <TextField
+                          InputProps={{
+                            inputProps: { min: 1, max: doorWidthFromredux },
+                          }}
+                          disabled={editField}
+                          placeholder={doorWidthFromredux}
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          value={doorWidthFromredux}
+                          style={{
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: "100%",
+                          }}
+                          name="door"
+                          onChange={(e) => handleInputChange(e)}
+                        />
+                      </Box>
+                      {/* <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Typography
+                          sx={{ mr: 2, color: editField ? "gray" : "" }}
+                        >
+                          Panel
+                        </Typography>
+                        <TextField
+                          disabled={editField}
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          value={doorPanelFromredux}
+                          style={{
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: "100%",
+                          }}
+                          name="panel"
+                        />
+                      </Box> */}
+                    </Box>
+                  </>
+                )}
               </Box>
+
               <Box
                 sx={{
                   display: "flex",
