@@ -2,7 +2,9 @@ import {
   Box,
   Button,
   CircularProgress,
+  IconButton,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
@@ -20,7 +22,12 @@ import {
   setDoorWidth,
   getMeasurementSide,
 } from "../../redux/estimateCalculations";
-import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+} from "../../utilities/common";
+import { layoutVariants } from "../../utilities/constants";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -68,11 +75,7 @@ const LayoutMeasurements = () => {
         }));
       // const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
       // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
-      const result = calculateAreaAndPerimeter(
-        measurementsArray,
-        selectedData?.settings?.variant
-      );
-      console.log("rsult", result.doorWidth);
+      const result = calculateAreaAndPerimeter(measurementsArray, selectedData?.settings?.variant);
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
 
@@ -266,73 +269,86 @@ const LayoutMeasurements = () => {
                   </Box>
                 ))}
 
-                {[
-                  "Door & Nib",
-                  "Door & Notched Panel",
-                  "Door & Notched Panel",
-                  "Door Notched Panel & Return",
-                  "Single Barn",
-                  "Double Barn",
-                  "Door Panel & Return",
-                ].includes(selectedData.name) && (
-                  <>
-                    <Typography>
-                      If you want to edit door width click on
-                      <span
-                        style={{
-                          cursor: "pointer",
-                          height: 40,
-                          fontSize: 20,
-                          marginLeft: "5px",
-
-                          color: "#1976d2",
-                        }}
-                        onClick={() => setEditField(!editField)}
-                      >
-                        Edit
-                      </span>
-                    </Typography>
-
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 1,
-                        alignItems: "start",
-                        justifyContent: "start",
-                      }}
-                    >
+                {![
+                  layoutVariants.DOOR,
+                  layoutVariants.DOUBLEDOOR,
+                  layoutVariants.DOUBLEBARN
+                ].includes(selectedData.settings.variant) && (
+                    <>
+                      <Typography>
+                        <input
+                          type="checkbox"
+                          onChange={() => setEditField(!editField)}
+                          style={{
+                            width: "20px",
+                          }}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Select if you want to customize the door width
+                        </span>
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
+                          gap: 1,
                         }}
                       >
-                        <Typography
-                          sx={{ mr: 2, color: editField ? "gray" : "" }}
-                        >
-                          Door
-                        </Typography>
-                        <TextField
-                          InputProps={{
-                            inputProps: { min: 1, max: doorWidthFromredux },
-                          }}
-                          disabled={editField}
-                          placeholder={doorWidthFromredux}
-                          type="number"
-                          size="small"
-                          variant="outlined"
-                          value={doorWidthFromredux}
-                          style={{
-                            background: "white",
-                            borderRadius: "8px",
-                            border: "1px solid #D0D5DD",
+                        <Box
+                          sx={{
+                            display: "flex",
                             width: "100%",
+                            alignItems: "center",
                           }}
-                          name="door"
-                          onChange={(e) => handleInputChange(e)}
-                        />
-                      </Box>
-                      {/* <Box
+                        >
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              width: "200px",
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                color: editField ? "gray" : "",
+                              }}
+                            >
+                              Door Width
+                            </Typography>
+                            <Tooltip
+                              title={
+                                "If you want to customize the door width, check the above checkbox"
+                              }
+                            >
+                              <IconButton>
+                                <InfoOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                          <TextField
+                            InputProps={{
+                              inputProps: { min: 1, max: doorWidthFromredux },
+                            }}
+                            disabled={editField}
+                            placeholder={doorWidthFromredux}
+                            type="number"
+                            size="small"
+                            variant="outlined"
+                            value={doorWidthFromredux}
+                            style={{
+                              background: "white",
+                              borderRadius: "8px",
+                              border: "1px solid #D0D5DD",
+                              width: "100%",
+                            }}
+                            name="door"
+                            onChange={(e) => handleInputChange(e)}
+                          />
+                        </Box>
+                        {/* <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -358,9 +374,9 @@ const LayoutMeasurements = () => {
                           name="panel"
                         />
                       </Box> */}
-                    </Box>
-                  </>
-                )}
+                      </Box>
+                    </>
+                  )}
               </Box>
 
               <Box
