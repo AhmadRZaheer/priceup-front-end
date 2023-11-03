@@ -495,7 +495,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     }; 
   }
   else if (variant === layoutVariants.SINGLEBARN){
-    const doorQuantity = measurements?.b === 0 ? 0 : 1;
+        const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a
@@ -547,7 +547,6 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width,
-      doorWidth: door.width ,
       panelWidth: panel.width 
     };
   } else if (variant === layoutVariants.CUSTOM) {

@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -46,9 +46,11 @@ const LayoutMeasurements = () => {
     return acc;
   }, {});
 
-  // const [width, setWidth] = useState(doorWidthFromredux);
-  // console.log(width, "width");
-
+  // const [width, setWidth] = useState(0);
+  const [debouncedValue, setDebouncedValue] = useState(0);
+  const [editDebouncedValue, setEditDebouncedValue] = useState(doorWidthFromredux);
+  let debounceTimeout, editDebounceTimeout;
+  console.log(editDebouncedValue, 'edit value');
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
       (schema, _, index) => {
@@ -80,9 +82,10 @@ const LayoutMeasurements = () => {
       dispatch(setLayoutPerimeter(result.perimeter));
 
       dispatch(updateMeasurements(measurementsArray));
-      // if (!editField) {
-      //   dispatch(setDoorWidth(width));
-      // } else {
+      if (!editField) {
+        dispatch(setDoorWidth(editDebouncedValue));
+      }
+      // else {
       //   dispatch(setDoorWidth(result.doorWidth));
       // }
       // dispatch(setDoorWidth(doorPanel));
@@ -91,7 +94,8 @@ const LayoutMeasurements = () => {
       console.log("helloo");
     },
   });
-  const doorandPanel = () => {
+  const doorandPanel = (event) => {
+    const inputVal = event.target.value;
     const valuesOfFormik = formik.values;
     const measurementsArray = Object.entries(valuesOfFormik)
       .filter(([key, value]) => value !== "")
@@ -100,14 +104,15 @@ const LayoutMeasurements = () => {
         value,
       }));
     if (measurementsArray.length === selectedData?.settings?.measurementSides) {
-      const result = calculateAreaAndPerimeter(
-        measurementsArray,
-        selectedData?.settings?.variant
-      );
-      dispatch(setDoorWidth(result.doorWidth));
-      // if (result?.panelWidth) dispatch(setPanelWidth(result.panelWidth));
+      // setWidth(inputVal);
 
-      console.log("hello world");
+      // Clear any existing timeout
+      clearTimeout(debounceTimeout);
+
+      // Set a new timeout
+      debounceTimeout = setTimeout(() => {
+        setDebouncedValue(inputVal);
+      }, 500); // 1000 milliseconds (1 second)
     } else {
       console.log(
         "Cannot calculate result as there are empty values in measurementsArray"
@@ -115,8 +120,27 @@ const LayoutMeasurements = () => {
     }
   };
 
+  useEffect(() => {
+    const valuesOfFormik = formik.values;
+    const measurementsArray = Object.entries(valuesOfFormik)
+      .filter(([key, value]) => value !== "")
+      .map(([key, value]) => ({
+        key,
+        value,
+      }));
+    const result = calculateAreaAndPerimeter(
+      measurementsArray,
+      selectedData?.settings?.variant
+    );
+    dispatch(setDoorWidth(result.doorWidth));
+    setEditDebouncedValue(result.doorWidth);
+    // if (result?.panelWidth) dispatch(setPanelWidth(result.panelWidth));
+
+    console.log("hello world");
+  }, [debouncedValue])
+
   const handleInputChange = (event) => {
-    dispatch(setDoorWidth(event.target.value));
+    setEditDebouncedValue(event.target.value);
   };
 
   return (
@@ -262,7 +286,7 @@ const LayoutMeasurements = () => {
                       value={formik.values[String.fromCharCode(97 + index)]}
                       onChange={(e) => {
                         formik.handleChange(e);
-                        doorandPanel();
+                        doorandPanel(e);
                       }}
                       onBlur={formik.handleBlur}
                     />
@@ -330,14 +354,14 @@ const LayoutMeasurements = () => {
                           </Box>
                           <TextField
                             InputProps={{
-                              inputProps: { min: 1, max: doorWidthFromredux },
+                              inputProps: { min: 1 },
                             }}
                             disabled={editField}
-                            placeholder={doorWidthFromredux}
+                            placeholder={editDebouncedValue}
                             type="number"
                             size="small"
                             variant="outlined"
-                            value={doorWidthFromredux}
+                            value={editDebouncedValue}
                             style={{
                               background: "white",
                               borderRadius: "8px",
