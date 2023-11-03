@@ -127,7 +127,7 @@ export const useEditDefault = () => {
               count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.sleeveOver?.count : 0,
             },
             glassToGlass: {
-              glassToGlassType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.glassToGlassType : 0,
+              glassToGlassType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.glassToGlassType : null,
               count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.count : 0,
             },
             cornerWallClamp: {
