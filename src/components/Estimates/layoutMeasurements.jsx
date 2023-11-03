@@ -17,14 +17,10 @@ import {
   setNavigationDesktop,
   updateMeasurements,
   getDoorWidth,
-  setPanelWidth,
   setDoorWidth,
+  getMeasurementSide,
 } from "../../redux/estimateCalculations";
-import {
-  backendURL,
-  calculateAreaAndPerimeter,
-  calculateAreaOrPerimeter,
-} from "../../utilities/common";
+import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -35,6 +31,13 @@ const LayoutMeasurements = () => {
   const [editField, setEditField] = useState(true);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
+  const measurementSide = useSelector(getMeasurementSide);
+  console.log(measurementSide, "measurementSide");
+
+  const initialValues = measurementSide.reduce((acc, item) => {
+    acc[item.key] = item.value;
+    return acc;
+  }, {});
 
   // const [width, setWidth] = useState(doorWidthFromredux);
   // console.log(width, "width");
@@ -54,7 +57,7 @@ const LayoutMeasurements = () => {
     ),
   });
   const formik = useFormik({
-    initialValues: {},
+    initialValues,
     validationSchema,
     onSubmit: async (values, resetForm) => {
       const measurementsArray = Object.entries(values)
@@ -65,8 +68,11 @@ const LayoutMeasurements = () => {
         }));
       // const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
       // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
-      const result = calculateAreaAndPerimeter(measurementsArray, selectedData?.settings?.variant);
-      console.log("rsult",result.doorWidth)
+      const result = calculateAreaAndPerimeter(
+        measurementsArray,
+        selectedData?.settings?.variant
+      );
+      console.log("rsult", result.doorWidth);
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
 
@@ -78,7 +84,7 @@ const LayoutMeasurements = () => {
       // }
       // dispatch(setDoorWidth(doorPanel));
       setHandleEstimatesPages("review");
-      // resetForm();
+      resetForm();
       console.log("helloo");
     },
   });
@@ -410,6 +416,8 @@ const LayoutMeasurements = () => {
                   <Button
                     fullWidth
                     onClick={() => {
+                      dispatch(updateMeasurements([]));
+                      dispatch(setDoorWidth(0));
                       setHandleEstimatesPages("layouts");
                     }}
                     sx={{
@@ -422,7 +430,6 @@ const LayoutMeasurements = () => {
                       fontSize: 20,
                     }}
                   >
-                    {" "}
                     Back
                   </Button>
                 </Box>
