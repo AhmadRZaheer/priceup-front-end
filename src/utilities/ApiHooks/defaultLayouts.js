@@ -117,29 +117,53 @@ export const useEditDefault = () => {
               height: updatedDefault.settings.heavyPivotOption.height,
             },
             channelOrClamps: updatedDefault.settings?.channelOrClamps,
-            mountingChannel: updatedDefault.settings?.channelOrClamps === 'Channel' ? updatedDefault.settings?.mountingChannel : null,
+            mountingChannel:
+              updatedDefault.settings?.channelOrClamps === "Channel"
+                ? updatedDefault.settings?.mountingChannel
+                : null,
             wallClamp: {
-              wallClampType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.wallClamp?.wallClampType : null,
-              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.wallClamp?.count : 0,
+              wallClampType:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.wallClamp?.wallClampType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.wallClamp?.count
+                  : 0,
             },
             sleeveOver: {
-              sleeveOverType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.sleeveOver?.sleeveOverType : null,
-              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.sleeveOver?.count : 0,
+              sleeveOverType:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.sleeveOver?.sleeveOverType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.sleeveOver?.count
+                  : 0,
             },
             glassToGlass: {
-              glassToGlassType: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.glassToGlassType : null,
-              count: updatedDefault.settings?.channelOrClamps === 'Clamps' ? updatedDefault.settings?.glassToGlass?.count : 0,
+              glassToGlassType:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.glassToGlass?.glassToGlassType
+                  : null,
+              count:
+                updatedDefault.settings?.channelOrClamps === "Clamps"
+                  ? updatedDefault.settings?.glassToGlass?.count
+                  : 0,
             },
             cornerWallClamp: {
-              wallClampType: updatedDefault.settings?.cornerWallClamp?.wallClampType,
+              wallClampType:
+                updatedDefault.settings?.cornerWallClamp?.wallClampType,
               count: updatedDefault.settings?.cornerWallClamp?.count,
             },
             cornerSleeveOver: {
-              sleeveOverType: updatedDefault.settings?.cornerSleeveOver?.sleeveOverType,
+              sleeveOverType:
+                updatedDefault.settings?.cornerSleeveOver?.sleeveOverType,
               count: updatedDefault.settings?.cornerSleeveOver?.count,
             },
             cornerGlassToGlass: {
-              glassToGlassType: updatedDefault.settings?.cornerGlassToGlass?.glassToGlassType,
+              glassToGlassType:
+                updatedDefault.settings?.cornerGlassToGlass?.glassToGlassType,
               count: updatedDefault.settings?.cornerGlassToGlass?.count,
             },
             glassType: {
@@ -151,6 +175,7 @@ export const useEditDefault = () => {
               count: updatedDefault.settings?.slidingDoorSystem?.count,
             },
             outages: updatedDefault.settings?.outages,
+            notch: updatedDefault.settings?.notch,
             transom: updatedDefault.settings?.transom,
             header: updatedDefault.settings?.header,
             glassAddon: updatedDefault.settings?.glassAddon,

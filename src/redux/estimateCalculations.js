@@ -789,6 +789,7 @@ const estimateCalcSlice = createSlice({
           ? [glassAddon]
           : [state.listData.glassAddons[0]],
         outages: layoutData?.settings?.outages,
+        notch: layoutData?.settings?.notch,
         hingeCut: layoutData?.settings?.hinges?.count,
         oneInchHoles:
           layoutData?.settings?.handles?.count * 2 +

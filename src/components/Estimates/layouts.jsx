@@ -118,7 +118,7 @@ export default function Layout() {
                   paddingBottom: 1,
                 }}
               >
-                Select Layout
+                Select Layout 
               </Typography>
               <Typography
                 sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
