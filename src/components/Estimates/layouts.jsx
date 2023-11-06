@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
+  resetState,
   selectedItem,
   setListData,
   setNavigationDesktop,
@@ -39,6 +40,7 @@ export default function Layout() {
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
@@ -52,6 +54,7 @@ export default function Layout() {
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));

@@ -12,6 +12,7 @@ import {Input} from "@mui/material";
 import {
   addSelectedItem,
   initializeStateForEditQuote,
+  resetState,
   setListData,
   setNavigationDesktop,
   setQuoteState,
@@ -47,7 +48,7 @@ export default function ExistingTable() {
   }, [deletedSuccessfully]);
 
   const handleIconButtonClick = (item) => {
-  
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({

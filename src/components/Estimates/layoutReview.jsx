@@ -223,7 +223,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
-      dispatch(resetState());
+      // dispatch(resetState());
       dispatch(setNavigation("existing"));
       Refetched();
       navigate("/estimates");
