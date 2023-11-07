@@ -16,9 +16,9 @@ import {
   setThickness,
 } from "../../redux/estimateCalculations";
 import OptionWithCounter from "./optionWithCounter";
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
 
 const MenuList = ({
   menuOptions,
@@ -66,7 +66,6 @@ const MenuList = ({
           justifyContent: "space-between",
           alignItems: "center",
           pb: 1,
-          
         }}
       >
         <Button
@@ -88,10 +87,10 @@ const MenuList = ({
           )}
           <Typography>{title}</Typography>
           <Tooltip title={title}>
-                        <IconButton>
-                          <InfoOutlinedIcon />
-                        </IconButton>
-                      </Tooltip>
+            <IconButton>
+              <InfoOutlinedIcon />
+            </IconButton>
+          </Tooltip>
         </Button>
         {![
           "hardwareFinishes",
@@ -106,27 +105,27 @@ const MenuList = ({
           "glassType",
           "hardwareAddons",
         ].includes(type) && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                color: { md: "#000000  ", xs: "white" },
-                alignSelf: "flex-end",
-                py: 1.5,
-              }}
-            >
-              <AddCircleOutline
-                onClick={() => handleCountSet(countVal + 1)}
-                sx={{ color: "#98A2B3" }}
-              />
-              <Typography>{countVal}</Typography>
-              <RemoveCircleOutline
-                onClick={() => handleCountSet(countVal - 1)}
-                sx={{ color: "#98A2B3" }}
-              />
-            </Box>
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              color: { md: "#000000  ", xs: "white" },
+              alignSelf: "flex-end",
+              py: 1.5,
+            }}
+          >
+            <AddCircleOutline
+              onClick={() => handleCountSet(countVal + 1)}
+              sx={{ color: "#98A2B3" }}
+            />
+            <Typography>{countVal}</Typography>
+            <RemoveCircleOutline
+              onClick={() => handleCountSet(countVal - 1)}
+              sx={{ color: "#98A2B3" }}
+            />
+          </Box>
+        )}
         {["glassType"].includes(type) && (
           <Box
             sx={{
@@ -179,7 +178,7 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "250px",
-            minHeight: '80px',
+            minHeight: "80px",
             overflowY: "scroll",
             color: { md: "#000000", xs: "white" },
           }}
@@ -207,23 +206,43 @@ const MenuList = ({
                     border: (
                       type === "hardwareAddons"
                         ? selectedContent?.hardwareAddons.some(
-                          (row) => row?.item?._id === item?._id
-                        ) : type === "glassAddons" ? selectedContent?.glassAddons.some(
-                          (selectedItem) => selectedItem?._id === item?._id
-                        ) : type === "wallClamp" ? selectedContent?.mountingClamps?.wallClamp.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "sleeveOver" ? selectedContent?.mountingClamps?.sleeveOver.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "glassToGlass" ? selectedContent?.mountingClamps?.glassToGlass.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "cornerWallClamp" ? selectedContent?.cornerClamps?.cornerWallClamp.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "cornerSleeveOver" ? selectedContent?.cornerClamps?.cornerSleeveOver.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        ) : type === "cornerGlassToGlass" ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
-                          (selectedItem) => selectedItem?.item?._id === item?._id
-                        )
-                          : item === selectedItem
+                            (row) => row?.item?._id === item?._id
+                          )
+                        : type === "glassAddons"
+                        ? selectedContent?.glassAddons.some(
+                            (selectedItem) => selectedItem?._id === item?._id
+                          )
+                        : type === "wallClamp"
+                        ? selectedContent?.mountingClamps?.wallClamp.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : type === "sleeveOver"
+                        ? selectedContent?.mountingClamps?.sleeveOver.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : type === "glassToGlass"
+                        ? selectedContent?.mountingClamps?.glassToGlass.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : type === "cornerWallClamp"
+                        ? selectedContent?.cornerClamps?.cornerWallClamp.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : type === "cornerSleeveOver"
+                        ? selectedContent?.cornerClamps?.cornerSleeveOver.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : type === "cornerGlassToGlass"
+                        ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
+                            (selectedItem) =>
+                              selectedItem?.item?._id === item?._id
+                          )
+                        : item === selectedItem
                     )
                       ? "2px solid blue"
                       : "1px solid #EAECF0",
@@ -248,16 +267,47 @@ const MenuList = ({
                   </Box>
                   <Box>
                     {type === "hardwareAddons" && (
-                      <OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.hardwareAddons?.find((row) => row?.item?.slug === item.slug)?.count} />
+                      <OptionWithCounter
+                        key={`${type}-${item.slug}`}
+                        item={item}
+                        type={type}
+                        counter={
+                          selectedContent?.hardwareAddons?.find(
+                            (row) => row?.item?.slug === item.slug
+                          )?.count
+                        }
+                      />
                     )}
-                    {["wallClamp",
-                      "sleeveOver",
-                      "glassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.mountingClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
-                    }
-                                        {["cornerWallClamp",
+                    {["wallClamp", "sleeveOver", "glassToGlass"].includes(
+                      type
+                    ) && (
+                      <OptionWithCounter
+                        key={`${type}-${item.slug}`}
+                        item={item}
+                        type={type}
+                        counter={
+                          selectedContent?.mountingClamps?.[type]?.find(
+                            (row) => row?.item?.slug === item?.slug
+                          )?.count
+                        }
+                      />
+                    )}
+                    {[
+                      "cornerWallClamp",
                       "cornerSleeveOver",
-                      "cornerGlassToGlass"].includes(type) && (<OptionWithCounter key={`${type}-${item.slug}`} item={item} type={type} counter={selectedContent?.cornerClamps?.[type]?.find((row) => row?.item?.slug === item?.slug)?.count} />)
-                    }
+                      "cornerGlassToGlass",
+                    ].includes(type) && (
+                      <OptionWithCounter
+                        key={`${type}-${item.slug}`}
+                        item={item}
+                        type={type}
+                        counter={
+                          selectedContent?.cornerClamps?.[type]?.find(
+                            (row) => row?.item?.slug === item?.slug
+                          )?.count
+                        }
+                      />
+                    )}
                   </Box>
                 </Box>
               </MenuItem>

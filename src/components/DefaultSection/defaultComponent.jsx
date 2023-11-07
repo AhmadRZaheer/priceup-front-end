@@ -556,12 +556,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                 gap: 4,
                 alignContent: "center",
                 padding: "15px 10px 15px 10px",
+                alignItems: "center",
               }}
             >
               <div
                 style={{
                   width: "250px",
                   padding: 4,
+                  marginTop: "22px",
                 }}
               >
                 Heavy Duty Option
@@ -569,6 +571,7 @@ const DefaultComponent = ({ showSnackbar }) => {
               <div
                 style={{
                   width: "250px",
+                  marginTop: "22px",
                 }}
               >
                 <Box sx={{ width: "220px" }}>
@@ -604,42 +607,52 @@ const DefaultComponent = ({ showSnackbar }) => {
                   display: "flex",
                   width: "250px",
                   gap: 2,
+                  alignItems: "center",
                 }}
               >
-                <TextField
-                  type="number"
-                  size="small"
-                  variant="outlined"
-                  name="heavyDutyOption.threshold"
-                  style={{
-                    width: "120px",
-                    padding: 1,
-                    marginX: 1,
-                  }}
-                  value={
-                    formik.values.heavyDutyOption.threshold !== undefined
-                      ? formik.values.heavyDutyOption.threshold
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <TextField
-                  type="number"
-                  size="small"
-                  variant="outlined"
-                  name="heavyDutyOption.height"
-                  style={{
-                    width: "120px",
-                  }}
-                  value={
-                    formik.values.heavyDutyOption.height !== undefined
-                      ? formik.values.heavyDutyOption.height
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
+                {/* width */}
+                <Box>
+                  <Typography>Width</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="heavyDutyOption.threshold"
+                    style={{
+                      width: "120px",
+                      padding: 1,
+                      marginX: 1,
+                    }}
+                    value={
+                      formik.values.heavyDutyOption.threshold !== undefined
+                        ? formik.values.heavyDutyOption.threshold
+                        : 0
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
+
+                {/* height */}
+                <Box>
+                  <Typography>Height</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="heavyDutyOption.height"
+                    style={{
+                      width: "120px",
+                    }}
+                    value={
+                      formik.values.heavyDutyOption.height !== undefined
+                        ? formik.values.heavyDutyOption.height
+                        : 0
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
               </Box>
             </div>
 
@@ -657,6 +670,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 style={{
                   width: "250px",
                   padding: 4,
+                  marginTop: "24px",
                 }}
               >
                 Heavy Pivot Option
@@ -666,7 +680,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   width: "250px",
                 }}
               >
-                <Box sx={{ width: "220px" }}>
+                <Box sx={{ width: "220px", marginTop: "24px" }}>
                   <TextField
                     select
                     size="small"
@@ -701,40 +715,46 @@ const DefaultComponent = ({ showSnackbar }) => {
                   gap: 2,
                 }}
               >
-                <TextField
-                  type="number"
-                  size="small"
-                  variant="outlined"
-                  name="heavyPivotOption.height"
-                  style={{
-                    width: "120px",
-                  }}
-                  value={
-                    formik.values.heavyPivotOption.height !== undefined
-                      ? formik.values.heavyPivotOption.height
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-                <TextField
-                  type="number"
-                  size="small"
-                  variant="outlined"
-                  name="heavyPivotOption.threshold"
-                  style={{
-                    width: "120px",
-                    padding: 1,
-                    marginX: 1,
-                  }}
-                  value={
-                    formik.values.heavyPivotOption.threshold !== undefined
-                      ? formik.values.heavyPivotOption.threshold
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
+                <Box>
+                  <Typography>Width</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="heavyPivotOption.threshold"
+                    style={{
+                      width: "120px",
+                      padding: 1,
+                      marginX: 1,
+                    }}
+                    value={
+                      formik.values.heavyPivotOption.threshold !== undefined
+                        ? formik.values.heavyPivotOption.threshold
+                        : 0
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
+                <Box>
+                  <Typography>Height</Typography>
+                  <TextField
+                    type="number"
+                    size="small"
+                    variant="outlined"
+                    name="heavyPivotOption.height"
+                    style={{
+                      width: "120px",
+                    }}
+                    value={
+                      formik.values.heavyPivotOption.height !== undefined
+                        ? formik.values.heavyPivotOption.height
+                        : 0
+                    }
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </Box>
               </Box>
             </div>
 
@@ -1648,7 +1668,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               ></div>{" "}
             </div>
-            
+
             {/* notch */}
             <div
               style={{

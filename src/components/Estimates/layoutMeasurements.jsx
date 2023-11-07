@@ -21,6 +21,8 @@ import {
   getDoorWidth,
   setDoorWidth,
   getMeasurementSide,
+  setContent,
+  getListData,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
@@ -39,6 +41,8 @@ const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSide = useSelector(getMeasurementSide);
+  const listContent = useSelector(getListData);
+
   console.log(measurementSide, "measurementSide");
 
   const initialValues = measurementSide.reduce((acc, item) => {
@@ -80,8 +84,25 @@ const LayoutMeasurements = () => {
       const result = calculateAreaAndPerimeter(measurementsArray, selectedData?.settings?.variant);
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
-
       dispatch(updateMeasurements(measurementsArray));
+
+      /** switch hinges if width increases layout defaults */
+        if (doorWidthFromredux > selectedData?.settings?.heavyDutyOption?.threshold) {
+          let hingesType = null;
+          hingesType = listContent?.hinges?.find(
+            (item) =>
+              item._id === selectedData?.settings?.heavyDutyOption?.heavyDutyType
+          );
+          dispatch(setContent({ type: "hinges", item: hingesType }));
+        }else{
+          let hingesType = null;
+        hingesType = listContent?.hinges?.find(
+          (item) =>
+            item._id === selectedData?.settings?.hinges?.hingesType
+        );
+        dispatch(setContent({ type: "hinges", item: hingesType }));
+        }
+      /** end */
       if (!editField) {
         dispatch(setDoorWidth(editDebouncedValue));
       }
@@ -132,7 +153,7 @@ const LayoutMeasurements = () => {
       measurementsArray,
       selectedData?.settings?.variant
     );
-    dispatch(setDoorWidth(result.doorWidth));
+        dispatch(setDoorWidth(result.doorWidth));
     setEditDebouncedValue(result.doorWidth);
     // if (result?.panelWidth) dispatch(setPanelWidth(result.panelWidth));
 
@@ -213,7 +234,7 @@ const LayoutMeasurements = () => {
                   paddingBottom: 1,
                 }}
               >
-                Enter Measurements
+                Enter Measurements 
               </Typography>
               <Typography
                 sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
