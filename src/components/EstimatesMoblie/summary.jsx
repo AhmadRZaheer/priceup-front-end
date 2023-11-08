@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
 import CustomImage from "../../Assets/customlayoutimage.svg";
-import { useEditEstimates, useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
-import { useNavigate } from 'react-router-dom';
+import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import {
   selectedItem,
   setNavigation,
@@ -16,15 +15,27 @@ import {
   getMeasurementSide,
   getLayoutPerimeter,
   getQuoteId,
+  getDoorWidth,
+  getHardwareTotal,
+  getGlassTotal,
+  getGlassAddonsTotal,
+  getFabricationTotal,
+  getMiscTotal,
+  getLaborTotal,
 } from "../../redux/estimateCalculations";
 
-const Summary = ({ handleOpen, }) => {
+const Summary = ({ handleOpen }) => {
+  const hardwarePrice = useSelector(getHardwareTotal);
+  const glassPrice = useSelector(getGlassTotal);
+  const glassAddonsPrice = useSelector(getGlassAddonsTotal);
+  const fabricationPrice = useSelector(getFabricationTotal);
+  const miscPrice = useSelector(getMiscTotal);
+  const laborPrice = useSelector(getLaborTotal);
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
-  const navigate = useNavigate()
   const totalPrice = useSelector(getTotal);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -33,7 +44,9 @@ const Summary = ({ handleOpen, }) => {
   });
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
-  const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
+  const layoutImage = selectedData?.image
+    ? `${backendURL}/${selectedData?.image}`
+    : CustomImage;
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const measurements = useSelector(getMeasurementSide);
@@ -41,34 +54,42 @@ const Summary = ({ handleOpen, }) => {
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
   const updatecheck = useSelector(getQuoteState);
+  const doorWidth = useSelector(getDoorWidth);
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
-        count: row.count
-      }
+        count: row.count,
+      };
     });
-    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count
+    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
+      (row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
       }
-    });
-    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count
+    );
+    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
+      (row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
       }
-    });
-    const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count
-      }
-    });
-    const glassAddonsArray = estimatesContent?.glassAddons?.map((item) => item?._id);
+    );
+    const glassToGlassArray =
+      estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+        return {
+          type: row.item._id,
+          count: row.count,
+        };
+      });
+    const glassAddonsArray = estimatesContent?.glassAddons?.map(
+      (item) => item?._id
+    );
     const estimate = {
       hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
       handles: {
@@ -121,7 +142,7 @@ const Summary = ({ handleOpen, }) => {
       estimateData: estimate,
       id: quoteId,
     });
-  }
+  };
   const showSnackbar = (message, severity) => {
     setSnackbar({
       open: true,
@@ -259,101 +280,201 @@ const Summary = ({ handleOpen, }) => {
                     .join("’’/ ")}
                   ’’
                 </Typography>
+                <Typography>Door Width {doorWidth}</Typography>
                 <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                   Summary{" "}
                 </Typography>
-                {selectedContent?.hardwareFinishes && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
-                  <Typography>
-                    {selectedContent?.hardwareFinishes?.name}
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                    borderBottom: "2px solid #D0D5DD",
+                    marginBottom: 2,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    {" "}
+                    Total Price
                   </Typography>
-                </Box>}
-                {selectedContent?.handles?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Handles:</Typography>
-                  <Typography>
-                    {selectedContent?.handles?.item?.name} (
-                    {selectedContent?.handles?.count})
+                  <Typography variant="h6">
+                    ${totalPrice?.toFixed(2) || 0}
                   </Typography>
-                </Box>}
-                {selectedContent?.hinges?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Hinges:</Typography>
-                  <Typography>
-                    {selectedContent?.hinges?.item?.name} (
-                    {selectedContent?.hinges?.count})
-                  </Typography>
-                </Box>}
+                </Box>{" "}
+                {selectedContent?.hardwareFinishes && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
+                    <Typography>
+                      {selectedContent?.hardwareFinishes?.name}
+                    </Typography>
+                  </Box>
+                )}
+                {selectedContent?.handles?.item && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Handles:
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.handles?.item?.name} (
+                      {selectedContent?.handles?.count})
+                    </Typography>
+                  </Box>
+                )}
+                {selectedContent?.hinges?.item && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>Hinges:</Typography>
+                    <Typography>
+                      {selectedContent?.hinges?.item?.name} (
+                      {selectedContent?.hinges?.count})
+                    </Typography>
+                  </Box>
+                )}
                 {selectedContent?.mountingChannel?.item && (
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Channel:</Typography>
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Channel:
+                    </Typography>
                     <Typography>
                       {selectedContent?.mountingChannel?.item?.name}
                     </Typography>
                   </Box>
                 )}
-                {selectedContent?.mountingClamps?.wallClamp?.length ?
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>WallClamps: </Typography>
-                    {selectedContent?.mountingClamps?.wallClamp?.map((row) =>
-                      <Typography>{row.item.name} ({row.count}) </Typography>
-                    )}
-                  </Box> : ''}
-                {selectedContent?.mountingClamps?.sleeveOver?.length ?
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
-                    {selectedContent?.mountingClamps?.sleeveOver?.map((row) =>
-                      <Typography>{row.item.name} ({row.count}) </Typography>
-                    )}
-                  </Box> : ''}
-                {selectedContent?.mountingClamps?.glassToGlass?.length ?
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
-                    {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
-                      <Typography>{row.item.name} ({row.count}) </Typography>
-                    )}
-                  </Box> : ''}
-                {selectedContent?.glassType?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    Glass Type:
-                  </Typography>
-                  <Typography>
-                    {selectedContent?.glassType?.item?.name} (
-                    {selectedContent?.glassType?.thickness})
-                  </Typography>
-                </Box>}
-                {selectedContent?.slidingDoorSystem?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Sliding Door System:</Typography>
-                  <Typography>
-                    {selectedContent?.slidingDoorSystem?.item?.name} (
-                    {selectedContent?.slidingDoorSystem?.count})
-                  </Typography>
-                </Box>}
-                {selectedContent?.transom && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Transom: </Typography>
-                  <Typography></Typography>
-                </Box>}
-                {selectedContent?.header?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Header:</Typography>
-                  <Typography>
-                    {selectedContent?.header?.item?.name} (
-                    {selectedContent?.header?.count})
-                  </Typography>
-                </Box>}
-                {selectedContent?.glassAddons?.length ? <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>
-                    Glass Addons:
-                  </Typography>
-                  {selectedContent?.glassAddons?.map((item) =>
-                    <Typography>
-                      {`${item?.name} `}
+                {selectedContent?.mountingClamps?.wallClamp?.length ? (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      WallClamps:{" "}
                     </Typography>
-                  )}
-                </Box> : ''}
-                {(selectedContent?.hardwareAddons?.length > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Add ons: </Typography>
-                  <Typography>
-                    {selectedContent?.hardwareAddons?.map((row) => ` ${row?.item?.name} (${row?.count})`)}{" "}
-                  </Typography>
-                </Box>}
+                    {selectedContent?.mountingClamps?.wallClamp?.map((row) => (
+                      <Typography>
+                        {row.item.name} ({row.count}){" "}
+                      </Typography>
+                    ))}
+                  </Box>
+                ) : (
+                  ""
+                )}
+                {selectedContent?.mountingClamps?.sleeveOver?.length ? (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Sleeve Over:{" "}
+                    </Typography>
+                    {selectedContent?.mountingClamps?.sleeveOver?.map((row) => (
+                      <Typography>
+                        {row.item.name} ({row.count}){" "}
+                      </Typography>
+                    ))}
+                  </Box>
+                ) : (
+                  ""
+                )}
+                {selectedContent?.mountingClamps?.glassToGlass?.length ? (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Glass To Glass:{" "}
+                    </Typography>
+                    {selectedContent?.mountingClamps?.glassToGlass?.map(
+                      (row) => (
+                        <Typography>
+                          {row.item.name} ({row.count}){" "}
+                        </Typography>
+                      )
+                    )}
+                  </Box>
+                ) : (
+                  ""
+                )}
+                {selectedContent?.glassType?.item && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Glass Type:
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.glassType?.item?.name} (
+                      {selectedContent?.glassType?.thickness})
+                    </Typography>
+                  </Box>
+                )}
+                {selectedContent?.slidingDoorSystem?.item && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Sliding Door System:
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.slidingDoorSystem?.item?.name} (
+                      {selectedContent?.slidingDoorSystem?.count})
+                    </Typography>
+                  </Box>
+                )}
+                {selectedContent?.transom && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Transom:{" "}
+                    </Typography>
+                    <Typography></Typography>
+                  </Box>
+                )}
+                {selectedContent?.header?.item && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>Header:</Typography>
+                    <Typography>
+                      {selectedContent?.header?.item?.name} (
+                      {selectedContent?.header?.count})
+                    </Typography>
+                  </Box>
+                )}
+                {selectedContent?.glassAddons?.length ? (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Glass Addons:
+                    </Typography>
+                    {selectedContent?.glassAddons?.map((item) => (
+                      <Typography>{`${item?.name} `}</Typography>
+                    ))}
+                  </Box>
+                ) : (
+                  ""
+                )}
+                {selectedContent?.hardwareAddons?.length > 0 && (
+                  <Box
+                    sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                  >
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      Add ons:{" "}
+                    </Typography>
+                    <Typography>
+                      {selectedContent?.hardwareAddons?.map(
+                        (row) => ` ${row?.item?.name} (${row?.count})`
+                      )}{" "}
+                    </Typography>
+                  </Box>
+                )}
                 <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
                   <Typography sx={{ fontWeight: "bold" }}>People: </Typography>
                   <Typography>{selectedContent?.people}</Typography>
@@ -362,6 +483,10 @@ const Summary = ({ handleOpen, }) => {
                   <Typography sx={{ fontWeight: "bold" }}>Hours: </Typography>
                   <Typography>{selectedContent?.hours}</Typography>
                 </Box>
+                <Typography> </Typography>
+                <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                  Pricing Sub Categories{" "}
+                </Typography>
                 <Typography> </Typography>
                 <Box
                   sx={{
@@ -373,11 +498,98 @@ const Summary = ({ handleOpen, }) => {
                     paddingY: 1,
                   }}
                 >
-                  <Typography sx={{ fontWeight: "bold" }}>Price</Typography>
-                  <Typography variant="h6">
-                    ${totalPrice?.toFixed(2) || 0}
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Hardware Price
                   </Typography>
-                </Box>{" "}
+                  <Typography variant="h6">
+                    ${hardwarePrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Glass Price
+                  </Typography>
+                  <Typography variant="h6">
+                    ${glassPrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Glass Addons Price
+                  </Typography>
+                  <Typography variant="h6">
+                    ${glassAddonsPrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Fabrication Price
+                  </Typography>
+                  <Typography variant="h6">
+                    ${fabricationPrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Misc Price
+                  </Typography>
+                  <Typography variant="h6">
+                    ${miscPrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    borderTop: "2px solid #D0D5DD",
+                    marginTop: 1,
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold" }}>
+                    Labor Price
+                  </Typography>
+                  <Typography variant="h6">
+                    ${laborPrice?.toFixed(2) || 0}
+                  </Typography>
+                </Box>
               </Box>
             </Box>
           </Box>
@@ -420,10 +632,9 @@ const Summary = ({ handleOpen, }) => {
               variant="contained"
               onClick={() => {
                 if (["create", "custom"].includes(updatecheck)) {
-                  handleOpen()
-                }
-                else {
-                  handleEditEstimate()
+                  handleOpen();
+                } else {
+                  handleEditEstimate();
                 }
               }}
               sx={{
