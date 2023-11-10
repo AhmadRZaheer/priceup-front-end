@@ -7,7 +7,6 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
-  resetState,
   selectedItem,
   setListData,
   setNavigation,
