@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
@@ -158,7 +158,7 @@ const Summary = ({ handleOpen }) => {
     }));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       dispatch(setNavigation("existing"));

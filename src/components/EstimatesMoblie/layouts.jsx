@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
+  resetState,
   selectedItem,
   setListData,
   setNavigation,
@@ -55,6 +56,7 @@ const Layout = () => {
     } else dispatch(setNavigation("measurements"));
   };
   const handleselectcustom = () => {
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
