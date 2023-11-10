@@ -50,7 +50,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const updatecheck = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
-    const quoteActiveState = useMemo(() => {
+  const quoteActiveState = useMemo(() => {
     let state = "";
     if (updatecheck === "create") {
       state = selectedData?.settings?.variant;
@@ -187,8 +187,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       )
     );
   };
-  const { data: estimatesData } = useFetchDataEstimate();
-  
+  const { data: estimatesData, refetch: Refetched } = useFetchDataEstimate();
+
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
@@ -215,7 +215,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       severity,
     });
   };
-  const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");

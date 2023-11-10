@@ -3,7 +3,7 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "../../Assets/customlayoutimage.svg";
-import { KeyboardArrowLeft } from "@mui/icons-material";
+import { KeyboardArrowLeft, NoEncryption } from "@mui/icons-material";
 import {
   setLayoutArea,
   setLayoutPerimeter,
@@ -177,7 +177,7 @@ const CustomLayout = () => {
               border: { md: "1px solid #EAECF0", xs: "none" },
               paddingX: { md: 2, xs: 0 },
               paddingY: { md: 4, xs: 0 },
-              rowGap: 4,
+              rowGap: { md: 4, xs: 2 },
               background: { md: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
@@ -216,20 +216,23 @@ const CustomLayout = () => {
                 width: { md: "96.5%", xs: "100%" },
                 paddingY: { md: 4, xs: 0 },
                 paddingX: { md: 2, xs: 0 },
-                height: "100%",
+                height: "99%",
                 background: { md: "#D9D9D9", xs: "#08061B" },
-                gap: 4,
+                gap: { md: 4, xs: 0 },
                 borderRadius: "8px",
                 overflow: "auto",
-                mb: { md: 0, xs: 9 },
-                position: "relative"
+                mb: { md: 0, xs: 0 },
+                maxHeight: { md: "100vh", xs: "90vh" },
+                position: "relative",
               }}
             >
               <Box
                 sx={{
                   display: "flex",
-                  width: { md: "48.5%", xs: "91.6%" },
-                  maxHeight: 340,
+                  width: { md: "48.5%", xs: "88.6%" },
+                  minHeight: "27vh",
+                  maxHeight: { md: 340, xs: "25vh" },
+                  marginX: "auto",
                   flexDirection: "column",
                   overflowY: "auto",
                   gap: { md: 1, xs: 2 },
@@ -245,176 +248,208 @@ const CustomLayout = () => {
                   paddingY: { md: 0, xs: 2 },
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: { md: 12, xs: 16 },
-                    ml: 2,
-                    justifyContent: "center",
-                    width: { md: 315, xs: "100%" },                    
-                    paddingLeft: "25px"
-                  }}
-                >
-                 
-                 <Box sx={{
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Width
-                  </Typography>
-                  </Box>
-
-                 <Box sx={{
-                    paddingLeft: "20px"
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Height
-                  </Typography>
-                  </Box>
-                 
-                  <Box sx={{
-                    paddingLeft: "10px"
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Quantity
-                  </Typography>
-                  </Box>
-                </Box>
-                {/* a */}
-                {Array.from({ length: numRows }).map((_, index) => (
+                <Box sx={{ pb: { md: 0, xs: 0 }, my: 2 }}>
+                  {" "}
                   <Box
-                    key={index}
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 1.5,
+                      gap: { md: 12, xs: 7 },
+                      ml: { md: 2, xs: 0 },
+                      justifyContent: { md: "center", xs: "flex-start" },
+                      width: { md: 315, xs: "90%" },
+                      paddingLeft: "25px",
                     }}
                   >
-                    {/* <Typography sx={{ mr: 2, width: 9 }}>{`a${
+                    <Box sx={{}}>
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          color: { md: "#9c9c9c", xs: "white" },
+                        }}
+                      >
+                        Width
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        paddingLeft: "20px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          color: { md: "#9c9c9c", xs: "white" },
+                        }}
+                      >
+                        Height
+                      </Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        paddingLeft: "10px",
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          fontSize: 18,
+                          color: { md: "#9c9c9c", xs: "white" },
+                        }}
+                      >
+                        Quantity
+                      </Typography>
+                    </Box>
+                  </Box>
+                  {/* a */}
+                  {Array.from({ length: numRows }).map((_, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1.5,
+                        mb: 1,
+                      }}
+                    >
+                      {/* <Typography sx={{ mr: 2, width: 9 }}>{`a${
                       index + 1
                     }`}</Typography> */}
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="outlined"
-                      name={`aWidth${index}`}
-                      placeholder="0"
-                      style={{
-                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
-                        background: "white",
-                        borderRadius: "8px",
-                        border: "1px solid #D0D5DD",
-                        width: { md: "28%", xs: "50%" },
-                      }}
-                      value={
-                        (
-                          getNearestSmallerKeyWithValues(values, index + 1) ||
-                          values[`${index + 1}`]
-                        )?.width || ""
-                      }
-                      onChange={(e) => {
-                        setValues((vals) => ({
-                          ...vals,
-                          [index + 1]: {
-                            ...vals[index + 1],
-                            width: e.target.value,
-                          },
-                        }));
-                      }}
-                    />
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="outlined"
-                      name={`aHeight${index}`}
-                      placeholder="0"
-                      style={{
-                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
-                        background: "white",
-                        borderRadius: "8px",
-                        border: "1px solid #D0D5DD",
-                        width: { md: "28%", xs: "50%" },
-                      }}
-                      value={
-                        (
-                          getNearestSmallerKeyWithValues(values, index + 1) ||
-                          values[`${index + 1}`]
-                        )?.height || ""
-                      }
-                      onChange={(e) => {
-                        setValues((vals) => ({
-                          ...vals,
-                          [index + 1]: {
-                            ...vals[index + 1],
-                            height: e.target.value,
-                          },
-                        }));
-                      }}
-                    />
-                    {typeof values[index + 1]?.count !== "undefined" && (
-                      <>
-                        <TextField
-                          disabled={isThereHigherKeyAvailable(
-                            values,
-                            index + 1
-                          )}
-                          type="number"
-                          size="small"
-                          variant="outlined"
-                          name={`Count${index}`}
-                          value={values[index + 1]?.count || ""}
-                          placeholder="quantity"
-                          style={{
-                            background: "white",
-                            borderRadius: "8px",
-                            border: "1px solid #D0D5DD",
-                            width: { md: "15%", xs: "20%" },
-                          }}
-                          onChange={(e) => {
-                            setValues((vals) => ({
-                              ...vals,
-                              [index + 1]: {
-                                ...vals[index + 1],
-                                count: parseInt(e.target.value),
-                              },
-                            }));
-                          }}
-                        />
-                        {Math.max(...Object.keys(values)) === index + 1 &&
-                          index + 1 !== 1 && (
-                            <a
-                              href="#"
-                              onClick={(event) => {
-                                event.preventDefault();
-                                setValues((vals) => {
-                                  const { [index + 1]: notWanted, ...rest } =
-                                    vals;
+                      <TextField
+                        type="number"
+                        size="small"
+                        variant="outlined"
+                        name={`aWidth${index}`}
+                        placeholder="0"
+                        style={{
+                          display:
+                            typeof values[index + 1]?.count == "undefined"
+                              ? "none"
+                              : "block",
+                          background: "white",
+                          borderRadius: "8px",
+                          border: "1px solid #D0D5DD",
+                          width: { md: "28%", xs: "20%" },
+                        }}
+                        value={
+                          (
+                            getNearestSmallerKeyWithValues(values, index + 1) ||
+                            values[`${index + 1}`]
+                          )?.width || ""
+                        }
+                        onChange={(e) => {
+                          setValues((vals) => ({
+                            ...vals,
+                            [index + 1]: {
+                              ...vals[index + 1],
+                              width: e.target.value,
+                            },
+                          }));
+                        }}
+                      />
+                      <TextField
+                        type="number"
+                        size="small"
+                        variant="outlined"
+                        name={`aHeight${index}`}
+                        placeholder="0"
+                        style={{
+                          display:
+                            typeof values[index + 1]?.count == "undefined"
+                              ? "none"
+                              : "block",
+                          background: "white",
+                          borderRadius: "8px",
+                          border: "1px solid #D0D5DD",
+                          width: { md: "28%", xs: "20%" },
+                        }}
+                        value={
+                          (
+                            getNearestSmallerKeyWithValues(values, index + 1) ||
+                            values[`${index + 1}`]
+                          )?.height || ""
+                        }
+                        onChange={(e) => {
+                          setValues((vals) => ({
+                            ...vals,
+                            [index + 1]: {
+                              ...vals[index + 1],
+                              height: e.target.value,
+                            },
+                          }));
+                        }}
+                      />
+                      {typeof values[index + 1]?.count !== "undefined" && (
+                        <>
+                          <TextField
+                            disabled={isThereHigherKeyAvailable(
+                              values,
+                              index + 1
+                            )}
+                            type="number"
+                            size="small"
+                            variant="outlined"
+                            name={`Count${index}`}
+                            value={values[index + 1]?.count || ""}
+                            placeholder="quantity"
+                            style={{
+                              background: "white",
+                              borderRadius: "8px",
+                              border: "1px solid #D0D5DD",
+                              width: { md: "15%", xs: "20%" },
+                            }}
+                            onChange={(e) => {
+                              setValues((vals) => ({
+                                ...vals,
+                                [index + 1]: {
+                                  ...vals[index + 1],
+                                  count: parseInt(e.target.value),
+                                },
+                              }));
+                            }}
+                          />
+                          {Math.max(...Object.keys(values)) === index + 1 &&
+                            index + 1 !== 1 && (
+                              <a
+                                href="#"
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  setValues((vals) => {
+                                    const { [index + 1]: notWanted, ...rest } =
+                                      vals;
 
-                                  return rest;
-                                });
-                              }}
-                            >
-                              <DeleteIcon sx={{ color: "black" }} />
-                            </a>
-                          )}
-                      </>
-                    )}
-                  </Box>
-                ))}
+                                    return rest;
+                                  });
+                                }}
+                              >
+                                <DeleteIcon
+                                  sx={{ color: { md: "black", xs: "white" } }}
+                                />
+                              </a>
+                            )}
+                        </>
+                      )}
+                    </Box>
+                  ))}
+                </Box>
+
                 <Button
                   fullWidth
                   onClick={addRow}
                   sx={{
+                    display: { md: "flex", xs: "none" },
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                     color: "#344054",
                     textTransform: "initial",
                     border: "1px solid #D0D5DD",
-                    backgroundColor: { md: "transparent", xs: "white" },
+                    backgroundColor: { md: "transparent" },
                     height: 40,
                     fontSize: 20,
                     position: "absolute",
-                    width: 480,
-                    bottom: 30
+                    marginX: "auto",
+                    width: { md: 480, xs: "90%" },
+                    bottom: 5,
                   }}
                 >
                   Add Row
@@ -431,15 +466,55 @@ const CustomLayout = () => {
                   minHeight: 100,
                 }}
               >
-                <img
-                  width="300px"
-                  height="340px"
-                  src={CustomImage}
-                  alt="Selected"
-                />
+                <Box sx={{ display: { md: "flex", xs: "none" } }}>
+                  <img
+                    width="300px"
+                    height="340px"
+                    src={CustomImage}
+                    alt="Selected"
+                  />
+                </Box>
+                <Box sx={{ display: { md: "none", xs: "flex" } }}>
+                  <img
+                    width="150px"
+                    height="200px"
+                    src={CustomImage}
+                    alt="Selected"
+                  />
+                </Box>
               </Box>
             </Box>
 
+            <Box
+              sx={{
+                position: { md: "static", xs: "fixed" },
+                bottom: { md: 100, xs: 66 },
+                background: { md: "transparent", xs: "#100d24" },
+                py: 2,
+                display: { md: "none", xs: "flex" },
+                justifyContent: { md: "space-between", xs: "center" },
+                width: "100%",
+              }}
+            >
+              <Button
+                fullWidth
+                onClick={addRow}
+                sx={{
+                  display: { md: "none", sx: "flex" },
+                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                  color: "white",
+                  textTransform: "initial",
+                  border: "1px solid #D0D5DD",
+                  height: 40,
+                  fontSize: 20,
+                  marginX: "auto",
+
+                  width: { md: 480, xs: "92%" },
+                }}
+              >
+                Add Row
+              </Button>
+            </Box>
             <Box
               sx={{
                 position: { md: "static", xs: "fixed" },
