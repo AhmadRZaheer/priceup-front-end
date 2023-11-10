@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
+  resetState,
   selectedItem,
   setListData,
   setNavigation,
@@ -41,7 +42,7 @@ const Layout = () => {
   const [selectCustom, setselectCustom] = useState(false);
 
   const handleBoxClick = (layout) => {
-    console.log('box click');
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
@@ -55,14 +56,15 @@ const Layout = () => {
     } else dispatch(setNavigation("measurements"));
   };
   const handleselectcustom = () => {
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
-console.log(selectedData, "selectedData")
-console.log(selectCustom, "selectCustom")
+  console.log(selectedData, "selectedData");
+  console.log(selectCustom, "selectCustom");
   return (
     <>
       <Box

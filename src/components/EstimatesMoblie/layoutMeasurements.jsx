@@ -1,17 +1,9 @@
-import {
-  Box,
-  CircularProgress,
-  IconButton,
-  TextField,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { Box, CircularProgress, TextField, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 import {
   getDoorWidth,
@@ -150,8 +142,6 @@ const LayoutMeasurements = () => {
     dispatch(setDoorWidth(result.doorWidth));
     setEditDebouncedValue(result.doorWidth);
     // if (result?.panelWidth) dispatch(setPanelWidth(result.panelWidth));
-
-    console.log("hello world");
   }, [debouncedValue]);
 
   const handleInputChange = (event) => {
@@ -235,7 +225,8 @@ const LayoutMeasurements = () => {
               <Box
                 sx={{
                   display: "flex",
-                  width: { md: "48.5%", xs: "92%" },
+                  width: { md: "48.5%", xs: "90%" },
+                  marginX: "auto",
                   height: "100%",
                   flexDirection: "column",
                   gap: { md: 2, xs: 2 },
