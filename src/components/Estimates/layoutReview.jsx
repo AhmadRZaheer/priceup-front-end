@@ -50,7 +50,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const updatecheck = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
-    const quoteActiveState = useMemo(() => {
+  const quoteActiveState = useMemo(() => {
     let state = "";
     if (updatecheck === "create") {
       state = selectedData?.settings?.variant;
@@ -188,7 +188,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     );
   };
   const { data: estimatesData } = useFetchDataEstimate();
-  
+
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
@@ -561,7 +561,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -619,7 +619,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -682,7 +682,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                             border: "1px solid #cccccc",
                             backgroundColor: "white",
                           },
-                          inputProps: { min: 0, max: 50 },
+                          inputProps: { min: 0 },
                         }}
                         InputLabelProps={{
                           style: {
@@ -741,7 +741,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -799,7 +799,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -857,7 +857,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -915,7 +915,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -929,14 +929,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                       variant="outlined"
                       size="small"
                       value={selectedContent.polish}
-                      onChange={(event) =>
+                      onChange={(event) => {
                         dispatch(
                           setInputContent({
                             type: "polish",
                             value: event.target.value,
                           })
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Box>
                 </Box>
@@ -973,7 +973,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -1031,7 +1031,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {

@@ -130,10 +130,9 @@ const FinishItem = ({
     SetUpdateValue(originalArray);
   };
   return (
-    <Box key={index} >
+    <Box key={index}>
       <form onSubmit={formik.handleSubmit}>
         <Box
-        
           style={{
             display: "flex",
             gap: 4,
@@ -141,7 +140,6 @@ const FinishItem = ({
             paddingTop: 4,
             paddingBottom: 4,
           }}
-          
         >
           <Box
             style={{
@@ -167,6 +165,9 @@ const FinishItem = ({
               size="small"
               variant="outlined"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="partNumber"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
@@ -192,6 +193,9 @@ const FinishItem = ({
               size="small"
               variant="outlined"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="cost"
               placeholder="Cost"
               style={{ width: "100%" }}
@@ -228,7 +232,7 @@ const FinishItem = ({
               <FormControlLabel
                 control={
                   <Switch
-                  color="success"
+                    color="success"
                     checked={formik.values.status}
                     onChange={(event) => handleStatusChange(event)}
                     onBlur={formik.handleBlur}

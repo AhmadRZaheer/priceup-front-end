@@ -297,6 +297,9 @@ const CustomLayout = () => {
                     }`}</Typography> */}
                     <TextField
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       size="small"
                       variant="outlined"
                       name={`aWidth${index}`}
@@ -326,9 +329,7 @@ const CustomLayout = () => {
                           },
                         }));
                       }}
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
+                    
                     />
                     <TextField
                       type="number"

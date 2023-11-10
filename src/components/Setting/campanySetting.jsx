@@ -254,6 +254,9 @@ const CampanySetting = () => {
               <p className="explain">Factor to multiply price </p>
               <TextField
                 type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
                 name="miscPricing.pricingFactor"
                 size="small"
                 value={formik.values?.miscPricing?.pricingFactor}
@@ -290,6 +293,9 @@ const CampanySetting = () => {
               <Typography>Hourly rates to be used for labour price</Typography>
               <TextField
                 type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
                 name="miscPricing.hourlyRate"
                 size="small"
                 value={formik.values?.miscPricing?.hourlyRate}
@@ -325,6 +331,9 @@ const CampanySetting = () => {
             <TextField
               sx={{ paddingRight: 19 }}
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="fabricatingPricing.oneHoleOneByTwoInchGlass"
               size="small"
               value={
@@ -344,6 +353,9 @@ const CampanySetting = () => {
             <TextField
               sx={{ paddingRight: 19 }}
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="fabricatingPricing.oneHoleThreeByEightInchGlass"
               size="small"
               value={
@@ -362,6 +374,9 @@ const CampanySetting = () => {
             <Typography>Clamp Cutout (1/2in)</Typography>
             <TextField
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               sx={{ paddingRight: 19 }}
               name="fabricatingPricing.clampCutoutOneByTwoInch"
               size="small"
@@ -379,6 +394,9 @@ const CampanySetting = () => {
             <Typography>Clamp Cutout (3/8in)</Typography>
             <TextField
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               sx={{ paddingRight: 19 }}
               name="fabricatingPricing.clampCutoutThreeByEightInch"
               size="small"
@@ -400,6 +418,9 @@ const CampanySetting = () => {
               sx={{ paddingRight: 19 }}
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="fabricatingPricing.hingeCutoutOneByTwoInch"
               value={formik.values?.fabricatingPricing?.hingeCutoutOneByTwoInch}
               onChange={formik.handleChange}
@@ -417,6 +438,9 @@ const CampanySetting = () => {
               sx={{ paddingRight: 19 }}
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="fabricatingPricing.hingeCutoutThreeByEightInch"
               value={
                 formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch
@@ -437,6 +461,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.minterOneByTwoInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.minterOneByTwoInch}
               onChange={formik.handleChange}
             />
@@ -454,6 +481,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.minterThreeByEightInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.minterThreeByEightInch}
               onChange={formik.handleChange}
             />
@@ -471,6 +501,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.notchOneByTwoInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.notchOneByTwoInch}
               onChange={formik.handleChange}
             />
@@ -488,6 +521,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.notchThreeByEightInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.notchThreeByEightInch}
               onChange={formik.handleChange}
             />
@@ -505,6 +541,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.outageOneByTwoInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.outageOneByTwoInch}
               onChange={formik.handleChange}
             />
@@ -522,6 +561,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.outageThreeByEightInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values?.fabricatingPricing?.outageThreeByEightInch}
               onChange={formik.handleChange}
             />
@@ -539,6 +581,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.polishPricePerOneByTwoInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={
                 formik.values?.fabricatingPricing?.polishPricePerOneByTwoInch
               }
@@ -558,6 +603,9 @@ const CampanySetting = () => {
               name="fabricatingPricing.polishPricePerThreeByEightInch"
               size="small"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={
                 formik.values?.fabricatingPricing
                   ?.polishPricePerThreeByEightInch

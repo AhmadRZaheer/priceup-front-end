@@ -304,10 +304,20 @@ const estimateCalcSlice = createSlice({
     },
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
-      state.content = {
-        ...state.content,
-        [type]: value,
-      };
+      if (["mitre"].includes(type)) {
+        // const mitre = value;
+        const polish = state.perimeter-value;
+        state.content = {
+          ...state.content,
+          mitre: value,
+          polish:polish
+        };
+      } else {
+        state.content = {
+          ...state.content,
+          [type]: value,
+        };
+      }
     },
     setThickness: (state, action) => {
       const { payload } = action;

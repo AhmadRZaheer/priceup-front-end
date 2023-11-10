@@ -168,6 +168,9 @@ const ListOption = ({
               size="small"
               variant="outlined"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               name="partNumber"
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
@@ -194,6 +197,9 @@ const ListOption = ({
               placeholder="Cost"
               style={{ width: "100%" }}
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               value={formik.values.cost}
               onChange={(event) => handleCostChange(event)}
               onBlur={formik.handleBlur}
