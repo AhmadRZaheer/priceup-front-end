@@ -163,7 +163,7 @@ const ListOption = ({
               alignItems: "center",
             }}
           >
-            <Typography>Hardware Part Number</Typography>
+            <Typography>Hardware Part Number </Typography>
             <TextField
               size="small"
               variant="outlined"
@@ -233,6 +233,7 @@ const ListOption = ({
                       onChange={(event) => handleStatusChange(event)}
                       onBlur={formik.handleBlur}
                       name="status"
+                      color="success"
                     />
                   }
                   label={"active"}

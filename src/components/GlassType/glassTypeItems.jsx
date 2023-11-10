@@ -221,7 +221,7 @@ const GlassTypeItem = ({
               <FormControlLabel
                 control={
                   <Switch
-                    color="primary"
+                    color="success"
                     checked={formik.values.status}
                     onChange={(event) => handleStatusChange(event)}
                     onBlur={formik.handleBlur}

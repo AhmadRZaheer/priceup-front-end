@@ -222,7 +222,7 @@ const CustomLayout = () => {
                 borderRadius: "8px",
                 overflow: "auto",
                 mb: { md: 0, xs: 9 },
-                position: "relative"
+                position: "relative",
               }}
             >
               <Box
@@ -252,32 +252,34 @@ const CustomLayout = () => {
                     gap: { md: 12, xs: 16 },
                     ml: 2,
                     justifyContent: "center",
-                    width: { md: 315, xs: "100%" },                    
-                    paddingLeft: "25px"
+                    width: { md: 315, xs: "100%" },
+                    paddingLeft: "25px",
                   }}
                 >
-                 
-                 <Box sx={{
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Width
-                  </Typography>
+                  <Box sx={{}}>
+                    <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
+                      Width
+                    </Typography>
                   </Box>
 
-                 <Box sx={{
-                    paddingLeft: "20px"
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Height
-                  </Typography>
+                  <Box
+                    sx={{
+                      paddingLeft: "20px",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
+                      Height
+                    </Typography>
                   </Box>
-                 
-                  <Box sx={{
-                    paddingLeft: "10px"
-                  }}> 
-                  <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
-                    Quantity
-                  </Typography>
+
+                  <Box
+                    sx={{
+                      paddingLeft: "10px",
+                    }}
+                  >
+                    <Typography sx={{ fontSize: 18, color: "#9c9c9c" }}>
+                      Quantity
+                    </Typography>
                   </Box>
                 </Box>
                 {/* a */}
@@ -300,7 +302,10 @@ const CustomLayout = () => {
                       name={`aWidth${index}`}
                       placeholder="0"
                       style={{
-                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
+                        display:
+                          typeof values[index + 1]?.count == "undefined"
+                            ? "none"
+                            : "block",
                         background: "white",
                         borderRadius: "8px",
                         border: "1px solid #D0D5DD",
@@ -321,15 +326,24 @@ const CustomLayout = () => {
                           },
                         }));
                       }}
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                     />
                     <TextField
                       type="number"
                       size="small"
                       variant="outlined"
                       name={`aHeight${index}`}
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       placeholder="0"
                       style={{
-                        display: typeof values[index + 1]?.count == "undefined" ? "none" : "block",
+                        display:
+                          typeof values[index + 1]?.count == "undefined"
+                            ? "none"
+                            : "block",
                         background: "white",
                         borderRadius: "8px",
                         border: "1px solid #D0D5DD",
@@ -364,6 +378,9 @@ const CustomLayout = () => {
                           name={`Count${index}`}
                           value={values[index + 1]?.count || ""}
                           placeholder="quantity"
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
                           style={{
                             background: "white",
                             borderRadius: "8px",
@@ -406,15 +423,19 @@ const CustomLayout = () => {
                   onClick={addRow}
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
+                    color: { md: "white", xs: "#344054" },
                     textTransform: "initial",
                     border: "1px solid #D0D5DD",
-                    backgroundColor: { md: "transparent", xs: "white" },
+                    backgroundColor: { md: "#8477da", xs: "white" },
                     height: 40,
                     fontSize: 20,
                     position: "absolute",
                     width: 480,
-                    bottom: 30
+                    bottom: 30,
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                      color: "white",
+                    },
                   }}
                 >
                   Add Row

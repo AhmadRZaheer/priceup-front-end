@@ -20,10 +20,7 @@ import Snackbars from "../Modal/snackBar";
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
-  const {
-    mutate: editFinish,
-    isSuccess: SuccessForEdit,
-  } = useEditSetting();
+  const { mutate: editFinish, isSuccess: SuccessForEdit } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -134,7 +131,12 @@ const CampanySetting = () => {
         >
           <Typography variant="h4">Setting</Typography>
           <Box sx={{ width: "200px" }}>
-            <Button sx={{backgroundColor: "#8477DA", boxShadow: 0}} fullWidth variant="contained" onClick={formik.handleSubmit}>
+            <Button
+              sx={{ backgroundColor: "#8477DA", boxShadow: 0 }}
+              fullWidth
+              variant="contained"
+              onClick={formik.handleSubmit}
+            >
               Update
             </Button>
           </Box>
@@ -262,7 +264,7 @@ const CampanySetting = () => {
                 <FormControlLabel
                   control={
                     <Switch
-                      color="primary"
+                      color="success"
                       checked={
                         formik.values?.miscPricing?.pricingFactorStatus || false
                       }
@@ -295,7 +297,7 @@ const CampanySetting = () => {
               />
               <FormControlLabel
                 sx={{ visibility: "hidden" }}
-                control={<Switch />}
+                control={<Switch color="success" />}
                 label={"active"}
               />
             </Box>
@@ -416,7 +418,9 @@ const CampanySetting = () => {
               size="small"
               type="number"
               name="fabricatingPricing.hingeCutoutThreeByEightInch"
-              value={formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch}
+              value={
+                formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch
+              }
               onChange={formik.handleChange}
             />
           </Box>
