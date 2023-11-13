@@ -339,7 +339,7 @@ const LayoutMeasurements = () => {
                           style: {
                             color: "white",
                             "&::placeholder": {
-                              color: "white !important",
+                              color: editField ? "white" : "black",
                             },
                           },
                           inputProps: { min: 1 },
@@ -349,12 +349,16 @@ const LayoutMeasurements = () => {
                             color: "rgba(255, 255, 255, 0.5)",
                           },
                         }}
-                        style={{
+                        sx={{
                           background: "#14112c",
                           borderRadius: "8px",
                           border: "1px solid #29263f",
-                          color: "white !important",
+                          color: "white",
                           width: "100%",
+                          "& .MuiInputBase-input.Mui-disabled": {
+                            color: "gray",
+                            WebkitTextFillColor: "gray",
+                          },
                         }}
                         name="door"
                         onChange={(e) => handleInputChange(e)}
