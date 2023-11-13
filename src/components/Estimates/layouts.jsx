@@ -72,27 +72,58 @@ export default function Layout() {
           background: "white",
           height: "98vh",
           paddingY: 4,
+          background: { sm: "white", xs: "#08061B" },
         }}
       >
         <Box
           sx={{
-            width: { md: "70%", sm: "100%", sx: "100%" },
+            width: { md: "70%", sm: "100%", xs: "100%" },
             margin: { md: "auto", xs: 0 },
             height: "100%",
             display: "flex",
             alignItems: { md: "center", xs: "start" },
             flexDirection: "column",
-            p: { md: 2, sx: 0 },
+            p: { md: 2, xs: 0 },
             gap: { md: 4, xs: 0 },
           }}
         >
-          <Typography
-            sx={{ display: { md: "block", xs: "none" } }}
-            textAlign={"center"}
-            variant="h4"
-          >
-            Create New Estimate
-          </Typography>
+          <div style={{ width: "100%" }}>
+            <Box
+              sx={{
+                backgroundColor: { xs: "#100D24", sm: "white" },
+                padding: { xs: "20px 15px", sm: "0px" },
+                borderBottomRightRadius: { xs: "16px", sm: "0px" },
+                borderBottomLeftRadius: { xs: "16px", sm: "0px" },
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              <NavLink to="/estimates">
+                <Box
+                  sx={{
+                    display: { xs: "block", sm: "none" },
+                    paddingRight: "20px",
+                    paddingTop: "4px",
+                  }}
+                >
+                  {" "}
+                  <img src="/icons/left_vector.svg" alt="<" />
+                </Box>
+              </NavLink>
+
+              <Typography
+                sx={{
+                  color: { sm: "black", xs: "white" },
+                  fontSize: { xs: "24px", sm: "2.124rem" },
+                  textAlign: { xs: "start", sm: "center" },
+                  fontWeight: 500,
+                }}
+                variant="h4"
+              >
+                Create New Qoute
+              </Typography>
+            </Box>
+          </div>
           <Box
             sx={{
               width: { md: "94%", sm: "98%", xs: "91.3%" },
@@ -105,7 +136,7 @@ export default function Layout() {
               paddingX: 2,
               paddingY: 4,
               rowGap: 2,
-              background: { md: "white", xs: "#100D24" },
+              background: { md: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
             }}
@@ -116,9 +147,10 @@ export default function Layout() {
                   fontSize: { md: "18px", xs: "18px" },
                   color: { md: "black", xs: "white" },
                   paddingBottom: 1,
+                  fontWeight: 600,
                 }}
               >
-                Select Layout 
+                Select Layout
               </Typography>
               <Typography
                 sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
@@ -192,11 +224,12 @@ export default function Layout() {
               <NavLink to="/estimates">
                 <Button
                   sx={{
-                    width: 180,
+                    width: { xs: 120, sm: 180 },
                     color: "black",
                     border: "1px solid black",
                     fontSize: 18,
                     ml: 2,
+                    backgroundColor: "white",
                   }}
                   fullWidth
                   variant="outlined"
@@ -208,10 +241,11 @@ export default function Layout() {
               <Button
                 disabled={selectedData || selectCustom ? false : true}
                 sx={{
-                  width: 180,
+                  width: { xs: 120, sm: 180 },
                   backgroundColor: "#8477DA",
                   fontSize: 18,
                   "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
                 }}
                 onClick={setStorePage}
                 fullWidth

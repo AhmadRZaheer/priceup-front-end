@@ -79,7 +79,7 @@ const ChannelTypeDesktop = ({
         <Button
           onClick={opneClose}
           id="basic-button"
-          sx={{ color: { md: "#000000 !important ", xs: "white" } }}
+          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -106,7 +106,7 @@ const ChannelTypeDesktop = ({
           sx={{
             height: "250px",
             overflowY: "scroll",
-            color: { md: "#000000", xs: "white" },
+            color: { sm: "#000000", xs: "white" },
             display: "flex",
             flexDirection: "column",
             width: "100%",

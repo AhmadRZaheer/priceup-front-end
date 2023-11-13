@@ -52,21 +52,21 @@ const Summary = () => {
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          p: { md: 2, sx: 0 },
-          gap: { md: 4, xs: 0 },
+          p: { sm: 2, xs: 0 },
+          gap: { sm: 4, xs: 0 },
         }}
       >
         <Box
           sx={{
             display: "flex",
             width: "100%",
-            paddingY: { md: 4, xs: 1 },
-            paddingX: { md: 2, xs: 0 },
-            background: "white",
-            margin: { md: 0, xs: "auto" },
+            paddingY: { sm: 4, xs: 1 },
+            paddingX: { sm: 2, xs: 0 },
+            background: { sm: "white" },
+            margin: { sm: 0, xs: "auto" },
             borderRadius: "8px",
             justifyContent: "space-between",
-            flexDirection: { md: "row", xs: "column" },
+            flexDirection: { sm: "row", xs: "column" },
             // minHeight: "50vh",
             // maxHeight: "79vh",
           }}
@@ -86,7 +86,7 @@ const Summary = () => {
                 width: "87%",
                 justifyContent: "center",
                 background: "rgba(217, 217, 217, 0.3)",
-                margin: { md: 0, xs: "auto" },
+                margin: { sm: 0, xs: "auto" },
                 p: 3,
                 borderRadius: 2,
               }}
@@ -101,30 +101,71 @@ const Summary = () => {
             <Box
               sx={{
                 width: "100%",
-
+                color: { xs: "white", sm: "black" },
                 paddingTop: 2,
                 margin: "auto",
               }}
             >
-              <Typography>
-                {measurements
-                  .filter(
-                    (measurement) =>
-                      measurement.value !== null && measurement.value !== ""
-                  )
-                  .map((measurement) => measurement.value)
-                  .join("’’/ ")}
-              </Typography>
-              <Typography>Door Width {doorWidth}</Typography>
-              <Typography>Square Foot {sqftArea}</Typography>
+              <Accordion
+                sx={{
+                  paddingX: "6px",
+                  border: "none",
+                  boxShadow: "none !important",
+                  ".MuiPaper-elevation": {
+                    border: " none !important",
+                    boxShadow: "none !important",
+                  },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                  sx={{
+                    padding: 0,
+                    margin: 0,
+                    borderBottom: "none",
+                    height: "30px",
+                  }}
+                >
+                  <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                    Dimention
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails
+                  sx={{
+                    padding: 0,
+                    borderTop: "2px solid #D0D5DD",
+                    paddingY: 1,
+                  }}
+                >
+                  <Typography>
+                    {measurements
+                      .filter(
+                        (measurement) =>
+                          measurement.value !== null && measurement.value !== ""
+                      )
+                      .map((measurement) => measurement.value)
+                      .join("’’/ ")}
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Door Width: </span>
+                    {doorWidth}
+                  </Typography>
+                  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
+                    {sqftArea}
+                  </Typography>
+                </AccordionDetails>
+              </Accordion>
               <Box
                 sx={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
                   paddingY: 1,
+                  paddingX: "6px",
                 }}
               >
                 <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
@@ -138,6 +179,7 @@ const Summary = () => {
               <Box sx={{ borderTop: "2px solid #D0D5DD" }}>
                 <Accordion
                   sx={{
+                    paddingX: "6px",
                     border: "none",
                     boxShadow: "none !important",
                     ".MuiPaper-elevation": {
@@ -150,7 +192,12 @@ const Summary = () => {
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
-                    sx={{ padding: 0, margin: 0, borderBottom: "none" }}
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                      borderBottom: "none",
+                      height: "30px",
+                    }}
                   >
                     <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
                       Summary{" "}
@@ -497,6 +544,7 @@ const Summary = () => {
                 {/* 2nd Accordian */}
                 <Accordion
                   sx={{
+                    paddingX: "6px",
                     border: "none",
                     boxShadow: "none !important",
                     ".MuiPaper-elevation": {
@@ -512,6 +560,7 @@ const Summary = () => {
                     sx={{
                       padding: 0,
                       margin: 0,
+                      height: "30px",
                     }}
                   >
                     <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
@@ -590,7 +639,7 @@ const Summary = () => {
                           alignItems: "center",
                           justifyContent: "space-between",
                           borderTop: "2px solid #D0D5DD",
-                         
+
                           paddingY: 1,
                         }}
                       >
@@ -607,7 +656,7 @@ const Summary = () => {
                           alignItems: "center",
                           justifyContent: "space-between",
                           borderTop: "2px solid #D0D5DD",
-                        
+
                           paddingY: 1,
                         }}
                       >

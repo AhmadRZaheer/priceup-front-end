@@ -71,7 +71,7 @@ const MenuList = ({
         <Button
           onClick={opneClose}
           id="basic-button"
-          sx={{ color: { md: "#000000 !important ", xs: "white" } }}
+          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -110,7 +110,7 @@ const MenuList = ({
               display: "flex",
               alignItems: "center",
               gap: 2,
-              color: { md: "#000000  ", xs: "white" },
+              color: { sm: "#000000  ", xs: "white" },
               alignSelf: "flex-end",
               py: 1.5,
             }}
@@ -132,7 +132,7 @@ const MenuList = ({
               display: "flex",
               alignItems: "center",
               gap: 2,
-              color: { md: "#000000  ", xs: "white" },
+              color: { sm: "#000000  ", xs: "white" },
               alignSelf: "flex-end",
             }}
           >
@@ -155,9 +155,9 @@ const MenuList = ({
                 },
               }}
               sx={{
-                border: { md: "none", xs: "2px solid #423f57" },
-                borderRadius: { md: 0, xs: 2 },
-                color: { md: "black", xs: "white" },
+                border: { sm: "none", xs: "2px solid #423f57" },
+                borderRadius: { sm: 0, xs: 2 },
+                color: { sm: "black", xs: "white" },
                 width: "100%",
                 mb: 1,
               }}
@@ -180,7 +180,7 @@ const MenuList = ({
             maxHeight: "250px",
             minHeight: "80px",
             overflowY: "scroll",
-            color: { md: "#000000", xs: "white" },
+            color: { sm: "#000000", xs: "white" },
           }}
         >
           {menuOptions === undefined ? (
@@ -252,7 +252,7 @@ const MenuList = ({
                     display: "flex",
                     gap: 2,
                     alignItems: "center",
-                    width: { md: "100%", xs: "95%" },
+                    width: { sm: "100%", xs: "95%" },
                     justifyContent: "space-between",
                   }}
                 >

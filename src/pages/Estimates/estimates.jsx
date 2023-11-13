@@ -8,8 +8,7 @@ const Estimates = () => {
     <div className="Customers">
       <Sidebar />
       <div className="customersContainer">
-        <Index />
-        
+        <Index />        
       </div>
     </div>
   );

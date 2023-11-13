@@ -238,55 +238,85 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     <>
       <Box
         sx={{
-          width: 900,
-          margin: { md: "auto", xs: 0 },
-
+          width: { xs: "100%", sm: 900 },
+          margin: { sm: "auto", xs: 0 },
           display: "flex",
           alignItems: "center",
-          height: "96vh",
+          height: { xs: "100vh", sm: "96vh" },
           flexDirection: "column",
-          p: 4,
           gap: 4,
+          backgroundColor: { xs: "#08061B", sm: "white" },
         }}
       >
-        <Typography
-          sx={{ display: { md: "block", xs: "none" } }}
-          textAlign={"center"}
-          variant="h4"
-        >
-          Create New Estimate
-        </Typography>
+        <div style={{ width: "100%" }}>
+          <Box
+            sx={{
+              backgroundColor: { xs: "#100D24", sm: "white" },
+              backdropFilter: "blur(127px)",
+              padding: { xs: "20px 15px", sm: "0px" },
+              borderBottomRightRadius: { xs: "16px", sm: "0px" },
+              borderBottomLeftRadius: { xs: "16px", sm: "0px" },
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {/* <NavLink to="/estimates"> */}
+            <Box
+              sx={{
+                display: { xs: "block", sm: "none" },
+                paddingRight: "20px",
+                paddingTop: "4px",
+              }}
+            >
+              {" "}
+              <img src="/icons/left_vector.svg" alt="<" />
+            </Box>
+            {/* </NavLink> */}
+
+            <Typography
+              sx={{
+                color: { sm: "black", xs: "white" },
+                fontSize: { xs: "24px", sm: "2.124rem" },
+                textAlign: { xs: "start", sm: "center" },
+                fontWeight: 500,
+              }}
+              variant="h4"
+            >
+              Create New Qoute
+            </Typography>
+          </Box>
+        </div>
+
         <Box
           sx={{
             width: "100%",
             margin: "auto",
-            borderRadius: { md: "12px", xs: 0 },
+            borderRadius: { sm: "12px", xs: 0 },
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: { md: "1px solid #EAECF0", xs: "none" },
-            paddingX: { md: 2, xs: 0 },
+            border: { sm: "1px solid #EAECF0", xs: "none" },
+            paddingX: { sm: 2, xs: 0 },
             paddingY: 4,
             rowGap: 4,
-            background: { md: "white", xs: "#100D24" },
+            background: { sm: "white", xs: "#08061B" },
             display: "flex",
             flexDirection: "column",
             paddingTop: 2,
-
             marginBottom: 4.6,
           }}
         >
-          <Box sx={{ width: { md: "100%", xs: "90%" }, margin: "auto" }}>
+          <Box sx={{ width: { sm: "100%", xs: "90%" }, margin: "auto" }}>
             <Typography
               sx={{
-                fontSize: { md: "18px", xs: "18px" },
-                color: { md: "black", xs: "white" },
+                fontSize: { sm: "18px", xs: "18px" },
+                color: { sm: "black", xs: "white" },
                 paddingBottom: 1,
               }}
             >
               Summary
             </Typography>
             <Typography
-              sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+              sx={{ color: { sm: "#667085", xs: "white" }, font: "14px" }}
             >
               Modify your estimate below to finalize the total price.
             </Typography>
@@ -294,22 +324,22 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           <Box
             sx={{
               display: "flex",
-              width: { md: "96.5%", xs: "94%" },
-              paddingY: { md: 4, xs: 0 },
-              paddingX: { md: 2, xs: 0 },
-              background: { md: "rgba(217, 217, 217, 0.3)", xs: "#100D24" },
+              width: { sm: "96.5%", xs: "94%" },
+              paddingY: { sm: 4, xs: 0 },
+              paddingX: { sm: 2, xs: 0 },
+              background: { sm: "rgba(217, 217, 217, 0.3)" },
               maxHeight: 1400,
               borderRadius: "8px",
               justifyContent: "space-between",
-              flexDirection: { md: "row", xs: "column" },
-              margin: { md: 0, xs: "auto" },
+              flexDirection: { sm: "row", xs: "column" },
+              margin: { sm: 0, xs: "auto" },
               overflow: "auto",
             }}
           >
             <Box
               sx={{
                 display: "flex",
-                width: "42%",
+                width: { sm: "42%" },
                 flexDirection: "column",
               }}
             >
@@ -317,7 +347,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-
                   gap: 1,
                 }}
               >
@@ -327,10 +356,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
-                    color: { md: "black", xs: "white" },
+                    color: { sm: "black", xs: "white" },
                   }}
                 >
                   <Box sx={{ width: "100%" }}>
@@ -350,7 +379,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -372,7 +401,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -397,7 +426,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     sx={{
                       alignItems: "center",
                       borderBottom: {
-                        md: "2px solid #D0D5DD",
+                        sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
                     }}
@@ -427,7 +456,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -449,7 +478,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -471,7 +500,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -493,7 +522,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -514,7 +543,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                   }}
@@ -534,12 +563,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>1" Holes</Typography>
@@ -569,7 +598,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -592,12 +621,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Hinge Cut Out</Typography>
@@ -627,7 +656,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -655,12 +684,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                       alignItems: "center",
                       justifyContent: "space-between",
                       borderBottom: {
-                        md: "2px solid #D0D5DD",
+                        sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
                       paddingLeft: 3,
                       paddingBottom: 1,
-                      color: { md: "#000000  ", xs: "white" },
+                      color: { sm: "#000000  ", xs: "white" },
                     }}
                   >
                     <Typography>Clamp Cut Out</Typography>
@@ -690,7 +719,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           },
                         }}
                         sx={{
-                          color: { md: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                         }}
                         variant="outlined"
@@ -714,12 +743,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Notch</Typography>
@@ -749,7 +778,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -772,12 +801,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Outages</Typography>
@@ -807,7 +836,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -830,12 +859,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Mitre</Typography>
@@ -865,7 +894,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -888,12 +917,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Polish</Typography>
@@ -923,7 +952,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -946,12 +975,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>People:</Typography>
@@ -981,7 +1010,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -1004,12 +1033,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     alignItems: "center",
                     justifyContent: "space-between",
                     borderBottom: {
-                      md: "2px solid #D0D5DD",
+                      sm: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
                     paddingLeft: 3,
                     paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
+                    color: { sm: "#000000  ", xs: "white" },
                   }}
                 >
                   <Typography>Hours:</Typography>
@@ -1039,7 +1068,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       variant="outlined"
@@ -1058,19 +1087,21 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 </Box>
               </Box>
             </Box>
-            <Box sx={{ width: "46%" }}>
+            <Box sx={{ width: { sm: "46%" } }}>
               <Summary />
             </Box>
           </Box>
+
+          {/* Buttons */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              width: "96%",
+              width: { sm: "96%" },
               paddingX: 2,
             }}
           >
-            <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+            <Box sx={{ width: "150px" }}>
               <Button
                 fullWidth
                 onClick={setHandleEstimatesPages}
@@ -1079,14 +1110,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   color: "#344054",
                   textTransform: "initial",
                   border: "1px solid #D0D5DD",
-                  backgroundColor: { md: "transparent", xs: "white" },
+                  backgroundColor: { sm: "transparent", xs: "white" },
                 }}
               >
                 {" "}
                 Back
               </Button>
             </Box>
-            <Box sx={{ width: { md: "150px", xs: "50%" } }}>
+            <Box sx={{ width: "150px" }}>
               <Button
                 fullWidth
                 disabled={selectedContent?.hardwareFinishes === null}

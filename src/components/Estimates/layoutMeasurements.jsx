@@ -27,6 +27,7 @@ import {
 import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { layoutVariants } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { NavLink } from "react-router-dom";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -170,46 +171,62 @@ const LayoutMeasurements = () => {
     <>
       <Box
         sx={{
-          width: { md: "80%", sm: "100%", sx: "100%" },
+          width: { md: "80%", sm: "100%", xs: "100%" },
           marginX: "auto",
-
           display: "flex",
-          alignItems: "center",
+          alignItems: { sm: "center" },
           flexDirection: "column",
-          p: { md: 6, sx: 0 },
+          p: { md: 6, xs: 0 },
           gap: { md: 4, xs: 0 },
           height: "100vh",
+          backgroundColor: { sm: "white", xs: "#08061B" },
         }}
       >
-        <Box
-          sx={{
-            display: { md: "none", xs: "flex" },
-            zIndex: 1,
-            justifyContent: { md: "center", xs: "start" },
-            background: "#18133b",
-            width: "100%",
-            color: "white",
-            paddingY: 1.2,
-            borderBottomLeftRadius: 20,
-            borderBottomRightRadius: 20,
-            marginTop: 7.6,
-          }}
-        >
-          <Typography textAlign={"center"} variant="h4">
-            Create New Estimate
-          </Typography>
-        </Box>
-        <Typography
-          sx={{ display: { md: "block", xs: "none" } }}
-          textAlign={"center"}
-          variant="h4"
-        >
-          Create New Estimate
-        </Typography>
+        <div style={{ width: "100%" }}>
+          <Box
+            sx={{
+              backgroundColor: { xs: "#100D24", sm: "white" },
+              padding: { xs: "20px 15px", sm: "0px" },
+              borderBottomRightRadius: { xs: "16px", sm: "0px" },
+              borderBottomLeftRadius: { xs: "16px", sm: "0px" },
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <Box
+              onClick={() => {
+                dispatch(updateMeasurements([]));
+                dispatch(setDoorWidth(0));
+                setHandleEstimatesPages("layouts");
+              }}
+              sx={{
+                display: { xs: "block", sm: "none" },
+                paddingRight: "20px",
+                paddingTop: "4px",
+              }}
+            >
+              {" "}
+              <img src="/icons/left_vector.svg" alt="<" />
+            </Box>
+
+            <Typography
+              sx={{
+                color: { sm: "black", xs: "white" },
+                fontSize: { xs: "24px", sm: "2.124rem" },
+                textAlign: { xs: "start", sm: "center" },
+                fontWeight: 500,
+              }}
+              variant="h4"
+            >
+              Create New Qoute
+            </Typography>
+          </Box>
+        </div>
+
         <form onSubmit={formik.handleSubmit}>
           <Box
             sx={{
-              width: 800,
+              width: { md: 800 },
               height: "100%",
               borderRadius: { md: "12px", xs: 0 },
               boxShadow:
@@ -218,7 +235,7 @@ const LayoutMeasurements = () => {
               paddingX: { md: 2, xs: 0 },
               paddingY: { md: 4, xs: 0 },
               rowGap: 4,
-              background: "white",
+              background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
             }}
@@ -226,7 +243,7 @@ const LayoutMeasurements = () => {
             <Box
               sx={{
                 paddingLeft: { md: 0, xs: 3 },
-                paddingTop: { md: 2, xs: 0 },
+                paddingTop: 2,
               }}
             >
               <Typography
@@ -254,7 +271,7 @@ const LayoutMeasurements = () => {
                 paddingY: { md: 4, xs: 0 },
                 paddingX: { md: 2, xs: 0 },
                 height: "100%",
-                background: "#D9D9D9",
+                background: { sm: "#D9D9D9" },
                 gap: 4,
                 borderRadius: "8px",
                 overflow: "auto",
@@ -269,10 +286,13 @@ const LayoutMeasurements = () => {
                   flexDirection: "column",
                   gap: { md: 2, xs: 2 },
                   color: { md: "black", xs: "white" },
-                  background: {
-                    md: "none",
-                    xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
-                  },
+                  borderRadius: "34px 34px 0px 0px",
+                  background: { xs: "rgba(16, 13, 36, 0.01)", sm: "none" },
+                  backdropFilter: { xs: "blur(81.5px)", sm: "none" },
+                  // background: {
+                  //   md: "none",
+                  //   xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                  // },
                   borderTopLeftRadius: { md: 0, xs: 30 },
                   borderTopRightRadius: { md: 0, xs: 30 },
                   borderTop: { md: 0, xs: "1px solid #667085" },
@@ -389,7 +409,7 @@ const LayoutMeasurements = () => {
                           variant="outlined"
                           value={editDebouncedValue}
                           style={{
-                            background: "white",
+                            background: { sm: "white" },
                             borderRadius: "8px",
                             border: "1px solid #D0D5DD",
                             width: "100%",
@@ -432,7 +452,7 @@ const LayoutMeasurements = () => {
               <Box
                 sx={{
                   display: "flex",
-                  width: "48.5%",
+                  width: { sm: "48.5%" },
                   justifyContent: "end",
                   alignItems: "center",
                   margin: "auto",
@@ -453,74 +473,84 @@ const LayoutMeasurements = () => {
                     <CircularProgress />
                   </Box>
                 ) : (
-                  <img
-                    width="300px"
-                    height="340px"
-                    src={`${backendURL}/${selectedData?.image}`}
-                    alt="Selected"
-                  />
+                  <Box
+                    sx={{
+                      width: { xs: "134px", sm: "300px" },
+                      height: { xs: "188px", sm: "340px" },
+                      padding: { xs: "10px", sm: "0px" },
+                    }}
+                  >
+                    <img
+                      width="100%"
+                      height="100%"
+                      src={`${backendURL}/${selectedData?.image}`}
+                      alt="Selected"
+                    />
+                  </Box>
                 )}
               </Box>
-            </Box>
 
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                width: "100%",
-              }}
-            >
+            </Box>
+              {/* Buttons */}
               <Box
                 sx={{
                   display: "flex",
-                  gap: 2,
-                  justifyContent: "space-between",
-                  width: "92%",
+                  justifyContent: "center",
+                  width: "100%",
+                  paddingBottom: { xs: "20px", sm: "0px" },
                 }}
               >
-                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                  <Button
-                    fullWidth
-                    onClick={() => {
-                      dispatch(updateMeasurements([]));
-                      dispatch(setDoorWidth(0));
-                      setHandleEstimatesPages("layouts");
-                    }}
-                    sx={{
-                      boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                      color: "#344054",
-                      textTransform: "initial",
-                      border: "1px solid #D0D5DD",
-                      backgroundColor: { md: "transparent", xs: "white" },
-                      height: 40,
-                      fontSize: 20,
-                    }}
-                  >
-                    Back
-                  </Button>
-                </Box>
-                <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-                  <Button
-                    type="submit"
-                    fullWidth
-                    disabled={Object.keys(formik.values).some(
-                      (key) => !formik.values[key]
-                    )}
-                    sx={{
-                      height: 40,
-                      fontSize: 20,
-                      backgroundColor: "#8477da",
-                      "&:hover": {
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    justifyContent: "space-between",
+                    width: "92%",
+                  }}
+                >
+                  <Box sx={{ width: "150px" }}>
+                    <Button
+                      fullWidth
+                      onClick={() => {
+                        dispatch(updateMeasurements([]));
+                        dispatch(setDoorWidth(0));
+                        setHandleEstimatesPages("layouts");
+                      }}
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { md: "transparent", xs: "white" },
+                        height: 40,
+                        fontSize: 20,
+                      }}
+                    >
+                      Back
+                    </Button>
+                  </Box>
+                  <Box sx={{ width: "150px" }}>
+                    <Button
+                      type="submit"
+                      fullWidth
+                      disabled={Object.keys(formik.values).some(
+                        (key) => !formik.values[key]
+                      )}
+                      sx={{
+                        height: 40,
+                        fontSize: 20,
                         backgroundColor: "#8477da",
-                      },
-                    }}
-                    variant="contained"
-                  >
-                    Next
-                  </Button>
+                        "&:hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                      variant="contained"
+                    >
+                      Next
+                    </Button>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
           </Box>
         </form>
       </Box>
