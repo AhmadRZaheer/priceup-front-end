@@ -32,7 +32,7 @@ const TableRow = ({ row, refetch, onToggleChange }) => {
           <FormControlLabel
             control={
               <Switch
-                color="primary"
+                color="success"
                 checked={active}
                 onClick={() => handleSwitch()}
                 name="status"
@@ -45,6 +45,5 @@ const TableRow = ({ row, refetch, onToggleChange }) => {
     </div>
   );
 };
-
 
 export default TableRow;

@@ -380,6 +380,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               >
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="handles.count"
@@ -456,6 +459,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               >
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="hinges.count"
@@ -530,6 +536,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               >
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="pivotHingeOption.count"
@@ -615,6 +624,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Typography>Width</Typography>
                   <TextField
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     size="small"
                     variant="outlined"
                     name="heavyDutyOption.threshold"
@@ -638,6 +650,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Typography>Height</Typography>
                   <TextField
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     size="small"
                     variant="outlined"
                     name="heavyDutyOption.height"
@@ -719,6 +734,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Typography>Width</Typography>
                   <TextField
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     size="small"
                     variant="outlined"
                     name="heavyPivotOption.threshold"
@@ -740,6 +758,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Typography>Height</Typography>
                   <TextField
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     size="small"
                     variant="outlined"
                     name="heavyPivotOption.height"
@@ -930,6 +951,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Box sx={{ width: "250px" }}>
                     <TextField
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       size="small"
                       variant="outlined"
                       name="wallClamp.count"
@@ -1003,6 +1027,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Box sx={{ width: "250px" }}>
                     <TextField
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       size="small"
                       variant="outlined"
                       name="sleeveOver.count"
@@ -1078,6 +1105,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <Box sx={{ width: "250px" }}>
                     <TextField
                       type="number"
+                      InputProps={{
+                        inputProps: { min: 0 },
+                      }}
                       size="small"
                       variant="outlined"
                       name="glassToGlass.count"
@@ -1153,6 +1183,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box sx={{ width: "250px" }}>
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="cornerWallClamp.count"
@@ -1226,6 +1259,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box sx={{ width: "250px" }}>
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="cornerSleeveOver.count"
@@ -1303,6 +1339,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box sx={{ width: "250px" }}>
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="cornerGlassToGlass.count"
@@ -1446,6 +1485,9 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box sx={{ width: "250px" }}>
                 <TextField
                   type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
                   size="small"
                   variant="outlined"
                   name="slidingDoorSystem.count"
@@ -1493,6 +1535,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="outages"
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     style={{
                       width: "220px",
                       paddingX: 10,
@@ -1697,6 +1742,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="notch"
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     style={{
                       width: "220px",
                       paddingX: 10,
@@ -1726,6 +1774,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     variant="outlined"
                     name="other.people"
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     style={{ width: "100%" }}
                     value={formik.values.other.people}
                     onChange={formik.handleChange}
@@ -1745,6 +1796,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   <TextField
                     size="small"
                     type="number"
+                    InputProps={{
+                      inputProps: { min: 0 },
+                    }}
                     variant="outlined"
                     name="other.hours"
                     style={{ width: "100%" }}

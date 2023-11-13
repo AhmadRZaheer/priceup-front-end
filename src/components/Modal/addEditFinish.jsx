@@ -38,7 +38,7 @@ export default function AddEditFinish({
   showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
-  
+
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -58,7 +58,6 @@ export default function AddEditFinish({
     isError: ErrorForAddEidt,
   } = useEditFinish();
 
-
   const handleCreateClick = (props) => {
     addFinish(props);
   };
@@ -70,27 +69,25 @@ export default function AddEditFinish({
 
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
-    image: Yup.mixed()
-      .test("required", "Image is required", (value) => {
-        return value !== undefined && value !== null;
-      }),
+    image: Yup.mixed().test("required", "Image is required", (value) => {
+      return value !== undefined && value !== null;
+    }),
     thickness: Yup.string().required("Thickness is required"),
   });
-  
 
   const formik = useFormik({
     initialValues: isEdit
       ? {
-        hardwareLabel: data?.name,
-        image: "",
-        thickness: data?.holesNeeded,
-        id: data?._id,
-      }
+          hardwareLabel: data?.name,
+          image: "",
+          thickness: data?.holesNeeded,
+          id: data?._id,
+        }
       : {
-        hardwareLabel: "",
-        image: "",
-        thickness: "",
-      },
+          hardwareLabel: "",
+          image: "",
+          thickness: "",
+        },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -106,7 +103,7 @@ export default function AddEditFinish({
       finishesRefetch();
       showSnackbar("Updated Successfully ", "success");
       close();
-    }else if (ErrorForAddEidt) {
+    } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
     }
@@ -116,7 +113,7 @@ export default function AddEditFinish({
       finishesRefetch();
       showSnackbar("Created Successfully ", "success");
       close();
-    }else if (ErrorForAdd) {
+    } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
       showSnackbar(errorMessage, "error");
     }
@@ -183,18 +180,22 @@ export default function AddEditFinish({
                 </Typography>
               </Box>
             </label>
-            <aside style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              marginTop: 16
-            }}>
-              {selectedImage && <img
-                width={"80px"}
-                height={"80px"}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
-              />}
+            <aside
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginTop: 16,
+              }}
+            >
+              {selectedImage && (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                />
+              )}
             </aside>
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
@@ -225,6 +226,9 @@ export default function AddEditFinish({
             <FormControl style={{ width: "100%" }} size="small">
               <TextField
                 type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
                 size="small"
                 variant="outlined"
                 name="thickness"

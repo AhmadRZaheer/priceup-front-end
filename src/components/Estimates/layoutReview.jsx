@@ -560,7 +560,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -618,7 +618,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -681,7 +681,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                             border: "1px solid #cccccc",
                             backgroundColor: "white",
                           },
-                          inputProps: { min: 0, max: 50 },
+                          inputProps: { min: 0 },
                         }}
                         InputLabelProps={{
                           style: {
@@ -740,7 +740,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -798,7 +798,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -856,7 +856,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -914,7 +914,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -928,14 +928,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                       variant="outlined"
                       size="small"
                       value={selectedContent.polish}
-                      onChange={(event) =>
+                      onChange={(event) => {
                         dispatch(
                           setInputContent({
                             type: "polish",
                             value: event.target.value,
                           })
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Box>
                 </Box>
@@ -972,7 +972,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {
@@ -1030,7 +1030,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                           border: "1px solid #cccccc",
                           backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {

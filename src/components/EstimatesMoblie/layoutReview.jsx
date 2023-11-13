@@ -458,7 +458,7 @@ const LayoutReview = () => {
                         style: {
                           color: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
+                        inputProps: { min: 0 },
                       }}
                       InputLabelProps={{
                         style: {

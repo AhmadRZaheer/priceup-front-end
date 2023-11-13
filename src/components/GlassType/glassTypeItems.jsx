@@ -162,6 +162,9 @@ const GlassTypeItem = ({
               variant="outlined"
               name="partNumber"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               placeholder="Hardware Part Number"
               style={{ width: "100%" }}
               value={formik.values.partNumber}
@@ -185,6 +188,9 @@ const GlassTypeItem = ({
               variant="outlined"
               name="cost"
               type="number"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
               placeholder="Cost"
               style={{ width: "100%" }}
               value={formik.values.cost}
@@ -221,7 +227,7 @@ const GlassTypeItem = ({
               <FormControlLabel
                 control={
                   <Switch
-                    color="primary"
+                    color="success"
                     checked={formik.values.status}
                     onChange={(event) => handleStatusChange(event)}
                     onBlur={formik.handleBlur}

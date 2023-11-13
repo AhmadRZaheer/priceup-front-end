@@ -11,11 +11,16 @@ import {
   getTotal,
   selectedItem,
   getDoorWidth,
-  getQuoteState
+  getQuoteState,
+  getLayoutArea,
 } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import CustomImage from "../../Assets/customlayoutimage.svg";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const Summary = () => {
   const hardwarePrice = useSelector(getHardwareTotal);
@@ -30,7 +35,13 @@ const Summary = () => {
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
-  const layoutImage = quoteState === 'create' ? `${backendURL}/${selectedData?.image}` : quoteState === 'edit' && selectedData?.layoutData?.image ? `${backendURL}/${selectedData?.layoutData?.image}` : CustomImage 
+  const sqftArea = useSelector(getLayoutArea);
+  const layoutImage =
+    quoteState === "create"
+      ? `${backendURL}/${selectedData?.image}`
+      : quoteState === "edit" && selectedData?.layoutData?.image
+      ? `${backendURL}/${selectedData?.layoutData?.image}`
+      : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   return (
     <>
@@ -77,7 +88,7 @@ const Summary = () => {
                 background: "rgba(217, 217, 217, 0.3)",
                 margin: { md: 0, xs: "auto" },
                 p: 3,
-                borderRadius: 2
+                borderRadius: 2,
               }}
             >
               <img
@@ -104,12 +115,8 @@ const Summary = () => {
                   .map((measurement) => measurement.value)
                   .join("’’/ ")}
               </Typography>
-              <Typography>
-                Door Width {doorWidth}
-              </Typography>
-              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                Summary{" "}
-              </Typography>
+              <Typography>Door Width {doorWidth}</Typography>
+              <Typography>Square Foot {sqftArea}</Typography>
               <Box
                 sx={{
                   display: "flex",
@@ -120,236 +127,501 @@ const Summary = () => {
                   paddingY: 1,
                 }}
               >
-                <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>Total Price</Typography>
+                <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
+                  Total Price
+                </Typography>
                 <Typography variant="h6">
                   ${totalPrice?.toFixed(2) || 0}
                 </Typography>
               </Box>{" "}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-              </Box>{" "}
-              {selectedContent?.hardwareFinishes && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Finish:</Typography>
-                <Typography>
-                  {selectedContent?.hardwareFinishes?.name}
-                </Typography>
-              </Box>}
-              {selectedContent?.handles?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Handles:</Typography>
-                <Typography>
-                  {selectedContent?.handles?.item?.name} (
-                  {selectedContent?.handles?.count})
-                </Typography>
-              </Box>}
-              {selectedContent?.hinges?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Hinges:</Typography>
-                <Typography>
-                  {selectedContent?.hinges?.item?.name} (
-                  {selectedContent?.hinges?.count})
-                </Typography>
-              </Box>}
-              {["channel"].includes(selectedContent?.mountingState) ? <>{selectedContent?.mountingChannel?.item && (
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Channel:</Typography>
-                  <Typography>
-                    {selectedContent?.mountingChannel?.item?.name}
-                  </Typography>
-                </Box>
-              )} </> : <> {selectedContent?.mountingClamps?.wallClamp?.length ?
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>WallClamps: </Typography>
-                  {selectedContent?.mountingClamps?.wallClamp?.map((row) =>
-                    <Typography>{row.item.name} ({row.count}) </Typography>
-                  )}
-                </Box> : ''}
-                {selectedContent?.mountingClamps?.sleeveOver?.length ?
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Sleeve Over: </Typography>
-                    {selectedContent?.mountingClamps?.sleeveOver?.map((row) =>
-                      <Typography>{row.item.name} ({row.count}) </Typography>
+              {/* Summary  */}
+              <Box sx={{ borderTop: "2px solid #D0D5DD" }}>
+                <Accordion
+                  sx={{
+                    border: "none",
+                    boxShadow: "none !important",
+                    ".MuiPaper-elevation": {
+                      border: " none !important",
+                      boxShadow: "none !important",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{ padding: 0, margin: 0, borderBottom: "none" }}
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      Summary{" "}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ padding: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderTop: "2px solid #D0D5DD",
+                        paddingY: 1,
+                      }}
+                    ></Box>{" "}
+                    {selectedContent?.hardwareFinishes && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Finish:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.hardwareFinishes?.name}
+                        </Typography>
+                      </Box>
                     )}
-                  </Box> : ''}
-                {selectedContent?.mountingClamps?.glassToGlass?.length ?
-                  <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                    <Typography sx={{ fontWeight: "bold" }}>Glass To Glass: </Typography>
-                    {selectedContent?.mountingClamps?.glassToGlass?.map((row) =>
-                      <Typography>{row.item.name} ({row.count}) </Typography>
+                    {selectedContent?.handles?.item && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Handles:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.handles?.item?.name} (
+                          {selectedContent?.handles?.count})
+                        </Typography>
+                      </Box>
                     )}
-                  </Box> : ''} </>}
+                    {selectedContent?.hinges?.item && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Hinges:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.hinges?.item?.name} (
+                          {selectedContent?.hinges?.count})
+                        </Typography>
+                      </Box>
+                    )}
+                    {["channel"].includes(selectedContent?.mountingState) ? (
+                      <>
+                        {selectedContent?.mountingChannel?.item && (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              textAlign: "baseline",
+                              gap: 0.6,
+                            }}
+                          >
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Channel:
+                            </Typography>
+                            <Typography>
+                              {selectedContent?.mountingChannel?.item?.name}
+                            </Typography>
+                          </Box>
+                        )}{" "}
+                      </>
+                    ) : (
+                      <>
+                        {" "}
+                        {selectedContent?.mountingClamps?.wallClamp?.length ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              textAlign: "baseline",
+                              gap: 0.6,
+                            }}
+                          >
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              WallClamps:{" "}
+                            </Typography>
+                            {selectedContent?.mountingClamps?.wallClamp?.map(
+                              (row) => (
+                                <Typography>
+                                  {row.item.name} ({row.count}){" "}
+                                </Typography>
+                              )
+                            )}
+                          </Box>
+                        ) : (
+                          ""
+                        )}
+                        {selectedContent?.mountingClamps?.sleeveOver?.length ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              textAlign: "baseline",
+                              gap: 0.6,
+                            }}
+                          >
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Sleeve Over:{" "}
+                            </Typography>
+                            {selectedContent?.mountingClamps?.sleeveOver?.map(
+                              (row) => (
+                                <Typography>
+                                  {row.item.name} ({row.count}){" "}
+                                </Typography>
+                              )
+                            )}
+                          </Box>
+                        ) : (
+                          ""
+                        )}
+                        {selectedContent?.mountingClamps?.glassToGlass
+                          ?.length ? (
+                          <Box
+                            sx={{
+                              display: "flex",
+                              textAlign: "baseline",
+                              gap: 0.6,
+                            }}
+                          >
+                            <Typography sx={{ fontWeight: "bold" }}>
+                              Glass To Glass:{" "}
+                            </Typography>
+                            {selectedContent?.mountingClamps?.glassToGlass?.map(
+                              (row) => (
+                                <Typography>
+                                  {row.item.name} ({row.count}){" "}
+                                </Typography>
+                              )
+                            )}
+                          </Box>
+                        ) : (
+                          ""
+                        )}{" "}
+                      </>
+                    )}
+                    {selectedContent?.cornerClamps?.cornerWallClamp?.length ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Corner WallClamp:{" "}
+                        </Typography>
+                        {selectedContent?.cornerClamps?.cornerWallClamp?.map(
+                          (row) => (
+                            <Typography>
+                              {row.item.name} ({row.count}){" "}
+                            </Typography>
+                          )
+                        )}
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    {selectedContent?.cornerClamps?.cornerSleeveOver?.length ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Corner Sleeve Over:{" "}
+                        </Typography>
+                        {selectedContent?.cornerClamps?.cornerSleeveOver?.map(
+                          (row) => (
+                            <Typography>
+                              {row.item.name} ({row.count}){" "}
+                            </Typography>
+                          )
+                        )}
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    {selectedContent?.cornerClamps?.cornerGlassToGlass
+                      ?.length ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Corner Glass To Glass:{" "}
+                        </Typography>
+                        {selectedContent?.cornerClamps?.cornerGlassToGlass?.map(
+                          (row) => (
+                            <Typography>
+                              {row.item.name} ({row.count}){" "}
+                            </Typography>
+                          )
+                        )}
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    {selectedContent?.glassType?.item && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Glass Type:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.glassType?.item?.name} (
+                          {selectedContent?.glassType?.thickness})
+                        </Typography>
+                      </Box>
+                    )}
+                    {selectedContent?.slidingDoorSystem?.item && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Sliding Door System:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.slidingDoorSystem?.item?.name} (
+                          {selectedContent?.slidingDoorSystem?.count})
+                        </Typography>
+                      </Box>
+                    )}
+                    {selectedContent?.transom && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Transom:{" "}
+                        </Typography>
+                        <Typography></Typography>
+                      </Box>
+                    )}
+                    {selectedContent?.header?.item && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Header:
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.header?.item?.name} (
+                          {selectedContent?.header?.count})
+                        </Typography>
+                      </Box>
+                    )}
+                    {selectedContent?.glassAddons?.length ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Glass Addons:
+                        </Typography>
+                        {selectedContent?.glassAddons?.map((item) => (
+                          <Typography>{`${item?.name} `}</Typography>
+                        ))}
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    {selectedContent?.hardwareAddons?.length > 0 && (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Add ons:{" "}
+                        </Typography>
+                        <Typography>
+                          {selectedContent?.hardwareAddons?.map(
+                            (row) => ` ${row?.item?.name} (${row?.count})`
+                          )}{" "}
+                        </Typography>
+                      </Box>
+                    )}
+                    <Box
+                      sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        People:{" "}
+                      </Typography>
+                      <Typography>{selectedContent?.people}</Typography>
+                    </Box>
+                    <Box
+                      sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Hours:{" "}
+                      </Typography>
+                      <Typography>{selectedContent?.hours}</Typography>
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
 
-              {selectedContent?.cornerClamps?.cornerWallClamp?.length ?
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Corner WallClamp: </Typography>
-                  {selectedContent?.cornerClamps?.cornerWallClamp?.map((row) =>
-                    <Typography>{row.item.name} ({row.count}) </Typography>
-                  )}
-                </Box> : ''}
-              {selectedContent?.cornerClamps?.cornerSleeveOver?.length ?
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Corner Sleeve Over: </Typography>
-                  {selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) =>
-                    <Typography>{row.item.name} ({row.count}) </Typography>
-                  )}
-                </Box> : ''}
-              {selectedContent?.cornerClamps?.cornerGlassToGlass?.length ?
-                <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                  <Typography sx={{ fontWeight: "bold" }}>Corner Glass To Glass: </Typography>
-                  {selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) =>
-                    <Typography>{row.item.name} ({row.count}) </Typography>
-                  )}
-                </Box> : ''}
-              {selectedContent?.glassType?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Glass Type:</Typography>
-                <Typography>
-                  {selectedContent?.glassType?.item?.name} (
-                  {selectedContent?.glassType?.thickness})
-                </Typography>
-              </Box>}
-              {selectedContent?.slidingDoorSystem?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Sliding Door System:</Typography>
-                <Typography>
-                  {selectedContent?.slidingDoorSystem?.item?.name} (
-                  {selectedContent?.slidingDoorSystem?.count})
-                </Typography>
-              </Box>}
-              {selectedContent?.transom && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Transom: </Typography>
-                <Typography></Typography>
-              </Box>}
-              {selectedContent?.header?.item && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Header:</Typography>
-                <Typography>
-                  {selectedContent?.header?.item?.name} (
-                  {selectedContent?.header?.count})
-                </Typography>
-              </Box>}
-              {selectedContent?.glassAddons?.length ? <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>
-                  Glass Addons:
-                </Typography>
-                {selectedContent?.glassAddons?.map((item) =>
-                  <Typography>
-                    {`${item?.name} `}
-                  </Typography>
-                )}
-              </Box> : ''}
-              {(selectedContent?.hardwareAddons?.length > 0) && <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Add ons: </Typography>
-                <Typography>
-                  {selectedContent?.hardwareAddons?.map((row) => ` ${row?.item?.name} (${row?.count})`)}{" "}
-                </Typography>
-              </Box>}
-              <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>People: </Typography>
-                <Typography>{selectedContent?.people}</Typography>
+                {/* 2nd Accordian */}
+                <Accordion
+                  sx={{
+                    border: "none",
+                    boxShadow: "none !important",
+                    ".MuiPaper-elevation": {
+                      border: " none !important",
+                      boxShadow: "none !important",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      Pricing Sub Categories{" "}
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ padding: 0 }}>
+                    <Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Hardware Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${hardwarePrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Glass Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${glassPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Glass Addons Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${glassAddonsPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Fabrication Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${fabricationPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                         
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Misc Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${miscPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+                        
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Labor Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${laborPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
               </Box>
-              <Box sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}>
-                <Typography sx={{ fontWeight: "bold" }}>Hours: </Typography>
-                <Typography>{selectedContent?.hours}</Typography>
-              </Box>
-              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                Pricing Sub Categories{" "}
-              </Typography>
-              <Typography> </Typography>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Hardware Price</Typography>
-                <Typography variant="h6">
-                  ${hardwarePrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Glass Price</Typography>
-                <Typography variant="h6">
-                  ${glassPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Glass Addons Price</Typography>
-                <Typography variant="h6">
-                  ${glassAddonsPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Fabrication Price</Typography>
-                <Typography variant="h6">
-                  ${fabricationPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Misc Price</Typography>
-                <Typography variant="h6">
-                  ${miscPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  marginTop: 1,
-                  paddingY: 1,
-                }}
-              >
-                <Typography sx={{ fontWeight: "bold" }}>Labor Price</Typography>
-                <Typography variant="h6">
-                  ${laborPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>
-
             </Box>
           </Box>
         </Box>

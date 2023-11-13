@@ -440,7 +440,7 @@ const CustomLayout = () => {
                   sx={{
                     display: { md: "flex", xs: "none" },
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                    color: "#344054",
+                    color: { md: "white", xs: "#344054" },
                     textTransform: "initial",
                     border: "1px solid #D0D5DD",
                     backgroundColor: { md: "transparent" },

@@ -39,8 +39,7 @@ const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
   email: yup.string().email("Invalid email address"),
-
-  address: yup.string().required("Address is required"),
+  // address: yup.string().required("Address is required"),
 });
 export default function ClientDetailsModel({
   open,
@@ -76,31 +75,40 @@ export default function ClientDetailsModel({
     },
     validationSchema,
     onSubmit: (values) => {
-      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      );
+      const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
+      );
+      const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
+        (row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
         }
-      });
-      const glassToGlassArray = estimatesContent?.mountingClamps?.glassToGlass?.map((row)=>{
-        return {
-          type: row.item._id,
-          count:row.count
-        }
-      });
-      const glassAddonsArray = estimatesContent?.glassAddons?.map((item)=>item?._id);
+      );
+      const glassToGlassArray =
+        estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+          return {
+            type: row.item._id,
+            count: row.count,
+          };
+        });
+      const glassAddonsArray = estimatesContent?.glassAddons?.map(
+        (item) => item?._id
+      );
       let estimate = {
         hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
         handles: {
@@ -115,8 +123,8 @@ export default function ClientDetailsModel({
           wallClamp: [...wallClampArray],
           sleeveOver: [...sleeveOverArray],
           glassToGlass: [...glassToGlassArray],
-      },
-      mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
+        },
+        mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
         glassType: {
           type: estimatesContent?.glassType?.item?._id,
           thickness: estimatesContent?.glassType?.thickness,
@@ -145,12 +153,15 @@ export default function ClientDetailsModel({
         towelBarsCount: estimatesContent?.sleeveOverCount,
         measurements: measurements,
         perimeter: perimeter,
-        sqftArea: sqftArea
+        sqftArea: sqftArea,
       };
-      if (["create","custom"].includes(updatecheck)) {
+      if (["create", "custom"].includes(updatecheck)) {
         mutate({
           customerData: values,
-          estimateData: { ...estimate, layout_id: estimatesLayout?._id || null },
+          estimateData: {
+            ...estimate,
+            layout_id: estimatesLayout?._id || null,
+          },
         });
       } else {
         mutateEdit({
@@ -396,9 +407,12 @@ export default function ClientDetailsModel({
                     "&:hover": {
                       backgroundColor: "white",
                     },
-                    color: "black"
+                    color: "black",
                   }}
-                > Back</Button>
+                >
+                  {" "}
+                  Back
+                </Button>
                 <Button
                   type="submit"
                   sx={{

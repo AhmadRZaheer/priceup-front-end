@@ -267,6 +267,8 @@ const LayoutMeasurements = () => {
                         style: {
                           color: "white",
                         },
+                        inputProps: { min: 0 },
+                       
                       }}
                       InputLabelProps={{
                         style: {
