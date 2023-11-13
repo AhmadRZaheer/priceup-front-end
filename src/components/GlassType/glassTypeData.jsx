@@ -8,6 +8,7 @@ import {
 } from "../../utilities/ApiHooks/glassType";
 import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeItem from "./glassTypeItems";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 
 const GlassTypeDataItem = ({
   entry,
@@ -98,11 +99,11 @@ const GlassTypeDataItem = ({
             </IconButton>
           </Box>
           <Box>
-            <IconButton>
-              <Delete onClick={() => handleHardwareDelete(entry._id)} />
+            <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+              <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
-            id={entry._id}
+              id={entry._id}
               onClick={() => handleOpenUpdate(entry._id)}
               sx={{
                 backgroundColor: "#8477DA",

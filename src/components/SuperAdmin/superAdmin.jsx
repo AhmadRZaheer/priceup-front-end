@@ -9,19 +9,20 @@ import {
   Typography,
   Input,
   InputAdornment,
+  Grid,
 } from "@mui/material";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import EditIcon from "../../Assets/d.svg";
 import Snackbars from "../Modal/snackBar";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
-import { DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useFetchAllStaff } from "../../utilities/ApiHooks/superAdmin";
+import { Link } from "react-router-dom";
 import { Search } from "@mui/icons-material";
-import EditIcon from '@mui/icons-material/Edit';
+import { backendURL } from "../../utilities/common";
 
 const SuperAdminTable = () => {
   const {
@@ -109,6 +110,45 @@ const SuperAdminTable = () => {
       },
     },
     {
+      field: "users",
+      headerName: "users",
+      width: 120,
+      renderCell: (params) => {
+        if (params.row && params.row.name) {
+          var firstNameInitial = params.row.name.charAt(0);
+        } else {
+          var firstNameInitial = "";
+        }
+        if (params.row && params.row.name) {
+          var lastNameInitial = params.row.name.charAt(1);
+        } else {
+          var lastNameInitial = "";
+        }
+        return (
+          <Grid container>
+            <Typography
+              sx={{
+                backgroundColor: "#F9F5FF",
+                width: 34,
+                height: 34,
+                borderRadius: "100%",
+                textAlign: "center",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#7F56D9",
+                textTransform: "uppercase",
+                fontWeight: "bold",
+              }}
+            >
+              {firstNameInitial}
+              {lastNameInitial}
+            </Typography>
+          </Grid>
+        );
+      },
+    },
+    {
       width: 140,
       renderCell: (params) => {
         const adminID = params.row._id;
@@ -123,7 +163,7 @@ const SuperAdminTable = () => {
                 sx={{
                   p: 0.5,
                   m: 0,
-                  color: "#8477DA",
+                  color: "#7F56D9",
                   textTransform: "capitalize",
                 }}
               >
@@ -144,13 +184,13 @@ const SuperAdminTable = () => {
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
-              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
+              <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
-             onClick={() => handleOpenEdit(params.row)}
+              onClick={() => handleOpenEdit(params.row)}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
-              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
+              <img src={EditIcon} alt="delete icon" />
             </IconButton>
           </>
         );
@@ -269,7 +309,8 @@ const SuperAdminTable = () => {
           mb: 2,
           mt: 10,
           width: "20%", // You can adjust the width as needed
-          marginLeft: "30px", // Adjust the margin as needed
+          marginLeft: "30px",
+          mt: 3 // Adjust the margin as needed
         }}
         endAdornment={
           <InputAdornment position="end">

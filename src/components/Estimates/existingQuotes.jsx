@@ -39,14 +39,14 @@ export default function ExistingQuotes() {
         >
           <Box
             sx={{
-              width: 300,
+              width: {lg: 300, md: 220},
               height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-              boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
+               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -74,7 +74,7 @@ export default function ExistingQuotes() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-              boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
+               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -102,7 +102,7 @@ export default function ExistingQuotes() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-              boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
+               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -130,7 +130,7 @@ export default function ExistingQuotes() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-              boxShadow: "2px 4px 10px 1px rgba(201, 201, 201, 0.47)",
+               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -150,7 +150,7 @@ export default function ExistingQuotes() {
           </Box>
         </Box>
         
-        <Box sx={{ width: "97%" }}>
+        <Box sx={{ width: "97%", border: "1px solid #EAECF0", borderRadius: "8px" }}>
           <ExistingTable />
         </Box>
       </Box>

@@ -41,7 +41,8 @@ const DefaultSection = () => {
             border: "1px solid rgb(232, 232, 232)",
             margin: "auto",
             paddingTop: 2,
-            width: "98%"
+            width: "98%",
+            borderRadius: "8px",
           }}
         >
           <div className="hardwareTable">

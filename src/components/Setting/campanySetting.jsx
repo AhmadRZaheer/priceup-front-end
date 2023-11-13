@@ -241,7 +241,7 @@ const CampanySetting = () => {
             gap: 2,
           }}
         >
-          <Typography variant="h6"></Typography>
+          <Typography variant="h6">Misc. Pricing</Typography>
           <Box
             sx={{
               display: "flex",

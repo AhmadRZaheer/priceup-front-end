@@ -1,8 +1,9 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import FinishItem from "./finishItem";
 import { Box, IconButton } from "@mui/material";
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import {
   useDeleteHardwares,
   useEditHardware,
@@ -60,7 +61,6 @@ const HardwareItem = ({
     }
   }, []);
 
-  
   return (
     <div
       style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
@@ -98,8 +98,8 @@ const HardwareItem = ({
           </IconButton>
         </Box>
         <Box>
-          <IconButton>
-            <Delete onClick={() => handleHardwareDelete(entry._id)} />
+          <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+            <img src={DeleteIcon} alt="delete icon" />
           </IconButton>
           <IconButton
             key={entry._id}

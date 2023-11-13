@@ -17,6 +17,7 @@ import {
   useDeleteGlassAddonOption,
   useEditGlassAddon,
 } from "../../utilities/ApiHooks/glassAddon";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 
 const ListOption = ({
   data,
@@ -254,7 +255,7 @@ const ListOption = ({
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
               )}
               {LoadingForEdit ? (

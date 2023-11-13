@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./teamTable.scss";
 import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -19,11 +18,12 @@ import {
 } from "../../utilities/ApiHooks/team";
 import AddTeamMembers from "../Modal/addTeamMembers";
 import Snackbars from "../Modal/snackBar";
-import { Add } from "@mui/icons-material";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
-  console.log("team",stafData)
+  console.log("team", stafData);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
@@ -79,8 +79,31 @@ const TeamTable = () => {
       showSnackbar("Deleted Successfully ", "warning");
     }
   }, [deleteSuccess]);
-
+  const { data: locationData } = useFetchAdminLocation();
   const actionColumn = [
+    {
+      field: "Access",
+      headerName: "Access",
+      width: 200,
+      renderCell: (params) => {
+        const { haveAccessTo } = params.row;
+
+        const matchingLocationNames = haveAccessTo
+          .map((accessToID) =>
+            locationData.find((location) => location.id === accessToID)
+          )
+          .filter((match) => match)
+          .map((match) => match.name);
+
+        return (
+          <div>
+            <Typography color={"#667085"}>
+              {matchingLocationNames.join(", ") || "No location member found"}
+            </Typography>
+          </div>
+        );
+      },
+    },
     {
       field: " ",
 
@@ -97,7 +120,7 @@ const TeamTable = () => {
               {isMatchingId && loaderForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <DeleteIcon />
+                <img src={DeleteIcon} alt="delete icon" />
               )}
             </div>
             <div
@@ -157,8 +180,7 @@ const TeamTable = () => {
                 variant="contained"
                 onClick={() => (setOpen(true), setIsEdit(false))}
               >
-                <Add sx={{ color: "white" }} />
-                Add Member
+                Add member
               </IconButton>
             </Box>
           </Box>
@@ -185,7 +207,7 @@ const TeamTable = () => {
             <DataGrid
               getRowId={(row) => row._id}
               rows={filteredData}
-              columns={teamColumns}
+              columns={teamColumns.concat(actionColumn)}
               pageSizeOptions={[10]}
               sx={{ width: "100%" }}
             />

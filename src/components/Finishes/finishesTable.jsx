@@ -2,12 +2,23 @@ import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
 import { userColumnsHardware } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { Search } from '@mui/icons-material';
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Add } from "@mui/icons-material";
-import { Box, CircularProgress, IconButton, Typography, TextField,Input,InputAdornment } from "@mui/material";
-import { useDeleteFinishes, useFetchDataFinishes } from "../../utilities/ApiHooks/finishes";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  Typography,
+  TextField,
+  Input,
+  InputAdornment,
+} from "@mui/material";
+import {
+  useDeleteFinishes,
+  useFetchDataFinishes,
+} from "../../utilities/ApiHooks/finishes";
 import Snackbars from "../Modal/snackBar";
 import AddEditFinish from "../Modal/addEditFinish";
 
@@ -17,7 +28,8 @@ const FinishesTable = () => {
     message: "",
     severity: "",
   });
-  const { data: finishesData, refetch: finishesRefetch } = useFetchDataFinishes();
+  const { data: finishesData, refetch: finishesRefetch } =
+    useFetchDataFinishes();
   const {
     mutate: deleteFinish,
     isSuccess: deleteSuccess,
@@ -37,7 +49,7 @@ const FinishesTable = () => {
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (data) => {
-    console.log("data",data)
+    console.log("data", data);
     setOpen(true);
     setEdit(data);
     setIsEdit(true);
@@ -60,7 +72,7 @@ const FinishesTable = () => {
       field: "Status",
       width: 200,
       renderCell: (params) => {
-        console.log("params",params.row)
+        console.log("params", params.row);
         const id = params.row._id;
         const isMatchingId = id === matchingId;
         return (
@@ -72,7 +84,7 @@ const FinishesTable = () => {
               {isMatchingId && loaderForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
-                <DeleteIcon />
+                <img src={DeleteIcon} alt="delete icon" />
               )}
             </div>
             <div className="viewButton">
@@ -114,9 +126,8 @@ const FinishesTable = () => {
   };
 
   // Filter the finishesData based on the search input
-  const filteredData = finishesData?.filter(
-    (finish) =>
-      finish.name.toLowerCase().includes(search.toLowerCase())
+  const filteredData = finishesData?.filter((finish) =>
+    finish.name.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -169,14 +180,14 @@ const FinishesTable = () => {
           onChange={(e) => setSearch(e.target.value)}
           sx={{
             mb: 2,
-            width: '20%', // You can adjust the width as needed
-            marginLeft: '30px', // Adjust the margin as needed
+            width: "20%", // You can adjust the width as needed
+            marginLeft: "30px", // Adjust the margin as needed
           }}
-          endAdornment={(
+          endAdornment={
             <InputAdornment position="end">
               <Search />
             </InputAdornment>
-          )}
+          }
         />
 
         <Box sx={{ border: "1px solid #EAECF0", margin: 2, p: 0 }}>
@@ -207,8 +218,7 @@ const FinishesTable = () => {
         />
       </Box>
     </>
-  )
+  );
 };
 
 export default FinishesTable;
-

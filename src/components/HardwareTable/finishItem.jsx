@@ -1,4 +1,3 @@
-import { Delete } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -9,6 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
@@ -250,7 +250,7 @@ const FinishItem = ({
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
               )}
               {LoadingForEdit ? (

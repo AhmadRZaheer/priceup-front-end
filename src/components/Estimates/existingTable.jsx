@@ -23,9 +23,11 @@ import {
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
+import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { Link, useNavigate } from "react-router-dom";
 import { backendURL } from "../../utilities/common";
 import { useEffect } from "react";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 export default function ExistingTable() {
   const { data, isFetching, refetch } = useGetEstimates();
   const navigate = useNavigate();
@@ -76,10 +78,28 @@ export default function ExistingTable() {
   };
   return (
     <>
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-        <Typography sx={{ fontSize: 18, fontWeight: "bold" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          p: 2,
+        }}
+      >
+        <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
           Estimates
         </Typography>
+        {/* Search input field */}
+        <Input
+          placeholder="Search by Name"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{ mb: 2 }}
+          endAdornment={
+            <InputAdornment position="end">
+              <Search />
+            </InputAdornment>
+          }
+        />
         <IconButton
           onClick={handleCreateQuote}
           disabled={estimateDataFetching}
@@ -93,32 +113,32 @@ export default function ExistingTable() {
             fontSize: 16,
           }}
         >
-          <Add sx={{ fontSize: 20, color: "white" }} />
+          <img
+            width={"26px"}
+            height={"20px"}
+            src={PlusWhiteIcon}
+            alt="plus icon"
+          />
           Add
         </IconButton>
       </Box>
 
-      {/* Search input field */}
-      <Input
-        placeholder="Search by Name"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{ mb: 2 }}
-        endAdornment={
-          <InputAdornment position="end">
-            <Search />
-          </InputAdornment>
-        }
-      />
-
       {/* Table header */}
-      <Box sx={{ display: "flex", backgroundColor: "#e8e8e8", p: 2 }}>
-        <Typography sx={{ width: 280 }}>Creator Name</Typography>
-        <Typography sx={{ width: 220 }}>Customer Name</Typography>
-        <Typography sx={{ width: 250 }}>Customer Email</Typography>
-        <Typography sx={{ width: 180 }}>Date Quoted</Typography>
-        <Typography sx={{ width: 200 }}>Total</Typography>
-        <Typography sx={{ width: 180 }}>Status</Typography>
+      <Box sx={{ display: "flex", backgroundColor: "#F9FAFB", p: 2 }}>
+        <Typography sx={{ width: 280, color: "#667085" }}>
+          Creator Name
+        </Typography>
+        <Typography sx={{ width: 220, color: "#667085" }}>
+          Customer Name
+        </Typography>
+        <Typography sx={{ width: 250, color: "#667085" }}>
+          Customer Email
+        </Typography>
+        <Typography sx={{ width: 180, color: "#667085" }}>
+          Date Quoted
+        </Typography>
+        <Typography sx={{ width: 200, color: "#667085" }}>Total</Typography>
+        <Typography sx={{ width: 180, color: "#667085" }}>Status</Typography>
         <Typography sx={{ width: 60 }}></Typography>
       </Box>
 
@@ -171,43 +191,82 @@ export default function ExistingTable() {
                   </Box>
                   <Box>
                     <Typography>{item.creatorData.name}</Typography>
-                    <Typography sx={{ fontSize: 13, p: 0, mt: -0.4 }}>
+                    <Typography
+                      sx={{ fontSize: 13, p: 0, mt: -0.4, color: "#667085" }}
+                    >
                       {item.creatorData.email}
                     </Typography>
                   </Box>
                 </Box>
-                <Typography sx={{ width: 210, py: 1 }}>
+                <Typography sx={{ width: 210, py: 1, color: "#667085" }}>
                   {item.customerData.name}
                 </Typography>
-                <Typography sx={{ width: 250, py: 1 }}>
+                <Typography sx={{ width: 250, py: 1, color: "#667085" }}>
                   {item.customerData.email}
                 </Typography>
-                <Typography sx={{ width: 190, py: 1 }}>
+                <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
                   {new Date(item?.updatedAt).toDateString()}
                 </Typography>
-                <Typography sx={{ width: 200, py: 1 }}>
+                <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
                   ${item?.cost?.toFixed(2) || 0}
                 </Typography>
-                <Typography sx={{ width: 170, py: 1 }}>
-                  {item?.status}
+                <Typography
+                  sx={{
+                    width: 170,
+                    py: 1,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "fit-content",
+                      bgcolor:
+                        item?.status === "pending" ? "#FEF3F2" : "#ECFDF3",
+                      borderRadius: "16px",
+                      color: item?.status === "pending" ? "#B42318" : "#027A48",
+                      pl: 1.8,
+                      pt: 0.3,
+                      pr: 1.8,
+                      pb: 0.5,
+                      display: "flex",
+                      gap: 1,
+                      alignItems: "center",
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        width: "6px",
+                        height: "6px",
+                        bgcolor:
+                          item?.status === "pending" ? "#B42318" : "#027A48",
+                        borderRadius: "100%",
+                        mt: 0.2,
+                      }}
+                    ></Box>
+                    {item?.status}
+                  </Box>
                 </Typography>
                 <IconButton
                   onClick={() => handleDeleteEstimate(item._id)}
                   sx={{
-                    padding: 0,
+                    padding: 1,
                     margin: 0,
                     borderRadius: "100%",
-                    mt: -1,
+                    mt: -0.5,
                     mr: 1,
                     "&:hover": { backgroundColor: "white" },
                     "&:active": { backgroundColor: "white" },
                   }}
                 >
-                  <Delete sx={{ color: "#667085", fontSize: 25, py: 0.8 }} />
+                  <img
+                    width={"20px"}
+                    height={"20px"}
+                    src={DeleteIcon}
+                    alt="delete icon"
+                  />
                 </IconButton>
                 <Link
                   to="/estimates/steps"
-                  style={{ marginLeft: 2, marginRight: 1 }}
+                  style={{ marginLeft: 2, marginRight: 1 ,marginTop: 6}}
                 >
                   <IconButton
                     onClick={() => handleIconButtonClick(item)}

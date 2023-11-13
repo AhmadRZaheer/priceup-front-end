@@ -16,6 +16,7 @@ import {
   useDeleteGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 
 const GlassTypeItem = ({
   data,
@@ -245,7 +246,7 @@ const GlassTypeItem = ({
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
               )}
               {LoadingForEdit ? (

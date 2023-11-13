@@ -9,20 +9,15 @@ import {
 } from "../../utilities/ApiHooks/glassAddon";
 import React, { useEffect, useState } from "react";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 
-const AddonList = ({
-  entry,
-  mainIndex,
-  refetch,
-  showSnackbar,
-  type,
-}) => {
+const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
   const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
-  useDeleteGlassAddon();
+    useDeleteGlassAddon();
   const handleHardwareDelete = (id) => {
     deleteGlassAddon(id);
   };
@@ -99,11 +94,11 @@ const AddonList = ({
             </IconButton>
           </Box>
           <Box>
-            <IconButton>
-              <Delete onClick={() => handleHardwareDelete(entry._id)} />
+            <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+              <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
-            id={entry._id}
+              id={entry._id}
               onClick={() => handleOpenUpdate(entry._id)}
               sx={{
                 backgroundColor: "#8477DA",

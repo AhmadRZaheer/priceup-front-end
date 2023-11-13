@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
 import { Link } from "react-router-dom";
@@ -14,6 +14,7 @@ export const teamColumns = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
+      console.log(params.row);
       return (
         <div className="cellWrapper">
           <div className="customerImg">
@@ -33,6 +34,57 @@ export const teamColumns = [
     },
   },
   { field: "email", headerName: "Email address", width: 330 },
+  {
+    field: "Date added",
+    headerName: "Date added",
+    width: 180,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>
+            {new Date(params.row.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Last quote",
+    headerName: "Last quote",
+    width: 180,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>
+            {params.row.lastQuoted
+              ? new Date(params.row.lastQuoted).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "-"}
+          </Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Total qouted",
+    headerName: "Total qouted",
+    width: 160,
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <>
+          <Typography color={"#667085"}>$ {params.row.totalQuoted}</Typography>
+        </>
+      );
+    },
+  },
 ];
 export const AdminColumns = [
   {
@@ -89,14 +141,21 @@ export const AdminColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 200 },
+  {
+    field: "email",
+    headerName: "Email address",
+    width: 200,
+    renderCell: (params) => {
+      return <div style={{ color: "#667085" }}>{params.row.email}</div>;
+    },
+  },
   {
     field: "dateAdded",
     headerName: "Date added",
     width: 220,
     renderCell: (params) => {
       return (
-        <div className="userNameTable">
+        <div style={{ color: "#667085" }}>
           {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
@@ -163,14 +222,21 @@ export const AdminColumns2 = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 200 },
+  {
+    field: "email",
+    headerName: "Email address",
+    width: 200,
+    renderCell: (params) => {
+      return <div style={{ color: "#667085" }}>{params.row.email}</div>;
+    },
+  },
   {
     field: "dateAdded",
     headerName: "Date added",
     width: 220,
     renderCell: (params) => {
       return (
-        <div className="userNameTable">
+        <div style={{ color: "#667085" }}>
           {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
@@ -192,13 +258,13 @@ export const CustomerColumns = [
       return (
         <>
           <div className="cellWrapper">
-            {/* <div className="customerImg">
+            <div className="customerImg">
               <img
                 style={{ width: 30, height: 30 }}
                 src={`${backendURL}/${params.row.image}`}
                 alt=""
               />
-            </div> */}
+            </div>
             <div className="customerNameTable">
               {params.row.name}
               <div className="userNameTable">{params.row.username}</div>
@@ -208,8 +274,44 @@ export const CustomerColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 300 },
-  { field: "lastQuotedOn", headerName: "LastQuoted", width: 300 },
+  {
+    field: "email",
+    headerName: "Email address",
+    width: 300,
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <>
+          <Typography color={"#667085"}>{params.row.email}</Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Address",
+    headerName: "Address",
+    width: 300,
+    renderCell: (params) => {
+      console.log(params.row);
+      return (
+        <>
+          <Typography color={"#667085"}>{params.row.address}</Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "lastQuotedOn",
+    headerName: "LastQuoted",
+    width: 300,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>{params.row.lastQuotedOn}</Typography>
+        </>
+      );
+    },
+  },
   ,
 ];
 export const CustomerQuoteColumns = [

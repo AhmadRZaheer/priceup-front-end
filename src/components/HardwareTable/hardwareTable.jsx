@@ -53,6 +53,7 @@ const HardwareTable = () => {
             border: "1px solid rgb(232, 232, 232)",
             marginLeft: 18,
             marginRight: 18,
+            borderRadius: "8px",
           }}
           className="HardWareComponent"
         >

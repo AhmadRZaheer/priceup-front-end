@@ -12,6 +12,7 @@ import Snackbars from "../Modal/snackBar";
 import "./hardwareTable.scss";
 import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";
+import AddIcon from "../../Assets/plus.svg";
 
 const HardWareComponent = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -37,9 +38,9 @@ const HardWareComponent = ({ type }) => {
   const {
     data: hardwareData,
     isFetching: hardwareFetching,
-    refetch: hardwareRefetch
+    refetch: hardwareRefetch,
   } = useFetchDatahardware(type);
- 
+
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -52,63 +53,19 @@ const HardWareComponent = ({ type }) => {
     setOpen(false);
   };
 
-  
- 
   return (
     <>
       <div
         style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignContent: "center",
           paddingTop: 20,
-          paddingBottom: 15,
-          paddingLeft: "10px",
-          paddingRight: "10px",
-          alignItems: "start",
         }}
-      >
-        {" "}
-        <div
-          style={{
-            width: "250px",
-            padding: 4,
-            alignItems: "center",
-            textTransform: "uppercase",
-          }}
-        >
-          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-            {type}
-          </p>
-        </div>
-        <div
-          style={{
-            padding: 4,
-          }}
-        >
-          <IconButton
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-            }}
-          >
-            <Add style={{ color: "white" }} />
-            Add
-          </IconButton>
-        </div>{" "}
-      </div>
+      ></div>
       <div
         style={{
           display: "flex",
           gap: 4,
           alignContent: "center",
-          backgroundColor: "rgb(232, 232, 232)",
+          backgroundColor: "#EAECF0",
           paddingTop: 15,
           paddingBottom: 15,
           paddingLeft: "10px",
@@ -119,7 +76,7 @@ const HardWareComponent = ({ type }) => {
         <div
           style={{
             width: "250px",
-            padding: 4,
+            padding: 8,
             alignItems: "center",
           }}
         >
@@ -128,8 +85,7 @@ const HardWareComponent = ({ type }) => {
         <div
           style={{
             width: "250px",
-
-            padding: 4,
+            padding: 8,
           }}
         >
           Part Number{" "}
@@ -137,8 +93,7 @@ const HardWareComponent = ({ type }) => {
         <div
           style={{
             width: "250px",
-
-            padding: 4,
+            padding: 8,
           }}
         >
           Cost
@@ -146,11 +101,24 @@ const HardWareComponent = ({ type }) => {
         <div
           style={{
             width: "250px",
-
-            padding: 4,
+            padding: 8,
           }}
         >
           Status
+        </div>{" "}
+        <div style={{ width: "50%", textAlign: "right" }}>
+          <IconButton
+            onClick={handleOpen}
+            sx={{
+              color: "#8477DA",
+              textTransform: "capitalize",
+              borderRadius: 2,
+              fontSize: 17,
+            }}
+          >
+            <img width={"25px"} height={"20px"} src={AddIcon} alt="add icon" />
+            Add
+          </IconButton>
         </div>{" "}
       </div>
       {hardwareFetching ? (
@@ -177,7 +145,13 @@ const HardWareComponent = ({ type }) => {
           }}
         >
           {hardwareData?.map((entry, mainIndex) => (
-            <HardwareItem entry={entry} mainIndex={mainIndex} hardwareRefetch={hardwareRefetch} showSnackbar={showSnackbar} type={type}/>
+            <HardwareItem
+              entry={entry}
+              mainIndex={mainIndex}
+              hardwareRefetch={hardwareRefetch}
+              showSnackbar={showSnackbar}
+              type={type}
+            />
           ))}
         </div>
       ) : (

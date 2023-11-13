@@ -21,6 +21,8 @@ import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";
 import Snackbars from "../Modal/snackBar";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import EditIcon from "../../Assets/d.svg";
 
 const SuperAdminTeam = () => {
   const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
@@ -92,7 +94,7 @@ const SuperAdminTeam = () => {
 
         return (
           <div>
-            <Typography>
+            <Typography color="#667085">
               {matchingLocationNames.join(", ") || "No location member found"}
             </Typography>
           </div>
@@ -116,7 +118,7 @@ const SuperAdminTeam = () => {
         return (
           <>
             <IconButton
-              sx={{ borderRadius: 0 }}
+              sx={{ borderRadius: 0, color: "#7F56D9" }}
               onClick={() => openModel(params.row)}
             >
               <h6>Access Location</h6>
@@ -140,12 +142,12 @@ const SuperAdminTeam = () => {
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
               onClick={() => handeleDeleteStaff(id)}
             >
-              <DeleteOutlineOutlined sx={{ color: "#788093", fontSize: 20 }} />
+              <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
-              <EditOutlined sx={{ color: "#788093", fontSize: 20 }} />
+              <img src={EditIcon} alt="delete icon" />
             </IconButton>
           </>
         );
@@ -170,8 +172,9 @@ const SuperAdminTeam = () => {
           sx={{
             mb: 2,
             mt: 10,
-            width: "20%", // You can adjust the width as needed
-            marginLeft: "30px", // Adjust the margin as needed
+            width: "20%",
+            marginLeft: "30px",
+            mt: 1,
           }}
           endAdornment={
             <InputAdornment position="end">

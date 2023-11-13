@@ -15,6 +15,7 @@ import {
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import { useState } from "react";
+import bgCustom from "../../Assets/customlayoutimage.svg";
 
 export default function Layout() {
   const boxStyles = {
@@ -182,9 +183,22 @@ export default function Layout() {
                     ...boxStyles,
                     backgroundColor: selectCustom ? "#8477DA" : "#D9D9D9",
                     color: selectCustom ? "white" : "black",
+                    position: "relative",
                   }}
                 >
-                  <Typography sx={{ font: "18px" }}>Custom</Typography>
+                  <img
+                    style={{
+                      position: "absolute",
+                      zIndex: 1,
+                      height: "100px",
+                      width: "100px",
+                    }}
+                    src={bgCustom}
+                    alt="custom image"
+                  />
+                  <Typography sx={{ font: "18px", zIndex: 2, color: "black" }}>
+                    Custom
+                  </Typography>
                 </Box>
               </Grid>
             )}
