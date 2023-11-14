@@ -14,13 +14,27 @@ import DefaltIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip, Popover, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Popover,
+  Typography,
+  Drawer,
+} from "@mui/material";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import { AttachMoney, KeyboardBackspace, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import AppBar from "@mui/material/AppBar";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+
+const drawerWidth = 320;
 
 const Sidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -53,8 +67,20 @@ const Sidebar = () => {
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
   };
-  return (
-    <>
+
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  const drawer = (
+    <Box
+      sx={{
+        position: { xs: "absolute", md: "static" },
+        top: "0px",
+        zIndex: 10,
+      }}
+    >
       <div className="sidebar">
         <Box
           sx={{
@@ -198,17 +224,17 @@ const Sidebar = () => {
                   </li>
                 </NavLink>
                 {/* <NavLink to="/Addons" className="link">
-              <li
-                className={` ${location.pathname === "/Addons" ? "active" : ""
-                  }`}
-              >
-                <IconButton sx={{ color: "white", padding: 0.2 }}>
-                  <LayersOutlinedIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
+          <li
+            className={` ${location.pathname === "/Addons" ? "active" : ""
+              }`}
+          >
+            <IconButton sx={{ color: "white", padding: 0.2 }}>
+              <LayersOutlinedIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
 
-                  <span>Add ons</span>
-                </IconButton>
-              </li>
-            </NavLink> */}
+              <span>Add ons</span>
+            </IconButton>
+          </li>
+        </NavLink> */}
                 <NavLink to="/glass-types" className="link">
                   <li
                     className={` ${
@@ -340,6 +366,76 @@ const Sidebar = () => {
           </Box>
         </Box>
       </div>
+    </Box>
+  );
+
+  return (
+    <>
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            display: { sm: "none" },
+          }}
+        >
+          <Toolbar sx={{ backgroundColor: "#100d24" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ mr: 2, display: { sm: "none" } }}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{
+            width: { sm: drawerWidth },
+            flexShrink: { sm: 0 },
+          }}
+          aria-label="mailbox "
+        >
+          {/* for mobile */}
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+
+          {/* for desktop */}
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      </Box>
+
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

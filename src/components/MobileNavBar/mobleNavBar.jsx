@@ -9,14 +9,12 @@ import { setNavigation } from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
-  Backdrop,
   Box,
   Button,
   Tooltip,
   Popover,
   Typography,
 } from "@mui/material";
-import { makeStyles } from "@material-ui/core";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -35,19 +33,19 @@ import {
   useSwitchStaffLocation,
 } from "../../utilities/ApiHooks/team";
 import { setDataRefetch } from "../../redux/staff";
+import AppBar from "@mui/material/AppBar";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
 
-const useStyles = makeStyles((theme) => ({
-  drawer: {
-    width: 280,
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-  },
-}));
+const drawerWidth = 280;
+
 function MobileBar() {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const classes = useStyles();
   const [activeButton, setActiveButton] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
@@ -122,217 +120,283 @@ function MobileBar() {
       );
     }
   }, [haveAccessFetched]);
-  return (
-    <>
-      <div className="Main">
-        <div className="MenuIcon" onClick={toggleSidebar}>
-          <MenuRoundedIcon sx={{ fontSize: 40, padding: 1 }} />
-        </div>
-        <div className="top">
-          <span className="logo">
+
+  const drawer = (
+    <Box
+      sx={{
+        backgroundColor: "#100d24",
+        width: drawerWidth,
+        height: "100vh",
+        padding: 0,
+        margin: 0,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+    >
+      <Box>
+        <div className="top2">
+          <span className="logo2">
             <img src={Logo} alt="" />
           </span>
         </div>
-        <div>
-          <IconButton sx={{ borderRadius: "full" }}>
-            <SearchOutlinedIcon
-              sx={{ fontSize: 40, padding: 0.2, fontWeight: 2, color: "white" }}
-            />
-          </IconButton>
-        </div>
-        <Drawer
-          anchor="left"
-          open={isSidebarOpen}
-          onClose={toggleSidebar}
-          classes={{ paper: classes.drawer }}
-          sx={{ width: 380 }}
+        <Box
+          sx={{
+            height: "65vh",
+            overflow: "auto",
+            width: drawerWidth,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
-          <Box
-            sx={{
-              backgroundColor: "#100d24",
-              width: 280,
-              height: "100vh",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box sx={{ height: "92vh" }}>
-              <div className="top2">
-                <span className="logo2">
-                  <img src={Logo} alt="" />
-                </span>
-              </div>
-              <Box
+          <Box sx={{ marginTop: 2, textAlign: "left" }}>
+            <Tooltip title="Switch Location">
+              <Button
                 sx={{
-                  height: "65vh",
-                  overflow: "auto",
-                  width: 280,
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  color: "white",
+                  padding: 0.2,
+                  width: 200,
+                  backgroundColor: "#8477da",
+                  ":hover": {
+                    backgroundColor: "#8477da",
+                  },
                 }}
+                onClick={handleSeeLocationsClick}
               >
-                <Box sx={{ marginTop: 2, textAlign: "left" }}>
-                  <Tooltip title="Switch Location">
-                    <Button
-                      sx={{
-                        color: "white",
-                        padding: 0.2,
-                        width: 200,
-                        backgroundColor: "#8477da",
-                        ":hover": {
-                          backgroundColor: "#8477da",
-                        },
-                      }}
-                      onClick={handleSeeLocationsClick}
-                    >
-                      <PinDrop sx={{ color: "white", }} />
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          padding: "8px",
-                        }}
-                      >
-                        <Typography sx={{ fontSize: "16px", mb: -0.4 }}>
-                          {activeLocation?.name}
-                        </Typography>
-                      </Box>
-                      {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
-                    </Button>
-                  </Tooltip>
+                <PinDrop sx={{ color: "white" }} />
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    padding: "8px",
+                  }}
+                >
+                  <Typography sx={{ fontSize: "16px", mb: -0.4 }}>
+                    {activeLocation?.name}
+                  </Typography>
                 </Box>
-                <Box sx={{ marginTop: 2 }}>
-                  <Button
-                    sx={{
-                      width: 200,
-                      color: "white",
-                      margin: 2,
-                      textTransform: "capitalize",
-                      backgroundColor:
-                        activeButton === "esti" ? "#B0C4DE" : "#8477da",
-                      ":hover": {
-                        backgroundColor:
-                          activeButton === "esti" ? "#B0C4DE" : "#8477da",
-                      },
-                    }}
-                    onClick={() => handleEstimateClick()}
-                  >
-                    <img
-                      style={{ paddingRight: 10 }}
-                      src={EstimsteIcon}
-                      alt="image of customer"
-                    />{" "}
-                    Estimates
-                  </Button>
-                </Box>
-                <Box sx={{ marginTop: 2 }}>
-                  <Button
-                    sx={{
-                      width: 200,
-                      color: "white",
-                      margin: 2,
-                      textTransform: "capitalize",
-                      backgroundColor:
-                        activeButton === "customr" ? "#B0C4DE" : "#8477da",
-                      ":hover": {
-                        backgroundColor:
-                          activeButton === "customr" ? "#B0C4DE" : "#8477da",
-                      },
-                    }}
-                    onClick={() => handleCustomerClick()}
-                  >
-                    <img
-                      style={{ paddingRight: 10 }}
-                      src={CustomerIcon}
-                      alt="image of customer"
-                    />{" "}
-                    Customer
-                  </Button>
-                </Box>
-                <Box sx={{ marginTop: 2 }}>
-                  <Button
-                    sx={{
-                      width: 200,
-                      color: "white",
-                      margin: 2,
-                      textTransform: "capitalize",
-                      backgroundColor:
-                        activeButton === "staff" ? "#B0C4DE" : "#8477da",
-                      ":hover": {
-                        backgroundColor:
-                          activeButton === "staff" ? "#B0C4DE" : "#8477da",
-                      },
-                    }}
-                    onClick={handleStaffClick}
-                  >
-                    <img
-                      style={{ paddingRight: 10 }}
-                      src={TremIcon}
-                      alt="image of customer"
-                    />{" "}
-                    Team
-                  </Button>
-                </Box>
-              </Box>
-            </Box>
+                {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
+              </Button>
+            </Tooltip>
+          </Box>
+          <Box sx={{ marginTop: 2 }}>
+            <Button
+              sx={{
+                width: 200,
+                color: "white",
+                margin: 2,
+                textTransform: "capitalize",
+                backgroundColor:
+                  activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                ":hover": {
+                  backgroundColor:
+                    activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                },
+              }}
+              onClick={() => handleEstimateClick()}
+            >
+              <img
+                style={{ paddingRight: 10 }}
+                src={EstimsteIcon}
+                alt="image of customer"
+              />{" "}
+              Estimates
+            </Button>
+          </Box>
+          <Box sx={{ marginTop: 2 }}>
+            <Button
+              sx={{
+                width: 200,
+                color: "white",
+                margin: 2,
+                textTransform: "capitalize",
+                backgroundColor:
+                  activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                ":hover": {
+                  backgroundColor:
+                    activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                },
+              }}
+              onClick={() => handleCustomerClick()}
+            >
+              <img
+                style={{ paddingRight: 10 }}
+                src={CustomerIcon}
+                alt="image of customer"
+              />{" "}
+              Customer
+            </Button>
+          </Box>
+          <Box sx={{ marginTop: 2 }}>
+            <Button
+              sx={{
+                width: 200,
+                color: "white",
+                margin: 2,
+                textTransform: "capitalize",
+                backgroundColor:
+                  activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                ":hover": {
+                  backgroundColor:
+                    activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                },
+              }}
+              onClick={handleStaffClick}
+            >
+              <img
+                style={{ paddingRight: 10 }}
+                src={TremIcon}
+                alt="image of customer"
+              />{" "}
+              Team
+            </Button>
+          </Box>
+        </Box>
+      </Box>
 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "end",
+          alignItems: "start",
+          width: "100%",
+          flexDirection: "column",
+          backgroundColor: "#100d24",
+        }}
+      >
+        <Tooltip title="Logout" placement="top" arrow>
+          <Button
+            sx={{
+              width: 240,
+              color: "white",
+              margin: 2,
+              backgroundColor: "#8477da",
+              ":hover": {
+                backgroundColor: "#8477da",
+              },
+            }}
+            variant="contained"
+            onClick={Logout}
+          >
+            Logout
+          </Button>
+        </Tooltip>
+
+        <div className="bottom">
+          <div className="UserIcon">
+            <img
+              src={`${backendURL}/${decodedToken?.image}`}
+              width="50"
+              height="50"
+              alt="no"
+            />
+          </div>
+          <div className="userInSidebar">
+            {decodedToken?.name}
+            <div className="emailUser">{decodedToken?.email}</div>
+          </div>
+        </div>
+      </Box>
+    </Box>
+  );
+
+  return (
+    <>
+      <Box sx={{ display: "flex" }}>
+        <AppBar
+          position="fixed"
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+          }}
+        >
+          <Toolbar sx={{ backgroundColor: "#100d24" }}>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "end",
-                alignItems: "start",
+                alignItems: "center",
+                justifyContent: "space-between",
                 width: "100%",
-                flexDirection: "column",
-                backgroundColor: "#100d24",
               }}
             >
-              <Tooltip title="Logout" placement="top" arrow>
-                <Button
-                  sx={{
-                    width: 240,
-                    color: "white",
-                    margin: 2,
-                    backgroundColor: "#8477da",
-                    ":hover": {
-                      backgroundColor: "#8477da",
-                    },
-                  }}
-                  variant="contained"
-                  onClick={Logout}
+              <div>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  edge="start"
+                  onClick={handleDrawerToggle}
+                  sx={{ mr: 2, display: { sm: "none" } }}
                 >
-                  Logout
-                </Button>
-              </Tooltip>
-
-              <div className="bottom">
-                <div className="UserIcon">
-                  <img
-                    src={`${backendURL}/${decodedToken?.image}`}
-                    width="50"
-                    height="50"
-                    alt="no"
+                  <MenuIcon />
+                </IconButton>
+              </div>
+              <div>
+                <span className="logo">
+                  <img src={Logo} alt="" />
+                </span>
+              </div>
+              <div>
+                <IconButton sx={{ borderRadius: "full" }}>
+                  <SearchOutlinedIcon
+                    sx={{
+                      fontSize: 40,
+                      padding: 0.2,
+                      fontWeight: 2,
+                      color: "white",
+                    }}
                   />
-                </div>
-                <div className="userInSidebar">
-                  {decodedToken?.name}
-                  <div className="emailUser">{decodedToken?.email}</div>
-                </div>
+                </IconButton>
               </div>
             </Box>
-          </Box>
-        </Drawer>
-        <Backdrop
-          open={isSidebarOpen}
-          onClick={handleBackdropClick}
-          className={classes.backdrop}
-        />
-      </div>
+          </Toolbar>
+        </AppBar>
+        <Box
+          component="nav"
+          sx={{
+            width: { sm: drawerWidth },
+            flexShrink: { sm: 0 },
+          }}
+          aria-label="mailbox "
+        >
+          {/* for mobile */}
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true,
+            }}
+            sx={{
+              display: { xs: "block", sm: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+          >
+            {drawer}
+          </Drawer>
+
+          {/* for desktop */}
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
+            open
+          >
+            {drawer}
+          </Drawer>
+        </Box>
+      </Box>
+
       <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
@@ -345,7 +409,7 @@ function MobileBar() {
           vertical: "top",
           horizontal: "left",
         }}
-      // sx={{ up:20 }}
+        // sx={{ up:20 }}
       >
         <input
           type="text"

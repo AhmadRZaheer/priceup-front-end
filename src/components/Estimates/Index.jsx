@@ -50,7 +50,9 @@ const Index = () => {
         {Navigation === "layouts" && <Layout />}
         {Navigation === "measurments" && <LayoutMeasurements />}
         {Navigation === "review" && (
-          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+          <LayoutReview
+            setClientDetailOpen={setClientDetailOpen}
+          />
         )}
         {Navigation === "custom" && <CustomLayout />}
       </Box>

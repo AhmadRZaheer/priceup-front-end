@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Typography,
-} from "@mui/material";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   initializeStateForEditQuote,
@@ -28,8 +23,8 @@ export default function ExitingQuotes() {
     useFetchDataEstimate();
   const dispatch = useDispatch();
   useEffect(() => {
-    refetchEstimates()
-  }, [refetchData])
+    refetchEstimates();
+  }, [refetchData]);
   const handleIconButtonClick = (item) => {
     dispatch(setListData(estimateListData));
     dispatch(
@@ -46,10 +41,10 @@ export default function ExitingQuotes() {
   };
   const useStyles = makeStyles({
     overflowText: {
-      maxWidth: '115px',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      overflow: 'hidden',
+      maxWidth: "115px",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
     },
   });
   const classes = useStyles();
@@ -71,22 +66,19 @@ export default function ExitingQuotes() {
       ) : (
         <Box
           sx={{
-            marginTop: 8,
-            height: "92.9vh",
+            height: "100vh",
             color: "#ffff",
             backgroundColor: "rgba(16, 13, 36, 1)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "space-between",
           }}
         >
-          <Box sx={{}}>
+          <Box>
             <Box
               sx={{
                 paddingY: 2,
                 paddingX: 2,
                 display: "flex",
                 justifyContent: "space-between",
+                marginTop: 8,
               }}
             >
               <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
@@ -127,18 +119,41 @@ export default function ExitingQuotes() {
                     }}
                   >
                     <Box sx={{ display: "flex", gap: 1 }}>
-                      <Box sx={{ width: 40, height: 40, borderRadius: "100%", overflow: "hidden" }}>
-                        <img width={40} src={`${backendURL}/${item?.creatorData?.image}`} alt="image person" />
+                      <Box
+                        sx={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: "100%",
+                          overflow: "hidden",
+                        }}
+                      >
+                        <img
+                          width={40}
+                          src={`${backendURL}/${item?.creatorData?.image}`}
+                          alt="image person"
+                        />
                       </Box>
 
                       <Box>
                         <Box sx={{ display: "flex", gap: 0.6 }}>
-                          <Typography className={classes.overflowText}>{item?.creatorData?.name}</Typography>
-                          <Typography sx={{ fontSize: 16, fontWeight: "Medium" }}> - Creator</Typography>
+                          <Typography className={classes.overflowText}>
+                            {item?.creatorData?.name}
+                          </Typography>
+                          <Typography
+                            sx={{ fontSize: 16, fontWeight: "Medium" }}
+                          >
+                            {" "}
+                            - Creator
+                          </Typography>
                         </Box>
                         <Box sx={{ display: "flex", gap: 0.6 }}>
-                          <Typography sx={{ fontSize: 14 }}>{item?.customerData?.name}</Typography>
-                          <Typography sx={{ fontSize: 14 }}> - Customer</Typography>
+                          <Typography sx={{ fontSize: 14 }}>
+                            {item?.customerData?.name}
+                          </Typography>
+                          <Typography sx={{ fontSize: 14 }}>
+                            {" "}
+                            - Customer
+                          </Typography>
                         </Box>
                       </Box>
                     </Box>
@@ -154,10 +169,23 @@ export default function ExitingQuotes() {
 
                       <Button
                         onClick={() => handleIconButtonClick(item)}
-                        sx={{ height: 25, color: 'white', background: "#8477DA", "&:hover": { background: "#8477DA", }, width: 'fit-content', margin: '0px auto' }}
+                        sx={{
+                          height: 25,
+                          color: "white",
+                          background: "#8477DA",
+                          "&:hover": { background: "#8477DA" },
+                          width: "fit-content",
+                          margin: "0px auto",
+                        }}
                         disabled={estimateDataFetching}
                       >
-                        <ModeIcon sx={{ color: "white", fontSize: '17px', marginRight: '5px' }} />
+                        <ModeIcon
+                          sx={{
+                            color: "white",
+                            fontSize: "17px",
+                            marginRight: "5px",
+                          }}
+                        />
                         Edit
                       </Button>
                       <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
@@ -165,36 +193,45 @@ export default function ExitingQuotes() {
                       </Typography>
                     </Box>
                   </Box>
-
-                )))}
+                ))
+              )}
             </Box>
           </Box>
+
           <Box
             sx={{
-              paddingX: 2,
-              py: 3,
               position: "fixed",
               bottom: 0,
-              left: 0,
-              width: "92%",
+              width: "100%",
+              paddingY: "20px",
               borderTop: "1px solid rgba(102, 112, 133, 0.5)",
+              overflow: "hidden",
             }}
           >
-            <Button
-              onClick={handleCreateQuote}
-              disabled={estimateDataFetching}
-              color="primary"
+            <Box
               sx={{
-                textTransform: "capitalize",
-                width: "100%",
-                background: "#8477DA",
-                color: "white",
-                fontSize: 18,
-                "&:hover": { background: "#8477DA", color: "white" },
+                display: "flex",
+                justifyContent: "center",
+                marginRight: { sm: 35 },
               }}
             >
-              Create New Estimate
-            </Button>
+              <Button
+                onClick={handleCreateQuote}
+                disabled={estimateDataFetching}
+                color="primary"
+                sx={{
+                  textTransform: "capitalize",
+                  width: "200px",
+                  background: "#8477DA",
+                  color: "white",
+                  fontSize: 18,
+                  "&:hover": { background: "#8477DA", color: "white" },
+                  margin: "0px",
+                }}
+              >
+                Create New Estimate
+              </Button>
+            </Box>
           </Box>
         </Box>
       )}

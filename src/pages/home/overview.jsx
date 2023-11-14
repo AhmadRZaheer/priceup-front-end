@@ -5,6 +5,7 @@ import Widget from "../../components/widgets/widget";
 import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/estimateDataCard";
 import ExistingQuotes2 from "../../components/Estimates/existingTable2";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { Box } from "@mui/material";
 
 const Overview = () => {
   const { data } = useFetchDataEstimateCard();
@@ -13,7 +14,11 @@ const Overview = () => {
   return (
     <div className="overview">
       <Sidebar />
-      <div className="overviewContainer">
+
+      <Box
+        className="overviewContainer"
+        sx={{ marginTop: { xs: "50px", sm: "0px" } }}
+      >
         <div className="page-title">
           <h2>Welcome back, {name}</h2>
 
@@ -28,7 +33,7 @@ const Overview = () => {
           <h2>Estimates</h2>
         </div>
         <ExistingQuotes2 />
-      </div>
+      </Box>
     </div>
   );
 };
