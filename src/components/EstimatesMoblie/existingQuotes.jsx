@@ -61,7 +61,7 @@ export default function ExitingQuotes() {
             height: "100vh",
           }}
         >
-          <CircularProgress />
+          <CircularProgress sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
         <Box
@@ -108,7 +108,7 @@ export default function ExitingQuotes() {
                     height: 600,
                   }}
                 >
-                  <CircularProgress sx={{}} />
+                  <CircularProgress sx={{ color: "#8477DA" }} />
                 </Box>
               ) : (
                 data?.estimates?.map((item) => (

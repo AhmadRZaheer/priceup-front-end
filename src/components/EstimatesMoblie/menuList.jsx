@@ -152,7 +152,7 @@ const MenuList = ({
               sx={{
                 border: { md: "none", xs: "2px solid #423f57" },
                 borderRadius: { md: 0, xs: 2 },
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
                 background: "#14112c",
                 width: "100%",
                 mb: 1,
@@ -189,7 +189,7 @@ const MenuList = ({
                 height: 150,
               }}
             >
-              <CircularProgress />
+              <CircularProgress sx={{ color: "#8477DA" }}/>
             </Box>
           ) : (
             menuOptions?.map((item) => (

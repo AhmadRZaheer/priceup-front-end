@@ -115,7 +115,7 @@ export default function Layout() {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -139,7 +139,7 @@ export default function Layout() {
                   height: 300,
                 }}
               >
-                <CircularProgress />
+                <CircularProgress sx={{color: "#8477DA"}}/>
               </Box>
             ) : (
               <Grid
@@ -182,7 +182,7 @@ export default function Layout() {
                   sx={{
                     ...boxStyles,
                     backgroundColor: selectCustom ? "#8477DA" : "#D9D9D9",
-                    color: selectCustom ? "white" : "black",
+                    color: selectCustom ? "white" : "#101828",
                     position: "relative",
                   }}
                 >
@@ -196,7 +196,7 @@ export default function Layout() {
                     src={bgCustom}
                     alt="custom image"
                   />
-                  <Typography sx={{ font: "18px", zIndex: 2, color: "black" }}>
+                  <Typography sx={{ font: "18px", zIndex: 2, color: "#101828" }}>
                     Custom
                   </Typography>
                 </Box>
@@ -207,7 +207,7 @@ export default function Layout() {
                 <Button
                   sx={{
                     width: 180,
-                    color: "black",
+                    color: "#101828",
                     border: "1px solid black",
                     fontSize: 18,
                     ml: 2,

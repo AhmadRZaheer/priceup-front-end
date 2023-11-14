@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
-import { Add} from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import Snackbars from "../Modal/snackBar";
 import {
   useDeleteGlassAddon,
@@ -8,6 +8,7 @@ import {
 } from "../../utilities/ApiHooks/glassAddon";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import AddonList from "./addonList";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const GlassAddonGrid = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -36,7 +37,7 @@ const GlassAddonGrid = ({ type }) => {
     isFetching: glassAddonFetching,
   } = useFetchGlassAddons(type);
   const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
-  useDeleteGlassAddon();
+    useDeleteGlassAddon();
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -96,21 +97,11 @@ const GlassAddonGrid = ({ type }) => {
             padding: 4,
           }}
         >
-          <IconButton
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-            }}
-          >
-            <Add style={{ color: "white" }} />
-            Add
-          </IconButton>
+          <CustomIconButton
+            handleClick={handleOpen}
+            icon={<Add style={{ color: "white" }} />}
+            buttonText="Add"
+          />
         </div>{" "}
       </div>
       <div
@@ -174,7 +165,7 @@ const GlassAddonGrid = ({ type }) => {
             height: "56vh",
           }}
         >
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
         <div

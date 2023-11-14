@@ -116,7 +116,7 @@ const Layout = () => {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -140,7 +140,7 @@ const Layout = () => {
                   height: 700,
                 }}
               >
-                <CircularProgress />
+                <CircularProgress  sx={{ color: "#8477DA" }}/>
               </Box>
             ) : (
               <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
@@ -154,7 +154,7 @@ const Layout = () => {
                           ? "rgba(36, 28, 52,0.5)"
                           : "#8477DA",
                       color:
-                        selectedData?._id !== layout._id ? "white" : "black",
+                        selectedData?._id !== layout._id ? "white" : "#101828",
                     }}
                     onClick={() => handleBoxClick(layout)}
                   >

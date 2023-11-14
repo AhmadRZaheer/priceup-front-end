@@ -131,7 +131,7 @@ const HardWareComponent = ({ type }) => {
             height: "60%",
           }}
         >
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : hardwareData?.length >= 1 ? (
         <div

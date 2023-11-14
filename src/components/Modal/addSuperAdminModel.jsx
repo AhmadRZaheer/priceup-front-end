@@ -219,7 +219,7 @@ export default function AddSuperAdminModel({
               variant="outlined"
               onClick={close}
               sx={{
-                color: "black",
+                color: "#101828",
                 border: "1px solid #D0D5DD",
                 width: "50%",
                 "&:hover": {
@@ -237,7 +237,7 @@ export default function AddSuperAdminModel({
               sx={{ backgroundColor: "#8477DA", width: "50%" }}
             >
                  {LoadingForEdit || LoadingForAdd ? (
-                <CircularProgress size={24} />
+                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
               ) : isEdit ? (
                 "Update"
               ) : (

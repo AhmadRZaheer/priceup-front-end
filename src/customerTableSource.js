@@ -1,12 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import userImg from "./Assets/username1.svg";
 import wheel from "./Assets/wheel.svg";
-import { Link } from "react-router-dom";
-
 import "./components/table/table.scss";
 import { backendURL } from "./utilities/common";
-import { useState } from "react";
-import { useFetchAdminLocation } from "./utilities/ApiHooks/superAdmin";
 
 export const teamColumns = [
   {
@@ -14,16 +10,66 @@ export const teamColumns = [
     headerName: "Name",
     width: 230,
     renderCell: (params) => {
-      console.log(params.row);
+      if (params.row && params.row.name) {
+        var firstNameInitial = params.row.name.charAt(0);
+      } else {
+        var firstNameInitial = "";
+      }
+      if (params.row && params.row.name) {
+        var lastNameInitial = params.row.name.charAt(1);
+      } else {
+        var lastNameInitial = "";
+      }
+
       return (
         <div className="cellWrapper">
           <div className="customerImg">
-            <img
-              style={{ width: 34, height: 34 }}
-              className="cellImg"
-              src={`${backendURL}/${params.row.image}`}
-              alt="dd"
-            />
+            {params.row.image === "images/staff/default.jpg" ? (
+              <Typography
+                sx={{
+                  backgroundColor: "#F9F5FF",
+                  width: 34,
+                  height: 34,
+                  borderRadius: "100%",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#7F56D9",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                {firstNameInitial}
+                {lastNameInitial}
+              </Typography>
+            ) : params.row.image === "" ? (
+              <Typography
+                sx={{
+                  backgroundColor: "#F9F5FF",
+                  width: 34,
+                  height: 34,
+                  borderRadius: "100%",
+                  textAlign: "center",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#7F56D9",
+                  textTransform: "uppercase",
+                  fontWeight: "bold",
+                }}
+              >
+                {firstNameInitial}
+                {lastNameInitial}
+              </Typography>
+            ) : (
+              <img
+                style={{ width: 34, height: 34 }}
+                className="cellImg"
+                src={`${backendURL}/${params.row.image}`}
+                alt="dd"
+              />
+            )}
           </div>
           <div className="customerNameTable">
             {params.row.name}
@@ -253,17 +299,50 @@ export const CustomerColumns = [
   {
     field: "name",
     headerName: "Name",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
+      if (params.row && params.row.name) {
+        var firstNameInitial = params.row.name.charAt(0);
+      } else {
+        var firstNameInitial = "";
+      }
+      if (params.row && params.row.name) {
+        var lastNameInitial = params.row.name.charAt(1);
+      } else {
+        var lastNameInitial = "";
+      }
+      console.log(params.row.image, "img");
       return (
         <>
           <div className="cellWrapper">
             <div className="customerImg">
-              <img
-                style={{ width: 30, height: 30 }}
-                src={`${backendURL}/${params.row.image}`}
-                alt=""
-              />
+              {params.row.image === "images/staff/default.jpg" ? (
+                <Typography
+                  sx={{
+                    backgroundColor: "#F9F5FF",
+                    width: 34,
+                    height: 34,
+                    borderRadius: "100%",
+                    textAlign: "center",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#7F56D9",
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {firstNameInitial}
+                  {lastNameInitial}
+                </Typography>
+              ) : (
+                <img
+                  style={{ width: 30, height: 30 }}
+                  src={`${backendURL}/${params.row.image}`}
+                  alt=""
+                />
+              )}
             </div>
             <div className="customerNameTable">
               {params.row.name}
@@ -277,6 +356,7 @@ export const CustomerColumns = [
   {
     field: "email",
     headerName: "Email address",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       console.log(params.row);
@@ -290,6 +370,7 @@ export const CustomerColumns = [
   {
     field: "Address",
     headerName: "Address",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       console.log(params.row);
@@ -302,7 +383,8 @@ export const CustomerColumns = [
   },
   {
     field: "lastQuotedOn",
-    headerName: "LastQuoted",
+    headerName: "Last quoted on",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       return (
@@ -317,15 +399,15 @@ export const CustomerColumns = [
 export const CustomerQuoteColumns = [
   {
     field: "name",
-    headerName: "Reffrence",
-    width: 220,
+    headerName: "Reference",
+    width: 500,
   },
 ];
 export const userColumns = [
   {
     field: "id",
     headerName: "ID",
-    width: 70,
+    width: 40,
   },
   {
     field: "name",

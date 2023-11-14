@@ -77,7 +77,7 @@ const Summary = () => {
               flexDirection: "column",
               width: "100%",
               borderRadius: "8px",
-              color: { md: "black", xs: "white" },
+              color: { md: "#101828", xs: "white" },
             }}
           >
             <Box

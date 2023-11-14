@@ -195,7 +195,7 @@ const CustomLayout = () => {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -236,7 +236,7 @@ const CustomLayout = () => {
                   flexDirection: "column",
                   overflowY: "auto",
                   gap: { md: 1, xs: 2 },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   background: {
                     md: "none",
                     xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
@@ -424,7 +424,7 @@ const CustomLayout = () => {
                                 }}
                               >
                                 <DeleteIcon
-                                  sx={{ color: { md: "black", xs: "white" } }}
+                                  sx={{ color: { md: "#101828", xs: "white" } }}
                                 />
                               </a>
                             )}

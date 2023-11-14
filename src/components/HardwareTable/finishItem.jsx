@@ -249,12 +249,13 @@ const FinishItem = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
+                  sx={{mt: 2}}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
               )}
-              {LoadingForEdit ? (
-                <CircularProgress size={24} color="warning" />
+              {/* {LoadingForEdit ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <IconButton
                   type="submit"
@@ -270,7 +271,7 @@ const FinishItem = ({
                 >
                   Update
                 </IconButton>
-              )}
+              )} */}
             </Box>
           </Box>
         </Box>

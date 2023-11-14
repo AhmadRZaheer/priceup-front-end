@@ -35,18 +35,19 @@ export default function ExistingQuotes() {
             display: "flex",
             width: "96.8%",
             justifyContent: "space-between",
+            gap: 2
           }}
         >
           <Box
             sx={{
-              width: {lg: 300, md: 220},
+              width: "50%",
               height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -67,14 +68,14 @@ export default function ExistingQuotes() {
 
           <Box
             sx={{
-              width: 300,
+              width: "50%",
               height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -95,14 +96,14 @@ export default function ExistingQuotes() {
 
           <Box
             sx={{
-              width: 300,
+              width: "50%",
               height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -123,14 +124,14 @@ export default function ExistingQuotes() {
 
           <Box
             sx={{
-              width: 300,
+              width: "50%",
               height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -149,8 +150,15 @@ export default function ExistingQuotes() {
             </Box>
           </Box>
         </Box>
-        
-        <Box sx={{ width: "97%", border: "1px solid #EAECF0", borderRadius: "8px" }}>
+
+        <Box
+          sx={{
+            width: "97%",
+            border: "1px solid #EAECF0",
+            borderRadius: "8px",
+            mb: 2,
+          }}
+        >
           <ExistingTable />
         </Box>
       </Box>

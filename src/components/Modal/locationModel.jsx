@@ -201,7 +201,7 @@ export default function LocationModel({
               onClick={onClose}
               variant="outlined"
               sx={{
-                color: "black",
+                color: "#101828",
                 border: "1px solid #D0D5DD",
                 width: "50%",
                 "&:hover": {

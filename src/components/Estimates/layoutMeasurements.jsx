@@ -232,7 +232,7 @@ const LayoutMeasurements = () => {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -268,7 +268,7 @@ const LayoutMeasurements = () => {
                   minHeight: 100,
                   flexDirection: "column",
                   gap: { md: 2, xs: 2 },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   background: {
                     md: "none",
                     xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
@@ -450,7 +450,7 @@ const LayoutMeasurements = () => {
                       height: 300,
                     }}
                   >
-                    <CircularProgress />
+                    <CircularProgress sx={{color: "#8477DA"}}/>
                   </Box>
                 ) : (
                   <img

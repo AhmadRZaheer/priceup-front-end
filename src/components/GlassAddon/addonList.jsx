@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
   const [open, setOpen] = React.useState(false);
@@ -77,41 +78,19 @@ const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
               alt=""
             />
             {entry.name}
-            <IconButton
-              onClick={() => handleOpenEdit(entry)}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-              }}
-            >
-              <Edit sx={{ fontSize: 18, mr: 0.4 }} />
-              Edit
-            </IconButton>
+            <CustomIconButton
+              handleClick={() => handleOpenEdit(entry)}
+              icon={<Edit sx={{ fontSize: 18, mr: 0.4 }} />}
+            />
           </Box>
           <Box>
             <IconButton onClick={() => handleHardwareDelete(entry._id)}>
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
-            <IconButton
-              id={entry._id}
-              onClick={() => handleOpenUpdate(entry._id)}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-              }}
-            >
-              Update
-            </IconButton>
+            <CustomIconButton
+              handleClick={() => handleOpenUpdate(entry._id)}
+              buttonText="Update"
+            />
           </Box>
         </Box>
         <Box sx={{ p: 2 }}>

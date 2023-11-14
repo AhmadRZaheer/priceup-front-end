@@ -265,7 +265,7 @@ export default function AddEditFinish({
               }}
             >
               {LoadingForEdit || LoadingForAdd ? (
-                <CircularProgress size={24} />
+                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
               ) : isEdit ? (
                 "Update"
               ) : (

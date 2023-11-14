@@ -27,7 +27,7 @@ const TableRow = ({ row, refetch, onToggleChange }) => {
     <div className="cellAction">
       <div>
         {LoadingForEdit ? (
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         ) : (
           <FormControlLabel
             control={

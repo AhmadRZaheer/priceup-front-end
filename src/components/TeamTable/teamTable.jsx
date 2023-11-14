@@ -11,6 +11,7 @@ import {
   Typography,
   Input,
   InputAdornment,
+  TextField,
 } from "@mui/material";
 import {
   useDeleteTeamMembers,
@@ -20,6 +21,7 @@ import AddTeamMembers from "../Modal/addTeamMembers";
 import Snackbars from "../Modal/snackBar";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -123,23 +125,18 @@ const TeamTable = () => {
                 <img src={DeleteIcon} alt="delete icon" />
               )}
             </div>
+
             <div
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
-              <IconButton
-                sx={{
-                  backgroundColor: "#8477DA",
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 2,
-                  fontSize: 17,
-                  padding: 1,
-                }}
-              >
-                <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} /> Edit
-              </IconButton>
+              <CustomIconButton
+                handleClick={() => handleOpenEdit(params.row)}
+                icon={
+                  <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} />
+                }
+                buttonText="Edit"
+              />
             </div>
           </div>
         );
@@ -185,22 +182,24 @@ const TeamTable = () => {
             </Box>
           </Box>
         </div>
-        <Input
-          placeholder="Search by Name or Email"
-          variant="outlined"
-          fullWidth
+        <TextField
+          placeholder="Search by Name"
           value={search}
+          variant="standard"
           onChange={(e) => setSearch(e.target.value)}
           sx={{
             mb: 2,
-            width: "20%", // You can adjust the width as needed
-            marginLeft: "30px", // Adjust the margin as needed
+            ".MuiInputBase-root:after": {
+              border: "1px solid #8477DA",
+            },
           }}
-          endAdornment={
-            <InputAdornment position="end">
-              <Search />
-            </InputAdornment>
-          }
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search sx={{ color: "#8477DA" }} />
+              </InputAdornment>
+            ),
+          }}
         />
         <div className="CustomerTable">
           {filteredData.length >= 1 ? (

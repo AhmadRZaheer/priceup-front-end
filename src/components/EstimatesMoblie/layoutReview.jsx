@@ -116,7 +116,7 @@ const LayoutReview = () => {
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "18px" },
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
                 paddingBottom: 1,
               }}
             >
@@ -169,7 +169,7 @@ const LayoutReview = () => {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
-                    color: { md: "black", xs: "white" },
+                    color: { md: "#101828", xs: "white" },
                   }}
                 >
                   <Box sx={{ width: "100%" }}>

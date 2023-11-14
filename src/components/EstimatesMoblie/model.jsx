@@ -211,7 +211,7 @@ export default function ClientDetailsModel({
                 padding: 3,
                 borderTopLeftRadius: { md: "4px", xs: 30 },
                 borderTopRightRadius: { md: "4px", xs: 30 },
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
               }}
             >
               <Box

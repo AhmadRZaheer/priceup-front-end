@@ -165,7 +165,7 @@ const DefaultComponent = ({ showSnackbar }) => {
             height: "56vh",
           }}
         >
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{color: "#8477DA"}} />
         </Box>
       ) : (
         <Box
@@ -247,7 +247,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                           alignItems: "center",
                         }}
                       >
-                        <CircularProgress size={24} color="warning" />
+                        <CircularProgress size={24} sx={{color: "#8477DA"}} />
                       </Box>
                     )}
                     {/* <Button

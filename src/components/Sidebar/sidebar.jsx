@@ -78,7 +78,7 @@ const Sidebar = () => {
               <ul>
                 {superAdminToken && (
                   <li
-                    style={{ padding: 10 }}
+                    style={{ padding: 10, marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
                     onClick={handleSeeLocationsClick}
                   >
@@ -94,7 +94,7 @@ const Sidebar = () => {
                 )}
                 <NavLink to="/" className="link">
                   <li
-                    style={{ padding: 10 }}
+                    style={{ padding: 10 , marginTop: 10}}
                     className={`estimates ${
                       location.pathname === "/" ? "active" : ""
                     }`}

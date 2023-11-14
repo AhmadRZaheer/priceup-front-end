@@ -1,5 +1,5 @@
-.CustomerTable {
-  padding: 20px;
+.CustomerTable-1 {
+  padding: 0px;
   .cellWrapper {
     display: flex;
     align-items: center;
@@ -44,4 +44,8 @@
 .custom-header-class {
   background-color: "red"; /* Replace with your desired color */
   /* Add more styles as needed */
+}
+.customHeaderClass {
+  background-color: #f9fafb;
+  color: #667085;
 }

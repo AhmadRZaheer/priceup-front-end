@@ -205,7 +205,7 @@ const Summary = ({ handleOpen }) => {
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "25px" },
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
                 paddingBottom: 1,
               }}
             >
@@ -242,7 +242,7 @@ const Summary = ({ handleOpen }) => {
                 background: { md: "#ffff", xs: "rgba(37, 32, 56,0.4)" },
                 p: { md: 3, xs: 0 },
                 borderRadius: "8px",
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
               }}
             >
               <Box

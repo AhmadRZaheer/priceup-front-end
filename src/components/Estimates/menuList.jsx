@@ -194,7 +194,7 @@ const MenuList = ({
                 height: 150,
               }}
             >
-              <CircularProgress />
+              <CircularProgress sx={{color: "#8477DA"}}/>
             </Box>
           ) : (
             menuOptions?.map((item) => (

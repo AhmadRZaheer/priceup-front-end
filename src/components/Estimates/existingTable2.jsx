@@ -31,11 +31,12 @@ export default function ExistingQuotes2() {
             display: "flex",
             width: "98%",
             justifyContent: "space-between",
+            gap: 2.6
           }}
         >
           <Box
             sx={{
-              width: 320,
+              width: "50%",
               height: 90,
               padding: 3,
               display: "flex",
@@ -63,7 +64,7 @@ export default function ExistingQuotes2() {
 
           <Box
             sx={{
-              width: 320,
+              width: "50%",
               height: 90,
               padding: 3,
               display: "flex",
@@ -91,7 +92,7 @@ export default function ExistingQuotes2() {
 
           <Box
             sx={{
-              width: 320,
+              width: "50%",
               height: 90,
               padding: 3,
               display: "flex",
@@ -119,7 +120,7 @@ export default function ExistingQuotes2() {
 
           <Box
             sx={{
-              width: 320,
+              width: "50%",
               height: 90,
               padding: 3,
               display: "flex",
@@ -150,6 +151,7 @@ export default function ExistingQuotes2() {
             width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
+            mb: 2
           }}
         >
           <ExistingTable />

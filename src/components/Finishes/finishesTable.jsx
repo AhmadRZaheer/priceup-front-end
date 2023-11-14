@@ -21,6 +21,7 @@ import {
 } from "../../utilities/ApiHooks/finishes";
 import Snackbars from "../Modal/snackBar";
 import AddEditFinish from "../Modal/addEditFinish";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const FinishesTable = () => {
   const [snackbar, setSnackbar] = useState({
@@ -88,21 +89,12 @@ const FinishesTable = () => {
               )}
             </div>
             <div className="viewButton">
-              <IconButton
-                onClick={() => handleOpenEdit(params.row)}
-                sx={{
-                  backgroundColor: "#8477DA",
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 2,
-                  fontSize: 17,
-                  padding: 1,
-                }}
-              >
-                <ModeIcon sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
-                Edit
-              </IconButton>
+              <CustomIconButton
+                handleClick={() => handleOpenEdit(params.row)}
+                icon={
+                  <ModeIcon sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
+                }
+              />
             </div>
           </div>
         );
@@ -153,21 +145,11 @@ const FinishesTable = () => {
           >
             <Typography variant="h4">Finishes</Typography>
             <div>
-              <IconButton
-                onClick={handleOpen}
-                sx={{
-                  backgroundColor: "#8477DA",
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 2,
-                  fontSize: 17,
-                  padding: 1,
-                }}
-              >
-                <Add style={{ color: "white" }} />
-                Add
-              </IconButton>
+              <CustomIconButton
+                handleClick={handleOpen}
+                icon={<Add style={{ color: "white" }} />}
+                buttonText="Add"
+              />
             </div>
           </div>
         </div>
