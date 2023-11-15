@@ -157,7 +157,7 @@ const SuperSidebar = () => {
             width: "317px",
           },
         }}
-        sx={{ left: 13 }}
+        sx={{ left: 30, top: -73 }}
       >
         <input
           type="text"
@@ -186,7 +186,7 @@ const SuperSidebar = () => {
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "310px",
+            width: "315px",
             display: "flex",
             flexDirection: "column",
             gap: 5,

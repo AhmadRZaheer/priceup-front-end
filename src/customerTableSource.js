@@ -535,7 +535,8 @@ export const userColumnsHardware = [
   {
     field: "name",
     headerName: "Name",
-    width: 230,
+    headerClassName: "customHeaderClass-finishes",
+    width: 1411,
     renderCell: (params) => {
       console.log("params", params.row);
       return (

@@ -367,7 +367,7 @@ const Sidebar = () => {
             width: "317px",
           },
         }}
-        sx={{ left: 13 }}
+        sx={{ left: 30, top: -72 }}
       >
         {superAdminToken && (
           <IconButton
@@ -426,7 +426,7 @@ const Sidebar = () => {
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "310px",
+            width: "315px",
             display: "flex",
             flexDirection: "column",
             gap: 5,

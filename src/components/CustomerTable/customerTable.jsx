@@ -180,7 +180,6 @@ const CustomerTable = () => {
                   page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
-                  pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
                 />
