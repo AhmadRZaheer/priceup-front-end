@@ -16,6 +16,8 @@ import {
 } from "../../utilities/ApiHooks/setting";
 import { backendURL } from "../../utilities/common";
 import Snackbars from "../Modal/snackBar";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
@@ -132,7 +134,11 @@ const CampanySetting = () => {
           <Typography variant="h4">Setting</Typography>
           <Box sx={{ width: "200px" }}>
             <Button
-              sx={{ backgroundColor: "#8477DA", boxShadow: 0 }}
+              sx={{
+                backgroundColor: "#8477DA",
+                boxShadow: 0,
+                ":hover": { backgroundColor: "#8477DA" },
+              }}
               fullWidth
               variant="contained"
               onClick={formik.handleSubmit}
@@ -218,15 +224,14 @@ const CampanySetting = () => {
             <Typography>Location</Typography>
             <Box sx={{ width: "400px" }}>
               {" "}
-              <TextField
+              <CustomInputField
                 fullWidth
-                size="small"
                 type="text"
                 name="location"
                 value={formik.values?.location}
                 placeholder={"Add location"}
                 onChange={formik.handleChange}
-              ></TextField>
+              />
             </Box>
           </Box>
         </Box>
@@ -252,30 +257,21 @@ const CampanySetting = () => {
             <Typography>Pricing factor</Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <p className="explain">Factor to multiply price </p>
-              <TextField
+              <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
-                }}
                 name="miscPricing.pricingFactor"
                 size="small"
                 value={formik.values?.miscPricing?.pricingFactor}
                 onChange={formik.handleChange}
               />
 
-              <Box sx={{ display: "flex" }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      color="success"
-                      checked={
-                        formik.values?.miscPricing?.pricingFactorStatus || false
-                      }
-                      onChange={formik.handleChange}
-                      name="miscPricing.pricingFactorStatus"
-                    />
+              <Box sx={{ ml: 2 }}>
+                <CustomToggle
+                  name="miscPricing.pricingFactorStatus"
+                  checked={
+                    formik.values?.miscPricing?.pricingFactorStatus || false
                   }
-                  label="active"
+                  onChange={formik.handleChange}
                 />
               </Box>
             </Box>
@@ -291,7 +287,7 @@ const CampanySetting = () => {
             <Typography>Default Hourly rate</Typography>
             <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
               <Typography>Hourly rates to be used for labour price</Typography>
-              <TextField
+              <CustomInputField
                 type="number"
                 InputProps={{
                   inputProps: { min: 0 },
@@ -328,19 +324,20 @@ const CampanySetting = () => {
             }}
           >
             <Typography>1" Hole (1/2in Glass)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              name="fabricatingPricing.oneHoleOneByTwoInchGlass"
-              size="small"
-              value={
-                formik.values?.fabricatingPricing?.oneHoleOneByTwoInchGlass
-              }
-              onChange={formik.handleChange}
-            />
+            <Box mr={19}>
+              <CustomInputField
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.oneHoleOneByTwoInchGlass"
+                size="small"
+                value={
+                  formik.values?.fabricatingPricing?.oneHoleOneByTwoInchGlass
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -350,19 +347,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>1" Hole (3/8in Glass)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              name="fabricatingPricing.oneHoleThreeByEightInchGlass"
-              size="small"
-              value={
-                formik.values?.fabricatingPricing?.oneHoleThreeByEightInchGlass
-              }
-              onChange={formik.handleChange}
-            />
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.oneHoleThreeByEightInchGlass"
+                size="small"
+                value={
+                  formik.values?.fabricatingPricing
+                    ?.oneHoleThreeByEightInchGlass
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -372,17 +371,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Clamp Cutout (1/2in)</Typography>
-            <TextField
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.clampCutoutOneByTwoInch"
-              size="small"
-              value={formik.values?.fabricatingPricing?.clampCutoutOneByTwoInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.clampCutoutOneByTwoInch"
+                size="small"
+                value={
+                  formik.values?.fabricatingPricing?.clampCutoutOneByTwoInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -392,19 +395,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Clamp Cutout (3/8in)</Typography>
-            <TextField
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.clampCutoutThreeByEightInch"
-              size="small"
-              value={
-                formik.values?.fabricatingPricing?.clampCutoutThreeByEightInch
-              }
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.clampCutoutThreeByEightInch"
+                size="small"
+                value={
+                  formik.values?.fabricatingPricing?.clampCutoutThreeByEightInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -414,17 +419,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Hinge Cutout (1/2in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              name="fabricatingPricing.hingeCutoutOneByTwoInch"
-              value={formik.values?.fabricatingPricing?.hingeCutoutOneByTwoInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.hingeCutoutOneByTwoInch"
+                value={
+                  formik.values?.fabricatingPricing?.hingeCutoutOneByTwoInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -434,19 +443,20 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Hinge Cutout (3/8in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              name="fabricatingPricing.hingeCutoutThreeByEightInch"
-              value={
-                formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch
-              }
-              onChange={formik.handleChange}
-            />
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                name="fabricatingPricing.hingeCutoutThreeByEightInch"
+                value={
+                  formik.values?.fabricatingPricing?.hingeCutoutThreeByEightInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -456,17 +466,19 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Miter (1/2in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.minterOneByTwoInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.minterOneByTwoInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.minterOneByTwoInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={formik.values?.fabricatingPricing?.minterOneByTwoInch}
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -476,17 +488,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Miter (3/8in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.minterThreeByEightInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.minterThreeByEightInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.minterThreeByEightInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={
+                  formik.values?.fabricatingPricing?.minterThreeByEightInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -496,17 +512,19 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Notch (1/2in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.notchOneByTwoInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.notchOneByTwoInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.notchOneByTwoInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={formik.values?.fabricatingPricing?.notchOneByTwoInch}
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -516,17 +534,19 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Notch (3/8in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.notchThreeByEightInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.notchThreeByEightInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.notchThreeByEightInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={formik.values?.fabricatingPricing?.notchThreeByEightInch}
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -536,17 +556,18 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Outage (1/2in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.outageOneByTwoInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.outageOneByTwoInch}
-              onChange={formik.handleChange}
-            />
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.outageOneByTwoInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={formik.values?.fabricatingPricing?.outageOneByTwoInch}
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -556,17 +577,21 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Outage (3/8in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.outageThreeByEightInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={formik.values?.fabricatingPricing?.outageThreeByEightInch}
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.outageThreeByEightInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={
+                  formik.values?.fabricatingPricing?.outageThreeByEightInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -576,19 +601,20 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Polish Price per Inch (1/2in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.polishPricePerOneByTwoInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={
-                formik.values?.fabricatingPricing?.polishPricePerOneByTwoInch
-              }
-              onChange={formik.handleChange}
-            />
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.polishPricePerOneByTwoInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={
+                  formik.values?.fabricatingPricing?.polishPricePerOneByTwoInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
           <Box
             sx={{
@@ -598,20 +624,22 @@ const CampanySetting = () => {
             }}
           >
             <Typography>Polish Price per Inch (3/8in)</Typography>
-            <TextField
-              sx={{ paddingRight: 19 }}
-              name="fabricatingPricing.polishPricePerThreeByEightInch"
-              size="small"
-              type="number"
-              InputProps={{
-                inputProps: { min: 0 },
-              }}
-              value={
-                formik.values?.fabricatingPricing
-                  ?.polishPricePerThreeByEightInch
-              }
-              onChange={formik.handleChange}
-            />
+
+            <Box sx={{ paddingRight: 19 }}>
+              <CustomInputField
+                name="fabricatingPricing.polishPricePerThreeByEightInch"
+                size="small"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={
+                  formik.values?.fabricatingPricing
+                    ?.polishPricePerThreeByEightInch
+                }
+                onChange={formik.handleChange}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>

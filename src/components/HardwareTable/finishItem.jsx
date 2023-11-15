@@ -16,6 +16,8 @@ import {
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
 import { useEffect } from "react";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
 
 const FinishItem = ({
   data,
@@ -161,7 +163,7 @@ const FinishItem = ({
             id={hardwareId}
           >
             <Typography>Hardware Part Number</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               type="number"
@@ -189,7 +191,8 @@ const FinishItem = ({
             }}
           >
             <Typography>Cost</Typography>
-            <TextField
+
+            <CustomInputField
               size="small"
               variant="outlined"
               type="number"
@@ -229,17 +232,11 @@ const FinishItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="success"
-                    checked={formik.values.status}
-                    onChange={(event) => handleStatusChange(event)}
-                    onBlur={formik.handleBlur}
-                    name="status"
-                  />
-                }
-                label={"active"}
+              <CustomToggle
+                checked={formik.values.status}
+                onChange={(event) => handleStatusChange(event)}
+                onBlur={formik.handleBlur}
+                name="status"
               />
             </Box>
             <Box sx={{ display: "flex" }}>
@@ -249,7 +246,7 @@ const FinishItem = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
-                  sx={{mt: 2}}
+                  sx={{ mt: 3.1 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>

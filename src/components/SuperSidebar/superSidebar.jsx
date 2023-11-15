@@ -157,7 +157,7 @@ const SuperSidebar = () => {
             width: "317px",
           },
         }}
-        sx={{ left: 13 }}
+        sx={{ left: 30, top: -73 }}
       >
         <input
           type="text"
@@ -186,7 +186,7 @@ const SuperSidebar = () => {
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "310px",
+            width: "315px",
             display: "flex",
             flexDirection: "column",
             gap: 5,
@@ -200,6 +200,7 @@ const SuperSidebar = () => {
           ) : (
             filteredAdminData.map((admin) => (
               <Typography
+                onClick={() => handleAdminNameClick(admin._id)}
                 key={admin.id}
                 sx={{
                   width: "83%",
@@ -226,10 +227,7 @@ const SuperSidebar = () => {
                     alt="no"
                   />
                 </div>
-                <div
-                  style={{ paddingLeft: "10px" }}
-                  onClick={() => handleAdminNameClick(admin._id)}
-                >
+                <div style={{ paddingLeft: "10px" }}>
                   <a style={{ cursor: "pointer" }}>{admin.name}</a>
                   <p style={{ fontSize: "10px" }}>{admin.email}</p>
                 </div>

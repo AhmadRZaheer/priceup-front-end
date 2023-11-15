@@ -464,7 +464,7 @@ const Sidebar = () => {
             width: "317px",
           },
         }}
-        sx={{ left: 13 }}
+        sx={{ left: 30, top: -72 }}
       >
         {superAdminToken && (
           <IconButton
@@ -523,7 +523,7 @@ const Sidebar = () => {
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "310px",
+            width: "315px",
             display: "flex",
             flexDirection: "column",
             gap: 5,
@@ -557,6 +557,7 @@ const Sidebar = () => {
                   px: 1,
                   borderRadius: "14px",
                 }}
+                onClick={() => handleAdminNameClick(admin._id)}
               >
                 <div className="UserIcon-1">
                   <img
@@ -566,10 +567,7 @@ const Sidebar = () => {
                     alt="no"
                   />
                 </div>
-                <div
-                  style={{ paddingLeft: "10px" }}
-                  onClick={() => handleAdminNameClick(admin._id)}
-                >
+                <div style={{ paddingLeft: "10px" }}>
                   <a style={{ cursor: "pointer" }}>{admin.name}</a>
                   <p style={{ fontSize: "10px" }}>{admin.email}</p>
                 </div>

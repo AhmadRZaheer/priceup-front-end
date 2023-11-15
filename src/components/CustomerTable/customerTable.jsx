@@ -5,9 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
   Typography,
-  Input,
   InputAdornment,
-  IconButton,
   TextField,
   Button,
 } from "@mui/material";
@@ -182,7 +180,6 @@ const CustomerTable = () => {
                   page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
-                  pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
                 />

@@ -1,6 +1,7 @@
-import { CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import { Box, CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useUserStatus } from "../../utilities/ApiHooks/superAdmin";
+import CustomToggle from "../ui-components/Toggle";
 
 const TableRow = ({ row, refetch, onToggleChange }) => {
   const {
@@ -26,21 +27,9 @@ const TableRow = ({ row, refetch, onToggleChange }) => {
   return (
     <div className="cellAction">
       <div>
-        {LoadingForEdit ? (
-          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-        ) : (
-          <FormControlLabel
-            control={
-              <Switch
-                color="success"
-                checked={active}
-                onClick={() => handleSwitch()}
-                name="status"
-              />
-            }
-            label={active ? "Active" : "Inactive"}
-          />
-        )}
+        <Box sx={{ height: 50 }}>
+          <CustomToggle checked={active} onClick={() => handleSwitch()} />
+        </Box>
       </div>
     </div>
   );
