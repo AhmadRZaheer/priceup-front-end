@@ -1,0 +1,21 @@
+.custom-textfield {
+  fieldset {
+    border-color: #d0d5dd !important;
+  }
+  .Mui-focused {
+    fieldset {
+      border-color: #8477da !important;
+    }
+  }
+
+  &:hover {
+    fieldset {
+      border-color: #8477da !important;
+    }
+  }
+}
+.custom-textfield-error {
+  fieldset {
+    border-color: red !important;
+  }
+}

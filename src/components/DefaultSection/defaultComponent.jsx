@@ -165,7 +165,7 @@ const DefaultComponent = ({ showSnackbar }) => {
             height: "56vh",
           }}
         >
-          <CircularProgress size={24} sx={{color: "#8477DA"}} />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
         <Box
@@ -247,7 +247,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                           alignItems: "center",
                         }}
                       >
-                        <CircularProgress size={24} sx={{color: "#8477DA"}} />
+                        <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                       </Box>
                     )}
                     {/* <Button
@@ -282,7 +282,7 @@ const DefaultComponent = ({ showSnackbar }) => {
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -329,7 +329,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -408,7 +408,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -485,7 +485,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -564,7 +564,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
                 alignItems: "center",
               }}
             >
@@ -678,7 +678,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -786,13 +786,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -842,14 +842,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                   display: "flex",
                   gap: 4,
                   alignContent: "center",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                 }}
               >
                 <div
                   style={{
                     width: "250px",
 
-                   padding: "10px 10px 10px 10px",
+                    padding: "10px 10px 10px 10px",
                     padding: 4,
                   }}
                 >
@@ -901,13 +901,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                     display: "flex",
                     gap: 4,
                     alignContent: "center",
-                   padding: "10px 10px 10px 10px",
+                    padding: "10px 10px 10px 10px",
                   }}
                 >
                   <div
                     style={{
                       width: "250px",
-                     padding: "10px 10px 10px 10px",
+                      padding: "10px 10px 10px 10px",
                       padding: 4,
                       display: "flex",
                       justifyContent: "space-between",
@@ -978,13 +978,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                     display: "flex",
                     gap: 4,
                     alignContent: "center",
-                   padding: "10px 10px 10px 10px",
+                    padding: "10px 10px 10px 10px",
                   }}
                 >
                   <div
                     style={{
                       width: "250px",
-                     padding: "10px 10px 10px 10px",
+                      padding: "10px 10px 10px 10px",
                       padding: 4,
                       display: "flex",
                       justifyContent: "end",
@@ -1054,13 +1054,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                     display: "flex",
                     gap: 4,
                     alignContent: "center",
-                   padding: "10px 10px 10px 10px",
+                    padding: "10px 10px 10px 10px",
                   }}
                 >
                   <div
                     style={{
                       width: "250px",
-                     padding: "10px 10px 10px 10px",
+                      padding: "10px 10px 10px 10px",
                       padding: 4,
                       display: "flex",
                       justifyContent: "end",
@@ -1133,13 +1133,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                   display: "flex",
                   justifyContent: "space-between",
@@ -1210,13 +1210,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                   display: "flex",
                   justifyContent: "end",
@@ -1286,13 +1286,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                   display: "flex",
                   justifyContent: "end",
@@ -1364,13 +1364,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -1438,7 +1438,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -1513,7 +1513,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
@@ -1561,13 +1561,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -1611,14 +1611,14 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
 
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -1663,13 +1663,13 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div
                 style={{
                   width: "250px",
-                 padding: "10px 10px 10px 10px",
+                  padding: "10px 10px 10px 10px",
                   padding: 4,
                 }}
               >
@@ -1720,7 +1720,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 display: "flex",
                 gap: 4,
                 alignContent: "center",
-               padding: "10px 10px 10px 10px",
+                padding: "10px 10px 10px 10px",
               }}
             >
               <div

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./teamTable.scss";
 import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
-import { Search } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   Input,
   InputAdornment,
   TextField,
+  Button,
 } from "@mui/material";
 import {
   useDeleteTeamMembers,
@@ -86,6 +87,7 @@ const TeamTable = () => {
     {
       field: "Access",
       headerName: "Access",
+      headerClassName: "customHeaderClass-team",
       width: 200,
       renderCell: (params) => {
         const { haveAccessTo } = params.row;
@@ -108,8 +110,8 @@ const TeamTable = () => {
     },
     {
       field: " ",
-
-      width: 200,
+      headerClassName: "customHeaderClass-team",
+      width: 258,
       renderCell: (params) => {
         const id = params.row._id;
         const isMatchingId = id === matchingId;
@@ -143,6 +145,53 @@ const TeamTable = () => {
       },
     },
   ];
+
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+  const MAX_PAGES_DISPLAYED = 5;
+
+  const getPageNumbersToShow = () => {
+    if (totalPages <= MAX_PAGES_DISPLAYED) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    const pagesToShow = [];
+    const startPage = Math.max(1, page - 2); // Display three on the first side
+    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
+
+    if (startPage > 1) {
+      pagesToShow.push(1);
+      if (startPage > 2) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pagesToShow.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+      pagesToShow.push(totalPages);
+    }
+
+    return pagesToShow;
+  };
+
+  const pageNumbersToShow = getPageNumbersToShow();
+
+  const handlePreviousPage = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
   return (
     <>
       <Box
@@ -153,71 +202,158 @@ const TeamTable = () => {
         }}
       >
         <div className="page-title">
+          <Typography sx={{ fontSize: 30, pl: 2, color: "#101828" }}>
+            Team Memebers
+          </Typography>
+        </div>
+        <Box
+          sx={{ border: "1px solid #EAECF0", borderRadius: "8px", m: 3, mr: 4 }}
+        >
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              width: "98%",
+              width: "96%",
+              p: 2,
+              alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: 30, pl: 2 }}>Team Memebers</Typography>
-            <Box sx={{ width: "200px" }}>
-              <IconButton
-                sx={{
-                  backgroundColor: "#8477DA",
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 2,
-                  fontSize: 20,
-                  padding: 1,
-                  mt: 1,
-                }}
-                fullWidth
-                variant="contained"
-                onClick={() => (setOpen(true), setIsEdit(false))}
-              >
-                Add member
-              </IconButton>
+            <Typography
+              sx={{
+                fontSize: "18px",
+                color: "#101828",
+                fontWeight: 500,
+              }}
+            >
+              Team Memebers
+            </Typography>
+            <TextField
+              placeholder="Search by Name"
+              value={search}
+              variant="standard"
+              onChange={(e) => setSearch(e.target.value)}
+              sx={{
+                mb: 2,
+                ".MuiInputBase-root:after": {
+                  border: "1px solid #8477DA",
+                },
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search sx={{ color: "#8477DA" }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
+            <Box>
+              <CustomIconButton
+                handleClick={() => (setOpen(true), setIsEdit(false))}
+                buttonText="Add member"
+              />
             </Box>
           </Box>
-        </div>
-        <TextField
-          placeholder="Search by Name"
-          value={search}
-          variant="standard"
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{
-            mb: 2,
-            ".MuiInputBase-root:after": {
-              border: "1px solid #8477DA",
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search sx={{ color: "#8477DA" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <div className="CustomerTable">
-          {filteredData.length >= 1 ? (
-            <DataGrid
-              getRowId={(row) => row._id}
-              rows={filteredData}
-              columns={teamColumns.concat(actionColumn)}
-              pageSizeOptions={[10]}
-              sx={{ width: "100%" }}
-            />
-          ) : (
-            <Typography
-              sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
-            >
-              No Team Found
-            </Typography>
-          )}
-        </div>
+
+          <div className="CustomerTable-team">
+            {filteredData.length >= 1 ? (
+              <>
+                <DataGrid
+                  style={{
+                    border: "none",
+                  }}
+                  getRowId={(row) => row._id}
+                  rows={filteredData.slice(
+                    (page - 1) * itemsPerPage,
+                    page * itemsPerPage
+                  )}
+                  columns={teamColumns.concat(actionColumn)}
+                  page={page}
+                  pageSize={itemsPerPage}
+                  rowCount={filteredData.length}
+                  pageSizeOptions={[1, , 25]}
+                  sx={{ width: "100%" }}
+                  hideFooter
+                />
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "10px",
+                    borderTop: "1px solid #EAECF0",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                      borderRadius: "8px",
+                      textTransform: "capitalize",
+                      fontWeight: 500,
+                      ":hover": {
+                        border: "1px solid #D0D5DD",
+                        color: "#344054",
+                      },
+                    }}
+                    variant="outlined"
+                    onClick={handlePreviousPage}
+                    disabled={page === 0}
+                  >
+                    <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
+                    Previous
+                  </Button>
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    {pageNumbersToShow.map((pagenumber, index) => (
+                      <Box
+                        key={index}
+                        sx={{
+                          backgroundColor:
+                            page === pagenumber
+                              ? "rgba(144, 136, 192, 0.2)"
+                              : "white",
+                          color: page === pagenumber ? "#353050" : "#667085",
+                          width: "40px",
+                          height: "40px",
+                          borderRadius: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {pagenumber}
+                      </Box>
+                    ))}
+                  </Box>
+                  <Button
+                    sx={{
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                      borderRadius: "8px",
+                      textTransform: "capitalize",
+                      fontWeight: 500,
+                      ":hover": {
+                        border: "1px solid #D0D5DD",
+                        color: "#344054",
+                      },
+                    }}
+                    onClick={handleNextPage}
+                    disabled={filteredData.length === 0}
+                  >
+                    Next
+                    <ArrowForward
+                      sx={{ color: "#344054", fontSize: 20, ml: 1 }}
+                    />
+                  </Button>
+                </Box>
+              </>
+            ) : (
+              <Typography
+                sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
+              >
+                No Team Found
+              </Typography>
+            )}
+          </div>
+        </Box>
 
         <AddTeamMembers
           open={open}

@@ -8,6 +8,7 @@ export const teamColumns = [
   {
     field: "name",
     headerName: "Name",
+    headerClassName: "customHeaderClass-team",
     width: 230,
     renderCell: (params) => {
       if (params.row && params.row.name) {
@@ -79,10 +80,23 @@ export const teamColumns = [
       );
     },
   },
-  { field: "email", headerName: "Email address", width: 330 },
+  {
+    field: "email",
+    headerName: "Email address",
+    headerClassName: "customHeaderClass-team",
+    width: 330,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>{params.row.email}</Typography>
+        </>
+      );
+    },
+  },
   {
     field: "Date added",
     headerName: "Date added",
+    headerClassName: "customHeaderClass-team",
     width: 180,
     renderCell: (params) => {
       return (
@@ -101,6 +115,7 @@ export const teamColumns = [
   {
     field: "Last quote",
     headerName: "Last quote",
+    headerClassName: "customHeaderClass-team",
     width: 180,
     renderCell: (params) => {
       return (
@@ -121,6 +136,7 @@ export const teamColumns = [
   {
     field: "Total qouted",
     headerName: "Total qouted",
+    headerClassName: "customHeaderClass-team",
     width: 160,
     renderCell: (params) => {
       console.log(params.row);

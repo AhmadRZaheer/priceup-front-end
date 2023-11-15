@@ -17,6 +17,8 @@ import {
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
 
 const GlassTypeItem = ({
   data,
@@ -158,7 +160,7 @@ const GlassTypeItem = ({
             }}
           >
             <Typography>Hardware Part Number</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               name="partNumber"
@@ -184,7 +186,7 @@ const GlassTypeItem = ({
             }}
           >
             <Typography>Cost</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               name="cost"
@@ -225,17 +227,11 @@ const GlassTypeItem = ({
             </Box>
 
             <Box style={{ marginTop: "18px" }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    color="success"
-                    checked={formik.values.status}
-                    onChange={(event) => handleStatusChange(event)}
-                    onBlur={formik.handleBlur}
-                    name="status"
-                  />
-                }
-                label={"active"}
+              <CustomToggle
+                checked={formik.values.status}
+                onChange={(event) => handleStatusChange(event)}
+                onBlur={formik.handleBlur}
+                name="status"
               />
             </Box>
             <Box sx={{ display: "flex" }}>
@@ -245,7 +241,7 @@ const GlassTypeItem = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
-                  sx={{mt: 2}}
+                  sx={{ mt: 3.2 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>

@@ -18,6 +18,8 @@ import {
   useEditGlassAddon,
 } from "../../utilities/ApiHooks/glassAddon";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomToggle from "../ui-components/Toggle";
+import CustomInputField from "../ui-components/CustomInput";
 
 const ListOption = ({
   data,
@@ -165,7 +167,7 @@ const ListOption = ({
             }}
           >
             <Typography>Hardware Part Number </Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               type="number"
@@ -174,7 +176,7 @@ const ListOption = ({
               }}
               name="partNumber"
               placeholder="Hardware Part Number"
-              style={{ width: "100%" }}
+              fullWidth
               value={formik.values.partNumber}
               onChange={(event) => handlePartChange(event)}
               onBlur={formik.handleBlur}
@@ -191,7 +193,7 @@ const ListOption = ({
             }}
           >
             <Typography>Cost</Typography>
-            <TextField
+            <CustomInputField
               size="small"
               variant="outlined"
               name="cost"
@@ -231,21 +233,13 @@ const ListOption = ({
               </FormControl>
             </Box> */}
 
-            <Box style={{ marginTop: "18px" }}>
-              <ThemeProvider>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={formik.values.status}
-                      onChange={(event) => handleStatusChange(event)}
-                      onBlur={formik.handleBlur}
-                      name="status"
-                      color="success"
-                    />
-                  }
-                  label={"active"}
-                />
-              </ThemeProvider>
+            <Box style={{ marginTop: "12px" }}>
+              <CustomToggle
+                checked={formik.values.status}
+                onChange={(event) => handleStatusChange(event)}
+                onBlur={formik.handleBlur}
+                name="status"
+              />
             </Box>
             <Box sx={{ display: "flex" }}>
               {LoadingForDelete ? (
@@ -254,7 +248,7 @@ const ListOption = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
-                  sx={{mt: 2}}
+                  sx={{ mt: 2.6 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>

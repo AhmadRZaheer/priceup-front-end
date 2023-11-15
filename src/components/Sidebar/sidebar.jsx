@@ -94,7 +94,7 @@ const Sidebar = () => {
                 )}
                 <NavLink to="/" className="link">
                   <li
-                    style={{ padding: 10 , marginTop: 10}}
+                    style={{ padding: 10, marginTop: 10 }}
                     className={`estimates ${
                       location.pathname === "/" ? "active" : ""
                     }`}
@@ -460,6 +460,7 @@ const Sidebar = () => {
                   px: 1,
                   borderRadius: "14px",
                 }}
+                onClick={() => handleAdminNameClick(admin._id)}
               >
                 <div className="UserIcon-1">
                   <img
@@ -469,10 +470,7 @@ const Sidebar = () => {
                     alt="no"
                   />
                 </div>
-                <div
-                  style={{ paddingLeft: "10px" }}
-                  onClick={() => handleAdminNameClick(admin._id)}
-                >
+                <div style={{ paddingLeft: "10px" }}>
                   <a style={{ cursor: "pointer" }}>{admin.name}</a>
                   <p style={{ fontSize: "10px" }}>{admin.email}</p>
                 </div>

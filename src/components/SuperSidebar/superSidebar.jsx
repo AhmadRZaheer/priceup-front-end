@@ -200,6 +200,7 @@ const SuperSidebar = () => {
           ) : (
             filteredAdminData.map((admin) => (
               <Typography
+                onClick={() => handleAdminNameClick(admin._id)}
                 key={admin.id}
                 sx={{
                   width: "83%",
@@ -226,10 +227,7 @@ const SuperSidebar = () => {
                     alt="no"
                   />
                 </div>
-                <div
-                  style={{ paddingLeft: "10px" }}
-                  onClick={() => handleAdminNameClick(admin._id)}
-                >
+                <div style={{ paddingLeft: "10px" }}>
                   <a style={{ cursor: "pointer" }}>{admin.name}</a>
                   <p style={{ fontSize: "10px" }}>{admin.email}</p>
                 </div>
