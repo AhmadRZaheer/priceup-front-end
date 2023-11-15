@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomerQuoteColumns } from "../../customerTableSource";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import {
@@ -17,13 +17,13 @@ import {
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
-import { Close } from "@mui/icons-material";
+import { ArrowBack, ArrowForward, Close, Edit } from "@mui/icons-material";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
-  gap: 3,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -40,7 +40,6 @@ const dataGridStyle = {
 };
 
 export default function AddEditFinish({ open, close, quoteId }) {
-  const navigate = useNavigate();
   const [estimates, setEstimates] = useState([]); // State to store fetched data
   const [loading, setLoading] = useState(true); // State to indicate loading
   const [error, setError] = useState(null); // State to store error
@@ -108,31 +107,67 @@ export default function AddEditFinish({ open, close, quoteId }) {
     {
       field: "Status",
       align: "left",
-      minWidth: "280px",
+      width: 80,
       renderCell: (params) => {
         return (
           <>
             <Link to="/customers/steps">
-              <IconButton
-                sx={{
-                  backgroundColor: "#8477DA",
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 2,
-                  fontSize: 15,
-                }}
-                onClick={() => handleIconButtonClick(params)}
-                disabled={estimateDataFetching}
-              >
-                Update
-              </IconButton>
+              <CustomIconButton
+                disable={estimateDataFetching}
+                handleClick={() => handleIconButtonClick(params)}
+                icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
+              />
             </Link>
           </>
         );
       },
     },
   ];
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 4;
+
+  const totalPages = Math.ceil(estimates.length / itemsPerPage);
+  const MAX_PAGES_DISPLAYED = 5;
+
+  const getPageNumbersToShow = () => {
+    if (totalPages <= MAX_PAGES_DISPLAYED) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    const pagesToShow = [];
+    const startPage = Math.max(1, page - 2); // Display three on the first side
+    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
+
+    if (startPage > 1) {
+      pagesToShow.push(1);
+      if (startPage > 2) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pagesToShow.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+      pagesToShow.push(totalPages);
+    }
+
+    return pagesToShow;
+  };
+
+  const pageNumbersToShow = getPageNumbersToShow();
+
+  const handlePreviousPage = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
 
   return (
     <div>
@@ -145,33 +180,128 @@ export default function AddEditFinish({ open, close, quoteId }) {
         }}
       >
         <Box sx={style}>
-          <Box sx={{ width: "100%", display: "flex", justifyContent: "space-between", alignItem: "center" }}>
-            <Typography sx={{fontSize: 24, fontWeight: "bold"}}>Estimates</Typography>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItem: "center",
+              mb: 2,
+            }}
+          >
+            <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+              Estimates
+            </Typography>
             <Close
               onClick={close}
               sx={{ color: "gray", fontSize: 24, cursor: "pointer" }}
             />
           </Box>
-          {loading ? (
-            <p>Loading...</p>
+          {estimateDataFetching ? (
+            <Box sx={{ width: "100%", textAlign: "center" }}>
+              <CircularProgress sx={{ color: "#8477DA" }} />
+            </Box>
           ) : error ? (
             <p>Error: {error.message}</p>
           ) : (
-            <DataGrid
-              getRowId={(row) => row._id}
-              rows={estimates} // Pass the fetched data as an array
-              columns={CustomerQuoteColumns.concat(actionColumn)}
-              autoHeight
-              pageSizeOptions={[10]}
-              disableColumnFilter
-              style={dataGridStyle}
-            />
+            <Box
+              sx={{ border: "1px solid #EAECF0", borderRadius: "8px", mb: 2 }}
+            >
+              <DataGrid
+                style={dataGridStyle}
+                getRowId={(row) => row._id}
+                rows={estimates.slice(
+                  (page - 1) * itemsPerPage,
+                  page * itemsPerPage
+                )}
+                columns={CustomerQuoteColumns.concat(actionColumn)}
+                page={page}
+                pageSize={itemsPerPage}
+                rowCount={estimates.length}
+                pageSizeOptions={[1, , 25]}
+                sx={{ width: "100%" }}
+                hideFooter
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                }}
+              >
+                <Button
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                    borderRadius: "8px",
+                    textTransform: "capitalize",
+                    fontWeight: 500,
+                    ":hover": {
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                    },
+                  }}
+                  variant="outlined"
+                  onClick={handlePreviousPage}
+                  disabled={page === 0}
+                >
+                  <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
+                  Previous
+                </Button>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  {pageNumbersToShow.map((pagenumber, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        backgroundColor:
+                          page === pagenumber
+                            ? "rgba(144, 136, 192, 0.2)"
+                            : "white",
+                        color: page === pagenumber ? "#353050" : "#667085",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {pagenumber}
+                    </Box>
+                  ))}
+                </Box>
+                <Button
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                    borderRadius: "8px",
+                    textTransform: "capitalize",
+                    fontWeight: 500,
+                    ":hover": {
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                    },
+                  }}
+                  onClick={handleNextPage}
+                  disabled={estimates.length === 0}
+                >
+                  Next
+                  <ArrowForward
+                    sx={{ color: "#344054", fontSize: 20, ml: 1 }}
+                  />
+                </Button>
+              </Box>
+            </Box>
           )}
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "black", border: "1px solid black", width: "120px" }}
+              sx={{
+                color: "#101828",
+                border: "1px solid black",
+                width: "120px",
+              }}
             >
               Cancel
             </Button>

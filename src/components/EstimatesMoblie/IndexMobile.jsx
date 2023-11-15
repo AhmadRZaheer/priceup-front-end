@@ -6,7 +6,10 @@ import Summary from "./summary";
 import ExitingQuotes from "./existingQuotes";
 import CustomerTable from "./customerTable";
 import StaffTable from "./staffTable";
-import { getPageNavigation,getQuoteState } from "../../redux/estimateCalculations";
+import {
+  getPageNavigation,
+  getQuoteState,
+} from "../../redux/estimateCalculations";
 import Layout from "./layouts";
 import { useSelector } from "react-redux";
 import Snackbars from "../Modal/snackBar";
@@ -41,12 +44,12 @@ const IndexMobile = () => {
   return (
     <>
       <Box sx={{ backgroundColor: "black" }}>
-        {Navigation == "existing" && <ExitingQuotes />}
-        {Navigation == "customerTable" && <CustomerTable />}
-        {Navigation == "staffTable" && <StaffTable />}
-        {Navigation == "layouts" && <Layout />}
-        {Navigation == "measurements" && <LayoutMeasurements />}
-        {Navigation == "review" && <LayoutReview />}
+        {Navigation === "existing" && <ExitingQuotes />}
+        {Navigation === "customerTable" && <CustomerTable />}
+        {Navigation === "staffTable" && <StaffTable />}
+        {Navigation === "layouts" && <Layout />}
+        {Navigation === "measurements" && <LayoutMeasurements />}
+        {Navigation === "review" && <LayoutReview />}
         {Navigation === "summary" ? (
           ["create", "custom"].includes(updatecheck) ? (
             <Summary handleOpen={handleOpen} />

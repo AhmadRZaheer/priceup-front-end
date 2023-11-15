@@ -1,12 +1,13 @@
 import { Box, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
   getLayoutArea,
   getQuoteState,
+  selectedItem,
   setFabricationPrice,
   setGlassAddonsPrice,
   setGlassPrice,
@@ -20,20 +21,31 @@ import ChannelType from "./channelOrClamp";
 import { calculateTotal } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
 import QuotesFooter from "./quotesFooter";
+import { layoutVariants } from "../../utilities/constants";
 
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const sqftArea = useSelector(getLayoutArea);
   const dispatch = useDispatch();
+  const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
+  const quoteActiveState = useMemo(() => {
+    let state = "";
+    if (quoteState === "create") {
+      state = selectedData?.settings?.variant;
+    } else if (quoteState === "edit") {
+      state = quoteState?.layoutData?.variant;
+    }
+    return state;
+  }, [quoteState]);
   useEffect(() => {
     const prices = calculateTotal(selectedContent, sqftArea, estimatesData);
     dispatch(setHardwarePrice(prices.hardwarePrice));
     dispatch(setGlassPrice(prices.glassPrice));
     dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
-    dispatch(setLaborPrice(prices.laborPrice))
+    dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
 
@@ -56,7 +68,7 @@ const LayoutReview = () => {
       open: false,
     }));
   };
-  console.log(quoteState, "quoteState")
+  console.log(quoteState, "quoteState");
   return (
     <>
       <Box
@@ -77,8 +89,8 @@ const LayoutReview = () => {
             quoteState === "create"
               ? "measurements"
               : quoteState === "custom"
-                ? "custom"
-                : "existing"
+              ? "custom"
+              : "existing"
           }
         />
         <Box
@@ -104,7 +116,7 @@ const LayoutReview = () => {
             <Typography
               sx={{
                 fontSize: { md: "18px", xs: "18px" },
-                color: { md: "black", xs: "white" },
+                color: { md: "#101828", xs: "white" },
                 paddingBottom: 1,
               }}
             >
@@ -157,7 +169,7 @@ const LayoutReview = () => {
                       md: "2px solid #D0D5DD",
                       xs: "2px solid #423f57",
                     },
-                    color: { md: "black", xs: "white" },
+                    color: { md: "#101828", xs: "white" },
                   }}
                 >
                   <Box sx={{ width: "100%" }}>
@@ -215,35 +227,42 @@ const LayoutReview = () => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  sx={{
-                    alignItems: "center",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                  }}
-                >
-                  <Box sx={{ width: "100%", display: "flex" }}>
+
+                {![
+                  layoutVariants.DOOR,
+                  layoutVariants.DOUBLEDOOR,
+                  layoutVariants.DOUBLEBARN,
+                ].includes(quoteActiveState) && (
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      borderBottom: {
+                        md: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
                     <Box sx={{ width: "100%", display: "flex" }}>
-                      <Box
-                        sx={{
-                          width: "100%",
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <ChannelType
-                          menuOptions={estimatesData?.channelOrClamps}
-                          title={"Mounting"}
-                          type={"mounting"}
-                          showSnackbar={showSnackbar}
-                          estimatesData={estimatesData}
-                        />
+                      <Box sx={{ width: "100%", display: "flex" }}>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <ChannelType
+                            menuOptions={estimatesData?.channelOrClamps}
+                            title={"Mounting"}
+                            type={"mounting"}
+                            showSnackbar={showSnackbar}
+                            estimatesData={estimatesData}
+                          />
+                        </Box>
                       </Box>
                     </Box>
                   </Box>
-                </Box>
+                )}
                 <Box
                   sx={{
                     display: "flex",
@@ -327,7 +346,7 @@ const LayoutReview = () => {
                       title={"Glass Addons"}
                       type={"glassAddons"}
                       showSnackbar={showSnackbar}
-                    // currentItem={selectedContent?.glassTreatment}
+                      // currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
                 </Box>
@@ -467,64 +486,70 @@ const LayoutReview = () => {
                     />
                   </Box>
                 </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    borderBottom: {
-                      md: "2px solid #D0D5DD",
-                      xs: "2px solid #423f57",
-                    },
-                    paddingLeft: 3,
-                    paddingBottom: 1,
-                    color: { md: "#000000  ", xs: "white" },
-                  }}
-                >
-                  <Typography>Clamp Cut out</Typography>
+                {![
+                  layoutVariants.DOOR,
+                  layoutVariants.DOUBLEDOOR,
+                  layoutVariants.DOUBLEBARN,
+                ].includes(quoteActiveState) && (
                   <Box
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 2,
-                      width: "120px",
-                      padddingY: 4,
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        md: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      paddingLeft: 3,
+                      paddingBottom: 1,
+                      color: { md: "#000000  ", xs: "white" },
                     }}
                   >
-                    <TextField
-                      type="number"
-                      InputProps={{
-                        style: {
-                          color: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                      }}
-                      InputLabelProps={{
-                        style: {
-                          color: "rgba(255, 255, 255, 0.5)",
-                        },
-                      }}
+                    <Typography>Clamp Cut out</Typography>
+                    <Box
                       sx={{
-                        border: { md: "none", xs: "2px solid #423f57" },
-                        borderRadius: { md: 0, xs: 2 },
-                        color: { md: "black", xs: "white" },
-                        background: "#14112c",
-                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
                       }}
-                      variant="outlined"
-                      size="small"
-                      value={selectedContent.clampCut}
-                      onChange={(event) =>
-                        dispatch(
-                          setInputContent({
-                            type: "clampCut",
-                            value: event.target.value,
-                          })
-                        )
-                      }
-                    />
+                    >
+                      <TextField
+                        type="number"
+                        InputProps={{
+                          style: {
+                            color: "white",
+                          },
+                          inputProps: { min: 0, max: 50 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          border: { md: "none", xs: "2px solid #423f57" },
+                          borderRadius: { md: 0, xs: 2 },
+                          color: { md: "black", xs: "white" },
+                          background: "#14112c",
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.clampCut}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "clampCut",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
                   </Box>
-                </Box>
+                )}
                 <Box
                   sx={{
                     display: "flex",
@@ -883,8 +908,8 @@ const LayoutReview = () => {
             quoteState === "create"
               ? "measurements"
               : quoteState === "custom"
-                ? "custom"
-                : "existing"
+              ? "custom"
+              : "existing"
           }
           disabled={selectedContent?.hardwareFinishes === null}
         />

@@ -187,7 +187,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       )
     );
   };
-  const { data: estimatesData } = useFetchDataEstimate();
+  const { data: estimatesData, refetch: Refetched } = useFetchDataEstimate();
 
   useEffect(() => {
     const prices = calculateTotal(
@@ -215,7 +215,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       severity,
     });
   };
-  const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");

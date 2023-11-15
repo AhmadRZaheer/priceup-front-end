@@ -12,6 +12,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useAddLocation } from "../../utilities/ApiHooks/team";
+import { Close } from "@mui/icons-material";
 
 const style = {
   position: "absolute",
@@ -114,12 +115,29 @@ export default function LocationModel({
               {haveAccessArray.map((data) => {
                 return (
                   <Box
-                    sx={{ padding: "10px", borderRadius: "7px" }}
+                    sx={{
+                      padding: "10px",
+                      borderRadius: "7px",
+                    }}
                     key={data.id}
                   >
                     <Chip
                       label={data.name}
                       onDelete={data.id ? handleDelete(data) : undefined}
+                      deleteIcon={
+                        <Close
+                          style={{
+                            color: "white",
+                            width: "16px",
+                            height: "16px",
+                          }}
+                        />
+                      }
+                      sx={{
+                        color: "white",
+                        bgcolor: "#C6C6C6",
+                        borderRadius: "7px",
+                      }}
                     />
                   </Box>
                 );
@@ -161,6 +179,11 @@ export default function LocationModel({
                             onClick={() => handleAddLocation(data)}
                             label={data.name}
                             onDelete={data.id ? undefined : handleDelete(data)}
+                            sx={{
+                              color: "white",
+                              bgcolor: "#C6C6C6",
+                              borderRadius: "7px",
+                            }}
                           />
                         </Box>
                       );
@@ -178,7 +201,7 @@ export default function LocationModel({
               onClick={onClose}
               variant="outlined"
               sx={{
-                color: "black",
+                color: "#101828",
                 border: "1px solid #D0D5DD",
                 width: "50%",
                 "&:hover": {

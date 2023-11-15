@@ -10,6 +10,7 @@ import {
 import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeDataItem from "./glassTypeData";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const GlassTypeComponent = ({ type }) => {
   const [snackbar, setSnackbar] = useState({
@@ -89,21 +90,11 @@ const GlassTypeComponent = ({ type }) => {
             padding: 4,
           }}
         >
-          <IconButton
-            onClick={handleOpen}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-            }}
-          >
-            <Add style={{ color: "white" }} />
-            Add
-          </IconButton>
+          <CustomIconButton
+            handleClick={handleOpen}
+            icon={<Add style={{ color: "white" }} />}
+            buttonText=" Add"
+          />
         </div>{" "}
       </div>
       <div
@@ -167,7 +158,7 @@ const GlassTypeComponent = ({ type }) => {
             height: "56vh",
           }}
         >
-          <CircularProgress size={24} color="warning" />
+          <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
         <div
@@ -181,12 +172,13 @@ const GlassTypeComponent = ({ type }) => {
           }}
         >
           {GlassTypeData?.map((entry, mainIndex) => (
-           <GlassTypeDataItem
-           entry={entry}
-           mainIndex={mainIndex}
-           GlassTypeRefetch={GlassTypeRefetch}
-           showSnackbar={showSnackbar}
-           type={type} />
+            <GlassTypeDataItem
+              entry={entry}
+              mainIndex={mainIndex}
+              GlassTypeRefetch={GlassTypeRefetch}
+              showSnackbar={showSnackbar}
+              type={type}
+            />
           ))}
         </div>
       )}

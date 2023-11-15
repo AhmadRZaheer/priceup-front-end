@@ -16,6 +16,7 @@ import {
   useDeleteGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 
 const GlassTypeItem = ({
   data,
@@ -244,12 +245,13 @@ const GlassTypeItem = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
+                  sx={{mt: 2}}
                 >
-                  <Delete />
+                  <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
               )}
-              {LoadingForEdit ? (
-                <CircularProgress size={24} color="warning" />
+              {/* {LoadingForEdit ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <IconButton
                   type="submit"
@@ -265,7 +267,7 @@ const GlassTypeItem = ({
                 >
                   Update
                 </IconButton>
-              )}
+              )} */}
             </Box>
           </Box>
         </Box>

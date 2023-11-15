@@ -11,7 +11,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
           display: "flex",
           gap: 4,
           alignContent: "center",
-          backgroundColor: "rgb(232, 232, 232)",
+          backgroundColor: "#EAECF0",
           paddingTop: 15,
           paddingBottom: 15,
           paddingLeft: "10px",
@@ -27,6 +27,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             fontSize: 18,
             paddingLeft: 5,
             alignItems: "center",
+            color: "#667085",
           }}
         >
           Image
@@ -37,6 +38,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
+            color: "#667085",
           }}
         >
           Setting
@@ -47,6 +49,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
+            color: "#667085",
           }}
         >
           Default
@@ -65,13 +68,18 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
               paddingTop: 6,
               fontSize: 18,
               paddingLeft: 5,
+              color: "#667085",
             }}
           >
             Default count
           </div>
           <Button
             onClick={handleEditClick}
-            sx={{ backgroundColor: "#8477DA", boxShadow: 0, "&:hover": {backgroundColor: "#8477DA"} }}
+            sx={{
+              backgroundColor: "#8477DA",
+              boxShadow: 0,
+              "&:hover": { backgroundColor: "#8477DA" },
+            }}
             variant="contained"
           >
             {" "}

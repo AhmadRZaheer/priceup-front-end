@@ -15,6 +15,7 @@ import {
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import { useState } from "react";
+import bgCustom from "../../Assets/customlayoutimage.svg";
 
 export default function Layout() {
   const boxStyles = {
@@ -145,7 +146,7 @@ export default function Layout() {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                   fontWeight: 600,
                 }}
@@ -170,7 +171,7 @@ export default function Layout() {
                   height: 300,
                 }}
               >
-                <CircularProgress />
+                <CircularProgress sx={{color: "#8477DA"}}/>
               </Box>
             ) : (
               <Grid
@@ -213,10 +214,23 @@ export default function Layout() {
                   sx={{
                     ...boxStyles,
                     backgroundColor: selectCustom ? "#8477DA" : "#D9D9D9",
-                    color: selectCustom ? "white" : "black",
+                    color: selectCustom ? "white" : "#101828",
+                    position: "relative",
                   }}
                 >
-                  <Typography sx={{ font: "18px" }}>Custom</Typography>
+                  <img
+                    style={{
+                      position: "absolute",
+                      zIndex: 1,
+                      height: "100px",
+                      width: "100px",
+                    }}
+                    src={bgCustom}
+                    alt="custom image"
+                  />
+                  <Typography sx={{ font: "18px", zIndex: 2, color: "#101828" }}>
+                    Custom
+                  </Typography>
                 </Box>
               </Grid>
             )}

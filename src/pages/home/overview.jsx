@@ -22,12 +22,13 @@ const Overview = () => {
         <div className="page-title">
           <h2>Welcome back, {name}</h2>
 
-          <p>Tract, manage and forecast your customers and orders.</p>
+          <p className="discription-welcome">Tract, manage and forecast your customers and orders.</p>
         </div>
         <div className="widgets">
           <Widget value={data?.estimates || 0} type="estimates" />
           <Widget value={data?.customers || 0} type="customers" />
           <Widget value={data?.staff || 0} type="team" />
+          <Widget value={data?.staff || 0} type="invoice" />
         </div>
         <div className="page-title">
           <h2>Estimates</h2>

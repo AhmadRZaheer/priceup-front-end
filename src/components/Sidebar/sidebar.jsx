@@ -28,8 +28,9 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import { AttachMoney, KeyboardBackspace, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import { Link } from "react-router-dom";
 import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import BackIcon from "../../Assets/back.svg";
+import EyeIcon from "../../Assets/eye-icon.svg";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
@@ -102,16 +103,24 @@ const Sidebar = () => {
             <div className="center">
               <ul>
                 {superAdminToken && (
-                  <li style={{ padding: 10 }} onClick={handleSeeLocationsClick}>
+                  <li
+                    style={{ padding: 10, marginBottom: 0 }}
+                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                    onClick={handleSeeLocationsClick}
+                  >
                     <IconButton sx={{ color: "white", padding: 0.2 }}>
-                      <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
+                      <img
+                        src={EyeIcon}
+                        alt="eye icon"
+                        style={{ marginRight: 12 }}
+                      />
                       <span>See Locations</span>
                     </IconButton>
                   </li>
                 )}
                 <NavLink to="/" className="link">
                   <li
-                    style={{ padding: 10 }}
+                    style={{ padding: 10 , marginTop: 10}}
                     className={`estimates ${
                       location.pathname === "/" ? "active" : ""
                     }`}
@@ -448,89 +457,81 @@ const Sidebar = () => {
           vertical: "top",
           horizontal: "left",
         }}
-        sx={{ left: 12 }}
+        PaperProps={{
+          style: {
+            borderRadius: "34px",
+            width: "317px",
+          },
+        }}
+        sx={{ left: 13 }}
       >
-        <input
-          type="text"
-          placeholder="Search Admin Names"
-          style={{
-            width: "270px",
-            padding: "8px",
-            paddingLeft: "35px",
-            height: "26px",
-            marginBottom: "10px",
-            marginLeft: "20px",
-            marginRight: "20px",
-            marginTop: "20px",
-            position: "relative",
-          }}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-          <Search sx={{ color: " #100d24" }} />
-          {/* You can use an icon library like Font Awesome */}
-        </span>
+        {superAdminToken && (
+          <IconButton
+            sx={{
+              fontSize: "15px",
+              borderRadius: 1,
+              ml: 2.2,
+              mt: 2,
+              color: "#667085",
+              position: "sticky",
+              bg: "white",
+              top: 0,
+              display: "flex",
+              gap: 2,
+              bgcolor: "white",
+              ":hover": {
+                bgcolor: "white",
+              },
+              p: 1,
+            }}
+            onClick={() => {
+              localStorage.setItem("token", superAdminToken);
+              localStorage.removeItem("superAdminToken");
+
+              window.location.href = "/";
+            }}
+          >
+            <img src={BackIcon} alt="back icon" />
+            Back to super admin view
+          </IconButton>
+        )}
+        <Box sx={{ position: "relative" }}>
+          <input
+            type="text"
+            placeholder="Search Admin Names"
+            style={{
+              width: "230px",
+              padding: "8px",
+              paddingLeft: "35px",
+              height: "26px",
+              marginBottom: "10px",
+              marginLeft: "20px",
+              marginRight: "20px",
+              marginTop: "20px",
+              borderRadius: "14px",
+            }}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <span style={{ position: "absolute", left: "28px", top: "30px" }}>
+            <Search sx={{ color: "#8477DA" }} />
+          </span>
+        </Box>
         <div
           style={{
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "340px",
+            width: "310px",
             display: "flex",
             flexDirection: "column",
             gap: 5,
             pt: 100,
             position: "relative",
+            marginTop: 10,
+            marginBottom: 10,
           }}
         >
-          {superAdminToken && (
-            <IconButton
-              sx={{
-                fontSize: "15px",
-                borderRadius: 1,
-                ml: 2.2,
-                color: "black",
-                position: "sticky",
-                bg: "white",
-                top: 0,
-                bgcolor: "white",
-                ":hover": {
-                  bgcolor: "white",
-                },
-                pb: 2,
-                borderBottom: "1px solid #babab8",
-                borderRadius: 0,
-              }}
-              onClick={() => {
-                localStorage.setItem("token", superAdminToken);
-                localStorage.removeItem("superAdminToken");
-
-                window.location.href = "/";
-              }}
-            >
-              <KeyboardBackspace sx={{ mr: 0.5 }} />
-              Back to admin
-            </IconButton>
-          )}
-          <Box
-            sx={{
-              borderBottom: "1px solid #babab8",
-              width: "94%",
-              ml: "auto",
-              py: 0.6,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: 12,
-                textTransform: "uppercase",
-                color: "#8f8f8f",
-              }}
-            >
-              Locations
-            </Typography>
-          </Box>
           {filteredAdminData.length === 0 ? (
             <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
               No location found
@@ -540,20 +541,20 @@ const Sidebar = () => {
               <Typography
                 key={admin.id}
                 sx={{
-                  width: "88%",
+                  width: "83.8%",
                   ml: "10px",
                   marginBottom: "5px",
                   textTransform: "lowercase",
                   marginLeft: "20px",
                   display: "flex",
-                  border: "1px solid #babab8",
+                  border: "1px solid #D9D9D9",
                   ":hover": {
                     bgcolor: "rgba(0, 0, 0, 0.1)",
                     cursor: "pointer",
                   },
                   py: 0.4,
                   px: 1,
-                  borderRadius: 1,
+                  borderRadius: "14px",
                 }}
               >
                 <div className="UserIcon-1">

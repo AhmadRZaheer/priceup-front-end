@@ -140,7 +140,7 @@ const ChannelTypeDesktop = ({
                       color:
                         item.toLowerCase() === selectedContent?.mountingState
                           ? "white"
-                          : "black",
+                          : "#101828",
                       bgcolor:
                         item.toLowerCase() === selectedContent?.mountingState
                           ? "#8477DA"

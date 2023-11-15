@@ -1,13 +1,15 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import FinishItem from "./finishItem";
 import { Box, IconButton } from "@mui/material";
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import {
   useDeleteHardwares,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
 import AddEditHardware from "../Modal/addEditHardware";
+import CustomIconButton from "../ui-components/CustomButton";
 
 const HardwareItem = ({
   entry,
@@ -60,7 +62,6 @@ const HardwareItem = ({
     }
   }, []);
 
-  
   return (
     <div
       style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
@@ -82,40 +83,19 @@ const HardwareItem = ({
             alt=""
           />
           {entry.name}
-          <IconButton
-            onClick={handleOpenEdit}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-            }}
-          >
-            <Edit color="white" sx={{ fontSize: 18, pr: 0.4 }} />
-            Edit
-          </IconButton>
+          <CustomIconButton
+            handleClick={handleOpenEdit}
+            icon={<Edit color="white" sx={{ fontSize: 18, pr: 0.4 }} />}
+          />
         </Box>
         <Box>
-          <IconButton>
-            <Delete onClick={() => handleHardwareDelete(entry._id)} />
+          <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+            <img src={DeleteIcon} alt="delete icon" />
           </IconButton>
-          <IconButton
-            key={entry._id}
-            id={entry._id}
-            onClick={() => handleOpenUpdate(entry._id)}
-            sx={{
-              backgroundColor: "#8477DA",
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-            }}
-          >
-            Update
-          </IconButton>
+          <CustomIconButton
+            handleClick={() => handleOpenUpdate(entry._id)}
+            buttonText="Update"
+          />
         </Box>
       </Box>
       <Box sx={{ p: 2 }}>

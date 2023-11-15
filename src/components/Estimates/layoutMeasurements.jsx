@@ -249,7 +249,7 @@ const LayoutMeasurements = () => {
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -470,7 +470,7 @@ const LayoutMeasurements = () => {
                       height: 300,
                     }}
                   >
-                    <CircularProgress />
+                    <CircularProgress sx={{color: "#8477DA"}}/>
                   </Box>
                 ) : (
                   <Box

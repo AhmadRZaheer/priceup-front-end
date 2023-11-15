@@ -7,6 +7,7 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
+  resetState,
   selectedItem,
   setListData,
   setNavigation,
@@ -41,12 +42,12 @@ const Layout = () => {
   const [selectCustom, setselectCustom] = useState(false);
 
   const handleBoxClick = (layout) => {
-    console.log('box click');
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
     setselectCustom(false);
+    // dispatch(resetState());
   };
 
   const setStorePage = () => {
@@ -55,14 +56,16 @@ const Layout = () => {
     } else dispatch(setNavigation("measurements"));
   };
   const handleselectcustom = () => {
+    dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
+    // dispatch(resetState());
   };
-console.log(selectedData, "selectedData")
-console.log(selectCustom, "selectCustom")
+  console.log(selectedData, "selectedData");
+  console.log(selectCustom, "selectCustom");
   return (
     <>
       <Box
@@ -113,7 +116,7 @@ console.log(selectCustom, "selectCustom")
               <Typography
                 sx={{
                   fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "black", xs: "white" },
+                  color: { md: "#101828", xs: "white" },
                   paddingBottom: 1,
                 }}
               >
@@ -137,7 +140,7 @@ console.log(selectCustom, "selectCustom")
                   height: 700,
                 }}
               >
-                <CircularProgress />
+                <CircularProgress  sx={{ color: "#8477DA" }}/>
               </Box>
             ) : (
               <Grid container gap={1} sx={{ height: "55vh", overflow: "auto" }}>
@@ -151,7 +154,7 @@ console.log(selectCustom, "selectCustom")
                           ? "rgba(36, 28, 52,0.5)"
                           : "#8477DA",
                       color:
-                        selectedData?._id !== layout._id ? "white" : "black",
+                        selectedData?._id !== layout._id ? "white" : "#101828",
                     }}
                     onClick={() => handleBoxClick(layout)}
                   >

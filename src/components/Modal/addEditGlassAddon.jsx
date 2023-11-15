@@ -198,7 +198,7 @@ export default function AddEditGlassAddon({
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "black", border: "1px solid #D0D5DD", width: "50%" }}
+              sx={{ color: "#101828", border: "1px solid #D0D5DD", width: "50%" }}
             >
               Cancel
             </Button>
@@ -216,7 +216,7 @@ export default function AddEditGlassAddon({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24} />
+                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
               ) : isEdit ? (
                 "Update"
               ) : (

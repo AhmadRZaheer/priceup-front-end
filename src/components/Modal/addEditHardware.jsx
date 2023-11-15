@@ -223,7 +223,7 @@ export default function AddEditHardware({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24} />
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

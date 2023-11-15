@@ -13,7 +13,7 @@ import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
+import EyeIcon from "../../Assets/eye-icon.svg";
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -68,9 +68,17 @@ const SuperSidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-                <li style={{ padding: 10 }} onClick={handleSeeLocationsClick}>
+                <li
+                  style={{ padding: 10 }}
+                  className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                  onClick={handleSeeLocationsClick}
+                >
                   <IconButton sx={{ color: "white", padding: 0.2 }}>
-                    <PeopleOutlineIcon sx={{ color: "white", mr: 1 }} />
+                    <img
+                      src={EyeIcon}
+                      alt="eye icon"
+                      style={{ marginRight: 12 }}
+                    />
                     <span>See Locations</span>
                   </IconButton>
                 </li>
@@ -143,13 +151,19 @@ const SuperSidebar = () => {
           vertical: "top",
           horizontal: "left",
         }}
-        sx={{left: 15}}
+        PaperProps={{
+          style: {
+            borderRadius: "34px",
+            width: "317px",
+          },
+        }}
+        sx={{ left: 13 }}
       >
         <input
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: "270px",
+            width: "230px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",
@@ -158,12 +172,13 @@ const SuperSidebar = () => {
             marginRight: "20px",
             marginTop: "20px",
             position: "relative",
+            borderRadius: "14px",
           }}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-          <Search sx={{ color: " #100d24" }} />
+          <Search sx={{ color: "#8477DA" }} />
           {/* You can use an icon library like Font Awesome */}
         </span>
         <div
@@ -171,30 +186,13 @@ const SuperSidebar = () => {
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "340px",
+            width: "310px",
             display: "flex",
             flexDirection: "column",
             gap: 5,
+            marginBottom: 10,
           }}
         >
-          <Box
-            sx={{
-              borderBottom: "1px solid #babab8",
-              width: "94%",
-              ml: "auto",
-              py: 0.6,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: 12,
-                textTransform: "uppercase",
-                color: "#8f8f8f",
-              }}
-            >
-              Locations
-            </Typography>
-          </Box>
           {filteredAdminData.length === 0 ? (
             <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
               No location found
@@ -204,20 +202,20 @@ const SuperSidebar = () => {
               <Typography
                 key={admin.id}
                 sx={{
-                  width: "88%",
+                  width: "83%",
                   ml: "10px",
                   marginBottom: "5px",
                   textTransform: "lowercase",
                   marginLeft: "20px",
                   display: "flex",
-                  border: "1px solid #babab8",
+                  border: "1px solid #D9D9D9",
                   ":hover": {
                     bgcolor: "rgba(0, 0, 0, 0.1)",
                     cursor: "pointer",
                   },
                   py: 0.4,
                   px: 1,
-                  borderRadius: 1,
+                  borderRadius: "14px",
                 }}
               >
                 <div className="UserIcon-1">
