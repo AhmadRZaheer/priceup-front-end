@@ -74,11 +74,9 @@ const LayoutReview = () => {
       <Box
         sx={{
           width: { md: "70%", sm: "100%", sx: "100%" },
-          margin: { md: "auto", xs: 0 },
-
+          margin: { md: "auto", xs: 0 }, 
           display: "flex",
-          alignItems: { md: "center", xs: "start" },
-
+          alignItems: { md: "center", xs: "start" }, 
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },

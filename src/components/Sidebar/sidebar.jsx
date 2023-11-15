@@ -80,6 +80,7 @@ const Sidebar = () => {
         position: { xs: "absolute", md: "static" },
         top: "0px",
         zIndex: 10,
+        backgroundColor: "red",
       }}
     >
       <div className="sidebar">
@@ -120,7 +121,7 @@ const Sidebar = () => {
                 )}
                 <NavLink to="/" className="link">
                   <li
-                    style={{ padding: 10 , marginTop: 10}}
+                    style={{ padding: 10, marginTop: 10 }}
                     className={`estimates ${
                       location.pathname === "/" ? "active" : ""
                     }`}

@@ -148,17 +148,18 @@ function MobileBar() {
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
-            alignItems: "center",
           }}
         >
-          <Box sx={{ marginTop: 2, textAlign: "left" }}>
+          <Box>
             <Tooltip title="Switch Location">
               <Button
                 sx={{
+                  width: 245,
                   color: "white",
-                  padding: 0.2,
-                  width: 200,
-                  backgroundColor: "#8477da",
+                  marginX: 2,
+                  marginY: 1,
+                  paddingY: "10px",
+                  textTransform: "capitalize",
                   ":hover": {
                     backgroundColor: "#8477da",
                   },
@@ -171,29 +172,30 @@ function MobileBar() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    padding: "8px",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px", mb: -0.4 }}>
+                  <Typography sx={{ fontSize: "16px" }}>
                     {activeLocation?.name}
                   </Typography>
+                  Locations
                 </Box>
                 {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
               </Button>
             </Tooltip>
           </Box>
-          <Box sx={{ marginTop: 2 }}>
+          <Box>
             <Button
               sx={{
-                width: 200,
+                width: 245,
                 color: "white",
-                margin: 2,
+                marginX: 2,
+                marginY: 1,
+                paddingY: "10px",
                 textTransform: "capitalize",
                 backgroundColor:
-                  activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                  activeButton === "esti" ? "#8477da" : "transprent",
                 ":hover": {
-                  backgroundColor:
-                    activeButton === "esti" ? "#B0C4DE" : "#8477da",
+                  backgroundColor: "#8477da",
                 },
               }}
               onClick={() => handleEstimateClick()}
@@ -206,18 +208,20 @@ function MobileBar() {
               Estimates
             </Button>
           </Box>
-          <Box sx={{ marginTop: 2 }}>
+          <Box>
             <Button
               sx={{
-                width: 200,
+                width: 245,
                 color: "white",
-                margin: 2,
+                marginX: 2,
+                marginY: 1,
+                paddingY: "10px",
                 textTransform: "capitalize",
+
                 backgroundColor:
-                  activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                  activeButton === "customr" ? "#8477da" : "transprent",
                 ":hover": {
-                  backgroundColor:
-                    activeButton === "customr" ? "#B0C4DE" : "#8477da",
+                  backgroundColor: "#8477da",
                 },
               }}
               onClick={() => handleCustomerClick()}
@@ -230,18 +234,19 @@ function MobileBar() {
               Customer
             </Button>
           </Box>
-          <Box sx={{ marginTop: 2 }}>
+          <Box>
             <Button
               sx={{
-                width: 200,
+                width: 245,
                 color: "white",
-                margin: 2,
+                marginX: 2,
+                marginY: 1,
+                paddingY: "10px",
                 textTransform: "capitalize",
                 backgroundColor:
-                  activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                  activeButton === "staff" ? "#8477da" : "transprent",
                 ":hover": {
-                  backgroundColor:
-                    activeButton === "staff" ? "#B0C4DE" : "#8477da",
+                  backgroundColor: "#8477da",
                 },
               }}
               onClick={handleStaffClick}
@@ -311,6 +316,7 @@ function MobileBar() {
           sx={{
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
+            display: { sm: "none" },
           }}
         >
           <Toolbar sx={{ backgroundColor: "#100d24" }}>
@@ -402,49 +408,57 @@ function MobileBar() {
         anchorEl={anchorEl}
         onClose={handleClosePopup}
         anchorOrigin={{
-          vertical: "bottom",
+          vertical: "top",
           horizontal: "right",
         }}
         transformOrigin={{
           vertical: "top",
           horizontal: "left",
         }}
-        // sx={{ up:20 }}
+        PaperProps={{
+          style: {
+            borderRadius: "34px",
+            width: "317px",
+          },
+        }}
+        sx={{ left: 13 }}
       >
         <input
           type="text"
           placeholder="Search Locations"
           style={{
-            width: "270px",
+            width: "230px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",
-            marginBottom: "10px",
+            // marginBottom: "10px",
             marginLeft: "20px",
             marginRight: "20px",
             marginTop: "20px",
-            position: "relative",
+            borderRadius: "14px",
           }}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-          <Search sx={{ color: " #100d24" }} />
-          {/* You can use an icon library like Font Awesome */}
+          <Search sx={{ color: "#8477DA" }} />
         </span>
         <div
           style={{
             maxHeight: "260px",
             overflowY: "auto",
             paddingX: 25,
-            width: "340px",
+            width: "310px",
             display: "flex",
             flexDirection: "column",
             gap: 5,
-            paddingBottom: 20,
+            pt: 100,
+            position: "relative",
+            marginTop: 4,
+            marginBottom: 10,
           }}
         >
-          <Box
+          {/* <Box
             sx={{
               borderBottom: "1px solid #babab8",
               width: "94%",
@@ -461,7 +475,7 @@ function MobileBar() {
             >
               All Locations
             </Typography>
-          </Box>
+          </Box> */}
           {staffhaveAccessTo.length === 0 ? (
             <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
               No location found
@@ -471,22 +485,20 @@ function MobileBar() {
               <Box
                 key={location.id}
                 sx={{
-                  width: "88%",
+                  width: "83.8%",
                   ml: "10px",
-                  gap: "10px",
                   marginBottom: "5px",
-                  justifyContent: "space-between",
-                  alignItems: "center",
+                  textTransform: "lowercase",
                   marginLeft: "20px",
                   display: "flex",
-                  border: "1px solid #babab8",
+                  border: "1px solid #D9D9D9",
                   ":hover": {
                     bgcolor: "rgba(0, 0, 0, 0.1)",
                     cursor: "pointer",
                   },
                   py: 0.4,
                   px: 1,
-                  borderRadius: 1,
+                  borderRadius: "14px",
                 }}
               >
                 <Box className="UserIcon-1">
@@ -500,6 +512,7 @@ function MobileBar() {
                 <Box
                   style={{ flexGrow: 1 }}
                   onClick={() => handleSwitchLocation(location)}
+                  sx={{ paddingLeft: "12px" }}
                 >
                   <a style={{ cursor: "pointer" }}>
                     <Typography

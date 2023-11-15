@@ -43,7 +43,12 @@ const IndexMobile = () => {
 
   return (
     <>
-      <Box sx={{ backgroundColor: "black" }}>
+      <Box
+        sx={{
+          backgroundColor: { xs: "#100d24", sm: "white" },
+          color: { xs: "white", sm: "black" },
+        }}
+      >
         {Navigation === "existing" && <ExitingQuotes />}
         {Navigation === "customerTable" && <CustomerTable />}
         {Navigation === "staffTable" && <StaffTable />}

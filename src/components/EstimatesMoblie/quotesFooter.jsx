@@ -18,62 +18,56 @@ const QuotesFooter = ({ navigateNext, type, navigateBack, disabled }) => {
     <Box>
       <Box
         sx={{
-          display: { md: "none", xs: "flex" },
+          display: "flex",
           gap: 2,
-          justifyContent: "center",
-          width: "93%",
-          paddingX: 2,
-          paddingY: 2,
-          position: "fixed",
-          bottom: 0,
-          backgroundColor: "#100d24",
-          borderTop: "1px solid #423f57",
+          justifyContent: "space-between",
+          width: "100%",
+          // borderTop: { xs: "1px solid #423f57", sm: "none" },
           zIndex: 100,
+          marginY: "20px",
         }}
       >
-        <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-          <Button
-            fullWidth
-            onClick={() => {
-              dispatch(setNavigation(navigateBack));
-              if (navigateBack === "layouts") {
-                dispatch(updateMeasurements([]));
-                dispatch(setDoorWidth(0));
-              }
-            }}
-            sx={{
-              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-              color: "#344054",
-              textTransform: "initial",
-              border: "1px solid #D0D5DD",
-              backgroundColor: { md: "transparent", xs: "white" },
-            }}
-          >
-            {" "}
-            Back
-          </Button>
-        </Box>
+        <Button
+          fullWidth
+          onClick={() => {
+            dispatch(setNavigation(navigateBack));
+            if (navigateBack === "layouts") {
+              dispatch(updateMeasurements([]));
+              dispatch(setDoorWidth(0));
+            }
+          }}
+          sx={{
+            boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+            color: "#344054",
+            textTransform: "initial",
+            border: "1px solid #D0D5DD",
+            backgroundColor: { md: "transparent", xs: "white" },
+            width: "160px",
+          }}
+        >
+          {" "}
+          Back
+        </Button>
 
-        <Box sx={{ width: { md: "150px", xs: "50%" } }}>
-          <Button
-            fullWidth
-            disabled={disabled}
-            type={type}
-            variant="contained"
-            onClick={() => {
-              nextClickHandler();
-            }}
-            sx={{
+        <Button
+          fullWidth
+          disabled={disabled}
+          type={type}
+          variant="contained"
+          onClick={() => {
+            nextClickHandler();
+          }}
+          sx={{
+            backgroundColor: "#8477da",
+            "&:hover": {
               backgroundColor: "#8477da",
-              "&:hover": {
-                backgroundColor: "#8477da",
-              },
-            }}
-          >
-            {" "}
-            Next
-          </Button>
-        </Box>
+            },
+            width: "160px",
+          }}
+        >
+          {" "}
+          Next
+        </Button>
       </Box>
     </Box>
   );

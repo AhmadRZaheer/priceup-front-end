@@ -11,10 +11,10 @@ export default function ExitingQuotes() {
     <>
       <Box
         sx={{
-          marginTop: 8,
-          color: "#ffff",
-          height: "92vh",
-          backgroundColor: "rgba(16, 13, 36, 1)",
+          marginTop: { xs: 8, sm: 0 },
+          // color: "#ffff",
+          height: "100vh",
+          // backgroundColor: "rgba(16, 13, 36, 1)",
           display: "flex",
           flexDirection: "column",
           alignItems: "space-between",

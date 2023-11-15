@@ -1,6 +1,4 @@
-
-
-
+ 
 button {
   cursor: pointer;
 }
@@ -27,9 +25,7 @@ input {
   border-radius: 8px;
   padding: 10px 14px;
   gap: 8px;
-
 }
-
 
 .auth-form-container {
   padding: 26px 24px 24px;
@@ -46,15 +42,12 @@ input {
   border: none;
   color: #8477DA;
   font-weight: 600;
-
 }
 
 .logo-img {
   padding: 20px;
   width: 100%;
   max-width: 150px;
-  margin-bottom: 20px;
-
-
+  margin-bottom: 20px; 
 }
 
