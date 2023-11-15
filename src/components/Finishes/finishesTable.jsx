@@ -124,7 +124,7 @@ const FinishesTable = () => {
     finish.name.toLowerCase().includes(search.toLowerCase())
   );
   const [page, setPage] = useState(1);
-  const itemsPerPage = 1;
+  const itemsPerPage = 10;
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const MAX_PAGES_DISPLAYED = 5;
