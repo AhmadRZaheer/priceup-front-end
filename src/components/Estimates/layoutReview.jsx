@@ -180,7 +180,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     dispatch(
       setNavigationDesktop(
         quoteState === "create"
-          ? "measurments"
+          ? "measurements"
           : quoteState === "custom"
           ? "custom"
           : "existing"
@@ -219,7 +219,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       // dispatch(resetState());
-      dispatch(setNavigation("existing"));
+      dispatch(setNavigationDesktop("existing"));
       Refetched();
       navigate("/estimates");
     } else if (ErrorForAddEidt) {

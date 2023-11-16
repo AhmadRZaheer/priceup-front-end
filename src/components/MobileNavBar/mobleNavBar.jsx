@@ -5,7 +5,7 @@ import "./mobileNavBar.scss";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
 import TremIcon from "../../Assets/users.svg";
 import React, { useEffect, useMemo, useState } from "react";
-import { setNavigation } from "../../redux/estimateCalculations";
+import { setNavigation, setNavigationDesktop } from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
@@ -90,15 +90,15 @@ function MobileBar() {
 
   const handleCustomerClick = () => {
     setActiveButton("customr");
-    dispatch(setNavigation("customerTable"));
+    dispatch(setNavigationDesktop("customerTable"));
   };
   const handleStaffClick = () => {
     setActiveButton("staff");
-    dispatch(setNavigation("staffTable"));
+    dispatch(setNavigationDesktop("staffTable"));
   };
   const handleEstimateClick = () => {
     setActiveButton("esti");
-    dispatch(setNavigation("existing"));
+    dispatch(setNavigationDesktop("existing"));
   };
   const handleSwitchLocation = (location) => {
     if (location.id !== activeLocation.id) {

@@ -48,7 +48,7 @@ const Index = () => {
       >
         {Navigation === "existing" && <ExistingQuotes />}
         {Navigation === "layouts" && <Layout />}
-        {Navigation === "measurments" && <LayoutMeasurements />}
+        {Navigation === "measurements" && <LayoutMeasurements />}
         {Navigation === "review" && (
           <LayoutReview
             setClientDetailOpen={setClientDetailOpen}

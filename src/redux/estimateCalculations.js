@@ -32,7 +32,7 @@ const initialState = {
   quoteId: null,
   quoteState: "create",
   handlePageNavigation: "existing",
-  handlePageDesktopNavigation: "layouts",
+  handlePageDesktopNavigation: "existing",
   perimeter: 0,
   sqftArea: 0,
   doorWidth: 0,
@@ -101,7 +101,12 @@ const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
   initialState,
   reducers: {
-    resetState: () => initialState,
+    resetState: (state) => {
+      state = {
+        ...initialState,
+        handlePageDesktopNavigation: state.handlePageDesktopNavigation,
+      };
+    },
     setDoorWidth: (state, action) => {
       state.doorWidth = action.payload;
     },
@@ -306,11 +311,11 @@ const estimateCalcSlice = createSlice({
       const { type, value } = action.payload;
       if (["mitre"].includes(type)) {
         // const mitre = value;
-        const polish = state.perimeter-value;
+        const polish = state.perimeter - value;
         state.content = {
           ...state.content,
           mitre: value,
-          polish:polish
+          polish: polish,
         };
       } else {
         state.content = {

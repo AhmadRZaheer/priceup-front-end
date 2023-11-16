@@ -24,6 +24,7 @@ import {
   resetState,
   selectedItem,
   setNavigation,
+  setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
 const style = {
@@ -49,6 +50,7 @@ export default function ClientDetailsModel({
   handleCancel,
   showSnackbar,
 }) {
+  console.log('in correct file');
   const {
     mutate,
     isError: ErrorForAdd,
@@ -70,7 +72,7 @@ export default function ClientDetailsModel({
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      firstName: "",
+      firstName: "Hi",
       lastName: "",
       email: "",
       address: "",
@@ -185,6 +187,8 @@ export default function ClientDetailsModel({
         perimeter: perimeter,
         sqftArea: sqftArea,
       };
+      console.log('in correct file');
+      
       if (["create", "custom"].includes(updatecheck)) {
         mutate({
           customerData: values,
@@ -208,7 +212,7 @@ export default function ClientDetailsModel({
     if (CreatedSuccessfullyEdit) {
       showSnackbar("Estimate Updated successfully", "success");
       // dispatch(resetState());
-      dispatch(setNavigation("existing"));
+      dispatch(setNavigationDesktop("existing"));
       handleCancel();
       //localhost:3000/customers
       http: Refetched();
@@ -222,7 +226,7 @@ export default function ClientDetailsModel({
     if (CreatedSuccessfully) {
       showSnackbar("Estimate created successfully", "success");
       // dispatch(resetState());
-      dispatch(setNavigation("existing"));
+      dispatch(setNavigationDesktop("existing"));
       handleCancel();
       Refetched();
       navigate("/estimates");

@@ -51,7 +51,7 @@ export default function Layout() {
   const setStorePage = () => {
     if (selectCustom) {
       dispatch(setNavigationDesktop("custom"));
-    } else dispatch(setNavigationDesktop("measurments"));
+    } else dispatch(setNavigationDesktop("measurements"));
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
@@ -62,6 +62,9 @@ export default function Layout() {
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
+  const handleBack = () => {
+    dispatch(setNavigationDesktop("existing"));
+  }
   return (
     <>
       <Box
@@ -235,7 +238,7 @@ export default function Layout() {
               </Grid>
             )}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <NavLink to="/estimates">
+              {/* <NavLink to="/estimates"> */}
                 <Button
                   sx={{
                     width: { xs: 120, sm: 180 },
@@ -247,11 +250,12 @@ export default function Layout() {
                   }}
                   fullWidth
                   variant="outlined"
+                  onClick={handleBack}
                 >
                   {" "}
                   Back
                 </Button>
-              </NavLink>
+              {/* </NavLink> */}
               <Button
                 disabled={selectedData || selectCustom ? false : true}
                 sx={{

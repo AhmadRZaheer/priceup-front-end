@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Staff from "../../pages/EstimatesMobile/staff";
+// import Staff from "../../pages/EstimatesMobile/staff";
 import Overview from "../../pages/home/overview";
 import Customers from "../../pages/Customers/customers";
 import Single from "../../pages/singlle/single";
@@ -21,7 +21,7 @@ import Admin from "../../pages/Admin/admin";
 import { useMemo } from "react";
 import LandingPage from "../../pages/LandingPage/landingPage";
 import AdminTeam from "../../pages/TeamAdmin/adminTeam";
-import ExistingQuotes from "../Estimates/existingQuotes";
+import Staff from "../../pages/Staff/staff";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -38,11 +38,11 @@ const AppRoutes = () => {
   };
 
   const isAdmin = () => {
-    return decodedToken?.role === "admin";
+        return decodedToken?.role === "admin";
   };
 
   const isStaff = () => {
-    return decodedToken?.role === "staff";
+        return decodedToken?.role === "staff";
   };
 
   const getHomepageURL = () => {
@@ -101,11 +101,7 @@ const AppRoutes = () => {
         </Route>
       ) : isStaff() ? (
         <Route path="/">
-          <Route index element={<Staff />} />{" "}
-          <Route path="/estimates/">
-            <Route index element={<ExistingQuotes />} />
-            <Route path="steps" element={<Estimates />} />
-          </Route>
+          <Route index element={<Staff />} />
           <Route path="*" element={<Staff />}></Route>
         </Route>
       ) : isSuperAdmin() ? (
