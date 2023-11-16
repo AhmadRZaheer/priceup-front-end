@@ -1,5 +1,5 @@
 .CustomerTable {
-  padding: 20px;
+  padding: 0px;
   .cellWrapper {
     display: flex;
     align-items: center;
@@ -47,4 +47,15 @@
   margin-top: 10px;
   width: 96%;
   margin: auto;
+}
+.hardwareTable-superadmin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 97%;
+  margin: auto;
+}
+.customHeaderClass-admin-team {
+  background-color: red;
+  color: #667085;
 }

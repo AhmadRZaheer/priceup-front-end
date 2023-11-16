@@ -61,7 +61,7 @@ const Sidebar = () => {
   };
 
   const filteredAdminData = AdminData.filter((admin) =>
-    admin.name.toLowerCase().includes(searchQuery.toLowerCase())
+    admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (adminId) => {
     navigate(`/?userID=${adminId}`);
@@ -540,7 +540,7 @@ const Sidebar = () => {
           ) : (
             filteredAdminData.map((admin) => (
               <Typography
-                key={admin.id}
+                key={admin.user._id}
                 sx={{
                   width: "83.8%",
                   ml: "10px",
@@ -557,7 +557,7 @@ const Sidebar = () => {
                   px: 1,
                   borderRadius: "14px",
                 }}
-                onClick={() => handleAdminNameClick(admin._id)}
+                onClick={() => handleAdminNameClick(admin.user._id)}
               >
                 <div className="UserIcon-1">
                   <img
@@ -568,8 +568,8 @@ const Sidebar = () => {
                   />
                 </div>
                 <div style={{ paddingLeft: "10px" }}>
-                  <a style={{ cursor: "pointer" }}>{admin.name}</a>
-                  <p style={{ fontSize: "10px" }}>{admin.email}</p>
+                  <a style={{ cursor: "pointer" }}>{admin.user.name}</a>
+                  <p style={{ fontSize: "10px" }}>{admin.user.email}</p>
                 </div>
               </Typography>
             ))

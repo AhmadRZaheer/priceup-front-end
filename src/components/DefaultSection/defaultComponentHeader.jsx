@@ -78,6 +78,8 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
             sx={{
               backgroundColor: "#8477DA",
               boxShadow: 0,
+              height: 40,
+              width: 90,
               "&:hover": { backgroundColor: "#8477DA" },
             }}
             variant="contained"
