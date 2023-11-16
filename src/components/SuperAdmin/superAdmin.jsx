@@ -10,6 +10,7 @@ import {
   Input,
   InputAdornment,
   Grid,
+  CircularProgress,
 } from "@mui/material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
@@ -23,13 +24,14 @@ import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
+import EstimsteIcon from "../../Assets/bar.svg";
 
 const SuperAdminTable = () => {
   const {
     data: AdminData,
     refetch: teamMemberRefetch,
-    isFetching,
     isFetched,
+    isFetching,
   } = useFetchDataAdmin();
 
   const [open, setOpen] = useState(false);
@@ -198,8 +200,9 @@ const SuperAdminTable = () => {
     },
   ];
   const filteredData = AdminData?.filter((admin) =>
-    admin.name.toLowerCase().includes(search.toLowerCase())
+    admin.user.name.toLowerCase().includes(search.toLowerCase())
   );
+
   return (
     <Box sx={{ height: "97vh", overflow: "auto" }}>
       <div className="page-title">
@@ -310,7 +313,7 @@ const SuperAdminTable = () => {
           mt: 10,
           width: "20%", // You can adjust the width as needed
           marginLeft: "30px",
-          mt: 3 // Adjust the margin as needed
+          mt: 3, // Adjust the margin as needed
         }}
         endAdornment={
           <InputAdornment position="end">
@@ -318,14 +321,374 @@ const SuperAdminTable = () => {
           </InputAdornment>
         }
       />
-      <div className="hardwareTable">
-        <DataGrid
+      <div className="hardwareTable-superadmin">
+        {/* <DataGrid
           getRowId={(row) => row._id}
           rows={filteredData}
           columns={AdminColumns2.concat(actionColumn)}
           pageSizeOptions={[10]}
           sx={{ width: "97%", m: "auto" }}
-        />
+        /> */}
+        {isFetching ? (
+          <Box
+            sx={{
+              width: "100%",
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+              height: "300px",
+              alignItems: "center",
+            }}
+          >
+            <CircularProgress sx={{ color: "#8477DA" }} />
+          </Box>
+        ) : (
+          filteredData?.map((item) => {
+            const handleToggleChange = (active) => {
+              setInActiveCount((prevCount) => {
+                if (!active && prevCount > 0) {
+                  return prevCount - 1;
+                } else if (active) {
+                  return prevCount + 1;
+                }
+                return prevCount; // No change if not active and count is 0
+              });
+
+              setActiveCount((prevCount) => {
+                if (active && prevCount > 0) {
+                  return prevCount - 1;
+                } else if (!active) {
+                  return prevCount + 1;
+                }
+
+                return prevCount; // No change if not active and count is 0
+              });
+            };
+
+            if (item?.user && item?.user?.name) {
+              var firstNameInitial = item?.user?.name?.charAt(0);
+            } else {
+              var firstNameInitial = "";
+            }
+            if (item?.user && item?.user?.name) {
+              var lastNameInitial = item?.user?.name?.charAt(1);
+            } else {
+              var lastNameInitial = "";
+            }
+
+            const adminID = item?.user?._id;
+            return (
+              <Box
+                key={item?.user?._id}
+                sx={{
+                  bgcolor: "white",
+                  border: "1px solid #EAECF0",
+                  width: "100%",
+                  minHeight: "316px",
+                  maxHeight: "316px",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
+                {/* uper part*/}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    p: 2,
+                  }}
+                >
+                  {/* Box 1 */}
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                  >
+                    {/* Name and logo */}
+                    <Box
+                      sx={{ display: "flex", gap: 1.5, alignItems: "center" }}
+                    >
+                      <Box
+                        sx={{
+                          width: "40px",
+                          height: "40px",
+                          overflow: "hidden",
+                          borderRadius: "100%",
+                        }}
+                      >
+                        {item?.user?.image === "images/users/default.jpg" ? (
+                          <Typography
+                            sx={{
+                              backgroundColor: "#F9F5FF",
+                              width: 40,
+                              height: 40,
+                              borderRadius: "100%",
+                              textAlign: "center",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#7F56D9",
+                              textTransform: "uppercase",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {firstNameInitial}
+                            {lastNameInitial}
+                          </Typography>
+                        ) : item?.user?.image === "" ? (
+                          <Typography
+                            sx={{
+                              backgroundColor: "#F9F5FF",
+                              width: 40,
+                              height: 40,
+                              borderRadius: "100%",
+                              textAlign: "center",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              color: "#7F56D9",
+                              textTransform: "uppercase",
+                              fontWeight: "bold",
+                            }}
+                          >
+                            {firstNameInitial}
+                            {lastNameInitial}
+                          </Typography>
+                        ) : (
+                          <img
+                            className="cellImg"
+                            style={{ width: 40, height: 40 }}
+                            src={`${backendURL}/${item?.user?.image}`}
+                            alt="logo image"
+                          />
+                        )}
+                      </Box>
+                      <Typography
+                        sx={{
+                          color: "#101828",
+                          fontSize: "18px",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {item?.user?.name}
+                      </Typography>
+                    </Box>
+                    {/* Email */}
+                    <Typography
+                      sx={{ color: "#667085", fontSize: "14px", mt: 1 }}
+                    >
+                      {item?.user?.email}
+                    </Typography>
+                    {/* Date Added */}
+                    <Typography sx={{ color: "#667085", fontSize: "14px" }}>
+                      {new Date(item?.user?.updatedAt).toLocaleDateString(
+                        undefined,
+                        {
+                          weekday: "long",
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        }
+                      )}
+                    </Typography>
+                  </Box>
+                  {/* Box 2 */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "180px",
+                      gap: 1,
+                    }}
+                  >
+                    <Box sx={{ height: "100px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Status
+                      </Typography>
+                      <Box>
+                        <TableRow
+                          row={item?.user}
+                          refetch={teamMemberRefetch}
+                          onToggleChange={handleToggleChange}
+                        />
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ height: "125px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Users
+                      </Typography>
+                      <Grid container mt={1} gap={2}>
+                        <Typography
+                          sx={{
+                            backgroundColor: "#F9F5FF",
+                            width: 32,
+                            height: 32,
+                            borderRadius: "100%",
+                            textAlign: "center",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            color: "#7F56D9",
+                            textTransform: "uppercase",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {firstNameInitial}
+                          {lastNameInitial}
+                        </Typography>
+                      </Grid>
+                    </Box>
+                  </Box>
+                  {/* Box 3 */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "180px",
+                      gap: 1,
+                    }}
+                  >
+                    <Box sx={{ height: "125px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Estimates
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          color: "#667085",
+                          alignItems: "center",
+                          mt: 1,
+                        }}
+                      >
+                        <img src={EstimsteIcon} alt="image of customer" />
+                        <Typography>{item.estimates}</Typography>
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ height: "100px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Team
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          color: "#667085",
+                          alignItems: "center",
+                          mt: 1,
+                        }}
+                      >
+                        <img src={EstimsteIcon} alt="image of customer" />
+                        <Typography>{item.staffs}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                  {/* Box 4 */}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      width: "180px",
+                      gap: 1,
+                    }}
+                  >
+                    <Box sx={{ height: "125px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Customers
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          color: "#667085",
+                          alignItems: "center",
+                          mt: 1,
+                        }}
+                      >
+                        <img src={EstimsteIcon} alt="image of customer" />
+                        <Typography>{item.customers}</Typography>
+                      </Box>
+                    </Box>
+
+                    <Box sx={{ height: "100px" }}>
+                      <Typography sx={{ fontSize: "16px", color: "#667085" }}>
+                        Layouts
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                          color: "#667085",
+                          alignItems: "center",
+                          mt: 1,
+                        }}
+                      >
+                        <img src={EstimsteIcon} alt="image of customer" />
+                        <Typography>{item.layouts}</Typography>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* lower part */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    p: 0.6,
+                    height: "40px",
+                    borderTop: "1px solid #EAECF0",
+                    alignItems: "center",
+                  }}
+                >
+                  <Box></Box>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <IconButton
+                        sx={{
+                          p: 0,
+                          borderRadius: "100%",
+                          width: 28,
+                          height: 28,
+                        }}
+                      >
+                        <img src={DeleteIcon} alt="delete icon" />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleOpenEdit(item)}
+                        sx={{
+                          p: 0,
+                          borderRadius: "100%",
+                          width: 28,
+                          height: 28,
+                        }}
+                      >
+                        <img src={EditIcon} alt="delete icon" />
+                      </IconButton>
+                    </Box>
+                    <Link
+                      to={`/?adminID=${adminID}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <Button
+                        variant="text"
+                        sx={{
+                          p: 1,
+                          m: 0,
+                          color: "#7F56D9",
+                          textTransform: "capitalize",
+                          borderLeft: "1px solid #EAECF0",
+                        }}
+                      >
+                        Access Location
+                      </Button>
+                    </Link>
+                  </Box>
+                </Box>
+              </Box>
+            );
+          })
+        )}
       </div>
 
       <AddSuperAdminModel

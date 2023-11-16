@@ -16,6 +16,9 @@ import DefaultComponentHeader from "./defaultComponentHeader";
 import { getDefaultId, getRefetch, setRefetch } from "../../redux/defaultSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
+import CustomInputField from "../ui-components/CustomInput";
+import CustomInputMenu from "../ui-components/CustomInputMenu";
+import { Fullscreen } from "@mui/icons-material";
 const DefaultComponent = ({ showSnackbar }) => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
@@ -197,11 +200,11 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "320px" }}>
-                  <TextField
+                  <CustomInputField
                     size="small"
                     variant="outlined"
                     name="name"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.name || null}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -294,23 +297,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="hardwareFinishes"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.hardwareFinishes || null}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.hardwareFinishes.map((option) => (
-                      <MenuItem key={option.name} value={option?._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.hardwareFinishes}
+                  />
                 </Box>
               </div>
               <div
@@ -346,30 +342,22 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="handles.handleType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.handles.handleType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("handles.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.handles.map((option) => (
-                      <MenuItem key={option?._id} value={option?._id}>
-                        {option?.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.handles}
+                  />
                 </Box>
               </div>
               <Box
@@ -378,7 +366,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   paddingX: 10,
                 }}
               >
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -386,10 +374,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   size="small"
                   variant="outlined"
                   name="handles.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
+                  fullWidth={true}
                   value={
                     formik.values.handles.count !== undefined
                       ? formik.values.handles.count
@@ -425,30 +410,22 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="hinges.hingesType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.hinges.hingesType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("hinges.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.hinges.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option?.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.hinges}
+                  />
                 </Box>
               </div>
               <Box
@@ -457,7 +434,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   paddingX: 10,
                 }}
               >
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -465,10 +442,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   size="small"
                   variant="outlined"
                   name="hinges.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
+                  fullWidth={true}
                   value={
                     formik.values.hinges.count !== undefined
                       ? formik.values.hinges.count
@@ -502,30 +476,22 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="pivotHingeOption.pivotHingeType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.pivotHingeOption.pivotHingeType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("pivotHingeOption.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.pivotHingeOption.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.pivotHingeOption}
+                  />
                 </Box>
               </div>
               <Box
@@ -534,7 +500,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   paddingX: 10,
                 }}
               >
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -542,10 +508,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   size="small"
                   variant="outlined"
                   name="pivotHingeOption.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
+                  fullWidth={true}
                   value={
                     formik.values.pivotHingeOption.count !== undefined
                       ? formik.values.pivotHingeOption.count
@@ -584,31 +547,23 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="heavyDutyOption.heavyDutyType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.heavyDutyOption.heavyDutyType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextFields to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("heavyDutyOption.threshold", 0);
                         formik.setFieldValue("heavyDutyOption.height", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.heavyDutyOption.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.heavyDutyOption}
+                  />
                 </Box>
               </div>
               <Box
@@ -620,9 +575,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 {/* width */}
-                <Box>
+                <Box sx={{ mb: 0.5 }}>
                   <Typography>Width</Typography>
-                  <TextField
+                  <CustomInputField
                     type="number"
                     InputProps={{
                       inputProps: { min: 0 },
@@ -630,11 +585,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     size="small"
                     variant="outlined"
                     name="heavyDutyOption.threshold"
-                    style={{
-                      width: "120px",
-                      padding: 1,
-                      marginX: 1,
-                    }}
+                    fullWidth={true}
                     value={
                       formik.values.heavyDutyOption.threshold !== undefined
                         ? formik.values.heavyDutyOption.threshold
@@ -646,9 +597,10 @@ const DefaultComponent = ({ showSnackbar }) => {
                 </Box>
 
                 {/* height */}
-                <Box>
+                <Box sx={{ mb: 0.5 }}>
                   <Typography>Height</Typography>
-                  <TextField
+
+                  <CustomInputField
                     type="number"
                     InputProps={{
                       inputProps: { min: 0 },
@@ -656,9 +608,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     size="small"
                     variant="outlined"
                     name="heavyDutyOption.height"
-                    style={{
-                      width: "120px",
-                    }}
+                    fullWidth={true}
                     value={
                       formik.values.heavyDutyOption.height !== undefined
                         ? formik.values.heavyDutyOption.height
@@ -696,31 +646,23 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px", marginTop: "24px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="heavyPivotOption.heavyPivotType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.heavyPivotOption.heavyPivotType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextFields to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("heavyPivotOption.height", 0);
                         formik.setFieldValue("heavyPivotOption.threshold", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.heavyPivotOption.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.heavyPivotOption}
+                  />
                 </Box>
               </div>
               <Box
@@ -730,9 +672,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                   gap: 2,
                 }}
               >
-                <Box>
+                <Box sx={{ mb: 0.5 }}>
                   <Typography>Width</Typography>
-                  <TextField
+                  <CustomInputField
                     type="number"
                     InputProps={{
                       inputProps: { min: 0 },
@@ -740,11 +682,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     size="small"
                     variant="outlined"
                     name="heavyPivotOption.threshold"
-                    style={{
-                      width: "120px",
-                      padding: 1,
-                      marginX: 1,
-                    }}
+                    fullWidth={true}
                     value={
                       formik.values.heavyPivotOption.threshold !== undefined
                         ? formik.values.heavyPivotOption.threshold
@@ -754,9 +692,9 @@ const DefaultComponent = ({ showSnackbar }) => {
                     onBlur={formik.handleBlur}
                   />
                 </Box>
-                <Box>
+                <Box mb={0.5}>
                   <Typography>Height</Typography>
-                  <TextField
+                  <CustomInputField
                     type="number"
                     InputProps={{
                       inputProps: { min: 0 },
@@ -764,9 +702,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     size="small"
                     variant="outlined"
                     name="heavyPivotOption.height"
-                    style={{
-                      width: "120px",
-                    }}
+                    fullWidth={true}
                     value={
                       formik.values.heavyPivotOption.height !== undefined
                         ? formik.values.heavyPivotOption.height
@@ -813,6 +749,12 @@ const DefaultComponent = ({ showSnackbar }) => {
                     value={formik.values.channelOrClamps}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
+                    className={"custom-textfield"}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        height: "40px",
+                      },
+                    }}
                   >
                     {/* <MenuItem value="">Select Empty</MenuItem> */}
                     {["Channel", "Clamps"].map((option) => (
@@ -861,31 +803,21 @@ const DefaultComponent = ({ showSnackbar }) => {
                   }}
                 >
                   <Box sx={{ width: "220px" }}>
-                    <TextField
-                      select
+                    <CustomInputMenu
                       size="small"
                       variant="outlined"
                       name="mountingChannel"
-                      style={{ width: "100%" }}
+                      fullWidth={true}
                       value={formik.values.mountingChannel}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                    >
-                      <MenuItem value={null}>Select Empty</MenuItem>
-                      {singleDefault?.listData?.mountingChannel.map(
-                        (option) => (
-                          <MenuItem key={option._id} value={option._id}>
-                            {option.name}
-                          </MenuItem>
-                        )
-                      )}
-                    </TextField>
+                      MenuData={singleDefault?.listData?.mountingChannel}
+                    />
                   </Box>
                 </div>
                 <div
                   style={{
                     width: "250px",
-
                     padding: 4,
                   }}
                 ></div>{" "}
@@ -922,34 +854,26 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                   >
                     <Box sx={{ width: "220px" }}>
-                      <TextField
-                        select
+                      <CustomInputMenu
                         size="small"
                         variant="outlined"
                         name="wallClamp.wallClampType"
-                        style={{ width: "100%" }}
+                        fullWidth={true}
                         value={formik.values.wallClamp.wallClampType || ""}
                         onChange={(e) => {
                           formik.handleChange(e);
 
-                          // Check if the selected value is empty and set the number TextField to 0
                           if (e.target.value === null) {
                             formik.setFieldValue("wallClamp.count", 0);
                           }
                         }}
                         onBlur={formik.handleBlur}
-                      >
-                        <MenuItem value={null}>Select Empty</MenuItem>
-                        {singleDefault?.listData?.wallClamp.map((option) => (
-                          <MenuItem key={option._id} value={option._id}>
-                            {option.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                        MenuData={singleDefault?.listData?.wallClamp}
+                      />
                     </Box>
                   </div>
                   <Box sx={{ width: "250px" }}>
-                    <TextField
+                    <CustomInputField
                       type="number"
                       InputProps={{
                         inputProps: { min: 0 },
@@ -957,10 +881,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       size="small"
                       variant="outlined"
                       name="wallClamp.count"
-                      style={{
-                        width: "250px",
-                        paddingX: 10,
-                      }}
+                      fullWidth={true}
                       value={
                         formik.values.wallClamp.count !== undefined
                           ? formik.values.wallClamp.count
@@ -998,34 +919,26 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                   >
                     <Box sx={{ width: "220px" }}>
-                      <TextField
-                        select
+                      <CustomInputMenu
                         size="small"
                         variant="outlined"
                         name="sleeveOver.sleeveOverType"
-                        style={{ width: "100%" }}
+                        fullWidth={true}
                         value={formik.values.sleeveOver.sleeveOverType || ""}
                         onChange={(e) => {
                           formik.handleChange(e);
 
-                          // Check if the selected value is empty and set the number TextField to 0
                           if (e.target.value === null) {
                             formik.setFieldValue("sleeveOver.count", 0);
                           }
                         }}
                         onBlur={formik.handleBlur}
-                      >
-                        <MenuItem value={null}>Select Empty</MenuItem>
-                        {singleDefault?.listData?.sleeveOver.map((option) => (
-                          <MenuItem key={option._id} value={option._id}>
-                            {option.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                        MenuData={singleDefault?.listData?.sleeveOver}
+                      />
                     </Box>
                   </div>
                   <Box sx={{ width: "250px" }}>
-                    <TextField
+                    <CustomInputField
                       type="number"
                       InputProps={{
                         inputProps: { min: 0 },
@@ -1033,10 +946,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       size="small"
                       variant="outlined"
                       name="sleeveOver.count"
-                      style={{
-                        width: "250px",
-                        paddingX: 10,
-                      }}
+                      fullWidth={true}
                       value={
                         formik.values.sleeveOver.count !== undefined
                           ? formik.values.sleeveOver.count
@@ -1074,36 +984,28 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                   >
                     <Box sx={{ width: "220px" }}>
-                      <TextField
-                        select
+                      <CustomInputMenu
                         size="small"
                         variant="outlined"
                         name="glassToGlass.glassToGlassType"
-                        style={{ width: "100%" }}
+                        fullWidth={true}
                         value={
                           formik.values.glassToGlass.glassToGlassType || ""
                         }
                         onChange={(e) => {
                           formik.handleChange(e);
 
-                          // Check if the selected value is empty and set the number TextField to 0
                           if (e.target.value === null) {
                             formik.setFieldValue("glassToGlass.count", 0);
                           }
                         }}
                         onBlur={formik.handleBlur}
-                      >
-                        <MenuItem value={null}>Select Empty</MenuItem>
-                        {singleDefault?.listData?.glassToGlass.map((option) => (
-                          <MenuItem key={option._id} value={option._id}>
-                            {option.name}
-                          </MenuItem>
-                        ))}
-                      </TextField>
+                        MenuData={singleDefault?.listData?.glassToGlass}
+                      />
                     </Box>
                   </div>
                   <Box sx={{ width: "250px" }}>
-                    <TextField
+                    <CustomInputField
                       type="number"
                       InputProps={{
                         inputProps: { min: 0 },
@@ -1111,10 +1013,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                       size="small"
                       variant="outlined"
                       name="glassToGlass.count"
-                      style={{
-                        width: "250px",
-                        paddingX: 10,
-                      }}
+                      fullWidth={true}
                       value={
                         formik.values.glassToGlass.count !== undefined
                           ? formik.values.glassToGlass.count
@@ -1154,34 +1053,26 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="cornerWallClamp.wallClampType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.cornerWallClamp.wallClampType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("cornerWallClamp.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.cornerWallClamp.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.cornerWallClamp}
+                  />
                 </Box>
               </div>
               <Box sx={{ width: "250px" }}>
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -1189,10 +1080,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   size="small"
                   variant="outlined"
                   name="cornerWallClamp.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
+                  fullWidth={true}
                   value={
                     formik.values.cornerWallClamp.count !== undefined
                       ? formik.values.cornerWallClamp.count
@@ -1230,45 +1118,34 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="cornerSleeveOver.sleeveOverType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.cornerSleeveOver.sleeveOverType || ""}
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("cornerSleeveOver.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.cornerSleeveOver.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.cornerSleeveOver}
+                  />
                 </Box>
               </div>
               <Box sx={{ width: "250px" }}>
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
                   }}
                   size="small"
                   variant="outlined"
+                  fullWidth={true}
                   name="cornerSleeveOver.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
                   value={
                     formik.values.cornerSleeveOver.count !== undefined
                       ? formik.values.cornerSleeveOver.count
@@ -1306,38 +1183,29 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
+                  <CustomInputMenu
                     select
                     size="small"
                     variant="outlined"
                     name="cornerGlassToGlass.glassToGlassType"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={
                       formik.values.cornerGlassToGlass.glassToGlassType || ""
                     }
                     onChange={(e) => {
                       formik.handleChange(e);
 
-                      // Check if the selected value is empty and set the number TextField to 0
                       if (e.target.value === null) {
                         formik.setFieldValue("cornerGlassToGlass.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.cornerGlassToGlass.map(
-                      (option) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {option.name}
-                        </MenuItem>
-                      )
-                    )}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.cornerGlassToGlass}
+                  />
                 </Box>
               </div>
               <Box sx={{ width: "250px" }}>
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
@@ -1345,10 +1213,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                   size="small"
                   variant="outlined"
                   name="cornerGlassToGlass.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
+                  fullWidth={true}
                   value={
                     formik.values.cornerGlassToGlass.count !== undefined
                       ? formik.values.cornerGlassToGlass.count
@@ -1382,30 +1247,22 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="glassType.type"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.glassType.type || ""}
                     onChange={(event) => {
                       formik.handleChange(event);
 
-                      // Check if the selected value is empty and set the value of "thickness" to "0"
                       if (event.target.value === null) {
                         formik.setFieldValue("glassType.thickness", "0");
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.glassType.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.glassType}
+                  />
                 </Box>
               </div>
               <Box sx={{ width: "250px" }}>
@@ -1419,6 +1276,12 @@ const DefaultComponent = ({ showSnackbar }) => {
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   required={true}
+                  className={"custom-textfield"}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      height: "40px",
+                    },
+                  }}
                 >
                   <MenuItem value="0">0</MenuItem>
                   <MenuItem key="1/2" value="1/2">
@@ -1455,46 +1318,33 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="slidingDoorSystem.type"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.slidingDoorSystem.type}
                     onChange={(e) => {
                       formik.handleChange(e);
                       if (e.target.value === null) {
-                        // Set the number TextField value to 0 when "Select Empty" is chosen
                         formik.setFieldValue("slidingDoorSystem.count", 0);
                       }
                     }}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.slidingDoorSystem.map(
-                      (option) => (
-                        <MenuItem key={option._id} value={option._id}>
-                          {option.name}
-                        </MenuItem>
-                      )
-                    )}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.slidingDoorSystem}
+                  />
                 </Box>
               </div>
               <Box sx={{ width: "250px" }}>
-                <TextField
+                <CustomInputField
                   type="number"
                   InputProps={{
                     inputProps: { min: 0 },
                   }}
                   size="small"
+                  fullWidth={true}
                   variant="outlined"
                   name="slidingDoorSystem.count"
-                  style={{
-                    width: "250px",
-                    paddingX: 10,
-                  }}
                   value={
                     formik.values.slidingDoorSystem.count !== 0
                       ? formik.values.slidingDoorSystem.count
@@ -1530,7 +1380,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
+                  <CustomInputField
                     size="small"
                     variant="outlined"
                     name="outages"
@@ -1538,10 +1388,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     InputProps={{
                       inputProps: { min: 0 },
                     }}
-                    style={{
-                      width: "220px",
-                      paddingX: 10,
-                    }}
+                    fullWidth={true}
                     value={formik.values.outages}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -1579,23 +1426,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="transom"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.transom}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.transom.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.transom}
+                  />
                 </Box>
               </div>
               <div
@@ -1630,23 +1470,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="header"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.header}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.header.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.header}
+                  />
                 </Box>
               </div>
               <div
@@ -1681,23 +1514,16 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
+                  <CustomInputMenu
                     size="small"
                     variant="outlined"
                     name="glassAddon"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.glassAddon}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                  >
-                    <MenuItem value={null}>Select Empty</MenuItem>
-                    {singleDefault?.listData?.glassAddons.map((option) => (
-                      <MenuItem key={option._id} value={option._id}>
-                        {option.name}
-                      </MenuItem>
-                    ))}
-                  </TextField>
+                    MenuData={singleDefault?.listData?.glassAddons}
+                  />
                   {formik.touched.glassAddon && formik.errors.glassAddon && (
                     <Box style={{ color: "red" }}>
                       {formik.errors.glassAddon}
@@ -1737,7 +1563,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                 }}
               >
                 <Box sx={{ width: "220px" }}>
-                  <TextField
+                  <CustomInputField
                     size="small"
                     variant="outlined"
                     name="notch"
@@ -1745,10 +1571,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     InputProps={{
                       inputProps: { min: 0 },
                     }}
-                    style={{
-                      width: "220px",
-                      paddingX: 10,
-                    }}
+                    fullWidth={true}
                     value={formik.values.notch}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
@@ -1769,7 +1592,7 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box style={{ width: "250px" }}>
                 <Box sx={{ width: "220px" }}>
                   <Typography>People</Typography>
-                  <TextField
+                  <CustomInputField
                     size="small"
                     variant="outlined"
                     name="other.people"
@@ -1777,11 +1600,12 @@ const DefaultComponent = ({ showSnackbar }) => {
                     InputProps={{
                       inputProps: { min: 0 },
                     }}
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.other.people}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
+
                   {formik.touched.other?.people &&
                     formik.errors.other?.people && (
                       <Box style={{ color: "red" }}>
@@ -1793,7 +1617,7 @@ const DefaultComponent = ({ showSnackbar }) => {
               <Box style={{ width: "250px" }}>
                 <Box sx={{ width: "220px" }}>
                   <Typography>Hours</Typography>
-                  <TextField
+                  <CustomInputField
                     size="small"
                     type="number"
                     InputProps={{
@@ -1801,7 +1625,7 @@ const DefaultComponent = ({ showSnackbar }) => {
                     }}
                     variant="outlined"
                     name="other.hours"
-                    style={{ width: "100%" }}
+                    fullWidth={true}
                     value={formik.values.other.hours}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
