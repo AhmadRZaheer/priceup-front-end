@@ -49,6 +49,7 @@ const IndexMobile = () => {
         sx={{
           backgroundColor: { xs: "#100d24", sm: "white" },
           color: { xs: "white", sm: "black" },
+          height: "100vh",
         }}
       >
         {Navigation === "existing" && <ExitingQuotes />}
@@ -56,9 +57,9 @@ const IndexMobile = () => {
         {Navigation === "staffTable" && <StaffTable />}
         {Navigation === "layouts" && <Layout />}
         {Navigation === "measurements" && <LayoutMeasurements />}
-        {Navigation === "review" && <LayoutReview
-          setClientDetailOpen={setClientDetailOpen}
-        />}
+        {Navigation === "review" && (
+          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+        )}
         {/* {Navigation === "summary" ? (
           ["create", "custom"].includes(updatecheck) ? (
             <Summary handleOpen={handleOpen} />
@@ -69,10 +70,10 @@ const IndexMobile = () => {
         {Navigation === "custom" && <CustomLayout />}
 
         <ClientDetailsModel
-        open={clientDetailOpen}
-        handleCancel={() => setClientDetailOpen(false)}
-        showSnackbar={showSnackbar}
-      />
+          open={clientDetailOpen}
+          handleCancel={() => setClientDetailOpen(false)}
+          showSnackbar={showSnackbar}
+        />
         {/* <Model
           open={clientDetailOpen}
           handleCancel={handleClose}

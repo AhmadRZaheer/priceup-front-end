@@ -64,7 +64,7 @@ export default function Layout() {
   };
   const handleBack = () => {
     dispatch(setNavigationDesktop("existing"));
-  }
+  };
   return (
     <>
       <Box
@@ -72,26 +72,18 @@ export default function Layout() {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          flexDirection: "column",
+          justifyContent: "center",
           background: "white",
-          height: "98vh",
-          paddingY: 4,
+          height: "100vh",
           background: { sm: "white", xs: "#08061B" },
         }}
       >
         <Box
           sx={{
-            width: { md: "70%", sm: "100%", xs: "100%" },
-            margin: { md: "auto", xs: 0 },
-            height: "100%",
-            display: "flex",
-            alignItems: { md: "center", xs: "start" },
-            flexDirection: "column",
-            p: { md: 2, xs: 0 },
-            gap: { md: 4, xs: 0 },
+            width: { sm: 800 },
           }}
         >
-          <div style={{ width: "100%" }}>
+          <Box style={{ paddingBottom: "10px" }}>
             <Box
               sx={{
                 backgroundColor: { xs: "#100D24", sm: "white" },
@@ -100,6 +92,7 @@ export default function Layout() {
                 borderBottomLeftRadius: { xs: "16px", sm: "0px" },
                 display: "flex",
                 alignItems: "center",
+                marginTop: { sm: 0, xs: 5 },
               }}
             >
               <NavLink to="/estimates">
@@ -127,12 +120,11 @@ export default function Layout() {
                 Create New Qoute
               </Typography>
             </Box>
-          </div>
+          </Box>
           <Box
             sx={{
-              width: { md: "94%", sm: "98%", xs: "91.3%" },
-              marginX: "auto",
-              minHeight: 400,
+              height: 600,
+              overflow: "hidden",
               borderRadius: "12px",
               boxShadow:
                 "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -140,7 +132,7 @@ export default function Layout() {
               paddingX: 2,
               paddingY: 4,
               rowGap: 2,
-              background: { md: "white", xs: "#08061B" },
+              background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
             }}
@@ -174,7 +166,7 @@ export default function Layout() {
                   height: 300,
                 }}
               >
-                <CircularProgress sx={{color: "#8477DA"}}/>
+                <CircularProgress sx={{ color: "#8477DA" }} />
               </Box>
             ) : (
               <Grid
@@ -193,6 +185,8 @@ export default function Layout() {
                           : "#8477DA",
                       color:
                         selectedData?._id !== layout._id ? "black" : "white",
+                      width: "162px",
+                      height: "192px",
                     }}
                     onClick={() => handleBoxClick(layout)}
                   >
@@ -231,7 +225,9 @@ export default function Layout() {
                     src={bgCustom}
                     alt="custom image"
                   />
-                  <Typography sx={{ font: "18px", zIndex: 2, color: "#101828" }}>
+                  <Typography
+                    sx={{ font: "18px", zIndex: 2, color: "#101828" }}
+                  >
                     Custom
                   </Typography>
                 </Box>
@@ -239,22 +235,22 @@ export default function Layout() {
             )}
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               {/* <NavLink to="/estimates"> */}
-                <Button
-                  sx={{
-                    width: { xs: 120, sm: 180 },
-                    color: "black",
-                    border: "1px solid black",
-                    fontSize: 18,
-                    ml: 2,
-                    backgroundColor: "white",
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  onClick={handleBack}
-                >
-                  {" "}
-                  Back
-                </Button>
+              <Button
+                sx={{
+                  width: { xs: 120, sm: 180 },
+                  color: "black",
+                  border: "1px solid black",
+                  fontSize: 18,
+                  ml: 2,
+                  backgroundColor: "white",
+                }}
+                fullWidth
+                variant="outlined"
+                onClick={handleBack}
+              >
+                {" "}
+                Back
+              </Button>
               {/* </NavLink> */}
               <Button
                 disabled={selectedData || selectCustom ? false : true}

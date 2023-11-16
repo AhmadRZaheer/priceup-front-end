@@ -245,6 +245,7 @@ export default function ExitingQuotes() {
           justifyContent: "center",
           paddingTop: { xs: 10, sm: 20 },
           display: { xs: "none", sm: "block" },
+         
         }}
       >
         <Box sx={{ paddingX: "30px" }}>

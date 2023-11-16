@@ -263,32 +263,38 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           flexDirection: "column",
           gap: 4,
           backgroundColor: { xs: "#08061B", sm: "white" },
+          paddingTop: { sm: "40px" },
         }}
       >
-        <div style={{ width: "100%" }}>
+        <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "white" },
-              backdropFilter: "blur(127px)",
               padding: { xs: "20px 15px", sm: "0px" },
               borderBottomRightRadius: { xs: "16px", sm: "0px" },
               borderBottomLeftRadius: { xs: "16px", sm: "0px" },
               display: "flex",
               alignItems: "center",
+              marginTop: { sm: 0, xs: 7 },
             }}
           >
-            {/* <NavLink to="/estimates"> */}
             <Box
               sx={{
                 display: { xs: "block", sm: "none" },
                 paddingRight: "20px",
                 paddingTop: "4px",
               }}
+              onClick={
+                summaryState
+                  ? setHandleEstimatesPages
+                  : () => {
+                      setSummaryState(true);
+                    }
+              }
             >
               {" "}
               <img src="/icons/left_vector.svg" alt="<" />
             </Box>
-            {/* </NavLink> */}
 
             <Typography
               sx={{
@@ -302,7 +308,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               Create New Qoute
             </Typography>
           </Box>
-        </div>
+        </Box>
 
         <Box
           sx={{

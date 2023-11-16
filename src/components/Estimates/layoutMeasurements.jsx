@@ -171,254 +171,257 @@ const LayoutMeasurements = () => {
     <>
       <Box
         sx={{
-          width: { md: "80%", sm: "100%", xs: "100%" },
           marginX: "auto",
           display: "flex",
           alignItems: { sm: "center" },
-          flexDirection: "column",
-          p: { md: 6, xs: 0 },
-          gap: { md: 4, xs: 0 },
+          justifyContent: "center",
           height: "100vh",
           backgroundColor: { sm: "white", xs: "#08061B" },
         }}
       >
-        <div style={{ width: "100%" }}>
-          <Box
-            sx={{
-              backgroundColor: { xs: "#100D24", sm: "white" },
-              padding: { xs: "20px 15px", sm: "0px" },
-              borderBottomRightRadius: { xs: "16px", sm: "0px" },
-              borderBottomLeftRadius: { xs: "16px", sm: "0px" },
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <Box
-              onClick={() => {
-                dispatch(updateMeasurements([]));
-                dispatch(setDoorWidth(0));
-                setHandleEstimatesPages("layouts");
-              }}
-              sx={{
-                display: { xs: "block", sm: "none" },
-                paddingRight: "20px",
-                paddingTop: "4px",
-              }}
-            >
-              {" "}
-              <img src="/icons/left_vector.svg" alt="<" />
-            </Box>
-
-            <Typography
-              sx={{
-                color: { sm: "black", xs: "white" },
-                fontSize: { xs: "24px", sm: "2.124rem" },
-                textAlign: { xs: "start", sm: "center" },
-                fontWeight: 500,
-              }}
-              variant="h4"
-            >
-              Create New Qoute
-            </Typography>
-          </Box>
-        </div>
-
-        <form onSubmit={formik.handleSubmit}>
-          <Box
-            sx={{
-              width: { md: 800 },
-              height: "100%",
-              borderRadius: { md: "12px", xs: 0 },
-              boxShadow:
-                "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-              border: { md: "1px solid #EAECF0", xs: "none" },
-              paddingX: { md: 2, xs: 0 },
-              paddingY: { md: 4, xs: 0 },
-              rowGap: 4,
-              background: { sm: "white", xs: "#08061B" },
-              display: "flex",
-              flexDirection: "column",
-            }}
-          >
+        <Box
+          sx={{
+            width: { sm: 800 },
+          }}
+        >
+          <div style={{ width: "100%" }}>
             <Box
               sx={{
-                paddingLeft: { md: 0, xs: 3 },
-                paddingTop: 2,
+                backgroundColor: { xs: "#100D24", sm: "white" },
+                padding: { xs: "20px 15px", sm: "0px" },
+                borderBottomRightRadius: { xs: "16px", sm: "0px" },
+                borderBottomLeftRadius: { xs: "16px", sm: "0px" },
+                display: "flex",
+                alignItems: "center",
+                marginTop: { sm: 0, xs: 7 },
               }}
             >
-              <Typography
+              <Box
+                onClick={() => {
+                  dispatch(updateMeasurements([]));
+                  dispatch(setDoorWidth(0));
+                  setHandleEstimatesPages("layouts");
+                }}
                 sx={{
-                  fontSize: { md: "18px", xs: "18px" },
-                  color: { md: "#101828", xs: "white" },
-                  paddingBottom: 1,
+                  display: { xs: "block", sm: "none" },
+                  paddingRight: "20px",
+                  paddingTop: "4px",
                 }}
               >
-                Enter Measurements
-              </Typography>
+                {" "}
+                <img src="/icons/left_vector.svg" alt="<" />
+              </Box>
+
               <Typography
-                sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+                sx={{
+                  color: { sm: "black", xs: "white" },
+                  fontSize: { xs: "24px", sm: "2.124rem" },
+                  textAlign: { xs: "start", sm: "center" },
+                  fontWeight: 500,
+                  paddingBottom: "10px",
+                }}
+                variant="h4"
               >
-                Your new project has been created. Invite colleagues to
-                collaborate on this project.
+                Create New Qoute
               </Typography>
             </Box>
+          </div>
 
+          <form onSubmit={formik.handleSubmit}>
             <Box
               sx={{
+                height: { xs: "100vh", sm: 600 },
+                borderRadius: { sm: "12px", xs: 0 },
+                boxShadow:
+                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                border: { sm: "1px solid #EAECF0", xs: "none" },
+                paddingX: { sm: 2, xs: 0 },
+                paddingY: { sm: 4, xs: 0 },
+                rowGap: 4,
+                background: { sm: "white", xs: "#08061B" },
                 display: "flex",
-                flexDirection: { md: "row", xs: "column" },
-                width: { md: "96.5%", xs: "100%" },
-                paddingY: { md: 4, xs: 0 },
-                paddingX: { md: 2, xs: 0 },
-                height: "100%",
-                background: { sm: "#D9D9D9" },
-                gap: 4,
-                borderRadius: "8px",
-                overflow: "auto",
+                flexDirection: "column",
               }}
             >
               <Box
                 sx={{
-                  display: "flex",
-                  width: { md: "48.5%", xs: "92%" },
-                  maxHeight: "100%",
-                  minHeight: 100,
-                  flexDirection: "column",
-                  gap: { md: 2, xs: 2 },
-                  color: { md: "black", xs: "white" },
-                  borderRadius: "34px 34px 0px 0px",
-                  background: { xs: "rgba(16, 13, 36, 0.01)", sm: "none" },
-                  backdropFilter: { xs: "blur(81.5px)", sm: "none" },
-                  // background: {
-                  //   md: "none",
-                  //   xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
-                  // },
-                  borderTopLeftRadius: { md: 0, xs: 30 },
-                  borderTopRightRadius: { md: 0, xs: 30 },
-                  borderTop: { md: 0, xs: "1px solid #667085" },
-                  paddingX: { md: 0, xs: 2 },
-                  paddingTop: 4,
+                  paddingLeft: { sm: 0, xs: 3 },
+                  paddingTop: 2,
                 }}
               >
-                {Array.from({
-                  length: selectedData?.settings?.measurementSides,
-                }).map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                    }}
-                  >
-                    <Typography sx={{ mr: 2 }}>
-                      {String.fromCharCode(97 + index)}
-                    </Typography>
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="outlined"
-                      name={String.fromCharCode(97 + index)}
-                      placeholder={String.fromCharCode(97 + index)}
-                      style={{
-                        background: "white",
-                        borderRadius: "8px",
-                        border: "1px solid #D0D5DD",
-                        width: "100%",
-                      }}
-                      value={formik.values[String.fromCharCode(97 + index)]}
-                      onChange={(e) => {
-                        formik.handleChange(e);
-                        doorandPanel(e);
-                      }}
-                      onBlur={formik.handleBlur}
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
-                    />
-                  </Box>
-                ))}
+                <Typography
+                  sx={{
+                    fontSize: { sm: "18px", xs: "18px" },
+                    color: { sm: "#101828", xs: "white" },
+                    paddingBottom: 1,
+                  }}
+                >
+                  Enter Measurements
+                </Typography>
+                <Typography
+                  sx={{ color: { sm: "#667085", xs: "white" }, font: "14px" }}
+                >
+                  Your new project has been created. Invite colleagues to
+                  collaborate on this project.
+                </Typography>
+              </Box>
 
-                {![
-                  layoutVariants.DOOR,
-                  layoutVariants.DOUBLEDOOR,
-                  layoutVariants.DOUBLEBARN,
-                ].includes(selectedData.settings.variant) && (
-                  <>
-                    <Typography>
-                      <input
-                        type="checkbox"
-                        onChange={() => setEditField(!editField)}
-                        style={{
-                          width: "20px",
-                        }}
-                      />
-                      <span
-                        style={{
-                          marginLeft: "10px",
-                        }}
-                      >
-                        Select if you want to customize the door width
-                      </span>
-                    </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: { sm: "row", xs: "column" },
+                  width: { sm: "96.5%", xs: "100%" },
+                  paddingY: { sm: 4, xs: 0 },
+                  paddingX: { sm: 2, xs: 0 },
+                  height: "100%",
+                  background: { sm: "#D9D9D9" },
+                  gap: 4,
+                  borderRadius: "8px",
+                  overflow: "auto",
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: { sm: "48.5%", xs: "92%" },
+                    maxHeight: "100%",
+                    minHeight: 100,
+                    flexDirection: "column",
+                    gap: { sm: 2, xs: 2 },
+                    color: { sm: "black", xs: "white" },
+                    borderRadius: "34px 34px 0px 0px",
+                    background: { xs: "rgba(16, 13, 36, 0.01)", sm: "none" },
+                    backdropFilter: { xs: "blur(81.5px)", sm: "none" },
+                    // background: {
+                    //   sm: "none",
+                    //   xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                    // },
+                    borderTopLeftRadius: { sm: 0, xs: 30 },
+                    borderTopRightRadius: { sm: 0, xs: 30 },
+                    borderTop: { sm: 0, xs: "1px solid #667085" },
+                    paddingX: { sm: 0, xs: 2 },
+                    paddingTop: 4,
+                  }}
+                >
+                  {Array.from({
+                    length: selectedData?.settings?.measurementSides,
+                  }).map((_, index) => (
                     <Box
+                      key={index}
                       sx={{
                         display: "flex",
+                        alignItems: "center",
                         gap: 1,
                       }}
                     >
+                      <Typography sx={{ mr: 2 }}>
+                        {String.fromCharCode(97 + index)}
+                      </Typography>
+                      <TextField
+                        type="number"
+                        size="small"
+                        variant="outlined"
+                        name={String.fromCharCode(97 + index)}
+                        placeholder={String.fromCharCode(97 + index)}
+                        style={{
+                          background: "white",
+                          borderRadius: "8px",
+                          border: "1px solid #D0D5DD",
+                          width: "100%",
+                        }}
+                        value={formik.values[String.fromCharCode(97 + index)]}
+                        onChange={(e) => {
+                          formik.handleChange(e);
+                          doorandPanel(e);
+                        }}
+                        onBlur={formik.handleBlur}
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                      />
+                    </Box>
+                  ))}
+
+                  {![
+                    layoutVariants.DOOR,
+                    layoutVariants.DOUBLEDOOR,
+                    layoutVariants.DOUBLEBARN,
+                  ].includes(selectedData.settings.variant) && (
+                    <>
+                      <Typography>
+                        <input
+                          type="checkbox"
+                          onChange={() => setEditField(!editField)}
+                          style={{
+                            width: "20px",
+                          }}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Select if you want to customize the door width
+                        </span>
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          width: "100%",
-                          alignItems: "center",
+                          gap: 1,
                         }}
                       >
                         <Box
                           sx={{
                             display: "flex",
+                            width: "100%",
                             alignItems: "center",
-                            width: "200px",
                           }}
                         >
-                          <Typography
+                          <Box
                             sx={{
-                              color: editField ? "gray" : "",
+                              display: "flex",
+                              alignItems: "center",
+                              width: "200px",
                             }}
                           >
-                            Door Width
-                          </Typography>
-                          <Tooltip
-                            title={
-                              "If you want to customize the door width, check the above checkbox"
-                            }
-                          >
-                            <IconButton>
-                              <InfoOutlinedIcon />
-                            </IconButton>
-                          </Tooltip>
+                            <Typography
+                              sx={{
+                                color: editField ? "gray" : "",
+                              }}
+                            >
+                              Door Width
+                            </Typography>
+                            <Tooltip
+                              title={
+                                "If you want to customize the door width, check the above checkbox"
+                              }
+                            >
+                              <IconButton>
+                                <InfoOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </Box>
+                          <TextField
+                            InputProps={{
+                              inputProps: { min: 1 },
+                            }}
+                            disabled={editField}
+                            placeholder={editDebouncedValue}
+                            type="number"
+                            size="small"
+                            variant="outlined"
+                            value={editDebouncedValue}
+                            style={{
+                              background: "white",
+                              borderRadius: "8px",
+                              border: "1px solid #D0D5DD",
+                              width: "100%",
+                            }}
+                            name="door"
+                            onChange={(e) => handleInputChange(e)}
+                          />
                         </Box>
-                        <TextField
-                          InputProps={{
-                            inputProps: { min: 1 },
-                          }}
-                          disabled={editField}
-                          placeholder={editDebouncedValue}
-                          type="number"
-                          size="small"
-                          variant="outlined"
-                          value={editDebouncedValue}
-                          style={{
-                            background: { sm: "white" },
-                            borderRadius: "8px",
-                            border: "1px solid #D0D5DD",
-                            width: "100%",
-                          }}
-                          name="door"
-                          onChange={(e) => handleInputChange(e)}
-                        />
-                      </Box>
-                      {/* <Box
+                        {/* <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -444,53 +447,52 @@ const LayoutMeasurements = () => {
                           name="panel"
                         />
                       </Box> */}
+                      </Box>
+                    </>
+                  )}
+                </Box>
+
+                <Box
+                  sx={{
+                    display: "flex",
+                    width: { sm: "48.5%" },
+                    justifyContent: "end",
+                    alignItems: "center",
+                    margin: "auto",
+                    order: { sm: 1, xs: -1 },
+                  }}
+                >
+                  {selectedData?.image === "" ? (
+                    <Box
+                      sx={{
+                        width: 40,
+                        m: "auto",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        height: 300,
+                      }}
+                    >
+                      <CircularProgress sx={{ color: "#8477DA" }} />
                     </Box>
-                  </>
-                )}
+                  ) : (
+                    <Box
+                      sx={{
+                        width: { xs: "134px", sm: "300px" },
+                        height: { xs: "188px", sm: "340px" },
+                        padding: { xs: "10px", sm: "0px" },
+                      }}
+                    >
+                      <img
+                        width="100%"
+                        height="100%"
+                        src={`${backendURL}/${selectedData?.image}`}
+                        alt="Selected"
+                      />
+                    </Box>
+                  )}
+                </Box>
               </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  width: { sm: "48.5%" },
-                  justifyContent: "end",
-                  alignItems: "center",
-                  margin: "auto",
-                  order: { md: 2, xs: -1 },
-                }}
-              >
-                {selectedData?.image === "" ? (
-                  <Box
-                    sx={{
-                      width: 40,
-                      m: "auto",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      height: 300,
-                    }}
-                  >
-                    <CircularProgress sx={{color: "#8477DA"}}/>
-                  </Box>
-                ) : (
-                  <Box
-                    sx={{
-                      width: { xs: "134px", sm: "300px" },
-                      height: { xs: "188px", sm: "340px" },
-                      padding: { xs: "10px", sm: "0px" },
-                    }}
-                  >
-                    <img
-                      width="100%"
-                      height="100%"
-                      src={`${backendURL}/${selectedData?.image}`}
-                      alt="Selected"
-                    />
-                  </Box>
-                )}
-              </Box>
-
-            </Box>
               {/* Buttons */}
               <Box
                 sx={{
@@ -521,7 +523,7 @@ const LayoutMeasurements = () => {
                         color: "#344054",
                         textTransform: "initial",
                         border: "1px solid #D0D5DD",
-                        backgroundColor: { md: "transparent", xs: "white" },
+                        backgroundColor: { sm: "transparent", xs: "white" },
                         height: 40,
                         fontSize: 20,
                       }}
@@ -551,8 +553,9 @@ const LayoutMeasurements = () => {
                   </Box>
                 </Box>
               </Box>
-          </Box>
-        </form>
+            </Box>
+          </form>
+        </Box>
       </Box>
     </>
   );

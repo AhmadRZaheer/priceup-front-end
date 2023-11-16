@@ -27,19 +27,7 @@ import {
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
-const style = {
-  position: "absolute",
-  display: "flex",
-  flexDirection: "column",
-  gap: 3,
-  top: "30%",
-  left: "40%",
-  width: 400,
-  height: "auto",
-  borderRadius: { md: "4px" },
-  backgroundColor: "white",
-  zIndex: 2,
-};
+
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
@@ -50,7 +38,7 @@ export default function ClientDetailsModel({
   handleCancel,
   showSnackbar,
 }) {
-  console.log('in correct file');
+  console.log("in correct file");
   const {
     mutate,
     isError: ErrorForAdd,
@@ -72,7 +60,7 @@ export default function ClientDetailsModel({
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
-      firstName: "Hi",
+      firstName: "",
       lastName: "",
       email: "",
       address: "",
@@ -110,22 +98,20 @@ export default function ClientDetailsModel({
             count: row.count,
           };
         });
-      const cornerWallClampArray = estimatesContent?.cornerClamps?.cornerWallClamp?.map(
-        (row) => {
+      const cornerWallClampArray =
+        estimatesContent?.cornerClamps?.cornerWallClamp?.map((row) => {
           return {
             type: row.item._id,
             count: row.count,
           };
-        }
-      );
-      const cornerSleeveOverArray = estimatesContent?.cornerClamps?.cornerSleeveOver?.map(
-        (row) => {
+        });
+      const cornerSleeveOverArray =
+        estimatesContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
           return {
             type: row.item._id,
             count: row.count,
           };
-        }
-      );
+        });
       const cornerGlassToGlassArray =
         estimatesContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
           return {
@@ -187,8 +173,8 @@ export default function ClientDetailsModel({
         perimeter: perimeter,
         sqftArea: sqftArea,
       };
-      console.log('in correct file');
-      
+      console.log("in correct file");
+
       if (["create", "custom"].includes(updatecheck)) {
         mutate({
           customerData: values,
@@ -244,23 +230,34 @@ export default function ClientDetailsModel({
         aria-describedby="modal-modal-description"
       >
         <form onSubmit={formik.handleSubmit}>
-          <Box sx={style}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              zIndex: 12,
+              width: "100%",
+              height: "100vh",
+              display: "flex",
+              justifyContent: { sm: "center" },
+              alignItems: { xs: "end", sm: "center" },
+            }}
+          >
             <Box
               sx={{
-                background: {
-                  md: "#ffff",
-                  xs: "linear-gradient(to top right, #625f78 16%, #312969, #100d24 82%)",
-                },
+                backgroundColor: { xs: "#100D24", sm: "white" },
+                backdropFilter: { xs: "blur(81.5px)", sm: "none" },
                 padding: 3,
-                borderTopLeftRadius: { md: "4px", xs: 30 },
-                borderTopRightRadius: { md: "4px", xs: 30 },
-                color: { md: "#101828", xs: "white" },
+                borderTopLeftRadius: { sm: "4px", xs: 30 },
+                borderTopRightRadius: { sm: "4px", xs: 30 },
+                color: { sm: "#101828", xs: "white" },
+                width: { sm: "400px", xs: "100%" },
               }}
             >
               <Box
                 sx={{
-                  display: "flex",
-                  paddingBottom: 2,
+                  fontSize: "18px",
+                  fontWeight: 600,
+                  paddingBottom: "4px",
                 }}
               >
                 <Typography>Clients Details</Typography>
@@ -273,10 +270,10 @@ export default function ClientDetailsModel({
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
-                      paddingY: { md: 0, xs: 2 },
+                      paddingY: { sm: 0, xs: 2 },
                     }}
                   >
-                    <Box sx={{ display: { md: "block", xs: "none" } }}>
+                    <Box sx={{ display: { sm: "block", xs: "none" } }}>
                       <label htmlFor="firstName">First Name</label>
                     </Box>
 
@@ -301,7 +298,7 @@ export default function ClientDetailsModel({
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       value={formik.values.firstName}
@@ -320,10 +317,10 @@ export default function ClientDetailsModel({
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
-                      paddingY: { md: 0, xs: 2 },
+                      paddingY: { sm: 0, xs: 2 },
                     }}
                   >
-                    <Box sx={{ display: { md: "block", xs: "none" } }}>
+                    <Box sx={{ display: { sm: "block", xs: "none" } }}>
                       {" "}
                       <label htmlFor="lastName">Last Name</label>
                     </Box>
@@ -350,7 +347,7 @@ export default function ClientDetailsModel({
                         },
                       }}
                       sx={{
-                        color: { md: "black", xs: "white" },
+                        color: { sm: "black", xs: "white" },
                         width: "100%",
                       }}
                       onBlur={formik.handleBlur}
@@ -368,10 +365,10 @@ export default function ClientDetailsModel({
                   display: "flex",
                   flexDirection: "column",
                   gap: 1,
-                  paddingBottom: { md: 0, xs: 2 },
+                  paddingBottom: { sm: 0, xs: 2 },
                 }}
               >
-                <Box sx={{ display: { md: "block", xs: "none" } }}>
+                <Box sx={{ display: { sm: "block", xs: "none" } }}>
                   <label htmlFor="email">Client Email address</label>
                 </Box>
                 <TextField
@@ -396,7 +393,7 @@ export default function ClientDetailsModel({
                     },
                   }}
                   sx={{
-                    color: { md: "black", xs: "white" },
+                    color: { sm: "black", xs: "white" },
                     width: "100%",
                   }}
                   onChange={formik.handleChange}
@@ -412,7 +409,7 @@ export default function ClientDetailsModel({
                   gap: 1,
                 }}
               >
-                <Box sx={{ display: { md: "block", xs: "none" } }}>
+                <Box sx={{ display: { sm: "block", xs: "none" } }}>
                   {" "}
                   <label htmlFor="address">Client address</label>
                 </Box>
@@ -438,7 +435,7 @@ export default function ClientDetailsModel({
                     },
                   }}
                   sx={{
-                    color: { md: "black", xs: "white" },
+                    color: { sm: "black", xs: "white" },
                     width: "100%",
                   }}
                   onChange={formik.handleChange}
