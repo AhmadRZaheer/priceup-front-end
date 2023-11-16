@@ -21,6 +21,7 @@ import Admin from "../../pages/Admin/admin";
 import { useMemo } from "react";
 import LandingPage from "../../pages/LandingPage/landingPage";
 import AdminTeam from "../../pages/TeamAdmin/adminTeam";
+import ExistingQuotes from "../Estimates/existingQuotes";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -100,7 +101,11 @@ const AppRoutes = () => {
         </Route>
       ) : isStaff() ? (
         <Route path="/">
-          <Route index element={<Staff />} />
+          <Route index element={<Staff />} />{" "}
+          <Route path="/estimates/">
+            <Route index element={<ExistingQuotes />} />
+            <Route path="steps" element={<Estimates />} />
+          </Route>
           <Route path="*" element={<Staff />}></Route>
         </Route>
       ) : isSuperAdmin() ? (

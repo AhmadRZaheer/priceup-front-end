@@ -15,9 +15,10 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
+import logout from "../../Assets/logout.svg";
 import { backendURL } from "../../utilities/common";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { logoutHandler } from "../../redux/userAuth";
 import EstimsteIcon from "../../Assets/bar.svg";
@@ -46,7 +47,7 @@ function MobileBar() {
   };
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [activeButton, setActiveButton] = useState(null);
+  const [activeButton, setActiveButton] = useState("esti");
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const { data: haveAccess, isFetched: haveAccessFetched } =
@@ -120,7 +121,7 @@ function MobileBar() {
       );
     }
   }, [haveAccessFetched]);
-
+  const location = useLocation();
   const drawer = (
     <Box
       sx={{
@@ -145,9 +146,7 @@ function MobileBar() {
             height: "65vh",
             overflow: "auto",
             width: drawerWidth,
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
+            paddingTop: "20px",
           }}
         >
           <Box>
@@ -163,6 +162,8 @@ function MobileBar() {
                   ":hover": {
                     backgroundColor: "#8477da",
                   },
+                  display: "flex",
+                  justifyContent: "start",
                 }}
                 onClick={handleSeeLocationsClick}
               >
@@ -197,6 +198,8 @@ function MobileBar() {
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
+                display: "flex",
+                justifyContent: "start",
               }}
               onClick={() => handleEstimateClick()}
             >
@@ -223,6 +226,8 @@ function MobileBar() {
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
+                display: "flex",
+                justifyContent: "start",
               }}
               onClick={() => handleCustomerClick()}
             >
@@ -248,6 +253,8 @@ function MobileBar() {
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
+                display: "flex",
+                justifyContent: "start",
               }}
               onClick={handleStaffClick}
             >
@@ -272,23 +279,25 @@ function MobileBar() {
           backgroundColor: "#100d24",
         }}
       >
-        <Tooltip title="Logout" placement="top" arrow>
-          <Button
-            sx={{
-              width: 240,
-              color: "white",
-              margin: 2,
-              backgroundColor: "#8477da",
-              ":hover": {
+        <Box sx={{ display: { xs: "block", sm: "none" } }}>
+          <Tooltip title="Logout" placement="top" arrow>
+            <Button
+              sx={{
+                width: 240,
+                color: "white",
+                margin: 2,
                 backgroundColor: "#8477da",
-              },
-            }}
-            variant="contained"
-            onClick={Logout}
-          >
-            Logout
-          </Button>
-        </Tooltip>
+                ":hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
+              variant="contained"
+              onClick={Logout}
+            >
+              Logout
+            </Button>
+          </Tooltip>
+        </Box>
 
         <div className="bottom">
           <div className="UserIcon">
@@ -302,7 +311,23 @@ function MobileBar() {
           <div className="userInSidebar">
             {decodedToken?.name}
             <div className="emailUser">{decodedToken?.email}</div>
-          </div>
+          </div>{" "}
+          <Box sx={{ display: { xs: "none", sm: "block" }, marginTop: "10px" }}>
+            <Tooltip title="Logout" placement="top-start" arrow>
+              <Box
+                sx={{
+                  fontSize: 16,
+                  marginLeft: 2,
+                  width: 50,
+                  height: 30,
+                  textAlign: "center",
+                }}
+                onClick={Logout}
+              >
+                <img src={logout} alt="image" />
+              </Box>
+            </Tooltip>
+          </Box>
         </div>
       </Box>
     </Box>
@@ -525,6 +550,7 @@ function MobileBar() {
                     {location?.email}
                   </Typography>
                 </Box>
+
                 {activeLocation?.id === location?.id && (
                   <Box>
                     <FiberManualRecord

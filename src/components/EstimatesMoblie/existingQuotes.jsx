@@ -246,7 +246,7 @@ export default function ExitingQuotes() {
           display: { xs: "none", sm: "block" },
         }}
       >
-        <Box>
+        <Box sx={{ paddingX: "30px" }}>
           <ExistingTable />
         </Box>
       </Box>
