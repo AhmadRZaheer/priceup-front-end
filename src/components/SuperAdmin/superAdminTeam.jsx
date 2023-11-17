@@ -132,8 +132,7 @@ const SuperAdminTeam = () => {
 
     {
       field: "Access",
-      width: 165,
-      align: "right",
+      width: 210,
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
         return (
@@ -151,9 +150,8 @@ const SuperAdminTeam = () => {
 
     {
       field: "Action",
-      width: 165,
+      width: 120,
       headerClassName: "customHeaderClass-admin-team",
-      align: "right",
       renderCell: (params) => {
         console.log(params, "id");
         const id = params.row._id;

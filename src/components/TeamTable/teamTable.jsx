@@ -32,10 +32,8 @@ const TeamTable = () => {
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
-  const filteredData = stafData?.filter(
-    (team) =>
-      team.name.toLowerCase().includes(search.toLowerCase()) ||
-      team.email.toLowerCase().includes(search.toLowerCase())
+  const filteredData = stafData?.filter((team) =>
+    team.name.toLowerCase().includes(search.toLowerCase())
   );
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {

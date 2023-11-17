@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import {
+  Add,
+  ArrowBack,
+  ArrowForward,
+  Delete,
+  Edit,
+} from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -7,6 +13,7 @@ import {
   Typography,
   InputAdornment,
   TextField,
+  Button,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import {
@@ -30,6 +37,7 @@ import { backendURL } from "../../utilities/common";
 import { useEffect } from "react";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
+import { DataGrid } from "@mui/x-data-grid";
 export default function ExistingTable() {
   const { data, isFetching, refetch } = useGetEstimates();
   const navigate = useNavigate();
@@ -47,7 +55,7 @@ export default function ExistingTable() {
   const [search, setSearch] = useState("");
 
   const filteredData = data?.estimates?.filter((item) =>
-    item.customerData.email.toLowerCase().includes(search.toLowerCase())
+    item.customerData.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleDeleteEstimate = (id) => {
@@ -77,6 +85,265 @@ export default function ExistingTable() {
     dispatch(setNavigationDesktop("layouts"));
     navigate("/estimates/steps");
   };
+  const EstiamtesColumn = [
+    {
+      field: "Creator Name",
+      headerClassName: "customHeaderClass",
+      width: 260,
+      renderCell: (params) => {
+        if (params?.row?.creatorData && params?.row?.creatorData?.name) {
+          var firstNameInitial = params?.row?.creatorData?.name.charAt(0);
+        } else {
+          var firstNameInitial = "";
+        }
+        if (params.row?.creatorData && params?.row?.creatorData?.name) {
+          var lastNameInitial = params?.row?.creatorData?.name.charAt(1);
+        } else {
+          var lastNameInitial = "";
+        }
+        return (
+          <>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "100%",
+                  overflow: "hidden",
+                }}
+              >
+                {params?.row?.creatorData?.image ===
+                "images/users/default.jpg" ? (
+                  <Typography
+                    sx={{
+                      backgroundColor: "#F9F5FF",
+                      width: 34,
+                      height: 34,
+                      borderRadius: "100%",
+                      textAlign: "center",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "#7F56D9",
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {firstNameInitial}
+                    {lastNameInitial}
+                  </Typography>
+                ) : (
+                  <img
+                    width={40}
+                    src={`${backendURL}/${params?.row?.creatorData?.image}`}
+                    alt="image person"
+                  />
+                )}
+              </Box>
+              <Box>
+                <Typography>{params?.row?.creatorData?.name}</Typography>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    p: 0,
+                    mt: -0.4,
+                    color: "#667085",
+                  }}
+                >
+                  {params?.row?.creatorData?.email}
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer Name",
+      headerClassName: "customHeaderClass",
+      width: 230,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ py: 1, color: "#667085" }}>
+              {params?.row?.customerData?.name}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer Email",
+      headerClassName: "customHeaderClass",
+      width: 280,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ py: 1, color: "#667085" }}>
+              {params?.row?.customerData?.email}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
+      field: "Date quoted",
+      headerClassName: "customHeaderClass",
+      width: 226,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
+              {new Date(params?.row?.updatedAt).toDateString()}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Estimated total",
+      headerClassName: "customHeaderClass",
+      width: 170,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+              ${params?.row?.cost?.toFixed(2) || 0}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerClassName: "customHeaderClass",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <>
+            <Box
+              sx={{
+                width: "fit-content",
+                bgcolor:
+                  params?.row?.status === "pending" ? "#FEF3F2" : "#ECFDF3",
+                borderRadius: "16px",
+                color:
+                  params?.row?.status === "pending" ? "#B42318" : "#027A48",
+                pl: 1.8,
+                pt: 0.3,
+                pr: 1.8,
+                pb: 0.5,
+                display: "flex",
+                gap: 1,
+                alignItems: "center",
+              }}
+            >
+              <Box
+                sx={{
+                  width: "6px",
+                  height: "6px",
+                  bgcolor:
+                    params?.row?.status === "pending" ? "#B42318" : "#027A48",
+                  borderRadius: "100%",
+                  mt: 0.2,
+                }}
+              ></Box>
+              {params?.row?.status}
+            </Box>
+          </>
+        );
+      },
+    },
+    {
+      field: "Action",
+      headerClassName: "customHeaderClass",
+      width: 180,
+      renderCell: (params) => {
+        return (
+          <>
+            <IconButton
+              onClick={() => handleDeleteEstimate(params?.row?._id)}
+              sx={{
+                padding: 1,
+                margin: 0,
+                borderRadius: "100%",
+                mt: -0.5,
+                mr: 1,
+                "&:hover": { backgroundColor: "white" },
+                "&:active": { backgroundColor: "white" },
+              }}
+            >
+              <img
+                width={"20px"}
+                height={"20px"}
+                src={DeleteIcon}
+                alt="delete icon"
+              />
+            </IconButton>
+            <Link
+              to="/estimates/steps"
+              style={{ marginLeft: 2, marginRight: 1, marginTop: 6 }}
+            >
+              <CustomIconButton
+                handleClick={() => handleIconButtonClick(params?.row)}
+                disable={estimateDataFetching}
+                buttonText="Edit"
+                icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
+              />
+            </Link>
+          </>
+        );
+      },
+    },
+  ];
+
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const totalPages = Math.ceil(filteredData?.length / itemsPerPage);
+  const MAX_PAGES_DISPLAYED = 5;
+
+  const getPageNumbersToShow = () => {
+    if (totalPages <= MAX_PAGES_DISPLAYED) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1);
+    }
+
+    const pagesToShow = [];
+    const startPage = Math.max(1, page - 2); // Display three on the first side
+    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
+
+    if (startPage > 1) {
+      pagesToShow.push(1);
+      if (startPage > 2) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pagesToShow.push(i);
+    }
+
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+      }
+      pagesToShow.push(totalPages);
+    }
+
+    return pagesToShow;
+  };
+
+  const pageNumbersToShow = getPageNumbersToShow();
+
+  const handlePreviousPage = () => {
+    setPage((prevPage) => Math.max(prevPage - 1, 1));
+  };
+
+  const handleNextPage = () => {
+    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+  };
+
   return (
     <>
       <Box
@@ -132,8 +399,8 @@ export default function ExistingTable() {
           Add
         </IconButton>
       </Box>
-      <Box>
-        {/* Table header */}
+      {/* <Box>
+        {/* Table header 
         <Box
           sx={{
             display: "flex",
@@ -355,7 +622,109 @@ export default function ExistingTable() {
             )}
           </Box>
         )}
-      </Box>
+      </Box> */}
+      {isFetching || estimateDataFetching ? (
+        <Box
+          sx={{
+            width: 40,
+            m: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            maxHeight: "70vh",
+            minHeight: "40vh",
+          }}
+        >
+          <CircularProgress sx={{ color: "#8477DA" }} />
+        </Box>
+      ) : (
+        <Box>
+          <DataGrid
+            style={{
+              border: "none",
+            }}
+            getRowId={(row) => row._id}
+            rows={filteredData.slice(
+              (page - 1) * itemsPerPage,
+              page * itemsPerPage
+            )}
+            columns={EstiamtesColumn}
+            page={page}
+            pageSize={itemsPerPage}
+            rowCount={filteredData ? filteredData?.length : 0}
+            sx={{ width: "100%" }}
+            hideFooter
+          />
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px",
+              borderTop: "1px solid #EAECF0",
+            }}
+          >
+            <Button
+              sx={{
+                border: "1px solid #D0D5DD",
+                color: "#344054",
+                borderRadius: "8px",
+                textTransform: "capitalize",
+                fontWeight: 500,
+                ":hover": {
+                  border: "1px solid #D0D5DD",
+                  color: "#344054",
+                },
+              }}
+              variant="outlined"
+              onClick={handlePreviousPage}
+              disabled={page === 0}
+            >
+              <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
+              Previous
+            </Button>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              {pageNumbersToShow.map((pagenumber, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    backgroundColor:
+                      page === pagenumber
+                        ? "rgba(144, 136, 192, 0.2)"
+                        : "white",
+                    color: page === pagenumber ? "#353050" : "#667085",
+                    width: "40px",
+                    height: "40px",
+                    borderRadius: "8px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {pagenumber}
+                </Box>
+              ))}
+            </Box>
+            <Button
+              sx={{
+                border: "1px solid #D0D5DD",
+                color: "#344054",
+                borderRadius: "8px",
+                textTransform: "capitalize",
+                fontWeight: 500,
+                ":hover": {
+                  border: "1px solid #D0D5DD",
+                  color: "#344054",
+                },
+              }}
+              onClick={handleNextPage}
+              // disabled={filteredData.creatorData.length === 0}
+            >
+              Next
+              <ArrowForward sx={{ color: "#344054", fontSize: 20, ml: 1 }} />
+            </Button>
+          </Box>
+        </Box>
+      )}
     </>
   );
 }
