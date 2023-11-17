@@ -205,7 +205,7 @@ export default function LocationModel({
                 border: "1px solid #D0D5DD",
                 width: "50%",
                 "&:hover": {
-                  backgroundColor: "#8477da",
+                  border: "1px solid #D0D5DD",
                 },
               }}
             >
@@ -214,7 +214,13 @@ export default function LocationModel({
             <Button
               fullWidth
               variant="contained"
-              sx={{ backgroundColor: "#8477DA", width: "50%" }}
+              sx={{
+                backgroundColor: "#8477DA",
+                width: "50%",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
               onClick={() => handleEditClick()}
             >
               Done

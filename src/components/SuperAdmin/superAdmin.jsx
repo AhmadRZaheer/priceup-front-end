@@ -548,7 +548,7 @@ const SuperAdminTable = () => {
                       gap: 1,
                     }}
                   >
-                    <Box sx={{ height: "125px" }}>
+                    <Box sx={{ height: "100px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
                         Estimates
                       </Typography>
@@ -593,7 +593,7 @@ const SuperAdminTable = () => {
                       gap: 1,
                     }}
                   >
-                    <Box sx={{ height: "125px" }}>
+                    <Box sx={{ height: "100px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
                         Customers
                       </Typography>
