@@ -5,7 +5,7 @@ import { useFetchDataTeam } from "../../utilities/ApiHooks/team";
 import { teamColumns } from "../../customerTableSource";
 import "./customerTable.css";
 
-export default function ExitingQuotes() {
+export default function StaffTable() {
   const { data: staffData } = useFetchDataTeam();
   return (
     <>
@@ -30,7 +30,7 @@ export default function ExitingQuotes() {
             }}
           >
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-              Customer
+              Customer 
             </Typography>
           </Box>
           <div className="CustomerTable">
