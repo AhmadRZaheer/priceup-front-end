@@ -70,8 +70,6 @@ export default function ExitingQuotes() {
           <Box
             sx={{
               height: "100vh",
-              // color: "#ffff",
-              // backgroundColor: "rgba(16, 13, 36, 1)",
             }}
           >
             <Box>
@@ -243,12 +241,19 @@ export default function ExitingQuotes() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          paddingTop: { xs: 10, sm: 20 },
+          paddingTop: 10,
           display: { xs: "none", sm: "block" },
         }}
       >
         <Box sx={{ paddingX: "30px" }}>
-          <ExistingTable />
+          <Box>
+            <Typography sx={{ fontSize: 30, pb: 2, color: "#101828" }}>
+              Estimates
+            </Typography>
+          </Box>
+          <Box sx={{ border: "1px solid #EAECF0", borderRadius: "8px" }}>
+            <ExistingTable />
+          </Box>
         </Box>
       </Box>
     </>

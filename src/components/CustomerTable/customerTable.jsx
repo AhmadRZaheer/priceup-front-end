@@ -17,7 +17,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 
 const CustomerTable = () => {
   const { data: customerData } = useFetchDataCustomer();
-  console.log("data", customerData);
+
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedRowData, setSelectedRowData] = React.useState(null);

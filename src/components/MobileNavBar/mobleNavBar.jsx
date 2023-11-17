@@ -241,7 +241,7 @@ function MobileBar() {
               Customer
             </Button>
           </Box>
-          <Box>
+          {/* <Box>
             <Button
               sx={{
                 width: 245,
@@ -268,7 +268,7 @@ function MobileBar() {
               />{" "}
               Team
             </Button>
-          </Box>
+          </Box> */}
         </Box>
       </Box>
 
@@ -341,8 +341,7 @@ function MobileBar() {
       </Box>
     </Box>
   );
-  console.log("suleman 1", location);
-
+ 
   return (
     <>
       <Box sx={{ display: "flex" }}>

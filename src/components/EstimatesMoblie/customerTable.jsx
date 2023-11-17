@@ -5,7 +5,7 @@ import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { CustomerColumns } from "../../customerTableSource";
 import "./customerTable.css";
 
-export default function ExitingQuotes() {
+export default function CustomerTable() {
   const { data: customerData } = useFetchDataCustomer();
   return (
     <>
@@ -14,7 +14,7 @@ export default function ExitingQuotes() {
           marginTop: { xs: 8, sm: 0 },
           // color: "#ffff",
           height: "100vh",
-          // backgroundColor: "rgba(16, 13, 36, 1)",
+          // backgroundColor: "red",
           display: "flex",
           flexDirection: "column",
           alignItems: "space-between",
@@ -30,7 +30,7 @@ export default function ExitingQuotes() {
             }}
           >
             <Typography sx={{ fontSize: 18, fontWeight: "Medium" }}>
-              Customer
+              Customer 
             </Typography>
           </Box>
           <div className="CustomerTable">
