@@ -6,6 +6,7 @@ import {
   Typography,
   Input,
   InputAdornment,
+  CircularProgress,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
@@ -30,7 +31,11 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 
 const SuperAdminTeam = () => {
-  const { data: staffData, refetch: teamMemberRefetch } = useFetchAllStaff();
+  const {
+    data: staffData,
+    refetch: teamMemberRefetch,
+    isFetching,
+  } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
   const [snackbar, setSnackbar] = useState({
     open: false,
@@ -86,7 +91,8 @@ const SuperAdminTeam = () => {
     {
       field: "user_name",
       headerName: "Location",
-      width: 200,
+      headerClassName: "customHeaderClass-admin-team",
+      width: 300,
       renderCell: (params) => {
         const { haveAccessTo } = params.row;
 
@@ -99,8 +105,16 @@ const SuperAdminTeam = () => {
 
         return (
           <div>
-            <Typography color="#667085">
-              {matchingLocationNames.join(", ") || "No location member found"}
+            <Typography
+              style={{
+                maxWidth: "240px",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+              color="#667085"
+            >
+              {matchingLocationNames.join(", ") || "Not added to any location"}
             </Typography>
           </div>
         );
@@ -109,16 +123,17 @@ const SuperAdminTeam = () => {
     {
       field: "Status",
       paddingLeft: 3,
-      width: 220,
+      headerClassName: "customHeaderClass-admin-team",
+      width: 180,
       renderCell: (params) => {
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
 
     {
-      field: "location",
-      width: 165,
-      align: "right",
+      field: "Access",
+      width: 210,
+      headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
         return (
           <>
@@ -134,9 +149,9 @@ const SuperAdminTeam = () => {
     },
 
     {
-      field: " ",
-      width: 165,
-      align: "right",
+      field: "Action",
+      width: 120,
+      headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
         console.log(params, "id");
         const id = params.row._id;
@@ -246,93 +261,111 @@ const SuperAdminTeam = () => {
               }
             />
           </Box>
-          <div className="CustomerTable">
-            <DataGrid
-              style={{
-                border: "none",
-              }}
-              getRowId={(row) => row._id}
-              rows={filteredData.slice(
-                (page - 1) * itemsPerPage,
-                page * itemsPerPage
-              )}
-              columns={AdminColumns.concat(actionColumn)}
-              page={page}
-              pageSize={itemsPerPage}
-              rowCount={filteredData.length}
-              sx={{ width: "100%" }}
-              hideFooter
-            />
+          {isFetching ? (
             <Box
               sx={{
+                width: "100%",
+                textAlign: "center",
                 display: "flex",
-                justifyContent: "space-between",
-                padding: "10px",
-                borderTop: "1px solid #EAECF0",
-                width: "98%",
+                justifyContent: "center",
+                height: "300px",
+                alignItems: "center",
               }}
             >
-              <Button
-                sx={{
-                  border: "1px solid #D0D5DD",
-                  color: "#344054",
-                  borderRadius: "8px",
-                  textTransform: "capitalize",
-                  fontWeight: 500,
-                  ":hover": {
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                  },
-                }}
-                variant="outlined"
-                onClick={handlePreviousPage}
-                disabled={page === 0}
-              >
-                <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
-                Previous
-              </Button>
-              <Box sx={{ display: "flex", gap: 2 }}>
-                {pageNumbersToShow.map((pagenumber, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      backgroundColor:
-                        page === pagenumber
-                          ? "rgba(144, 136, 192, 0.2)"
-                          : "white",
-                      color: page === pagenumber ? "#353050" : "#667085",
-                      width: "40px",
-                      height: "40px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {pagenumber}
-                  </Box>
-                ))}
-              </Box>
-              <Button
-                sx={{
-                  border: "1px solid #D0D5DD",
-                  color: "#344054",
-                  borderRadius: "8px",
-                  textTransform: "capitalize",
-                  fontWeight: 500,
-                  ":hover": {
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                  },
-                }}
-                onClick={handleNextPage}
-                disabled={filteredData.length === 0}
-              >
-                Next
-                <ArrowForward sx={{ color: "#344054", fontSize: 20, ml: 1 }} />
-              </Button>
+              <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          </div>
+          ) : (
+            <div className="CustomerTable">
+              <DataGrid
+                style={{
+                  border: "none",
+                }}
+                getRowId={(row) => row._id}
+                rows={filteredData.slice(
+                  (page - 1) * itemsPerPage,
+                  page * itemsPerPage
+                )}
+                columns={AdminColumns.concat(actionColumn)}
+                page={page}
+                pageSize={itemsPerPage}
+                rowCount={filteredData.length}
+                sx={{ width: "100%" }}
+                hideFooter
+              />
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  padding: "10px",
+                  borderTop: "1px solid #EAECF0",
+                  width: "98%",
+                }}
+              >
+                <Button
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                    borderRadius: "8px",
+                    textTransform: "capitalize",
+                    fontWeight: 500,
+                    ":hover": {
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                    },
+                  }}
+                  variant="outlined"
+                  onClick={handlePreviousPage}
+                  disabled={page === 0}
+                >
+                  <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
+                  Previous
+                </Button>
+
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  {pageNumbersToShow.map((pagenumber, index) => (
+                    <Box
+                      key={index}
+                      sx={{
+                        backgroundColor:
+                          page === pagenumber
+                            ? "rgba(144, 136, 192, 0.2)"
+                            : "white",
+                        color: page === pagenumber ? "#353050" : "#667085",
+                        width: "40px",
+                        height: "40px",
+                        borderRadius: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {pagenumber}
+                    </Box>
+                  ))}
+                </Box>
+                <Button
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    color: "#344054",
+                    borderRadius: "8px",
+                    textTransform: "capitalize",
+                    fontWeight: 500,
+                    ":hover": {
+                      border: "1px solid #D0D5DD",
+                      color: "#344054",
+                    },
+                  }}
+                  onClick={handleNextPage}
+                  disabled={filteredData.length === 0}
+                >
+                  Next
+                  <ArrowForward
+                    sx={{ color: "#344054", fontSize: 20, ml: 1 }}
+                  />
+                </Button>
+              </Box>
+            </div>
+          )}
         </Box>
         <LocationModel
           open={open}

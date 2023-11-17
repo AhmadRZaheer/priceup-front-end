@@ -21,16 +21,14 @@ const CustomerTable = () => {
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedRowData, setSelectedRowData] = React.useState(null);
-  const filteredData = customerData?.filter(
-    (customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase()) ||
-      customer.email.toLowerCase().includes(search.toLowerCase())
+  const filteredData = customerData?.filter((customer) =>
+    customer.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (params) => {
-    setSelectedRowData(params.row); // Store the data of the selected row
+    setSelectedRowData(params.row);
     setOpen(true);
   };
   const actionColumn = [
@@ -38,7 +36,7 @@ const CustomerTable = () => {
       field: "Status",
       align: "left",
       headerClassName: "customHeaderClass",
-      width: 344,
+      width: 340,
       renderCell: (params) => {
         console.log("customer", params.row._id);
         return (

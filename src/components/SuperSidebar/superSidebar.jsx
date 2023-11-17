@@ -86,7 +86,11 @@ const SuperSidebar = () => {
                 <NavLink to="/admin" className="link">
                   <li
                     className={` ${
-                      location.pathname === "/admin" ? "active" : ""
+                      location.pathname === "/admin"
+                        ? "active"
+                        : location.pathname === "/"
+                        ? "active"
+                        : ""
                     }`}
                   >
                     <IconButton sx={{ color: "white", padding: 0.2 }}>
