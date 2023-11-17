@@ -231,7 +231,7 @@ const FinishItem = ({
               </FormControl>
             </Box>
 
-            <Box style={{ marginTop: "18px" }}>
+            <Box style={{ marginTop: "8px" }}>
               <CustomToggle
                 checked={formik.values.status}
                 onChange={(event) => handleStatusChange(event)}
@@ -246,7 +246,7 @@ const FinishItem = ({
                 <IconButton
                   type="button"
                   onClick={(event) => handleFinishDelete(event)}
-                  sx={{ mt: 3.1 }}
+                  sx={{ mt: 2 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>

@@ -16,12 +16,12 @@ import {
   setLaborPrice,
   setTotal,
 } from "../../redux/estimateCalculations";
-import Snackbars from "../Modal/snackBar";
 import ChannelType from "./channelOrClamp";
 import { calculateTotal } from "../../utilities/common";
 import QuotesHeader from "./quotesHeader";
 import QuotesFooter from "./quotesFooter";
 import { layoutVariants } from "../../utilities/constants";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const LayoutReview = () => {
   const { data: estimatesData } = useFetchDataEstimate();
@@ -49,25 +49,9 @@ const LayoutReview = () => {
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
+  }
   console.log(quoteState, "quoteState");
   return (
     <>
@@ -175,7 +159,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hardwareFinishes}
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       estimatesData={estimatesData}
                       currentItem={selectedContent?.hardwareFinishes}
                     />
@@ -197,7 +181,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.handles}
                       title={"Handles"}
                       type={"handles"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.handles.count}
                       currentItem={selectedContent?.handles?.item}
                     />
@@ -219,7 +203,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hinges}
                       title={"Hinges"}
                       type={"hinges"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.hinges.count}
                       currentItem={selectedContent?.hinges?.item}
                     />
@@ -253,7 +237,7 @@ const LayoutReview = () => {
                             menuOptions={estimatesData?.channelOrClamps}
                             title={"Mounting"}
                             type={"mounting"}
-                            showSnackbar={showSnackbar}
+                            showSnackbar={showSnackbarHandler}
                             estimatesData={estimatesData}
                           />
                         </Box>
@@ -277,7 +261,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassType}
                       title={" Glass type"}
                       type={"glassType"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       thickness={selectedContent.glassType.thickness}
                       currentItem={selectedContent?.glassType?.item}
                     />
@@ -299,7 +283,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.slidingDoorSystem}
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.slidingDoorSystem.count}
                       currentItem={selectedContent?.slidingDoorSystem?.item}
                     />
@@ -321,7 +305,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.header}
                       title={"Header"}
                       type={"header"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.header.count}
                       currentItem={selectedContent?.header?.item}
                     />
@@ -343,7 +327,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassAddons}
                       title={"Glass Addons"}
                       type={"glassAddons"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                       // currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
@@ -364,7 +348,7 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hardwareAddons}
                       title={"Hardware Addons"}
                       type={"hardwareAddons"}
-                      showSnackbar={showSnackbar}
+                      showSnackbar={showSnackbarHandler}
                     />
                   </Box>
                 </Box>
@@ -910,12 +894,6 @@ const LayoutReview = () => {
               : "existing"
           }
           disabled={selectedContent?.hardwareFinishes === null}
-        />
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
         />
       </Box>
     </>

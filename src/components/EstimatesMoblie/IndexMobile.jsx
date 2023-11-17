@@ -12,35 +12,21 @@ import {
   getQuoteState,
 } from "../../redux/estimateCalculations";
 import Layout from "../Estimates/layouts";
-import { useSelector } from "react-redux";
-import Snackbars from "../Modal/snackBar";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Box } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
 import ClientDetailsModel from "../Estimates/model";
+import { showSnackbar } from "../../redux/snackBarSlice";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const handleClose = () => setClientDetailOpen(false);
   const handleOpen = () => setClientDetailOpen(true);
   const updatecheck = useSelector(getQuoteState);
   const Navigation = useSelector(getPageDesktopNavigation);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const dispatch = useDispatch();
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   return (
@@ -72,19 +58,13 @@ const IndexMobile = () => {
         <ClientDetailsModel
           open={clientDetailOpen}
           handleCancel={() => setClientDetailOpen(false)}
-          showSnackbar={showSnackbar}
+          showSnackbar={showSnackbarHandler}
         />
         {/* <Model
           open={clientDetailOpen}
           handleCancel={handleClose}
           showSnackbar={showSnackbar}
         /> */}
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
-        />
       </Box>
     </>
   );

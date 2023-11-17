@@ -26,9 +26,10 @@ import { AdminColumns } from "../../customerTableSource";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";
-import Snackbars from "../Modal/snackBar";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const SuperAdminTeam = () => {
   const {
@@ -37,24 +38,10 @@ const SuperAdminTeam = () => {
     isFetching,
   } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   const [search, setSearch] = useState("");
@@ -81,6 +68,7 @@ const SuperAdminTeam = () => {
 
   const handeleDeleteStaff = (id) => {
     usedelete(id);
+    showSnackbarHandler("Staff info deleted successfully", "error");
   };
   useEffect(() => {
     teamMemberRefetch();
@@ -372,16 +360,10 @@ const SuperAdminTeam = () => {
           onClose={closeModel}
           selectedRow={selectedRow}
           staffRefetch={teamMemberRefetch}
-          showSnackbar={showSnackbar}
+          showSnackbar={showSnackbarHandler}
           // filteredAdminData={filteredAdminData}
           // notAdded={notAdded}
           // AdminData={AdminData}
-        />
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
         />
       </Box>
     </>

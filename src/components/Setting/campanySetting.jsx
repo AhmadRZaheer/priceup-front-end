@@ -15,40 +15,28 @@ import {
   useFetchDataSetting,
 } from "../../utilities/ApiHooks/setting";
 import { backendURL } from "../../utilities/common";
-import Snackbars from "../Modal/snackBar";
+
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
+import { showSnackbar } from "../../redux/snackBarSlice";
+import { useDispatch } from "react-redux";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const { mutate: editFinish, isSuccess: SuccessForEdit } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
 
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   useEffect(() => {
     if (SuccessForEdit) {
       reFetchDataSetting();
-      showSnackbar("UPDATED Successfully ", "success");
+      showSnackbarHandler("UPDATED Successfully ", "success");
     }
   }, [SuccessForEdit]);
   const formik = useFormik({
@@ -643,13 +631,6 @@ const CampanySetting = () => {
           </Box>
         </Box>
       </Box>
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
-      />
     </form>
   );
 };

@@ -7,86 +7,67 @@ import ExitingQuotes from "./estimates";
 import CustomerTable from "./customerTable";
 import StaffTable from "./staffTable";
 import {
-    getPageDesktopNavigation,
-    getPageNavigation,
-    getQuoteState,
+  getPageDesktopNavigation,
+  getPageNavigation,
+  getQuoteState,
 } from "../../redux/estimateCalculations";
 import Layout from "../Estimates/layouts";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Snackbars from "../Modal/snackBar";
 import { Box } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
 import ClientDetailsModel from "../Estimates/model";
+import { showSnackbar } from "../../redux/snackBarSlice";
 const IndexMobile = () => {
-    const [clientDetailOpen, setClientDetailOpen] = useState(false);
-    const handleClose = () => setClientDetailOpen(false);
-    const handleOpen = () => setClientDetailOpen(true);
-    const updatecheck = useSelector(getQuoteState);
-    const Navigation = useSelector(getPageDesktopNavigation);
-    const [snackbar, setSnackbar] = useState({
-        open: false,
-        message: "",
-        severity: "",
-    });
-    const showSnackbar = (message, severity) => {
-        setSnackbar({
-            open: true,
-            message,
-            severity,
-        });
-    };
+  const [clientDetailOpen, setClientDetailOpen] = useState(false);
+  const handleClose = () => setClientDetailOpen(false);
+  const handleOpen = () => setClientDetailOpen(true);
+  const updatecheck = useSelector(getQuoteState);
+  const Navigation = useSelector(getPageDesktopNavigation);
+  const dispatch = useDispatch();
 
-    const closeSnackbar = () => {
-        setSnackbar((prevState) => ({
-            ...prevState,
-            open: false,
-        }));
-    };
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
+  };
 
-    return (
-        <>
-            <Box
-                sx={{
-                    backgroundColor: { xs: "#100d24", sm: "white" },
-                    color: { xs: "white", sm: "black" },
-                }}
-            >
-                {Navigation === "existing" && <ExitingQuotes />}
-                {Navigation === "customerTable" && <CustomerTable />}
-                {Navigation === "staffTable" && <StaffTable />}
-                {Navigation === "layouts" && <Layout />}
-                {Navigation === "measurements" && <LayoutMeasurements />}
-                {Navigation === "review" && <LayoutReview
-                    setClientDetailOpen={setClientDetailOpen}
-                />}
-                {/* {Navigation === "summary" ? (
+  return (
+    <>
+      <Box
+        sx={{
+          backgroundColor: { xs: "#100d24", sm: "white" },
+          color: { xs: "white", sm: "black" },
+        }}
+      >
+        {Navigation === "existing" && <ExitingQuotes />}
+        {Navigation === "customerTable" && <CustomerTable />}
+        {Navigation === "staffTable" && <StaffTable />}
+        {Navigation === "layouts" && <Layout />}
+        {Navigation === "measurements" && <LayoutMeasurements />}
+        {Navigation === "review" && (
+          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+        )}
+        {/* {Navigation === "summary" ? (
           ["create", "custom"].includes(updatecheck) ? (
             <Summary handleOpen={handleOpen} />
           ) : (
             <Summary /> // Render Summary without handleOpen
           )
         ) : null} */}
-                {Navigation === "custom" && <CustomLayout />}
+        {Navigation === "custom" && <CustomLayout />}
 
-                <ClientDetailsModel
-                    open={clientDetailOpen}
-                    handleCancel={() => setClientDetailOpen(false)}
-                    showSnackbar={showSnackbar}
-                />
-                {/* <Model
+        <ClientDetailsModel
+          open={clientDetailOpen}
+          handleCancel={() => setClientDetailOpen(false)}
+          showSnackbar={showSnackbarHandler}
+        />
+        {/* <Model
           open={clientDetailOpen}
           handleCancel={handleClose}
           showSnackbar={showSnackbar}
         /> */}
-                <Snackbars
-                    open={snackbar.open}
-                    message={snackbar.message}
-                    severity={snackbar.severity}
-                    closeSnackbar={closeSnackbar}
-                />
-            </Box>
-        </>
-    );
+      </Box>
+    </>
+  );
 };
 
 export default IndexMobile;

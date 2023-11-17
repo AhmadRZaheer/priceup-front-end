@@ -9,7 +9,10 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import { useCreateAdminsMembers,useEditUser } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useCreateAdminsMembers,
+  useEditUser,
+} from "../../utilities/ApiHooks/superAdmin";
 
 const style = {
   position: "absolute",
@@ -94,9 +97,9 @@ export default function AddSuperAdminModel({
   React.useEffect(() => {
     if (SuccessForEdit) {
       refetch();
-      showSnackbar("Updated Successfully ", "success");
+      showSnackbar("Updated Successfully", "success");
       close();
-    }else if (ErrorForAddEidt) {
+    } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
       showSnackbar(errorMessage, "error");
     }
@@ -104,7 +107,7 @@ export default function AddSuperAdminModel({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("New User Created  ", "success");
+      showSnackbar("New User Created ", "success");
       close();
     }
   }, [CreatedSuccessfully]);
@@ -223,7 +226,7 @@ export default function AddSuperAdminModel({
                 border: "1px solid #D0D5DD",
                 width: "50%",
                 "&:hover": {
-                  backgroundColor: "#8477da",
+                  border: "1px solid #D0D5DD",
                 },
               }}
             >
@@ -234,10 +237,16 @@ export default function AddSuperAdminModel({
               variant="contained"
               onClick={formik.handleSubmit}
               disabled={LoadingForAdd}
-              sx={{ backgroundColor: "#8477DA", width: "50%" }}
+              sx={{
+                backgroundColor: "#8477DA",
+                width: "50%",
+                "&:hover": {
+                  backgroundColor: "#8477da",
+                },
+              }}
             >
-                 {LoadingForEdit || LoadingForAdd ? (
-                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
+              {LoadingForEdit || LoadingForAdd ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

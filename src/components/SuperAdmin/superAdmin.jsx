@@ -11,10 +11,11 @@ import {
   InputAdornment,
   Grid,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
-import Snackbars from "../Modal/snackBar";
+
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
@@ -25,6 +26,8 @@ import { Link } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/bar.svg";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const SuperAdminTable = () => {
   const {
@@ -52,24 +55,10 @@ const SuperAdminTable = () => {
     setIsEdit(true);
   };
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   const actionColumn = [
@@ -302,9 +291,9 @@ const SuperAdminTable = () => {
         </Box>
       </div>
 
-      <Input
+      <TextField
         placeholder="Search by Name"
-        variant="outlined"
+        variant="standard"
         fullWidth
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -314,12 +303,17 @@ const SuperAdminTable = () => {
           width: "20%", // You can adjust the width as needed
           marginLeft: "30px",
           mt: 3, // Adjust the margin as needed
+          ".MuiInputBase-root:after": {
+            border: "1px solid #8477DA",
+          },
         }}
-        endAdornment={
-          <InputAdornment position="end">
-            <Search />
-          </InputAdornment>
-        }
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <Search sx={{ color: "#8477DA" }} />
+            </InputAdornment>
+          ),
+        }}
       />
       <div className="hardwareTable-superadmin">
         {/* <DataGrid
@@ -695,15 +689,9 @@ const SuperAdminTable = () => {
         open={open}
         close={handleClose}
         refetch={teamMemberRefetch}
-        showSnackbar={showSnackbar}
+        showSnackbar={showSnackbarHandler}
         data={edit}
         isEdit={isEdit}
-      />
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
       />
     </Box>
   );

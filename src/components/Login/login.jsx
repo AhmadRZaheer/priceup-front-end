@@ -6,20 +6,19 @@ import { backendURL } from "../../utilities/common";
 import { loginHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import Snackbars from "../Modal/snackBar";
-import desktopImage from "../../Assets/desktop.svg"
+import desktopImage from "../../Assets/desktop.svg";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
 
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-
   const dispatch = useDispatch();
+
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -36,7 +35,7 @@ const Login = (props) => {
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        showSnackbar(errorMessage, "error");
+        showSnackbarHandler(errorMessage, "error");
       });
   };
 
@@ -56,24 +55,10 @@ const Login = (props) => {
       .catch((error) => {
         const errorMessage =
           error.response?.data?.message || "Login failed. Please try again.";
-        showSnackbar(errorMessage, "error");
+        showSnackbarHandler(errorMessage, "error");
       });
   };
 
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
   return (
     <>
       <div
@@ -86,13 +71,13 @@ const Login = (props) => {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          backgroundImage: `url(${desktopImage})`
+          backgroundImage: `url(${desktopImage})`,
         }}
       >
         <div>
           <img className="logo-img" src={Logo} />
         </div>
-        <div style={{marginTop: 30}} className="auth-form-container">
+        <div style={{ marginTop: 30 }} className="auth-form-container">
           <h3>Login</h3>
           <form className="login-form">
             <label htmlFor="email">Email or Username</label>
@@ -132,13 +117,6 @@ const Login = (props) => {
           </button>
         </div>
       </div>
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
-      />
     </>
   );
 };

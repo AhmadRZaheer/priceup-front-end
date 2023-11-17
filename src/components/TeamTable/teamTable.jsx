@@ -23,6 +23,8 @@ import Snackbars from "../Modal/snackBar";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
 import CustomIconButton from "../ui-components/CustomButton";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -41,25 +43,10 @@ const TeamTable = () => {
     setEdit(data);
     setIsEdit(true);
   };
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
+  const dispatch = useDispatch();
 
   const {
     mutate: deleteFinish,
@@ -70,14 +57,14 @@ const TeamTable = () => {
     deleteFinish(id);
     setMatchingId(id);
     if (deleteSuccess) {
-      showSnackbar("Deleted Successfully ", "warning");
+      showSnackbarHandler("Deleted Successfully ", "warning");
       teamMemberRefetch();
     }
   };
   React.useEffect(() => {
     if (deleteSuccess) {
       teamMemberRefetch();
-      showSnackbar("Deleted Successfully ", "warning");
+      showSnackbarHandler("Deleted Successfully ", "warning");
     }
   }, [deleteSuccess]);
   const { data: locationData } = useFetchAdminLocation();
@@ -109,7 +96,7 @@ const TeamTable = () => {
     {
       field: " ",
       headerClassName: "customHeaderClass-team",
-      width: 258,
+      width: 245,
       renderCell: (params) => {
         const id = params.row._id;
         const isMatchingId = id === matchingId;
@@ -359,13 +346,7 @@ const TeamTable = () => {
           data={edit}
           isEdit={isEdit}
           refetch={teamMemberRefetch}
-          showSnackbar={showSnackbar}
-        />
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
+          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>

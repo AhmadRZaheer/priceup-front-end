@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-import Snackbars from "../Modal/snackBar";
 import {
   useDeleteGlassTypeFull,
   useFetchDataGlassType,
@@ -11,26 +10,14 @@ import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeDataItem from "./glassTypeData";
 import CustomIconButton from "../ui-components/CustomButton";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const GlassTypeComponent = ({ type }) => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   const {
@@ -55,7 +42,7 @@ const GlassTypeComponent = ({ type }) => {
   useEffect(() => {
     if (deleteSuccess) {
       GlassTypeRefetch();
-      showSnackbar("Deleted Successfully ", "error");
+      showSnackbarHandler("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
 
@@ -176,7 +163,7 @@ const GlassTypeComponent = ({ type }) => {
               entry={entry}
               mainIndex={mainIndex}
               GlassTypeRefetch={GlassTypeRefetch}
-              showSnackbar={showSnackbar}
+              showSnackbar={showSnackbarHandler}
               type={type}
             />
           ))}
@@ -189,15 +176,8 @@ const GlassTypeComponent = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={GlassTypeRefetch}
-        showSnackbar={showSnackbar}
+        showSnackbar={showSnackbarHandler}
         categorySlug={type}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
       />
     </>
   );

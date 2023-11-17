@@ -20,16 +20,12 @@ import {
   useDeleteFinishes,
   useFetchDataFinishes,
 } from "../../utilities/ApiHooks/finishes";
-import Snackbars from "../Modal/snackBar";
 import AddEditFinish from "../Modal/addEditFinish";
 import CustomIconButton from "../ui-components/CustomButton";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const FinishesTable = () => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
   const { data: finishesData, refetch: finishesRefetch } =
     useFetchDataFinishes();
   const {
@@ -65,7 +61,7 @@ const FinishesTable = () => {
   useEffect(() => {
     if (deleteSuccess) {
       finishesRefetch();
-      showSnackbar("Finish is Deleted Successfully", "error");
+      showSnackbarHandler("Finish is Deleted Successfully", "error");
     }
   }, [deleteSuccess]);
 
@@ -103,20 +99,9 @@ const FinishesTable = () => {
       },
     },
   ];
-
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
-
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const dispatch = useDispatch();
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   // Filter the finishesData based on the search input
@@ -235,7 +220,9 @@ const FinishesTable = () => {
 
           <Box>
             {filteredData.length === 0 ? (
-              <Typography sx={{color: "#667085", textAlign: "center", p: 1}}>No Finishes Found</Typography>
+              <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
+                No Finishes Found
+              </Typography>
             ) : (
               <div className="hardwareTable">
                 <DataGrid
@@ -335,14 +322,7 @@ const FinishesTable = () => {
           data={edit}
           isEdit={isEdit}
           finishesRefetch={finishesRefetch}
-          showSnackbar={showSnackbar}
-        />
-
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
+          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>

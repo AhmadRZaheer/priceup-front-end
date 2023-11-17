@@ -13,26 +13,14 @@ import "./hardwareTable.scss";
 import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";
 import AddIcon from "../../Assets/plus.svg";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const HardWareComponent = ({ type }) => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
 
   const {
@@ -149,7 +137,7 @@ const HardWareComponent = ({ type }) => {
               entry={entry}
               mainIndex={mainIndex}
               hardwareRefetch={hardwareRefetch}
-              showSnackbar={showSnackbar}
+              showSnackbar={showSnackbarHandler}
               type={type}
             />
           ))}
@@ -168,15 +156,8 @@ const HardWareComponent = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={hardwareRefetch}
-        showSnackbar={showSnackbar}
+        showSnackbar={showSnackbarHandler}
         categorySlug={type}
-      />
-
-      <Snackbars
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.severity}
-        closeSnackbar={closeSnackbar}
       />
     </>
   );

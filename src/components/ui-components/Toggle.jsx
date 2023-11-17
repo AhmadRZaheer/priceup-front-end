@@ -15,6 +15,21 @@ function CustomToggle({ checked, onChange, name, onBlur, onClick }) {
               backgroundColor: "white",
               mt: 0.8,
               ml: 0.6,
+              ":hover": {
+                backgroundColor: "white",
+              },
+              ":focus": {
+                backgroundColor: "white",
+              },
+            },
+            "& .MuiTouchRipple-root": {
+              backgroundColor: "transparent",
+              ":hover": {
+                backgroundColor: "transparent",
+              },
+              ":focus": {
+                backgroundColor: "transparent",
+              },
             },
             "& .MuiSwitch-track": {
               backgroundColor: "#7F56D9 !important",

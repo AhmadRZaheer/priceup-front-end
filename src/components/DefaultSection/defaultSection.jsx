@@ -3,26 +3,14 @@ import "./hardwareTable.scss";
 import { Box, Typography } from "@mui/material";
 import DefaultComponent from "./defaultComponent";
 import Snackbars from "../Modal/snackBar";
+import { showSnackbar } from "../../redux/snackBarSlice";
+import { useDispatch } from "react-redux";
 
 const DefaultSection = () => {
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
-  };
+  const dispatch = useDispatch();
 
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
   return (
     <>
@@ -47,16 +35,10 @@ const DefaultSection = () => {
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
-              <DefaultComponent showSnackbar={showSnackbar} />
+              <DefaultComponent showSnackbar={showSnackbarHandler} />
             </div>
           </div>
         </Box>
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
-        />
       </Box>
     </>
   );

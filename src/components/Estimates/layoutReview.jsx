@@ -3,7 +3,6 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import Snackbars from "../Modal/snackBar";
 import {
   getContent,
   getLayoutArea,
@@ -33,6 +32,7 @@ import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
 import { useNavigate } from "react-router-dom";
 import { layoutVariants } from "../../utilities/constants";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
   const navigate = useNavigate();
@@ -203,21 +203,13 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
-  const [snackbar, setSnackbar] = useState({
-    open: false,
-    message: "",
-    severity: "",
-  });
-  const showSnackbar = (message, severity) => {
-    setSnackbar({
-      open: true,
-      message,
-      severity,
-    });
+
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
   };
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      showSnackbar("Estimate Updated successfully", "success");
+      showSnackbarHandler("Estimate Updated successfully", "success");
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
       Refetched();
@@ -227,12 +219,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
-  const closeSnackbar = () => {
-    setSnackbar((prevState) => ({
-      ...prevState,
-      open: false,
-    }));
-  };
 
   const [summaryState, setSummaryState] = useState(true);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -1236,13 +1222,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
             ""
           )}
         </Box>
-
-        <Snackbars
-          open={snackbar.open}
-          message={snackbar.message}
-          severity={snackbar.severity}
-          closeSnackbar={closeSnackbar}
-        />
       </Box>
     </>
   );

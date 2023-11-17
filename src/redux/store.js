@@ -7,6 +7,8 @@ import estimateCalculations from "./estimateCalculations";
 import selectedIdSlice from "./selectedIdSlice";
 import defaultSlice from "./defaultSlice";
 import staffSlice from "./staff";
+import snackBarSlice from "./snackBarSlice";
+
 const store = configureStore({
   reducer: {
     hardware: hardwareReducer,
@@ -16,6 +18,7 @@ const store = configureStore({
     selectedIdSlice: selectedIdSlice,
     defaultSlice: defaultSlice,
     staff: staffSlice,
+    snackbar: snackBarSlice,
   },
 });
 
