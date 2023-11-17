@@ -13,6 +13,7 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useAddLocation } from "../../utilities/ApiHooks/team";
 import { Close } from "@mui/icons-material";
+import Tooltip from "@mui/material/Tooltip";
 
 const style = {
   position: "absolute",
@@ -87,6 +88,7 @@ export default function LocationModel({
       staffRefetch();
     }
   }, [SuccessForEdit]);
+
   return (
     <div>
       <Modal
@@ -114,32 +116,41 @@ export default function LocationModel({
             >
               {haveAccessArray.map((data) => {
                 return (
-                  <Box
-                    sx={{
-                      padding: "10px",
-                      borderRadius: "7px",
-                    }}
-                    key={data.id}
-                  >
-                    <Chip
-                      label={data.name}
-                      onDelete={data.id ? handleDelete(data) : undefined}
-                      deleteIcon={
-                        <Close
-                          style={{
-                            color: "white",
-                            width: "16px",
-                            height: "16px",
-                          }}
-                        />
-                      }
+                  <Tooltip title={selectedRow.company_id === data.id ? "Cannot Remove" : ""}>
+                    <Box
                       sx={{
-                        color: "white",
-                        bgcolor: "#C6C6C6",
+                        padding: "10px",
                         borderRadius: "7px",
                       }}
-                    />
-                  </Box>
+                      key={data.id}
+                    >
+                      <Chip
+                        label={data.name}
+                        onDelete={data.id ? handleDelete(data) : undefined}
+                        deleteIcon={
+                          <Close
+                            style={{
+                              color: "white",
+                              width: "16px",
+                              height: "16px",
+                              display:
+                                selectedRow.company_id === data.id
+                                  ? "none"
+                                  : "block",
+                            }}
+                          />
+                        }
+                        sx={{
+                          color: "white",
+                          bgcolor:
+                            selectedRow.company_id === data.id
+                              ? "#8477DA"
+                              : "#C6C6C6",
+                          borderRadius: "7px",
+                        }}
+                      />
+                    </Box>
+                  </Tooltip>
                 );
               })}
             </Box>

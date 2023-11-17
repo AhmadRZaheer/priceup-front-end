@@ -318,7 +318,7 @@ export const CustomerColumns = [
   {
     field: "name",
     headerName: "Name",
-    headerClassName: "customHeaderClass-admin-team",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       if (params.row && params.row.name) {
@@ -375,7 +375,7 @@ export const CustomerColumns = [
   {
     field: "email",
     headerName: "Email address",
-    headerClassName: "customHeaderClass-admin-team",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       console.log(params.row);
@@ -389,7 +389,7 @@ export const CustomerColumns = [
   {
     field: "Address",
     headerName: "Address",
-    headerClassName: "customHeaderClass-admin-team",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       console.log(params.row);
@@ -403,7 +403,7 @@ export const CustomerColumns = [
   {
     field: "lastQuotedOn",
     headerName: "Last quoted on",
-    headerClassName: "customHeaderClass-admin-team",
+    headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
       return (

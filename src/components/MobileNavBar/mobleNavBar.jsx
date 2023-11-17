@@ -5,7 +5,10 @@ import "./mobileNavBar.scss";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
 import TremIcon from "../../Assets/users.svg";
 import React, { useEffect, useMemo, useState } from "react";
-import { setNavigation, setNavigationDesktop } from "../../redux/estimateCalculations";
+import {
+  setNavigation,
+  setNavigationDesktop,
+} from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
@@ -81,7 +84,6 @@ function MobileBar() {
   const handleBackdropClick = () => {
     setIsSidebarOpen(false);
   };
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
@@ -126,7 +128,7 @@ function MobileBar() {
     <Box
       sx={{
         backgroundColor: "#100d24",
-        width: drawerWidth,
+        width: "100%",
         height: "100vh",
         padding: 0,
         margin: 0,
@@ -175,10 +177,9 @@ function MobileBar() {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px" }}>
-                    {activeLocation?.name}
+                  <Typography sx={{ fontSize: "16px", paddingLeft: "2px" }}>
+                    {activeLocation?.name} Location
                   </Typography>
-                  Locations
                 </Box>
                 {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
               </Button>
@@ -200,6 +201,7 @@ function MobileBar() {
                 },
                 display: "flex",
                 justifyContent: "start",
+                fontSize: "16px",
               }}
               onClick={() => handleEstimateClick()}
             >
@@ -220,7 +222,7 @@ function MobileBar() {
                 marginY: 1,
                 paddingY: "10px",
                 textTransform: "capitalize",
-
+                fontSize: "16px",
                 backgroundColor:
                   activeButton === "customr" ? "#8477da" : "transprent",
                 ":hover": {
@@ -255,6 +257,7 @@ function MobileBar() {
                 },
                 display: "flex",
                 justifyContent: "start",
+                fontSize: "16px",
               }}
               onClick={handleStaffClick}
             >
@@ -277,6 +280,7 @@ function MobileBar() {
           width: "100%",
           flexDirection: "column",
           backgroundColor: "#100d24",
+          overflowX: "hidden",
         }}
       >
         <Box sx={{ display: { xs: "block", sm: "none" } }}>
@@ -308,7 +312,12 @@ function MobileBar() {
               alt="no"
             />
           </div>
-          <div className="userInSidebar">
+          <div
+            className="userInSidebar"
+            style={{
+              width: "155px",
+            }}
+          >
             {decodedToken?.name}
             <div className="emailUser">{decodedToken?.email}</div>
           </div>{" "}
@@ -317,7 +326,7 @@ function MobileBar() {
               <Box
                 sx={{
                   fontSize: 16,
-                  marginLeft: 2,
+                  marginLeft: "2px",
                   width: 50,
                   height: 30,
                   textAlign: "center",
@@ -332,6 +341,7 @@ function MobileBar() {
       </Box>
     </Box>
   );
+  console.log("suleman 1", location);
 
   return (
     <>
@@ -405,6 +415,7 @@ function MobileBar() {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                overflowX: "hidden",
               },
             }}
           >
@@ -419,6 +430,7 @@ function MobileBar() {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                overflowX: "hidden",
               },
             }}
             open
@@ -536,7 +548,10 @@ function MobileBar() {
                 </Box>
                 <Box
                   style={{ flexGrow: 1 }}
-                  onClick={() => handleSwitchLocation(location)}
+                  onClick={() => {
+                    console.log("suleman", location);
+                    handleSwitchLocation(location);
+                  }}
                   sx={{ paddingLeft: "12px" }}
                 >
                   <a style={{ cursor: "pointer" }}>
