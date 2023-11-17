@@ -5,7 +5,10 @@ import "./mobileNavBar.scss";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
 import TremIcon from "../../Assets/users.svg";
 import React, { useEffect, useMemo, useState } from "react";
-import { setNavigation, setNavigationDesktop } from "../../redux/estimateCalculations";
+import {
+  setNavigation,
+  setNavigationDesktop,
+} from "../../redux/estimateCalculations";
 import {
   Drawer,
   IconButton,
@@ -126,7 +129,7 @@ function MobileBar() {
     <Box
       sx={{
         backgroundColor: "#100d24",
-        width: drawerWidth,
+        width: "100%",
         height: "100vh",
         padding: 0,
         margin: 0,
@@ -277,6 +280,7 @@ function MobileBar() {
           width: "100%",
           flexDirection: "column",
           backgroundColor: "#100d24",
+          overflowX: "hidden",
         }}
       >
         <Box sx={{ display: { xs: "block", sm: "none" } }}>
@@ -308,7 +312,12 @@ function MobileBar() {
               alt="no"
             />
           </div>
-          <div className="userInSidebar">
+          <div
+            className="userInSidebar"
+            style={{
+              width: "155px",
+            }}
+          >
             {decodedToken?.name}
             <div className="emailUser">{decodedToken?.email}</div>
           </div>{" "}
@@ -317,7 +326,7 @@ function MobileBar() {
               <Box
                 sx={{
                   fontSize: 16,
-                  marginLeft: 2,
+                  marginLeft: "2px",
                   width: 50,
                   height: 30,
                   textAlign: "center",
@@ -405,6 +414,7 @@ function MobileBar() {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                overflowX: "hidden",
               },
             }}
           >
@@ -419,6 +429,7 @@ function MobileBar() {
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                overflowX: "hidden",
               },
             }}
             open

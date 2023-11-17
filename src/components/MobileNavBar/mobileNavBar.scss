@@ -32,7 +32,8 @@
     .userInSidebar{
         font-size: 18px !important;
         color: white;
-        
+        word-wrap: break-word;
+
     }
     .emailUser{
         font-size: 16px !important;
@@ -40,7 +41,7 @@
     }
     .logOutIcon{
         font-size: 16px;
-        margin-left: 30px !important;
+        margin-left: 20px !important;
     }
 }
  
