@@ -84,7 +84,6 @@ function MobileBar() {
   const handleBackdropClick = () => {
     setIsSidebarOpen(false);
   };
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const Logout = () => {
     dispatch(logoutHandler());
@@ -178,10 +177,9 @@ function MobileBar() {
                     justifyContent: "center",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px" }}>
-                    {activeLocation?.name}
+                  <Typography sx={{ fontSize: "16px", paddingLeft: "2px" }}>
+                    {activeLocation?.name} Location
                   </Typography>
-                  Locations
                 </Box>
                 {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
               </Button>
@@ -203,6 +201,7 @@ function MobileBar() {
                 },
                 display: "flex",
                 justifyContent: "start",
+                fontSize: "16px",
               }}
               onClick={() => handleEstimateClick()}
             >
@@ -223,7 +222,7 @@ function MobileBar() {
                 marginY: 1,
                 paddingY: "10px",
                 textTransform: "capitalize",
-
+                fontSize: "16px",
                 backgroundColor:
                   activeButton === "customr" ? "#8477da" : "transprent",
                 ":hover": {
@@ -258,6 +257,7 @@ function MobileBar() {
                 },
                 display: "flex",
                 justifyContent: "start",
+                fontSize: "16px",
               }}
               onClick={handleStaffClick}
             >
@@ -341,6 +341,7 @@ function MobileBar() {
       </Box>
     </Box>
   );
+  console.log("suleman 1", location);
 
   return (
     <>
@@ -547,7 +548,10 @@ function MobileBar() {
                 </Box>
                 <Box
                   style={{ flexGrow: 1 }}
-                  onClick={() => handleSwitchLocation(location)}
+                  onClick={() => {
+                    console.log("suleman", location);
+                    handleSwitchLocation(location);
+                  }}
                   sx={{ paddingLeft: "12px" }}
                 >
                   <a style={{ cursor: "pointer" }}>

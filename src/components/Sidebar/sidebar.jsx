@@ -60,7 +60,7 @@ const Sidebar = () => {
     setAnchorEl(null);
   };
 
-  const filteredAdminData = AdminData.filter((admin) =>
+  const filteredAdminData = AdminData?.filter((admin) =>
     admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (adminId) => {
