@@ -30,6 +30,8 @@ import { backendURL } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import DeleteModal from "../Modal/deleteModal";
+import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 
 const SuperAdminTable = () => {
   const {
@@ -41,6 +43,8 @@ const SuperAdminTable = () => {
   const { data: staffData } = useFetchAllStaff();
 
   const [open, setOpen] = useState(false);
+  const [DeleteOpen, setDeleteOpen] = useState(false);
+  const [EditOpen, setEditOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
   const [edit, setEdit] = React.useState(null);
@@ -51,6 +55,10 @@ const SuperAdminTable = () => {
   const [search, setSearch] = useState("");
 
   const handleClose = () => setOpen(false);
+  const handleCloseDelete = () => setDeleteOpen(false);
+  const handleOpenDelete = () => setDeleteOpen(true);
+  const handleCloseEdit = () => setEditOpen(false);
+  const handleOpenEdi = () => setEditOpen(true);
 
   const handleOpenEdit = (data) => {
     setOpen(true);
@@ -176,6 +184,7 @@ const SuperAdminTable = () => {
         return (
           <>
             <IconButton
+              onClick={handleOpenDelete}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
               <img src={DeleteIcon} alt="delete icon" />
@@ -559,7 +568,9 @@ const SuperAdminTable = () => {
                         }}
                       >
                         <img src={EstimsteIcon} alt="image of customer" />
-                        <Typography sx={{pt: 0.2}}>{item.estimates}</Typography>
+                        <Typography sx={{ pt: 0.2 }}>
+                          {item.estimates}
+                        </Typography>
                       </Box>
                     </Box>
 
@@ -648,6 +659,7 @@ const SuperAdminTable = () => {
                           width: 28,
                           height: 28,
                         }}
+                        onClick={handleOpenDelete}
                       >
                         <img src={DeleteIcon} alt="delete icon" />
                       </IconButton>
@@ -687,15 +699,17 @@ const SuperAdminTable = () => {
           })
         )}
       </div>
-
-      <AddSuperAdminModel
+      <DeleteModal open={DeleteOpen} close={handleCloseDelete} />
+      <EditLocationModal open={open}
+        close={handleClose}/>
+      {/* <AddSuperAdminModel
         open={open}
         close={handleClose}
         refetch={teamMemberRefetch}
         showSnackbar={showSnackbarHandler}
         data={edit}
         isEdit={isEdit}
-      />
+      /> */}
     </Box>
   );
 };
