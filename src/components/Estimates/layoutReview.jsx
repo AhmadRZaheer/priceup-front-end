@@ -24,6 +24,7 @@ import {
   selectedItem,
   setCost,
   setProfit,
+  getListData,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
@@ -43,7 +44,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
-  const estimatesContent = useSelector(getContent);
+const listData = useSelector(getListData);
   const estimatesTotal = useSelector(getTotal);
   const measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
@@ -64,13 +65,13 @@ const LayoutReview = ({ setClientDetailOpen }) => {
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
-    const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
+    const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
         count: row.count,
       };
     });
-    const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
+    const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
       (row) => {
         return {
           type: row.item._id,
@@ -78,7 +79,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         };
       }
     );
-    const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
+    const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
       (row) => {
         return {
           type: row.item._id,
@@ -87,45 +88,45 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       }
     );
     const glassToGlassArray =
-      estimatesContent?.mountingClamps?.glassToGlass?.map((row) => {
+      selectedContent?.mountingClamps?.glassToGlass?.map((row) => {
         return {
           type: row.item._id,
           count: row.count,
         };
       });
     const cornerWallClampArray =
-      estimatesContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+      selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
         return {
           type: row.item._id,
           count: row.count,
         };
       });
     const cornerSleeveOverArray =
-      estimatesContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+      selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
         return {
           type: row.item._id,
           count: row.count,
         };
       });
     const cornerGlassToGlassArray =
-      estimatesContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+      selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
         return {
           type: row.item._id,
           count: row.count,
         };
       });
-    const glassAddonsArray = estimatesContent?.glassAddons?.map(
+    const glassAddonsArray = selectedContent?.glassAddons?.map(
       (item) => item?._id
     );
     const estimate = {
-      hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
+      hardwareFinishes: selectedContent?.hardwareFinishes?._id,
       handles: {
-        type: estimatesContent?.handles?.item?._id,
-        count: estimatesContent?.handles?.count,
+        type: selectedContent?.handles?.item?._id,
+        count: selectedContent?.handles?.count,
       },
       hinges: {
-        type: estimatesContent?.hinges?.item?._id,
-        count: estimatesContent?.hinges?.count,
+        type: selectedContent?.hinges?.item?._id,
+        count: selectedContent?.hinges?.count,
       },
       mountingClamps: {
         wallClamp: [...wallClampArray],
@@ -137,33 +138,33 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         sleeveOver: [...cornerSleeveOverArray],
         glassToGlass: [...cornerGlassToGlassArray],
       },
-      mountingChannel: estimatesContent?.mountingChannel?.item?._id || null,
+      mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
       glassType: {
-        type: estimatesContent?.glassType?.item?._id,
-        thickness: estimatesContent?.glassType?.thickness,
+        type: selectedContent?.glassType?.item?._id,
+        thickness: selectedContent?.glassType?.thickness,
       },
       glassAddons: [...glassAddonsArray],
       slidingDoorSystem: {
-        type: estimatesContent?.slidingDoorSystem?.item?._id,
-        count: estimatesContent?.slidingDoorSystem?.count,
+        type: selectedContent?.slidingDoorSystem?.item?._id,
+        count: selectedContent?.slidingDoorSystem?.count,
       },
       header: {
-        type: estimatesContent?.header?.item?._id,
-        count: estimatesContent?.slidingDoorSystem?.count,
+        type: selectedContent?.header?.item?._id,
+        count: selectedContent?.slidingDoorSystem?.count,
       },
-      oneInchHoles: estimatesContent?.oneInchHoles,
-      hingeCut: estimatesContent?.hingeCut,
-      clampCut: estimatesContent?.clampCut,
-      notch: estimatesContent?.notch,
-      outages: estimatesContent?.outages,
-      mitre: estimatesContent?.mitre,
-      polish: estimatesContent?.polish,
-      people: estimatesContent?.people,
-      hours: estimatesContent?.hours,
+      oneInchHoles: selectedContent?.oneInchHoles,
+      hingeCut: selectedContent?.hingeCut,
+      clampCut: selectedContent?.clampCut,
+      notch: selectedContent?.notch,
+      outages: selectedContent?.outages,
+      mitre: selectedContent?.mitre,
+      polish: selectedContent?.polish,
+      people: selectedContent?.people,
+      hours: selectedContent?.hours,
       cost: Number(estimatesTotal),
       hardwareAddons: [...hardwareAddonsArray],
-      sleeveOverCount: estimatesContent?.sleeveOverCount,
-      towelBarsCount: estimatesContent?.sleeveOverCount,
+      sleeveOverCount: selectedContent?.sleeveOverCount,
+      towelBarsCount: selectedContent?.sleeveOverCount,
       measurements: measurements,
       perimeter: perimeter,
       sqftArea: sqftArea,
@@ -184,18 +185,18 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         quoteState === "create"
           ? "measurements"
           : quoteState === "custom"
-            ? "custom"
-            : "existing"
+          ? "custom"
+          : "existing"
       )
     );
   };
-  const { data: estimatesData, refetch: Refetched } = useFetchDataEstimate();
+  // const { data: listData, refetch: Refetched } = useFetchDataEstimate();
 
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
       sqftArea,
-      estimatesData,
+      listData,
       quoteState
     );
     dispatch(setHardwarePrice(prices.hardwarePrice));
@@ -206,6 +207,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     dispatch(setTotal(prices.total));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
+    console.log(prices);
   }, [selectedContent]);
 
   const showSnackbarHandler = (message, severity) => {
@@ -216,7 +218,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       showSnackbarHandler("Estimate Updated successfully", "success");
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
-      Refetched();
+      // Refetched();
       navigate("/estimates");
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
@@ -278,8 +280,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 summaryState
                   ? setHandleEstimatesPages
                   : () => {
-                    setSummaryState(true);
-                  }
+                      setSummaryState(true);
+                    }
               }
             >
               {" "}
@@ -378,11 +380,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.hardwareFinishes}
+                        menuOptions={listData?.hardwareFinishes}
                         title={"Hardware Finishes"}
                         type={"hardwareFinishes"}
                         showSnackbar={showSnackbar}
-                        estimatesData={estimatesData}
+                        listData={listData}
                         currentItem={selectedContent?.hardwareFinishes}
                       />
                     </Box>
@@ -400,7 +402,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.handles}
+                        menuOptions={listData?.handles}
                         title={"Handles"}
                         type={"handles"}
                         showSnackbar={showSnackbar}
@@ -422,7 +424,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.hinges}
+                        menuOptions={listData?.hinges}
                         title={"Hinges"}
                         type={"hinges"}
                         showSnackbar={showSnackbar}
@@ -436,34 +438,34 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(quoteActiveState) && (
-                      <Box
-                        sx={{
-                          alignItems: "center",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                        }}
-                      >
-                        <Box sx={{ width: "100%", display: "flex" }}>
-                          <Box
-                            sx={{
-                              width: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <ChannelTypeDesktop
-                              menuOptions={estimatesData?.channelOrClamps}
-                              title={"Mounting"}
-                              type={"mounting"}
-                              showSnackbar={showSnackbar}
-                              estimatesData={estimatesData}
-                            />
-                          </Box>
+                    <Box
+                      sx={{
+                        alignItems: "center",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                      }}
+                    >
+                      <Box sx={{ width: "100%", display: "flex" }}>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <ChannelTypeDesktop
+                            menuOptions={listData?.channelOrClamps}
+                            title={"Mounting"}
+                            type={"mounting"}
+                            showSnackbar={showSnackbar}
+                            listData={listData}
+                          />
                         </Box>
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -477,7 +479,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.glassType}
+                        menuOptions={listData?.glassType}
                         title={" Glass type"}
                         type={"glassType"}
                         showSnackbar={showSnackbar}
@@ -499,7 +501,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.slidingDoorSystem}
+                        menuOptions={listData?.slidingDoorSystem}
                         title={"Sliding Door System"}
                         type={"slidingDoorSystem"}
                         showSnackbar={showSnackbar}
@@ -521,7 +523,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.header}
+                        menuOptions={listData?.header}
                         title={"Header"}
                         type={"header"}
                         showSnackbar={showSnackbar}
@@ -543,11 +545,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.glassAddons}
+                        menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
                         showSnackbar={showSnackbar}
-                      // currentItem={selectedContent?.glassAddons}
+                        // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
                   </Box>
@@ -564,7 +566,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   >
                     <Box sx={{ width: "100%" }}>
                       <MenuList
-                        menuOptions={estimatesData?.hardwareAddons}
+                        menuOptions={listData?.hardwareAddons}
                         title={"Hardware Addons"}
                         type={"hardwareAddons"}
                         showSnackbar={showSnackbar}
@@ -692,65 +694,65 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(quoteActiveState) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                        paddingLeft: 3,
+                        paddingBottom: 1,
+                        color: { sm: "#000000  ", xs: "white" },
+                      }}
+                    >
+                      <Typography>Clamp Cut Out</Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                          paddingLeft: 3,
-                          paddingBottom: 1,
-                          color: { sm: "#000000  ", xs: "white" },
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
                         }}
                       >
-                        <Typography>Clamp Cut Out</Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            width: "120px",
-                            padddingY: 4,
+                        <TextField
+                          type="number"
+                          InputProps={{
+                            style: {
+                              color: "black",
+                              borderRadius: 10,
+                              border: "1px solid #cccccc",
+                              backgroundColor: "white",
+                            },
+                            inputProps: { min: 0 },
                           }}
-                        >
-                          <TextField
-                            type="number"
-                            InputProps={{
-                              style: {
-                                color: "black",
-                                borderRadius: 10,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                              },
-                              inputProps: { min: 0 },
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={selectedContent.clampCut}
-                            onChange={(event) =>
-                              dispatch(
-                                setInputContent({
-                                  type: "clampCut",
-                                  value: event.target.value,
-                                })
-                              )
-                            }
-                          />
-                        </Box>
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={selectedContent.clampCut}
+                          onChange={(event) =>
+                            dispatch(
+                              setInputContent({
+                                type: "clampCut",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        />
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -1182,8 +1184,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     summaryState
                       ? setHandleEstimatesPages
                       : () => {
-                        setSummaryState(true);
-                      }
+                          setSummaryState(true);
+                        }
                   }
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
