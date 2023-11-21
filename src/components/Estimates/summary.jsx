@@ -9,6 +9,8 @@ import {
   getMeasurementSide,
   getMiscTotal,
   getTotal,
+  getCost,
+  getProfit,
   selectedItem,
   getDoorWidth,
   getQuoteState,
@@ -31,6 +33,9 @@ const Summary = () => {
   const laborPrice = useSelector(getLaborTotal);
   const doorWidth = useSelector(getDoorWidth);
   const totalPrice = useSelector(getTotal);
+  const actualCost = useSelector(getCost);
+  const grossProfit = useSelector(getProfit);
+
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
@@ -40,8 +45,8 @@ const Summary = () => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.layoutData?.image
-      ? `${backendURL}/${selectedData?.layoutData?.image}`
-      : CustomImage;
+        ? `${backendURL}/${selectedData?.layoutData?.image}`
+        : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   return (
     <>
@@ -106,6 +111,7 @@ const Summary = () => {
                 margin: "auto",
               }}
             >
+             {/** Dimensions Accordian */}
               <Accordion
                 sx={{
                   paddingX: "6px",
@@ -129,7 +135,7 @@ const Summary = () => {
                   }}
                 >
                   <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                    Dimention
+                  Dimensions
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails
@@ -177,6 +183,7 @@ const Summary = () => {
               </Box>{" "}
               {/* Summary  */}
               <Box sx={{ borderTop: "2px solid #D0D5DD" }}>
+                {/** Selected Content Accordian */}
                 <Accordion
                   sx={{
                     paddingX: "6px",
@@ -540,8 +547,86 @@ const Summary = () => {
                     </Box>
                   </AccordionDetails>
                 </Accordion>
+                {/** Gross Profit Accordian */}
+                <Accordion
+                  sx={{
+                    paddingX: "6px",
+                    border: "none",
+                    boxShadow: "none !important",
+                    ".MuiPaper-elevation": {
+                      border: " none !important",
+                      boxShadow: "none !important",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                      borderBottom: "none",
+                      height: "30px",
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      Gross Profit Margin
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      padding: 0,
+                      borderTop: "2px solid #D0D5DD",
+                      paddingY: 1,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Total:
+                      </Typography>
+                      <Typography>
+                      ${totalPrice?.toFixed(2) || 0}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Actual Cost:
+                      </Typography>
+                      <Typography>
+                      ${actualCost?.toFixed(2) || 0}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Profit:
+                      </Typography>
+                      <Typography>
+                      ${grossProfit?.toFixed(2) || 0}
+                      </Typography>
+                    </Box>
 
-                {/* 2nd Accordian */}
+                  </AccordionDetails>
+                </Accordion>
+                {/* Price category Accordian */}
                 <Accordion
                   sx={{
                     paddingX: "6px",
