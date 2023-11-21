@@ -31,6 +31,7 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import DeleteModal from "../Modal/deleteModal";
 
 const SuperAdminTeam = () => {
   const {
@@ -48,7 +49,6 @@ const SuperAdminTeam = () => {
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  // console.log(selectedRow, "selectedRow");
   const openModel = (row) => {
     setSelectedRow(row);
     setOpen(true);
@@ -56,20 +56,14 @@ const SuperAdminTeam = () => {
   const closeModel = () => {
     setOpen(false);
   };
-
-  // const filteredAdminData = AdminLocations.filter(
-  //   (data) => data._id === "650bfe2699342cae578a772a"
-  // );
-  // const notAdded = AdminLocations.filter(
-  //   (data) => data._id !== "650bfe2699342cae578a772a"
-  // );
-  // const filteredAdminData = AdminData.filter((data) =>
-  //   selectedRow?.haveAccessTo.includes(data._id)
-  // );
-
-  const handeleDeleteStaff = (id) => {
-    usedelete(id);
+  const [Delete_id, setDelete_id] = useState();
+  const [Delete_M, setDelete_M] = useState(false);
+  const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
+  const handleClose = () => setDelete_M(false);
+  const handeleDeleteStaff = () => {
+    usedelete(Delete_id);
     showSnackbarHandler("Staff info deleted successfully", "error");
+    handleClose();
   };
   useEffect(() => {
     teamMemberRefetch();
@@ -149,7 +143,7 @@ const SuperAdminTeam = () => {
           <>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-              onClick={() => handeleDeleteStaff(id)}
+              onClick={() => handleOpen(id)}
             >
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
@@ -359,6 +353,11 @@ const SuperAdminTeam = () => {
             </div>
           )}
         </Box>
+        <DeleteModal
+          close={handleClose}
+          open={Delete_M}
+          handleDelete={handeleDeleteStaff}
+        />
         <LocationModel
           open={open}
           onClose={closeModel}
