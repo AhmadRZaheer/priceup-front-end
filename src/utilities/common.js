@@ -244,6 +244,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +
     laborPrice;
+  const cost = hardwareTotals+fabricationPrice+glassPrice+glassAddonsPrice;
   return {
     hardwarePrice: hardwareTotals,
     fabricationPrice: fabricationPrice,
@@ -252,6 +253,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     miscPricing: 0,
     laborPrice: laborPrice,
     total: total,
+    cost:cost,
+    profit:(total - cost)
   };
 };
 

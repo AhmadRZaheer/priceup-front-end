@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { layoutVariants } from "../utilities/constants";
 export const getContent = (state) => state.estimateCalculations.content;
+export const getCost = (state) => state.estimateCalculations.actualCost;
+export const getProfit = (state) => state.estimateCalculations.grossProfit;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
 export const getDoorWidth = (state) => state.estimateCalculations.doorWidth;
 export const getHardwareTotal = (state) =>
@@ -89,6 +91,8 @@ const initialState = {
     hardwareAddons: [],
     mountingState: "channel",
   },
+  actualCost: 0,
+  grossProfit: 0,
   totalPrice: 0,
   hardwarePrice: 0,
   glassPrice: 0,
@@ -282,6 +286,14 @@ const estimateCalcSlice = createSlice({
     setTotal: (state, action) => {
       const { payload } = action;
       state.totalPrice = payload;
+    },
+    setCost: (state, action) => {
+      const { payload } = action;
+      state.actualCost = payload;
+    },
+    setProfit: (state, action) => {
+      const { payload } = action;
+      state.grossProfit = payload;
     },
     setHardwarePrice: (state, action) => {
       const { payload } = action;
@@ -1026,6 +1038,8 @@ export const {
   setLayoutPerimeter,
   setContent,
   setTotal,
+  setCost,
+  setProfit,
   setCounters,
   setInputContent,
   setThickness,
