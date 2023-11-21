@@ -233,7 +233,7 @@ function EditLocationModal({ open, close, handleSave }) {
                     sx={{
                       color: "#4D5463",
                       fontSize: "15px",
-                      borderBottom: "1px solid #667085",
+                      borderBottom: "1px solid #ccc",
                       width: "100%",
                       pr: 4,
                       mr: -3,
@@ -254,7 +254,7 @@ function EditLocationModal({ open, close, handleSave }) {
                   </Typography>
                 )}
               </AccordionSummary>
-              <AccordionDetails sx={{ padding: 0 }}>
+              <AccordionDetails sx={{p: 0}}>
                 <Box>
                   <Box
                     sx={{
@@ -262,6 +262,8 @@ function EditLocationModal({ open, close, handleSave }) {
                       flexWrap: "wrap",
                       alignItems: "baseline",
                       gap: "4px",
+                      pl: 3,
+                      pb: 2
                     }}
                     component="ul"
                   >
@@ -276,7 +278,6 @@ function EditLocationModal({ open, close, handleSave }) {
                     >
                       <Box
                         sx={{
-                          padding: "10px",
                           borderRadius: "7px",
                         }}
                         // key={data.id}
@@ -318,10 +319,11 @@ function EditLocationModal({ open, close, handleSave }) {
                 <Accordion
                   sx={{
                     paddingX: "6px",
+                    boxShadow: "none !important",
                   }}
                 >
                   <AccordionSummary
-                    expandIcon={<ExpandMore sx={{ color: "black" }} />}
+                    expandIcon={<ExpandMore sx={{ color: "#4D5463" }} />}
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                     onClick={() => toggleSection(2)}
@@ -329,13 +331,16 @@ function EditLocationModal({ open, close, handleSave }) {
                     {sections[2] ? (
                       <Typography
                         sx={{
-                          color: "black",
-                          borderBottom: "1px solid #667085",
+                          color: "#4D5463",
+                          fontSize: "14px",
+                          borderBottom: "1px solid #ccc",
                           width: "100%",
-                          pr: 4,
-                          mr: -3,
+                          pr: 5.8,
+                          mr: -3.5,
                           pb: 1,
                           mb: -1,
+                          ml: -0.6,
+                          pl: 0.2,
                         }}
                       >
                         Add User
@@ -344,47 +349,46 @@ function EditLocationModal({ open, close, handleSave }) {
                       <Typography
                         sx={{
                           color: "black",
+                          fontSize: "14px",
                         }}
                       >
                         Add User
                       </Typography>
                     )}
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          alignItems: "baseline",
-                          gap: "1px",
-                        }}
-                        component="ul"
-                      >
-                        {/* {giveAccessArray.map((data) => {
+                  <AccordionDetails sx={{ pt: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexWrap: "wrap",
+                        alignItems: "baselines",
+                        gap: "4px",
+                        p: 0,
+                      }}
+                      component="ul"
+                    >
+                      {/* {giveAccessArray.map((data) => {
                             return ( */}
-                        <Box
-                          sx={{ padding: "10px", borderRadius: "7px" }}
-                          // key={data.id}
-                        >
-                          <Chip
-                            // onClick={() => handleAddLocation(data)}
-                            label="User name"
-                            // onDelete={
-                            //   data.id ? undefined : handleDelete(data)
-                            // }
-                            sx={{
-                              color: "white",
-                              bgcolor: "#C6C6C6",
-                              borderRadius: "7px",
-                            }}
-                          />
-                        </Box>
-                        {/* );
-                          })} */}
+                      <Box
+                        sx={{ borderRadius: "7px", p: 0 }}
+                        // key={data.id}
+                      >
+                        <Chip
+                          // onClick={() => handleAddLocation(data)}
+                          label="User name"
+                          // onDelete={
+                          //   data.id ? undefined : handleDelete(data)
+                          // }
+                          sx={{
+                            color: "white",
+                            bgcolor: "#C6C6C6",
+                            borderRadius: "7px",
+                            cursor: "pointer",
+                          }}
+                        />
                       </Box>
-
-                      {/* <ChipsArray /> */}
+                      {/* );
+                          })} */}
                     </Box>
                   </AccordionDetails>
                 </Accordion>

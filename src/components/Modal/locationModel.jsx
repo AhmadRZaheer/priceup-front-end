@@ -44,6 +44,12 @@ export default function LocationModel({
   } = useAddLocation();
   const [haveAccessArray, setHaveAccessArray] = useState([]);
   const [giveAccessArray, setGiveAccessArray] = useState([]);
+  const [isOpen, setisOpen] = useState(false);
+  const handleOpen = () => {
+    if (isOpen) {
+      setisOpen(false);
+    } else setisOpen(true);
+  };
   const handleDelete = (chipToDelete) => () => {
     const itemToRemove = haveAccessArray.find(
       (item) => item.id === chipToDelete.id
@@ -110,16 +116,20 @@ export default function LocationModel({
                 display: "flex",
                 flexWrap: "wrap",
                 alignItems: "baseline",
-                gap: "4px",
+                gap: 1,
+                p: 0,
               }}
               component="ul"
             >
               {haveAccessArray.map((data) => {
                 return (
-                  <Tooltip title={selectedRow.company_id === data.id ? "Cannot Remove" : ""}>
+                  <Tooltip
+                    title={
+                      selectedRow.company_id === data.id ? "Cannot Remove" : ""
+                    }
+                  >
                     <Box
                       sx={{
-                        padding: "10px",
                         borderRadius: "7px",
                       }}
                       key={data.id}
@@ -164,8 +174,26 @@ export default function LocationModel({
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
+              onClick={handleOpen}
             >
-              <Typography>Add location</Typography>
+              {isOpen ? (
+                <Typography
+                  sx={{
+                    color: "#4D5463",
+
+                    borderBottom: "1px solid #ccc",
+                    width: "100%",
+                    pr: 4,
+                    mr: -3,
+                    pb: 1,
+                    mb: -1,
+                  }}
+                >
+                  Add location
+                </Typography>
+              ) : (
+                <Typography color={"#4D5463"}>Add location</Typography>
+              )}
             </AccordionSummary>
             <AccordionDetails>
               <Box>
@@ -176,16 +204,14 @@ export default function LocationModel({
                       display: "flex",
                       flexWrap: "wrap",
                       alignItems: "baseline",
-                      gap: "4px",
+                      p: 0,
+                      gap: 1,
                     }}
                     component="ul"
                   >
                     {giveAccessArray.map((data) => {
                       return (
-                        <Box
-                          sx={{ padding: "10px", borderRadius: "7px" }}
-                          key={data.id}
-                        >
+                        <Box sx={{ borderRadius: "7px" }} key={data.id}>
                           <Chip
                             onClick={() => handleAddLocation(data)}
                             label={data.name}
