@@ -13,7 +13,7 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 
 const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };

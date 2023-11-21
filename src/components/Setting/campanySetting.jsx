@@ -94,7 +94,6 @@ const CampanySetting = () => {
     setSelectedImage(URL.createObjectURL(file));
   };
   const handleEditSetting = (props) => {
-    let id = settingData._id;
     editFinish({ data: props, id: settingData._id });
     reFetchDataSetting();
   };

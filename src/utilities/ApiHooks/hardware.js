@@ -177,23 +177,62 @@ export const useCreateHardware = () => {
 
 //   return useMutation(handleEdit);
 // };
+// export const useEditHardware = () => {
+//   const handleEdit = async (props) => {
+//     const token = localStorage.getItem("token");
+//     console.log(props, "props");
+//     console.log(props.hardwareData.image, "props.id");
+//     try {
+//       const response = await axios.put(
+//         `${backendURL}/hardwares/${props.id}`,
+//         {
+//           ...(props.finishesData ? { finishes: props.finishesData } : {}),
+//           ...(props.hardwareData
+//             ? { name: props.hardwareData.name, image: props.hardwareData.image }
+//             : {}),
+//         },
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+//       if (response.data.code === 200) {
+//         return response.data.data;
+//       } else {
+//         throw new Error("An error occurred while updating the data.");
+//       }
+//     } catch (error) {
+//       throw new Error("An error occurred while updating the data.");
+//     }
+//   };
+//   return useMutation(handleEdit);
+// };
+// ... (import statements)
+
 export const useEditHardware = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
+    console.log(props, "props");
+    console.log(props.hardwareData.image, "props.id");
 
     try {
+      const formData = new FormData();
+      formData.append("name", props.hardwareData.name);
+
+      if (props.hardwareData.image) {
+        formData.append("image", props.hardwareData.image);
+      }
+
       const response = await axios.put(
         `${backendURL}/hardwares/${props.id}`,
+        formData,
         {
-          ...(props.finishesData ? { finishes: props.finishesData } : {}),
-          ...(props.hardwareData
-            ? { name: props.hardwareData.name, image: props.hardwareData.image }
-            : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
+
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -203,6 +242,7 @@ export const useEditHardware = () => {
       throw new Error("An error occurred while updating the data.");
     }
   };
+
   return useMutation(handleEdit);
 };
 

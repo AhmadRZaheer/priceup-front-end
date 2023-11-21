@@ -26,8 +26,11 @@ import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
 const FinishesTable = () => {
-  const { data: finishesData, refetch: finishesRefetch } =
-    useFetchDataFinishes();
+  const {
+    data: finishesData,
+    refetch: finishesRefetch,
+    isFetching,
+  } = useFetchDataFinishes();
   const {
     mutate: deleteFinish,
     isSuccess: deleteSuccess,
@@ -219,7 +222,19 @@ const FinishesTable = () => {
           </div>
 
           <Box>
-            {filteredData.length === 0 ? (
+            {isFetching ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  padding: "20px",
+                  alignItems: "center",
+                  height: "200px",
+                }}
+              >
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+              </Box>
+            ) : filteredData.length === 0 ? (
               <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
                 No Finishes Found
               </Typography>

@@ -13,6 +13,7 @@ import {
   useCreateGlassAddon,
   useEditGlassAddon,
 } from "../../utilities/ApiHooks/glassAddon";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -53,17 +54,18 @@ export default function AddEditGlassAddon({
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useEditGlassAddon();
-
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfully) {
+      console.log("CreatedSuccessfully useEffect triggered");
       refetch();
       showSnackbar("Created Successfully ", "success");
       close();
     }
   }, [CreatedSuccessfully]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (SuccessForEdit) {
+      console.log("SuccessForEdit useEffect triggered");
       refetch();
       showSnackbar("Edit Successfully ", "success");
       close();
@@ -85,14 +87,14 @@ export default function AddEditGlassAddon({
   const formik = useFormik({
     initialValues: isEdit
       ? {
-        name: data?.name,
-        image: "",
-        id: data?._id,
-      }
+          name: data?.name,
+          image: "",
+          id: data?._id,
+        }
       : {
-        name: "",
-        image: "",
-      },
+          name: "",
+          image: "",
+        },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -198,7 +200,11 @@ export default function AddEditGlassAddon({
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "#101828", border: "1px solid #D0D5DD", width: "50%" }}
+              sx={{
+                color: "#101828",
+                border: "1px solid #D0D5DD",
+                width: "50%",
+              }}
             >
               Cancel
             </Button>
@@ -216,7 +222,7 @@ export default function AddEditGlassAddon({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

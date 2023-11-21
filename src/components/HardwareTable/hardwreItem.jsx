@@ -78,7 +78,7 @@ const HardwareItem = ({
         {" "}
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
           <img
-            className="cellImg"
+            style={{ width: 50, height: 50 }}
             src={`${backendURL}/${entry.image}`}
             alt=""
           />

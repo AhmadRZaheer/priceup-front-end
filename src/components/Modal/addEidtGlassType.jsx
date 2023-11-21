@@ -13,6 +13,7 @@ import {
   useCreateGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -54,7 +55,7 @@ export default function AddEditGlassType({
     isSuccess: SuccessForEdit,
   } = useEditGlassType();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
       showSnackbar("Created Successfully ", "success");
@@ -62,7 +63,7 @@ export default function AddEditGlassType({
     }
   }, [CreatedSuccessfully]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (SuccessForEdit) {
       refetch();
       showSnackbar("Edit Successfully ", "success");
@@ -128,7 +129,7 @@ export default function AddEditGlassType({
 
           <Box>
             <input
-              accept="image/*"
+              accept="image/svg+xml,image/png,image/jpeg,image/gif"
               id="image-input"
               type="file"
               {...getInputProps()}
@@ -198,7 +199,11 @@ export default function AddEditGlassType({
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "#101828", border: "1px solid #D0D5DD", width: "50%" }}
+              sx={{
+                color: "#101828",
+                border: "1px solid #D0D5DD",
+                width: "50%",
+              }}
             >
               Cancel
             </Button>
@@ -216,7 +221,7 @@ export default function AddEditGlassType({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24}  sx={{ color: "#8477DA" }}/>
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

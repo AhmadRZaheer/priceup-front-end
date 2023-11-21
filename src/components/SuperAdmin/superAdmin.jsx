@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./superAdmin.scss";
-import { AdminColumns2 } from "../../customerTableSource";
-import { DataGrid } from "@mui/x-data-grid";
+import TeamIcon from "../../Assets/user-gary.svg";
 import {
   Box,
   Button,
   IconButton,
   Typography,
-  Input,
   InputAdornment,
   Grid,
   CircularProgress,
@@ -15,8 +13,12 @@ import {
 } from "@mui/material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
-
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
+import DefaultIcon from "../../Assets/layout-gray.svg";
+import {
+  useFetchAllStaff,
+  useFetchDataAdmin,
+} from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
 import image1 from "../../Assets/Active-location.png";
@@ -25,7 +27,7 @@ import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
-import EstimsteIcon from "../../Assets/bar.svg";
+import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
@@ -36,6 +38,7 @@ const SuperAdminTable = () => {
     isFetched,
     isFetching,
   } = useFetchDataAdmin();
+  const { data: staffData } = useFetchAllStaff();
 
   const [open, setOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
@@ -286,7 +289,7 @@ const SuperAdminTable = () => {
             <Typography sx={{ fontSize: 18 }}>Team Members</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {AdminData.length}
+            {staffData.length}
           </Typography>
         </Box>
       </div>
@@ -498,7 +501,7 @@ const SuperAdminTable = () => {
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
                         Status
                       </Typography>
-                      <Box>
+                      <Box sx={{ ml: -1.2 }}>
                         <TableRow
                           row={item?.user}
                           refetch={teamMemberRefetch}
@@ -549,14 +552,14 @@ const SuperAdminTable = () => {
                       <Box
                         sx={{
                           display: "flex",
-                          gap: 1,
+                          gap: 1.5,
                           color: "#667085",
                           alignItems: "center",
                           mt: 1,
                         }}
                       >
                         <img src={EstimsteIcon} alt="image of customer" />
-                        <Typography>{item.estimates}</Typography>
+                        <Typography sx={{pt: 0.2}}>{item.estimates}</Typography>
                       </Box>
                     </Box>
 
@@ -567,13 +570,13 @@ const SuperAdminTable = () => {
                       <Box
                         sx={{
                           display: "flex",
-                          gap: 1,
+                          gap: 1.5,
                           color: "#667085",
                           alignItems: "center",
-                          mt: 1,
+                          mt: 1.2,
                         }}
                       >
-                        <img src={EstimsteIcon} alt="image of customer" />
+                        <img src={TeamIcon} alt="image of customer" />
                         <Typography>{item.staffs}</Typography>
                       </Box>
                     </Box>
@@ -600,7 +603,7 @@ const SuperAdminTable = () => {
                           mt: 1,
                         }}
                       >
-                        <img src={EstimsteIcon} alt="image of customer" />
+                        <img src={CustomerIcon} alt="image of customer" />
                         <Typography>{item.customers}</Typography>
                       </Box>
                     </Box>
@@ -615,10 +618,10 @@ const SuperAdminTable = () => {
                           gap: 1,
                           color: "#667085",
                           alignItems: "center",
-                          mt: 1,
+                          mt: 1.2,
                         }}
                       >
-                        <img src={EstimsteIcon} alt="image of customer" />
+                        <img src={DefaultIcon} alt="image of customer" />
                         <Typography>{item.layouts}</Typography>
                       </Box>
                     </Box>

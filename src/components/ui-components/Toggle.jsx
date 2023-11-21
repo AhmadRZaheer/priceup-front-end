@@ -11,26 +11,25 @@ function CustomToggle({ checked, onChange, name, onBlur, onClick }) {
           onBlur={onBlur}
           onClick={onClick}
           sx={{
+            "& .MuiSwitch-switchBase": {
+              color: "transparent !important",
+              backgroundColor: "transparent !important",
+              ":hover": {
+                backgroundColor: "transparent ", // Remove or set to the desired color
+              },
+              ":focus": {
+                backgroundColor: "transparent !important", // Remove or set to the desired color
+              },
+              ":active": {
+                backgroundColor: "transparent !important", // Remove or set to the desired color
+              },
+            },
             "& .MuiSwitch-thumb": {
               backgroundColor: "white",
               mt: 0.8,
               ml: 0.6,
-              ":hover": {
-                backgroundColor: "white",
-              },
-              ":focus": {
-                backgroundColor: "white",
-              },
             },
-            "& .MuiTouchRipple-root": {
-              backgroundColor: "transparent",
-              ":hover": {
-                backgroundColor: "transparent",
-              },
-              ":focus": {
-                backgroundColor: "transparent",
-              },
-            },
+
             "& .MuiSwitch-track": {
               backgroundColor: "#7F56D9 !important",
               opacity: `${checked ? 1 : 0.2} !important`,

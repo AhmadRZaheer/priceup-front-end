@@ -2,8 +2,7 @@ import { IconButton } from "@mui/material";
 import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { Edit } from "@mui/icons-material";
 
-function CustomIconButton({ handleClick, disable, buttonText = "Edit", icon, }) {
-  console.log(disable, "????");
+function CustomIconButton({ handleClick, disable, buttonText = "Edit", icon }) {
   return (
     <>
       <IconButton

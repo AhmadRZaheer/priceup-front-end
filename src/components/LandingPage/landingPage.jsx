@@ -345,7 +345,6 @@ const LandingPageComponent = () => {
                     alignItems: "center",
                     width: "300px",
                     gap: 3,
-                    mt: 2,
                     border: "1px solid rgba(255, 255, 255, 0.2)",
                   }}
                 >

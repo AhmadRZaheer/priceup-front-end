@@ -7,6 +7,7 @@ import {
   Input,
   InputAdornment,
   CircularProgress,
+  TextField,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
@@ -229,24 +230,27 @@ const SuperAdminTeam = () => {
             <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
               Team
             </Typography>
-            <Input
+            <TextField
               placeholder="Search by Name"
-              variant="outlined"
+              variant="standard"
               fullWidth
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{
                 mb: 2,
-                mt: 10,
                 width: "20%",
                 marginLeft: "30px",
-                mt: 1,
+                ".MuiInputBase-root:after": {
+                  border: "1px solid #8477DA",
+                },
               }}
-              endAdornment={
-                <InputAdornment position="end">
-                  <Search />
-                </InputAdornment>
-              }
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <Search sx={{ color: "#8477DA" }} />
+                  </InputAdornment>
+                ),
+              }}
             />
           </Box>
           {isFetching ? (

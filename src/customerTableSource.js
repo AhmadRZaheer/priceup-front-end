@@ -544,13 +544,19 @@ export const userColumnsHardware = [
       console.log("params", params.row);
       return (
         <div className="cellWrapper">
-          <div className="hardwareImg">
-            <img
-              className="cellImg"
-              src={`${backendURL}/${params.row.image}`}
-              alt=""
-            />
-          </div>
+          {params.row.image === "" ? (
+            "---"
+          ) : (
+            <div className="hardwareImg">
+              <img
+                width={40}
+                height={40}
+                src={`${backendURL}/${params.row.image}`}
+                alt=""
+              />
+            </div>
+          )}
+
           <div className="hardwareNameTable">{params.row.name}</div>
         </div>
       );

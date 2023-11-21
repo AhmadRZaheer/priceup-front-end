@@ -8,11 +8,10 @@ import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
 import EstimsteIcon from "../../Assets/bar.svg";
 import CustomerIcon from "../../Assets/Customer-icon.svg";
-import TremIcon from "../../Assets/users.svg";
+import TeamIcon from "../../Assets/users.svg";
 import HardWairIcon from "../../Assets/box.svg";
-import DefaltIcon from "../../Assets/columns.svg";
+import DefaultIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
-import LayersOutlinedIcon from "@mui/icons-material/LayersOutlined";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import {
   Box,
@@ -22,13 +21,10 @@ import {
   Typography,
   Drawer,
 } from "@mui/material";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
-import { AttachMoney, KeyboardBackspace, Search } from "@mui/icons-material";
+import { AttachMoney, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import PeopleOutlineIcon from "@mui/icons-material/PeopleOutline";
 import BackIcon from "../../Assets/back.svg";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import AppBar from "@mui/material/AppBar";
@@ -38,7 +34,7 @@ import Toolbar from "@mui/material/Toolbar";
 const drawerWidth = 320;
 
 const Sidebar = () => {
-  const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
+  const { data: AdminData } = useFetchDataAdmin();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
@@ -184,7 +180,7 @@ const Sidebar = () => {
                     >
                       <img
                         style={{ paddingRight: 10 }}
-                        src={TremIcon}
+                        src={TeamIcon}
                         alt="image of customer"
                       />
 
@@ -294,7 +290,7 @@ const Sidebar = () => {
                     >
                       <img
                         style={{ paddingRight: 10 }}
-                        src={DefaltIcon}
+                        src={DefaultIcon}
                         alt="image of customer"
                       />
 

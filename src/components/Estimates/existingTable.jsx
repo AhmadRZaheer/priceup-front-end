@@ -637,6 +637,10 @@ export default function ExistingTable() {
         >
           <CircularProgress sx={{ color: "#8477DA" }} />
         </Box>
+      ) : filteredData.length === 0 ? (
+        <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+          No Estimates Found
+        </Typography>
       ) : (
         <Box>
           <DataGrid

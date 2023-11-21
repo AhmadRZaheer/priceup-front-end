@@ -106,23 +106,68 @@ export const useCreateGlassAddon = () => {
   return useMutation(handleCreate);
 };
 
+// export const useEditGlassAddon = () => {
+//   const handleEdit = async (props) => {
+//     const token = localStorage.getItem("token");
+//     try {
+//       const response = await axios.put(
+//         `${backendURL}/glassAddons/${props?.id}`,
+//         {
+//           ...(props.optionsData ? { options: props.optionsData } : {}),
+//           ...(props.glassAddonData
+//             ? {
+//                 name: props.glassAddonData.name,
+//                 image: props.glassAddonData.image,
+//               }
+//             : {}),
+//         },
+//         {
+//           headers: { Authorization: `Bearer ${token}` },
+//         }
+//       );
+
+//       if (response.data.code === 200) {
+//         return response.data.data;
+//       } else {
+//         throw new Error("An error occurred while updating the data.");
+//       }
+//     } catch (error) {
+//       throw new Error("An error occurred while updating the data.");
+//     }
+//   };
+
+//   return useMutation(handleEdit);
+// };
 export const useEditGlassAddon = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
+
     try {
+      const formData = new FormData();
+
+      // Check if optionsData exists before appending to FormData
+      if (props.optionsData) {
+        formData.append("options", props.optionsData);
+      }
+
+      // Check if glassAddonData exists before appending to FormData
+      if (props.glassAddonData) {
+        formData.append("name", props.glassAddonData.name);
+
+        // Check if image exists before appending to FormData
+        if (props.glassAddonData.image) {
+          formData.append("image", props.glassAddonData.image);
+        }
+      }
+
       const response = await axios.put(
         `${backendURL}/glassAddons/${props?.id}`,
+        formData,
         {
-          ...(props.optionsData ? { options: props.optionsData } : {}),
-          ...(props.glassAddonData
-            ? {
-                name: props.glassAddonData.name,
-                image: props.glassAddonData.image,
-              }
-            : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Set content type for FormData
+          },
         }
       );
 

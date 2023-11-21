@@ -13,6 +13,7 @@ import {
   useCreateHardware,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -56,7 +57,7 @@ export default function AddEditHardware({
     isSuccess: SuccessForEdit,
   } = useEditHardware();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
       showSnackbar("Created Successfully ", "success");
@@ -67,7 +68,9 @@ export default function AddEditHardware({
       refetch();
       showSnackbar("Updated Successfully ", "success");
       close();
+      console.log(SuccessForEdit, "effect s");
     }
+    console.log("effect");
   }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
@@ -170,18 +173,22 @@ export default function AddEditHardware({
                 </Typography>
               </Box>
             </label>
-            <aside style={{
-              display: 'flex',
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-              marginTop: 16
-            }}>
-              {selectedImage && <img
-                width={"80px"}
-                height={"80px"}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
-              />}
+            <aside
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
+                marginTop: 16,
+              }}
+            >
+              {selectedImage && (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                />
+              )}
             </aside>
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
