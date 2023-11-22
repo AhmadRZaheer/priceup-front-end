@@ -58,13 +58,13 @@ const SuperAdminTable = () => {
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleOpenDelete = () => setDeleteOpen(true);
   const handleCloseEdit = () => setEditOpen(false);
-  const handleOpenEdi = () => setEditOpen(true);
+  const handleOpenEdit = () => setEditOpen(true);
 
-  const handleOpenEdit = (data) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
+  // const handleOpenEdit = (data) => {
+  //   setOpen(true);
+  //   setEdit(data);
+  //   setIsEdit(true);
+  // };
 
   const dispatch = useDispatch();
 
@@ -700,16 +700,15 @@ const SuperAdminTable = () => {
         )}
       </div>
       <DeleteModal open={DeleteOpen} close={handleCloseDelete} />
-      <EditLocationModal open={open}
-        close={handleClose}/>
-      {/* <AddSuperAdminModel
+      <EditLocationModal open={EditOpen} close={handleCloseEdit} />
+      <AddSuperAdminModel
         open={open}
         close={handleClose}
         refetch={teamMemberRefetch}
         showSnackbar={showSnackbarHandler}
         data={edit}
         isEdit={isEdit}
-      /> */}
+      />
     </Box>
   );
 };
