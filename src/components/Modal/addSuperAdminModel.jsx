@@ -49,19 +49,9 @@ export default function AddSuperAdminModel({
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateAdminsMembers();
-  const {
-    mutate: editFinish,
-    isLoading: LoadingForEdit,
-    isSuccess: SuccessForEdit,
-    isError: ErrorForAddEidt,
-  } = useEditUser();
 
   const handleCreateClick = (props) => {
     addTeamAdminsMembers(props);
-  };
-  const handleEditClick = (props) => {
-    const id = data;
-    editFinish(props, id);
   };
 
   const validationSchema = Yup.object().shape({
@@ -71,39 +61,21 @@ export default function AddSuperAdminModel({
   });
 
   const formik = useFormik({
-    initialValues: isEdit
-      ? {
-          name: data?.name,
-          email: data?.email,
-          password: data?.password,
-          image: "",
-          id: data?._id,
-        }
-      : {
-          name: "",
-          image: "",
-          email: "",
-          password: "",
-        },
+    initialValues: {
+      name: "",
+      image: "",
+      email: "",
+      password: "",
+    },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
-      isEdit ? handleEditClick(values) : handleCreateClick(values);
+      handleCreateClick(values);
       setSelectedImage(null);
       resetForm();
     },
   });
 
-  React.useEffect(() => {
-    if (SuccessForEdit) {
-      refetch();
-      showSnackbar("Updated Successfully", "success");
-      close();
-    } else if (ErrorForAddEidt) {
-      const errorMessage = ErrorForAddEidt.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
-    }
-  }, [SuccessForEdit, ErrorForAddEidt]);
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
@@ -130,9 +102,7 @@ export default function AddSuperAdminModel({
               alignItems: "baseline",
             }}
           >
-            <Typography>
-              {isEdit ? "Edit Team Members" : "Add Team Members"}
-            </Typography>
+            <Typography>Add Location</Typography>
           </Box>
 
           <Box>
@@ -245,10 +215,8 @@ export default function AddSuperAdminModel({
                 },
               }}
             >
-              {LoadingForEdit || LoadingForAdd ? (
+              {LoadingForAdd ? (
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-              ) : isEdit ? (
-                "Update"
               ) : (
                 "Create"
               )}

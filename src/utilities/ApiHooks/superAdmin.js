@@ -4,6 +4,8 @@ import axios from "axios";
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataAdmin = () => {
   async function fetchData() {
@@ -82,12 +84,9 @@ export const useDeleteStaff = () => {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `${backendURL}/staffs/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.delete(`${backendURL}/staffs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -223,33 +222,57 @@ export const useUserStatus = () => {
 
   return useMutation(handleEdit);
 };
+
 export const useEditUser = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (updatedUser) => {
-    const token = localStorage.getItem("token");
-    const formData = new FormData();
-
-    formData.append("image", updatedUser?.image);
-    formData.append("name", updatedUser?.name);
-    formData.append("email", updatedUser?.email);
-
     try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+
+      formData.append("image", updatedUser?.selectedImage);
+      formData.append("name", updatedUser?.name);
+      // formData.append("email", updatedUser?.email);
+      if (updatedUser?.password !== "") {
+        formData.append("password", updatedUser?.password);
+      }
+
       const response = await axios.put(
-        `${backendURL}/users/${updatedUser?.id}`,
+        `${backendURL}/users/${updatedUser?.userid}`,
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Set the content type for form data
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User status updated successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
-        throw new Error("An error occurred while creating the data.");
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the user data.",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the user data.");
       }
     } catch (error) {
-      throw new Error("An error occurred while creating the data.");
+      dispatch(
+        showSnackbar({
+          message: "An error occurred while updating the user data.",
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while updating the user data.");
     }
   };
 
@@ -281,4 +304,48 @@ export const useGiveAccessToStaff = () => {
   };
 
   return useMutation(handleUpdate);
+};
+export const useDeleteUser = () => {
+  const dispatch = useDispatch();
+  const handleDelete = async (userData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${backendURL}/users/${userData?._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User deleted successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: `Failed to delete user. Server response: ${response.data.message}`,
+            severity: "error",
+          })
+        );
+        throw new Error(
+          `Failed to delete user. Server response: ${response.data.message}`
+        );
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `An error occurred while trying to delete the user.`,
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while trying to delete the user.");
+    }
+  };
+
+  return useMutation(handleDelete);
 };
