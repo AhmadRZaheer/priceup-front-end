@@ -4,7 +4,6 @@ import {
   Button,
   IconButton,
   Typography,
-  Input,
   InputAdornment,
   CircularProgress,
   TextField,
@@ -12,28 +11,19 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import {
-  useFetchAdminLocation,
   useDeleteStaff,
   useFetchAllStaff,
 } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
-import {
-  ArrowBack,
-  ArrowForward,
-  DeleteOutlineOutlined,
-  EditOutlined,
-} from "@mui/icons-material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
-import LocationModel from "../Modal/locationModel";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import EditIcon from "../../Assets/d.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 
-const SuperAdminTeam = () => {
+const SuperAdminUser = () => {
   const {
     data: staffData,
     refetch: teamMemberRefetch,
@@ -47,15 +37,7 @@ const SuperAdminTeam = () => {
   };
 
   const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null);
-  const openModel = (row) => {
-    setSelectedRow(row);
-    setOpen(true);
-  };
-  const closeModel = () => {
-    setOpen(false);
-  };
+
   const [Delete_id, setDelete_id] = useState();
   const [Delete_M, setDelete_M] = useState(false);
   const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
@@ -69,74 +51,21 @@ const SuperAdminTeam = () => {
     teamMemberRefetch();
   }, [isSuccess]);
 
-  const { data: locationData } = useFetchAdminLocation();
   const actionColumn = [
-    {
-      field: "user_name",
-      headerName: "Location",
-      headerClassName: "customHeaderClass-admin-team",
-      flex: 0.8,
-      renderCell: (params) => {
-        const { haveAccessTo } = params.row;
-
-        const matchingLocationNames = haveAccessTo
-          .map((accessToID) =>
-            locationData.find((location) => location.id === accessToID)
-          )
-          .filter((match) => match)
-          .map((match) => match.name);
-
-        return (
-          <div>
-            <Typography
-              style={{
-                maxWidth: "240px",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-              color="#667085"
-            >
-              {matchingLocationNames.join(", ") || "Not added to any location"}
-            </Typography>
-          </div>
-        );
-      },
-    },
     {
       field: "Status",
       paddingLeft: 3,
       headerClassName: "customHeaderClass-admin-team",
-      flex: 0.5,
+      flex: 1, 
       renderCell: (params) => {
         return <TableRow row={params.row} refetch={teamMemberRefetch} />;
       },
     },
-
-    {
-      field: "Access",
-      flex: 0.6,
-      headerClassName: "customHeaderClass-admin-team",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              sx={{ borderRadius: 0, color: "#7F56D9" }}
-              onClick={() => openModel(params.row)}
-            >
-              <h6>Access Location</h6>
-            </IconButton>
-          </>
-        );
-      },
-    },
-
     {
       field: "Action",
-      flex: 0.4,
+      flex: 0.5, //
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
-        console.log(params, "id");
         const id = params.row._id;
 
         return (
@@ -146,11 +75,6 @@ const SuperAdminTeam = () => {
               onClick={() => handleOpen(id)}
             >
               <img src={DeleteIcon} alt="delete icon" />
-            </IconButton>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <img src={EditIcon} alt="delete icon" />
             </IconButton>
           </>
         );
@@ -173,13 +97,13 @@ const SuperAdminTeam = () => {
     }
 
     const pagesToShow = [];
-    const startPage = Math.max(1, page - 2); // Display three on the first side
+    const startPage = Math.max(1, page - 2);
     const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
 
     if (startPage > 1) {
       pagesToShow.push(1);
       if (startPage > 2) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+        pagesToShow.push("...");
       }
     }
 
@@ -189,7 +113,7 @@ const SuperAdminTeam = () => {
 
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
+        pagesToShow.push("...");
       }
       pagesToShow.push(totalPages);
     }
@@ -211,7 +135,7 @@ const SuperAdminTeam = () => {
     <>
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
         <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-          Team
+          Users
         </Typography>
         <Box
           sx={{
@@ -222,7 +146,7 @@ const SuperAdminTeam = () => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-              Team
+              Users
             </Typography>
             <TextField
               placeholder="Search by Name"
@@ -358,18 +282,8 @@ const SuperAdminTeam = () => {
           open={Delete_M}
           handleDelete={handeleDeleteStaff}
         />
-        <LocationModel
-          open={open}
-          onClose={closeModel}
-          selectedRow={selectedRow}
-          staffRefetch={teamMemberRefetch}
-          showSnackbar={showSnackbarHandler}
-          // filteredAdminData={filteredAdminData}
-          // notAdded={notAdded}
-          // AdminData={AdminData}
-        />
       </Box>
     </>
   );
 };
-export default SuperAdminTeam;
+export default SuperAdminUser;

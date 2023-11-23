@@ -153,7 +153,7 @@ export const AdminColumns = [
     field: "Team Members",
     headerName: "Name",
     headerClassName: "customHeaderClass-admin-team",
-    width: 250,
+    flex: 0.8, 
     renderCell: (params) => {
       if (params.row && params.row.name) {
         var firstNameInitial = params.row.name.charAt(0);
@@ -208,7 +208,7 @@ export const AdminColumns = [
     field: "email",
     headerName: "Email address",
     headerClassName: "customHeaderClass-admin-team",
-    width: 250,
+    flex: 0.8, 
     renderCell: (params) => {
       return <div style={{ color: "#667085" }}>{params.row.email}</div>;
     },
@@ -217,7 +217,7 @@ export const AdminColumns = [
     field: "dateAdded",
     headerName: "Date added",
     headerClassName: "customHeaderClass-admin-team",
-    width: 240,
+    flex: 0.8, 
     renderCell: (params) => {
       return (
         <div style={{ color: "#667085" }}>

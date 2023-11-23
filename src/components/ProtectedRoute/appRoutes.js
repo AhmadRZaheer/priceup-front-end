@@ -22,6 +22,7 @@ import { useMemo } from "react";
 import LandingPage from "../../pages/LandingPage/landingPage";
 import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 import Staff from "../../pages/Staff/staff";
+import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -108,6 +109,7 @@ const AppRoutes = () => {
         <Route path="/">
           <Route index element={<Admin />} />
           <Route path="/team" element={<AdminTeam />} />
+          <Route path="/user" element={<AdminUser />} />
           <Route path="*" element={<Admin />} />
         </Route>
       ) : (

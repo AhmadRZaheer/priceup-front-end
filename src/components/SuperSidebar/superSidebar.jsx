@@ -115,6 +115,22 @@ const SuperSidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
+                <NavLink to="/user" className="link">
+                  <li
+                    className={` ${
+                      location.pathname === "/user" ? "active" : ""
+                    }`}
+                  >
+                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                      <img
+                        style={{ paddingRight: 10 }}
+                        src={TremIcon}
+                        alt="image of customer"
+                      />
+                      <span>Users</span>
+                    </IconButton>
+                  </li>
+                </NavLink>
               </ul>
             </div>
           </Box>
