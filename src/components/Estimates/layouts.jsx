@@ -35,7 +35,8 @@ export default function Layout() {
     flexDirection: "column",
     cursor: "pointer",
   };
-  const { data: layouts, isFetching: loading } = useFetchDataDefault();
+  
+   const { data: layouts, isFetching: loading } = useFetchDataDefault();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
   const dispatch = useDispatch();

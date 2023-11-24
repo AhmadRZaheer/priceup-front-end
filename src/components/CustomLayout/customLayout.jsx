@@ -265,7 +265,7 @@ const CustomLayout = () => {
                       <Typography
                         sx={{
                           fontSize: 18,
-                          color: { md: "#9c9c9c", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                         }}
                       >
                         Width
@@ -280,7 +280,7 @@ const CustomLayout = () => {
                       <Typography
                         sx={{
                           fontSize: 18,
-                          color: { md: "#9c9c9c", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                         }}
                       >
                         Height
@@ -295,7 +295,7 @@ const CustomLayout = () => {
                       <Typography
                         sx={{
                           fontSize: 18,
-                          color: { md: "#9c9c9c", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                         }}
                       >
                         Quantity
@@ -321,6 +321,9 @@ const CustomLayout = () => {
                         size="small"
                         variant="outlined"
                         name={`aWidth${index}`}
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
                         placeholder="0"
                         style={{
                           display:
@@ -353,6 +356,9 @@ const CustomLayout = () => {
                         size="small"
                         variant="outlined"
                         name={`aHeight${index}`}
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
                         placeholder="0"
                         style={{
                           display:
@@ -391,6 +397,9 @@ const CustomLayout = () => {
                             size="small"
                             variant="outlined"
                             name={`Count${index}`}
+                            InputProps={{
+                              inputProps: { min: 1 },
+                            }}
                             value={values[index + 1]?.count || ""}
                             placeholder="quantity"
                             style={{
@@ -443,7 +452,10 @@ const CustomLayout = () => {
                     color: { md: "white", xs: "#344054" },
                     textTransform: "initial",
                     border: "1px solid #D0D5DD",
-                    backgroundColor: { md: "transparent" },
+                    backgroundColor: "#8477da",
+                    "&:hover": {
+                      backgroundColor: "#8477da",
+                    },
                     height: 40,
                     fontSize: 20,
                     position: "absolute",

@@ -45,8 +45,8 @@ const Summary = () => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.layoutData?.image
-        ? `${backendURL}/${selectedData?.layoutData?.image}`
-        : CustomImage;
+      ? `${backendURL}/${selectedData?.layoutData?.image}`
+      : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   return (
     <>
@@ -111,7 +111,7 @@ const Summary = () => {
                 margin: "auto",
               }}
             >
-             {/** Dimensions Accordian */}
+              {/** Dimensions Accordian */}
               <Accordion
                 sx={{
                   paddingX: "6px",
@@ -135,7 +135,7 @@ const Summary = () => {
                   }}
                 >
                   <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                  Dimensions
+                    Dimensions
                   </Typography>
                 </AccordionSummary>
                 <AccordionDetails
@@ -154,10 +154,14 @@ const Summary = () => {
                       .map((measurement) => measurement.value)
                       .join("’’/ ")}
                   </Typography>
-                  <Typography>
-                    <span style={{ fontWeight: "bold" }}>Door Width: </span>
-                    {doorWidth}
-                  </Typography>
+                  {doorWidth ? (
+                    <Typography>
+                      <span style={{ fontWeight: "bold" }}>Door Width: </span>
+                      {doorWidth}
+                    </Typography>
+                  ) : (
+                    ""
+                  )}
                   <Typography>
                     <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
                     {sqftArea}
@@ -591,9 +595,7 @@ const Summary = () => {
                       <Typography sx={{ fontWeight: "bold" }}>
                         Gross Total:
                       </Typography>
-                      <Typography>
-                      ${totalPrice?.toFixed(2) || 0}
-                      </Typography>
+                      <Typography>${totalPrice?.toFixed(2) || 0}</Typography>
                     </Box>
                     <Box
                       sx={{
@@ -605,9 +607,7 @@ const Summary = () => {
                       <Typography sx={{ fontWeight: "bold" }}>
                         Actual Cost:
                       </Typography>
-                      <Typography>
-                      ${actualCost?.toFixed(2) || 0}
-                      </Typography>
+                      <Typography>${actualCost?.toFixed(2) || 0}</Typography>
                     </Box>
                     <Box
                       sx={{
@@ -619,11 +619,8 @@ const Summary = () => {
                       <Typography sx={{ fontWeight: "bold" }}>
                         Gross Profit:
                       </Typography>
-                      <Typography>
-                      ${grossProfit?.toFixed(2) || 0}
-                      </Typography>
+                      <Typography>${grossProfit?.toFixed(2) || 0}</Typography>
                     </Box>
-
                   </AccordionDetails>
                 </Accordion>
                 {/* Price category Accordian */}

@@ -235,7 +235,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-  console.log(fabricationPrice, "fabricat", glassPrice);
+  console.log( selectedContent?.people, "fabricat", selectedContent?.hours, estimatesData?.miscPricing?.hourlyRate);
   const total =
     (hardwareTotals +
       fabricationPrice +

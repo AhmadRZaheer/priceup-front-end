@@ -222,33 +222,57 @@ export const useUserStatus = () => {
 
   return useMutation(handleEdit);
 };
+
 export const useEditUser = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (updatedUser) => {
-    const token = localStorage.getItem("token");
-    const formData = new FormData();
-
-    formData.append("image", updatedUser?.image);
-    formData.append("name", updatedUser?.name);
-    formData.append("email", updatedUser?.email);
-
     try {
+      const token = localStorage.getItem("token");
+      const formData = new FormData();
+
+      formData.append("image", updatedUser?.selectedImage);
+      formData.append("name", updatedUser?.name);
+      // formData.append("email", updatedUser?.email);
+      if (updatedUser?.password !== "") {
+        formData.append("password", updatedUser?.password);
+      }
+
       const response = await axios.put(
-        `${backendURL}/users/${updatedUser?.id}`,
+        `${backendURL}/users/${updatedUser?.userid}`,
         formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data", // Set the content type for form data
+            "Content-Type": "multipart/form-data",
           },
         }
       );
+
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User status updated successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
-        throw new Error("An error occurred while creating the data.");
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the user data.",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the user data.");
       }
     } catch (error) {
-      throw new Error("An error occurred while creating the data.");
+      dispatch(
+        showSnackbar({
+          message: "An error occurred while updating the user data.",
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while updating the user data.");
     }
   };
 

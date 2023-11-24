@@ -27,13 +27,14 @@ import {
   addSelectedItem,
   initializeStateForEditQuote,
   resetState,
+  setDoorWidth,
   setListData,
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
 import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { Link, useNavigate } from "react-router-dom";
-import { backendURL } from "../../utilities/common";
+import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { useEffect } from "react";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
@@ -77,6 +78,12 @@ export default function ExistingTable() {
     );
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
+    const result = calculateAreaAndPerimeter(
+      item.measurements,
+      item?.layoutData?.variant
+    );
+
+    dispatch(setDoorWidth(result.doorWidth));
     dispatch(setNavigationDesktop("review"));
   };
 

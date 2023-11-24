@@ -13,6 +13,7 @@ function CustomInputField({
   error,
   helperText,
   onBlur,
+  disabled,
 }) {
   return (
     <>
@@ -23,13 +24,16 @@ function CustomInputField({
         type={type}
         name={name}
         value={value}
+        disabled={disabled}
         error={error}
         InputProps={InputProps}
         placeholder={placeholder}
         onChange={onChange}
         helperText={helperText}
         onBlur={onBlur}
-        className={error ? "custom-textfield-error": "custom-textfield"}
+        className={
+          error ? "custom-textfield-error" : disabled ? "" : "custom-textfield"
+        }
       />
     </>
   );

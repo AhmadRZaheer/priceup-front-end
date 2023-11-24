@@ -1007,7 +1007,7 @@ const estimateCalcSlice = createSlice({
         hours: estimateData?.hours,
         glassAddons: glassAddons?.length
           ? [...glassAddons]
-          : state.listData.glassAddons[0],
+          : [state.listData.glassAddons[0]],
         oneInchHoles: estimateData?.oneInchHoles,
         clampCut: estimateData?.clampCut,
         notch: estimateData?.notch,

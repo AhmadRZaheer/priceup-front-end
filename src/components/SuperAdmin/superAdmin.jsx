@@ -16,6 +16,7 @@ import EditIcon from "../../Assets/d.svg";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
 import DefaultIcon from "../../Assets/layout-gray.svg";
 import {
+  useDeleteUser,
   useFetchAllStaff,
   useFetchDataAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
@@ -41,14 +42,17 @@ const SuperAdminTable = () => {
     isFetching,
   } = useFetchDataAdmin();
   const { data: staffData } = useFetchAllStaff();
+  const { mutate: deleteuserdata, isSuccess } = useDeleteUser();
 
   const [open, setOpen] = useState(false);
   const [DeleteOpen, setDeleteOpen] = useState(false);
   const [EditOpen, setEditOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
-  const [edit, setEdit] = React.useState(null);
-  const [isEdit, setIsEdit] = React.useState(false);
+  // const [edit, setEdit] = useState(null);
+  // const [isEdit, setIsEdit] = useState(false);
+  const [isUserData, setisUserData] = useState(null);
+
   useEffect(() => {
     setActiveCount(AdminData.length);
   }, [isFetched]);
@@ -56,14 +60,22 @@ const SuperAdminTable = () => {
 
   const handleClose = () => setOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
-  const handleOpenDelete = () => setDeleteOpen(true);
-  const handleCloseEdit = () => setEditOpen(false);
-  const handleOpenEdi = () => setEditOpen(true);
+  const handleDeleteUser = () => {
+    setDeleteOpen(false);
+    deleteuserdata(isUserData);
+  };
+  useEffect(() => {
+    teamMemberRefetch();
+  }, [isSuccess]);
+  const handleOpenDelete = (data) => {
+    setDeleteOpen(true);
+    setisUserData(data?.user);
+  };
 
+  const handleCloseEdit = () => setEditOpen(false);
   const handleOpenEdit = (data) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
+    setEditOpen(true);
+    setisUserData(data?.user);
   };
 
   const actionColumn = [
@@ -178,13 +190,13 @@ const SuperAdminTable = () => {
         return (
           <>
             <IconButton
-              onClick={handleOpenDelete}
+              // onClick={handleOpenDelete}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
-              onClick={() => handleOpenEdit(params.row)}
+              // onClick={() => handleOpenEdit(params.row)}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
               <img src={EditIcon} alt="delete icon" />
@@ -434,7 +446,14 @@ const SuperAdminTable = () => {
                             {firstNameInitial}
                             {lastNameInitial}
                           </Typography>
-                        ) : item?.user?.image === "" ? (
+                        ) : item?.user?.image ? (
+                          <img
+                            className="cellImg"
+                            style={{ width: 40, height: 40 }}
+                            src={`${backendURL}/${item?.user?.image}`}
+                            alt="logo image"
+                          />
+                        ) : (
                           <Typography
                             sx={{
                               backgroundColor: "#F9F5FF",
@@ -453,13 +472,6 @@ const SuperAdminTable = () => {
                             {firstNameInitial}
                             {lastNameInitial}
                           </Typography>
-                        ) : (
-                          <img
-                            className="cellImg"
-                            style={{ width: 40, height: 40 }}
-                            src={`${backendURL}/${item?.user?.image}`}
-                            alt="logo image"
-                          />
                         )}
                       </Box>
                       <Typography
@@ -654,7 +666,7 @@ const SuperAdminTable = () => {
                           width: 28,
                           height: 28,
                         }}
-                        onClick={handleOpenDelete}
+                        onClick={() => handleOpenDelete(item)}
                       >
                         <img src={DeleteIcon} alt="delete icon" />
                       </IconButton>
@@ -696,14 +708,14 @@ const SuperAdminTable = () => {
       </div>
       <DeleteModal open={DeleteOpen} close={handleCloseDelete} />
       <EditLocationModal open={open} close={handleClose} />
-      {/* <AddSuperAdminModel
+      <AddSuperAdminModel
         open={open}
         close={handleClose}
         refetch={teamMemberRefetch}
         showSnackbar={showSnackbarHandler}
-        data={edit}
-        isEdit={isEdit}
-      /> */}
+        // data={edit}
+        // isEdit={isEdit}
+      />
     </Box>
   );
 };
