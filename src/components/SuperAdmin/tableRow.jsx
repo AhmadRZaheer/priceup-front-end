@@ -1,28 +1,43 @@
 import { Box, CircularProgress, FormControlLabel, Switch } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useUserStatus } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useCustomUserStatus,
+  useUserStatus,
+} from "../../utilities/ApiHooks/superAdmin";
 import CustomToggle from "../ui-components/Toggle";
 
-const TableRow = ({ row, refetch, onToggleChange }) => {
+const TableRow = ({ row, refetch, onToggleChange, type }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useUserStatus();
+
+  const {
+    mutate: updateStatusUser,
+    isLoading: LoadingForEditUser,
+    isSuccess: SuccessForEditUser,
+  } = useCustomUserStatus();
+
   const [active, setActive] = useState(row.status);
 
   const handleSwitch = () => {
     setActive(!active);
-    updateStatus({ status: !active, id: row._id });
+    if (type === "superAdmin") {
+      updateStatus({ status: !active, id: row?._id });
+      onToggleChange(active);
+    } else if (type === "superAdminTeam") {
+    } else if (type === "superAdminUser") {
+      updateStatusUser({ status: !active, id: row?._id });
+    }
     // Call the callback function to update non-active count
-    onToggleChange(active);
   };
 
   useEffect(() => {
     if (SuccessForEdit) {
       refetch();
     }
-  }, [SuccessForEdit]);
+  }, [SuccessForEdit, SuccessForEditUser]);
 
   return (
     <div className="cellAction">

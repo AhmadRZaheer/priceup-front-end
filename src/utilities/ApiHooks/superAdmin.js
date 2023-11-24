@@ -4,6 +4,8 @@ import axios from "axios";
 import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataAdmin = () => {
   async function fetchData() {
@@ -82,12 +84,9 @@ export const useDeleteStaff = () => {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(
-        `${backendURL}/staffs/${id}`,
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.delete(`${backendURL}/staffs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.data.code === 200) {
         return response.data.data;
       } else {
@@ -281,4 +280,168 @@ export const useGiveAccessToStaff = () => {
   };
 
   return useMutation(handleUpdate);
+};
+
+export const useDataCustomUser = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/customUsers`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["customUsers"],
+    queryFn: fetchData,
+    enabled: true,
+    placeholderData: [],
+  });
+};
+
+export const useCreateCustomUser = () => {
+  const handleCreate = async (props) => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/customUsers/save`,
+        {
+          name: props.name,
+          email: props.email,
+          image: props.image,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleCreate);
+};
+
+export const useCustomUserStatus = () => {
+  const handleEdit = async (status) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/customUsers/${status?.id}`,
+        {
+          status: status?.status,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+
+export const useDeleteUser = () => {
+  const dispatch = useDispatch();
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(`${backendURL}/customUsers/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User deleted successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data.",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
+export const useEditCustomUser = () => {
+  const handleEdit = async (updatedUser) => {
+    const token = localStorage.getItem("token");
+    // const formData = new FormData();
+
+    // formData.append("image", updatedUser?.image);customUserscustomUsers
+    // formData.append("name", updatedUser?.name);customUserscustomUsers
+    // formData.append("email", updatedUser?.email);
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/customUsers/${updatedUser?.id}`,
+        {
+          image: updatedUser?.image,
+          name: updatedUser?.name,
+          ...(updatedUser?.locationsAccess
+            ? {
+                locationsAccess: [
+                  { company_id: "gjjkj", company_password: "" },
+                ],
+              }
+            : {}),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // "Content-Type": "multipart/form-data", // Set the content type for form data
+          },
+        }
+      );
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
 };

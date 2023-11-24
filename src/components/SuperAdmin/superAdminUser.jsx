@@ -11,7 +11,9 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import {
+  useDataCustomUser,
   useDeleteStaff,
+  useDeleteUser,
   useFetchAllStaff,
 } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
@@ -22,29 +24,39 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
+import EditIcon from "../../Assets/d.svg";
+import CustomUserCreateModal from "../Modal/addCustomUserAdmin";
+import { tuple } from "yup";
 
 const SuperAdminUser = () => {
   const {
-    data: staffData,
+    data: customUserData,
     refetch: teamMemberRefetch,
     isFetching,
-  } = useFetchAllStaff();
-  const { mutate: usedelete, isSuccess } = useDeleteStaff();
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
+  } = useDataCustomUser();
+  const { mutate: usedelete, isSuccess } = useDeleteUser();
 
   const [search, setSearch] = useState("");
-
   const [Delete_id, setDelete_id] = useState();
   const [Delete_M, setDelete_M] = useState(false);
+  const [Create_Edit_M, setCreate_Edit_M] = useState(false);
+  const [isEdit, setisEdit] = useState({ type: false, data: null });
+
   const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
   const handleClose = () => setDelete_M(false);
+  const handleOpenCreate = () => {
+    setCreate_Edit_M(true);
+  };
+  const handleOpenEdit = (item) => {
+    setCreate_Edit_M(true);
+    setisEdit({ type: true, data: item });
+  };
+  const handleCloseCreate = () => {
+    setCreate_Edit_M(false);
+    setisEdit({ type: false });
+  };
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
-    showSnackbarHandler("Staff info deleted successfully", "error");
     handleClose();
   };
   useEffect(() => {
@@ -56,9 +68,15 @@ const SuperAdminUser = () => {
       field: "Status",
       paddingLeft: 3,
       headerClassName: "customHeaderClass-admin-team",
-      flex: 1, 
+      flex: 1,
       renderCell: (params) => {
-        return <TableRow row={params.row} refetch={teamMemberRefetch} />;
+        return (
+          <TableRow
+            row={params.row}
+            refetch={teamMemberRefetch}
+            type={"superAdminUser"}
+          />
+        );
       },
     },
     {
@@ -76,12 +94,18 @@ const SuperAdminUser = () => {
             >
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
+            <IconButton
+              onClick={() => handleOpenEdit(params.row)}
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+            >
+              <img src={EditIcon} alt="delete icon" />
+            </IconButton>
           </>
         );
       },
     },
   ];
-  const filteredData = staffData?.filter((staff) =>
+  const filteredData = customUserData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -134,9 +158,28 @@ const SuperAdminUser = () => {
   return (
     <>
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
-        <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-          Users
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
+          <Typography sx={{ ml: 2, fontSize: 26, fontWeight: "bold" }}>
+            Users
+          </Typography>
+          <Button
+            sx={{
+              bgcolor: "#8477da",
+              color: "white",
+              textTransform: "capitalize",
+              width: 120,
+              height: 40,
+              fontSize: 16,
+              ":hover": {
+                bgcolor: "#8477da",
+              },
+              mr: 2,
+            }}
+            onClick={handleOpenCreate}
+          >
+            Add User
+          </Button>
+        </Box>
         <Box
           sx={{
             m: 3,
@@ -184,6 +227,10 @@ const SuperAdminUser = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
+          ) : customUserData.length === 0 ? (
+            <Typography sx={{ color: "#667085", textAlign: "center", p: 3 }}>
+              No Costom user Found
+            </Typography>
           ) : (
             <div className="CustomerTable">
               <DataGrid
@@ -281,6 +328,12 @@ const SuperAdminUser = () => {
           close={handleClose}
           open={Delete_M}
           handleDelete={handeleDeleteStaff}
+        />
+        <CustomUserCreateModal
+          close={handleCloseCreate}
+          open={Create_Edit_M}
+          refetch={teamMemberRefetch}
+          isEdit={isEdit}
         />
       </Box>
     </>

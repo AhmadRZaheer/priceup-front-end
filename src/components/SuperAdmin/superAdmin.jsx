@@ -66,12 +66,6 @@ const SuperAdminTable = () => {
     setIsEdit(true);
   };
 
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
-
   const actionColumn = [
     {
       field: "Status",
@@ -515,6 +509,7 @@ const SuperAdminTable = () => {
                           row={item?.user}
                           refetch={teamMemberRefetch}
                           onToggleChange={handleToggleChange}
+                          type={"superAdmin"}
                         />
                       </Box>
                     </Box>
@@ -700,8 +695,7 @@ const SuperAdminTable = () => {
         )}
       </div>
       <DeleteModal open={DeleteOpen} close={handleCloseDelete} />
-      <EditLocationModal open={open}
-        close={handleClose}/>
+      <EditLocationModal open={open} close={handleClose} />
       {/* <AddSuperAdminModel
         open={open}
         close={handleClose}
