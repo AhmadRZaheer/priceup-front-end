@@ -390,12 +390,57 @@ export const useCustomUserStatus = () => {
 
 export const useDeleteUser = () => {
   const dispatch = useDispatch();
-  const handleDelete = async (id) => {
+  const handleDelete = async (userData) => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.delete(`${backendURL}/customUsers/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.delete(
+        `${backendURL}/users/${userData?._id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User deleted successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data.",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
+      throw error;
+    }
+  };
+
+  return useMutation(handleDelete);
+};
+
+export const useDeleteCustomerUser = () => {
+  const dispatch = useDispatch();
+  const handleDelete = async (userData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.delete(
+        `${backendURL}/customUsers/${userData}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
@@ -435,18 +480,16 @@ export const useEditCustomUser = () => {
     // formData.append("image", updatedUser?.image);customUserscustomUsers
     // formData.append("name", updatedUser?.name);customUserscustomUsers
     // formData.append("email", updatedUser?.email);
-
+    console.log(updatedUser?.locationsAccess);
     try {
       const response = await axios.put(
-        `${backendURL}/customUsers/${updatedUser?.id}`,
+        `${backendURL}/customUsers/${updatedUser?._id}`,
         {
           image: updatedUser?.image,
           name: updatedUser?.name,
           ...(updatedUser?.locationsAccess
             ? {
-                locationsAccess: [
-                  { company_id: "gjjkj", company_password: "" },
-                ],
+                locationsAccess: updatedUser?.locationsAccess,
               }
             : {}),
         },

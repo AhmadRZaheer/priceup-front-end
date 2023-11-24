@@ -28,7 +28,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
   };
   const formik = useFormik({
     initialValues: {
-      id: isEdit?.data?._id,
+      _id: isEdit?.data?._id,
       name: isEdit?.type ? isEdit?.data?.name : "",
       email: isEdit?.type ? isEdit?.data?.email : "",
       image: isEdit?.type ? isEdit?.data?.image : "",

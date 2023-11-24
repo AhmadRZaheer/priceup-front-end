@@ -12,6 +12,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
 import {
   useDataCustomUser,
+  useDeleteCustomerUser,
   useDeleteStaff,
   useDeleteUser,
   useFetchAllStaff,
@@ -34,15 +35,18 @@ const SuperAdminUser = () => {
     refetch: teamMemberRefetch,
     isFetching,
   } = useDataCustomUser();
-  const { mutate: usedelete, isSuccess } = useDeleteUser();
+  const { mutate: usedelete, isSuccess } = useDeleteCustomerUser();
 
   const [search, setSearch] = useState("");
-  const [Delete_id, setDelete_id] = useState();
+  const [Delete_id, setDelete_id] = useState(null);
   const [Delete_M, setDelete_M] = useState(false);
   const [Create_Edit_M, setCreate_Edit_M] = useState(false);
   const [isEdit, setisEdit] = useState({ type: false, data: null });
 
-  const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
+  const handleOpen = (id) => {
+    setDelete_id(id);
+    setDelete_M(true);
+  };
   const handleClose = () => setDelete_M(false);
   const handleOpenCreate = () => {
     setCreate_Edit_M(true);

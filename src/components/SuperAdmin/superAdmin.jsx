@@ -52,6 +52,10 @@ const SuperAdminTable = () => {
   // const [edit, setEdit] = useState(null);
   // const [isEdit, setIsEdit] = useState(false);
   const [isUserData, setisUserData] = useState(null);
+  const dispatch = useDispatch();
+  const showSnackbarHandler = (message, severity) => {
+    dispatch(showSnackbar({ message, severity }));
+  };
 
   useEffect(() => {
     setActiveCount(AdminData.length);
@@ -190,13 +194,13 @@ const SuperAdminTable = () => {
         return (
           <>
             <IconButton
-              // onClick={handleOpenDelete}
+              onClick={handleOpenDelete}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <IconButton
-              // onClick={() => handleOpenEdit(params.row)}
+              onClick={() => handleOpenEdit(params.row)}
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
             >
               <img src={EditIcon} alt="delete icon" />
@@ -706,8 +710,17 @@ const SuperAdminTable = () => {
           })
         )}
       </div>
-      <DeleteModal open={DeleteOpen} close={handleCloseDelete} />
-      <EditLocationModal open={open} close={handleClose} />
+      <DeleteModal
+        open={DeleteOpen}
+        close={handleCloseDelete}
+        handleDelete={handleDeleteUser}
+      />
+      <EditLocationModal
+        open={EditOpen}
+        close={handleCloseEdit}
+        userdata={isUserData}
+        refetch={teamMemberRefetch}
+      />
       <AddSuperAdminModel
         open={open}
         close={handleClose}

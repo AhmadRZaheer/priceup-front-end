@@ -12,14 +12,20 @@ import {
 } from "@mui/material";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import CustomInputField from "../ui-components/CustomInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
-import { useEditUser } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useDataCustomUser,
+  useEditUser,
+} from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
+import PasswordModal from "./addUserPassword";
 
 function EditLocationModal({ open, close, userdata, refetch }) {
   const [sections, setSections] = useState([false, false, false]);
   const [selectedImage, setSelectedImage] = useState(null);
+
+  const { data: customUserData } = useDataCustomUser();
   const style = {
     position: "absolute",
     top: "50%",
@@ -57,7 +63,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
     ),
   });
 
-  const { mutate: editFinish } = useEditUser();
+  const { mutate: editFinish, isSuccess } = useEditUser();
   const formik = useFormik({
     initialValues: {
       name: userdata?.name,
@@ -81,6 +87,82 @@ function EditLocationModal({ open, close, userdata, refetch }) {
     setSelectedImage(file);
     formik.setFieldValue("selectedImage", file);
   };
+  const [haveAccessArray, setHaveAccessArray] = useState([]);
+  const [giveAccessArray, setGiveAccessArray] = useState([]);
+  const [user, setuser] = useState(null);
+  const [isOpen, setisOpen] = useState(false);
+
+  const handleOpen = (data) => {
+    if (isOpen) {
+      setisOpen(false);
+    } else setisOpen(true);
+    setuser(data);
+  };
+  useEffect(() => {
+    if (userdata && customUserData) {
+      const matchingUserData = customUserData.filter((userData) =>
+        userData.locationsAccess?.some(
+          (accessData) => accessData.company_id === userdata._id
+        )
+      );
+
+      const nonMatchingUserData = customUserData.filter(
+        (userData) =>
+          !userData.locationsAccess?.some(
+            (accessData) => accessData.company_id === userdata._id
+          )
+      );
+
+      setHaveAccessArray(matchingUserData);
+      setGiveAccessArray(nonMatchingUserData);
+    }
+  }, [userdata, customUserData]);
+
+  // const handleDelete = (chipToDelete) => () => {
+  //   const itemToRemove = haveAccessArray.find(
+  //     (item) => item.id === chipToDelete.id
+  //   );
+  //   const result = haveAccessArray.filter(
+  //     (chip) => chip.id !== chipToDelete.id
+  //   );
+  //   setHaveAccessArray(result);
+  //   setGiveAccessArray([...giveAccessArray, itemToRemove]);
+  // };
+
+  // const handleAddLocation = (chipToAdd) => {
+  //   if (!haveAccessArray.includes(chipToAdd.id)) {
+  //     setHaveAccessArray([...haveAccessArray, chipToAdd]);
+  //   }
+  //   const result = giveAccessArray.filter((chip) => chip.id !== chipToAdd.id);
+  //   setGiveAccessArray(result);
+  // };
+  // const handleEditClick = () => {
+  //   const idsToAdd = haveAccessArray?.map((item) => {
+  //     return item.id;
+  //   });
+  //   const id = selectedRow?._id;
+  //   editTeamMembers({ data: idsToAdd, locId: id });
+  //   onClose();
+  //   showSnackbar("Staff info updated successfully", "success");
+  // };
+  // useEffect(() => {
+  //   if (selectedRow) {
+  //     const filteredlocationData = locationData.filter((data) =>
+  //       selectedRow?.haveAccessTo.includes(data.id)
+  //     );
+  //     const excludedLocationData = locationData.filter(
+  //       (data) => !selectedRow?.haveAccessTo.includes(data.id)
+  //     );
+  //     setHaveAccessArray(filteredlocationData);
+  //     setGiveAccessArray(excludedLocationData);
+  //   }
+  // }, [locationData, selectedRow]);
+  // useEffect(() => {
+  //   if (SuccessForEdit) {
+  //     staffRefetch();
+  //   }
+  // }, [SuccessForEdit]);
+
   return (
     <>
       <Modal open={open} onClose={close}>
@@ -349,53 +431,52 @@ function EditLocationModal({ open, close, userdata, refetch }) {
                       }}
                       component="ul"
                     >
-                      {/* {haveAccessArray.map((data) => {
-                      return ( */}
-                      <Tooltip
-                      // title={
-                      //   selectedRow.company_id === data.id
-                      //     ? "Cannot Remove"
-                      //     : ""
-                      // }
-                      >
-                        <Box
-                          sx={{
-                            borderRadius: "7px",
-                          }}
-                          // key={data.id}
-                        >
-                          <Chip
-                            label={"Add User"}
-                            // onDelete={
-                            //   data.id ? handleDelete(data) : undefined
-                            // }
-                            deleteIcon={
-                              <Close
-                                style={{
+                      {haveAccessArray.map((data) => {
+                        return (
+                          <Tooltip
+                          // title={
+                          //   selectedRow.company_id === data.id
+                          //     ? "Cannot Remove"
+                          //     : ""
+                          // }
+                          >
+                            <Box
+                              sx={{
+                                borderRadius: "7px",
+                              }}
+                              key={data._id}
+                            >
+                              <Chip
+                                label={data.name}
+                                // onDelete={
+                                //   data.id ? handleDelete(data) : undefined
+                                // }
+                                deleteIcon={
+                                  <Close
+                                    style={{
+                                      color: "white",
+                                      width: "16px",
+                                      height: "16px",
+                                      display:
+                                        // userdata?._id === data?._id
+                                        //   ? "none"
+                                        "block",
+                                    }}
+                                  />
+                                }
+                                sx={{
                                   color: "white",
-                                  width: "16px",
-                                  height: "16px",
-                                  display:
-                                    // selectedRow.company_id === data.id
-                                    //   ? "none"
-                                    // :
-                                    "block",
+                                  bgcolor: "#C6C6C6",
+                                  // selectedRow.company_id === data.id
+                                  //   ? "#8477DA"
+                                  //   : "#C6C6C6",
+                                  borderRadius: "7px",
                                 }}
                               />
-                            }
-                            sx={{
-                              color: "white",
-                              bgcolor: "#C6C6C6",
-                              // selectedRow.company_id === data.id
-                              //   ? "#8477DA"
-                              //   : "#C6C6C6",
-                              borderRadius: "7px",
-                            }}
-                          />
-                        </Box>
-                      </Tooltip>
-                      {/* );
-                    })} */}
+                            </Box>
+                          </Tooltip>
+                        );
+                      })}
                     </Box>
                   </Box>
                   <Accordion
@@ -449,28 +530,28 @@ function EditLocationModal({ open, close, userdata, refetch }) {
                         }}
                         component="ul"
                       >
-                        {/* {giveAccessArray.map((data) => {
-                            return ( */}
-                        <Box
-                          sx={{ borderRadius: "7px", p: 0 }}
-                          // key={data.id}
-                        >
-                          <Chip
-                            // onClick={() => handleAddLocation(data)}
-                            label="User name"
-                            // onDelete={
-                            //   data.id ? undefined : handleDelete(data)
-                            // }
-                            sx={{
-                              color: "white",
-                              bgcolor: "#C6C6C6",
-                              borderRadius: "7px",
-                              cursor: "pointer",
-                            }}
-                          />
-                        </Box>
-                        {/* );
-                          })} */}
+                        {giveAccessArray?.map((data) => {
+                          return (
+                            <Box
+                              sx={{ borderRadius: "7px", p: 0 }}
+                              key={data.id}
+                            >
+                              <Chip
+                                onClick={() => handleOpen(data)}
+                                label={data.name}
+                                // onDelete={
+                                //   data._id ? undefined : handleDelete(data)
+                                // }
+                                sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
+                                  borderRadius: "7px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Box>
+                          );
+                        })}
                       </Box>
                     </AccordionDetails>
                   </Accordion>
@@ -513,6 +594,12 @@ function EditLocationModal({ open, close, userdata, refetch }) {
           </form>
         </Box>
       </Modal>
+      <PasswordModal
+        open={isOpen}
+        close={handleOpen}
+        user={user}
+        companyId={userdata?._id}
+      />
     </>
   );
 }
