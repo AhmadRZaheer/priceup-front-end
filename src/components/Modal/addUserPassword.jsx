@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Button, Modal, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomInputField from "../ui-components/CustomInput";
 import { useEditCustomUser } from "../../utilities/ApiHooks/superAdmin";
 
-function PasswordModal({ open, close, user, companyId }) {
-  const { mutate: UpdateCustomUser } = useEditCustomUser();
+function PasswordModal({ open, close, user, companyId, customUserRefech }) {
+  const { mutate: UpdateCustomUser, isSuccess } = useEditCustomUser();
   const style = {
     position: "absolute",
     top: "50%",
@@ -43,10 +43,12 @@ function PasswordModal({ open, close, user, companyId }) {
         ],
       };
       UpdateCustomUser(updatedUser);
-      // You can add your logic to confirm the password or perform other actions
-      close(); // Close the modal after submission
+      close();
     },
   });
+  useEffect(() => {
+    customUserRefech();
+  }, [isSuccess]);
 
   return (
     <>

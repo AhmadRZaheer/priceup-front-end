@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   useDataCustomUser,
+  useEditCustomUser,
   useEditUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
@@ -25,7 +26,11 @@ function EditLocationModal({ open, close, userdata, refetch }) {
   const [sections, setSections] = useState([false, false, false]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const { data: customUserData } = useDataCustomUser();
+  const {
+    data: customUserData,
+    isSuccess: customerSuc,
+    refetch: customUserRefech,
+  } = useDataCustomUser();
   const style = {
     position: "absolute",
     top: "50%",
@@ -64,6 +69,8 @@ function EditLocationModal({ open, close, userdata, refetch }) {
   });
 
   const { mutate: editFinish, isSuccess } = useEditUser();
+  const { mutate: updateCustomUser, isSuccess: userUpdated } =
+    useEditCustomUser();
   const formik = useFormik({
     initialValues: {
       name: userdata?.name,
@@ -99,69 +106,46 @@ function EditLocationModal({ open, close, userdata, refetch }) {
     setuser(data);
   };
   useEffect(() => {
-    if (userdata && customUserData) {
+    console.log(userdata?._id, "uerid");
+
+    console.log(customUserData, "customUserData");
+    setHaveAccessArray((prevHaveAccessArray) => {
       const matchingUserData = customUserData.filter((userData) =>
-        userData.locationsAccess?.some(
-          (accessData) => accessData.company_id === userdata._id
+        userData?.locationsAccess?.some(
+          (accessData) => accessData?.company_id === userdata?._id
         )
       );
+      return matchingUserData;
+    });
 
+    setGiveAccessArray((prevGiveAccessArray) => {
       const nonMatchingUserData = customUserData.filter(
         (userData) =>
           !userData.locationsAccess?.some(
-            (accessData) => accessData.company_id === userdata._id
+            (accessData) => accessData?.company_id === userdata?._id
           )
       );
-
-      setHaveAccessArray(matchingUserData);
-      setGiveAccessArray(nonMatchingUserData);
-    }
+      return nonMatchingUserData;
+    });
   }, [userdata, customUserData]);
 
-  // const handleDelete = (chipToDelete) => () => {
-  //   const itemToRemove = haveAccessArray.find(
-  //     (item) => item.id === chipToDelete.id
-  //   );
-  //   const result = haveAccessArray.filter(
-  //     (chip) => chip.id !== chipToDelete.id
-  //   );
-  //   setHaveAccessArray(result);
-  //   setGiveAccessArray([...giveAccessArray, itemToRemove]);
-  // };
+  useEffect(() => {
+    customUserRefech();
+  }, [userUpdated, customerSuc]);
 
-  // const handleAddLocation = (chipToAdd) => {
-  //   if (!haveAccessArray.includes(chipToAdd.id)) {
-  //     setHaveAccessArray([...haveAccessArray, chipToAdd]);
-  //   }
-  //   const result = giveAccessArray.filter((chip) => chip.id !== chipToAdd.id);
-  //   setGiveAccessArray(result);
-  // };
-  // const handleEditClick = () => {
-  //   const idsToAdd = haveAccessArray?.map((item) => {
-  //     return item.id;
-  //   });
-  //   const id = selectedRow?._id;
-  //   editTeamMembers({ data: idsToAdd, locId: id });
-  //   onClose();
-  //   showSnackbar("Staff info updated successfully", "success");
-  // };
-  // useEffect(() => {
-  //   if (selectedRow) {
-  //     const filteredlocationData = locationData.filter((data) =>
-  //       selectedRow?.haveAccessTo.includes(data.id)
-  //     );
-  //     const excludedLocationData = locationData.filter(
-  //       (data) => !selectedRow?.haveAccessTo.includes(data.id)
-  //     );
-  //     setHaveAccessArray(filteredlocationData);
-  //     setGiveAccessArray(excludedLocationData);
-  //   }
-  // }, [locationData, selectedRow]);
-  // useEffect(() => {
-  //   if (SuccessForEdit) {
-  //     staffRefetch();
-  //   }
-  // }, [SuccessForEdit]);
+  const removeLocationAccess = async (ToRemove) => {
+    const updatedLocationsAccess = ToRemove?.locationsAccess.filter(
+      (location) => location?.company_id !== userdata?._id
+    );
+
+    const updatedUser = {
+      ...ToRemove,
+      locationsAccess: updatedLocationsAccess,
+    };
+
+    await updateCustomUser(updatedUser);
+    customUserRefech();
+  };
 
   return (
     <>
@@ -448,28 +432,20 @@ function EditLocationModal({ open, close, userdata, refetch }) {
                             >
                               <Chip
                                 label={data.name}
-                                // onDelete={
-                                //   data.id ? handleDelete(data) : undefined
-                                // }
+                                onDelete={() => removeLocationAccess(data)}
                                 deleteIcon={
                                   <Close
                                     style={{
                                       color: "white",
                                       width: "16px",
                                       height: "16px",
-                                      display:
-                                        // userdata?._id === data?._id
-                                        //   ? "none"
-                                        "block",
+                                      display: "block",
                                     }}
                                   />
                                 }
                                 sx={{
                                   color: "white",
                                   bgcolor: "#C6C6C6",
-                                  // selectedRow.company_id === data.id
-                                  //   ? "#8477DA"
-                                  //   : "#C6C6C6",
                                   borderRadius: "7px",
                                 }}
                               />
@@ -599,6 +575,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
         close={handleOpen}
         user={user}
         companyId={userdata?._id}
+        customUserRefech={customUserRefech}
       />
     </>
   );
