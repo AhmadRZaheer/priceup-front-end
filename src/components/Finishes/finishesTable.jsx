@@ -22,10 +22,12 @@ import {
 } from "../../utilities/ApiHooks/finishes";
 import AddEditFinish from "../Modal/addEditFinish";
 import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { getDataRefetch } from "../../redux/staff";
 
 const FinishesTable = () => {
+  const refetchData = useSelector(getDataRefetch);
   const {
     data: finishesData,
     refetch: finishesRefetch,
@@ -42,6 +44,9 @@ const FinishesTable = () => {
   const [matchingId, setMatchingId] = useState("");
   const [search, setSearch] = useState("");
 
+  useEffect(() => {
+    finishesRefetch();
+  }, [refetchData]);
   const handleOpen = () => {
     setOpen(true);
     setIsEdit(false);
@@ -50,7 +55,6 @@ const FinishesTable = () => {
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (data) => {
-    console.log("data", data);
     setOpen(true);
     setEdit(data);
     setIsEdit(true);

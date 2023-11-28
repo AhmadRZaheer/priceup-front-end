@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal";
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomerQuoteColumns } from "../../customerTableSource";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import {
   useDeleteEstimates,
@@ -19,6 +19,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowBack, ArrowForward, Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "../ui-components/CustomButton";
+import { getDataRefetch } from "../../redux/staff";
 
 const style = {
   position: "absolute",
@@ -40,15 +41,17 @@ const dataGridStyle = {
 };
 
 export default function AddEditFinish({ open, close, quoteId }) {
-  const [estimates, setEstimates] = useState([]); // State to store fetched data
-  const [loading, setLoading] = useState(true); // State to indicate loading
-  const [error, setError] = useState(null); // State to store error
+  const [estimates, setEstimates] = useState([]); // State to indicate loading
+  const [error, setError] = useState(null);
+  const refetchData = useSelector(getDataRefetch); // State to store error
   const {
     data: estimateListData,
     isFetching: estimateDataFetching,
     refetch: Refetched,
   } = useFetchDataEstimate();
-  console.log("qutid", estimates);
+  useEffect(() => {
+    Refetched();
+  }, [refetchData]);
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchData = async () => {
@@ -78,11 +81,8 @@ export default function AddEditFinish({ open, close, quoteId }) {
           // Handle other response codes or errors as needed
           setError("Error message or handling for non-200 response");
         }
-
-        setLoading(false);
       } catch (error) {
         setError(error.message);
-        setLoading(false);
       }
     };
 

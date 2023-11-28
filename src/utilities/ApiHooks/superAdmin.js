@@ -512,3 +512,76 @@ export const useEditCustomUser = () => {
 
   return useMutation(handleEdit);
 };
+// export const useHaveAccsessCustomUser = () => {
+//   async function fetchData({id}) {
+//     const token = localStorage.getItem("token");
+//     try {
+//       const response = await axios.get(`${backendURL}/customUsers/haveAccess/${id}`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+//       if (response.data && response.data.code === 200) {
+//         return response.data.data ? response.data.data : [];
+//       } else {
+//         throw new Error("An error occurred while fetching the data.");
+//       }
+//     } catch (error) {
+//       throw new Error("An error occurred while fetching the data.");
+//     }
+//   }
+//   return useQuery({
+//     queryKey: ["customUsers"],
+//     queryFn: fetchData,
+//     enabled: true,
+//     placeholderData: [],
+//   });
+// };
+export const useHaveAccessCustomUser = () => {
+  const handleGetData = async (userData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        `${backendURL}/customUsers/haveAccess/${userData}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  return useMutation(handleGetData);
+};
+export const useSwitchLocationUser = () => {
+  const handleSwitch = async (props) => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/customUsers/switchLocation`,
+        {
+          userId: decodedToken?.id,
+          companyId: props?.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};

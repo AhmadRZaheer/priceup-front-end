@@ -21,7 +21,7 @@ import {
   useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Input } from "@mui/material";
 import {
   addSelectedItem,
@@ -39,11 +39,11 @@ import { useEffect } from "react";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 import { DataGrid } from "@mui/x-data-grid";
+import { getDataRefetch } from "../../redux/staff";
 export default function ExistingTable() {
   const { data, isFetching, refetch } = useGetEstimates();
   const navigate = useNavigate();
-
-  console.log("data", data);
+  const refetchData = useSelector(getDataRefetch);
   const {
     data: estimateListData,
     isFetching: estimateDataFetching,
@@ -66,6 +66,10 @@ export default function ExistingTable() {
   useEffect(() => {
     refetch();
   }, [deletedSuccessfully]);
+  useEffect(() => {
+    refetch();
+    Refetched();
+  }, [refetchData]);
 
   const handleIconButtonClick = (item) => {
     dispatch(resetState());

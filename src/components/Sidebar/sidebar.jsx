@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./sidebar.scss";
 import Logo from "../../Assets/purplelogo.svg";
 import logout from "../../Assets/logout.svg";
@@ -20,21 +20,36 @@ import {
   Popover,
   Typography,
   Drawer,
+  CircularProgress,
 } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
 import { AttachMoney, Search } from "@mui/icons-material";
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useDataCustomUser,
+  useFetchDataAdmin,
+  useHaveAccessCustomUser,
+  useSwitchLocationUser,
+} from "../../utilities/ApiHooks/superAdmin";
 import BackIcon from "../../Assets/back.svg";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+import { setDataRefetch } from "../../redux/staff";
 
 const drawerWidth = 320;
 
 const Sidebar = () => {
-  const { data: AdminData } = useFetchDataAdmin();
+  const { data: AdminData, refetch } = useFetchDataAdmin();
+  const { mutate: haveAccessSet, data: haveAccessData } =
+    useHaveAccessCustomUser();
+  const {
+    mutate: switchLocationUser,
+    data: useToken,
+    isSuccess: switched,
+    isLoading: isSwitching,
+  } = useSwitchLocationUser();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
@@ -48,6 +63,7 @@ const Sidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -59,17 +75,42 @@ const Sidebar = () => {
   const filteredAdminData = AdminData?.filter((admin) =>
     admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const filteredCustomUser = haveAccessData?.filter((data) =>
+    data.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const handleAdminNameClick = (adminId) => {
     navigate(`/?userID=${adminId}`);
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
   };
-
+  const handleCustomUserClick = async (userData) => {
+    if (!userData || !decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (userData.id !== decodedToken.company_id) {
+      await switchLocationUser(userData);
+    }
+  };
+  const [refetchKey, setRefetchKey] = useState(0);
+  useEffect(() => {
+    if (switched) {
+      localStorage.setItem("token", useToken);
+      dispatch(setDataRefetch());
+      setRefetchKey((prevKey) => prevKey + 1);
+    }
+  }, [switched]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  useEffect(() => {
+    haveAccessSet(decodedToken?.id);
+  }, []);
+  // console.log(superAdminToken, "superAdminToken");
+  // console.log(token, "token");
+  // console.log(decodedToken, "decodedToken");
+  // console.log(haveAccessData, "haveAccsessData");
   const drawer = (
     <Box
       sx={{
@@ -114,6 +155,25 @@ const Sidebar = () => {
                       <span>See Locations</span>
                     </IconButton>
                   </li>
+                )}
+                {decodedToken?.role === "admin" &&
+                haveAccessData?.length > 0 ? (
+                  <li
+                    style={{ padding: 10, marginBottom: 0 }}
+                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                    onClick={handleSeeLocationsClick}
+                  >
+                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                      <img
+                        src={EyeIcon}
+                        alt="eye icon"
+                        style={{ marginRight: 12 }}
+                      />
+                      <span>See Locations</span>
+                    </IconButton>
+                  </li>
+                ) : (
+                  ""
                 )}
                 <NavLink to="/" className="link">
                   <li
@@ -534,6 +594,80 @@ const Sidebar = () => {
               No location found
             </Typography>
           ) : (
+            decodedToken?.role === "admin" &&
+            (isSwitching ? (
+              <Box
+                sx={{
+                  width: "100%",
+                  textAlign: "center",
+                  display: "flex",
+                  justifyContent: "center",
+                  height: "100px",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress sx={{ color: "#8477DA" }} />
+              </Box>
+            ) : (
+              filteredCustomUser?.map((item) => (
+                <Typography
+                  key={item.id}
+                  sx={{
+                    width: "83.8%",
+                    ml: "10px",
+                    marginBottom: "5px",
+                    textTransform: "lowercase",
+                    marginLeft: "20px",
+                    display: "flex",
+                    border: "1px solid #D9D9D9",
+                    ":hover": {
+                      bgcolor: "rgba(0, 0, 0, 0.1)",
+                      cursor: "pointer",
+                    },
+                    py: 0.4,
+                    px: 1,
+                    borderRadius: "14px",
+                  }}
+                  onClick={() => handleCustomUserClick(item)}
+                >
+                  <div className="UserIcon-1">
+                    <img
+                      src={`${backendURL}/${item.image}`}
+                      width="32"
+                      height="32"
+                      alt="no"
+                    />
+                  </div>
+                  <div style={{ paddingLeft: "10px" }}>
+                    <a style={{ cursor: "pointer" }}>{item.name}</a>
+                    <p style={{ fontSize: "10px" }}>{item.email}</p>
+                  </div>
+                  {item.id === decodedToken?.company_id ? (
+                    <Box
+                      sx={{
+                        width: "50%",
+                        display: "flex",
+                        justifyContent: "end",
+                        mt: 1.4,
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: 16,
+                          height: 16,
+                          borderRadius: "100%",
+                          background: "#4de369",
+                        }}
+                      ></div>
+                    </Box>
+                  ) : (
+                    "---"
+                  )}
+                </Typography>
+              ))
+            ))
+          )}
+          {superAdminToken &&
             filteredAdminData.map((admin) => (
               <Typography
                 key={admin.user._id}
@@ -557,7 +691,7 @@ const Sidebar = () => {
               >
                 <div className="UserIcon-1">
                   <img
-                    src={`${backendURL}/${decodedToken?.image}`}
+                    src={`${backendURL}/${admin?.user?.image}`}
                     width="32"
                     height="32"
                     alt="no"
@@ -568,70 +702,9 @@ const Sidebar = () => {
                   <p style={{ fontSize: "10px" }}>{admin.user.email}</p>
                 </div>
               </Typography>
-            ))
-          )}
+            ))}
         </div>
       </Popover>
-      {/* <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClosePopup}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <input
-            type="text"
-            placeholder="Search Admin Names"
-            style={{
-              width: "200px",
-              padding: "8px",
-              marginBottom: "10px",
-              marginLeft: "20px",
-              marginRight: "20px",
-            }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        <div
-          style={{
-            maxHeight: "150px",
-            overflowY: "auto",
-            paddingX: "20px",
-            width: "240px",
-          }}
-        >
-          {filteredAdminData.map((admin) => (
-            <Typography
-              key={admin.id}
-              sx={{
-                marginBottom: "5px",
-                textTransform: "lowercase",
-                marginLeft: "20px",
-                borderBottom: "1px solid #7d7d7d",
-                ":hover": {
-                  bgcolor: "rgba(0, 0, 0, 0.2)",
-                  cursor: "pointer",
-                },
-              }}
-            >
-              <a
-                onClick={() => handleAdminNameClick(admin._id)}
-                style={{ cursor: "pointer" }}
-              >
-                {admin.name}
-              </a>
-            </Typography>
-          ))}
-        </div>
-      </Popover> */}
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>
   );

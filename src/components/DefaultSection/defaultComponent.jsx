@@ -19,6 +19,7 @@ import { backendURL } from "../../utilities/common";
 import CustomInputField from "../ui-components/CustomInput";
 import CustomInputMenu from "../ui-components/CustomInputMenu";
 import { Fullscreen } from "@mui/icons-material";
+import { getDataRefetch } from "../../redux/staff";
 const DefaultComponent = ({ showSnackbar }) => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
@@ -29,7 +30,11 @@ const DefaultComponent = ({ showSnackbar }) => {
     isFetching: isfetchingDefaultSingle,
     refetch,
   } = useFetchSingleDefault(defaultId);
+  const refetchData = useSelector(getDataRefetch);
 
+  useEffect(() => {
+    refetch();
+  }, [refetchData]);
   const formik = useFormik({
     initialValues: {
       image: singleDefault?.layoutData?.image,

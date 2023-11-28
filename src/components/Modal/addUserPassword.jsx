@@ -29,6 +29,7 @@ function PasswordModal({ open, close, user, companyId, customUserRefech }) {
     initialValues: {
       password: "",
     },
+    enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       // Handle form submission here

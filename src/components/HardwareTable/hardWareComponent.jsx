@@ -13,12 +13,13 @@ import "./hardwareTable.scss";
 import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";
 import AddIcon from "../../Assets/plus.svg";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { getDataRefetch } from "../../redux/staff";
 
 const HardWareComponent = ({ type }) => {
   const dispatch = useDispatch();
-
+  const refetchData = useSelector(getDataRefetch);
   const showSnackbarHandler = (message, severity) => {
     dispatch(showSnackbar({ message, severity }));
   };
@@ -32,7 +33,9 @@ const HardWareComponent = ({ type }) => {
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-
+  useEffect(() => {
+    hardwareRefetch();
+  }, [refetchData]);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);

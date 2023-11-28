@@ -10,12 +10,13 @@ import GlassTypeItem from "./glassTypeItems";
 import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeDataItem from "./glassTypeData";
 import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { getDataRefetch } from "../../redux/staff";
 
 const GlassTypeComponent = ({ type }) => {
   const dispatch = useDispatch();
-
+  const refetchData = useSelector(getDataRefetch);  
   const showSnackbarHandler = (message, severity) => {
     dispatch(showSnackbar({ message, severity }));
   };
@@ -30,7 +31,9 @@ const GlassTypeComponent = ({ type }) => {
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-
+  useEffect(() => { 
+    GlassTypeRefetch();
+  }, [refetchData]);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);

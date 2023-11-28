@@ -9,11 +9,13 @@ import {
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import AddonList from "./addonList";
 import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { getDataRefetch } from "../../redux/staff";
 
 const GlassAddonGrid = ({ type }) => {
   const dispatch = useDispatch();
+  const refetchData = useSelector(getDataRefetch);
 
   const showSnackbarHandler = (message, severity) => {
     dispatch(showSnackbar({ message, severity }));
@@ -30,6 +32,9 @@ const GlassAddonGrid = ({ type }) => {
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
 
+  useEffect(() => {
+    glassAddonRefetch();
+  }, [refetchData]);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);

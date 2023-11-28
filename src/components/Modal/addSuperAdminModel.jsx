@@ -67,7 +67,7 @@ export default function AddSuperAdminModel({
       email: "",
       password: "",
     },
-    enableReinitialize: true,
+    enableReinitialize: false,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       handleCreateClick(values);

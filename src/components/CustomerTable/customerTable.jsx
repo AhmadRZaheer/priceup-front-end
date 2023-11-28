@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "../../customerTableSource";
 import { DataGrid } from "@mui/x-data-grid";
@@ -14,17 +14,21 @@ import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
 import CustomerQoute from "../Estimates/customerQuotTable";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
+import { getDataRefetch } from "../../redux/staff";
+import { useSelector } from "react-redux";
 
 const CustomerTable = () => {
-  const { data: customerData } = useFetchDataCustomer();
-
+  const { data: customerData, refetch } = useFetchDataCustomer();
+  const refetchData = useSelector(getDataRefetch);
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedRowData, setSelectedRowData] = React.useState(null);
   const filteredData = customerData?.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
   );
-
+  useEffect(() => {
+    refetch();
+  }, [refetchData]);
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (params) => {

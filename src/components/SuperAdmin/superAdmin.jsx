@@ -56,7 +56,6 @@ const SuperAdminTable = () => {
   const showSnackbarHandler = (message, severity) => {
     dispatch(showSnackbar({ message, severity }));
   };
-
   useEffect(() => {
     setActiveCount(AdminData.length);
   }, [isFetched]);
@@ -66,20 +65,21 @@ const SuperAdminTable = () => {
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = () => {
     setDeleteOpen(false);
-    deleteuserdata(isUserData);
+    deleteuserdata(isUserData?.user);
   };
   useEffect(() => {
     teamMemberRefetch();
   }, [isSuccess]);
+
   const handleOpenDelete = (data) => {
     setDeleteOpen(true);
-    setisUserData(data?.user);
+    setisUserData(data);
   };
 
   const handleCloseEdit = () => setEditOpen(false);
   const handleOpenEdit = (data) => {
     setEditOpen(true);
-    setisUserData(data?.user);
+    setisUserData(data);
   };
 
   const actionColumn = [
@@ -718,7 +718,7 @@ const SuperAdminTable = () => {
       <EditLocationModal
         open={EditOpen}
         close={handleCloseEdit}
-        userdata={isUserData}
+        userdata={isUserData?.user}
         refetch={teamMemberRefetch}
       />
       <AddSuperAdminModel

@@ -71,6 +71,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
   const { mutate: editFinish, isSuccess } = useEditUser();
   const { mutate: updateCustomUser, isSuccess: userUpdated } =
     useEditCustomUser();
+  console.log(userdata, "userdata");
   const formik = useFormik({
     initialValues: {
       name: userdata?.name,
@@ -86,6 +87,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
       editFinish(values);
       close();
       refetch();
+      console.log("submit");
     },
   });
 
@@ -105,10 +107,9 @@ function EditLocationModal({ open, close, userdata, refetch }) {
     } else setisOpen(true);
     setuser(data);
   };
+  console.log(userdata, "ueser");
   useEffect(() => {
-    console.log(userdata?._id, "uerid");
-
-    console.log(customUserData, "customUserData");
+    // console.log(customUserData, "customUserData");
     setHaveAccessArray((prevHaveAccessArray) => {
       const matchingUserData = customUserData.filter((userData) =>
         userData?.locationsAccess?.some(
@@ -346,7 +347,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
                       </Typography>
                       <CustomInputField
                         fullWidth={true}
-                        type="text"
+                        type="password"
                         name="password"
                         value={formik.values.password}
                         onChange={formik.handleChange}

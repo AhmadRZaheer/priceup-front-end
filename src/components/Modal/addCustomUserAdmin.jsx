@@ -33,7 +33,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
       email: isEdit?.type ? isEdit?.data?.email : "",
       image: isEdit?.type ? isEdit?.data?.image : "",
     },
-    enableReinitialize: true,
+    enableReinitialize: isEdit?.type ? true : false,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
       email: Yup.string()
