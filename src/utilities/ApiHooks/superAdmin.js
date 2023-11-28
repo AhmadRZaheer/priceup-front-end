@@ -333,14 +333,13 @@ export const useDataCustomUser = () => {
 export const useCreateCustomUser = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
-    const decodedToken = parseJwt(token);
     try {
       const response = await axios.post(
         `${backendURL}/customUsers/save`,
         {
           name: props.name,
           email: props.email,
-          image: props.image,
+          // image: props.image,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -485,7 +484,7 @@ export const useEditCustomUser = () => {
       const response = await axios.put(
         `${backendURL}/customUsers/${updatedUser?._id}`,
         {
-          image: updatedUser?.image,
+          // image: updatedUser?.image,
           name: updatedUser?.name,
           ...(updatedUser?.locationsAccess
             ? {

@@ -719,6 +719,7 @@ const SuperAdminTable = () => {
         open={EditOpen}
         close={handleCloseEdit}
         userdata={isUserData?.user}
+        companydata={isUserData?.company}
         refetch={teamMemberRefetch}
       />
       <AddSuperAdminModel

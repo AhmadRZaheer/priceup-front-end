@@ -22,7 +22,7 @@ import {
 import * as Yup from "yup";
 import PasswordModal from "./addUserPassword";
 
-function EditLocationModal({ open, close, userdata, refetch }) {
+function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const [sections, setSections] = useState([false, false, false]);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -113,7 +113,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
     setHaveAccessArray((prevHaveAccessArray) => {
       const matchingUserData = customUserData.filter((userData) =>
         userData?.locationsAccess?.some(
-          (accessData) => accessData?.company_id === userdata?._id
+          (accessData) => accessData?.company_id === companydata?._id
         )
       );
       return matchingUserData;
@@ -123,20 +123,21 @@ function EditLocationModal({ open, close, userdata, refetch }) {
       const nonMatchingUserData = customUserData.filter(
         (userData) =>
           !userData.locationsAccess?.some(
-            (accessData) => accessData?.company_id === userdata?._id
+            (accessData) => accessData?.company_id === companydata?._id
           )
       );
       return nonMatchingUserData;
     });
-  }, [userdata, customUserData]);
+  }, [companydata, customUserData]);
 
   useEffect(() => {
     customUserRefech();
   }, [userUpdated, customerSuc]);
 
   const removeLocationAccess = async (ToRemove) => {
+    console.log(ToRemove, "ToRemove");
     const updatedLocationsAccess = ToRemove?.locationsAccess.filter(
-      (location) => location?.company_id !== userdata?._id
+      (location) => location?.company_id !== companydata?._id
     );
 
     const updatedUser = {
@@ -575,7 +576,7 @@ function EditLocationModal({ open, close, userdata, refetch }) {
         open={isOpen}
         close={handleOpen}
         user={user}
-        companyId={userdata?._id}
+        companyId={companydata?._id}
         customUserRefech={customUserRefech}
       />
     </>

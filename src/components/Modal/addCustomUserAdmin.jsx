@@ -31,7 +31,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
       _id: isEdit?.data?._id,
       name: isEdit?.type ? isEdit?.data?.name : "",
       email: isEdit?.type ? isEdit?.data?.email : "",
-      image: isEdit?.type ? isEdit?.data?.image : "",
+      // image: isEdit?.type ? isEdit?.data?.image : "",
     },
     enableReinitialize: isEdit?.type ? true : false,
     validationSchema: Yup.object({
