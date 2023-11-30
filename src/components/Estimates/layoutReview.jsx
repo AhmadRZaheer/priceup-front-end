@@ -25,6 +25,7 @@ import {
   setCost,
   setProfit,
   getListData,
+  getUserProfitPercentage,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
@@ -44,7 +45,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
-const listData = useSelector(getListData);
+  const listData = useSelector(getListData);
   const estimatesTotal = useSelector(getTotal);
   const measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
@@ -161,6 +162,7 @@ const listData = useSelector(getListData);
       polish: selectedContent?.polish,
       people: selectedContent?.people,
       hours: selectedContent?.hours,
+      userProfitPercentage: selectedContent?.userProfitPercentage,
       cost: Number(estimatesTotal),
       hardwareAddons: [...hardwareAddonsArray],
       sleeveOverCount: selectedContent?.sleeveOverCount,
@@ -191,7 +193,8 @@ const listData = useSelector(getListData);
     );
   };
   // const { data: listData, refetch: Refetched } = useFetchDataEstimate();
-
+  // const userProfitPercentage = useSelector(getUserProfitPercentage);
+  // console.log(userProfitPercentage, "userProfitPercentage layout review");
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,

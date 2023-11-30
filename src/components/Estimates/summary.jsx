@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import {
   getContent,
   getFabricationTotal,
@@ -15,8 +15,10 @@ import {
   getDoorWidth,
   getQuoteState,
   getLayoutArea,
+  getUserProfitPercentage,
+  setUserProfitPercentage,
 } from "../../redux/estimateCalculations";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 import Accordion from "@mui/material/Accordion";
@@ -31,11 +33,11 @@ const Summary = () => {
   const fabricationPrice = useSelector(getFabricationTotal);
   const miscPrice = useSelector(getMiscTotal);
   const laborPrice = useSelector(getLaborTotal);
+  const userProfitPercentage = useSelector(getUserProfitPercentage);
   const doorWidth = useSelector(getDoorWidth);
   const totalPrice = useSelector(getTotal);
   const actualCost = useSelector(getCost);
   const grossProfit = useSelector(getProfit);
-
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
@@ -48,6 +50,8 @@ const Summary = () => {
       ? `${backendURL}/${selectedData?.layoutData?.image}`
       : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
+  const dispatch = useDispatch();
+
   return (
     <>
       <Box
@@ -551,78 +555,7 @@ const Summary = () => {
                     </Box>
                   </AccordionDetails>
                 </Accordion>
-                {/** Gross Profit Accordian */}
-                <Accordion
-                  sx={{
-                    paddingX: "6px",
-                    border: "none",
-                    boxShadow: "none !important",
-                    ".MuiPaper-elevation": {
-                      border: " none !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    sx={{
-                      padding: 0,
-                      margin: 0,
-                      borderBottom: "none",
-                      height: "30px",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                      Gross Profit Margin
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails
-                    sx={{
-                      padding: 0,
-                      borderTop: "2px solid #D0D5DD",
-                      paddingY: 1,
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Gross Total:
-                      </Typography>
-                      <Typography>${totalPrice?.toFixed(2) || 0}</Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Actual Cost:
-                      </Typography>
-                      <Typography>${actualCost?.toFixed(2) || 0}</Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Gross Profit:
-                      </Typography>
-                      <Typography>${grossProfit?.toFixed(2) || 0}</Typography>
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
+
                 {/* Price category Accordian */}
                 <Accordion
                   sx={{
@@ -750,6 +683,150 @@ const Summary = () => {
                         </Typography>
                       </Box>
                     </Typography>
+                  </AccordionDetails>
+                </Accordion>
+                {/** Gross Profit Accordian */}
+                <Accordion
+                  sx={{
+                    paddingX: "6px",
+                    border: "none",
+                    boxShadow: "none !important",
+                    ".MuiPaper-elevation": {
+                      border: " none !important",
+                      boxShadow: "none !important",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                      borderBottom: "none",
+                      height: "30px",
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      Gross Profit Margin
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      padding: 0,
+                      borderTop: "2px solid #D0D5DD",
+                      paddingY: 1,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Total:
+                      </Typography>
+                      <Typography>${totalPrice?.toFixed(2) || 0}</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Actual Cost:
+                      </Typography>
+                      <Typography>${actualCost?.toFixed(2) || 0}</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Profit:
+                      </Typography>
+                      <Typography>{grossProfit?.toFixed(2) || 0} %</Typography>
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingTop: "0px",
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Adjust Profit:
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
+                        }}
+                      >
+                        <TextField
+                          type="number"
+                          InputProps={{
+                            style: {
+                              color: "black",
+                              borderRadius: 10,
+                              border: "1px solid #cccccc",
+                              backgroundColor: "white",
+                            },
+                            inputProps: { min: 0, max: 100 },
+                          }}
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={userProfitPercentage}
+                          onChange={(event) => {
+                            dispatch(
+                              setUserProfitPercentage(
+                                Number(event.target.value)
+                              )
+                            );
+                            console.log(userProfitPercentage, "prooooo");
+                          }}
+                        />{" "}
+                        %
+                      </Box>
+                      {/* <Box sx={{ width: "100px" }}>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={handleProfitPercentage}
+                          sx={{
+                            backgroundColor: "#8477da",
+                            "&:hover": {
+                              backgroundColor: "#8477da",
+                            },
+                          }}
+                        >
+                          {" "}
+                          Submit
+                        </Button>
+                      </Box> */}
+                    </Box>
                   </AccordionDetails>
                 </Accordion>
               </Box>

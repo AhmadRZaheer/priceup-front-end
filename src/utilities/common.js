@@ -135,7 +135,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         (item) => selectedContent.hardwareFinishes._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
-  
+
   let mountingPrice = selectedContent?.mountingState === 'channel' ? mountingChannel : (mountingWallClamps + mountingglassToGlass + mountingsleeveOver);
   mountingPrice += (cornerWallClamps + cornerGlassToGlass + cornerSleeveOver);
   const hardwareTotals =
@@ -235,8 +235,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-  console.log( selectedContent?.people, "fabricat", selectedContent?.hours, estimatesData?.miscPricing?.hourlyRate);
-  const total =
+
+  let total =
     (hardwareTotals +
       fabricationPrice +
       hardwareAddons +
@@ -244,7 +244,24 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       glassAddonsPrice) *
       estimatesData?.miscPricing?.pricingFactor +
     laborPrice;
-  const cost = hardwareTotals+fabricationPrice+glassPrice+glassAddonsPrice;
+  const cost =
+    hardwareTotals + fabricationPrice + glassPrice + glassAddonsPrice;
+  const profit = total - cost;
+  const totalPercentage = ((total - cost) * 100) / total;
+  if (selectedContent.userProfitPercentage !== 0) {
+    if (totalPercentage > selectedContent.userProfitPercentage) {
+      const newPercentage =
+        totalPercentage - selectedContent.userProfitPercentage;
+      const price = total * (newPercentage / 100);
+      total = total - price;
+    }
+    if (totalPercentage < selectedContent.userProfitPercentage) {
+      const newPercentage =
+        selectedContent.userProfitPercentage - totalPercentage;
+      const price = total * (newPercentage / 100);
+      total = total + price;
+    }
+  }
   return {
     hardwarePrice: hardwareTotals,
     fabricationPrice: fabricationPrice,
@@ -253,8 +270,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     miscPricing: 0,
     laborPrice: laborPrice,
     total: total,
-    cost:cost,
-    profit:(total - cost)
+    cost: cost,
+    profit: ((total - cost) * 100) / total,
   };
 };
 
@@ -300,7 +317,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     };
     const areaSqft = Math.round(((door.width*door.height)/144*doorQuantity) * 100) / 100;
     const perimeterDoor = {width:(door.width*2*doorQuantity),height:(door.height*2*doorQuantity)};
-    const perimeter = perimeterDoor.width+perimeterDoor.height;  
+    const perimeter = perimeterDoor.width+perimeterDoor.height;
     return {
       areaSqft: areaSqft,
       perimeter:perimeter,
@@ -335,7 +352,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       panelWidth: panel.width 
 
     };
-    
+  
    }
    else if (variant === layoutVariants.DOUBLEDOOR)
    {
@@ -362,9 +379,9 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     return {
       areaSqft:areaSqft,
       perimeter:perimeter,
-      doorWidth: doorLeft.width 
+      doorWidth: doorLeft.width
     };
-   }
+  }
    else if(variant === layoutVariants.DOORANDNIB){
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
@@ -390,10 +407,10 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width ,
-      panelWidth: panel.width 
+      panelWidth: panel.width
     };
-   }
-   else if (variant === layoutVariants.DOORANDNOTCHEDPANEL){ 
+  }
+   else if (variant === layoutVariants.DOORANDNOTCHEDPANEL){
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
@@ -420,9 +437,9 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width ,
-      panelWidth: panel.width 
+      panelWidth: panel.width
     };
-   }
+  }
    else if (variant === layoutVariants.DOORPANELANDRETURN){
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
@@ -432,8 +449,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const doorSqft = ((door.width*door.height)/144*doorQuantity);
     const panelQuantity = measurements?.b > 28 ? 1 : 0;
     const panel = {
-        width: door?.width > 28 ? (measurements?.b-door?.width) : (measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))),
-        height: panelQuantity === 0 ? 0 : measurements?.a
+      width: door?.width > 28 ? (measurements?.b-door?.width) : (measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))),
+      height: panelQuantity === 0 ? 0 : measurements?.a
       }
     const panelSqft = ((panel.width*panel.height)/144*panelQuantity);
     const returnQuantity = measurements?.c === 0 ? 0 : 1;
@@ -457,8 +474,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width ,
-      panelWidth: panel.width 
-    }; 
+      panelWidth: panel.width
+    };
   }
   else if (variant === layoutVariants.DOORNOTCHEDPANELANDRETURN){
     const doorQuantity = measurements?.a === 0 ? 0 : 1;
@@ -469,8 +486,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
     const doorSqft = ((door.width*door.height)/144*doorQuantity);
     const panelQuantity = measurements?.a > 28 ? 1 : 0;
     const panel = {
-        width: door?.width > 28 ? (Number(measurements?.b-door?.width)+Number(measurements?.d)) : Number((measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))))+Number(measurements?.d),
-        height: panelQuantity === 0 ? 0 : measurements?.a
+      width: door?.width > 28 ? (Number(measurements?.b-door?.width)+Number(measurements?.d)) : Number((measurements?.b < 29 ? (measurements?.b-door?.width) : ((measurements?.b >= 28 ? measurements?.b-door?.width : 0) < 10 ? 10 : (measurements?.b >= 28 ? measurements?.b-door?.width : 0))))+Number(measurements?.d),
+      height: panelQuantity === 0 ? 0 : measurements?.a
       }
     const panelSqft = ((panel.width*panel.height)/144*panelQuantity);
     const returnQuantity = measurements?.a === 0 ? 0 : 1;
@@ -494,11 +511,11 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width ,
-      panelWidth: panel.width 
-    }; 
+      panelWidth: panel.width
+    };
   }
   else if (variant === layoutVariants.SINGLEBARN){
-        const doorQuantity = measurements?.b === 0 ? 0 : 1;
+    const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a
@@ -522,7 +539,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width ,
-      panelWidth: panel.width 
+      panelWidth: panel.width
     };
   }
   else if (variant === layoutVariants.DOUBLEBARN){
@@ -550,7 +567,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant) => {
       areaSqft:areaSqft,
       perimeter:perimeter,
       doorWidth: door.width,
-      panelWidth: panel.width 
+      panelWidth: panel.width
     };
   } else if (variant === layoutVariants.CUSTOM) {
     measurements = measurementSides;

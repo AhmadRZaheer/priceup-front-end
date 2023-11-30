@@ -172,8 +172,8 @@ export default function ClientDetailsModel({
         measurements: measurements,
         perimeter: perimeter,
         sqftArea: sqftArea,
+        userProfitPercentage: estimatesContent?.userProfitPercentage,
       };
-      console.log("in correct file");
 
       if (["create", "custom"].includes(updatecheck)) {
         mutate({
@@ -192,7 +192,7 @@ export default function ClientDetailsModel({
       }
     },
   });
-  const navigate = useNavigate();
+    const navigate = useNavigate();
   const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {

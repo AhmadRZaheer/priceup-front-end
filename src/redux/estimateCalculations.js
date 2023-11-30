@@ -15,6 +15,8 @@ export const getFabricationTotal = (state) =>
 export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
 export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
 
+export const getUserProfitPercentage = (state) =>
+  state.estimateCalculations.content.userProfitPercentage;
 export const getMeasurementSide = (state) =>
   state.estimateCalculations.measurements;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
@@ -90,6 +92,7 @@ const initialState = {
     hours: 0,
     hardwareAddons: [],
     mountingState: "channel",
+    userProfitPercentage: 0,
   },
   actualCost: 0,
   grossProfit: 0,
@@ -283,6 +286,11 @@ const estimateCalcSlice = createSlice({
         };
       }
     },
+
+    setUserProfitPercentage: (state, action) => {
+      const { payload } = action;
+      state.content.userProfitPercentage = payload;
+    },
     setTotal: (state, action) => {
       const { payload } = action;
       state.totalPrice = payload;
@@ -319,6 +327,7 @@ const estimateCalcSlice = createSlice({
       const { payload } = action;
       state.laborPrice = payload;
     },
+
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
       if (["mitre"].includes(type)) {
@@ -1017,6 +1026,7 @@ const estimateCalcSlice = createSlice({
         sleeveOverCount: estimateData?.sleeveOverCount,
         towelBarsCount: estimateData?.towelBarsCount,
         hardwareAddons: [...hardwareAddons],
+        userProfitPercentage: estimateData?.userProfitPercentage,
       };
       state.quoteState = quoteState;
       state.measurements = measurements;
@@ -1034,6 +1044,7 @@ export const {
   setFabricationPrice,
   setMiscPrice,
   setLaborPrice,
+  setUserProfitPercentage,
   setLayoutArea,
   setLayoutPerimeter,
   setContent,
