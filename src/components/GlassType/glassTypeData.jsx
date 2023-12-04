@@ -11,13 +11,7 @@ import GlassTypeItem from "./glassTypeItems";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 
-const GlassTypeDataItem = ({
-  entry,
-  mainIndex,
-  GlassTypeRefetch,
-  showSnackbar,
-  type,
-}) => {
+const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -34,12 +28,6 @@ const GlassTypeDataItem = ({
   };
   useEffect(() => {
     if (GlassTypeEditSuccess || deleteSuccess) {
-      if (deleteSuccess) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (GlassTypeEditSuccess) {
-        showSnackbar("Updated Successfully", "success");
-      }
       GlassTypeRefetch();
     }
   }, [GlassTypeEditSuccess, deleteSuccess]);
@@ -106,7 +94,6 @@ const GlassTypeDataItem = ({
               index={index}
               refetch={GlassTypeRefetch}
               glassTypeId={entry._id}
-              showSnackbar={showSnackbar}
               SetUpdateValue={SetUpdateValue}
               UpdateValue={UpdateValue}
             />
@@ -119,7 +106,6 @@ const GlassTypeDataItem = ({
         data={entry}
         isEdit={true}
         refetch={GlassTypeRefetch}
-        showSnackbar={showSnackbar}
         categorySlug={type}
       />
     </>

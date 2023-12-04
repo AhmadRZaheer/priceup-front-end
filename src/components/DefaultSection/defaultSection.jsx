@@ -7,11 +7,6 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 import { useDispatch } from "react-redux";
 
 const DefaultSection = () => {
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
   return (
     <>
       <Box
@@ -35,7 +30,7 @@ const DefaultSection = () => {
         >
           <div className="hardwareTable">
             <div className="hardwareTable">
-              <DefaultComponent showSnackbar={showSnackbarHandler} />
+              <DefaultComponent  />
             </div>
           </div>
         </Box>

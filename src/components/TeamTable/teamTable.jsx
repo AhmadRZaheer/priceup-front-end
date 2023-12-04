@@ -43,11 +43,6 @@ const TeamTable = () => {
     setEdit(data);
     setIsEdit(true);
   };
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
-  const dispatch = useDispatch();
-
   const {
     mutate: deleteFinish,
     isSuccess: deleteSuccess,
@@ -56,15 +51,10 @@ const TeamTable = () => {
   const handleTeamMemberDelete = (id) => {
     deleteFinish(id);
     setMatchingId(id);
-    if (deleteSuccess) {
-      showSnackbarHandler("Deleted Successfully ", "warning");
-      teamMemberRefetch();
-    }
   };
   React.useEffect(() => {
     if (deleteSuccess) {
       teamMemberRefetch();
-      showSnackbarHandler("Deleted Successfully ", "warning");
     }
   }, [deleteSuccess]);
   const { data: locationData } = useFetchAdminLocation();
@@ -346,7 +336,6 @@ const TeamTable = () => {
           data={edit}
           isEdit={isEdit}
           refetch={teamMemberRefetch}
-          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>

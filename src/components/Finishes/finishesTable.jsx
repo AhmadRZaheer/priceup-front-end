@@ -68,7 +68,6 @@ const FinishesTable = () => {
   useEffect(() => {
     if (deleteSuccess) {
       finishesRefetch();
-      showSnackbarHandler("Finish is Deleted Successfully", "error");
     }
   }, [deleteSuccess]);
 
@@ -106,10 +105,6 @@ const FinishesTable = () => {
       },
     },
   ];
-  const dispatch = useDispatch();
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   // Filter the finishesData based on the search input
   const filteredData = finishesData?.filter((finish) =>
@@ -341,7 +336,6 @@ const FinishesTable = () => {
           data={edit}
           isEdit={isEdit}
           finishesRefetch={finishesRefetch}
-          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>

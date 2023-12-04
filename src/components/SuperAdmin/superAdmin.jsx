@@ -16,6 +16,7 @@ import EditIcon from "../../Assets/d.svg";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
 import DefaultIcon from "../../Assets/layout-gray.svg";
 import {
+  useDataCustomUser,
   useDeleteUser,
   useFetchAllStaff,
   useFetchDataAdmin,
@@ -30,7 +31,6 @@ import { Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 
@@ -41,6 +41,11 @@ const SuperAdminTable = () => {
     isFetched,
     isFetching,
   } = useFetchDataAdmin();
+  const {
+    data: customUserData,
+    isSuccess: customerSuc,
+    refetch: customUserRefech,
+  } = useDataCustomUser();
   const { data: staffData } = useFetchAllStaff();
   const { mutate: deleteuserdata, isSuccess } = useDeleteUser();
 
@@ -49,18 +54,24 @@ const SuperAdminTable = () => {
   const [EditOpen, setEditOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
-  // const [edit, setEdit] = useState(null);
+  const [haveAccessUsers, sethaveAccessUsers] = useState([]);
   // const [isEdit, setIsEdit] = useState(false);
   const [isUserData, setisUserData] = useState(null);
-  const dispatch = useDispatch();
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
+  useEffect(() => {
+    sethaveAccessUsers((prevHaveAccessArray) => {
+      const matchingUserData = customUserData.filter((userData) =>
+        userData?.locationsAccess?.some(
+          (accessData) => accessData?.company_id === isUserData?.company?._id
+        )
+      );
+      return matchingUserData;
+    });
+  }, [isUserData?.company, customUserData]);
+
   useEffect(() => {
     setActiveCount(AdminData.length);
   }, [isFetched]);
   const [search, setSearch] = useState("");
-
   const handleClose = () => setOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = () => {
@@ -81,6 +92,7 @@ const SuperAdminTable = () => {
     setEditOpen(true);
     setisUserData(data);
   };
+  console.log(AdminData, "AdminData");
 
   const actionColumn = [
     {
@@ -360,6 +372,11 @@ const SuperAdminTable = () => {
           </Box>
         ) : (
           filteredData?.map((item) => {
+            const matchingUserData = customUserData.filter((userData) =>
+              userData?.locationsAccess?.some(
+                (accessData) => accessData?.company_id === item?.company?._id
+              )
+            );
             const handleToggleChange = (active) => {
               setInActiveCount((prevCount) => {
                 if (!active && prevCount > 0) {
@@ -535,24 +552,39 @@ const SuperAdminTable = () => {
                         Users
                       </Typography>
                       <Grid container mt={1} gap={2}>
-                        <Typography
-                          sx={{
-                            backgroundColor: "#F9F5FF",
-                            width: 32,
-                            height: 32,
-                            borderRadius: "100%",
-                            textAlign: "center",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "#7F56D9",
-                            textTransform: "uppercase",
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {firstNameInitial}
-                          {lastNameInitial}
-                        </Typography>
+                        {matchingUserData.map((user) => {
+                          if (user && user?.name) {
+                            var firstNameUser = user?.name?.charAt(0);
+                          } else {
+                            var firstNameUser = "";
+                          }
+                          if (user && user?.name) {
+                            var lastNameUser = user?.name?.charAt(1);
+                          } else {
+                            var lastNameUser = "";
+                          }
+
+                          return (
+                            <Typography
+                              sx={{
+                                backgroundColor: "#F9F5FF",
+                                width: 32,
+                                height: 32,
+                                borderRadius: "100%",
+                                textAlign: "center",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                color: "#7F56D9",
+                                textTransform: "uppercase",
+                                fontWeight: "bold",
+                              }}
+                            >
+                              {firstNameUser}
+                              {lastNameUser}
+                            </Typography>
+                          );
+                        })}
                       </Grid>
                     </Box>
                   </Box>
@@ -726,7 +758,6 @@ const SuperAdminTable = () => {
         open={open}
         close={handleClose}
         refetch={teamMemberRefetch}
-        showSnackbar={showSnackbarHandler}
         // data={edit}
         // isEdit={isEdit}
       />

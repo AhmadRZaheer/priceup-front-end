@@ -2,6 +2,8 @@ import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -52,6 +54,7 @@ export const useGetEstimates = () => {
 };
 
 export const useCreateEstimates = () => {
+  const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
@@ -78,11 +81,29 @@ export const useCreateEstimates = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Estimate Created Successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "success",
+          })
+        );
         throw Error("An error occurred while creating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "success",
+        })
+      );
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -95,11 +116,11 @@ function generateRandomNumbers(count) {
   for (let i = 0; i < count; i++) {
     randomNumbers.push(String(1000 + Math.floor(Math.random() * 9000)));
   }
-  return randomNumbers.join('');
+  return randomNumbers.join("");
 }
 
-
 export const useEditEstimates = () => {
+  const dispatch = useDispatch();
   const handleEditEstimate = async (updatedEstimate) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
@@ -108,7 +129,11 @@ export const useEditEstimates = () => {
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
           customerData: updatedEstimate.customerData,
-          estimateData: { ...updatedEstimate.estimateData, creator_id: decodedToken.id, creator_type: decodedToken.role },
+          estimateData: {
+            ...updatedEstimate.estimateData,
+            creator_id: decodedToken.id,
+            creator_type: decodedToken.role,
+          },
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -116,11 +141,24 @@ export const useEditEstimates = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Estimate Updated Successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -129,6 +167,7 @@ export const useEditEstimates = () => {
 };
 
 export const useDeleteEstimates = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -136,15 +175,32 @@ export const useDeleteEstimates = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Estimate Deleted Successfuly",
+            severity: "error",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
       throw error;
     }
   };
 
   return useMutation(handleDelete);
 };
-

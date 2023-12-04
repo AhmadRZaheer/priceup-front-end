@@ -15,11 +15,7 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 import { getDataRefetch } from "../../redux/staff";
 
 const GlassTypeComponent = ({ type }) => {
-  const dispatch = useDispatch();
-  const refetchData = useSelector(getDataRefetch);  
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
+  const refetchData = useSelector(getDataRefetch);
 
   const {
     data: GlassTypeData,
@@ -31,7 +27,7 @@ const GlassTypeComponent = ({ type }) => {
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
-  useEffect(() => { 
+  useEffect(() => {
     GlassTypeRefetch();
   }, [refetchData]);
   const handleOpen = (data) => {
@@ -45,7 +41,6 @@ const GlassTypeComponent = ({ type }) => {
   useEffect(() => {
     if (deleteSuccess) {
       GlassTypeRefetch();
-      showSnackbarHandler("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
 
@@ -166,7 +161,6 @@ const GlassTypeComponent = ({ type }) => {
               entry={entry}
               mainIndex={mainIndex}
               GlassTypeRefetch={GlassTypeRefetch}
-              showSnackbar={showSnackbarHandler}
               type={type}
             />
           ))}
@@ -179,7 +173,6 @@ const GlassTypeComponent = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={GlassTypeRefetch}
-        showSnackbar={showSnackbarHandler}
         categorySlug={type}
       />
     </>

@@ -19,12 +19,12 @@ import OptionWithCounter from "./optionWithCounter";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 const MenuList = ({
   menuOptions,
   title,
   type,
-  showSnackbar,
   count,
   thickness,
   currentItem,
@@ -55,7 +55,13 @@ const MenuList = ({
       ["hardwareFinishes"].includes(type)
     )
       setAnchorEl(!anchorEl);
-    else showSnackbar("Please select 'hardwareFinishes' first", "warning");
+    else
+      dispatch(
+        showSnackbar({
+          message: "Please select 'hardwareFinishes' first",
+          severity: "warning",
+        })
+      );
   };
   return (
     <Box>
@@ -194,7 +200,7 @@ const MenuList = ({
                 height: 150,
               }}
             >
-              <CircularProgress sx={{color: "#8477DA"}}/>
+              <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
           ) : (
             menuOptions?.map((item) => (

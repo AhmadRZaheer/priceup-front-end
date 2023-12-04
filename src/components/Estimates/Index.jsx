@@ -14,11 +14,6 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
   const Navigation = useSelector(getPageDesktopNavigation);
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   return (
     <>
@@ -45,7 +40,6 @@ const Index = () => {
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
-        showSnackbar={showSnackbarHandler}
       />
     </>
   );

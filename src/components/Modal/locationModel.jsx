@@ -34,7 +34,6 @@ export default function LocationModel({
   onClose,
   selectedRow,
   staffRefetch,
-  showSnackbar,
 }) {
   const { data: locationData } = useFetchAdminLocation();
   const {
@@ -75,7 +74,6 @@ export default function LocationModel({
     const id = selectedRow?._id;
     editTeamMembers({ data: idsToAdd, locId: id });
     onClose();
-    showSnackbar("Staff info updated successfully", "success");
   };
   useEffect(() => {
     if (selectedRow) {

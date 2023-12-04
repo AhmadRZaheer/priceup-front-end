@@ -16,8 +16,9 @@ import { backendURL } from "../../utilities/common";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
-const ChannelTypeDesktop = ({ menuOptions, title, type, showSnackbar }) => {
+const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
   const [anchorEl, setAnchorEl] = useState(false);
   const selectedContent = useSelector(getContent);
   const listData = useSelector(getListData);
@@ -58,10 +59,16 @@ const ChannelTypeDesktop = ({ menuOptions, title, type, showSnackbar }) => {
       ["hardwareFinishes"].includes(type)
     )
       setAnchorEl(!anchorEl);
-    else showSnackbar("Please select 'hardwareFinishes' first", "warning");
+    else
+      dispatch(
+        showSnackbar({
+          message: "Please select 'hardwareFinishes' first",
+          severity: "warning",
+        })
+      );
   };
   const [cornerActive, setCornerActive] = useState(true);
-   return (
+  return (
     <Box>
       <Box
         sx={{
@@ -174,19 +181,16 @@ const ChannelTypeDesktop = ({ menuOptions, title, type, showSnackbar }) => {
                   menuOptions={listData?.wallClamp}
                   title={"Wall Clamps"}
                   type={"wallClamp"}
-                  showSnackbar={showSnackbar}
                 />
                 <MenuList
                   menuOptions={listData?.sleeveOver}
                   title={"Sleeve Over"}
                   type={"sleeveOver"}
-                  showSnackbar={showSnackbar}
                 />
                 <MenuList
                   menuOptions={listData?.glassToGlass}
                   title={"Glass to Glass"}
                   type={"glassToGlass"}
-                  showSnackbar={showSnackbar}
                 />
               </>
             )}
@@ -280,19 +284,16 @@ const ChannelTypeDesktop = ({ menuOptions, title, type, showSnackbar }) => {
                 menuOptions={listData?.cornerWallClamp}
                 title={"Wall Clamps"}
                 type={"cornerWallClamp"}
-                showSnackbar={showSnackbar}
               />
               <MenuList
                 menuOptions={listData?.cornerSleeveOver}
                 title={"Sleeve Over"}
                 type={"cornerSleeveOver"}
-                showSnackbar={showSnackbar}
               />
               <MenuList
                 menuOptions={listData?.cornerGlassToGlass}
                 title={"Glass to Glass"}
                 type={"cornerGlassToGlass"}
-                showSnackbar={showSnackbar}
               />
             </>
           )}

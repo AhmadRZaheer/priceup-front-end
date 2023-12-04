@@ -2,6 +2,8 @@ import { backendURL, createSlug } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataGlassType = () => {
   async function fetchData() {
@@ -28,6 +30,7 @@ export const useFetchDataGlassType = () => {
 };
 
 export const useDeleteGlassType = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
@@ -38,12 +41,19 @@ export const useDeleteGlassType = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Deleted Successfully", severity: "error" })
+        );
         return response.data.data;
       } else {
+        showSnackbar({
+          message: "An error occurred while fetching the data",
+          severity: "error",
+        });
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      showSnackbar({ message: error, severity: "error" });
       throw error;
     }
   };
@@ -51,6 +61,7 @@ export const useDeleteGlassType = () => {
   return useMutation(handleDelete);
 };
 export const useDeleteGlassTypeFull = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
@@ -58,12 +69,21 @@ export const useDeleteGlassTypeFull = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Deleted Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw error;
     }
   };
@@ -72,6 +92,7 @@ export const useDeleteGlassTypeFull = () => {
 };
 
 export const useCreateGlassType = () => {
+  const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
@@ -91,12 +112,27 @@ export const useCreateGlassType = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Created Successfuly", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      throw new Error("An error occurred while creating the data.");
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
+      throw new Error(error);
     }
   };
 
@@ -104,6 +140,7 @@ export const useCreateGlassType = () => {
 };
 
 export const useEditGlassType = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
     try {
@@ -133,11 +170,21 @@ export const useEditGlassType = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };

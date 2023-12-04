@@ -18,11 +18,7 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 import { getDataRefetch } from "../../redux/staff";
 
 const HardWareComponent = ({ type }) => {
-  const dispatch = useDispatch();
   const refetchData = useSelector(getDataRefetch);
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   const {
     data: hardwareData,
@@ -140,7 +136,6 @@ const HardWareComponent = ({ type }) => {
               entry={entry}
               mainIndex={mainIndex}
               hardwareRefetch={hardwareRefetch}
-              showSnackbar={showSnackbarHandler}
               type={type}
             />
           ))}
@@ -159,7 +154,6 @@ const HardWareComponent = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={hardwareRefetch}
-        showSnackbar={showSnackbarHandler}
         categorySlug={type}
       />
     </>

@@ -29,14 +29,7 @@ const style = {
   p: 4,
 };
 
-export default function AddTeamMembers({
-  open,
-  close,
-  isEdit,
-  data,
-  refetch,
-  showSnackbar,
-}) {
+export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
@@ -59,7 +52,6 @@ export default function AddTeamMembers({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("New Team Member Created  ", "success");
       close();
     }
   }, [CreatedSuccessfully]);
@@ -67,7 +59,6 @@ export default function AddTeamMembers({
   React.useEffect(() => {
     if (SuccessForEdit) {
       refetch();
-      showSnackbar("Updated Successfully ", "success");
       close();
     }
   }, [SuccessForEdit]);
@@ -224,7 +215,11 @@ export default function AddTeamMembers({
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "#101828", border: "1px solid #D0D5DD", width: "50%" }}
+              sx={{
+                color: "#101828",
+                border: "1px solid #D0D5DD",
+                width: "50%",
+              }}
             >
               Cancel
             </Button>
@@ -242,7 +237,7 @@ export default function AddTeamMembers({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24} sx={{ color: "#8477DA" }}/>
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

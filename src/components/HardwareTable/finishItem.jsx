@@ -24,7 +24,6 @@ const FinishItem = ({
   index,
   refetch,
   hardwareId,
-  showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
@@ -84,12 +83,6 @@ const FinishItem = ({
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if (SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (SuccessForEdit) {
-        showSnackbar("Updated Successfully", "success");
-      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 

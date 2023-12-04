@@ -35,7 +35,6 @@ export default function AddEditHardware({
   isEdit,
   data,
   refetch,
-  showSnackbar,
   categorySlug,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -60,13 +59,11 @@ export default function AddEditHardware({
   useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("Created Successfully ", "success");
       close();
     }
 
     if (SuccessForEdit) {
       refetch();
-      showSnackbar("Updated Successfully ", "success");
       close();
       console.log(SuccessForEdit, "effect s");
     }

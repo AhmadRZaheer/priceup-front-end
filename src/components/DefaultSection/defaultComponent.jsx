@@ -20,7 +20,7 @@ import CustomInputField from "../ui-components/CustomInput";
 import CustomInputMenu from "../ui-components/CustomInputMenu";
 import { Fullscreen } from "@mui/icons-material";
 import { getDataRefetch } from "../../redux/staff";
-const DefaultComponent = ({ showSnackbar }) => {
+const DefaultComponent = () => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
   const refetchDefault = useSelector(getRefetch);
@@ -152,7 +152,6 @@ const DefaultComponent = ({ showSnackbar }) => {
   useEffect(() => {
     if (SuccessForEdit) {
       refetch();
-      showSnackbar("Updated Successfully ", "success");
       dispatch(setRefetch(refetchDefault + 1));
     }
   }, [SuccessForEdit]);

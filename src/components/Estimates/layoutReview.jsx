@@ -213,19 +213,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     console.log(prices);
   }, [selectedContent]);
 
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      showSnackbarHandler("Estimate Updated successfully", "success");
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
       // Refetched();
       navigate("/estimates");
-    } else if (ErrorForAddEidt) {
-      const errorMessage = ErrorForAddEidt.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
 
@@ -386,7 +379,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.hardwareFinishes}
                         title={"Hardware Finishes"}
                         type={"hardwareFinishes"}
-                        showSnackbar={showSnackbar}
                         listData={listData}
                         currentItem={selectedContent?.hardwareFinishes}
                       />
@@ -408,7 +400,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.handles}
                         title={"Handles"}
                         type={"handles"}
-                        showSnackbar={showSnackbar}
                         count={selectedContent.handles.count}
                         currentItem={selectedContent?.handles?.item}
                       />
@@ -430,7 +421,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.hinges}
                         title={"Hinges"}
                         type={"hinges"}
-                        showSnackbar={showSnackbar}
                         count={selectedContent.hinges.count}
                         currentItem={selectedContent?.hinges?.item}
                       />
@@ -462,7 +452,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                             menuOptions={listData?.channelOrClamps}
                             title={"Mounting"}
                             type={"mounting"}
-                            showSnackbar={showSnackbar}
                             listData={listData}
                           />
                         </Box>
@@ -485,7 +474,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.glassType}
                         title={" Glass type"}
                         type={"glassType"}
-                        showSnackbar={showSnackbar}
                         thickness={selectedContent.glassType.thickness}
                         currentItem={selectedContent?.glassType?.item}
                       />
@@ -507,7 +495,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.slidingDoorSystem}
                         title={"Sliding Door System"}
                         type={"slidingDoorSystem"}
-                        showSnackbar={showSnackbar}
                         count={selectedContent.slidingDoorSystem.count}
                         currentItem={selectedContent?.slidingDoorSystem?.item}
                       />
@@ -529,7 +516,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.header}
                         title={"Header"}
                         type={"header"}
-                        showSnackbar={showSnackbar}
                         count={selectedContent.header.count}
                         currentItem={selectedContent?.header?.item}
                       />
@@ -551,7 +537,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
-                        showSnackbar={showSnackbar}
                         // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
@@ -572,7 +557,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.hardwareAddons}
                         title={"Hardware Addons"}
                         type={"hardwareAddons"}
-                        showSnackbar={showSnackbar}
                       />
                     </Box>
                   </Box>

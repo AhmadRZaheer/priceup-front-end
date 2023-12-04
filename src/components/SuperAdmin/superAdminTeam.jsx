@@ -40,11 +40,6 @@ const SuperAdminTeam = () => {
     isFetching,
   } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -62,7 +57,6 @@ const SuperAdminTeam = () => {
   const handleClose = () => setDelete_M(false);
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
-    showSnackbarHandler("Staff info deleted successfully", "error");
     handleClose();
   };
   useEffect(() => {
@@ -160,7 +154,6 @@ const SuperAdminTeam = () => {
   const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
-
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -260,6 +253,10 @@ const SuperAdminTeam = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
+          ) : filteredData.length === 0 ? (
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+              No Team Found
+            </Typography>
           ) : (
             <div className="CustomerTable">
               <DataGrid
@@ -363,7 +360,6 @@ const SuperAdminTeam = () => {
           onClose={closeModel}
           selectedRow={selectedRow}
           staffRefetch={teamMemberRefetch}
-          showSnackbar={showSnackbarHandler}
           // filteredAdminData={filteredAdminData}
           // notAdded={notAdded}
           // AdminData={AdminData}

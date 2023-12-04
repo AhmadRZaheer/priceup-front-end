@@ -2,6 +2,8 @@ import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataTeam = () => {
   async function fetchData() {
@@ -28,6 +30,7 @@ export const useFetchDataTeam = () => {
 };
 
 export const useDeleteTeamMembers = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -35,12 +38,21 @@ export const useDeleteTeamMembers = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Deleted Successfully", severity: "error" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw error;
     }
   };
@@ -49,6 +61,7 @@ export const useDeleteTeamMembers = () => {
 };
 
 export const useCreateTeamMembers = () => {
+  const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
@@ -69,11 +82,24 @@ export const useCreateTeamMembers = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: " Team Member Created Successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -82,8 +108,8 @@ export const useCreateTeamMembers = () => {
 };
 
 export const useEditTeamMembers = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (editTeamMembers) => {
-    console.log("team", editTeamMembers);
     const token = localStorage.getItem("token");
 
     try {
@@ -101,11 +127,21 @@ export const useEditTeamMembers = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "success",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "success" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -114,6 +150,7 @@ export const useEditTeamMembers = () => {
 };
 //new hook for update location
 export const useAddLocation = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (editTeamMembers) => {
     console.log(editTeamMembers?.data, "testing data");
     const token = localStorage.getItem("token");
@@ -130,11 +167,29 @@ export const useAddLocation = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Updated Successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

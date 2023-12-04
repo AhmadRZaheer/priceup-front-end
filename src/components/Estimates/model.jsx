@@ -33,12 +33,7 @@ const validationSchema = yup.object({
   lastName: yup.string().required("Last Name is required"),
   email: yup.string().email("Invalid email address"),
 });
-export default function ClientDetailsModel({
-  open,
-  handleCancel,
-  showSnackbar,
-}) {
-  console.log("in correct file");
+export default function ClientDetailsModel({ open, handleCancel }) {
   const {
     mutate,
     isError: ErrorForAdd,
@@ -192,11 +187,10 @@ export default function ClientDetailsModel({
       }
     },
   });
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const { refetch: Refetched } = useFetchDataEstimate();
   React.useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      showSnackbar("Estimate Updated successfully", "success");
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
       handleCancel();
@@ -205,12 +199,10 @@ export default function ClientDetailsModel({
       navigate("/estimates");
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
   React.useEffect(() => {
     if (CreatedSuccessfully) {
-      showSnackbar("Estimate created successfully", "success");
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
       handleCancel();
@@ -218,7 +210,6 @@ export default function ClientDetailsModel({
       navigate("/estimates");
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfully, ErrorForAdd]);
 

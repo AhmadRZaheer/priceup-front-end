@@ -12,7 +12,7 @@ import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 
-const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
+const AddonList = ({ entry, mainIndex, refetch, type }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -29,12 +29,6 @@ const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
   };
   useEffect(() => {
     if (glassAddonEditSuccess || deleteSuccess) {
-      if (deleteSuccess) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (glassAddonEditSuccess) {
-        showSnackbar("Updated Successfully", "success");
-      }
       refetch();
     }
   }, [glassAddonEditSuccess, deleteSuccess]);
@@ -101,7 +95,6 @@ const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
               index={index}
               refetch={refetch}
               glassAddonId={entry._id}
-              showSnackbar={showSnackbar}
               SetUpdateValue={SetUpdateValue}
               UpdateValue={UpdateValue}
             />
@@ -114,7 +107,6 @@ const AddonList = ({ entry, mainIndex, refetch, showSnackbar, type }) => {
         data={entry}
         isEdit={true}
         refetch={refetch}
-        showSnackbar={showSnackbar}
         categorySlug={type}
       />
     </>

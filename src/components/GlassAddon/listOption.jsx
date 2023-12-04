@@ -26,7 +26,6 @@ const ListOption = ({
   index,
   refetch,
   glassAddonId,
-  showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
@@ -89,12 +88,6 @@ const ListOption = ({
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if (SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (SuccessForEdit) {
-        showSnackbar("Updated Successfully", "success");
-      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 

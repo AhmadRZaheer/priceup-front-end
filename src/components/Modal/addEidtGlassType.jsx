@@ -35,7 +35,6 @@ export default function AddEditGlassType({
   isEdit,
   data,
   refetch,
-  showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const onDrop = (acceptedFiles) => {
@@ -58,7 +57,6 @@ export default function AddEditGlassType({
   useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("Created Successfully ", "success");
       close();
     }
   }, [CreatedSuccessfully]);
@@ -66,7 +64,6 @@ export default function AddEditGlassType({
   useEffect(() => {
     if (SuccessForEdit) {
       refetch();
-      showSnackbar("Edit Successfully ", "success");
       close();
     }
   }, [SuccessForEdit]);

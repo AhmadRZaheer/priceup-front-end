@@ -2,6 +2,8 @@ import { backendURL } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDataSetting = () => {
   async function fetchData() {
@@ -33,10 +35,9 @@ export const useFetchDataSetting = () => {
 };
 
 export const useEditSetting = () => {
+  const dispatch = useDispatch();
   const handleEditSetting = async (editedData) => {
-
     const token = localStorage.getItem("token");
-    
 
     try {
       const response = await axios.put(
@@ -89,11 +90,26 @@ export const useEditSetting = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

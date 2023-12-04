@@ -35,7 +35,6 @@ export default function AddEditFinish({
   isEdit,
   data,
   finishesRefetch,
-  showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -101,21 +100,15 @@ export default function AddEditFinish({
   React.useEffect(() => {
     if (SuccessForEdit) {
       finishesRefetch();
-      showSnackbar("Updated Successfully ", "success");
       close();
-    } else if (ErrorForAddEidt) {
-      const errorMessage = ErrorForAddEidt.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
     }
   }, [SuccessForEdit, ErrorForAddEidt]);
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       finishesRefetch();
-      showSnackbar("Created Successfully ", "success");
       close();
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
-      showSnackbar(errorMessage, "error");
     }
   }, [CreatedSuccessfully, ErrorForAdd]);
   return (

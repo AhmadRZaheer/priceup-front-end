@@ -25,7 +25,6 @@ const GlassTypeItem = ({
   index,
   refetch,
   glassTypeId,
-  showSnackbar,
   SetUpdateValue,
   UpdateValue,
 }) => {
@@ -83,12 +82,6 @@ const GlassTypeItem = ({
   useEffect(() => {
     if (SuccessForEdit || SuccessForDelete) {
       refetch();
-      if (SuccessForDelete) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (SuccessForEdit) {
-        showSnackbar("Edit Successfully", "success");
-      }
     }
   }, [SuccessForEdit, SuccessForDelete]);
 

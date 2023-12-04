@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import Snackbars from "../Modal/snackBar";
 import {
   useDeleteGlassAddon,
   useFetchGlassAddons,
@@ -10,16 +9,10 @@ import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import AddonList from "./addonList";
 import CustomIconButton from "../ui-components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
 import { getDataRefetch } from "../../redux/staff";
 
 const GlassAddonGrid = ({ type }) => {
-  const dispatch = useDispatch();
   const refetchData = useSelector(getDataRefetch);
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   const {
     data: glassAddons,
@@ -55,7 +48,6 @@ const GlassAddonGrid = ({ type }) => {
   useEffect(() => {
     if (deleteSuccess) {
       glassAddonRefetch();
-      showSnackbarHandler("Deleted Successfully ", "error");
     }
   }, [deleteSuccess]);
 
@@ -176,7 +168,6 @@ const GlassAddonGrid = ({ type }) => {
               entry={entry}
               mainIndex={mainIndex}
               refetch={glassAddonRefetch}
-              showSnackbar={showSnackbarHandler}
               type={type}
             />
           ))}
@@ -189,7 +180,6 @@ const GlassAddonGrid = ({ type }) => {
         data={edit}
         isEdit={isEdit}
         refetch={glassAddonRefetch}
-        showSnackbar={showSnackbarHandler}
         categorySlug={type}
       />
     </>

@@ -24,11 +24,6 @@ const IndexMobile = () => {
   const handleOpen = () => setClientDetailOpen(true);
   const updatecheck = useSelector(getQuoteState);
   const Navigation = useSelector(getPageDesktopNavigation);
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
 
   return (
     <>
@@ -58,7 +53,6 @@ const IndexMobile = () => {
         <ClientDetailsModel
           open={clientDetailOpen}
           handleCancel={() => setClientDetailOpen(false)}
-          showSnackbar={showSnackbarHandler}
         />
         {/* <Model
           open={clientDetailOpen}

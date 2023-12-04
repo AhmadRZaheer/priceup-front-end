@@ -27,16 +27,9 @@ const CampanySetting = () => {
   const { mutate: editFinish, isSuccess: SuccessForEdit } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const dispatch = useDispatch();
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  };
-
   useEffect(() => {
     if (SuccessForEdit) {
       reFetchDataSetting();
-      showSnackbarHandler("UPDATED Successfully ", "success");
     }
   }, [SuccessForEdit]);
   const formik = useFormik({

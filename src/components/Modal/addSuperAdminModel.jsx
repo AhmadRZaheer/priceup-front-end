@@ -34,7 +34,6 @@ export default function AddSuperAdminModel({
   isEdit,
   data,
   refetch,
-  showSnackbar,
 }) {
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -79,7 +78,6 @@ export default function AddSuperAdminModel({
   React.useEffect(() => {
     if (CreatedSuccessfully) {
       refetch();
-      showSnackbar("New User Created ", "success");
       close();
     }
   }, [CreatedSuccessfully]);

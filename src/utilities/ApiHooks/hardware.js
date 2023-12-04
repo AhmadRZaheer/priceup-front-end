@@ -3,6 +3,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { showSnackbar } from "../../redux/snackBarSlice";
 
 export const useFetchDatahardwareCategory = () => {
   async function fetchData() {
@@ -84,6 +86,7 @@ export const useFetchDatahardware = (type) => {
 };
 
 export const useDeleteHardwares = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem("token");
@@ -91,12 +94,21 @@ export const useDeleteHardwares = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Deleted Successfuly", severity: "error" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw error;
     }
   };
@@ -105,6 +117,7 @@ export const useDeleteHardwares = () => {
 };
 
 export const useCreateHardware = () => {
+  const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
@@ -125,11 +138,21 @@ export const useCreateHardware = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Created Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -177,38 +200,55 @@ export const useCreateHardware = () => {
 
 //   return useMutation(handleEdit);
 // };
-// export const useEditHardware = () => {
-//   const handleEdit = async (props) => {
-//     const token = localStorage.getItem("token");
-//     console.log(props, "props");
-//     console.log(props.hardwareData.image, "props.id");
-//     try {
-//       const response = await axios.put(
-//         `${backendURL}/hardwares/${props.id}`,
-//         {
-//           ...(props.finishesData ? { finishes: props.finishesData } : {}),
-//           ...(props.hardwareData
-//             ? { name: props.hardwareData.name, image: props.hardwareData.image }
-//             : {}),
-//         },
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-//       if (response.data.code === 200) {
-//         return response.data.data;
-//       } else {
-//         throw new Error("An error occurred while updating the data.");
-//       }
-//     } catch (error) {
-//       throw new Error("An error occurred while updating the data.");
-//     }
-//   };
-//   return useMutation(handleEdit);
-// };
-// ... (import statements)
+export const useEditFullHardware = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (props) => {
+    const token = localStorage.getItem("token");
+    console.log(props.DataFinishes.id, "props");
+    try {
+      const response = await axios.put(
+        `${backendURL}/hardwares/${props.DataFinishes.id}`,
+        {
+          ...(props.DataFinishes.finishesData
+            ? { finishes: props.DataFinishes.finishesData }
+            : {}),
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Hardware Updated Successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: error,
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+  return useMutation(handleEdit);
+};
 
 export const useEditHardware = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
     console.log(props, "props");
@@ -234,11 +274,21 @@ export const useEditHardware = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -247,6 +297,7 @@ export const useEditHardware = () => {
 };
 
 export const useDeleteHardwareFinish = () => {
+  const dispatch = useDispatch();
   const handleDelete = async (props) => {
     try {
       const token = localStorage.getItem("token");
@@ -257,12 +308,24 @@ export const useDeleteHardwareFinish = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "Finish Type Deleted Successfully",
+            severity: "error",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while fetching the data",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      console.error("Delete failed", error);
+      dispatch(showSnackbar({ message: error, severity: "error" }));
       throw error;
     }
   };

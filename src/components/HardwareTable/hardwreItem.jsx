@@ -6,18 +6,13 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import {
   useDeleteHardwares,
+  useEditFullHardware,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
 import AddEditHardware from "../Modal/addEditHardware";
 import CustomIconButton from "../ui-components/CustomButton";
 
-const HardwareItem = ({
-  entry,
-  mainIndex,
-  hardwareRefetch,
-  showSnackbar,
-  type,
-}) => {
+const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -28,28 +23,31 @@ const HardwareItem = ({
     deleteHardware(id);
   };
   const { mutate: editFinish, isSuccess: hardwareEditSuccess } =
-    useEditHardware();
+    useEditFullHardware();
   const handleOpenEdit = () => {
     setOpen(true);
   };
   useEffect(() => {
     if (hardwareEditSuccess || deleteSuccess) {
-      if (deleteSuccess) {
-        showSnackbar("Deleted Successfully", "error");
-      }
-      if (hardwareEditSuccess) {
-        showSnackbar("Updated Successfully", "success");
-      }
       hardwareRefetch();
     }
   }, [hardwareEditSuccess, deleteSuccess]);
 
   const [UpdateValue, SetUpdateValue] = useState(entry.finishes);
+  const [DataFinishes, setIdUpdate] = useState({
+    finishesData: null,
+    id: null,
+  });
 
   const handleOpenUpdate = (id) => {
-    editFinish({ finishesData: UpdateValue, id: id });
+    setIdUpdate({ finishesData: UpdateValue, id: id });
     localStorage.setItem("scrollToIndex", id);
   };
+  useEffect(() => {
+    if (DataFinishes.finishesData !== null && DataFinishes.id !== null) {
+      editFinish({ DataFinishes });
+    }
+  }, [UpdateValue, DataFinishes]);
 
   useEffect(() => {
     const scrollToIndex = localStorage.getItem("scrollToIndex");
@@ -106,7 +104,6 @@ const HardwareItem = ({
             index={index}
             refetch={hardwareRefetch}
             hardwareId={entry._id}
-            showSnackbar={showSnackbar}
             SetUpdateValue={SetUpdateValue}
             UpdateValue={UpdateValue}
           />
@@ -118,7 +115,6 @@ const HardwareItem = ({
         data={entry}
         isEdit={true}
         refetch={hardwareRefetch}
-        showSnackbar={showSnackbar}
         categorySlug={type}
       />
     </div>

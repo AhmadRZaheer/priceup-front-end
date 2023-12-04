@@ -48,19 +48,15 @@ const LayoutReview = () => {
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
-
-  const showSnackbarHandler = (message, severity) => {
-    dispatch(showSnackbar({ message, severity }));
-  }
   console.log(quoteState, "quoteState");
   return (
     <>
       <Box
         sx={{
           width: { md: "70%", sm: "100%", sx: "100%" },
-          margin: { md: "auto", xs: 0 }, 
+          margin: { md: "auto", xs: 0 },
           display: "flex",
-          alignItems: { md: "center", xs: "start" }, 
+          alignItems: { md: "center", xs: "start" },
           flexDirection: "column",
           p: { md: 2, sx: 0 },
           gap: { md: 4, xs: 0 },
@@ -159,7 +155,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hardwareFinishes}
                       title={"Hardware Finishes"}
                       type={"hardwareFinishes"}
-                      showSnackbar={showSnackbarHandler}
                       estimatesData={estimatesData}
                       currentItem={selectedContent?.hardwareFinishes}
                     />
@@ -181,7 +176,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.handles}
                       title={"Handles"}
                       type={"handles"}
-                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.handles.count}
                       currentItem={selectedContent?.handles?.item}
                     />
@@ -203,7 +197,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hinges}
                       title={"Hinges"}
                       type={"hinges"}
-                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.hinges.count}
                       currentItem={selectedContent?.hinges?.item}
                     />
@@ -237,7 +230,6 @@ const LayoutReview = () => {
                             menuOptions={estimatesData?.channelOrClamps}
                             title={"Mounting"}
                             type={"mounting"}
-                            showSnackbar={showSnackbarHandler}
                             estimatesData={estimatesData}
                           />
                         </Box>
@@ -261,7 +253,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassType}
                       title={" Glass type"}
                       type={"glassType"}
-                      showSnackbar={showSnackbarHandler}
                       thickness={selectedContent.glassType.thickness}
                       currentItem={selectedContent?.glassType?.item}
                     />
@@ -283,7 +274,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.slidingDoorSystem}
                       title={"Sliding Door System"}
                       type={"slidingDoorSystem"}
-                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.slidingDoorSystem.count}
                       currentItem={selectedContent?.slidingDoorSystem?.item}
                     />
@@ -305,7 +295,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.header}
                       title={"Header"}
                       type={"header"}
-                      showSnackbar={showSnackbarHandler}
                       count={selectedContent.header.count}
                       currentItem={selectedContent?.header?.item}
                     />
@@ -327,7 +316,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.glassAddons}
                       title={"Glass Addons"}
                       type={"glassAddons"}
-                      showSnackbar={showSnackbarHandler}
                       // currentItem={selectedContent?.glassTreatment}
                     />
                   </Box>
@@ -348,7 +336,6 @@ const LayoutReview = () => {
                       menuOptions={estimatesData?.hardwareAddons}
                       title={"Hardware Addons"}
                       type={"hardwareAddons"}
-                      showSnackbar={showSnackbarHandler}
                     />
                   </Box>
                 </Box>

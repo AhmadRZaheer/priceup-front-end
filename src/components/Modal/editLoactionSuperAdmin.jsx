@@ -71,7 +71,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const { mutate: editFinish, isSuccess } = useEditUser();
   const { mutate: updateCustomUser, isSuccess: userUpdated } =
     useEditCustomUser();
-  console.log(userdata, "userdata");
   const formik = useFormik({
     initialValues: {
       name: userdata?.name,
@@ -87,7 +86,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
       editFinish(values);
       close();
       refetch();
-      console.log("submit");
     },
   });
 
@@ -107,9 +105,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     } else setisOpen(true);
     setuser(data);
   };
-  console.log(userdata, "ueser");
   useEffect(() => {
-    // console.log(customUserData, "customUserData");
     setHaveAccessArray((prevHaveAccessArray) => {
       const matchingUserData = customUserData.filter((userData) =>
         userData?.locationsAccess?.some(
@@ -135,7 +131,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   }, [userUpdated, customerSuc]);
 
   const removeLocationAccess = async (ToRemove) => {
-    console.log(ToRemove, "ToRemove");
     const updatedLocationsAccess = ToRemove?.locationsAccess.filter(
       (location) => location?.company_id !== companydata?._id
     );
