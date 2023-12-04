@@ -5,6 +5,7 @@ import {
   useUserStatus,
 } from "../../utilities/ApiHooks/superAdmin";
 import CustomToggle from "../ui-components/Toggle";
+import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 
 const TableRow = ({ row, refetch, onToggleChange, type }) => {
   const {
@@ -18,6 +19,7 @@ const TableRow = ({ row, refetch, onToggleChange, type }) => {
     isLoading: LoadingForEditUser,
     isSuccess: SuccessForEditUser,
   } = useCustomUserStatus();
+  const { mutate: editTeamMembers } = useEditTeamMembers();
 
   const [active, setActive] = useState(row.status);
 
@@ -27,6 +29,8 @@ const TableRow = ({ row, refetch, onToggleChange, type }) => {
       updateStatus({ status: !active, id: row?._id });
       onToggleChange(active);
     } else if (type === "superAdminTeam") {
+      console.log(active, "activeactiveactive");
+      editTeamMembers({ status: !active, id: row?._id });
     } else if (type === "superAdminUser") {
       updateStatusUser({ status: !active, id: row?._id });
     }

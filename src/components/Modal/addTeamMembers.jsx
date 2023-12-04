@@ -218,13 +218,18 @@ export default function AddTeamMembers({
               helperText={formik.touched.name && formik.errors.email}
               variant="outlined"
               fullWidth
+              disabled
             />
           </Box>
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
               onClick={close}
-              sx={{ color: "#101828", border: "1px solid #D0D5DD", width: "50%" }}
+              sx={{
+                color: "#101828",
+                border: "1px solid #D0D5DD",
+                width: "50%",
+              }}
             >
               Cancel
             </Button>
@@ -242,7 +247,7 @@ export default function AddTeamMembers({
               }}
             >
               {LoadingForAdd || LoadingForEdit ? (
-                <CircularProgress size={24} sx={{ color: "#8477DA" }}/>
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
                 "Update"
               ) : (

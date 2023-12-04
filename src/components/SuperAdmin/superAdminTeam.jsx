@@ -32,6 +32,7 @@ import EditIcon from "../../Assets/d.svg";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
+import AddTeamMembers from "../Modal/addTeamMembers";
 
 const SuperAdminTeam = () => {
   const {
@@ -47,7 +48,6 @@ const SuperAdminTeam = () => {
   };
 
   const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const openModel = (row) => {
     setSelectedRow(row);
@@ -59,7 +59,11 @@ const SuperAdminTeam = () => {
   const [Delete_id, setDelete_id] = useState();
   const [Delete_M, setDelete_M] = useState(false);
   const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
-  const handleClose = () => setDelete_M(false);
+  const handleClose = () => {
+    setDelete_M(false);
+    setOpen(false);
+  };
+
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
     showSnackbarHandler("Staff info deleted successfully", "error");
@@ -69,6 +73,15 @@ const SuperAdminTeam = () => {
     teamMemberRefetch();
   }, [isSuccess]);
 
+  const [open, setOpen] = useState(false);
+  const [open2, setOpen2] = useState(false);
+  const [edit2, setEdit2] = useState(null);
+  const [isEdit2, setIsEdit2] = useState(false);
+  const handleOpenEdit = (data) => {
+    setOpen2(true);
+    setEdit2(data);
+    setIsEdit2(true);
+  };
   const { data: locationData } = useFetchAdminLocation();
   const actionColumn = [
     {
@@ -109,7 +122,13 @@ const SuperAdminTeam = () => {
       headerClassName: "customHeaderClass-admin-team",
       flex: 0.5,
       renderCell: (params) => {
-        return <TableRow row={params.row} refetch={teamMemberRefetch} />;
+        return (
+          <TableRow
+            row={params.row}
+            refetch={teamMemberRefetch}
+            type={"superAdminTeam"}
+          />
+        );
       },
     },
 
@@ -124,7 +143,7 @@ const SuperAdminTeam = () => {
               sx={{ borderRadius: 0, color: "#7F56D9" }}
               onClick={() => openModel(params.row)}
             >
-              <h6>Access Location</h6>
+              <h6>Modify Access</h6>
             </IconButton>
           </>
         );
@@ -149,8 +168,9 @@ const SuperAdminTeam = () => {
             </IconButton>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+              onClick={() => handleOpenEdit(params.row)}
             >
-              <img src={EditIcon} alt="delete icon" />
+              <img src={EditIcon} alt="EDIT icon" />
             </IconButton>
           </>
         );
@@ -160,7 +180,7 @@ const SuperAdminTeam = () => {
   const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
-
+  console.log(staffData, filteredData, "filteredData sassa");
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -262,22 +282,31 @@ const SuperAdminTeam = () => {
             </Box>
           ) : (
             <div className="CustomerTable">
-              <DataGrid
-                style={{
-                  border: "none",
-                }}
-                getRowId={(row) => row._id}
-                rows={filteredData.slice(
-                  (page - 1) * itemsPerPage,
-                  page * itemsPerPage
-                )}
-                columns={AdminColumns.concat(actionColumn)}
-                page={page}
-                pageSize={itemsPerPage}
-                rowCount={filteredData.length}
-                sx={{ width: "100%" }}
-                hideFooter
-              />
+              {filteredData.length > 0 ? (
+                <DataGrid
+                  style={{
+                    border: "none",
+                  }}
+                  getRowId={(row) => row._id}
+                  rows={filteredData?.slice(
+                    (page - 1) * itemsPerPage,
+                    page * itemsPerPage
+                  )}
+                  columns={AdminColumns?.concat(actionColumn)}
+                  page={page}
+                  pageSize={itemsPerPage}
+                  rowCount={filteredData?.length}
+                  sx={{ width: "100%" }}
+                  hideFooter
+                />
+              ) : (
+                <Box
+                  sx={{ padding: "10px 0px", fontSize: "18px", color: "gray" }}
+                >
+                  No Team member found
+                </Box>
+              )}
+              {/* button Box */}
               <Box
                 sx={{
                   display: "flex",
@@ -367,6 +396,16 @@ const SuperAdminTeam = () => {
           // filteredAdminData={filteredAdminData}
           // notAdded={notAdded}
           // AdminData={AdminData}
+        />
+        <AddTeamMembers
+          open={open2}
+          close={() => {
+            setOpen2(false);
+          }}
+          data={edit2}
+          isEdit={isEdit2}
+          refetch={teamMemberRefetch}
+          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>
