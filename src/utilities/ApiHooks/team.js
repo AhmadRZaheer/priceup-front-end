@@ -111,16 +111,22 @@ export const useEditTeamMembers = () => {
   const dispatch = useDispatch();
   const handleEdit = async (editTeamMembers) => {
     const token = localStorage.getItem("token");
+    const updatedData = {
+      ...(editTeamMembers?.teamData
+        ? {
+            name: editTeamMembers?.teamData?.name,
+            image: editTeamMembers?.teamData?.image,
+            // password: editTeamMembers?.teamData?.password,
+          }
+        : {}),
+      status: editTeamMembers?.status,
+    };
+    console.log("team", editTeamMembers, updatedData);
 
     try {
       const response = await axios.put(
         `${backendURL}/staffs/${editTeamMembers?.id}`,
-        {
-          name: editTeamMembers?.teamData?.name,
-          email: editTeamMembers?.teamData?.email,
-          password: editTeamMembers?.teamData?.password,
-          image: editTeamMembers?.teamData?.image,
-        },
+        updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
