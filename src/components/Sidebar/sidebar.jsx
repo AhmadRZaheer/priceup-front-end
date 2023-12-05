@@ -37,6 +37,7 @@ import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { setDataRefetch } from "../../redux/staff";
+import DefaultImage from "../ui-components/defaultImage";
 
 const drawerWidth = 320;
 
@@ -387,15 +388,13 @@ const Sidebar = () => {
                 display: "flex",
                 alignItems: "center",
                 paddingX: 2,
-                pt: 1,
+                p: 1,
               }}
             >
-              <Box sx={{ marginRight: 1 }}>
-                <img
-                  src={`${backendURL}/${decodedToken?.image}`}
-                  width="50"
-                  height="50"
-                  alt="no"
+              <Box sx={{ marginLeft: 1, mr: 1.2 }}>
+                <DefaultImage
+                  image={decodedToken?.image}
+                  name={decodedToken?.name}
                 />
               </Box>
               <Box sx={{ fontSize: 18 }}>
@@ -630,22 +629,17 @@ const Sidebar = () => {
                   }}
                   onClick={() => handleCustomUserClick(item)}
                 >
-                  <div className="UserIcon-1">
-                    <img
-                      src={`${backendURL}/${item.image}`}
-                      width="32"
-                      height="32"
-                      alt="no"
-                    />
+                  <div style={{ width: "20%" }}>
+                    <DefaultImage image={item.image} name={item.name} />
                   </div>
-                  <div style={{ paddingLeft: "10px" }}>
+                  <div style={{ paddingLeft: "10px", width: "100%" }}>
                     <a style={{ cursor: "pointer" }}>{item.name}</a>
                     <p style={{ fontSize: "10px" }}>{item.email}</p>
                   </div>
                   {item.id === decodedToken?.company_id ? (
                     <Box
                       sx={{
-                        width: "50%",
+                        width: "10%",
                         display: "flex",
                         justifyContent: "end",
                         mt: 1.4,
@@ -661,7 +655,7 @@ const Sidebar = () => {
                       ></div>
                     </Box>
                   ) : (
-                    "---"
+                    ""
                   )}
                 </Typography>
               ))
@@ -689,12 +683,10 @@ const Sidebar = () => {
                 }}
                 onClick={() => handleAdminNameClick(admin.user._id)}
               >
-                <div className="UserIcon-1">
-                  <img
-                    src={`${backendURL}/${admin?.user?.image}`}
-                    width="32"
-                    height="32"
-                    alt="no"
+                <div>
+                  <DefaultImage
+                    image={admin?.user?.image}
+                    name={admin.user.name}
                   />
                 </div>
                 <div style={{ paddingLeft: "10px" }}>

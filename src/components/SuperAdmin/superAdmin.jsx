@@ -33,6 +33,7 @@ import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
 import DeleteModal from "../Modal/deleteModal";
 import EditLocationModal from "../Modal/editLoactionSuperAdmin";
+import DefaultImage from "../ui-components/defaultImage";
 
 const SuperAdminTable = () => {
   const {
@@ -138,36 +139,9 @@ const SuperAdminTable = () => {
       headerName: "users",
       width: 120,
       renderCell: (params) => {
-        if (params.row && params.row.name) {
-          var firstNameInitial = params.row.name.charAt(0);
-        } else {
-          var firstNameInitial = "";
-        }
-        if (params.row && params.row.name) {
-          var lastNameInitial = params.row.name.charAt(1);
-        } else {
-          var lastNameInitial = "";
-        }
         return (
           <Grid container>
-            <Typography
-              sx={{
-                backgroundColor: "#F9F5FF",
-                width: 34,
-                height: 34,
-                borderRadius: "100%",
-                textAlign: "center",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                color: "#7F56D9",
-                textTransform: "uppercase",
-                fontWeight: "bold",
-              }}
-            >
-              {firstNameInitial}
-              {lastNameInitial}
-            </Typography>
+            <DefaultImage image={params.row.image} name={params.row.name} />
           </Grid>
         );
       },
@@ -440,60 +414,11 @@ const SuperAdminTable = () => {
                     <Box
                       sx={{ display: "flex", gap: 1.5, alignItems: "center" }}
                     >
-                      <Box
-                        sx={{
-                          width: "40px",
-                          height: "40px",
-                          overflow: "hidden",
-                          borderRadius: "100%",
-                        }}
-                      >
-                        {item?.user?.image === "images/users/default.jpg" ? (
-                          <Typography
-                            sx={{
-                              backgroundColor: "#F9F5FF",
-                              width: 40,
-                              height: 40,
-                              borderRadius: "100%",
-                              textAlign: "center",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: "#7F56D9",
-                              textTransform: "uppercase",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {firstNameInitial}
-                            {lastNameInitial}
-                          </Typography>
-                        ) : item?.user?.image ? (
-                          <img
-                            className="cellImg"
-                            style={{ width: 40, height: 40 }}
-                            src={`${backendURL}/${item?.user?.image}`}
-                            alt="logo image"
-                          />
-                        ) : (
-                          <Typography
-                            sx={{
-                              backgroundColor: "#F9F5FF",
-                              width: 40,
-                              height: 40,
-                              borderRadius: "100%",
-                              textAlign: "center",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: "#7F56D9",
-                              textTransform: "uppercase",
-                              fontWeight: "bold",
-                            }}
-                          >
-                            {firstNameInitial}
-                            {lastNameInitial}
-                          </Typography>
-                        )}
+                      <Box>
+                        <DefaultImage
+                          image={item?.user?.image}
+                          name={item?.user?.name}
+                        />
                       </Box>
                       <Typography
                         sx={{
@@ -553,36 +478,11 @@ const SuperAdminTable = () => {
                       </Typography>
                       <Grid container mt={1} gap={2}>
                         {matchingUserData.map((user) => {
-                          if (user && user?.name) {
-                            var firstNameUser = user?.name?.charAt(0);
-                          } else {
-                            var firstNameUser = "";
-                          }
-                          if (user && user?.name) {
-                            var lastNameUser = user?.name?.charAt(1);
-                          } else {
-                            var lastNameUser = "";
-                          }
-
                           return (
-                            <Typography
-                              sx={{
-                                backgroundColor: "#F9F5FF",
-                                width: 32,
-                                height: 32,
-                                borderRadius: "100%",
-                                textAlign: "center",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                color: "#7F56D9",
-                                textTransform: "uppercase",
-                                fontWeight: "bold",
-                              }}
-                            >
-                              {firstNameUser}
-                              {lastNameUser}
-                            </Typography>
+                            <DefaultImage
+                              image={user?.image}
+                              name={user?.name}
+                            />
                           );
                         })}
                       </Grid>

@@ -401,7 +401,6 @@ const SuperAdminTeam = () => {
           data={edit2}
           isEdit={isEdit2}
           refetch={teamMemberRefetch}
-          showSnackbar={showSnackbarHandler}
         />
       </Box>
     </>

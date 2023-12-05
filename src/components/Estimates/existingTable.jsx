@@ -40,6 +40,7 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 import { DataGrid } from "@mui/x-data-grid";
 import { getDataRefetch } from "../../redux/staff";
+import DefaultImage from "../ui-components/defaultImage";
 export default function ExistingTable() {
   const { data, isFetching, refetch } = useGetEstimates();
   const navigate = useNavigate();
@@ -102,16 +103,7 @@ export default function ExistingTable() {
       headerClassName: "customHeaderClass",
       width: 260,
       renderCell: (params) => {
-        if (params?.row?.creatorData && params?.row?.creatorData?.name) {
-          var firstNameInitial = params?.row?.creatorData?.name.charAt(0);
-        } else {
-          var firstNameInitial = "";
-        }
-        if (params.row?.creatorData && params?.row?.creatorData?.name) {
-          var lastNameInitial = params?.row?.creatorData?.name.charAt(1);
-        } else {
-          var lastNameInitial = "";
-        }
+        console.log(params?.row?.creatorData, "params?.row?.creatorData");
         return (
           <>
             <Box sx={{ display: "flex", gap: 1 }}>
@@ -123,33 +115,10 @@ export default function ExistingTable() {
                   overflow: "hidden",
                 }}
               >
-                {params?.row?.creatorData?.image ===
-                "images/users/default.jpg" ? (
-                  <Typography
-                    sx={{
-                      backgroundColor: "#F9F5FF",
-                      width: 34,
-                      height: 34,
-                      borderRadius: "100%",
-                      textAlign: "center",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "#7F56D9",
-                      textTransform: "uppercase",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    {firstNameInitial}
-                    {lastNameInitial}
-                  </Typography>
-                ) : (
-                  <img
-                    width={40}
-                    src={`${backendURL}/${params?.row?.creatorData?.image}`}
-                    alt="image person"
-                  />
-                )}
+                <DefaultImage
+                  image={params?.row?.creatorData?.image}
+                  name={params?.row?.creatorData?.name}
+                />
               </Box>
               <Box>
                 <Typography>{params?.row?.creatorData?.name}</Typography>

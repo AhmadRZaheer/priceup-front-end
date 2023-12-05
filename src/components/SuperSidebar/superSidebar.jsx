@@ -14,6 +14,7 @@ import { FmdGoodOutlined, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Link } from "react-router-dom";
 import EyeIcon from "../../Assets/eye-icon.svg";
+import DefaultImage from "../ui-components/defaultImage";
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -138,11 +139,9 @@ const SuperSidebar = () => {
             <div className="line"></div>
             <div className="bottom">
               <div className="UserIcon">
-                <img
-                  src={`${backendURL}/${decodedToken?.image}`}
-                  width="50"
-                  height="50"
-                  alt="no"
+                <DefaultImage
+                  image={decodedToken?.image}
+                  name={decodedToken?.name}
                 />
               </div>
               <div className="userInSidebar">
@@ -239,12 +238,10 @@ const SuperSidebar = () => {
                   borderRadius: "14px",
                 }}
               >
-                <div className="UserIcon-1">
-                  <img
-                    src={`${backendURL}/${decodedToken?.image}`}
-                    width="32"
-                    height="32"
-                    alt="no"
+                <div>
+                  <DefaultImage
+                    image={decodedToken?.image}
+                    name={admin.user.name}
                   />
                 </div>
                 <div style={{ paddingLeft: "10px" }}>
