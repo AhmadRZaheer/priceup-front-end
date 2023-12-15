@@ -133,6 +133,7 @@ const HardWareComponent = ({ type }) => {
         >
           {hardwareData?.map((entry, mainIndex) => (
             <HardwareItem
+              key={mainIndex}
               entry={entry}
               mainIndex={mainIndex}
               hardwareRefetch={hardwareRefetch}

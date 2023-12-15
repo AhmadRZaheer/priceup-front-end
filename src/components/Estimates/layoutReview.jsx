@@ -180,7 +180,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   };
 
   const quoteState = useSelector(getQuoteState);
-  console.log(quoteState, "staet");
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
@@ -192,9 +191,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       )
     );
   };
-  // const { data: listData, refetch: Refetched } = useFetchDataEstimate();
-  // const userProfitPercentage = useSelector(getUserProfitPercentage);
-  // console.log(userProfitPercentage, "userProfitPercentage layout review");
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
@@ -210,7 +206,6 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     dispatch(setTotal(prices.total));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
-    console.log(prices);
   }, [selectedContent]);
 
   React.useEffect(() => {

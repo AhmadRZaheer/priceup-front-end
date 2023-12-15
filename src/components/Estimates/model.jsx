@@ -21,9 +21,7 @@ import {
   getQuoteId,
   getQuoteState,
   getTotal,
-  resetState,
   selectedItem,
-  setNavigation,
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,8 +29,13 @@ import { Link, useNavigate } from "react-router-dom";
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
-  email: yup.string().email("Invalid email address"),
+  email: yup
+    .string()
+    .required("Email is required")
+    .email("Invalid email address"),
+  phone: yup.string().required("phone is required"),
 });
+
 export default function ClientDetailsModel({ open, handleCancel }) {
   const {
     mutate,
@@ -58,6 +61,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
       firstName: "",
       lastName: "",
       email: "",
+      phone: "",
       address: "",
     },
     validationSchema,
@@ -393,6 +397,50 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                   helperText={formik.touched.email && formik.errors.email}
                 />
               </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1,
+                  paddingBottom: { sm: 0, xs: 2 },
+                }}
+              >
+                <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                  <label htmlFor="phone">Client Phone Number</label>
+                </Box>
+                <TextField
+                  id="phone"
+                  name="phone"
+                  placeholder="Client Email address"
+                  size="small"
+                  variant="outlined"
+                  value={formik.values.phone}
+                  InputProps={{
+                    style: {
+                      color: "black",
+                      borderRadius: 4,
+                      border: "1px solid #cccccc",
+                      backgroundColor: "white",
+                    },
+                    inputProps: { min: 0, max: 50 },
+                  }}
+                  InputLabelProps={{
+                    style: {
+                      color: "rgba(255, 255, 255, 0.5)",
+                    },
+                  }}
+                  sx={{
+                    color: { sm: "black", xs: "white" },
+                    width: "100%",
+                  }}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.phone && formik.errors.phone}
+                  helperText={formik.touched.phone && formik.errors.phone}
+                />
+              </Box>
+
               <Box
                 sx={{
                   display: "flex",

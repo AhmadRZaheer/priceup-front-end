@@ -42,7 +42,6 @@ const CustomerTable = () => {
       headerClassName: "customHeaderClass",
       width: 340,
       renderCell: (params) => {
-        console.log("customer", params.row._id);
         return (
           <>
             <CustomIconButton

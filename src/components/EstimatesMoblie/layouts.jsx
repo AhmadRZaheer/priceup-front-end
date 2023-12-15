@@ -64,8 +64,6 @@ const Layout = () => {
     setselectCustom(true);
     // dispatch(resetState());
   };
-  console.log(selectedData, "selectedData");
-  console.log(selectCustom, "selectCustom");
   return (
     <>
       <Box

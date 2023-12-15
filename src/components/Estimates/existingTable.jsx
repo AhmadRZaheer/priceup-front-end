@@ -103,7 +103,6 @@ export default function ExistingTable() {
       headerClassName: "customHeaderClass",
       width: 260,
       renderCell: (params) => {
-        console.log(params?.row?.creatorData, "params?.row?.creatorData");
         return (
           <>
             <Box sx={{ display: "flex", gap: 1 }}>

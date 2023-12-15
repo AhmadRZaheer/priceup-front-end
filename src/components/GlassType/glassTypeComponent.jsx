@@ -158,6 +158,7 @@ const GlassTypeComponent = ({ type }) => {
         >
           {GlassTypeData?.map((entry, mainIndex) => (
             <GlassTypeDataItem
+              key={mainIndex}
               entry={entry}
               mainIndex={mainIndex}
               GlassTypeRefetch={GlassTypeRefetch}

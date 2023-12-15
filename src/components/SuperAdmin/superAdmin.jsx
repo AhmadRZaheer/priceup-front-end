@@ -477,9 +477,10 @@ const SuperAdminTable = () => {
                         Users
                       </Typography>
                       <Grid container mt={1} gap={2}>
-                        {matchingUserData.map((user) => {
+                        {matchingUserData.map((user, index) => {
                           return (
                             <DefaultImage
+                              key={index}
                               image={user?.image}
                               name={user?.name}
                             />

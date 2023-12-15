@@ -84,7 +84,6 @@ export const teamColumns = [
     headerClassName: "customHeaderClass-team",
     width: 160,
     renderCell: (params) => {
-      console.log(params.row);
       return (
         <>
           <Typography color={"#667085"}>$ {params.row.totalQuoted}</Typography>
@@ -215,10 +214,24 @@ export const CustomerColumns = [
     headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
-      console.log(params.row);
       return (
         <>
           <Typography color={"#667085"}>{params.row.email}</Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Phone",
+    headerName: "Phone number",
+    headerClassName: "customHeaderClass",
+    width: 300,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>
+            {params.row.phone === "" ? "---" : params.row.phone}
+          </Typography>
         </>
       );
     },
@@ -229,7 +242,6 @@ export const CustomerColumns = [
     headerClassName: "customHeaderClass",
     width: 300,
     renderCell: (params) => {
-      console.log(params.row);
       return (
         <>
           <Typography color={"#667085"}>{params.row.address}</Typography>
@@ -378,7 +390,6 @@ export const userColumnsHardware = [
     headerClassName: "customHeaderClass-finishes",
     width: 1400,
     renderCell: (params) => {
-      console.log("params", params.row);
       return (
         <div className="cellWrapper">
           {params.row.image === "" ? (

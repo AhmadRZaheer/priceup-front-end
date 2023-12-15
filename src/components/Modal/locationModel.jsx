@@ -122,6 +122,7 @@ export default function LocationModel({
               {haveAccessArray.map((data) => {
                 return (
                   <Tooltip
+                    key={data.id}
                     title={
                       selectedRow.company_id === data.id ? "Cannot Remove" : ""
                     }

@@ -6,8 +6,6 @@ import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 export default function ChipsArray() {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
 
-  console.log(AdminData, "staffData");
-
   const handleDelete = (chipToDelete) => () => {
     AdminData.filter((chip) => chip._id !== chipToDelete._id);
   };

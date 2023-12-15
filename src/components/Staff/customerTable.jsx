@@ -295,6 +295,7 @@ export default function CustomerTable() {
                 {customerData.map((data) => {
                   return (
                     <Box
+                      key={data.id}
                       sx={{
                         display: "flex",
                         justifyContent: "space-between",

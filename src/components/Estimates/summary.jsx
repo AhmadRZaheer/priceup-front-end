@@ -805,7 +805,6 @@ const Summary = () => {
                                 Number(event.target.value)
                               )
                             );
-                            console.log(userProfitPercentage, "prooooo");
                           }}
                         />{" "}
                         %

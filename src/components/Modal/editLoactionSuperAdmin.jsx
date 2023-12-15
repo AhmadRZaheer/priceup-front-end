@@ -415,11 +415,12 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       {haveAccessArray.map((data) => {
                         return (
                           <Tooltip
-                          // title={
-                          //   selectedRow.company_id === data.id
-                          //     ? "Cannot Remove"
-                          //     : ""
-                          // }
+                            // title={
+                            //   selectedRow.company_id === data.id
+                            //     ? "Cannot Remove"
+                            //     : ""
+                            // }
+                            key={data._id}
                           >
                             <Box
                               sx={{

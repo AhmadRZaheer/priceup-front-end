@@ -83,11 +83,6 @@ const CustomLayout = () => {
         )
       )
       .flat();
-    console.log(
-      measurementsArray,
-      arrayForMeasurement,
-      "isdaidaskdaskdas 3sakds "
-    );
 
     const result = calculateAreaAndPerimeter(
       measurementsArray,

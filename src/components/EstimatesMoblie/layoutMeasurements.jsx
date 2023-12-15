@@ -28,7 +28,6 @@ const LayoutMeasurements = () => {
   const measurementSide = useSelector(getMeasurementSide);
   const listContent = useSelector(getListData);
 
-  console.log(measurementSide, "measurementSide");
 
   const initialValues = measurementSide.reduce((acc, item) => {
     acc[item.key] = item.value;
@@ -39,7 +38,6 @@ const LayoutMeasurements = () => {
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   let debounceTimeout;
-  console.log(editDebouncedValue, "edit value");
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
       (schema, _, index) => {
@@ -98,7 +96,6 @@ const LayoutMeasurements = () => {
 
       dispatch(setNavigation("review"));
       resetForm();
-      console.log("helloo");
     },
   });
   const doorandPanel = (event) => {

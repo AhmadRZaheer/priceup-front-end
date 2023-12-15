@@ -130,7 +130,6 @@ const DefaultComponent = () => {
     enableReinitialize: true,
     onSubmit: (values) => {},
   });
-  console.log(formik.values, "value");
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
 

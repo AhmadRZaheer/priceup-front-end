@@ -165,6 +165,7 @@ const GlassAddonGrid = ({ type }) => {
         >
           {glassAddons?.map((entry, mainIndex) => (
             <AddonList
+              key={mainIndex}
               entry={entry}
               mainIndex={mainIndex}
               refetch={glassAddonRefetch}

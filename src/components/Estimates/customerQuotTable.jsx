@@ -92,7 +92,6 @@ export default function AddEditFinish({ open, close, quoteId }) {
   }, [open, quoteId]);
 
   const handleIconButtonClick = (params) => {
-    console.log("qutitem", params.row);
     dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({

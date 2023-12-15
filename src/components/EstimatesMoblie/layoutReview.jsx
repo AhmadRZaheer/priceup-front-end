@@ -48,7 +48,6 @@ const LayoutReview = () => {
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
-  console.log(quoteState, "quoteState");
   return (
     <>
       <Box
