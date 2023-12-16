@@ -610,7 +610,7 @@ const Sidebar = () => {
             ) : (
               filteredCustomUser?.map((item) => (
                 <Typography
-                  key={item.id}
+                  key={item?.id}
                   sx={{
                     width: "83.8%",
                     ml: "10px",
@@ -630,11 +630,11 @@ const Sidebar = () => {
                   onClick={() => handleCustomUserClick(item)}
                 >
                   <div style={{ width: "20%" }}>
-                    <DefaultImage image={item.image} name={item.name} />
+                    <DefaultImage image={item?.image} name={item?.name} />
                   </div>
                   <div style={{ paddingLeft: "10px", width: "100%" }}>
-                    <a style={{ cursor: "pointer" }}>{item.name}</a>
-                    <p style={{ fontSize: "10px" }}>{item.email}</p>
+                    <a style={{ cursor: "pointer" }}>{item?.name}</a>
+                    <p style={{ fontSize: "10px" }}>{item?.email}</p>
                   </div>
                   {item.id === decodedToken?.company_id ? (
                     <Box
@@ -664,7 +664,7 @@ const Sidebar = () => {
           {superAdminToken &&
             filteredAdminData.map((admin) => (
               <Typography
-                key={admin.user._id}
+                key={admin?.user?._id}
                 sx={{
                   width: "83.8%",
                   ml: "10px",
@@ -681,17 +681,17 @@ const Sidebar = () => {
                   px: 1,
                   borderRadius: "14px",
                 }}
-                onClick={() => handleAdminNameClick(admin.user._id)}
+                onClick={() => handleAdminNameClick(admin?.user?._id)}
               >
                 <div>
                   <DefaultImage
                     image={admin?.user?.image}
-                    name={admin.user.name}
+                    name={admin?.user?.name}
                   />
                 </div>
                 <div style={{ paddingLeft: "10px" }}>
-                  <a style={{ cursor: "pointer" }}>{admin.user.name}</a>
-                  <p style={{ fontSize: "10px" }}>{admin.user.email}</p>
+                  <a style={{ cursor: "pointer" }}>{admin?.user?.name}</a>
+                  <p style={{ fontSize: "10px" }}>{admin?.user?.email}</p>
                 </div>
               </Typography>
             ))}
