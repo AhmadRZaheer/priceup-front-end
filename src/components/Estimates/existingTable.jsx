@@ -57,7 +57,7 @@ export default function ExistingTable() {
   const [search, setSearch] = useState("");
 
   const filteredData = data?.estimates?.filter((item) =>
-    item.customerData.name.toLowerCase().includes(search.toLowerCase())
+    item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const handleDeleteEstimate = (id) => {
