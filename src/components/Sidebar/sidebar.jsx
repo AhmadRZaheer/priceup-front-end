@@ -74,10 +74,10 @@ const Sidebar = () => {
   };
 
   const filteredAdminData = AdminData?.filter((admin) =>
-    admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const filteredCustomUser = haveAccessData?.filter((data) =>
-    data.name.toLowerCase().includes(searchQuery.toLowerCase())
+    data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (adminId) => {
     navigate(`/?userID=${adminId}`);
