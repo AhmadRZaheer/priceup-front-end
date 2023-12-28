@@ -191,7 +191,7 @@ export const CustomerColumns = [
     field: "name",
     headerName: "Name",
     headerClassName: "customHeaderClass",
-    width: 300,
+    flex: 1.2,
     renderCell: (params) => {
       return (
         <>
@@ -212,7 +212,7 @@ export const CustomerColumns = [
     field: "email",
     headerName: "Email address",
     headerClassName: "customHeaderClass",
-    width: 300,
+    flex: 1.4,
     renderCell: (params) => {
       return (
         <>
@@ -225,7 +225,7 @@ export const CustomerColumns = [
     field: "Phone",
     headerName: "Phone number",
     headerClassName: "customHeaderClass",
-    width: 300,
+    flex: 1,
     renderCell: (params) => {
       return (
         <>
@@ -240,7 +240,7 @@ export const CustomerColumns = [
     field: "Address",
     headerName: "Address",
     headerClassName: "customHeaderClass",
-    width: 300,
+    flex: 1,
     renderCell: (params) => {
       return (
         <>
@@ -253,7 +253,7 @@ export const CustomerColumns = [
     field: "lastQuotedOn",
     headerName: "Last quoted on",
     headerClassName: "customHeaderClass",
-    width: 300,
+    flex: 0.8,
     renderCell: (params) => {
       return (
         <>

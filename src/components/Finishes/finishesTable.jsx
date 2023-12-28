@@ -286,6 +286,7 @@ const FinishesTable = () => {
                     {pageNumbersToShow.map((pagenumber, index) => (
                       <Box
                         key={index}
+                        onClick={() => setPage(pagenumber)}
                         sx={{
                           backgroundColor:
                             page === pagenumber
@@ -298,6 +299,7 @@ const FinishesTable = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          cursor: "pointer",
                         }}
                       >
                         {pagenumber}
