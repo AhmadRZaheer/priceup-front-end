@@ -337,6 +337,7 @@ const SuperAdminTeam = () => {
                   {pageNumbersToShow.map((pagenumber, index) => (
                     <Box
                       key={index}
+                      onClick={() => setPage(pagenumber)}
                       sx={{
                         backgroundColor:
                           page === pagenumber
@@ -349,6 +350,7 @@ const SuperAdminTeam = () => {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        cursor: "pointer",
                       }}
                     >
                       {pagenumber}

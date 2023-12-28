@@ -26,7 +26,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
-const   TeamTable = () => {
+const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
   console.log("team", stafData);
   const [search, setSearch] = useState("");
@@ -280,6 +280,7 @@ const   TeamTable = () => {
                     {pageNumbersToShow.map((pagenumber, index) => (
                       <Box
                         key={index}
+                        onClick={() => setPage(pagenumber)}
                         sx={{
                           backgroundColor:
                             page === pagenumber
@@ -292,6 +293,7 @@ const   TeamTable = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          cursor: "pointer",
                         }}
                       >
                         {pagenumber}

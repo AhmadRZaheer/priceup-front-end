@@ -20,6 +20,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ArrowBack, ArrowForward, Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "../ui-components/CustomButton";
 import { getDataRefetch } from "../../redux/staff";
+import { useFetchDataCustomerEstimtes } from "../../utilities/ApiHooks/customer";
 
 const style = {
   position: "absolute",
@@ -41,62 +42,34 @@ const dataGridStyle = {
 };
 
 export default function AddEditFinish({ open, close, quoteId }) {
-  const [estimates, setEstimates] = useState([]); // State to indicate loading
-  const [error, setError] = useState(null);
-  const refetchData = useSelector(getDataRefetch); // State to store error
+  const refetchData = useSelector(getDataRefetch);
   const {
     data: estimateListData,
     isFetching: estimateDataFetching,
     refetch: Refetched,
   } = useFetchDataEstimate();
+  const {
+    mutate: setQuoteId,
+    data: estimates,
+    isLoading: estimateQuoteFetching,
+    error,
+  } = useFetchDataCustomerEstimtes();
   useEffect(() => {
     Refetched();
   }, [refetchData]);
   const dispatch = useDispatch();
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Make the API call
-        const token = localStorage.getItem("token");
-        const response = await fetch(
-          `${backendURL}/users/getQuote/${quoteId}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const responseData = await response.json();
-
-        if (responseData && responseData.code === 200) {
-          // Check if there's valid data in the response
-          const data = responseData.data ? responseData.data : null;
-
-          // Here you can use the 'data' as needed, e.g., set it in state
-          setEstimates(data);
-        } else {
-          // Handle other response codes or errors as needed
-          setError("Error message or handling for non-200 response");
-        }
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    if (open) {
-      fetchData();
+    if (open && quoteId !== null && quoteId !== undefined) {
+      setQuoteId({ quoteId });
     }
-  }, [open, quoteId]);
+  }, [open, quoteId, setQuoteId]);
 
   const handleIconButtonClick = (params) => {
     dispatch(setListData(estimateListData));
     dispatch(
       initializeStateForEditQuote({
         estimateData: params.row,
-        quotesId: params.row._id,
+        quotesId: params.row.id,
       })
     );
     dispatch(setNavigationDesktop("review"));
@@ -108,11 +81,12 @@ export default function AddEditFinish({ open, close, quoteId }) {
       align: "left",
       width: 80,
       renderCell: (params) => {
+        console.log(params);
         return (
           <>
             <Link to="/customers/steps">
               <CustomIconButton
-                disable={estimateDataFetching}
+                disable={estimateQuoteFetching}
                 handleClick={() => handleIconButtonClick(params)}
                 icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
               />
@@ -125,7 +99,7 @@ export default function AddEditFinish({ open, close, quoteId }) {
   const [page, setPage] = useState(1);
   const itemsPerPage = 4;
 
-  const totalPages = Math.ceil(estimates.length / itemsPerPage);
+  const totalPages = estimates ? Math.ceil(estimates.length / itemsPerPage) : 0;
   const MAX_PAGES_DISPLAYED = 5;
 
   const getPageNumbersToShow = () => {
@@ -196,27 +170,27 @@ export default function AddEditFinish({ open, close, quoteId }) {
               sx={{ color: "gray", fontSize: 24, cursor: "pointer" }}
             />
           </Box>
-          {estimateDataFetching ? (
+          {estimateQuoteFetching ? (
             <Box sx={{ width: "100%", textAlign: "center" }}>
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
           ) : error ? (
             <p>Error: {error.message}</p>
-          ) : (
+          ) : estimates && estimates.length > 0 ? (
             <Box
               sx={{ border: "1px solid #EAECF0", borderRadius: "8px", mb: 2 }}
             >
               <DataGrid
                 style={dataGridStyle}
                 getRowId={(row) => row._id}
-                rows={estimates.slice(
+                rows={estimates?.slice(
                   (page - 1) * itemsPerPage,
                   page * itemsPerPage
                 )}
                 columns={CustomerQuoteColumns.concat(actionColumn)}
                 page={page}
                 pageSize={itemsPerPage}
-                rowCount={estimates.length}
+                rowCount={estimates?.length}
                 pageSizeOptions={[1, , 25]}
                 sx={{ width: "100%" }}
                 hideFooter
@@ -251,6 +225,7 @@ export default function AddEditFinish({ open, close, quoteId }) {
                   {pageNumbersToShow.map((pagenumber, index) => (
                     <Box
                       key={index}
+                      onClick={() => setPage(pagenumber)}
                       sx={{
                         backgroundColor:
                           page === pagenumber
@@ -263,6 +238,7 @@ export default function AddEditFinish({ open, close, quoteId }) {
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
+                        cursor: "pointer",
                       }}
                     >
                       {pagenumber}
@@ -282,7 +258,7 @@ export default function AddEditFinish({ open, close, quoteId }) {
                     },
                   }}
                   onClick={handleNextPage}
-                  disabled={estimates.length === 0}
+                  disabled={estimates?.length === 0}
                 >
                   Next
                   <ArrowForward
@@ -291,6 +267,8 @@ export default function AddEditFinish({ open, close, quoteId }) {
                 </Button>
               </Box>
             </Box>
+          ) : (
+            <Typography>No estimates Quotes found.</Typography>
           )}
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button

@@ -40,7 +40,7 @@ const CustomerTable = () => {
       field: "Status",
       align: "left",
       headerClassName: "customHeaderClass",
-      width: 340,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -64,7 +64,7 @@ const CustomerTable = () => {
   ];
 
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const itemsPerPage = 100;
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
   const MAX_PAGES_DISPLAYED = 5;
@@ -215,6 +215,7 @@ const CustomerTable = () => {
                     {pageNumbersToShow.map((pagenumber, index) => (
                       <Box
                         key={index}
+                        onClick={() => setPage(pagenumber)}
                         sx={{
                           backgroundColor:
                             page === pagenumber
@@ -227,6 +228,7 @@ const CustomerTable = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          cursor: "pointer",
                         }}
                       >
                         {pagenumber}
@@ -268,7 +270,7 @@ const CustomerTable = () => {
         <CustomerQoute
           open={open}
           close={handleClose}
-          quoteId={selectedRowData ? selectedRowData._id : null}
+          quoteId={selectedRowData ? selectedRowData : null}
         />
       </Box>
     </>
