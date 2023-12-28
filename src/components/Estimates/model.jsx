@@ -153,7 +153,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
         },
         header: {
           type: estimatesContent?.header?.item?._id,
-          count: estimatesContent?.slidingDoorSystem?.count,
+          count: estimatesContent?.header?.count,
         },
         oneInchHoles: estimatesContent?.oneInchHoles,
         hingeCut: estimatesContent?.hingeCut,

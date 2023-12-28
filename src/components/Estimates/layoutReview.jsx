@@ -151,7 +151,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       },
       header: {
         type: selectedContent?.header?.item?._id,
-        count: selectedContent?.slidingDoorSystem?.count,
+        count: selectedContent?.header?.count,
       },
       oneInchHoles: selectedContent?.oneInchHoles,
       hingeCut: selectedContent?.hingeCut,
