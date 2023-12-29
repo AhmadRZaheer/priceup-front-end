@@ -142,7 +142,8 @@ const estimateCalcSlice = createSlice({
         console.log("Nice Try.");
       } else if (["glassAddons"].includes(type)) {
         if (item.slug === "no-treatment") {
-          state.content.glassAddons = [state.listData.glassAddons[0]];
+      const noGlassAddon = state.listData.glassAddons?.find((item)=>item.slug === 'no-treatment');
+          state.content.glassAddons = [noGlassAddon];
         } else {
           const foundIndex = state.content.glassAddons?.findIndex(
             (row) => row.slug === item.slug
@@ -735,7 +736,7 @@ const estimateCalcSlice = createSlice({
       //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-1-2');
       //   }
       // }
-
+      const noGlassAddon = state.listData.glassAddons?.find((item)=>item.slug === 'no-treatment');
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -823,7 +824,7 @@ const estimateCalcSlice = createSlice({
         hours: layoutData?.settings?.other?.hours,
         glassAddons: glassAddon
           ? [glassAddon]
-          : [state.listData.glassAddons[0]],
+          : [noGlassAddon],
         outages: layoutData?.settings?.outages,
         notch: layoutData?.settings?.notch,
         hingeCut: layoutData?.settings?.hinges?.count,
