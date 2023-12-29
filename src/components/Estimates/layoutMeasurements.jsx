@@ -42,7 +42,11 @@ const LayoutMeasurements = () => {
   const listContent = useSelector(getListData);
 
   const initialValues = measurementSide.reduce((acc, item) => {
-    acc[item.key] = item.value;
+    if (item.value === undefined) {
+      acc[item.key] = item.value;
+    } else {
+      acc = {};
+    }
     return acc;
   }, {});
 
@@ -50,7 +54,7 @@ const LayoutMeasurements = () => {
   const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
-  let debounceTimeout, editDebounceTimeout;
+  let debounceTimeout;
   const validationSchema = Yup.object().shape({
     ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
       (schema, _, index) => {
@@ -68,7 +72,8 @@ const LayoutMeasurements = () => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values, resetForm) => {
+    enableReinitialize: true,
+    onSubmit: async (values, { resetForm }) => {
       const measurementsArray = Object.entries(values)
         .filter(([key, value]) => value !== "")
         .map(([key, value]) => ({
@@ -120,15 +125,11 @@ const LayoutMeasurements = () => {
         value,
       }));
     if (measurementsArray.length === selectedData?.settings?.measurementSides) {
-      // setWidth(inputVal);
-
-      // Clear any existing timeout
       clearTimeout(debounceTimeout);
 
-      // Set a new timeout
       debounceTimeout = setTimeout(() => {
         setDebouncedValue(inputVal);
-      }, 500); // 1000 milliseconds (1 second)
+      }, 500);
     } else {
       console.log(
         "Cannot calculate result as there are empty values in measurementsArray"
