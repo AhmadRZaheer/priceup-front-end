@@ -798,13 +798,20 @@ const Summary = () => {
                           }}
                           variant="outlined"
                           size="small"
-                          value={userProfitPercentage}
+                          value={
+                            userProfitPercentage > 0 ? userProfitPercentage : ""
+                          }
                           onChange={(event) => {
-                            dispatch(
-                              setUserProfitPercentage(
-                                Number(event.target.value)
-                              )
-                            );
+                            if (
+                              Number(event.target.value) < 100 &&
+                              Number(event.target.value) > 0
+                            ) {
+                              dispatch(
+                                setUserProfitPercentage(
+                                  Number(event.target.value)
+                                )
+                              );
+                            }
                           }}
                         />{" "}
                         %

@@ -292,8 +292,9 @@ const CampanySetting = () => {
             display: "flex",
             flexDirection: "column",
             gap: 2,
-            maxHeight: "40vh",
-            overflowY: "scroll",
+            // maxHeight: "38vh",
+            // overflowY: "scroll",
+            pb: 6
           }}
         >
           <Box

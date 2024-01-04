@@ -101,7 +101,7 @@ export default function ExistingTable() {
     {
       field: "Creator Name",
       headerClassName: "customHeaderClass",
-      width: 260,
+      flex: 1.5,
       renderCell: (params) => {
         return (
           <>
@@ -140,7 +140,7 @@ export default function ExistingTable() {
     {
       field: "Customer Name",
       headerClassName: "customHeaderClass",
-      width: 230,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -154,7 +154,7 @@ export default function ExistingTable() {
     {
       field: "Customer Email",
       headerClassName: "customHeaderClass",
-      width: 280,
+      flex: 1.5,
       renderCell: (params) => {
         return (
           <>
@@ -169,7 +169,7 @@ export default function ExistingTable() {
     {
       field: "Date quoted",
       headerClassName: "customHeaderClass",
-      width: 226,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -183,7 +183,7 @@ export default function ExistingTable() {
     {
       field: "Estimated total",
       headerClassName: "customHeaderClass",
-      width: 170,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
@@ -197,7 +197,7 @@ export default function ExistingTable() {
     {
       field: "Status",
       headerClassName: "customHeaderClass",
-      width: 200,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
@@ -237,7 +237,7 @@ export default function ExistingTable() {
     {
       field: "Action",
       headerClassName: "customHeaderClass",
-      width: 180,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>

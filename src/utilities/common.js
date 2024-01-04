@@ -254,21 +254,23 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     laborPrice;
   const cost =
     hardwareTotals + fabricationPrice + glassPrice + glassAddonsPrice;
-  const profit = total - cost;
-  const totalPercentage = ((total - cost) * 100) / total;
-  if (selectedContent.userProfitPercentage !== 0) {
-    if (totalPercentage > selectedContent.userProfitPercentage) {
-      const newPercentage =
-        totalPercentage - selectedContent.userProfitPercentage;
-      const price = total * (newPercentage / 100);
-      total = total - price;
-    }
-    if (totalPercentage < selectedContent.userProfitPercentage) {
-      const newPercentage =
-        selectedContent.userProfitPercentage - totalPercentage;
-      const price = total * (newPercentage / 100);
-      total = total + price;
-    }
+  // const profit = total - cost;
+  // const totalPercentage = ((total - cost) * 100) / total;
+  if (selectedContent.userProfitPercentage > 0 && selectedContent.userProfitPercentage < 100) {
+    total = ((cost * 100) / ((selectedContent.userProfitPercentage)-100)) * -1
+
+    // if (totalPercentage > selectedContent.userProfitPercentage) {
+    //   const newPercentage =
+    //     totalPercentage - selectedContent.userProfitPercentage;
+    //   const price = total * (newPercentage / 100);
+    //   total = total - price;
+    // }
+    // if (totalPercentage < selectedContent.userProfitPercentage) {
+    //   const newPercentage =
+    //     selectedContent.userProfitPercentage - totalPercentage;
+    //   const price = total * (newPercentage / 100);
+    //   total = total + price;
+    // }
   }
   return {
     hardwarePrice: hardwareTotals,
