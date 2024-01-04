@@ -14,7 +14,7 @@ import {
   setQuoteState,
 } from "../../redux/estimateCalculations";
 import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import bgCustom from "../../Assets/customlayoutimage.svg";
 
 export default function Layout() {
@@ -35,14 +35,14 @@ export default function Layout() {
     flexDirection: "column",
     cursor: "pointer",
   };
-  
-   const { data: layouts, isFetching: loading } = useFetchDataDefault();
+
+  const { data: layouts, isFetching: loading } = useFetchDataDefault();
   const { data: estimateListData, isFetching: estimateDataFetching } =
     useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    dispatch(resetState());
+    // dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
@@ -56,7 +56,7 @@ export default function Layout() {
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
-    dispatch(resetState());
+    // dispatch(resetState());
     dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
@@ -66,6 +66,9 @@ export default function Layout() {
   const handleBack = () => {
     dispatch(setNavigationDesktop("existing"));
   };
+  useEffect(() => {
+    dispatch(resetState());
+  }, [])
   return (
     <>
       <Box
