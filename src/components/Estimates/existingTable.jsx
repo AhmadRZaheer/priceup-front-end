@@ -611,7 +611,7 @@ export default function ExistingTable() {
             justifyContent: "center",
             alignItems: "center",
             maxHeight: "70vh",
-            minHeight: "40vh",
+            minHeight: "20vh",
           }}
         >
           <CircularProgress sx={{ color: "#8477DA" }} />
