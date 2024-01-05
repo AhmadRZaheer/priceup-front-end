@@ -12,7 +12,7 @@ const DefaultSection = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          pt: 1,
+          // pt: 1,
         }}
       >
         <div className="page-title">
@@ -28,11 +28,7 @@ const DefaultSection = () => {
             borderRadius: "8px",
           }}
         >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
-              <DefaultComponent  />
-            </div>
-          </div>
+          <DefaultComponent />
         </Box>
       </Box>
     </>

@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import { Add } from "@mui/icons-material";
 import {
   useDeleteGlassAddon,
@@ -50,7 +55,7 @@ const GlassAddonGrid = ({ type }) => {
       glassAddonRefetch();
     }
   }, [deleteSuccess]);
-
+  const miniTab = useMediaQuery("(max-width: 1400px)");
   return (
     <>
       <div
@@ -153,13 +158,12 @@ const GlassAddonGrid = ({ type }) => {
           <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
-            marginTop: 4,
-            height: "75vh",
+            gap: 1,
+            height: miniTab ? "69vh" : "76vh",
             overflowY: "scroll",
           }}
         >
@@ -172,7 +176,7 @@ const GlassAddonGrid = ({ type }) => {
               type={type}
             />
           ))}
-        </div>
+        </Box>
       )}
 
       <AddEditGlassAddon

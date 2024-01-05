@@ -27,36 +27,25 @@ const GlassTypeTable = () => {
 
     dispatch(addHardware(newHardware));
   };
-
+ 
   return (
     <>
       <Box
         sx={{
           backgroundColor: "white",
-          height: "98.2vh",
+          height: "96vh",
           paddingTop: 2,
-          paddingLeft: 1,
         }}
       >
-        <div
-          style={{
-            marginLeft: "15px",
-            marginRight: "15px",
-            background: "rgb(232, 232, 232)",
-          }}
-        ></div>
         <Box
           sx={{
             border: "1px solid rgb(232, 232, 232)",
-            margin: 2,
             height: "90vh",
+            width: "95%",
+            m: "auto",
           }}
         >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
               <GlassTypeComponent type={"Glass Types"} />
-            </div>
-          </div>
         </Box>
         <AddEditModel
           open={open}

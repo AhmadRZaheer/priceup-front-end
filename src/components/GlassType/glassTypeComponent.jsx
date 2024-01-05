@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, IconButton } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  useMediaQuery,
+} from "@mui/material";
 import { Add, Delete, Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import {
@@ -43,7 +48,7 @@ const GlassTypeComponent = ({ type }) => {
       GlassTypeRefetch();
     }
   }, [deleteSuccess]);
-
+  const miniTab = useMediaQuery("(max-width: 1280px)");
   return (
     <>
       <div
@@ -139,20 +144,18 @@ const GlassTypeComponent = ({ type }) => {
             justifyContent: "center",
             padding: "20px",
             alignItems: "center",
-
             height: "56vh",
           }}
         >
           <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : (
-        <div
-          style={{
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
-            marginTop: 4,
-            height: "75vh",
+            gap: 1,
+            height: miniTab ? "68vh" : "72vh",
             overflowY: "scroll",
           }}
         >
@@ -165,7 +168,7 @@ const GlassTypeComponent = ({ type }) => {
               type={type}
             />
           ))}
-        </div>
+        </Box>
       )}
 
       <AddEditGlassType

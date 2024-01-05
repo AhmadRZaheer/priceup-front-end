@@ -40,10 +40,9 @@ const HardwareTable = () => {
           backgroundColor: "white",
           height: "98.2vh",
           paddingLeft: 1,
-          pt: 2,
         }}
       >
-        <div className="page-title">
+        <div className="h-page-title">
           <Typography style={{ fontSize: 30, paddingLeft: 10 }}>
             Hardware
           </Typography>
@@ -57,26 +56,23 @@ const HardwareTable = () => {
           }}
           className="HardWareComponent"
         >
-          <div className="hardwareTable">
-            <div className="hardwareTable">
-              <div
-                style={{
-                  marginLeft: "15px",
-                  marginRight: "15px",
-                  paddingLeft: 20,
-                  paddingRight: 20,
-                  paddingTop: 10,
-                  width: "auto",
-                }}
-              >
-                <Header types={hardwareCategoryData} showMore={SetShowNext} />
-              </div>
-              <div>
-                <HardWareComponent type={showNext} />
-              </div>
-            </div>
+          <div
+            style={{
+              marginLeft: "15px",
+              marginRight: "15px",
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 10,
+              width: "auto",
+            }}
+          >
+            <Header types={hardwareCategoryData} showMore={SetShowNext} />
+          </div>
+          <div>
+            <HardWareComponent type={showNext} />
           </div>
         </div>
+
         <AddEditModel
           open={open}
           close={handleClose}

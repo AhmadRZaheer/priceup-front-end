@@ -63,7 +63,7 @@ const TeamTable = () => {
       field: "Access",
       headerName: "Access",
       headerClassName: "customHeaderClass-team",
-      width: 200,
+      flex: 1,
       renderCell: (params) => {
         const { haveAccessTo } = params.row;
 
@@ -86,7 +86,7 @@ const TeamTable = () => {
     {
       field: " ",
       headerClassName: "customHeaderClass-team",
-      width: 245,
+      flex: 1,
       renderCell: (params) => {
         const id = params.row._id;
         const isMatchingId = id === matchingId;
@@ -173,7 +173,6 @@ const TeamTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          paddingLeft: 1,
         }}
       >
         <div className="page-title">
@@ -182,13 +181,18 @@ const TeamTable = () => {
           </Typography>
         </div>
         <Box
-          sx={{ border: "1px solid #EAECF0", borderRadius: "8px", m: 3, mr: 4 }}
+          sx={{
+            border: "1px solid #EAECF0",
+            borderRadius: "8px",
+            width: "97%",
+            m: "auto",
+          }}
         >
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              width: "96%",
+              width: "95%",
               p: 2,
               alignItems: "center",
             }}

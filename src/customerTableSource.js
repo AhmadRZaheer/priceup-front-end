@@ -10,7 +10,7 @@ export const teamColumns = [
     field: "name",
     headerName: "Name",
     headerClassName: "customHeaderClass-team",
-    width: 230,
+    flex: 1.2,
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
@@ -29,7 +29,7 @@ export const teamColumns = [
     field: "email",
     headerName: "Email address",
     headerClassName: "customHeaderClass-team",
-    width: 330,
+    flex: 1.5,
     renderCell: (params) => {
       return (
         <>
@@ -42,7 +42,7 @@ export const teamColumns = [
     field: "Date added",
     headerName: "Date added",
     headerClassName: "customHeaderClass-team",
-    width: 180,
+    flex: 1,
     renderCell: (params) => {
       return (
         <>
@@ -61,7 +61,7 @@ export const teamColumns = [
     field: "Last quote",
     headerName: "Last quote",
     headerClassName: "customHeaderClass-team",
-    width: 180,
+    flex: 0.8,
     renderCell: (params) => {
       return (
         <>
@@ -82,7 +82,7 @@ export const teamColumns = [
     field: "Total qouted",
     headerName: "Total qouted",
     headerClassName: "customHeaderClass-team",
-    width: 160,
+    flex: 0.8,
     renderCell: (params) => {
       return (
         <>
@@ -388,7 +388,7 @@ export const userColumnsHardware = [
     field: "name",
     headerName: "Name",
     headerClassName: "customHeaderClass-finishes",
-    width: 1400,
+    flex: 6,
     renderCell: (params) => {
       return (
         <div className="cellWrapper">

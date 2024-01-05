@@ -40,7 +40,7 @@ const CustomerTable = () => {
       field: "Status",
       align: "left",
       headerClassName: "customHeaderClass",
-      flex: 1,
+      flex: 1.3,
       renderCell: (params) => {
         return (
           <>
@@ -115,7 +115,6 @@ const CustomerTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          paddingLeft: 1,
           pt: 1,
         }}
       >
@@ -124,9 +123,11 @@ const CustomerTable = () => {
         </Typography>
         <Box
           sx={{
-            m: 3,
             border: "1px solid #EAECF0",
             borderRadius: "8px",
+            width: "97%",
+            m: "auto",
+            mt: 1,
           }}
         >
           <Box

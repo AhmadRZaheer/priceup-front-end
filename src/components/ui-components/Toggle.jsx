@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, Switch, Typography } from "@mui/material";
+import { Box, Switch, Typography } from "@mui/material";
 
 function CustomToggle({ checked, onChange, name, onBlur, onClick }) {
   return (

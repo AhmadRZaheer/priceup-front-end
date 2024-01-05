@@ -1,9 +1,7 @@
 import React from "react";
 import "./style.scss";
 import { useDispatch } from "react-redux";
-import {
-  addHardware,
-} from "../../redux/hardwareSlice";
+import { addHardware } from "../../redux/hardwareSlice";
 import { Box } from "@mui/material";
 import userImg from "../../Assets/username1.svg";
 import AddEditModel from "../Modal/addEditFinish";
@@ -32,38 +30,27 @@ const GlassAddonComponent = () => {
 
   return (
     <>
-    <Box sx={{
-       backgroundColor: "white",
-       height: "98.2vh",
-       paddingTop: 2,
-       paddingLeft: 1
-    }}>
-      <div
-        style={{
-          marginLeft: "15px",
-          marginRight: "15px",
-          background: "rgb(232, 232, 232)",
-        }}
-      >
-      </div>
       <Box
         sx={{
-          border: "1px solid rgb(232, 232, 232)",
-          margin: 2,
-          height: "90vh"
+          backgroundColor: "white",
+          height: "96vh",
+          paddingTop: 2,
         }}
       >
-        <div className="hardwareTable">
-          <div className="hardwareTable">
-            <GlassAddonGrid type={"Glass Addons"} />
-          </div>
-        </div>
-      </Box>
-      <AddEditModel
-        open={open}
-        close={handleClose}
-        handleHeaderClick={handleHeaderClick}
-      />
+        <Box
+          sx={{
+            border: "1px solid rgb(232, 232, 232)",
+            margin: 2,
+            height: "90vh",
+          }}
+        >
+          <GlassAddonGrid type={"Glass Addons"} />
+        </Box>
+        <AddEditModel
+          open={open}
+          close={handleClose}
+          handleHeaderClick={handleHeaderClick}
+        />
       </Box>
     </>
   );

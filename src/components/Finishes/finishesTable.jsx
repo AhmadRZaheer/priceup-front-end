@@ -75,7 +75,7 @@ const FinishesTable = () => {
     {
       field: "Status",
       headerClassName: "customHeaderClass-finishes",
-      width: 150,
+      flex: 1,
       renderCell: (params) => {
         console.log("params", params.row);
         const id = params.row._id;

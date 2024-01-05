@@ -1,11 +1,12 @@
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import LayoutHeader from "./layoutHeader";
 
 const DefaultComponentHeader = ({ selected, handleEditClick }) => {
   return (
     <>
-      <LayoutHeader />
-
+      <Box sx={{ width: "96%", m: "auto" }}>
+        <LayoutHeader />
+      </Box>
       <div
         style={{
           display: "flex",

@@ -121,13 +121,12 @@ const HardWareComponent = ({ type }) => {
           <CircularProgress size={24} sx={{ color: "#8477DA" }} />
         </Box>
       ) : hardwareData?.length >= 1 ? (
-        <div
+        <Box
           className="HardwareTable"
-          style={{
+          sx={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
-            marginTop: 4,
+            gap: 1,
             overflowY: "scroll",
           }}
         >
@@ -140,7 +139,7 @@ const HardWareComponent = ({ type }) => {
               type={type}
             />
           ))}
-        </div>
+        </Box>
       ) : (
         <Typography
           sx={{ textAlign: "center", py: 2, fontSize: 20, color: "gray" }}

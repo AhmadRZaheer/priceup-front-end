@@ -209,7 +209,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
               helperText={formik.touched.name && formik.errors.email}
               variant="outlined"
               fullWidth
-              disabled
+              disabled={isEdit ? true : false}
             />
           </Box>
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
