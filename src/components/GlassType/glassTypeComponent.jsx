@@ -155,7 +155,7 @@ const GlassTypeComponent = ({ type }) => {
             display: "flex",
             flexDirection: "column",
             gap: 1,
-            height: miniTab ? "68vh" : "72vh",
+            height: miniTab ? "69vh" : "76vh",
             overflowY: "scroll",
           }}
         >
