@@ -72,7 +72,8 @@ const Sidebar = () => {
   const handleClosePopup = () => {
     setAnchorEl(null);
   };
-  const [activeLocation, setActiveLocation] = useState(null);   /** Added for branch PD-28 */
+  const [activeLocation, setActiveLocation] =
+    useState(null); /** Added for branch PD-28 */
 
   const filteredAdminData = AdminData?.filter((admin) =>
     admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -81,9 +82,9 @@ const Sidebar = () => {
     data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (admin) => {
-  /** Added for branch PD-28 */
-    setActiveLocation(admin);   
-  /** Added for branch PD-28 */
+    /** Added for branch PD-28 */
+    setActiveLocation(admin);
+    /** Added for branch PD-28 */
     navigate(`/?userID=${admin?._id}`);
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
@@ -114,12 +115,19 @@ const Sidebar = () => {
   }, []);
   /** Added for branch PD-28 */
   useEffect(() => {
-    if (filteredAdminData && filteredAdminData?.length) {
-      const record =  filteredAdminData?.find((admin) => admin?.company?._id === decodedToken?.company_id);
-      if(record?.user){
-        setActiveLocation(record?.user);
+    const fetchData = async () => {
+      if (filteredAdminData && filteredAdminData.length) {
+        const record = await filteredAdminData.find(
+          (admin) => admin?.company?._id === decodedToken?.company_id
+        );
+        if (record?.user) {
+          setActiveLocation(record?.user);
+        }
+        console.log(record?.user?.name, "record?.user");
       }
-    }
+    };
+
+    fetchData();
   }, [filteredAdminData]);
   /** Added for branch PD-28 */
   // console.log(token, "token");
@@ -155,18 +163,30 @@ const Sidebar = () => {
               <ul>
                 {superAdminToken && (
                   /** Added for branch PD-28 */
-                  <li style={{ marginBottom: 0 }}
+                  <li
+                    style={{ marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                    onClick={handleSeeLocationsClick}>
-                  <Tooltip title="Switch Location">
-                  <IconButton sx={{ color: "white", padding: 0.2,display:'flex',width:'100%' }}>
-                  <PinDrop sx={{ color: "white" }} />
-                      <span style={{flexGrow:1}}> {activeLocation?.name}</span>
-                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
-                    </IconButton>
-                  </Tooltip>
-                </li>
-                /** Added for branch PD-28 */
+                    onClick={handleSeeLocationsClick}
+                  >
+                    <Tooltip title="Switch Location">
+                      <IconButton
+                        sx={{
+                          color: "white",
+                          padding: 0.2,
+                          display: "flex",
+                          width: "100%",
+                        }}
+                      >
+                        <PinDrop sx={{ color: "white" }} />
+                        <span style={{ flexGrow: 1 }}>
+                          {" "}
+                          {activeLocation?.name}
+                        </span>
+                        <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                      </IconButton>
+                    </Tooltip>
+                  </li>
+                  /** Added for branch PD-28 */
                 )}
                 {decodedToken?.role === "admin" &&
                 haveAccessData?.length > 0 ? (
