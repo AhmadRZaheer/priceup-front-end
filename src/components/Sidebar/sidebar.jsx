@@ -24,7 +24,7 @@ import {
 } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { backendURL } from "../../utilities/common";
-import { AttachMoney, Search } from "@mui/icons-material";
+import { AttachMoney, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
 import {
   useDataCustomUser,
   useFetchDataAdmin,
@@ -72,6 +72,7 @@ const Sidebar = () => {
   const handleClosePopup = () => {
     setAnchorEl(null);
   };
+  const [activeLocation, setActiveLocation] = useState(null);   /** Added for branch PD-28 */
 
   const filteredAdminData = AdminData?.filter((admin) =>
     admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -79,8 +80,11 @@ const Sidebar = () => {
   const filteredCustomUser = haveAccessData?.filter((data) =>
     data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
-  const handleAdminNameClick = (adminId) => {
-    navigate(`/?userID=${adminId}`);
+  const handleAdminNameClick = (admin) => {
+  /** Added for branch PD-28 */
+    setActiveLocation(admin);   
+  /** Added for branch PD-28 */
+    navigate(`/?userID=${admin?._id}`);
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
   };
@@ -108,7 +112,16 @@ const Sidebar = () => {
   useEffect(() => {
     haveAccessSet(decodedToken?.id);
   }, []);
-  // console.log(superAdminToken, "superAdminToken");
+  /** Added for branch PD-28 */
+  useEffect(() => {
+    if (filteredAdminData && filteredAdminData?.length) {
+      const record =  filteredAdminData?.find((admin) => admin?.company?._id === decodedToken?.company_id);
+      if(record?.user){
+        setActiveLocation(record?.user);
+      }
+    }
+  }, [filteredAdminData]);
+  /** Added for branch PD-28 */
   // console.log(token, "token");
   // console.log(decodedToken, "decodedToken");
   // console.log(haveAccessData, "haveAccsessData");
@@ -142,20 +155,19 @@ const Sidebar = () => {
             <div className="center">
               <ul>
                 {superAdminToken && (
-                  <li
-                    style={{ padding: 10, marginBottom: 0 }}
+                  /** Added for branch PD-28 */
+                  <li style={{ marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                    onClick={handleSeeLocationsClick}
-                  >
-                    <IconButton sx={{ color: "white", padding: 0.2 }}>
-                      <img
-                        src={EyeIcon}
-                        alt="eye icon"
-                        style={{ marginRight: 12 }}
-                      />
-                      <span>See Locations</span>
+                    onClick={handleSeeLocationsClick}>
+                  <Tooltip title="Switch Location">
+                  <IconButton sx={{ color: "white", padding: 0.2,display:'flex',width:'100%' }}>
+                  <PinDrop sx={{ color: "white" }} />
+                      <span style={{flexGrow:1}}> {activeLocation?.name}</span>
+                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
                     </IconButton>
-                  </li>
+                  </Tooltip>
+                </li>
+                /** Added for branch PD-28 */
                 )}
                 {decodedToken?.role === "admin" &&
                 haveAccessData?.length > 0 ? (
@@ -681,7 +693,7 @@ const Sidebar = () => {
                   px: 1,
                   borderRadius: "14px",
                 }}
-                onClick={() => handleAdminNameClick(admin?.user?._id)}
+                onClick={() => handleAdminNameClick(admin?.user)}
               >
                 <div>
                   <DefaultImage
