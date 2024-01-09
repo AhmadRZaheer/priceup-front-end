@@ -1,20 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import { Add, Delete, Edit } from "@mui/icons-material";
-import { backendURL } from "../../utilities/common";
-import {
-  useDeleteHardwares,
-  useEditHardware,
-  useFetchDatahardware,
-} from "../../utilities/ApiHooks/hardware";
+import { useFetchDatahardware } from "../../utilities/ApiHooks/hardware";
 import AddEditHardware from "../Modal/addEditHardware";
-import Snackbars from "../Modal/snackBar";
 import "./hardwareTable.scss";
-import FinishItem from "./finishItem";
 import HardwareItem from "./hardwreItem";
 import AddIcon from "../../Assets/plus.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
+import { useSelector } from "react-redux";
 import { getDataRefetch } from "../../redux/staff";
 
 const HardWareComponent = ({ type }) => {
@@ -44,25 +35,20 @@ const HardWareComponent = ({ type }) => {
     <>
       <div
         style={{
-          paddingTop: 20,
-        }}
-      ></div>
-      <div
-        style={{
           display: "flex",
-          gap: 4,
           alignContent: "center",
           backgroundColor: "#EAECF0",
           paddingTop: 15,
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
+          marginTop: 15,
         }}
       >
         {" "}
         <div
           style={{
-            width: "250px",
+            width: "27%",
             padding: 8,
             alignItems: "center",
           }}
@@ -71,7 +57,7 @@ const HardWareComponent = ({ type }) => {
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "30%",
             padding: 8,
           }}
         >
@@ -79,7 +65,7 @@ const HardWareComponent = ({ type }) => {
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "38%",
             padding: 8,
           }}
         >
@@ -87,13 +73,13 @@ const HardWareComponent = ({ type }) => {
         </div>
         <div
           style={{
-            width: "250px",
+            width: "20%",
             padding: 8,
           }}
         >
           Status
         </div>{" "}
-        <div style={{ width: "50%", textAlign: "right" }}>
+        <div style={{ width: "22%", textAlign: "right" }}>
           <IconButton
             onClick={handleOpen}
             sx={{

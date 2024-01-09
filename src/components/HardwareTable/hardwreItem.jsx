@@ -62,7 +62,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
 
   return (
     <div
-      style={{ borderBottom: "2px solid rgb(232, 232, 232)" }}
+      style={{ borderBottom: "2px solid rgb(232, 232, 232)", width: "100%" }}
       key={mainIndex}
     >
       <Box
@@ -78,7 +78,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
           <img
             style={{ width: 50, height: 50 }}
             src={`${backendURL}/${entry.image}`}
-            alt=""
+            alt="setting logo"
           />
           {entry.name}
           <CustomIconButton
@@ -96,7 +96,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
           />
         </Box>
       </Box>
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, width: { md: "80%", xs: "90%" } }}>
         {entry?.finishes?.map((finish, index) => (
           <FinishItem
             data={finish}

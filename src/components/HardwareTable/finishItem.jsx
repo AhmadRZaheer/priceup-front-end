@@ -130,16 +130,16 @@ const FinishItem = ({
         <Box
           style={{
             display: "flex",
-            gap: 4,
             alignContent: "center",
+            justifyContent: "space-between",
             paddingTop: 4,
             paddingBottom: 4,
           }}
         >
           <Box
-            style={{
-              width: "250px",
-              padding: 4,
+            sx={{
+              minWidth: "200px",
+              padding: 1,
               alignItems: "center",
             }}
           >
@@ -148,12 +148,12 @@ const FinishItem = ({
           </Box>
 
           <Box
-            style={{
-              width: "250px",
-              padding: 4,
+            id={hardwareId}
+            sx={{
+              minWidth: "230px",
+              padding: 1,
               alignItems: "center",
             }}
-            id={hardwareId}
           >
             <Typography>Hardware Part Number</Typography>
             <CustomInputField
@@ -177,9 +177,9 @@ const FinishItem = ({
           </Box>
 
           <Box
-            style={{
-              width: "250px",
-              padding: 4,
+            sx={{
+              minWidth: "230px",
+              padding: 1,
               alignItems: "center",
             }}
           >
@@ -203,9 +203,9 @@ const FinishItem = ({
             />
           </Box>
           <Box
-            style={{
-              maxWidth: "400px",
-              padding: 4,
+            sx={{
+              minWidth: "260px",
+              padding: 1,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -213,7 +213,7 @@ const FinishItem = ({
           >
             <Box
               style={{
-                width: "150px",
+                width: "100%",
                 padding: 4,
                 alignItems: "center",
                 justifyContent: "center",

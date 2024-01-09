@@ -1,11 +1,11 @@
 .Defaults {
   display: flex;
   width: 100%;
-  background-color: black;
   .defaultsConatiner {
-    flex: 6;
+    // flex: 6;
     background-color: white;
     height: 98vh;
+    width: 100%;
   }
   .title {
     font-size: 25px;

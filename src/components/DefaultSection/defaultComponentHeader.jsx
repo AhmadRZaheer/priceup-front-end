@@ -23,7 +23,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         {" "}
         <div
           style={{
-            width: "380px",
+            width: "30%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 5,
@@ -35,7 +35,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "20%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
@@ -46,7 +46,7 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         </div>{" "}
         <div
           style={{
-            width: "250px",
+            width: "20%",
             paddingTop: 6,
             fontSize: 18,
             paddingLeft: 10,
@@ -58,7 +58,6 @@ const DefaultComponentHeader = ({ selected, handleEditClick }) => {
         <div
           style={{
             width: "40%",
-
             fontSize: 18,
             display: "flex",
             justifyContent: "space-between",

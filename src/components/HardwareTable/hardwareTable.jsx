@@ -39,7 +39,6 @@ const HardwareTable = () => {
         sx={{
           backgroundColor: "white",
           height: "98.2vh",
-          paddingLeft: 1,
         }}
       >
         <div className="h-page-title">
@@ -50,16 +49,13 @@ const HardwareTable = () => {
         <div
           style={{
             border: "1px solid rgb(232, 232, 232)",
-            marginLeft: 18,
-            marginRight: 18,
+            width: "98%",
             borderRadius: "8px",
+            margin: "auto",
           }}
-          className="HardWareComponent"
         >
           <div
             style={{
-              marginLeft: "15px",
-              marginRight: "15px",
               paddingLeft: 20,
               paddingRight: 20,
               paddingTop: 10,
