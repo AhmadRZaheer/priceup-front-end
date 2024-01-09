@@ -128,10 +128,9 @@ const Sidebar = () => {
   const drawer = (
     <Box
       sx={{
-        position: { xs: "absolute", md: "static" },
+        // position: { xs: "absolute", md: "static" },
         top: "0px",
         zIndex: 10,
-        backgroundColor: "red",
       }}
     >
       <div className="sidebar">
@@ -148,7 +147,7 @@ const Sidebar = () => {
             <NavLink to="/">
               <div className="top">
                 <span className="logo">
-                  <img src={Logo} alt="" />
+                  <img src={Logo} alt="price up logo" />
                 </span>
               </div>
             </NavLink>

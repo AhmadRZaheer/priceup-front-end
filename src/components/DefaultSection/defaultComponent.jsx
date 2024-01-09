@@ -175,88 +175,87 @@ const DefaultComponent = () => {
         </Box>
       ) : (
         <Box
-          style={{
+          sx={{
             display: "flex",
-            marginTop: 4,
+            marginTop: 1,
             maxHeight: "66vh",
-            overflowY: "scroll",
+            overflow: "scroll",
             width: "100%",
           }}
         >
-          <Box>
+          <Box
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 14,
+              alignContent: "center",
+              paddingTop: 15,
+              paddingBottom: 15,
+              paddingLeft: "10px",
+              paddingRight: "10px",
+            }}
+          >
             <Box
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 14,
-                alignContent: "center",
-                paddingTop: 15,
-                paddingBottom: 15,
-                paddingLeft: "10px",
-                paddingRight: "10px",
+                width: "380px",
+                paddingX: 10,
+              }}
+            >
+              <Box sx={{ width: "320px" }}>
+                <CustomInputField
+                  size="small"
+                  variant="outlined"
+                  name="name"
+                  fullWidth={true}
+                  value={formik.values.name || null}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </Box>
+            </Box>
+            <Box
+              style={{
+                width: "360px",
+                paddingX: 10,
               }}
             >
               <Box
-                style={{
-                  width: "380px",
-                  paddingX: 10,
+                sx={{
+                  width: "315px",
+                  borderRadius: 2,
+                  marginX: 1,
                 }}
               >
-                <Box sx={{ width: "320px" }}>
-                  <CustomInputField
-                    size="small"
-                    variant="outlined"
-                    name="name"
-                    fullWidth={true}
-                    value={formik.values.name || null}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
+                <Box>
+                  <input
+                    type="file"
+                    accept="image/svg+xml,image/png,image/jpeg,image/gif"
+                    style={{ display: "none" }}
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
                   />
-                </Box>
-              </Box>
-              <Box
-                style={{
-                  width: "380px",
-                  paddingX: 10,
-                }}
-              >
-                <Box
-                  sx={{
-                    width: "315px",
-                    borderRadius: 2,
-                    marginX: 1,
-                  }}
-                >
-                  <Box>
-                    <input
-                      type="file"
-                      accept="image/svg+xml,image/png,image/jpeg,image/gif"
-                      style={{ display: "none" }}
-                      ref={fileInputRef}
-                      onChange={handleFileChange}
+                  {formik.values.image ? (
+                    <img
+                      width={"100%"}
+                      height={"400px"}
+                      src={`${backendURL}/${formik.values.image}`}
+                      alt="Selected"
                     />
-                    {formik.values.image ? (
-                      <img
-                        width={"100%"}
-                        height={"400px"}
-                        src={`${backendURL}/${formik.values.image}`}
-                        alt="Selected"
-                      />
-                    ) : (
-                      <Box
-                        sx={{
-                          width: "100%",
-                          height: "400px",
-                          textAlign: "center",
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                        }}
-                      >
-                        <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-                      </Box>
-                    )}
-                    {/* <Button
+                  ) : (
+                    <Box
+                      sx={{
+                        width: "100%",
+                        height: "400px",
+                        textAlign: "center",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                    </Box>
+                  )}
+                  {/* <Button
                       style={{
                         width: "100%",
                         boxShadow: "0px 0px 2px blue",
@@ -271,11 +270,11 @@ const DefaultComponent = () => {
                     >
                       Upload Image
                     </Button> */}
-                  </Box>
                 </Box>
               </Box>
             </Box>
           </Box>
+
           <Box>
             <div
               style={{
