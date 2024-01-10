@@ -54,7 +54,8 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
+  const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
   const dispatch = useDispatch();
@@ -133,6 +134,16 @@ const Sidebar = () => {
   // console.log(token, "token");
   // console.log(decodedToken, "decodedToken");
   // console.log(haveAccessData, "haveAccsessData");
+  useEffect(() => {
+    if (filteredCustomUser) {
+      const user = filteredCustomUser.find(
+        (item) => item.id === decodedToken?.company_id
+      );
+
+      setCustomActiveUser(user.name, "user");
+    }
+  }, [filteredCustomUser, decodedToken]);
+
   const drawer = (
     <Box
       sx={{
@@ -195,13 +206,19 @@ const Sidebar = () => {
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
                     onClick={handleSeeLocationsClick}
                   >
-                    <IconButton sx={{ color: "white", padding: 0.2 }}>
-                      <img
-                        src={EyeIcon}
-                        alt="eye icon"
-                        style={{ marginRight: 12 }}
-                      />
-                      <span>See Locations</span>
+                    <IconButton
+                      sx={{
+                        color: "white",
+                        padding: 0.2,
+                        display: "flex",
+                        justifyContent: "space-between",
+                        width: "100%",
+                        borderRadius: 0,
+                      }}
+                    >
+                      <PinDrop sx={{ color: "white" }} />
+                      <span>{CustomActiveUser}</span>
+                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
                     </IconButton>
                   </li>
                 ) : (
