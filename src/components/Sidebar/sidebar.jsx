@@ -140,7 +140,7 @@ const Sidebar = () => {
         (item) => item.id === decodedToken?.company_id
       );
 
-      setCustomActiveUser(user.name, "user");
+      setCustomActiveUser(user?.name, "user");
     }
   }, [filteredCustomUser, decodedToken]);
 
