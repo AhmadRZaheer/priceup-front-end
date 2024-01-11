@@ -134,8 +134,49 @@ const estimateCalcSlice = createSlice({
           },
         };
       } else if (["hardwareFinishes"].includes(type)) {
+        // recheck hardwares availability with current finish
+        /** handles */
+        const handleItem = state.content.handles.item;
+        let handleStatus = false;
+        if(handleItem){
+        handleStatus = state.content.handles.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        }
+        /** hinges */
+        const hingeItem = state.content.hinges.item;
+        let hingeStatus = false;
+        if(hingeItem){
+        hingeStatus = state.content.hinges.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        }
+        /** sliding door system */
+        const slidingDoorItem = state.content.slidingDoorSystem.item;
+        let slidingDoorSystemStatus = false;
+        if(slidingDoorItem){
+          slidingDoorSystemStatus = state.content.slidingDoorSystem.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        }
+        /** header */
+        const headerItem = state.content.header.item;
+        let headerStatus = false;
+        if(headerItem){
+          headerStatus = state.content.header.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        }
         state.content = {
           ...state.content,
+          handles: {
+            item: handleItem && handleStatus === true ? state.content.handles?.item : null,
+            count: state.content.handles?.count,
+          },
+          hinges: {
+            item: hingeItem && hingeStatus === true ? state.content.hinges?.item : null,
+            count: state.content.hinges?.count,
+          },
+          slidingDoorSystem: {
+            item: slidingDoorItem && slidingDoorSystemStatus === true ? state.content.slidingDoorSystem?.item : null,
+            count: state.content.slidingDoorSystem?.count,
+          },
+          header: {
+            item: headerItem && headerStatus === true ? state.content.header?.item : null,
+            count: state.content.header?.count,
+          },
           [type]: item,
         };
       } else if (["hardwareAddons"].includes(type)) {
@@ -640,19 +681,19 @@ const estimateCalcSlice = createSlice({
       );
       let handleType = null;
       handleType = state.listData?.handles?.find(
-        (item) => item._id === layoutData?.settings?.handles?.handleType
+        (item) => (item._id === layoutData?.settings?.handles?.handleType) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
-        (item) => item._id === layoutData?.settings?.hinges?.hingesType
+        (item) => (item._id === layoutData?.settings?.hinges?.hingesType) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
+        (item) => (item._id === layoutData?.settings?.slidingDoorSystem?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
       let headerType = null;
       headerType = state.listData?.header?.find(
-        (item) => item._id === layoutData?.settings?.header
+        (item) => (item._id === layoutData?.settings?.header) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
 
       let glassType = null;
@@ -851,20 +892,20 @@ const estimateCalcSlice = createSlice({
       );
       let handleType = null;
       handleType = state.listData?.handles?.find(
-        (item) => item._id === estimateData?.handles?.type
+        (item) => (item._id === estimateData?.handles?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
-        (item) => item._id === estimateData?.hinges?.type
+        (item) => (item._id === estimateData?.hinges?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => item._id === estimateData?.slidingDoorSystem?.type
+        (item) => (item._id === estimateData?.slidingDoorSystem?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
 
       let headerType = null;
       headerType = state.listData?.header?.find(
-        (item) => item._id === estimateData?.header?.type
+        (item) => (item._id === estimateData?.header?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
       );
 
       let glassTypee = null;
