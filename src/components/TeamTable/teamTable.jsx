@@ -15,6 +15,8 @@ import {
   Button,
 } from "@mui/material";
 import {
+  useAddLocation,
+  useDeleteTeamFromOne,
   useDeleteTeamMembers,
   useFetchDataTeam,
 } from "../../utilities/ApiHooks/team";
@@ -25,15 +27,19 @@ import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
 import CustomIconButton from "../ui-components/CustomButton";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { parseJwt } from "../ProtectedRoute/authVerify";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  const { mutate: editTeamMembers, isSuccess } = useAddLocation();
   console.log("team", stafData);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
   const [edit, setEdit] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [matchingId, setMatchingId] = useState("");
+  const token = localStorage.getItem("token");
+  const decodedToken = parseJwt(token);
   const filteredData = stafData?.filter((team) =>
     team.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -48,15 +54,29 @@ const TeamTable = () => {
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteTeamMembers();
-  const handleTeamMemberDelete = (id) => {
-    deleteFinish(id);
-    setMatchingId(id);
-  };
-  React.useEffect(() => {
-    if (deleteSuccess) {
+  const handleTeamMemberDelete = async (teamdata) => {
+    if (teamdata?.company_id !== decodedToken.company_id) {
+      const haveAccessss = teamdata.haveAccessTo.filter(
+        (item) => item !== decodedToken.company_id
+      );
+      await editTeamMembers({
+        data: haveAccessss,
+        locId: teamdata._id,
+      });
+      teamMemberRefetch();
+    } else {
+      console.log("delete finish");
+      await deleteFinish(teamdata._id);
+      setMatchingId(teamdata._id);
       teamMemberRefetch();
     }
-  }, [deleteSuccess]);
+  };
+
+  React.useEffect(() => {
+    if (deleteSuccess && isSuccess) {
+      teamMemberRefetch();
+    }
+  }, [deleteSuccess, isSuccess]);
   const { data: locationData } = useFetchAdminLocation();
   const actionColumn = [
     {
@@ -94,7 +114,7 @@ const TeamTable = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleTeamMemberDelete(id)}
+              onClick={() => handleTeamMemberDelete(params.row)}
             >
               {isMatchingId && loaderForDelete ? (
                 <CircularProgress size={24} color="warning" />
