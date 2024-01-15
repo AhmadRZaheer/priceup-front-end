@@ -5,7 +5,13 @@ import {
   ChevronRight,
   RemoveCircleOutline,
 } from "@mui/icons-material";
-import { Box, CircularProgress, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  TextField,
+  Typography,
+  MenuItem as SingleMenuItem,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -32,9 +38,9 @@ const MenuList = ({
   const [countVal, setCountVal] = useState(count || 0);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
   const [selectedItem, setSelectedItem] = useState(null);
-  useEffect(()=>{
-      setSelectedItem(currentItem);
-  },[currentItem])
+  useEffect(() => {
+    setSelectedItem(currentItem);
+  }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     dispatch(setContent({ type: type, item: item }));
@@ -64,7 +70,7 @@ const MenuList = ({
         })
       );
   };
-  return (
+    return (
     <Box>
       <Box
         sx={{
@@ -78,7 +84,7 @@ const MenuList = ({
         <Button
           onClick={opneClose}
           id="basic-button"
-                  sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
+          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -171,12 +177,12 @@ const MenuList = ({
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
             >
-              <MenuItem key="1/2" value="1/2">
+              <SingleMenuItem key="1/2" value="1/2">
                 1/2
-              </MenuItem>
-              <MenuItem key="3/8" value="3/8">
+              </SingleMenuItem>
+              <SingleMenuItem key="3/8" value="3/8">
                 3/8
-              </MenuItem>
+              </SingleMenuItem>
             </TextField>
           </Box>
         )}
@@ -205,7 +211,13 @@ const MenuList = ({
             </Box>
           ) : (
             menuOptions?.map((item) => (
-              <MenuItem type={type} item={item} selectedItem={selectedItem} handleItemSelect={handleItemSelect} selectedContent={selectedContent} />
+              <MenuItem
+                type={type}
+                item={item}
+                selectedItem={selectedItem}
+                handleItemSelect={handleItemSelect}
+                selectedContent={selectedContent}
+              />
             ))
           )}
         </Box>
