@@ -35,7 +35,7 @@ const SuperAdminUser = () => {
     refetch: teamMemberRefetch,
     isFetching,
   } = useDataCustomUser();
-  const { mutate: usedelete, isSuccess } = useDeleteCustomerUser();
+  const { mutate: usedelete, isSuccess, isLoading } = useDeleteCustomerUser();
 
   const [search, setSearch] = useState("");
   const [Delete_id, setDelete_id] = useState(null);
@@ -61,10 +61,12 @@ const SuperAdminUser = () => {
   };
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
-    handleClose();
   };
   useEffect(() => {
-    teamMemberRefetch();
+    if (isSuccess) {
+      teamMemberRefetch();
+      handleClose();
+    }
   }, [isSuccess]);
 
   const actionColumn = [
@@ -333,6 +335,7 @@ const SuperAdminUser = () => {
         <DeleteModal
           close={handleClose}
           open={Delete_M}
+          isLoading={isLoading}
           handleDelete={handeleDeleteStaff}
         />
         <CustomUserCreateModal

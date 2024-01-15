@@ -7,7 +7,7 @@ import {
 import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 
-const TableRow = ({ row, refetch, onToggleChange, type }) => {
+const TableRow = ({ row, onToggleChange, type }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
@@ -36,12 +36,6 @@ const TableRow = ({ row, refetch, onToggleChange, type }) => {
     }
     // Call the callback function to update non-active count
   };
-
-  useEffect(() => {
-    if (SuccessForEdit) {
-      refetch();
-    }
-  }, [SuccessForEdit, SuccessForEditUser]);
 
   return (
     <div className="cellAction">

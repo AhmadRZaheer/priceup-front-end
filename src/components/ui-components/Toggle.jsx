@@ -33,7 +33,7 @@ function CustomToggle({ checked, onChange, name, onBlur, onClick }) {
             "& .MuiSwitch-track": {
               backgroundColor: "#7F56D9 !important",
               opacity: `${checked ? 1 : 0.2} !important`,
-              paddingTop: 1.4,
+              paddingTop: 1.3,
               pl: 1.6,
               pr: 4,
               borderRadius: "20px !important",

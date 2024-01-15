@@ -1,6 +1,12 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Modal,
+  Typography,
+} from "@mui/material";
 
-function DeleteModal({ open, close, handleDelete }) {
+function DeleteModal({ open, close, handleDelete, isLoading }) {
   const style = {
     position: "absolute",
     top: "50%",
@@ -44,8 +50,19 @@ function DeleteModal({ open, close, handleDelete }) {
                   bgcolor: "#8477DA",
                 },
               }}
+              disabled={isLoading}
             >
-              Delete
+              {isLoading ? (
+                <CircularProgress
+                  sx={{
+                    color: "#8477DA",
+                    width: "24px !important",
+                    height: "24px !important",
+                  }}
+                />
+              ) : (
+                "Delete"
+              )}
             </Button>
           </Box>
         </Box>

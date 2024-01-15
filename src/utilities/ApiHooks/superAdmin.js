@@ -226,6 +226,7 @@ export const useCreateAdminsMembers = () => {
 };
 
 export const useUserStatus = () => {
+  const dispatch = useDispatch();
   const handleEdit = async (status) => {
     const token = localStorage.getItem("token");
 
@@ -241,11 +242,29 @@ export const useUserStatus = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User Status Updated Successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the user data.",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -401,6 +420,7 @@ export const useCreateCustomUser = () => {
 };
 
 export const useCustomUserStatus = () => {
+  const dispatch = useDispatch()
   const handleEdit = async (status) => {
     const token = localStorage.getItem("token");
 
@@ -416,11 +436,29 @@ export const useCustomUserStatus = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User status Updated successfully",
+            severity: "success",
+          })
+        );
         return response.data.data;
       } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data.",
+            severity: "error",
+          })
+        );
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

@@ -1,4 +1,10 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Modal,
+  Typography,
+} from "@mui/material";
 import { useFormik } from "formik";
 import CustomInputField from "../ui-components/CustomInput";
 import { useEffect, useState } from "react";
@@ -10,8 +16,16 @@ import {
 import * as Yup from "yup";
 
 function CustomUserCreateModal({ open, close, refetch, isEdit }) {
-  const { mutate: userCreateData, isSuccess } = useCreateCustomUser();
-  const { mutate: uesEditUser, isSuccess: updated } = useEditCustomUser();
+  const {
+    mutate: userCreateData,
+    isSuccess,
+    isLoading: creatingUser,
+  } = useCreateCustomUser();
+  const {
+    mutate: uesEditUser,
+    isSuccess: updated,
+    isLoading,
+  } = useEditCustomUser();
   const [selectedImage, setSelectedImage] = useState(null);
 
   const style = {
@@ -50,8 +64,11 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     },
   });
   useEffect(() => {
-    close();
-    refetch();
+    if (isSuccess || updated) {
+      close();
+      refetch();
+      formik.resetForm();
+    }
   }, [isSuccess, updated]);
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -178,8 +195,17 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     bgcolor: "#8477DA",
                   },
                 }}
+                disabled={isLoading || creatingUser}
               >
-                {isEdit.type ? "Update" : "Create"}
+                {isLoading ? (
+                  <CircularProgress sx={{ color: "#8477DA" }} />
+                ) : creatingUser ? (
+                  <CircularProgress sx={{ color: "#8477DA" }} />
+                ) : isEdit.type ? (
+                  "Update"
+                ) : (
+                  "Create"
+                )}
               </Button>
             </Box>
           </form>

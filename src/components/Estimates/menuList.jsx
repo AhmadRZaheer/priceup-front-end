@@ -10,7 +10,7 @@ import {
   CircularProgress,
   TextField,
   Typography,
-  MenuItem as SingleMenuItem,
+  MenuItem as MuiMenuItem,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -177,12 +177,12 @@ const MenuList = ({
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
             >
-              <SingleMenuItem key="1/2" value="1/2">
+              <MuiMenuItem key="1/2" value="1/2">
                 1/2
-              </SingleMenuItem>
-              <SingleMenuItem key="3/8" value="3/8">
+              </MuiMenuItem>
+              <MuiMenuItem key="3/8" value="3/8">
                 3/8
-              </SingleMenuItem>
+              </MuiMenuItem>
             </TextField>
           </Box>
         )}

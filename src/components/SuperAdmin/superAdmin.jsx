@@ -38,17 +38,17 @@ import DefaultImage from "../ui-components/defaultImage";
 const SuperAdminTable = () => {
   const {
     data: AdminData,
-    refetch: teamMemberRefetch,
+    refetch: AdminRefetch,
     isFetched,
     isFetching,
   } = useFetchDataAdmin();
-  const {
-    data: customUserData,
-    isSuccess: customerSuc,
-    refetch: customUserRefech,
-  } = useDataCustomUser();
+  const { data: customUserData } = useDataCustomUser();
   const { data: staffData } = useFetchAllStaff();
-  const { mutate: deleteuserdata, isSuccess } = useDeleteUser();
+  const {
+    mutate: deleteuserdata,
+    isSuccess,
+    isLoading: deleteisLoading,
+  } = useDeleteUser();
 
   const [open, setOpen] = useState(false);
   const [DeleteOpen, setDeleteOpen] = useState(false);
@@ -75,12 +75,15 @@ const SuperAdminTable = () => {
   const [search, setSearch] = useState("");
   const handleClose = () => setOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
-  const handleDeleteUser = () => {
-    setDeleteOpen(false);
-    deleteuserdata(isUserData?.user);
+  console.log(deleteisLoading, "deleteisLoading", isSuccess);
+  const handleDeleteUser = async () => {
+    await deleteuserdata(isUserData?.user);
   };
   useEffect(() => {
-    teamMemberRefetch();
+    if (isSuccess) {
+      setDeleteOpen(false);
+      AdminRefetch();
+    }
   }, [isSuccess]);
 
   const handleOpenDelete = (data) => {
@@ -126,11 +129,7 @@ const SuperAdminTable = () => {
         };
 
         return (
-          <TableRow
-            row={params.row}
-            refetch={teamMemberRefetch}
-            onToggleChange={handleToggleChange}
-          />
+          <TableRow row={params.row} onToggleChange={handleToggleChange} />
         );
       },
     },
@@ -465,7 +464,6 @@ const SuperAdminTable = () => {
                       <Box sx={{ ml: -1.2 }}>
                         <TableRow
                           row={item?.user}
-                          refetch={teamMemberRefetch}
                           onToggleChange={handleToggleChange}
                           type={"superAdmin"}
                         />
@@ -646,6 +644,7 @@ const SuperAdminTable = () => {
       <DeleteModal
         open={DeleteOpen}
         close={handleCloseDelete}
+        isLoading={deleteisLoading}
         handleDelete={handleDeleteUser}
       />
       <EditLocationModal
@@ -653,12 +652,12 @@ const SuperAdminTable = () => {
         close={handleCloseEdit}
         userdata={isUserData?.user}
         companydata={isUserData?.company}
-        refetch={teamMemberRefetch}
+        refetch={AdminRefetch}
       />
       <AddSuperAdminModel
         open={open}
         close={handleClose}
-        refetch={teamMemberRefetch}
+        refetch={AdminRefetch}
         // data={edit}
         // isEdit={isEdit}
       />
