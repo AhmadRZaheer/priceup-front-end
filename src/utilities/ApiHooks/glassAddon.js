@@ -172,17 +172,76 @@ export const useCreateGlassAddon = () => {
 
 //   return useMutation(handleEdit);
 // };
+// export const useEditGlassAddon = () => {
+//   const dispatch = useDispatch();
+//   const handleEdit = async (props) => {
+//     const token = localStorage.getItem("token");
+
+//     try {
+//       console.log(props, "props");
+//       const options = {};
+//       const formData = new FormData();
+//       console.log(props.optionsData, "props.optionsData");
+//       // Check if optionsData exists before appending to FormData
+//       if (props.optionsData.length >= 0) {
+//         options.options = props.optionsData;
+//       }
+
+//       // Check if glassAddonData exists before appending to FormData
+//       if (props.glassAddonData) {
+//         formData.append("name", props.glassAddonData.name);
+
+//         // Check if image exists before appending to FormData
+//         if (props.glassAddonData.image) {
+//           formData.append("image", props.glassAddonData.image);
+//         }
+//       }
+//       const dataToSend = formData.has("name") ? formData : options;
+//       const response = await axios.put(
+//         `${backendURL}/glassAddons/${props?.id}`,
+//         dataToSend,
+//         {
+//           headers: {
+//             Authorization: `Bearer ${token}`,
+//             "Content-Type": "multipart/form-data", // Set content type for FormData
+//           },
+//         }
+//       );
+
+//       if (response.data.code === 200) {
+//         dispatch(
+//           showSnackbar({ message: "Updated Successfully", severity: "error" })
+//         );
+//         return response.data.data;
+//       } else {
+//         dispatch(
+//           showSnackbar({
+//             message: "An error occurred while updating the data",
+//             severity: "error",
+//           })
+//         );
+//         throw new Error("An error occurred while updating the data.");
+//       }
+//     } catch (error) {
+//       dispatch(showSnackbar({ message: error, severity: "error" }));
+//       throw new Error("An error occurred while updating the data.");
+//     }
+//   };
+
+//   return useMutation(handleEdit);
+// };
 export const useEditGlassAddon = () => {
   const dispatch = useDispatch();
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
 
     try {
+      const options = {};
       const formData = new FormData();
 
-      // Check if optionsData exists before appending to FormData
-      if (props.optionsData) {
-        formData.append("options", props.optionsData);
+      // Check if optionsData is defined and is an array
+      if (Array.isArray(props.optionsData) && props.optionsData.length > 0) {
+        options.options = props.optionsData;
       }
 
       // Check if glassAddonData exists before appending to FormData
@@ -194,10 +253,10 @@ export const useEditGlassAddon = () => {
           formData.append("image", props.glassAddonData.image);
         }
       }
-
+      const dataToSend = formData.has("name") ? formData : options;
       const response = await axios.put(
         `${backendURL}/glassAddons/${props?.id}`,
-        formData,
+        dataToSend,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -221,7 +280,7 @@ export const useEditGlassAddon = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: error.message, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };

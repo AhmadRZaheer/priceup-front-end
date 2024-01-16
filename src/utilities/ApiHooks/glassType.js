@@ -70,7 +70,7 @@ export const useDeleteGlassTypeFull = () => {
       });
       if (response.data.code === 200) {
         dispatch(
-          showSnackbar({ message: "Deleted Successfully", severity: "success" })
+          showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
         return response.data.data;
       } else {

@@ -73,7 +73,9 @@ const TeamTable = () => {
   };
 
   React.useEffect(() => {
-    if (deleteSuccess && isSuccess) {
+    if (deleteSuccess) {
+      teamMemberRefetch();
+    } else if (deleteSuccess) {
       teamMemberRefetch();
     }
   }, [deleteSuccess, isSuccess]);
