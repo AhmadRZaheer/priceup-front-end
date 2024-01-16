@@ -34,7 +34,7 @@ const CampanySetting = () => {
   }, [SuccessForEdit]);
   const formik = useFormik({
     initialValues: {
-      location: settingData?.address,
+      address: settingData?.address,
       image: selectedImage,
 
       miscPricing: {
@@ -72,6 +72,7 @@ const CampanySetting = () => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
+      console.log(values, "editedData")
       handleEditSetting(values);
     },
   });
@@ -207,8 +208,8 @@ const CampanySetting = () => {
               <CustomInputField
                 fullWidth
                 type="text"
-                name="location"
-                value={formik.values?.location}
+                name="address"
+                value={formik.values?.address}
                 placeholder={"Add location"}
                 onChange={formik.handleChange}
               />

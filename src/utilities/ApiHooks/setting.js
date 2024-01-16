@@ -42,48 +42,47 @@ export const useEditSetting = () => {
     try {
       const response = await axios.put(
         `${backendURL}/companies/${editedData?.id}`,
-        {
-          address: editedData.data.location,
-          image: editedData.data.image,
+        editedData?.data,
+        // address: editedData.data.location,
+        // image: editedData.data.image,
 
-          miscPricing: {
-            pricingFactor: editedData.data.miscPricing.pricingFactor,
-            hourlyRate: editedData.data.miscPricing.hourlyRate,
-            pricingFactorStatus:
-              editedData.data.miscPricing?.pricingFactorStatus,
-          },
-          fabricatingPricing: {
-            oneHoleOneByTwoInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleOneByTwoInchGlass,
-            oneHoleThreeByEightInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleThreeByEightInchGlass,
-            clampCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.clampCutoutOneByTwoInch,
-            clampCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.clampCutoutThreeByEightInch,
-            hingeCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutOneByTwoInch,
-            hingeCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutThreeByEightInch,
-            minterOneByTwoInch:
-              editedData?.data.fabricatingPricing?.minterOneByTwoInch,
-            minterThreeByEightInch:
-              editedData?.data.fabricatingPricing?.minterThreeByEightInch,
-            notchOneByTwoInch:
-              editedData?.data.fabricatingPricing?.notchOneByTwoInch,
-            notchThreeByEightInch:
-              editedData?.data.fabricatingPricing?.notchThreeByEightInch,
-            outageOneByTwoInch:
-              editedData?.data.fabricatingPricing?.outageOneByTwoInch,
-            outageThreeByEightInch:
-              editedData?.data.fabricatingPricing?.outageThreeByEightInch,
-            polishPricePerOneByTwoInch:
-              editedData?.data.fabricatingPricing?.polishPricePerOneByTwoInch,
-            polishPricePerThreeByEightInch:
-              editedData?.data.fabricatingPricing
-                ?.polishPricePerThreeByEightInch,
-          },
-        },
+        // miscPricing: {
+        //   pricingFactor: editedData.data.miscPricing.pricingFactor,
+        //   hourlyRate: editedData.data.miscPricing.hourlyRate,
+        //   pricingFactorStatus:
+        //     editedData.data.miscPricing?.pricingFactorStatus,
+        // },
+        // fabricatingPricing: {
+        //   oneHoleOneByTwoInchGlass:
+        //     editedData?.data.fabricatingPricing?.oneHoleOneByTwoInchGlass,
+        //   oneHoleThreeByEightInchGlass:
+        //     editedData?.data.fabricatingPricing?.oneHoleThreeByEightInchGlass,
+        //   clampCutoutOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.clampCutoutOneByTwoInch,
+        //   clampCutoutThreeByEightInch:
+        //     editedData?.data.fabricatingPricing?.clampCutoutThreeByEightInch,
+        //   hingeCutoutOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.hingeCutoutOneByTwoInch,
+        //   hingeCutoutThreeByEightInch:
+        //     editedData?.data.fabricatingPricing?.hingeCutoutThreeByEightInch,
+        //   minterOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.minterOneByTwoInch,
+        //   minterThreeByEightInch:
+        //     editedData?.data.fabricatingPricing?.minterThreeByEightInch,
+        //   notchOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.notchOneByTwoInch,
+        //   notchThreeByEightInch:
+        //     editedData?.data.fabricatingPricing?.notchThreeByEightInch,
+        //   outageOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.outageOneByTwoInch,
+        //   outageThreeByEightInch:
+        //     editedData?.data.fabricatingPricing?.outageThreeByEightInch,
+        //   polishPricePerOneByTwoInch:
+        //     editedData?.data.fabricatingPricing?.polishPricePerOneByTwoInch,
+        //   polishPricePerThreeByEightInch:
+        //     editedData?.data.fabricatingPricing
+        //       ?.polishPricePerThreeByEightInch,
+        // },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
