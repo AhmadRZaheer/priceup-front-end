@@ -63,21 +63,40 @@ export const useDeleteTeamMembers = () => {
 export const useCreateTeamMembers = () => {
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
+    console.log(props, "props.team");
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
+    const formData = new FormData();
 
+    if (
+      props.image &&
+      (props.image instanceof File || props.image instanceof Blob)
+    ) {
+      formData.append("image", props.image);
+    }
+
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("password", "");
+    formData.append("email", props.email);
+    formData.append("haveAccessTo", JSON.stringify([decodedToken?.company_id]));
     try {
       const response = await axios.post(
         `${backendURL}/staffs/save`,
+        formData,
+        // {
+        //   name: props.name,
+        //   image: formData.get("image"),
+        //   company_id: decodedToken?.company_id,
+        //   password: "",
+        //   email: props.email,
+        //   haveAccessTo: [decodedToken?.company_id],
+        // },
         {
-          name: props.name,
-          company_id: decodedToken?.company_id,
-          password: "",
-          email: props.email,
-          haveAccessTo: [decodedToken?.company_id],
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Set the content type for form data
+          },
         }
       );
 
@@ -111,22 +130,31 @@ export const useEditTeamMembers = () => {
   const dispatch = useDispatch();
   const handleEdit = async (editTeamMembers) => {
     const token = localStorage.getItem("token");
-    const updatedData = {
-      ...(editTeamMembers?.teamData
-        ? {
-            name: editTeamMembers?.teamData?.name,
-            image: editTeamMembers?.teamData?.image,
-            // password: editTeamMembers?.teamData?.password,
-          }
-        : {}),
-      status: editTeamMembers?.status,
-    };
-    console.log("team", editTeamMembers, updatedData);
+    console.log(editTeamMembers, "editTeamMembers");
+    const formData = new FormData();
+
+    if (
+      editTeamMembers?.teamData?.image &&
+      (editTeamMembers?.teamData?.image instanceof File ||
+        editTeamMembers?.teamData?.image instanceof Blob)
+    ) {
+      formData.append("image", editTeamMembers?.teamData?.image);
+    }
+
+    formData.append("name", editTeamMembers?.teamData?.name);
+    if (editTeamMembers?.status !== undefined) {
+      formData.append("status", editTeamMembers?.status);
+    }
+
+    // const updatedData = {
+    //   ...(editTeamMembers?.teamData ? formData : {}),
+    //   status: editTeamMembers?.status,
+    // };
 
     try {
       const response = await axios.put(
         `${backendURL}/staffs/${editTeamMembers?.id}`,
-        updatedData,
+        formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }

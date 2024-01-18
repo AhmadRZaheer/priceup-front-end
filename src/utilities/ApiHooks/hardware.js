@@ -119,21 +119,28 @@ export const useDeleteHardwares = () => {
 export const useCreateHardware = () => {
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
+    console.log(props, "props");
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
 
+    formData.append("name", props.name);
+    formData.append("slug", slug);
+    formData.append("hardware_category_slug", props.hardware_category_slug);
+    formData.append("company_id", decodedToken?.company_id);
     try {
       const response = await axios.post(
         `${backendURL}/hardwares/save`,
+        formData,
         {
-          name: props.name,
-          slug: slug,
-          hardware_category_slug: props.hardware_category_slug,
-          company_id: decodedToken?.company_id,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
+          },
         }
       );
 

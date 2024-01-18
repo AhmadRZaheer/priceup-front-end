@@ -38,14 +38,9 @@ export const useEditSetting = () => {
   const dispatch = useDispatch();
   const handleEditSetting = async (editedData) => {
     const token = localStorage.getItem("token");
-
-    try {
-      const response = await axios.put(
-        `${backendURL}/companies/${editedData?.id}`,
-        {
-          address: editedData.data.location,
-          image: editedData.data.image,
-
+    const formData = new FormData();
+    const data = {
+          address: editedData.data.address,
           miscPricing: {
             pricingFactor: editedData.data.miscPricing.pricingFactor,
             hourlyRate: editedData.data.miscPricing.hourlyRate,
@@ -83,9 +78,21 @@ export const useEditSetting = () => {
               editedData?.data.fabricatingPricing
                 ?.polishPricePerThreeByEightInch,
           },
-        },
+        };
+    formData.append("data", JSON.stringify(data));
+    if (editedData.data?.image) {
+      formData.append("image", editedData.data.image);
+    }
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/companies/${editedData?.id}`,
+        formData,
         {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 

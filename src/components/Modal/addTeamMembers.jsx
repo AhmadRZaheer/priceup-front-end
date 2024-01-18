@@ -30,7 +30,9 @@ const style = {
 };
 
 export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(
+    isEdit ? data?.image : null
+  );
 
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
@@ -84,7 +86,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
       ? {
           name: data?.name,
           email: data?.email,
-          image: "",
+          image: data?.image,
         }
       : {
           name: "",

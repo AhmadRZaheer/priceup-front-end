@@ -18,8 +18,8 @@ import { backendURL } from "../../utilities/common";
 
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
-import { showSnackbar } from "../../redux/snackBarSlice";
-import { useDispatch } from "react-redux";
+import { useDropzone } from "react-dropzone";
+import InputImageIcon from "../../Assets/imageUploader.svg";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
@@ -32,9 +32,16 @@ const CampanySetting = () => {
       reFetchDataSetting();
     }
   }, [SuccessForEdit]);
+
+  const onDrop = (acceptedFiles) => {
+    setSelectedImage(acceptedFiles[0]);
+    formik.setFieldValue("image", acceptedFiles[0]);
+  };
+
+  const { getInputProps } = useDropzone({ onDrop });
   const formik = useFormik({
     initialValues: {
-      location: settingData?.address,
+      address: settingData?.address,
       image: selectedImage,
 
       miscPricing: {
@@ -76,16 +83,16 @@ const CampanySetting = () => {
     },
   });
 
-  const fileInputRef = useRef(null);
+  // const fileInputRef = useRef(null);
 
-  const handleFileUpload = () => {
-    fileInputRef.current.click();
-  };
+  // const handleFileUpload = () => {
+  //   fileInputRef.current.click();
+  // };
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setSelectedImage(URL.createObjectURL(file));
-  };
+  // const handleFileChange = (event) => {
+  //   const file = event.target.files[0];
+  //   setSelectedImage(URL.createObjectURL(file));
+  // };
   const handleEditSetting = (props) => {
     editFinish({ data: props, id: settingData._id });
     reFetchDataSetting();
@@ -139,7 +146,6 @@ const CampanySetting = () => {
           <Box
             sx={{
               display: "flex",
-
               justifyContent: "space-between",
             }}
           >
@@ -151,44 +157,60 @@ const CampanySetting = () => {
               </Typography>
             </Box>
 
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, width: 410, mr: 5 }}>
               <img
                 width={"40px"}
                 height={"40px"}
-                src={selectedImage || `${backendURL}/${settingData?.image}`}
+                src={
+                  selectedImage instanceof File
+                    ? URL.createObjectURL(selectedImage)
+                    : `${backendURL}/${settingData?.image}`
+                }
                 alt="Selected"
                 style={{ borderRadius: "100%" }}
               />
-              <Box sx={{ borderRadius: "100%", display: "flex" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    width: "350px",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    borderRadius: "8px",
-                    border: "1px solid #EAECF0",
-                    p: 3,
-                  }}
-                >
-                  <img
-                    width={"40px"}
-                    height={"40px"}
-                    src={selectedImage || imageUploader}
-                    alt="Selected"
-                  />
-                  <Button onClick={handleFileUpload}>Click to Upload</Button>
-                  <Typography variant="body2">
-                    SVG, PNG, JPG or GIF (max. 800x400px)
-                  </Typography>
+              <Box sx={{ width: "100%" }}>
+                <Box>
                   <input
+                    accept="image/*"
+                    id="image-input"
                     type="file"
-                    accept="image/svg+xml,image/png,image/jpeg,image/gif"
+                    {...getInputProps()}
                     style={{ display: "none" }}
-                    ref={fileInputRef}
-                    onChange={handleFileChange}
                   />
+
+                  <label htmlFor="image-input">
+                    <Box
+                      sx={{
+                        border: "1px solid #EAECF0",
+                        textAlign: "center",
+                        padding: 2,
+                      }}
+                    >
+                      <Box sx={{ height: 60 }}>
+                        <img
+                          width={60}
+                          src={InputImageIcon}
+                          alt="icon of input image"
+                        />
+                      </Box>
+                      <span
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
+                        <Typography sx={{ color: "#8477DA" }}>
+                          Click to {selectedImage ? "Eidt" : "Upload"}
+                        </Typography>
+                      </span>
+                      <Typography variant="body2" sx={{ color: "#667085" }}>
+                        SVG, PNG, JPG or GIF (max. 800x400px)
+                      </Typography>
+                    </Box>
+                  </label>
                 </Box>
               </Box>
             </Box>
@@ -207,8 +229,8 @@ const CampanySetting = () => {
               <CustomInputField
                 fullWidth
                 type="text"
-                name="location"
-                value={formik.values?.location}
+                name="address"
+                value={formik.values?.address}
                 placeholder={"Add location"}
                 onChange={formik.handleChange}
               />
@@ -294,7 +316,7 @@ const CampanySetting = () => {
             gap: 2,
             // maxHeight: "38vh",
             // overflowY: "scroll",
-            pb: 6
+            pb: 6,
           }}
         >
           <Box

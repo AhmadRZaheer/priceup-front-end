@@ -128,7 +128,7 @@ export const useEditFinish = () => {
     formData.append("name", updatedHardware?.hardwareLabel);
     formData.append("image", updatedHardware?.image);
     formData.append("holesNeeded", updatedHardware?.thickness);
-
+    console.log(formData,'formData finishes');
     try {
       const response = await axios.put(
         `${backendURL}/finishes/${updatedHardware?.id}`,
