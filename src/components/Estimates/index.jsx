@@ -4,12 +4,10 @@ import ClientDetailsModel from "./model";
 import LayoutMeasurements from "./layoutMeasurements";
 import LayoutReview from "./layoutReview";
 import Layout from "./layouts";
-import Snackbars from "../Modal/snackBar";
 import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import ExistingQuotes from "./existingQuotes";
 import CustomLayout from "../CustomLayout/customLayout";
-import { showSnackbar } from "../../redux/snackBarSlice";
 
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);

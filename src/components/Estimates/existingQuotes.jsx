@@ -1,23 +1,32 @@
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import image1 from "../../Assets/test.png";
 import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
 import image4 from "../../Assets/calculator.svg";
 import {
-  // useFetchDataEstimate,
+  useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
+
 import ExistingTable from "./existingTable";
 import { useEffect } from "react";
+import { getEstimatesListRefetch } from "../../redux/refetch";
+import { useSelector } from "react-redux";
 
 export default function ExistingQuotes() {
-  const { data, refetch } = useGetEstimates();
+  const refetchEstimatesCouner = useSelector(getEstimatesListRefetch);
+  const { data: estimatesList, isLoading: estimatesFetching, refetch: refetchEstimatesList } = useGetEstimates();
+  const {
+    data: allHardwaresList,
+    isLoading: listFetching,
+    refetch: refetchHardwaresList,
+  } = useFetchDataEstimate();
   useEffect(() => {
-    const refetchdata = () => {
-      refetch();
-    };
-    refetchdata();
-  }, []);
+    refetchEstimatesList();
+    if (refetchEstimatesCouner <= 0) {
+      refetchHardwaresList();
+    }
+  }, [refetchEstimatesCouner]);
   return (
     <>
       <Box
@@ -27,28 +36,23 @@ export default function ExistingQuotes() {
           justifyContent: "start",
           alignItems: "center",
           width: "100%",
-          height: "98vh",
+          height: "auto",
           overflow: "auto",
-          backgroundColor: "white",
           gap: 5,
-          pt: 2,
         }}
       >
-        <Box sx={{ textAlign: "start", width: "96.4%" }}>
-          <Typography sx={{ fontSize: 30 }}>Estimates</Typography>
-        </Box>
         <Box
           sx={{
             display: "flex",
-            width: "96.8%",
+            width: "98%",
             justifyContent: "space-between",
-            gap: 2,
+            gap: 2.6,
           }}
         >
           <Box
             sx={{
               width: "50%",
-              height: 80,
+              height: 90,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -65,7 +69,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {data?.pending}
+                {estimatesList?.pending}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -76,7 +80,7 @@ export default function ExistingQuotes() {
           <Box
             sx={{
               width: "50%",
-              height: 80,
+              height: 90,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -93,7 +97,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {data?.approved}
+                {estimatesList?.approved}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -104,7 +108,7 @@ export default function ExistingQuotes() {
           <Box
             sx={{
               width: "50%",
-              height: 80,
+              height: 90,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -121,7 +125,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {data?.voided}
+                {estimatesList?.voided}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -132,7 +136,7 @@ export default function ExistingQuotes() {
           <Box
             sx={{
               width: "50%",
-              height: 80,
+              height: 90,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -149,7 +153,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pl={0.8} fontSize={26} fontWeight="bold">
-                ${data?.total?.toFixed(2) || 0}
+                ${estimatesList?.total?.toFixed(2)}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
@@ -157,16 +161,29 @@ export default function ExistingQuotes() {
             </Box>
           </Box>
         </Box>
-
         <Box
           sx={{
-            width: "97%",
+            width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
             mb: 2,
           }}
         >
-          <ExistingTable />
+          {estimatesFetching || listFetching ? (
+            <Box
+              sx={{
+                width: 40,
+                m: "auto",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                maxHeight: "70vh",
+                minHeight: "20vh",
+              }}
+            >
+              <CircularProgress sx={{ color: "#8477DA" }} />
+            </Box>
+          ) : (<ExistingTable estimatesList={estimatesList} allHardwaresList={allHardwaresList} />)}
         </Box>
       </Box>
     </>

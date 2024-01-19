@@ -1,7 +1,7 @@
 import React from "react";
 import "./customers.scss";
 import Sidebar from "../../components/Sidebar/sidebar";
-import Index from "../../components/Estimates/Index";
+import Index from "../../components/Estimates";
 
 const Estimates = () => {
   return (

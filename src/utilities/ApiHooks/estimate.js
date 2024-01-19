@@ -4,6 +4,7 @@ import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { setEstimatesListRefetch } from "../../redux/refetch";
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -25,7 +26,7 @@ export const useFetchDataEstimate = () => {
     queryKey: ["estimateData"],
     queryFn: fetchData,
     enabled: false,
-    placeholderData: [],
+    // placeholderData: [],
   });
 };
 
@@ -48,8 +49,8 @@ export const useGetEstimates = () => {
   return useQuery({
     queryKey: ["estimates"],
     queryFn: fetchData,
-    enabled: true,
-    placeholderData: [],
+    enabled: false,
+    // placeholderData: [],
   });
 };
 
@@ -175,6 +176,7 @@ export const useDeleteEstimates = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({
             message: "Estimate Deleted Successfuly",

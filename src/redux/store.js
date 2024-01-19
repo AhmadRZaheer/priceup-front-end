@@ -8,6 +8,7 @@ import selectedIdSlice from "./selectedIdSlice";
 import defaultSlice from "./defaultSlice";
 import staffSlice from "./staff";
 import snackBarSlice from "./snackBarSlice";
+import refetchSlice from "./refetch";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     defaultSlice: defaultSlice,
     staff: staffSlice,
     snackbar: snackBarSlice,
+    refetch: refetchSlice,
   },
 });
 

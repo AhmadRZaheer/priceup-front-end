@@ -11,7 +11,7 @@ export const useFetchDataEstimateCard = () => {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (response.data && response.data.code === 200) {
-          return response.data.data ? response.data.data : {};
+          return response.data.data ? response.data.data : null;
         } else {
           throw new Error("An error occurred while fetching the data.");
         }
@@ -23,6 +23,6 @@ export const useFetchDataEstimateCard = () => {
       queryKey: ["dashboardData"],
       queryFn: fetchData,
       enabled: false,
-      placeholderData: {},
+      // placeholderData: {},
     });
   };

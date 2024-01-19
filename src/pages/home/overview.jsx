@@ -3,7 +3,7 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import "./overview.scss";
 import Widget from "../../components/widgets/widget";
 import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/estimateDataCard";
-import ExistingQuotes2 from "../../components/Estimates/existingTable2";
+import ExistingQuotes from "../../components/Estimates/existingQuotes";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { Box } from "@mui/material";
 
@@ -11,7 +11,7 @@ const Overview = () => {
   const { data, refetch } = useFetchDataEstimateCard();
   const token = localStorage.getItem("token");
   const { name } = parseJwt(token);
-  useEffect(() => refetch(), []);
+  useEffect(() => { refetch(); }, []);
   return (
     <div className="overview">
       <Sidebar />
@@ -36,7 +36,7 @@ const Overview = () => {
         <div className="page-title">
           <h2>Estimates</h2>
         </div>
-        <ExistingQuotes2 />
+        <ExistingQuotes />
       </Box>
     </div>
   );

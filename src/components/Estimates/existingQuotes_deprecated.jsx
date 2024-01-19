@@ -7,14 +7,16 @@ import {
   // useFetchDataEstimate,
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
-
 import ExistingTable from "./existingTable";
 import { useEffect } from "react";
 
-export default function ExistingQuotes2() {
+export default function ExistingQuotes() {
   const { data, refetch } = useGetEstimates();
   useEffect(() => {
-    refetch();
+    const refetchdata = () => {
+      refetch();
+    };
+    refetchdata();
   }, []);
   return (
     <>
@@ -25,23 +27,28 @@ export default function ExistingQuotes2() {
           justifyContent: "start",
           alignItems: "center",
           width: "100%",
-          height: "auto",
+          height: "98vh",
           overflow: "auto",
+          backgroundColor: "white",
           gap: 5,
+          pt: 2,
         }}
       >
+        <Box sx={{ textAlign: "start", width: "96.4%" }}>
+          <Typography sx={{ fontSize: 30 }}>Estimates</Typography>
+        </Box>
         <Box
           sx={{
             display: "flex",
-            width: "98%",
+            width: "96.8%",
             justifyContent: "space-between",
-            gap: 2.6,
+            gap: 2,
           }}
         >
           <Box
             sx={{
               width: "50%",
-              height: 90,
+              height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -69,7 +76,7 @@ export default function ExistingQuotes2() {
           <Box
             sx={{
               width: "50%",
-              height: 90,
+              height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -97,7 +104,7 @@ export default function ExistingQuotes2() {
           <Box
             sx={{
               width: "50%",
-              height: 90,
+              height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -125,7 +132,7 @@ export default function ExistingQuotes2() {
           <Box
             sx={{
               width: "50%",
-              height: 90,
+              height: 80,
               padding: 3,
               display: "flex",
               justifyContent: "start",
@@ -142,7 +149,7 @@ export default function ExistingQuotes2() {
                 alt=""
               />
               <Typography pl={0.8} fontSize={26} fontWeight="bold">
-                ${data?.total?.toFixed(2)}
+                ${data?.total?.toFixed(2) || 0}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
@@ -150,9 +157,10 @@ export default function ExistingQuotes2() {
             </Box>
           </Box>
         </Box>
+
         <Box
           sx={{
-            width: "98%",
+            width: "97%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
             mb: 2,
