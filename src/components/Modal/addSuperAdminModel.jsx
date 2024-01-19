@@ -55,7 +55,13 @@ export default function AddSuperAdminModel({
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email address"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required")
+      .matches(
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        "Invalid email address format"
+      ),
     image: Yup.mixed(),
   });
 
@@ -115,46 +121,46 @@ export default function AddSuperAdminModel({
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
             )}
-            {selectedImage ? (
+
+            <label htmlFor="image-input">
+              <Box
+                sx={{
+                  border: "1px solid #EAECF0",
+                  textAlign: "center",
+                  padding: 2,
+                }}
+              >
+                <Box sx={{ height: 60 }}>
+                  <img
+                    width={60}
+                    src={InputImageIcon}
+                    alt="icon of input image"
+                  />
+                </Box>
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Typography sx={{ color: "#8477DA" }}>
+                    Click to Upload
+                  </Typography>
+                </span>
+                <Typography variant="body2" sx={{ color: "#667085" }}>
+                  SVG, PNG, JPG or GIF (max. 800x400px)
+                </Typography>
+              </Box>
+            </label>
+            {selectedImage && (
               <img
                 width={"80px"}
                 height={"80px"}
                 src={URL.createObjectURL(selectedImage)}
                 alt="Selected"
               />
-            ) : (
-              <label htmlFor="image-input">
-                <Box
-                  sx={{
-                    border: "1px solid #EAECF0",
-                    textAlign: "center",
-                    padding: 2,
-                  }}
-                >
-                  <Box sx={{ height: 60 }}>
-                    <img
-                      width={60}
-                      src={InputImageIcon}
-                      alt="icon of input image"
-                    />
-                  </Box>
-                  <span
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: 4,
-                    }}
-                  >
-                    <Typography sx={{ color: "#8477DA" }}>
-                      Click to Upload
-                    </Typography>
-                  </span>
-                  <Typography variant="body2" sx={{ color: "#667085" }}>
-                    SVG, PNG, JPG or GIF (max. 800x400px)
-                  </Typography>
-                </Box>
-              </label>
             )}
           </Box>
           <Box>

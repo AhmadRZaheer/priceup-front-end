@@ -178,21 +178,22 @@ export const useCreateAdminsMembers = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("email", props.email);
+    formData.append("password", props.password);
 
     try {
-      const response = await axios.post(
-        `${backendURL}/users/save`,
-        {
-          name: props.name,
-
-          company_id: decodedToken?.company_id,
-          password: props.password,
-          email: props.email,
+      const response = await axios.post(`${backendURL}/users/save`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
         },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      });
 
       if (response.data.code === 200) {
         dispatch(
@@ -278,8 +279,10 @@ export const useEditUser = () => {
     try {
       const token = localStorage.getItem("token");
       const formData = new FormData();
+      if (updatedUser?.selectedImage) {
+        formData.append("image", updatedUser?.selectedImage);
+      }
 
-      formData.append("image", updatedUser?.selectedImage);
       formData.append("name", updatedUser?.name);
       // formData.append("email", updatedUser?.email);
       if (updatedUser?.password !== "") {
@@ -383,16 +386,22 @@ export const useCreateCustomUser = () => {
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("email", props.email);
+
     try {
       const response = await axios.post(
         `${backendURL}/customUsers/save`,
+        formData,
         {
-          name: props.name,
-          email: props.email,
-          // image: props.image,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
@@ -420,7 +429,7 @@ export const useCreateCustomUser = () => {
 };
 
 export const useCustomUserStatus = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleEdit = async (status) => {
     const token = localStorage.getItem("token");
 
@@ -554,18 +563,55 @@ export const useEditCustomUser = () => {
   const dispatch = useDispatch();
   const handleEdit = async (updatedUser) => {
     const token = localStorage.getItem("token");
-    // const formData = new FormData();
+    const formData = new FormData();
+    if (updatedUser?.image) {
+      formData.append("image", updatedUser?.image);
+    }
 
-    // formData.append("image", updatedUser?.image);customUserscustomUsers
-    // formData.append("name", updatedUser?.name);customUserscustomUsers
-    // formData.append("email", updatedUser?.email);
-    console.log(updatedUser?.locationsAccess);
+    formData.append("name", updatedUser?.name);
+    formData.append("email", updatedUser?.email);
+    try {
+      const response = await axios.put(
+        `${backendURL}/customUsers/${updatedUser?._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+export const useEditAccessCustomUser = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (updatedUser) => {
+    const token = localStorage.getItem("token");
+
     try {
       const response = await axios.put(
         `${backendURL}/customUsers/${updatedUser?._id}`,
         {
-          // image: updatedUser?.image,
-          name: updatedUser?.name,
           ...(updatedUser?.locationsAccess
             ? {
                 locationsAccess: updatedUser?.locationsAccess,
