@@ -20,6 +20,9 @@ const LayoutHeader = () => {
   useEffect(() => {
     defaultDataRefetch();
   }, [refetch]);
+  useEffect(() => {
+    defaultDataRefetch();
+  }, []);
   const dispatch = useDispatch();
   const showMore = (id) => {
     dispatch(setDefaultId(id));

@@ -8,9 +8,16 @@ import {
   useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
 import ExistingTable from "./existingTable";
+import { useEffect } from "react";
 
 export default function ExistingQuotes() {
-  const { data } = useGetEstimates();
+  const { data, refetch } = useGetEstimates();
+  useEffect(() => {
+    const refetchdata = () => {
+      refetch();
+    };
+    refetchdata();
+  }, []);
   return (
     <>
       <Box
@@ -35,7 +42,7 @@ export default function ExistingQuotes() {
             display: "flex",
             width: "96.8%",
             justifyContent: "space-between",
-            gap: 2
+            gap: 2,
           }}
         >
           <Box

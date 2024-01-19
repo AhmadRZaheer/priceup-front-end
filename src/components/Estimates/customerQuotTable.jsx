@@ -57,6 +57,9 @@ export default function AddEditFinish({ open, close, quoteId }) {
   useEffect(() => {
     Refetched();
   }, [refetchData]);
+  useEffect(() => {
+    Refetched();
+  }, []);
   const dispatch = useDispatch();
   useEffect(() => {
     if (open && quoteId !== null && quoteId !== undefined) {

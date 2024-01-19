@@ -31,8 +31,13 @@ const GlassAddonGrid = ({ type }) => {
   const [isEdit, setIsEdit] = React.useState(false);
 
   useEffect(() => {
-    glassAddonRefetch();
+    if (refetchData) {
+      glassAddonRefetch();
+    }
   }, [refetchData]);
+  useEffect(() => {
+    glassAddonRefetch();
+  }, []);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);

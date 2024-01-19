@@ -4,6 +4,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import React, { useEffect, useState } from "react";
 import {
   useDeleteGlassTypeFull,
+  useEditFullGlassType,
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
 import AddEditGlassType from "../Modal/addEidtGlassType";
@@ -22,13 +23,14 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
     deleteGlassType(id);
   };
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
-    useEditGlassType();
+    useEditFullGlassType();
   const handleOpenEdit = () => {
     setOpen(true);
   };
   useEffect(() => {
     if (GlassTypeEditSuccess || deleteSuccess) {
       GlassTypeRefetch();
+      console.log("2");
     }
   }, [GlassTypeEditSuccess, deleteSuccess]);
   const [UpdateValue, SetUpdateValue] = useState(entry.options);
@@ -66,7 +68,8 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
           {" "}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             <img
-              className="cellImg"
+              width={"50px"}
+              height={"50px"}
               src={`${backendURL}/${entry.image}`}
               alt=""
             />

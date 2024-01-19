@@ -22,7 +22,7 @@ export const useFetchDataCustomer = () => {
   return useQuery({
     queryKey: ["customerData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };

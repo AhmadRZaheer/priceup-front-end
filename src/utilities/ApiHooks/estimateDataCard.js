@@ -22,7 +22,7 @@ export const useFetchDataEstimateCard = () => {
     return useQuery({
       queryKey: ["dashboardData"],
       queryFn: fetchData,
-      enabled: true,
+      enabled: false,
       placeholderData: {},
     });
   };

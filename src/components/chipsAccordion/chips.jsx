@@ -2,10 +2,13 @@ import * as React from "react";
 import Chip from "@mui/material/Chip";
 import { Box } from "@mui/material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import { useEffect } from "react";
 
 export default function ChipsArray() {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
-
+  useEffect(() => {
+    teamMemberRefetch();
+  }, []);
   const handleDelete = (chipToDelete) => () => {
     AdminData.filter((chip) => chip._id !== chipToDelete._id);
   };

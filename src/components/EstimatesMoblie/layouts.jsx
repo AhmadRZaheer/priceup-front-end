@@ -1,5 +1,5 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useFetchDataDefault } from "../../utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "../../utilities/common";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,8 +34,12 @@ export const boxStyles = {
   cursor: "pointer",
 };
 const Layout = () => {
-  const { data: layouts, isFetching: layoutFetching } = useFetchDataDefault();
-  const { data: estimateListData, isFetching: estimateDataFetching } =
+  const {
+    data: layouts,
+    isFetching: layoutFetching,
+    refetch,
+  } = useFetchDataDefault();
+  const { data: estimateListData, isFetching: estimateDataFetching, refetch:refetchList } =
     useFetchDataEstimate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
@@ -49,7 +53,10 @@ const Layout = () => {
     setselectCustom(false);
     // dispatch(resetState());
   };
-
+  useEffect(() => {
+    refetch();
+    refetchList()
+  }, []);
   const setStorePage = () => {
     if (selectCustom) {
       dispatch(setNavigation("custom"));

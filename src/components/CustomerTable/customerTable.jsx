@@ -29,6 +29,9 @@ const CustomerTable = () => {
   useEffect(() => {
     refetch();
   }, [refetchData]);
+  useEffect(() => {
+    refetch();
+  }, []);
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (params) => {

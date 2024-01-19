@@ -26,7 +26,7 @@ export const useFetchDataAdmin = () => {
   return useQuery({
     queryKey: ["teamData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };
@@ -50,7 +50,7 @@ export const useFetchAdminLocation = () => {
   return useQuery({
     queryKey: ["locationData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };

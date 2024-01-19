@@ -24,7 +24,7 @@ export const useFetchDataTeam = () => {
   return useQuery({
     queryKey: ["stafData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };
@@ -130,7 +130,6 @@ export const useEditTeamMembers = () => {
   const dispatch = useDispatch();
   const handleEdit = async (editTeamMembers) => {
     const token = localStorage.getItem("token");
-    console.log(editTeamMembers, "editTeamMembers");
     const formData = new FormData();
 
     if (
@@ -140,8 +139,10 @@ export const useEditTeamMembers = () => {
     ) {
       formData.append("image", editTeamMembers?.teamData?.image);
     }
+    if (editTeamMembers?.teamData?.name) {
+      formData.append("name", editTeamMembers?.teamData?.name);
+    }
 
-    formData.append("name", editTeamMembers?.teamData?.name);
     if (editTeamMembers?.status !== undefined) {
       formData.append("status", editTeamMembers?.status);
     }

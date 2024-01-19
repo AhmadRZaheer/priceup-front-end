@@ -4,9 +4,13 @@ import { DataGrid } from "@mui/x-data-grid";
 import { useFetchDataTeam } from "../../utilities/ApiHooks/team";
 import { teamColumns } from "../../customerTableSource";
 import "./customerTable.css";
+import { useEffect } from "react";
 
 export default function ExitingQuotes() {
-  const { data: staffData } = useFetchDataTeam();
+  const { data: staffData, refetch } = useFetchDataTeam();
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <>
       <Box

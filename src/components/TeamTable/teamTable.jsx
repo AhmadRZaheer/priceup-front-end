@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./teamTable.scss";
 import { teamColumns } from "../../customerTableSource";
 import ModeIcon from "@mui/icons-material/Mode";
@@ -72,10 +72,14 @@ const TeamTable = () => {
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     teamMemberRefetch();
   }, [deleteSuccess, isSuccess]);
-  const { data: locationData } = useFetchAdminLocation();
+  const { data: locationData, refetch } = useFetchAdminLocation();
+  useEffect(() => {
+    teamMemberRefetch();
+    refetch();
+  }, []);
   const actionColumn = [
     {
       field: "Access",

@@ -29,7 +29,7 @@ export const useFetchDataSetting = () => {
   return useQuery({
     queryKey: ["settingData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: {},
   });
 };

@@ -6,6 +6,7 @@ import {
   useDeleteGlassAddonOption,
   useDeleteGlassAddon,
   useEditGlassAddon,
+  useEditFullGlassAddon,
 } from "../../utilities/ApiHooks/glassAddon";
 import React, { useEffect, useState } from "react";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
@@ -14,6 +15,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 
 const AddonList = ({ entry, mainIndex, refetch, type }) => {
   const [open, setOpen] = useState(false);
+  const [isEdit, setisEdit] = useState(false);
   const handleClose = () => {
     setOpen(false);
   };
@@ -23,9 +25,10 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
     deleteGlassAddon(id);
   };
   const { mutate: editGlassAddon, isSuccess: glassAddonEditSuccess } =
-    useEditGlassAddon();
+    useEditFullGlassAddon();
   const handleOpenEdit = () => {
     setOpen(true);
+    setisEdit(true);
   };
   useEffect(() => {
     if (glassAddonEditSuccess || deleteSuccess) {
@@ -67,7 +70,8 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
           {" "}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
             <img
-              className="cellImg"
+              width={"50px"}
+              height={"50px"}
               src={`${backendURL}/${entry.image}`}
               alt=""
             />
@@ -105,7 +109,7 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
         open={open}
         close={handleClose}
         data={entry}
-        isEdit={true}
+        isEdit={isEdit}
         refetch={refetch}
         categorySlug={type}
       />

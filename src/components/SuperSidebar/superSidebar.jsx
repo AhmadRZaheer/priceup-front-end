@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./sidebar.scss";
 import Logo from "../../Assets/purplelogo.svg";
 import logout from "../../Assets/logout.svg";
@@ -8,11 +8,11 @@ import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
 import { Box, IconButton, Tooltip, Popover, Typography } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { backendURL } from "../../utilities/common";
+// import { backendURL } from "../../utilities/common";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
 
@@ -38,7 +38,9 @@ const SuperSidebar = () => {
   const handleClosePopup = () => {
     setAnchorEl(null);
   };
-
+  useEffect(() => {
+    teamMemberRefetch();
+  }, []);
   const filteredAdminData = AdminData.filter((admin) =>
     admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
   );

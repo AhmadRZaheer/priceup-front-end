@@ -24,7 +24,7 @@ export const useFetchGlassAddons = () => {
   return useQuery({
     queryKey: ["glassTreatmentsData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };
@@ -103,17 +103,23 @@ export const useCreateGlassAddon = () => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("slug", slug);
 
     try {
       const response = await axios.post(
         `${backendURL}/glassAddons/save`,
+        formData,
         {
-          name: props.name,
-          company_id: decodedToken?.company_id,
-          slug: slug,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
 
@@ -180,16 +186,9 @@ export const useEditGlassAddon = () => {
     try {
       const formData = new FormData();
 
-      // Check if optionsData exists before appending to FormData
-      if (props.optionsData) {
-        formData.append("options", props.optionsData);
-      }
-
-      // Check if glassAddonData exists before appending to FormData
       if (props.glassAddonData) {
         formData.append("name", props.glassAddonData.name);
 
-        // Check if image exists before appending to FormData
         if (props.glassAddonData.image) {
           formData.append("image", props.glassAddonData.image);
         }
@@ -202,6 +201,45 @@ export const useEditGlassAddon = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data", // Set content type for FormData
+          },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+export const useEditFullGlassAddon = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (props) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${backendURL}/glassAddons/${props?.id}`,
+        {
+          options: props.optionsData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         }
       );

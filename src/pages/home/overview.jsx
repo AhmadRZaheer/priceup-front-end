@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Sidebar from "../../components/Sidebar/sidebar";
 import "./overview.scss";
 import Widget from "../../components/widgets/widget";
@@ -8,9 +8,10 @@ import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { Box } from "@mui/material";
 
 const Overview = () => {
-  const { data } = useFetchDataEstimateCard();
+  const { data, refetch } = useFetchDataEstimateCard();
   const token = localStorage.getItem("token");
   const { name } = parseJwt(token);
+  useEffect(() => refetch(), []);
   return (
     <div className="overview">
       <Sidebar />
@@ -22,7 +23,9 @@ const Overview = () => {
         <div className="page-title">
           <h2>Welcome back, {name}</h2>
 
-          <p className="discription-welcome">Tract, manage and forecast your customers and orders.</p>
+          <p className="discription-welcome">
+            Tract, manage and forecast your customers and orders.
+          </p>
         </div>
         <div className="widgets">
           <Widget value={data?.estimates || 0} type="estimates" />

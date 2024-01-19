@@ -99,6 +99,9 @@ const Sidebar = () => {
       await switchLocationUser(userData);
     }
   };
+  useEffect(() => {
+    refetch();
+  }, []);
   const [refetchKey, setRefetchKey] = useState(0);
   useEffect(() => {
     if (switched) {
@@ -124,7 +127,6 @@ const Sidebar = () => {
         if (record?.user) {
           setActiveLocation(record?.user);
         }
-        console.log(record?.user?.name, "record?.user");
       }
     };
 

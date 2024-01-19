@@ -8,12 +8,12 @@ import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
 import { CircularProgress, TextField } from "@mui/material";
-import { useDropzone } from "react-dropzone";
 import {
   useCreateGlassAddon,
   useEditGlassAddon,
 } from "../../utilities/ApiHooks/glassAddon";
 import { useEffect } from "react";
+import { useDropzone } from "react-dropzone";
 
 const style = {
   position: "absolute",
@@ -76,8 +76,8 @@ export default function AddEditGlassAddon({
   const handleEditClick = (props) => {
     editGlassAddon({ glassAddonData: props, id: data?._id });
   };
-
   const validationSchema = Yup.object().shape({
+    name: Yup.string().required("glassAddons Label is required"),
     image: Yup.mixed(),
   });
 
@@ -107,8 +107,6 @@ export default function AddEditGlassAddon({
     <div>
       <Modal
         open={open}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
         sx={{
           backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -124,27 +122,16 @@ export default function AddEditGlassAddon({
           >
             <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
           </Box>
-
           <Box>
-            <input
-              accept="image/*"
-              id="image-input"
-              type="file"
-              {...getInputProps()}
-              style={{ display: "none" }}
-            />
-
-            {formik.errors.image && (
-              <Typography color="error">{formik.errors.image}</Typography>
-            )}
-            {selectedImage ? (
-              <img
-                width={"80px"}
-                height={"80px"}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
+            <Box>
+              <input
+                accept="image/*"
+                id="image-input"
+                type="file"
+                {...getInputProps()}
+                style={{ display: "none" }}
               />
-            ) : (
+
               <label htmlFor="image-input">
                 <Box
                   sx={{
@@ -177,7 +164,27 @@ export default function AddEditGlassAddon({
                   </Typography>
                 </Box>
               </label>
-            )}
+              <aside
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  marginTop: 16,
+                }}
+              >
+                {selectedImage && (
+                  <img
+                    width={"80px"}
+                    height={"80px"}
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected"
+                  />
+                )}
+                {formik.errors.image && (
+                  <Typography color="error">{formik.errors.image}</Typography>
+                )}
+              </aside>
+            </Box>
           </Box>
           <Box>
             <Typography>Name</Typography>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { CustomerColumns } from "../../customerTableSource";
@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 
 export default function CustomerTable() {
-  const { data: customerData } = useFetchDataCustomer();
+  const { data: customerData, refetch } = useFetchDataCustomer();
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [selectedRowData, setSelectedRowData] = React.useState(null);
@@ -27,7 +27,9 @@ export default function CustomerTable() {
       customer.name.toLowerCase().includes(search.toLowerCase()) ||
       customer.email.toLowerCase().includes(search.toLowerCase())
   );
-
+  useEffect(() => {
+    refetch();
+  }, []);
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (params) => {

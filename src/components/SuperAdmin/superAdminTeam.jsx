@@ -20,17 +20,17 @@ import TableRow from "./tableRow";
 import {
   ArrowBack,
   ArrowForward,
-  DeleteOutlineOutlined,
-  EditOutlined,
+  // DeleteOutlineOutlined,
+  // EditOutlined,
 } from "@mui/icons-material";
 import { AdminColumns } from "../../customerTableSource";
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+// import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
-import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
+// import { useDispatch } from "react-redux";
+// import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
 
@@ -76,7 +76,10 @@ const SuperAdminTeam = () => {
     setEdit2(data);
     setIsEdit2(true);
   };
-  const { data: locationData } = useFetchAdminLocation();
+  const { data: locationData, refetch } = useFetchAdminLocation();
+  useEffect(() => {
+    refetch();
+  }, []);
   const actionColumn = [
     {
       field: "user_name",

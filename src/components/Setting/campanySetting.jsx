@@ -32,6 +32,9 @@ const CampanySetting = () => {
       reFetchDataSetting();
     }
   }, [SuccessForEdit]);
+  useEffect(() => {
+    reFetchDataSetting();
+  }, []);
 
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);

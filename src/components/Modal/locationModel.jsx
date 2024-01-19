@@ -35,7 +35,7 @@ export default function LocationModel({
   selectedRow,
   staffRefetch,
 }) {
-  const { data: locationData } = useFetchAdminLocation();
+  const { data: locationData, refetch } = useFetchAdminLocation();
   const {
     mutate: editTeamMembers,
     isLoading: LoadingForEdit,
@@ -92,7 +92,9 @@ export default function LocationModel({
       staffRefetch();
     }
   }, [SuccessForEdit]);
-
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <div>
       <Modal

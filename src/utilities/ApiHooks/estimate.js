@@ -24,7 +24,7 @@ export const useFetchDataEstimate = () => {
   return useQuery({
     queryKey: ["estimateData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };
@@ -49,7 +49,7 @@ export const useGetEstimates = () => {
     queryKey: ["estimates"],
     queryFn: fetchData,
     enabled: true,
-    placeholderData: null,
+    placeholderData: [],
   });
 };
 

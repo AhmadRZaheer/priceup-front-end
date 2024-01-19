@@ -21,12 +21,19 @@ import ExistingTable from "../Estimates/existingTable";
 export default function ExitingQuotes() {
   const refetchData = useSelector(getDataRefetch);
   const { data, isFetching, refetch: refetchEstimates } = useGetEstimates();
-  const { data: estimateListData, isFetching: estimateDataFetching } =
-    useFetchDataEstimate();
+  const {
+    data: estimateListData,
+    isFetching: estimateDataFetching,
+    refetch,
+  } = useFetchDataEstimate();
   const dispatch = useDispatch();
   useEffect(() => {
     refetchEstimates();
   }, [refetchData]);
+  useEffect(() => {
+    refetchEstimates();
+    refetch();
+  }, []);
   const handleIconButtonClick = (item) => {
     dispatch(setListData(estimateListData));
     dispatch(

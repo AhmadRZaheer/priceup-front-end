@@ -24,7 +24,7 @@ import { layoutVariants } from "../../utilities/constants";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
 const LayoutReview = () => {
-  const { data: estimatesData } = useFetchDataEstimate();
+  const { data: estimatesData, refetch } = useFetchDataEstimate();
   const selectedContent = useSelector(getContent);
   const sqftArea = useSelector(getLayoutArea);
   const dispatch = useDispatch();
@@ -48,6 +48,9 @@ const LayoutReview = () => {
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setTotal(prices.total));
   }, [selectedContent]);
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <>
       <Box

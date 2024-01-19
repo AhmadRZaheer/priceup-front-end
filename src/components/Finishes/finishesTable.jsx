@@ -47,6 +47,9 @@ const FinishesTable = () => {
   useEffect(() => {
     finishesRefetch();
   }, [refetchData]);
+  useEffect(() => {
+    finishesRefetch();
+  }, []);
   const handleOpen = () => {
     setOpen(true);
     setIsEdit(false);

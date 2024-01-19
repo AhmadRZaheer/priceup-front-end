@@ -24,7 +24,7 @@ export const useFetchDataGlassType = () => {
   return useQuery({
     queryKey: ["glassTypeData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };
@@ -97,15 +97,18 @@ export const useCreateGlassType = () => {
     const token = localStorage.getItem("token");
     const slug = createSlug(props.name);
     const decodedToken = parseJwt(token);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("slug", slug);
 
     try {
       const response = await axios.post(
         `${backendURL}/glassTypes/save`,
-        {
-          name: props.name,
-          company_id: decodedToken?.company_id,
-          slug: slug,
-        },
+        formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -144,20 +147,16 @@ export const useEditGlassType = () => {
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
     try {
-      const updatedData = {
-        ...(props.optionsData ? { options: props.optionsData } : {}),
-        ...(props.glassTypeData
-          ? {
-              name: props.glassTypeData.name,
-              // image: props.glassTypeData.image,
-            }
-          : {}),
-      };
       const formData = new FormData();
+
+      // Append image field
       if (props?.glassTypeData?.image) {
         formData.append("image", props.glassTypeData.image);
       }
-      formData.append("jsonData", JSON.stringify(updatedData));
+
+      if (props.glassTypeData) {
+        formData.append("name", props.glassTypeData.name);
+      }
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,
         formData,
@@ -165,6 +164,45 @@ export const useEditGlassType = () => {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+export const useEditFullGlassType = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (props) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.put(
+        `${backendURL}/glassTypes/${props?.id}`,
+        {
+          options: props.optionsData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
         }
       );

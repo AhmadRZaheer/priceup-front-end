@@ -33,8 +33,13 @@ const GlassTypeComponent = ({ type }) => {
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
   useEffect(() => {
-    GlassTypeRefetch();
+    if (refetchData) {
+      GlassTypeRefetch();
+    }
   }, [refetchData]);
+  useEffect(() => {
+    GlassTypeRefetch();
+  }, []);
   const handleOpen = (data) => {
     setOpen(true);
     setIsEdit(false);

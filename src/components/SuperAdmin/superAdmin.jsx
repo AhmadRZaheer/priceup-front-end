@@ -55,19 +55,19 @@ const SuperAdminTable = () => {
   const [EditOpen, setEditOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
-  const [haveAccessUsers, sethaveAccessUsers] = useState([]);
+  // const [haveAccessUsers, sethaveAccessUsers] = useState([]);
   // const [isEdit, setIsEdit] = useState(false);
   const [isUserData, setisUserData] = useState(null);
-  useEffect(() => {
-    sethaveAccessUsers((prevHaveAccessArray) => {
-      const matchingUserData = customUserData.filter((userData) =>
-        userData?.locationsAccess?.some(
-          (accessData) => accessData?.company_id === isUserData?.company?._id
-        )
-      );
-      return matchingUserData;
-    });
-  }, [isUserData?.company, customUserData]);
+  // useEffect(() => {
+  //   sethaveAccessUsers((prevHaveAccessArray) => {
+  //     const matchingUserData = customUserData.filter((userData) =>
+  //       userData?.locationsAccess?.some(
+  //         (accessData) => accessData?.company_id === isUserData?.company?._id
+  //       )
+  //     );
+  //     return matchingUserData;
+  //   });
+  // }, [isUserData?.company, customUserData]);
 
   useEffect(() => {
     setActiveCount(AdminData.length);
@@ -85,6 +85,9 @@ const SuperAdminTable = () => {
       AdminRefetch();
     }
   }, [isSuccess]);
+  useEffect(() => {
+    AdminRefetch();
+  }, []);
 
   const handleOpenDelete = (data) => {
     setDeleteOpen(true);
@@ -98,103 +101,103 @@ const SuperAdminTable = () => {
   };
   console.log(AdminData, "AdminData");
 
-  const actionColumn = [
-    {
-      field: "Status",
-      paddingLeft: 3,
-      width: 220,
-      renderCell: (params) => {
-        const id = params.row._id;
-        // const isActive = params.row.Status === "Active";
+  // const actionColumn = [
+  //   {
+  //     field: "Status",
+  //     paddingLeft: 3,
+  //     width: 220,
+  //     renderCell: (params) => {
+  //       const id = params.row._id;
+  //       // const isActive = params.row.Status === "Active";
 
-        const handleToggleChange = (active) => {
-          setInActiveCount((prevCount) => {
-            if (!active && prevCount > 0) {
-              return prevCount - 1;
-            } else if (active) {
-              return prevCount + 1;
-            }
-            return prevCount; // No change if not active and count is 0
-          });
+  //       const handleToggleChange = (active) => {
+  //         setInActiveCount((prevCount) => {
+  //           if (!active && prevCount > 0) {
+  //             return prevCount - 1;
+  //           } else if (active) {
+  //             return prevCount + 1;
+  //           }
+  //           return prevCount; // No change if not active and count is 0
+  //         });
 
-          setActiveCount((prevCount) => {
-            if (active && prevCount > 0) {
-              return prevCount - 1;
-            } else if (!active) {
-              return prevCount + 1;
-            }
+  //         setActiveCount((prevCount) => {
+  //           if (active && prevCount > 0) {
+  //             return prevCount - 1;
+  //           } else if (!active) {
+  //             return prevCount + 1;
+  //           }
 
-            return prevCount; // No change if not active and count is 0
-          });
-        };
+  //           return prevCount; // No change if not active and count is 0
+  //         });
+  //       };
 
-        return (
-          <TableRow row={params.row} onToggleChange={handleToggleChange} />
-        );
-      },
-    },
-    {
-      field: "users",
-      headerName: "users",
-      width: 120,
-      renderCell: (params) => {
-        return (
-          <Grid container>
-            <DefaultImage image={params.row.image} name={params.row.name} />
-          </Grid>
-        );
-      },
-    },
-    {
-      width: 140,
-      renderCell: (params) => {
-        const adminID = params.row._id;
-        return (
-          <>
-            <Link
-              to={`/?adminID=${adminID}`}
-              style={{ textDecoration: "none" }}
-            >
-              <Button
-                variant="text"
-                sx={{
-                  p: 0.5,
-                  m: 0,
-                  color: "#7F56D9",
-                  textTransform: "capitalize",
-                }}
-              >
-                Access Location
-              </Button>
-            </Link>
-          </>
-        );
-      },
-    },
-    {
-      field: " ",
-      width: 165,
-      align: "right",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              onClick={handleOpenDelete}
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <img src={DeleteIcon} alt="delete icon" />
-            </IconButton>
-            <IconButton
-              onClick={() => handleOpenEdit(params.row)}
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-            >
-              <img src={EditIcon} alt="delete icon" />
-            </IconButton>
-          </>
-        );
-      },
-    },
-  ];
+  //       return (
+  //         <TableRow row={params.row} onToggleChange={handleToggleChange} />
+  //       );
+  //     },
+  //   },
+  //   {
+  //     field: "users",
+  //     headerName: "users",
+  //     width: 120,
+  //     renderCell: (params) => {
+  //       return (
+  //         <Grid container>
+  //           <DefaultImage image={params.row.image} name={params.row.name} />
+  //         </Grid>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     width: 140,
+  //     renderCell: (params) => {
+  //       const adminID = params.row._id;
+  //       return (
+  //         <>
+  //           <Link
+  //             to={`/?adminID=${adminID}`}
+  //             style={{ textDecoration: "none" }}
+  //           >
+  //             <Button
+  //               variant="text"
+  //               sx={{
+  //                 p: 0.5,
+  //                 m: 0,
+  //                 color: "#7F56D9",
+  //                 textTransform: "capitalize",
+  //               }}
+  //             >
+  //               Access Location
+  //             </Button>
+  //           </Link>
+  //         </>
+  //       );
+  //     },
+  //   },
+  //   {
+  //     field: " ",
+  //     width: 165,
+  //     align: "right",
+  //     renderCell: (params) => {
+  //       return (
+  //         <>
+  //           <IconButton
+  //             onClick={handleOpenDelete}
+  //             sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+  //           >
+  //             <img src={DeleteIcon} alt="delete icon" />
+  //           </IconButton>
+  //           <IconButton
+  //             onClick={() => handleOpenEdit(params.row)}
+  //             sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+  //           >
+  //             <img src={EditIcon} alt="delete icon" />
+  //           </IconButton>
+  //         </>
+  //       );
+  //     },
+  //   },
+  // ];
   const filteredData = AdminData?.filter((admin) =>
     admin.user.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -371,16 +374,16 @@ const SuperAdminTable = () => {
               });
             };
 
-            if (item?.user && item?.user?.name) {
-              var firstNameInitial = item?.user?.name?.charAt(0);
-            } else {
-              var firstNameInitial = "";
-            }
-            if (item?.user && item?.user?.name) {
-              var lastNameInitial = item?.user?.name?.charAt(1);
-            } else {
-              var lastNameInitial = "";
-            }
+            // if (item?.user && item?.user?.name) {
+            //   var firstNameInitial = item?.user?.name?.charAt(0);
+            // } else {
+            //   var firstNameInitial = "";
+            // }
+            // if (item?.user && item?.user?.name) {
+            //   var lastNameInitial = item?.user?.name?.charAt(1);
+            // } else {
+            //   var lastNameInitial = "";
+            // }
 
             const adminID = item?.user?._id;
             return (

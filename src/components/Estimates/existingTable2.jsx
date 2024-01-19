@@ -9,9 +9,13 @@ import {
 } from "../../utilities/ApiHooks/estimate";
 
 import ExistingTable from "./existingTable";
+import { useEffect } from "react";
 
 export default function ExistingQuotes2() {
-  const { data } = useGetEstimates();
+  const { data, refetch } = useGetEstimates();
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <>
       <Box
@@ -31,7 +35,7 @@ export default function ExistingQuotes2() {
             display: "flex",
             width: "98%",
             justifyContent: "space-between",
-            gap: 2.6
+            gap: 2.6,
           }}
         >
           <Box
@@ -43,7 +47,7 @@ export default function ExistingQuotes2() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -99,7 +103,7 @@ export default function ExistingQuotes2() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -127,7 +131,7 @@ export default function ExistingQuotes2() {
               justifyContent: "start",
               alignItems: "start",
               backgroundColor: "white",
-               boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
+              boxShadow: "0px 1px 4px 0px rgba(16, 24, 40, 0.2)",
               borderRadius: 2,
             }}
           >
@@ -151,7 +155,7 @@ export default function ExistingQuotes2() {
             width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            mb: 2
+            mb: 2,
           }}
         >
           <ExistingTable />

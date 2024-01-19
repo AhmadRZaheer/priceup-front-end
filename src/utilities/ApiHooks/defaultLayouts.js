@@ -23,7 +23,7 @@ export const useFetchDataDefault = () => {
   return useQuery({
     queryKey: ["defaultData"],
     queryFn: fetchData,
-    enabled: true,
+    enabled: false,
     placeholderData: [],
   });
 };

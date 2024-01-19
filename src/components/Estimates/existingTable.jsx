@@ -41,6 +41,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 import { DataGrid } from "@mui/x-data-grid";
 import { getDataRefetch } from "../../redux/staff";
 import DefaultImage from "../ui-components/defaultImage";
+
 export default function ExistingTable() {
   const { data, isFetching, refetch } = useGetEstimates();
   const navigate = useNavigate();
@@ -71,7 +72,10 @@ export default function ExistingTable() {
     refetch();
     Refetched();
   }, [refetchData]);
-
+  useEffect(() => {
+    refetch();
+    Refetched();
+  }, []);
   const handleIconButtonClick = (item) => {
     dispatch(resetState());
     dispatch(setListData(estimateListData));

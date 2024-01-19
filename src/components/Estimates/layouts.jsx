@@ -36,9 +36,10 @@ export default function Layout() {
     cursor: "pointer",
   };
 
-  const { data: layouts, isFetching: loading } = useFetchDataDefault();
-  const { data: estimateListData, isFetching: estimateDataFetching } =
+  const { data: layouts, isFetching: loading, refetch } = useFetchDataDefault();
+  const { data: estimateListData, isFetching: estimateDataFetching, refetch: refetchList } =
     useFetchDataEstimate();
+
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
@@ -68,7 +69,9 @@ export default function Layout() {
   };
   useEffect(() => {
     dispatch(resetState());
-  }, [])
+    refetch();
+    refetchList()
+  }, []);
   return (
     <>
       <Box
