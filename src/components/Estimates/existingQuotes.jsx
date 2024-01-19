@@ -15,7 +15,11 @@ import { useSelector } from "react-redux";
 
 export default function ExistingQuotes() {
   const refetchEstimatesCouner = useSelector(getEstimatesListRefetch);
-  const { data: estimatesList, isLoading: estimatesFetching, refetch: refetchEstimatesList } = useGetEstimates();
+  const {
+    data: estimatesList,
+    isLoading: estimatesFetching,
+    refetch: refetchEstimatesList,
+  } = useGetEstimates();
   const {
     data: allHardwaresList,
     isLoading: listFetching,
@@ -29,8 +33,20 @@ export default function ExistingQuotes() {
   }, [refetchEstimatesCouner]);
   return (
     <>
+      <Box sx={{ backgroundColor: "white" }}>
+        <Typography
+          sx={{
+            padding: 2.4,
+            fontWeight: "bold",
+            fontSize: 26,
+          }}
+        >
+          Estimates
+        </Typography>
+      </Box>
       <Box
         sx={{
+          backgroundColor: "white",
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
@@ -183,7 +199,12 @@ export default function ExistingQuotes() {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          ) : (<ExistingTable estimatesList={estimatesList} allHardwaresList={allHardwaresList} />)}
+          ) : (
+            <ExistingTable
+              estimatesList={estimatesList}
+              allHardwaresList={allHardwaresList}
+            />
+          )}
         </Box>
       </Box>
     </>

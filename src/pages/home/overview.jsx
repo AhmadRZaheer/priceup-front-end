@@ -11,7 +11,9 @@ const Overview = () => {
   const { data, refetch } = useFetchDataEstimateCard();
   const token = localStorage.getItem("token");
   const { name } = parseJwt(token);
-  useEffect(() => { refetch(); }, []);
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <div className="overview">
       <Sidebar />
@@ -32,9 +34,6 @@ const Overview = () => {
           <Widget value={data?.customers || 0} type="customers" />
           <Widget value={data?.staff || 0} type="team" />
           <Widget value={data?.staff || 0} type="invoice" />
-        </div>
-        <div className="page-title">
-          <h2>Estimates</h2>
         </div>
         <ExistingQuotes />
       </Box>
