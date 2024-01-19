@@ -3,10 +3,10 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomInputField from "../ui-components/CustomInput";
-import { useEditCustomUser } from "../../utilities/ApiHooks/superAdmin";
+import { useEditAccessCustomUser, useEditCustomUser } from "../../utilities/ApiHooks/superAdmin";
 
 function PasswordModal({ open, close, user, companyId, customUserRefech }) {
-  const { mutate: UpdateCustomUser, isSuccess } = useEditCustomUser();
+  const { mutate: UpdateCustomUser, isSuccess } = useEditAccessCustomUser();
   const style = {
     position: "absolute",
     top: "50%",

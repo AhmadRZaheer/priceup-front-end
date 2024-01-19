@@ -16,16 +16,17 @@ import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import {
   useDataCustomUser,
+  useEditAccessCustomUser,
   useEditCustomUser,
   useEditUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
 import PasswordModal from "./addUserPassword";
+import { backendURL } from "../../utilities/common";
 
 function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const [sections, setSections] = useState([false, false, false]);
   const [selectedImage, setSelectedImage] = useState(null);
-
   const {
     data: customUserData,
     isSuccess: customerSuc,
@@ -70,19 +71,20 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
 
   const { mutate: editFinish, isSuccess } = useEditUser();
   const { mutate: updateCustomUser, isSuccess: userUpdated } =
-    useEditCustomUser();
+    useEditAccessCustomUser();
   const formik = useFormik({
     initialValues: {
       name: userdata?.name,
       email: userdata?.email,
       phone: "",
       password: userdata?.password,
-      selectedImage: null,
+      selectedImage: userdata?.image,
       userid: userdata?._id,
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values, "values formik");
       editFinish(values);
       close();
       refetch();
@@ -259,6 +261,14 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         height={"80px"}
                         style={{ margin: 10 }}
                         src={URL.createObjectURL(selectedImage)}
+                        alt="Selected"
+                      />
+                    ) : userdata?.image ? (
+                      <img
+                        width={"80px"}
+                        height={"80px"}
+                        style={{ margin: 10 }}
+                        src={`${backendURL}/${userdata?.image}`}
                         alt="Selected"
                       />
                     ) : (

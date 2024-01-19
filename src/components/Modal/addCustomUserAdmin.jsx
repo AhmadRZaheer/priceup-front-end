@@ -45,7 +45,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
       _id: isEdit?.data?._id,
       name: isEdit?.type ? isEdit?.data?.name : "",
       email: isEdit?.type ? isEdit?.data?.email : "",
-      // image: isEdit?.type ? isEdit?.data?.image : "",
+      image: isEdit?.type ? isEdit?.data?.image : "",
     },
     enableReinitialize: isEdit?.type ? true : false,
     validationSchema: Yup.object({
@@ -98,6 +98,39 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                 {formik.errors.image && (
                   <Typography color="error">{formik.errors.image}</Typography>
                 )}
+
+                <label htmlFor="image-input">
+                  <Box
+                    sx={{
+                      border: "1px solid #EAECF0",
+                      textAlign: "center",
+                      padding: 2,
+                    }}
+                  >
+                    <Box sx={{ height: 60 }}>
+                      <img
+                        width={60}
+                        src={InputImageIcon}
+                        alt="icon of input image"
+                      />
+                    </Box>
+                    <span
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        gap: 4,
+                      }}
+                    >
+                      <Typography sx={{ color: "#8477DA" }}>
+                        Click to Upload
+                      </Typography>
+                    </span>
+                    <Typography variant="body2" sx={{ color: "#667085" }}>
+                      SVG, PNG, JPG or GIF (max. 800x400px)
+                    </Typography>
+                  </Box>
+                </label>
                 {selectedImage ? (
                   <img
                     width={"80px"}
@@ -106,38 +139,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     alt="Selected"
                   />
                 ) : (
-                  <label htmlFor="image-input">
-                    <Box
-                      sx={{
-                        border: "1px solid #EAECF0",
-                        textAlign: "center",
-                        padding: 2,
-                      }}
-                    >
-                      <Box sx={{ height: 60 }}>
-                        <img
-                          width={60}
-                          src={InputImageIcon}
-                          alt="icon of input image"
-                        />
-                      </Box>
-                      <span
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          gap: 4,
-                        }}
-                      >
-                        <Typography sx={{ color: "#8477DA" }}>
-                          Click to Upload
-                        </Typography>
-                      </span>
-                      <Typography variant="body2" sx={{ color: "#667085" }}>
-                        SVG, PNG, JPG or GIF (max. 800x400px)
-                      </Typography>
-                    </Box>
-                  </label>
+                  ""
                 )}
               </Box>
               <Box>
