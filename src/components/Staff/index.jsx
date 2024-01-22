@@ -1,28 +1,23 @@
 import React, { useState } from "react";
-// import Model from "./model";
 import LayoutMeasurements from "../Estimates/layoutMeasurements";
 import LayoutReview from "../Estimates/layoutReview";
-// import Summary from "./summary";
-import ExitingQuotes from "./estimates";
+import Estimates from "./estimates";
 import CustomerTable from "./customerTable";
 import StaffTable from "./staffTable";
 import {
   getPageDesktopNavigation,
-  getPageNavigation,
   getQuoteState,
 } from "../../redux/estimateCalculations";
 import Layout from "../Estimates/layouts";
-import { useDispatch, useSelector } from "react-redux";
-import Snackbars from "../Modal/snackBar";
+import { useSelector } from "react-redux";
 import { Box } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
 import ClientDetailsModel from "../Estimates/model";
-import { showSnackbar } from "../../redux/snackBarSlice";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
-  const handleClose = () => setClientDetailOpen(false);
-  const handleOpen = () => setClientDetailOpen(true);
-  const updatecheck = useSelector(getQuoteState);
+  // const handleClose = () => setClientDetailOpen(false);
+  // const handleOpen = () => setClientDetailOpen(true);
+  // const updatecheck = useSelector(getQuoteState);
   const Navigation = useSelector(getPageDesktopNavigation);
 
   return (
@@ -33,7 +28,7 @@ const IndexMobile = () => {
           color: { xs: "white", sm: "black" },
         }}
       >
-        {Navigation === "existing" && <ExitingQuotes />}
+        {Navigation === "existing" && <Estimates />}
         {Navigation === "customerTable" && <CustomerTable />}
         {Navigation === "staffTable" && <StaffTable />}
         {Navigation === "layouts" && <Layout />}

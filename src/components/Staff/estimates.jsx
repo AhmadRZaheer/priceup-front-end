@@ -1,9 +1,8 @@
-import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Typography, useMediaQuery } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   initializeStateForEditQuote,
   setListData,
-  setNavigation,
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
@@ -17,21 +16,26 @@ import ModeIcon from "@mui/icons-material/Mode";
 import { getDataRefetch } from "../../redux/staff";
 import { useEffect } from "react";
 import ExistingTable from "../Estimates/existingTable";
+import { getEstimatesListRefetch } from "../../redux/refetch";
 
-export default function ExitingQuotes() {
-  const refetchData = useSelector(getDataRefetch);
-  const { data, isFetching, refetch: refetchEstimates } = useGetEstimates();
+export default function Estimates() {
+  const refetchData = useSelector(getDataRefetch);   // refetch if staff switch location
+  const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);  // refetch estimates list on any action
+  const { data: estimatesList, isLoading: estimatesFetching, refetch: refetchEstimatesList } = useGetEstimates();
   const {
-    data: estimateListData,
-    isFetching: estimateDataFetching,
-    refetch,
+    data: allHardwaresList,
+    isLoading: listFetching,
+    refetch: refetchHardwaresList,
   } = useFetchDataEstimate();
   const dispatch = useDispatch();
   useEffect(() => {
-    refetchEstimates();
-  }, [refetchData]);
+    refetchEstimatesList();
+    if (refetchEstimatesCounter <= 0) {
+      refetchHardwaresList();
+    }
+  }, [refetchEstimatesCounter, refetchData]);
   const handleIconButtonClick = (item) => {
-    dispatch(setListData(estimateListData));
+    dispatch(setListData(allHardwaresList));
     dispatch(
       initializeStateForEditQuote({
         estimateData: item,
@@ -41,6 +45,7 @@ export default function ExitingQuotes() {
     dispatch(setNavigationDesktop("review"));
   };
   const handleCreateQuote = () => {
+    dispatch(setListData(allHardwaresList));
     dispatch(setQuoteState("create"));
     dispatch(setNavigationDesktop("layouts"));
   };
@@ -53,28 +58,25 @@ export default function ExitingQuotes() {
     },
   });
   const classes = useStyles();
-  useEffect(() => {
-    refetch();
-    refetchEstimates();
-  }, []);
+  const isMobile = useMediaQuery('(max-width:600px)');
   return (
-    <>
-      <Box sx={{ display: { xs: "block", sm: "none" } }}>
-        {isFetching || estimateDataFetching ? (
-          <Box
-            sx={{
-              width: 40,
-              m: "auto",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-            }}
-          >
-            <CircularProgress sx={{ color: "#8477DA" }} />
-          </Box>
-        ) : (
-          <Box
+    <Box>
+      {estimatesFetching || listFetching ? (
+        <Box
+          sx={{
+            width: 40,
+            m: "auto",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress sx={{ color: "#8477DA" }} />
+        </Box>
+      ) : (
+        <Box>
+          {isMobile ? (<Box
             sx={{
               height: "100vh",
             }}
@@ -102,7 +104,7 @@ export default function ExitingQuotes() {
                   overflow: "auto",
                 }}
               >
-                {isFetching ? (
+                {estimatesFetching ? (
                   <Box
                     sx={{
                       width: 40,
@@ -116,7 +118,7 @@ export default function ExitingQuotes() {
                     <CircularProgress sx={{ color: "#8477DA" }} />
                   </Box>
                 ) : (
-                  data?.estimates?.map((item) => (
+                  estimatesList?.estimates?.map((item) => (
                     <Box
                       key={item._id}
                       sx={{
@@ -185,7 +187,7 @@ export default function ExitingQuotes() {
                             width: "fit-content",
                             margin: "0px auto",
                           }}
-                          disabled={estimateDataFetching}
+                          disabled={estimatesFetching}
                         >
                           <ModeIcon
                             sx={{
@@ -225,7 +227,7 @@ export default function ExitingQuotes() {
               >
                 <Button
                   onClick={handleCreateQuote}
-                  disabled={estimateDataFetching}
+                  disabled={estimatesFetching}
                   color="primary"
                   sx={{
                     textTransform: "capitalize",
@@ -242,27 +244,19 @@ export default function ExitingQuotes() {
               </Box>
             </Box>
           </Box>
-        )}
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          paddingTop: 10,
-          display: { xs: "none", sm: "block" },
-        }}
-      >
-        <Box sx={{ paddingX: "30px" }}>
-          <Box>
-            <Typography sx={{ fontSize: 30, pb: 2, color: "#101828" }}>
-              Estimates
-            </Typography>
+          ) : (<Box sx={{ paddingX: "30px" }}>
+            <Box>
+              <Typography sx={{ fontSize: 30, pb: 2, color: "#101828" }}>
+                Estimates
+              </Typography>
+            </Box>
+            <Box sx={{ border: "1px solid #EAECF0", borderRadius: "8px" }}>
+              <ExistingTable estimatesList={estimatesList} allHardwaresList={allHardwaresList} />
+            </Box>
           </Box>
-          <Box sx={{ border: "1px solid #EAECF0", borderRadius: "8px" }}>
-            <ExistingTable />
-          </Box>
+          )}
         </Box>
-      </Box>
-    </>
+      )}
+    </Box>
   );
 }

@@ -14,7 +14,7 @@ import { getEstimatesListRefetch } from "../../redux/refetch";
 import { useSelector } from "react-redux";
 
 export default function ExistingQuotes() {
-  const refetchEstimatesCouner = useSelector(getEstimatesListRefetch);
+  const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   const {
     data: estimatesList,
     isLoading: estimatesFetching,
@@ -27,10 +27,10 @@ export default function ExistingQuotes() {
   } = useFetchDataEstimate();
   useEffect(() => {
     refetchEstimatesList();
-    if (refetchEstimatesCouner <= 0) {
+    if (refetchEstimatesCounter <= 0) {
       refetchHardwaresList();
     }
-  }, [refetchEstimatesCouner]);
+  }, [refetchEstimatesCounter]);
   return (
     <>
       <Box sx={{ backgroundColor: "white" }}>

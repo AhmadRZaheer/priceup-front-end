@@ -24,7 +24,7 @@ export const useFetchDataDefault = () => {
     queryKey: ["defaultData"],
     queryFn: fetchData,
     enabled: false,
-    placeholderData: [],
+    // placeholderData: [],
   });
 };
 export const useFetchSingleDefault = (id) => {

@@ -199,7 +199,7 @@ const TeamTable = () => {
       >
         <div className="page-title">
           <Typography sx={{ fontSize: 30, pl: 2, color: "#101828" }}>
-            Team Memebers
+            Team Members
           </Typography>
         </div>
         <Box
@@ -226,7 +226,7 @@ const TeamTable = () => {
                 fontWeight: 500,
               }}
             >
-              Team Memebers
+              Team Members
             </Typography>
             <TextField
               placeholder="Search by Name"
@@ -352,7 +352,7 @@ const TeamTable = () => {
               <Typography
                 sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
               >
-                No Team Found
+                No team member found
               </Typography>
             )}
           </div>

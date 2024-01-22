@@ -7,13 +7,10 @@ import {
   addSelectedItem,
   initializeStateForCreateQuote,
   initializeStateForCustomQuote,
-  resetState,
   selectedItem,
-  setListData,
   setNavigationDesktop,
   setQuoteState,
 } from "../../redux/estimateCalculations";
-import { useFetchDataEstimate } from "../../utilities/ApiHooks/estimate";
 import { useEffect, useState } from "react";
 import bgCustom from "../../Assets/customlayoutimage.svg";
 
@@ -36,15 +33,11 @@ export default function Layout() {
     cursor: "pointer",
   };
 
-  const { data: layouts, isFetching: loading, refetch } = useFetchDataDefault();
-  const { data: estimateListData, isFetching: estimateDataFetching, refetch: refetchList } =
-    useFetchDataEstimate();
+  const { data: layouts, isLoading: loading, refetch } = useFetchDataDefault();
 
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    // dispatch(resetState());
-    dispatch(setListData(estimateListData));
     dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
@@ -57,8 +50,6 @@ export default function Layout() {
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
-    // dispatch(resetState());
-    dispatch(setListData(estimateListData));
     dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
@@ -68,9 +59,7 @@ export default function Layout() {
     dispatch(setNavigationDesktop("existing"));
   };
   useEffect(() => {
-    dispatch(resetState());
     refetch();
-    refetchList()
   }, []);
   return (
     <>
@@ -162,7 +151,7 @@ export default function Layout() {
                 collaborate on this project.
               </Typography>
             </Box>
-            {loading || estimateDataFetching ? (
+            {loading ? (
               <Box
                 sx={{
                   width: 40,
@@ -181,7 +170,7 @@ export default function Layout() {
                 gap={1}
                 sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}
               >
-                {layouts.map((layout) => (
+                {layouts?.map((layout) => (
                   <Box
                     key={layout._id}
                     sx={{

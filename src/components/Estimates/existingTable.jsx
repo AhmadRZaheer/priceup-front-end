@@ -65,6 +65,8 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     };
 
     const handleCreateQuote = () => {
+        dispatch(resetState());
+        dispatch(setListData(allHardwaresList));
         dispatch(setQuoteState("create"));
         dispatch(setNavigationDesktop("layouts"));
         navigate("/estimates/steps");
