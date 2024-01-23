@@ -407,20 +407,25 @@ export const useCreateCustomUser = () => {
 
       if (response.data.code === 200) {
         dispatch(
-          showSnackbar({ message: "Created Successfully", security: "success" })
+          showSnackbar({ message: "Created Successfully", severity: "success" })
         );
         return response.data.data;
       } else {
         dispatch(
           showSnackbar({
             message: "An error occurred while creating the data.",
-            security: "error",
+            severity: "error",
           })
         );
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, security: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -464,7 +469,7 @@ export const useCustomUserStatus = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: `${error}`,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -506,7 +511,7 @@ export const useDeleteUser = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );

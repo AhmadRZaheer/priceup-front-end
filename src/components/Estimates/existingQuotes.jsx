@@ -12,9 +12,11 @@ import ExistingTable from "./existingTable";
 import { useEffect } from "react";
 import { getEstimatesListRefetch } from "../../redux/refetch";
 import { useSelector } from "react-redux";
+import { getDataRefetch } from "../../redux/staff";
 
 export default function ExistingQuotes() {
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
+  const refetchOnUserChange = useSelector(getDataRefetch);
   const {
     data: estimatesList,
     isLoading: estimatesFetching,
@@ -30,7 +32,7 @@ export default function ExistingQuotes() {
     if (refetchEstimatesCounter <= 0) {
       refetchHardwaresList();
     }
-  }, [refetchEstimatesCounter]);
+  }, [refetchEstimatesCounter, refetchOnUserChange]);
   return (
     <>
       <Box sx={{ backgroundColor: "white" }}>

@@ -40,6 +40,8 @@ import { setDataRefetch } from "../../redux/staff";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
+import DefaultImage from "../ui-components/defaultImage";
+import SingleUser from "../ui-components/SingleUser";
 
 const drawerWidth = 280;
 
@@ -305,11 +307,9 @@ function MobileBar() {
 
         <div className="bottom">
           <div className="UserIcon">
-            <img
-              src={`${backendURL}/${decodedToken?.image}`}
-              width="50"
-              height="50"
-              alt="no"
+            <DefaultImage
+              image={decodedToken?.image}
+              name={decodedToken?.name}
             />
           </div>
           <div
@@ -341,7 +341,7 @@ function MobileBar() {
       </Box>
     </Box>
   );
- 
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -457,7 +457,7 @@ function MobileBar() {
             width: "317px",
           },
         }}
-        sx={{ left: 13 }}
+        sx={{ left: 30, top: -72 }}
       >
         <input
           type="text"
@@ -518,61 +518,60 @@ function MobileBar() {
             </Typography>
           ) : (
             staffhaveAccessTo.map((location) => (
-              <Box
-                key={location.id}
-                sx={{
-                  width: "83.8%",
-                  ml: "10px",
-                  marginBottom: "5px",
-                  textTransform: "lowercase",
-                  marginLeft: "20px",
-                  display: "flex",
-                  border: "1px solid #D9D9D9",
-                  ":hover": {
-                    bgcolor: "rgba(0, 0, 0, 0.1)",
-                    cursor: "pointer",
-                  },
-                  py: 0.4,
-                  px: 1,
-                  borderRadius: "14px",
-                }}
-              >
-                <Box className="UserIcon-1">
-                  <img
-                    src={`${backendURL}/${location?.image}`}
-                    width="32"
-                    height="32"
-                    alt="no"
-                  />
-                </Box>
-                <Box
-                  style={{ flexGrow: 1 }}
-                  onClick={() => {
-                    console.log("suleman", location);
-                    handleSwitchLocation(location);
-                  }}
-                  sx={{ paddingLeft: "12px" }}
-                >
-                  <a style={{ cursor: "pointer" }}>
-                    <Typography
-                      sx={{ textTransform: "uppercase", fontSize: "16px" }}
-                    >
-                      {location?.name}
-                    </Typography>
-                  </a>
-                  <Typography style={{ fontSize: "10px" }}>
-                    {location?.email}
-                  </Typography>
-                </Box>
+              <SingleUser
+                key={location?.id}
+                item={location}
+                active={activeLocation?.id === location?.id}
+                handleClick={() => handleSwitchLocation(location)}
+              />
+              // <Box
+              //   key={location.id}
+              //   sx={{
+              //     width: "83.8%",
+              //     ml: "10px",
+              //     marginBottom: "5px",
+              //     textTransform: "lowercase",
+              //     marginLeft: "20px",
+              //     display: "flex",
+              //     border: "1px solid #D9D9D9",
+              //     ":hover": {
+              //       bgcolor: "rgba(0, 0, 0, 0.1)",
+              //       cursor: "pointer",
+              //     },
+              //     py: 0.4,
+              //     px: 1,
+              //     borderRadius: "14px",
+              //   }}
+              // >
+              //   <Box className="UserIcon-1">
+              //     <DefaultImage image={location?.image} name={location?.name} />
+              //   </Box>
+              //   <Box
+              //     style={{ flexGrow: 1 }}
+              //     onClick={() => {
+              //       console.log("suleman", location);
+              //       handleSwitchLocation(location);
+              //     }}
+              //     sx={{ paddingLeft: "12px" }}
+              //   >
+              //     <a style={{ cursor: "pointer" }}>
+              //       <Typography sx={{ fontSize: "16px" }}>
+              //         {location?.name}
+              //       </Typography>
+              //     </a>
+              //     <Typography style={{ fontSize: "10px" }}>
+              //       {location?.email}
+              //     </Typography>
+              //   </Box>
 
-                {activeLocation?.id === location?.id && (
-                  <Box>
-                    <FiberManualRecord
-                      sx={{ color: "#5cb85c", mr: 1, mb: -0.6 }}
-                    />
-                  </Box>
-                )}
-              </Box>
+              //   {activeLocation?.id === location?.id && (
+              //     <Box>
+              //       <FiberManualRecord
+              //         sx={{ color: "#5cb85c", mr: 1, mb: -0.6 }}
+              //       />
+              //     </Box>
+              //   )}
+              // </Box>
             ))
           )}
         </div>

@@ -133,13 +133,13 @@ const CustomLayout = () => {
             display: { md: "none", xs: "flex" },
             zIndex: 1,
             justifyContent: { md: "center", xs: "start" },
-            background: "#18133b",
+            background: "#100d24",
             width: "100%",
             color: "white",
             paddingY: 1,
             borderBottomLeftRadius: 20,
             borderBottomRightRadius: 20,
-            marginTop: 7.9,
+            marginTop: 7,
           }}
         >
           <Typography
@@ -176,7 +176,6 @@ const CustomLayout = () => {
               background: { md: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
-
               minWidth: { md: 700, xs: "100%" },
               maxWidth: { md: 1000, xs: "100%" },
             }}
@@ -224,9 +223,9 @@ const CustomLayout = () => {
               <Box
                 sx={{
                   display: "flex",
-                  width: { md: "48.5%", xs: "88.6%" },
+                  width: { md: "48.5%", xs: "90%" },
                   minHeight: "27vh",
-                  maxHeight: { md: 340, xs: "25vh" },
+                  maxHeight: { md: 340, xs: "34vh" },
                   marginX: "auto",
                   flexDirection: "column",
                   overflowY: "auto",
@@ -494,10 +493,9 @@ const CustomLayout = () => {
 
             <Box
               sx={{
-                position: { md: "static", xs: "fixed" },
-                bottom: { md: 100, xs: 66 },
-                background: { md: "transparent", xs: "#100d24" },
-                py: 2,
+                background: { md: "transparent", xs: "#08061B" },
+                pt: { sm: 2, xs: 0 },
+                pb: { sm: 2, xs: 10 },
                 display: { md: "none", xs: "flex" },
                 justifyContent: { md: "space-between", xs: "center" },
                 width: "100%",
@@ -511,11 +509,13 @@ const CustomLayout = () => {
                   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                   color: "white",
                   textTransform: "initial",
-                  border: "1px solid #D0D5DD",
                   height: 40,
                   fontSize: 20,
                   marginX: "auto",
-
+                  backgroundColor: "#8477da",
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
                   width: { md: 480, xs: "92%" },
                 }}
               >

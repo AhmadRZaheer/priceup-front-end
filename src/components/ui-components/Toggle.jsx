@@ -26,7 +26,7 @@ function CustomToggle({ checked, onChange, name, onBlur, onClick }) {
             },
             "& .MuiSwitch-thumb": {
               backgroundColor: "white",
-              mt: 0.7,
+              mt: 0.76,
               ml: 0.6,
             },
 

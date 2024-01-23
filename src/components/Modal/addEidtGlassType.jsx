@@ -14,6 +14,7 @@ import {
   useEditGlassType,
 } from "../../utilities/ApiHooks/glassType";
 import { useEffect } from "react";
+import { backendURL } from "../../utilities/common";
 
 const style = {
   position: "absolute",
@@ -172,13 +173,22 @@ export default function AddEditGlassType({
                 </Typography>
               </Box>
             </label>
-            {selectedImage && (
+            {selectedImage ? (
               <img
                 width={"80px"}
                 height={"80px"}
                 src={URL.createObjectURL(selectedImage)}
                 alt="Selected"
               />
+            ) : data?.image ? (
+              <img
+                width={"80px"}
+                height={"80px"}
+                src={`${backendURL}/${data?.image}`}
+                alt="logo team"
+              />
+            ) : (
+              ""
             )}
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>

@@ -14,6 +14,8 @@ import {
   useCreateTeamMembers,
   useEditTeamMembers,
 } from "../../utilities/ApiHooks/team";
+import { backendURL } from "../../utilities/common";
+import DefaultImage from "../ui-components/defaultImage";
 
 const style = {
   position: "absolute",
@@ -143,6 +145,38 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
             )}
+            <label htmlFor="image-input">
+              <Box
+                sx={{
+                  border: "1px solid #EAECF0",
+                  textAlign: "center",
+                  padding: 2,
+                }}
+              >
+                <Box sx={{ height: 60 }}>
+                  <img
+                    width={60}
+                    src={InputImageIcon}
+                    alt="icon of input image"
+                  />
+                </Box>
+                <span
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  <Typography sx={{ color: "#8477DA" }}>
+                    Click to Upload
+                  </Typography>
+                </span>
+                <Typography variant="body2" sx={{ color: "#667085" }}>
+                  SVG, PNG, JPG or GIF (max. 800x400px)
+                </Typography>
+              </Box>
+            </label>
             {selectedImage ? (
               <img
                 width={"80px"}
@@ -150,39 +184,15 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 src={URL.createObjectURL(selectedImage)}
                 alt="Selected"
               />
+            ) : data?.image !== undefined || null ? (
+              <img
+                width={"80px"}
+                height={"80px"}
+                src={`${backendURL}/${data?.image}`}
+                alt="logo team"
+              />
             ) : (
-              <label htmlFor="image-input">
-                <Box
-                  sx={{
-                    border: "1px solid #EAECF0",
-                    textAlign: "center",
-                    padding: 2,
-                  }}
-                >
-                  <Box sx={{ height: 60 }}>
-                    <img
-                      width={60}
-                      src={InputImageIcon}
-                      alt="icon of input image"
-                    />
-                  </Box>
-                  <span
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      gap: 4,
-                    }}
-                  >
-                    <Typography sx={{ color: "#8477DA" }}>
-                      Click to Upload
-                    </Typography>
-                  </span>
-                  <Typography variant="body2" sx={{ color: "#667085" }}>
-                    SVG, PNG, JPG or GIF (max. 800x400px)
-                  </Typography>
-                </Box>
-              </label>
+              ""
             )}
           </Box>
           <Box>

@@ -14,6 +14,7 @@ import {
   useEditCustomUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
+import { backendURL } from "../../utilities/common";
 
 function CustomUserCreateModal({ open, close, refetch, isEdit }) {
   const {
@@ -84,7 +85,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
               Create User
             </Typography>
             <Box>
-              <Box>
+              <Box sx={{ pb: 2 }}>
                 <input
                   accept="image/*"
                   id="image-input"
@@ -98,7 +99,6 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                 {formik.errors.image && (
                   <Typography color="error">{formik.errors.image}</Typography>
                 )}
-
                 <label htmlFor="image-input">
                   <Box
                     sx={{
@@ -137,6 +137,13 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     height={"80px"}
                     src={URL.createObjectURL(selectedImage)}
                     alt="Selected"
+                  />
+                ) : isEdit?.data?.image ? (
+                  <img
+                    width={"80px"}
+                    height={"80px"}
+                    src={`${backendURL}/${isEdit?.data?.image}`}
+                    alt="logo team"
                   />
                 ) : (
                   ""
@@ -200,9 +207,9 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                 disabled={isLoading || creatingUser}
               >
                 {isLoading ? (
-                  <CircularProgress sx={{ color: "#8477DA" }} />
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                 ) : creatingUser ? (
-                  <CircularProgress sx={{ color: "#8477DA" }} />
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                 ) : isEdit.type ? (
                   "Update"
                 ) : (

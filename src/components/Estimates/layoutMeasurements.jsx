@@ -195,7 +195,7 @@ const LayoutMeasurements = () => {
                 sx={{
                   display: { xs: "block", sm: "none" },
                   paddingRight: "20px",
-                  paddingTop: "4px",
+                  paddingTop: "2px",
                 }}
               >
                 {" "}
@@ -208,7 +208,6 @@ const LayoutMeasurements = () => {
                   fontSize: { xs: "24px", sm: "2.124rem" },
                   textAlign: { xs: "start", sm: "center" },
                   fontWeight: 500,
-                  paddingBottom: "10px",
                 }}
                 variant="h4"
               >
@@ -220,7 +219,7 @@ const LayoutMeasurements = () => {
           <form onSubmit={formik.handleSubmit}>
             <Box
               sx={{
-                height: { xs: "100vh", sm: 600 },
+                height: { xs: "100vh", sm: 660 },
                 borderRadius: { sm: "12px", xs: 0 },
                 boxShadow:
                   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
@@ -260,14 +259,13 @@ const LayoutMeasurements = () => {
                 sx={{
                   display: "flex",
                   flexDirection: { sm: "row", xs: "column" },
-                  width: { sm: "96.5%", xs: "100%" },
+                  width: { sm: "96.5%", xs: "99.8%" },
                   paddingY: { sm: 4, xs: 0 },
                   paddingX: { sm: 2, xs: 0 },
                   height: "100%",
                   background: { sm: "#D9D9D9" },
                   gap: 4,
                   borderRadius: "8px",
-                  overflow: "auto",
                 }}
               >
                 <Box
@@ -490,6 +488,7 @@ const LayoutMeasurements = () => {
                   justifyContent: "center",
                   width: "100%",
                   paddingBottom: { xs: "20px", sm: "0px" },
+                  bgcolor: { sm: "white", xs: "#08061B" },
                 }}
               >
                 <Box

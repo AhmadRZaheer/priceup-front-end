@@ -10,7 +10,7 @@ import {
 } from "../../redux/estimateCalculations";
 import Layout from "../Estimates/layouts";
 import { useSelector } from "react-redux";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
 import ClientDetailsModel from "../Estimates/model";
 const IndexMobile = () => {
@@ -19,12 +19,13 @@ const IndexMobile = () => {
   // const handleOpen = () => setClientDetailOpen(true);
   // const updatecheck = useSelector(getQuoteState);
   const Navigation = useSelector(getPageDesktopNavigation);
+  const mobile = useMediaQuery("(max-width: 600px)");
 
   return (
     <>
       <Box
         sx={{
-          backgroundColor: { xs: "#100d24", sm: "white" },
+          backgroundColor: mobile ? "#100d24 !important" : "white",
           color: { xs: "white", sm: "black" },
         }}
       >

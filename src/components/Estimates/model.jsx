@@ -33,7 +33,10 @@ const validationSchema = yup.object({
     .string()
     .required("Email is required")
     .email("Invalid email address"),
-  phone: yup.string().required("phone is required"),
+  phone: yup
+    .string()
+    .required("phone is required")
+    .matches(/^[0-9]+$/, "Phone must be numeric"),
 });
 
 export default function ClientDetailsModel({ open, handleCancel }) {

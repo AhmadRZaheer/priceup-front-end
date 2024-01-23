@@ -38,6 +38,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import { setDataRefetch } from "../../redux/staff";
 import DefaultImage from "../ui-components/defaultImage";
+import SingleUser from "../ui-components/SingleUser";
 
 const drawerWidth = 320;
 
@@ -97,6 +98,7 @@ const Sidebar = () => {
     }
     if (userData.id !== decodedToken.company_id) {
       await switchLocationUser(userData);
+      console.log("user changed");
     }
   };
   useEffect(() => {
@@ -107,6 +109,7 @@ const Sidebar = () => {
     if (switched) {
       localStorage.setItem("token", useToken);
       dispatch(setDataRefetch());
+      console.log(switched);
       setRefetchKey((prevKey) => prevKey + 1);
     }
   }, [switched]);
@@ -659,91 +662,103 @@ const Sidebar = () => {
               </Box>
             ) : (
               filteredCustomUser?.map((item) => (
-                <Typography
+                <SingleUser
                   key={item?.id}
-                  sx={{
-                    width: "83.8%",
-                    ml: "10px",
-                    marginBottom: "5px",
-                    textTransform: "lowercase",
-                    marginLeft: "20px",
-                    display: "flex",
-                    border: "1px solid #D9D9D9",
-                    ":hover": {
-                      bgcolor: "rgba(0, 0, 0, 0.1)",
-                      cursor: "pointer",
-                    },
-                    py: 0.4,
-                    px: 1,
-                    borderRadius: "14px",
-                  }}
-                  onClick={() => handleCustomUserClick(item)}
-                >
-                  <div style={{ width: "20%" }}>
-                    <DefaultImage image={item?.image} name={item?.name} />
-                  </div>
-                  <div style={{ paddingLeft: "10px", width: "100%" }}>
-                    <a style={{ cursor: "pointer" }}>{item?.name}</a>
-                    <p style={{ fontSize: "10px" }}>{item?.email}</p>
-                  </div>
-                  {item.id === decodedToken?.company_id ? (
-                    <Box
-                      sx={{
-                        width: "10%",
-                        display: "flex",
-                        justifyContent: "end",
-                        mt: 1.4,
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 16,
-                          height: 16,
-                          borderRadius: "100%",
-                          background: "#4de369",
-                        }}
-                      ></div>
-                    </Box>
-                  ) : (
-                    ""
-                  )}
-                </Typography>
+                  item={item}
+                  active={item.id === decodedToken?.company_id}
+                  handleClick={() => handleCustomUserClick(item)}
+                />
+                // <Typography
+                //   key={item?.id}
+                //   sx={{
+                //     width: "83.8%",
+                //     ml: "10px",
+                //     marginBottom: "5px",
+                //     textTransform: "lowercase",
+                //     marginLeft: "20px",
+                //     display: "flex",
+                //     border: "1px solid #D9D9D9",
+                //     ":hover": {
+                //       bgcolor: "rgba(0, 0, 0, 0.1)",
+                //       cursor: "pointer",
+                //     },
+                //     py: 0.4,
+                //     px: 1,
+                //     borderRadius: "14px",
+                //   }}
+                //   onClick={() => handleCustomUserClick(item)}
+                // >
+                //   <div style={{ width: "20%" }}>
+                //     <DefaultImage image={item?.image} name={item?.name} />
+                //   </div>
+                //   <div style={{ paddingLeft: "10px", width: "100%" }}>
+                //     <a style={{ cursor: "pointer" }}>{item?.name}</a>
+                //     <p style={{ fontSize: "10px" }}>{item?.email}</p>
+                //   </div>
+                //   {item.id === decodedToken?.company_id ? (
+                //     <Box
+                //       sx={{
+                //         width: "10%",
+                //         display: "flex",
+                //         justifyContent: "end",
+                //         mt: 1.4,
+                //       }}
+                //     >
+                //       <div
+                //         style={{
+                //           width: 16,
+                //           height: 16,
+                //           borderRadius: "100%",
+                //           background: "#4de369",
+                //         }}
+                //       ></div>
+                //     </Box>
+                //   ) : (
+                //     ""
+                //   )}
+                // </Typography>
               ))
             ))
           )}
           {superAdminToken &&
             filteredAdminData.map((admin) => (
-              <Typography
+              <SingleUser
                 key={admin?.user?._id}
-                sx={{
-                  width: "83.8%",
-                  ml: "10px",
-                  marginBottom: "5px",
-                  textTransform: "lowercase",
-                  marginLeft: "20px",
-                  display: "flex",
-                  border: "1px solid #D9D9D9",
-                  ":hover": {
-                    bgcolor: "rgba(0, 0, 0, 0.1)",
-                    cursor: "pointer",
-                  },
-                  py: 0.4,
-                  px: 1,
-                  borderRadius: "14px",
-                }}
-                onClick={() => handleAdminNameClick(admin?.user)}
-              >
-                <div>
-                  <DefaultImage
-                    image={admin?.user?.image}
-                    name={admin?.user?.name}
-                  />
-                </div>
-                <div style={{ paddingLeft: "10px" }}>
-                  <a style={{ cursor: "pointer" }}>{admin?.user?.name}</a>
-                  <p style={{ fontSize: "10px" }}>{admin?.user?.email}</p>
-                </div>
-              </Typography>
+                item={admin?.user}
+                active={admin?.company?._id === decodedToken?.company_id}
+                handleClick={() => handleAdminNameClick(admin?.user)}
+              />
+              // <Typography
+              //   key={admin?.user?._id}
+              //   sx={{
+              //     width: "83.8%",
+              //     ml: "10px",
+              //     marginBottom: "5px",
+              //     textTransform: "lowercase",
+              //     marginLeft: "20px",
+              //     display: "flex",
+              //     border: "1px solid #D9D9D9",
+              //     ":hover": {
+              //       bgcolor: "rgba(0, 0, 0, 0.1)",
+              //       cursor: "pointer",
+              //     },
+              //     py: 0.4,
+              //     px: 1,
+              //     borderRadius: "14px",
+              //   }}
+              //   onClick={() => handleAdminNameClick(admin?.user)}
+              // >
+              //   <div>
+              //     <DefaultImage
+              //       image={admin?.user?.image}
+              //       name={admin?.user?.name}
+              //     />
+              //   </div>
+              //   <div style={{ paddingLeft: "10px" }}>
+              //     <a style={{ cursor: "pointer" }}>{admin?.user?.name}</a>
+              //     <p style={{ fontSize: "10px" }}>{admin?.user?.email}</p>
+              //   </div>
+              // </Typography>
             ))}
         </div>
       </Popover>

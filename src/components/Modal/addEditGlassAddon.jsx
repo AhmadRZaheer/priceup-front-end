@@ -14,6 +14,7 @@ import {
 } from "../../utilities/ApiHooks/glassAddon";
 import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
+import { backendURL } from "../../utilities/common";
 
 const style = {
   position: "absolute",
@@ -172,13 +173,22 @@ export default function AddEditGlassAddon({
                   marginTop: 16,
                 }}
               >
-                {selectedImage && (
+                {selectedImage ? (
                   <img
                     width={"80px"}
                     height={"80px"}
                     src={URL.createObjectURL(selectedImage)}
                     alt="Selected"
                   />
+                ) : data?.image ? (
+                  <img
+                    width={"80px"}
+                    height={"80px"}
+                    src={`${backendURL}/${data?.image}`}
+                    alt="logo team"
+                  />
+                ) : (
+                  ""
                 )}
                 {formik.errors.image && (
                   <Typography color="error">{formik.errors.image}</Typography>

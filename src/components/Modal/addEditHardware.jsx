@@ -14,6 +14,7 @@ import {
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
 import { useEffect } from "react";
+import { backendURL } from "../../utilities/common";
 
 const style = {
   position: "absolute",
@@ -178,13 +179,22 @@ export default function AddEditHardware({
                 marginTop: 16,
               }}
             >
-              {selectedImage && (
+              {selectedImage ? (
                 <img
                   width={"80px"}
                   height={"80px"}
                   src={URL.createObjectURL(selectedImage)}
                   alt="Selected"
                 />
+              ) : data?.image ? (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={`${backendURL}/${data?.image}`}
+                  alt="logo team"
+                />
+              ) : (
+                ""
               )}
             </aside>
             {formik.errors.image && (

@@ -16,6 +16,7 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import DefaultImage from "../ui-components/defaultImage";
 
 export default function CustomerTable() {
   const { data: customerData, refetch } = useFetchDataCustomer();
@@ -116,12 +117,14 @@ export default function CustomerTable() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          paddingTop: 10,
-          width: "100%",
+          paddingTop: { sm: 3, xs: 10 },
+          width: "98%",
           height: "100vh",
           color: { xs: "white", sm: "black" },
           overflow: "auto",
+          m: "auto",
         }}
+        s
       >
         <Box sx={{ width: "98%" }}>
           <Typography
@@ -318,10 +321,9 @@ export default function CustomerTable() {
                               overflow: "hidden",
                             }}
                           >
-                            <img
-                              width={40}
-                              src={`${backendURL}/${data?.image}`}
-                              alt="image person"
+                            <DefaultImage
+                              image={data?.image}
+                              name={data?.name}
                             />
                           </Box>
                           <Box sx={{ paddingLeft: "10px" }}>

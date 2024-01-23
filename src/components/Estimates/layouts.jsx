@@ -88,11 +88,12 @@ export default function Layout() {
                 borderBottomLeftRadius: { xs: "16px", sm: "0px" },
                 display: "flex",
                 alignItems: "center",
-                marginTop: { sm: 0, xs: 5 },
+                marginTop: { sm: 0, xs: 2 },
               }}
             >
               <NavLink to="/estimates">
                 <Box
+                  onClick={handleBack}
                   sx={{
                     display: { xs: "block", sm: "none" },
                     paddingRight: "20px",
@@ -229,7 +230,17 @@ export default function Layout() {
                 </Box>
               </Grid>
             )}
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                position: { sm: "static", xs: "fixed" },
+                bottom: 0,
+                width: { sm: "auto", xs: "90%" },
+                py: { sm: 0, xs: 2 },
+                bgcolor: { sm: "white", xs: "#08061B" },
+              }}
+            >
               {/* <NavLink to="/estimates"> */}
               <Button
                 sx={{

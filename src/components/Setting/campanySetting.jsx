@@ -20,12 +20,15 @@ import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
 import { useDropzone } from "react-dropzone";
 import InputImageIcon from "../../Assets/imageUploader.svg";
+import { useSelector } from "react-redux";
+import { getDataRefetch } from "../../redux/staff";
 
 const CampanySetting = () => {
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const { mutate: editFinish, isSuccess: SuccessForEdit } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
+  const CustomerU_change = useSelector(getDataRefetch);
 
   useEffect(() => {
     if (SuccessForEdit) {
@@ -34,7 +37,7 @@ const CampanySetting = () => {
   }, [SuccessForEdit]);
   useEffect(() => {
     reFetchDataSetting();
-  }, []);
+  }, [CustomerU_change]);
 
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);

@@ -32,6 +32,27 @@ function DefaultImage({ image, name }) {
           {lastNameInitial}
         </Typography>
       );
+    case "images/staffs/default.jpg" || "images/staff/default.jpg":
+      return (
+        <Typography
+          sx={{
+            backgroundColor: "#F9F5FF",
+            width: 40,
+            height: 40,
+            borderRadius: "100%",
+            textAlign: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#7F56D9",
+            textTransform: "uppercase",
+            fontWeight: "bold",
+          }}
+        >
+          {firstNameInitial}
+          {lastNameInitial}
+        </Typography>
+      );
     case "images/staff/default.jpg":
       return (
         <Typography
