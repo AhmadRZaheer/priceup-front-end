@@ -91,7 +91,7 @@ const LayoutMeasurements = () => {
       dispatch(updateMeasurements(measurementsArray));
 
       /** switch hinges if width increases layout defaults */
-      if (
+      if (selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
         doorWidthFromredux > selectedData?.settings?.heavyDutyOption?.threshold
       ) {
         let hingesType = null;
