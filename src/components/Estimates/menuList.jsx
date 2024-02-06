@@ -70,7 +70,7 @@ const MenuList = ({
         })
       );
   };
-    return (
+  return (
     <Box>
       <Box
         sx={{
@@ -99,11 +99,6 @@ const MenuList = ({
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
           <Typography>{title}</Typography>
-          <Tooltip title={title}>
-            <IconButton>
-              <InfoOutlinedIcon />
-            </IconButton>
-          </Tooltip>
         </Button>
         {![
           "hardwareFinishes",

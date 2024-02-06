@@ -95,11 +95,6 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
           <Typography>{title}</Typography>
-          <Tooltip title={title}>
-            <IconButton>
-              <InfoOutlinedIcon />
-            </IconButton>
-          </Tooltip>
         </Button>
       </Box>
       {anchorEl ? (
