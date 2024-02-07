@@ -11,6 +11,7 @@ import AddEditGlassType from "../Modal/addEidtGlassType";
 import GlassTypeItem from "./glassTypeItems";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
+import DefaultImage from "../ui-components/defaultImage";
 
 const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
   const [open, setOpen] = React.useState(false);
@@ -67,12 +68,7 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
         >
           {" "}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <img
-              width={"50px"}
-              height={"50px"}
-              src={`${backendURL}/${entry.image}`}
-              alt=""
-            />
+            <DefaultImage image={entry.image} type={2} name={entry.name} />
             {entry.name}
             <CustomIconButton
               icon={<Edit sx={{ fontSize: 18, mr: 0.4 }} />}
