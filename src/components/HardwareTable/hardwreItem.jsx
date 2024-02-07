@@ -1,7 +1,7 @@
 import { Edit } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import FinishItem from "./finishItem";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Popover, Typography } from "@mui/material";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import {
@@ -11,6 +11,7 @@ import {
 } from "../../utilities/ApiHooks/hardware";
 import AddEditHardware from "../Modal/addEditHardware";
 import CustomIconButton from "../ui-components/CustomButton";
+import DefaultImage from "../ui-components/defaultImage";
 
 const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
   const [open, setOpen] = React.useState(false);
@@ -38,7 +39,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
     finishesData: null,
     id: null,
   });
-
+  
   const handleOpenUpdate = (id) => {
     setIdUpdate({ finishesData: UpdateValue, id: id });
     localStorage.setItem("scrollToIndex", id);
@@ -75,11 +76,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
       >
         {" "}
         <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <img
-            style={{ width: 50, height: 50 }}
-            src={`${backendURL}/${entry.image}`}
-            alt="setting logo"
-          />
+          <DefaultImage image={entry.image} type={2} name={entry.name} />
           {entry.name}
           <CustomIconButton
             handleClick={handleOpenEdit}

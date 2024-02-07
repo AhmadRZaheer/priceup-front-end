@@ -12,6 +12,7 @@ import React, { useEffect, useState } from "react";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
+import DefaultImage from "../ui-components/defaultImage";
 
 const AddonList = ({ entry, mainIndex, refetch, type }) => {
   const [open, setOpen] = useState(false);
@@ -69,12 +70,7 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
         >
           {" "}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-            <img
-              width={"50px"}
-              height={"50px"}
-              src={`${backendURL}/${entry.image}`}
-              alt=""
-            />
+            <DefaultImage image={entry.image} type={2} name={entry.name} />
             {entry.name}
             <CustomIconButton
               handleClick={() => handleOpenEdit(entry)}
