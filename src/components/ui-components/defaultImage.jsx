@@ -228,7 +228,7 @@ function DefaultImage({ image, name, type = 1 }) {
               {" "}
               <img
                 className="cellImg"
-                style={{ width: 100, height: 100 }}
+                style={{ width: 150, height: 150 }}
                 src={`${backendURL}/${image}`}
                 alt="logo image"
               />
