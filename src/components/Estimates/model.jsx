@@ -25,6 +25,8 @@ import {
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
+import { Menu, MenuItem } from "@mui/material";
+import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -45,6 +47,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateEstimates();
+  const { data: customerData, refetch } = useFetchDataCustomer();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
@@ -220,6 +223,8 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     }
   }, [CreatedSuccessfully, ErrorForAdd]);
 
+  const filterData = customerData;
+
   return (
     <div>
       <Modal
@@ -251,6 +256,41 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                 width: { sm: "400px", xs: "100%" },
               }}
             >
+              <Box sx={{ py: 1 }}>
+                <Box sx={{ width: "100%" }}>
+                  <TextField
+                    id="customers"
+                    name="customers"
+                    placeholder="Find Customers"
+                    size="small"
+                    variant="outlined"
+                    fullwidth
+                    InputProps={{
+                      style: {
+                        color: "black",
+                        borderRadius: 4,
+                        border: "1px solid #cccccc",
+                        backgroundColor: "white",
+                      },
+                      inputProps: { min: 0, max: 50 },
+                    }}
+                    InputLabelProps={{
+                      style: {
+                        color: "rgba(255, 255, 255, 0.5)",
+                      },
+                    }}
+                    sx={{
+                      color: { sm: "black", xs: "white" },
+                      width: "100%",
+                    }}
+                  />
+                </Box>
+                <Menu>
+                  {filterData.map((item) => {
+                    <MenuItem>{item.name}</MenuItem>;
+                  })}
+                </Menu>
+              </Box>
               <Box
                 sx={{
                   fontSize: "18px",
