@@ -114,7 +114,7 @@ const GlassTypeComponent = ({ type }) => {
         >
           Name
         </div>{" "}
-        <div
+        {/* <div
           style={{
             width: "250px",
 
@@ -122,7 +122,7 @@ const GlassTypeComponent = ({ type }) => {
           }}
         >
           Part Number{" "}
-        </div>{" "}
+        </div>{" "} */}
         <div
           style={{
             width: "250px",

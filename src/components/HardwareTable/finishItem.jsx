@@ -38,7 +38,7 @@ const FinishItem = ({
     isSuccess: SuccessForEdit,
   } = useEditHardware();
   const validationSchema = Yup.object().shape({
-    partNumber: Yup.string().required("Hardware Part Number is required"),
+    // partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
@@ -147,7 +147,7 @@ const FinishItem = ({
             <Typography variant="h6">{data?.name}</Typography>
           </Box>
 
-          <Box
+          {/* <Box
             id={hardwareId}
             sx={{
               minWidth: "230px",
@@ -174,13 +174,13 @@ const FinishItem = ({
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
             />
-          </Box>
+          </Box> */}
 
           <Box
             sx={{
               minWidth: "230px",
               padding: 1,
-              alignItems: "center",
+              alignItems: "start",
             }}
           >
             <Typography>Cost</Typography>
