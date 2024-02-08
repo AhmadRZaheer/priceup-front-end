@@ -298,7 +298,7 @@ const Sidebar = () => {
                         alt="image of customer"
                       />
 
-                      <span>Team</span>
+                      <span>Users</span>
                     </IconButton>
                   </li>
                 </NavLink>

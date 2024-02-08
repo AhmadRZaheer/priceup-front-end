@@ -227,7 +227,7 @@ const SuperAdminTeam = () => {
     <>
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
         <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-          Team
+          Users
         </Typography>
         <Box
           sx={{
@@ -238,7 +238,7 @@ const SuperAdminTeam = () => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-              Team
+              Users
             </Typography>
             <TextField
               placeholder="Search by Name"

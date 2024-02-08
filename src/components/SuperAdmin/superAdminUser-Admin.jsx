@@ -166,7 +166,7 @@ const SuperAdminUser = () => {
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
           <Typography sx={{ ml: 2, fontSize: 26, fontWeight: "bold" }}>
-            Users
+            Admin
           </Typography>
           <Button
             sx={{
@@ -183,7 +183,7 @@ const SuperAdminUser = () => {
             }}
             onClick={handleOpenCreate}
           >
-            Add User
+            Add Admin
           </Button>
         </Box>
         <Box
@@ -195,7 +195,7 @@ const SuperAdminUser = () => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-              Users
+              Admin
             </Typography>
             <TextField
               placeholder="Search by Name"

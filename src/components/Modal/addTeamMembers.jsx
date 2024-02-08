@@ -123,7 +123,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
         <Box sx={style}>
           <Box>
             <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
-              {isEdit ? "Edit Team Members" : "Add New Team Members"}
+              {isEdit ? "Edit User" : "Add New User"}
             </Typography>
             <Typography sx={{ color: "#667085", marginTop: 1 }}>
               Your new project has been created. Invite colleagues to

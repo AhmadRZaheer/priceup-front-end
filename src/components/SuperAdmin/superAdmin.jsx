@@ -293,7 +293,7 @@ const SuperAdminTable = () => {
               src={image3}
               alt="image type"
             />
-            <Typography sx={{ fontSize: 18 }}>Team Members</Typography>
+            <Typography sx={{ fontSize: 18 }}>Users</Typography>
           </Box>
           <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
             {staffData.length}
@@ -475,7 +475,7 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ height: "125px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-                        Users
+                        Admin
                       </Typography>
                       <Grid container mt={1} gap={2}>
                         {matchingUserData.map((user, index) => {
@@ -521,7 +521,7 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ height: "100px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-                        Team
+                        Users
                       </Typography>
                       <Box
                         sx={{

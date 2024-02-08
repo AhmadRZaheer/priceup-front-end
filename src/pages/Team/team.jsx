@@ -1,7 +1,7 @@
 import React from "react";
 import "./team.scss";
 import Sidebar from "../../components/Sidebar/sidebar";
-import TeamTable from "../../components/TeamTable/teamTable";
+import TeamTable from "../../components/Team-UserTable/teamTable";
 const Team = () => {
   return (
     <>

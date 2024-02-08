@@ -115,7 +115,7 @@ const SuperSidebar = () => {
                         src={TremIcon}
                         alt="image of customer"
                       />
-                      <span>Team</span>
+                      <span>Users</span>
                     </IconButton>
                   </li>
                 </NavLink>
@@ -131,7 +131,7 @@ const SuperSidebar = () => {
                         src={TremIcon}
                         alt="image of customer"
                       />
-                      <span>Users</span>
+                      <span>Admin</span>
                     </IconButton>
                   </li>
                 </NavLink>

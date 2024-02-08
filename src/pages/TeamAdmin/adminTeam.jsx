@@ -1,7 +1,7 @@
 import React from "react";
 import "./team.scss";
 import SuperSidebar from "../../components/SuperSidebar/superSidebar";
-import SuperAdminTeam from "../../components/SuperAdmin/superAdminTeam";
+import SuperAdminTeam from "../../components/SuperAdmin/superAdminTeam-User";
 const AdminTeam = () => {
   return (
     <>

@@ -1,7 +1,7 @@
 import React from "react";
 import "./userAdmin.scss";
 import SuperSidebar from "../../components/SuperSidebar/superSidebar";
-import SuperAdminUser from "../../components/SuperAdmin/superAdminUser";
+import SuperAdminUser from "../../components/SuperAdmin/superAdminUser-Admin";
 const AdminUser = () => {
   return (
     <>
