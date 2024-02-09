@@ -65,7 +65,7 @@ const HardWareComponent = ({ type }) => {
         </div>{" "} */}
         <div
           style={{
-            width: "38%",
+            width: "40%",
             padding: 8,
           }}
         >
@@ -73,7 +73,7 @@ const HardWareComponent = ({ type }) => {
         </div>
         <div
           style={{
-            width: "20%",
+            width: "58%",
             padding: 8,
           }}
         >

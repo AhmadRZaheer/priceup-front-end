@@ -131,7 +131,6 @@ const FinishItem = ({
           style={{
             display: "flex",
             alignContent: "center",
-            justifyContent: "space-between",
             paddingTop: 4,
             paddingBottom: 4,
           }}
@@ -181,6 +180,7 @@ const FinishItem = ({
               minWidth: "230px",
               padding: 1,
               alignItems: "start",
+              pl: 10
             }}
           >
             <Typography>Cost</Typography>
