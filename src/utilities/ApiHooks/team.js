@@ -118,7 +118,12 @@ export const useCreateTeamMembers = () => {
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -176,7 +181,12 @@ export const useEditTeamMembers = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "success" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "success",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -221,7 +231,7 @@ export const useAddLocation = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
