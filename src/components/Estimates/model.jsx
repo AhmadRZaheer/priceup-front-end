@@ -29,18 +29,12 @@ import { Autocomplete } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { useState } from "react";
 import DefaultImage from "../ui-components/defaultImage";
+import { useEffect } from "react";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
   lastName: yup.string().required("Last Name is required"),
-  email: yup
-    .string()
-    .required("Email is required")
-    .email("Invalid email address"),
-  phone: yup
-    .string()
-    .required("phone is required")
-    .matches(/^[0-9]+$/, "Phone must be numeric"),
+  phone: yup.string().matches(/^[0-9]+$/, "Phone must be numeric"),
 });
 
 export default function ClientDetailsModel({ open, handleCancel }) {
@@ -203,7 +197,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   });
   const navigate = useNavigate();
   const { refetch: Refetched } = useFetchDataEstimate();
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
@@ -214,10 +208,8 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     } else if (ErrorForAddEidt) {
       const errorMessage = ErrorForAddEidt.message || "An error occurred";
     }
-    refetch();
-    setFilteredCustomer(customerData);
   }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfully) {
       // dispatch(resetState());
       dispatch(setNavigationDesktop("existing"));
@@ -227,19 +219,14 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     } else if (ErrorForAdd) {
       const errorMessage = ErrorForAdd.message || "An error occurred";
     }
-    refetch();
-    setFilteredCustomer(customerData);
   }, [CreatedSuccessfully, ErrorForAdd]);
-  // console.log(customerData, "customerData");
-  const [searchQuery, setSearchQuery] = useState(""); // State to hold the search query
-  const [filteredCustomer, setFilteredCustomer] = useState(customerData); // State to hold filtered customer data
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredCustomer, setFilteredCustomer] = useState(customerData);
 
-  // Function to handle search query change
   const handleSearchChange = (event) => {
     const { value } = event.target;
     setSearchQuery(value);
 
-    // Filter customer data based on search query
     const filteredData = customerData.filter(
       (customer) =>
         customer.name.toLowerCase().includes(value.toLowerCase()) ||
@@ -254,11 +241,14 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   };
   const handleSubmit = async () => {
     const Name = selectedUser.name.split(" ");
-    mutate({
+    await mutate({
       customerData: {
         firstName: Name[0],
         lastName: Name[1],
-        ...selectedUser,
+        email: selectedUser.email,
+        phone: selectedUser.phone,
+        address: selectedUser.address,
+        id: selectedUser._id,
       },
       estimateData: {
         ...estimate,
@@ -266,7 +256,10 @@ export default function ClientDetailsModel({ open, handleCancel }) {
       },
     });
   };
-
+  useEffect(() => {
+    setFilteredCustomer(customerData);
+    refetch();
+  }, [customerData]);
   return (
     <div>
       <Modal
