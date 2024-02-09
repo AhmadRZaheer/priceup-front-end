@@ -432,7 +432,7 @@ export const columnsHardwareHandle = [
       );
     },
   },
-  { field: "PartNumber", headerName: "Part number", width: 330 },
+  // { field: "PartNumber", headerName: "Part number", width: 330 },
   {
     field: "Cost",
     headerName: "Cost",

@@ -39,7 +39,7 @@ const GlassTypeItem = ({
     isSuccess: SuccessForEdit,
   } = useEditGlassType();
   const validationSchema = Yup.object().shape({
-    partNumber: Yup.string().required("Hardware Part Number is required"),
+    // partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
@@ -145,7 +145,7 @@ const GlassTypeItem = ({
             }}
           ></Box>
 
-          <Box
+          {/* <Box
             style={{
               width: "250px",
               padding: 4,
@@ -169,7 +169,7 @@ const GlassTypeItem = ({
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
             />
-          </Box>
+          </Box> */}
 
           <Box
             style={{

@@ -121,7 +121,7 @@ const GlassAddonGrid = ({ type }) => {
         >
           Name
         </div>{" "}
-        <div
+        {/* <div
           style={{
             width: "250px",
 
@@ -129,7 +129,7 @@ const GlassAddonGrid = ({ type }) => {
           }}
         >
           Part Number{" "}
-        </div>{" "}
+        </div>{" "} */}
         <div
           style={{
             width: "250px",

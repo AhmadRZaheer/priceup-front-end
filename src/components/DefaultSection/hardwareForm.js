@@ -26,9 +26,9 @@ const HardwareForm = () => {
   ];
 
   const validationSchema = Yup.object({
-    hardwarePartNumber: Yup.string().required(
-      "Hardware Part Number is required"
-    ),
+    // hardwarePartNumber: Yup.string().required(
+    //   "Hardware Part Number is required"
+    // ),
 
     thickness: Yup.string().required("thickness is required"),
 
@@ -100,7 +100,7 @@ const HardwareForm = () => {
               )}
           </div>
 
-          <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
+          {/* <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
             <Typography>Hardware Part Number </Typography>
             <TextField
               variant="outlined"
@@ -117,7 +117,7 @@ const HardwareForm = () => {
                   {formik.errors.hardwarePartNumber}
                 </div>
               )}
-          </div>
+          </div> */}
 
           <div style={{ width: "250px", padding: 4, alignItems: "center" }}>
             <Typography>Cost</Typography>

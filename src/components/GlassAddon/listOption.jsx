@@ -40,7 +40,7 @@ const ListOption = ({
     isSuccess: SuccessForEdit,
   } = useEditGlassAddon();
   const validationSchema = Yup.object().shape({
-    partNumber: Yup.string().required("Hardware Part Number is required"),
+    // partNumber: Yup.string().required("Hardware Part Number is required"),
     cost: Yup.number().required("Cost is required"),
     status: Yup.boolean().required("Status is required"),
   });
@@ -152,7 +152,7 @@ const ListOption = ({
             }}
           ></Box>
 
-          <Box
+          {/* <Box
             style={{
               width: "250px",
               padding: 4,
@@ -176,7 +176,7 @@ const ListOption = ({
               error={formik.touched.partNumber && formik.errors.partNumber}
               helperText={formik.touched.partNumber && formik.errors.partNumber}
             />
-          </Box>
+          </Box> */}
 
           <Box
             style={{
