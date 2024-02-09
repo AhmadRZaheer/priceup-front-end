@@ -25,11 +25,12 @@ import {
   setNavigationDesktop,
 } from "../../redux/estimateCalculations";
 import { Link, useNavigate } from "react-router-dom";
-import { Autocomplete } from "@mui/material";
+import { Autocomplete, CircularProgress, InputAdornment } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { useState } from "react";
 import DefaultImage from "../ui-components/defaultImage";
 import { useEffect } from "react";
+import { Close } from "@mui/icons-material";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -57,7 +58,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   const updatecheck = useSelector(getQuoteState);
   const quoteId = useSelector(getQuoteId);
   const dispatch = useDispatch();
-  const { data: customerData, refetch } = useFetchDataCustomer();
+  const { data: customerData, refetch, isLoading } = useFetchDataCustomer();
   const [selectedUser, setSelectedUser] = useState();
   const [Tabs, setTabs] = useState("create");
   const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
@@ -227,13 +228,16 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     const { value } = event.target;
     setSearchQuery(value);
 
-    const filteredData = customerData.filter(
-      (customer) =>
-        customer.name.toLowerCase().includes(value.toLowerCase()) ||
-        customer.email.toLowerCase().includes(value.toLowerCase())
-    );
-
-    setFilteredCustomer(filteredData);
+    if (value === "") {
+      setFilteredCustomer(customerData);
+    } else {
+      const filteredData = customerData.filter(
+        (customer) =>
+          customer.name.toLowerCase().includes(value.toLowerCase()) ||
+          customer.email.toLowerCase().includes(value.toLowerCase())
+      );
+      setFilteredCustomer(filteredData);
+    }
   };
 
   const HandleSelected = (selectedOption) => {
@@ -337,9 +341,11 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                       fontSize: "18px",
                       fontWeight: 600,
                       paddingBottom: "4px",
+                      pt: 1,
+                      fontWeight: "bold",
                     }}
                   >
-                    <Typography>Clients Details</Typography>
+                    <Typography>Customer Detail</Typography>
                   </Box>
 
                   <Box sx={{ display: "flex", gap: 4 }}>
@@ -450,7 +456,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     }}
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                      <label htmlFor="email">Client Email address</label>
+                      <label htmlFor="email">Email</label>
                     </Box>
                     <TextField
                       id="email"
@@ -493,7 +499,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     }}
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                      <label htmlFor="phone">Client Phone Number</label>
+                      <label htmlFor="phone">Phone Number</label>
                     </Box>
                     <TextField
                       id="phone"
@@ -536,7 +542,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
                       {" "}
-                      <label htmlFor="address">Client address</label>
+                      <label htmlFor="address">address</label>
                     </Box>
                     <TextField
                       id="address"
@@ -590,6 +596,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                           backgroundColor: "white",
                         },
                         color: "#101828",
+                        border: "1px solid #D0D5DD",
                       }}
                     >
                       {" "}
@@ -615,63 +622,122 @@ export default function ClientDetailsModel({ open, handleCancel }) {
               ) : (
                 <>
                   <Box sx={{ p: 1 }}>
-                    <TextField
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      label="Search"
-                      variant="outlined"
-                      fullWidth
-                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        paddingBottom: { sm: 0, xs: 2 },
+                      }}
+                    >
+                      {/* <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                        <label htmlFor="search by name">Search by name</label>
+                      </Box> */}
+                      <TextField
+                        // size="small"
+                        InputProps={{
+                          endAdornment: searchQuery ? (
+                            <InputAdornment
+                              position="end"
+                              sx={{ cursor: "pointer" }}
+                              onClick={() => {
+                                setSearchQuery("");
+                                handleSearchChange({ target: { value: "" } });
+                              }}
+                            >
+                              <Close sx={{}} />
+                            </InputAdornment>
+                          ) : (
+                            ""
+                          ),
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            border: "1px solid #cccccc",
+                            backgroundColor: "white",
+                          },
+                          inputProps: { min: 0, max: 50 },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={searchQuery}
+                        onChange={handleSearchChange}
+                        // placeholder="Search by name"
+                        label="Search by name"
+                        variant="outlined"
+                        fullWidth
+                      />
+                    </Box>
+
                     <Box
                       sx={{
                         mt: 2,
                         p: 1,
-                        height: "204px",
+                        height: {sm:"212px", xs: "171px"},
                         width: "97%",
-                        bgcolor: "#dedede",
                         borderRadius: 2,
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
                         overflowY: "auto",
+                        boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                       }}
                     >
-                      {filteredCustomer.map((option) => (
-                        <Box
-                          onClick={() => HandleSelected(option)}
-                          sx={{
-                            display: "flex",
-                            backgroundColor:
-                              selectedUser?._id === option?._id
-                                ? "#8477da"
-                                : "white",
-                            "&:hover": {
-                              backgroundColor: "#8477da",
-                              color: "white",
-                            },
-
-                            color:
-                              selectedUser?._id === option?._id
-                                ? "white"
-                                : "black",
-                            p: 0.5,
-                            width: "96%",
-                            borderRadius: 2,
-                            cursor: "pointer",
-                          }}
+                      {isLoading ? (
+                        <CircularProgress size={24} color="#8477da" />
+                      ) : filteredCustomer?.length === 0 ? (
+                        <Typography
+                          sx={{ color: "gray", textAlign: "center", p: 1 }}
                         >
-                          <Box sx={{ pr: 1, pt: 0.4 }}>
-                            <DefaultImage
-                              name={option.name}
-                              image={option.image}
-                            />
+                          No Customer Found
+                        </Typography>
+                      ) : (
+                        filteredCustomer.map((option) => (
+                          <Box
+                            onClick={() => HandleSelected(option)}
+                            sx={{
+                              display: "flex",
+                              backgroundColor:
+                                selectedUser?._id === option?._id
+                                  ? "#8477da"
+                                  : "white",
+                              "&:hover": {
+                                boxShadow:
+                                  "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
+                              },
+
+                              color:
+                                selectedUser?._id === option?._id
+                                  ? "white"
+                                  : "black",
+                              p: 0.5,
+                              width: "96%",
+                              borderRadius: 2,
+                              cursor: "pointer",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                mr: 1,
+                                mt: 0.4,
+                                borderRadius: "100%",
+                                overflow: "hidden",
+                              }}
+                            >
+                              <DefaultImage
+                                name={option.name}
+                                image={option.image}
+                              />
+                            </Box>
+                            <Box>
+                              <Typography>{option.name}</Typography>
+                              <Typography> {option.email}</Typography>
+                            </Box>
                           </Box>
-                          <Box>
-                            <Typography>{option.name}</Typography>
-                            <Typography> {option.email}</Typography>
-                          </Box>
-                        </Box>
-                      ))}
+                        ))
+                      )}
                     </Box>
                   </Box>
                   <Box
@@ -684,7 +750,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                   >
                     <Button
                       onClick={handleCancel}
-                      variant="contained"
+                      variant="outlined"
                       sx={{
                         width: "48%",
                         textTransform: "initial",
@@ -693,6 +759,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                           backgroundColor: "white",
                         },
                         color: "#101828",
+                        border: "1px solid #D0D5DD",
                       }}
                     >
                       {" "}
@@ -710,6 +777,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                         },
                       }}
                       variant="contained"
+                      disabled={selectedUser ? false : true}
                     >
                       Save
                     </Button>
