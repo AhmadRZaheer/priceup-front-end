@@ -130,9 +130,16 @@ export const useEditEstimates = () => {
       const response = await axios.put(
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
-          customerData: updatedEstimate.customerData,
+          ...(updatedEstimate.customerData
+            ? { customerData: updatedEstimate.customerData }
+            : {}),
           estimateData: {
-            ...updatedEstimate.estimateData,
+            ...(updatedEstimate.estimateData
+              ? { ...updatedEstimate.estimateData }
+              : {}),
+            ...(updatedEstimate.status
+              ? { status: updatedEstimate.status }
+              : {}),
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
           },
