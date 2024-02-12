@@ -5,6 +5,7 @@ import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { setEstimatesListRefetch } from "../../redux/refetch";
+import { useSnackbar } from "notistack";
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -168,6 +169,8 @@ export const useEditEstimates = () => {
 };
 
 export const useDeleteEstimates = () => {
+  // const { enqueueSnackbar } = useSnackbar();
+
   const dispatch = useDispatch();
   const handleDelete = async (id) => {
     try {
@@ -177,6 +180,7 @@ export const useDeleteEstimates = () => {
       });
       if (response.data.code === 200) {
         dispatch(setEstimatesListRefetch());
+        // enqueueSnackbar("Estimate Deleted Successfuly", { variant: "error" });
         dispatch(
           showSnackbar({
             message: "Estimate Deleted Successfuly",

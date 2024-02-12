@@ -8,11 +8,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutHandler } from "./redux/userAuth";
 import { FetchId2 } from "./utilities/ApiHooks/superAdmin";
 import Snackbars from "./components/Modal/snackBar";
-import {
-  closeSnackbar,
-  selectSnackbar,
-  showSnackbar,
-} from "./redux/snackBarSlice";
+import { closeSnackbar, selectSnackbar } from "./redux/snackBarSlice";
+import { SnackbarProvider } from "notistack";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,13 +39,19 @@ function App() {
   return (
     <div className="App">
       <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <FetchId2>
-            <AppRoutes />
-            <AuthVerify logOut={logOut} />
-          </FetchId2>
-        </BrowserRouter>
+        <SnackbarProvider
+          maxSnack={4}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        >
+          <BrowserRouter>
+            <FetchId2>
+              <AppRoutes />
+              <AuthVerify logOut={logOut} />
+            </FetchId2>
+          </BrowserRouter>
+        </SnackbarProvider>
       </QueryClientProvider>
+
       <Snackbars
         open={snackbar.open}
         message={snackbar.message}
