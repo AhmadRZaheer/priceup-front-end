@@ -23,6 +23,7 @@ import {
   getMeasurementSide,
   setContent,
   getListData,
+  getQuoteState,
 } from "../../redux/estimateCalculations";
 import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { layoutVariants } from "../../utilities/constants";
@@ -40,6 +41,7 @@ const LayoutMeasurements = () => {
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSide = useSelector(getMeasurementSide);
   const listContent = useSelector(getListData);
+  const QuoteState = useSelector(getQuoteState);
 
   const initialValues = measurementSide.reduce((acc, item) => {
     if (item.value === undefined) {
@@ -91,7 +93,8 @@ const LayoutMeasurements = () => {
       dispatch(updateMeasurements(measurementsArray));
 
       /** switch hinges if width increases layout defaults */
-      if (selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
+      if (
+        selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
         doorWidthFromredux > selectedData?.settings?.heavyDutyOption?.threshold
       ) {
         let hingesType = null;
@@ -334,7 +337,10 @@ const LayoutMeasurements = () => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(selectedData.settings.variant) && (
+                  ].includes(
+                    selectedData?.settings?.variant ??
+                      selectedData.layoutData?.variant
+                  ) && (
                     <>
                       <Typography>
                         <input
@@ -474,7 +480,9 @@ const LayoutMeasurements = () => {
                       <img
                         width="100%"
                         height="100%"
-                        src={`${backendURL}/${selectedData?.image}`}
+                        src={`${backendURL}/${
+                          selectedData?.image ?? selectedData?.layoutData?.image
+                        }`}
                         alt="Selected"
                       />
                     </Box>
@@ -505,7 +513,11 @@ const LayoutMeasurements = () => {
                       onClick={() => {
                         dispatch(updateMeasurements([]));
                         dispatch(setDoorWidth(0));
-                        setHandleEstimatesPages("layouts");
+                        if (QuoteState === "edit") {
+                          setHandleEstimatesPages("existing");
+                        } else {
+                          setHandleEstimatesPages("layouts");
+                        }
                       }}
                       sx={{
                         boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",

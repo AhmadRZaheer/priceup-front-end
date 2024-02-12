@@ -187,6 +187,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           ? "measurements"
           : quoteState === "custom"
           ? "custom"
+          : quoteState === "edit"
+          ? "measurements"
           : "existing"
       )
     );
