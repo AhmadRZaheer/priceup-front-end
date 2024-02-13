@@ -23,6 +23,7 @@ import {
 import * as Yup from "yup";
 import PasswordModal from "./addUserPassword";
 import { backendURL } from "../../utilities/common";
+import AccordionLocationEdit from "../ui-components/AccordionLocationEdit";
 
 function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const [sections, setSections] = useState([false, false, false]);
@@ -150,25 +151,25 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     <>
       <Modal open={open} onClose={close}>
         <Box sx={style}>
-          <form onSubmit={formik.handleSubmit}>
-            <Box sx={{ width: "100%", justifyContent: "end", display: "flex" }}>
-              <Close
-                onClick={close}
-                sx={{
-                  color: "#7F56D9",
-                  cursor: "pointer",
-                  mt: -1,
-                  mr: -1,
-                }}
-              />
-            </Box>
-            <Typography
-              sx={{ color: "#667085", fontSize: "16px", fontWeight: "bold" }}
-            >
-              Locations Management
-            </Typography>
+          <Box sx={{ width: "100%", justifyContent: "end", display: "flex" }}>
+            <Close
+              onClick={close}
+              sx={{
+                color: "#7F56D9",
+                cursor: "pointer",
+                mt: -1,
+                mr: -1,
+              }}
+            />
+          </Box>
+          <Typography
+            sx={{ color: "#667085", fontSize: "16px", fontWeight: "bold" }}
+          >
+            Locations Management
+          </Typography>
 
-            <Box sx={{ mt: 2, mb: 10 }}>
+          <Box sx={{ mt: 2, mb: 10 }}>
+            <form onSubmit={formik.handleSubmit}>
               <Accordion
                 sx={{
                   paddingX: "6px",
@@ -193,7 +194,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         mb: -1,
                       }}
                     >
-                      Locations Info{" "}
+                      User Info{" "}
                     </Typography>
                   ) : (
                     <Typography
@@ -202,10 +203,11 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         fontSize: "15px",
                       }}
                     >
-                      Locations Info{" "}
+                      User Info{" "}
                     </Typography>
                   )}
                 </AccordionSummary>
+
                 <AccordionDetails sx={{ padding: 0 }}>
                   <Box mb={2}>
                     <input
@@ -368,214 +370,215 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       />
                     </Box>
                   </Box>
+                  <Box sx={{ p: 1, width: "96%" }}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      sx={{
+                        bgcolor: "#8477DA",
+                        width: "100%",
+                        color: "white",
+                        ":hover": {
+                          bgcolor: "#8477DA",
+                        },
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
                 </AccordionDetails>
               </Accordion>
-
-              <Accordion
-                sx={{
-                  padding: "6px",
-                  mt: 1,
-                }}
+            </form>
+            <AccordionLocationEdit
+              companyData={companydata}
+              close={close}
+              refetch={refetch}
+            />
+            <Accordion
+              sx={{
+                padding: "6px",
+                mt: 1,
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => toggleSection(1)}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  onClick={() => toggleSection(1)}
+                {sections[1] ? (
+                  <Typography
+                    sx={{
+                      color: "#4D5463",
+                      fontSize: "15px",
+                      borderBottom: "1px solid #ccc",
+                      width: "100%",
+                      pr: 4,
+                      mr: -3,
+                      pb: 1,
+                      mb: -1,
+                    }}
+                  >
+                    User Allotment{" "}
+                  </Typography>
+                ) : (
+                  <Typography
+                    sx={{
+                      color: "#4D5463",
+                      fontSize: "15px",
+                    }}
+                  >
+                    User Allotment{" "}
+                  </Typography>
+                )}
+              </AccordionSummary>
+              <AccordionDetails sx={{ p: 0 }}>
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexWrap: "wrap",
+                      alignItems: "baseline",
+                      gap: "4px",
+                      pl: 3,
+                      pb: 2,
+                    }}
+                    component="ul"
+                  >
+                    {haveAccessArray.map((data) => {
+                      return (
+                        <Tooltip
+                          // title={
+                          //   selectedRow.company_id === data.id
+                          //     ? "Cannot Remove"
+                          //     : ""
+                          // }
+                          key={data._id}
+                        >
+                          <Box
+                            sx={{
+                              borderRadius: "7px",
+                            }}
+                            key={data._id}
+                          >
+                            <Chip
+                              label={data.name}
+                              onDelete={() => removeLocationAccess(data)}
+                              deleteIcon={
+                                <Close
+                                  style={{
+                                    color: "white",
+                                    width: "16px",
+                                    height: "16px",
+                                    display: "block",
+                                  }}
+                                />
+                              }
+                              sx={{
+                                color: "white",
+                                bgcolor: "#C6C6C6",
+                                borderRadius: "7px",
+                              }}
+                            />
+                          </Box>
+                        </Tooltip>
+                      );
+                    })}
+                  </Box>
+                </Box>
+                <Accordion
+                  sx={{
+                    paddingX: "6px",
+                    boxShadow: "none !important",
+                  }}
                 >
-                  {sections[1] ? (
-                    <Typography
-                      sx={{
-                        color: "#4D5463",
-                        fontSize: "15px",
-                        borderBottom: "1px solid #ccc",
-                        width: "100%",
-                        pr: 4,
-                        mr: -3,
-                        pb: 1,
-                        mb: -1,
-                      }}
-                    >
-                      User Allotment{" "}
-                    </Typography>
-                  ) : (
-                    <Typography
-                      sx={{
-                        color: "#4D5463",
-                        fontSize: "15px",
-                      }}
-                    >
-                      User Allotment{" "}
-                    </Typography>
-                  )}
-                </AccordionSummary>
-                <AccordionDetails sx={{ p: 0 }}>
-                  <Box>
+                  <AccordionSummary
+                    expandIcon={<ExpandMore sx={{ color: "#4D5463" }} />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    onClick={() => toggleSection(2)}
+                  >
+                    {sections[2] ? (
+                      <Typography
+                        sx={{
+                          color: "#4D5463",
+                          fontSize: "14px",
+                          borderBottom: "1px solid #ccc",
+                          width: "100%",
+                          pr: 5.8,
+                          mr: -3.5,
+                          pb: 1,
+                          mb: -1,
+                          ml: -0.6,
+                          pl: 0.2,
+                        }}
+                      >
+                        Add User
+                      </Typography>
+                    ) : (
+                      <Typography
+                        sx={{
+                          color: "black",
+                          fontSize: "14px",
+                        }}
+                      >
+                        Add User
+                      </Typography>
+                    )}
+                  </AccordionSummary>
+                  <AccordionDetails sx={{ pt: 0 }}>
                     <Box
                       sx={{
                         display: "flex",
                         flexWrap: "wrap",
-                        alignItems: "baseline",
+                        alignItems: "baselines",
                         gap: "4px",
-                        pl: 3,
-                        pb: 2,
+                        p: 0,
                       }}
                       component="ul"
                     >
-                      {haveAccessArray.map((data) => {
+                      {giveAccessArray?.map((data) => {
                         return (
-                          <Tooltip
-                            // title={
-                            //   selectedRow.company_id === data.id
-                            //     ? "Cannot Remove"
-                            //     : ""
-                            // }
-                            key={data._id}
-                          >
-                            <Box
+                          <Box sx={{ borderRadius: "7px", p: 0 }} key={data.id}>
+                            <Chip
+                              onClick={() => handleOpen(data)}
+                              label={data.name}
+                              // onDelete={
+                              //   data._id ? undefined : handleDelete(data)
+                              // }
                               sx={{
+                                color: "white",
+                                bgcolor: "#C6C6C6",
                                 borderRadius: "7px",
+                                cursor: "pointer",
                               }}
-                              key={data._id}
-                            >
-                              <Chip
-                                label={data.name}
-                                onDelete={() => removeLocationAccess(data)}
-                                deleteIcon={
-                                  <Close
-                                    style={{
-                                      color: "white",
-                                      width: "16px",
-                                      height: "16px",
-                                      display: "block",
-                                    }}
-                                  />
-                                }
-                                sx={{
-                                  color: "white",
-                                  bgcolor: "#C6C6C6",
-                                  borderRadius: "7px",
-                                }}
-                              />
-                            </Box>
-                          </Tooltip>
+                            />
+                          </Box>
                         );
                       })}
                     </Box>
-                  </Box>
-                  <Accordion
-                    sx={{
-                      paddingX: "6px",
-                      boxShadow: "none !important",
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMore sx={{ color: "#4D5463" }} />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      onClick={() => toggleSection(2)}
-                    >
-                      {sections[2] ? (
-                        <Typography
-                          sx={{
-                            color: "#4D5463",
-                            fontSize: "14px",
-                            borderBottom: "1px solid #ccc",
-                            width: "100%",
-                            pr: 5.8,
-                            mr: -3.5,
-                            pb: 1,
-                            mb: -1,
-                            ml: -0.6,
-                            pl: 0.2,
-                          }}
-                        >
-                          Add User
-                        </Typography>
-                      ) : (
-                        <Typography
-                          sx={{
-                            color: "black",
-                            fontSize: "14px",
-                          }}
-                        >
-                          Add User
-                        </Typography>
-                      )}
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ pt: 0 }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexWrap: "wrap",
-                          alignItems: "baselines",
-                          gap: "4px",
-                          p: 0,
-                        }}
-                        component="ul"
-                      >
-                        {giveAccessArray?.map((data) => {
-                          return (
-                            <Box
-                              sx={{ borderRadius: "7px", p: 0 }}
-                              key={data.id}
-                            >
-                              <Chip
-                                onClick={() => handleOpen(data)}
-                                label={data.name}
-                                // onDelete={
-                                //   data._id ? undefined : handleDelete(data)
-                                // }
-                                sx={{
-                                  color: "white",
-                                  bgcolor: "#C6C6C6",
-                                  borderRadius: "7px",
-                                  cursor: "pointer",
-                                }}
-                              />
-                            </Box>
-                          );
-                        })}
-                      </Box>
-                    </AccordionDetails>
-                  </Accordion>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+                  </AccordionDetails>
+                </Accordion>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
 
-            <Box
-              sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}
-            >
-              <Button
-                onClick={close}
-                variant="outlined"
-                sx={{
+          <Box sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}>
+            <Button
+              onClick={close}
+              variant="outlined"
+              sx={{
+                border: "1px solid #D0D5DD",
+                width: "20%",
+                color: "#344054",
+                ":hover": {
                   border: "1px solid #D0D5DD",
-                  width: "20%",
-                  color: "#344054",
-                  ":hover": {
-                    border: "1px solid #D0D5DD",
-                  },
-                }}
-              >
-                Close
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{
-                  bgcolor: "#8477DA",
-                  width: "20%",
-                  color: "white",
-                  ":hover": {
-                    bgcolor: "#8477DA",
-                  },
-                }}
-              >
-                Save
-              </Button>
-            </Box>
-          </form>
+                },
+              }}
+            >
+              Close
+            </Button>
+          </Box>
         </Box>
       </Modal>
       <PasswordModal

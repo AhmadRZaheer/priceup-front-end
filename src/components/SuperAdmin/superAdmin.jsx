@@ -75,7 +75,6 @@ const SuperAdminTable = () => {
   const [search, setSearch] = useState("");
   const handleClose = () => setOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
-  console.log(deleteisLoading, "deleteisLoading", isSuccess);
   const handleDeleteUser = async () => {
     await deleteuserdata(isUserData?.user);
   };
@@ -99,7 +98,6 @@ const SuperAdminTable = () => {
     setEditOpen(true);
     setisUserData(data);
   };
-  console.log(AdminData, "AdminData");
 
   // const actionColumn = [
   //   {
@@ -300,31 +298,29 @@ const SuperAdminTable = () => {
           </Typography>
         </Box>
       </div>
-
-      <TextField
-        placeholder="Search by Name"
-        variant="standard"
-        fullWidth
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        sx={{
-          mb: 2,
-          mt: 10,
-          width: "20%", // You can adjust the width as needed
-          marginLeft: "30px",
-          mt: 3, // Adjust the margin as needed
-          ".MuiInputBase-root:after": {
-            border: "1px solid #8477DA",
-          },
-        }}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Search sx={{ color: "#8477DA" }} />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <Box sx={{ mt: 4, ml: 4, mb: 2 }}>
+        <TextField
+          placeholder="Search by Name"
+          variant="standard"
+          fullWidth
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          sx={{
+            width: "20% !important", // You can adjust the width as needed
+            // Adjust the margin as needed
+            ".MuiInputBase-root:after": {
+              border: "1px solid #8477DA",
+            },
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search sx={{ color: "#8477DA" }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </Box>
       <div className="hardwareTable-superadmin">
         {/* <DataGrid
           getRowId={(row) => row._id}
@@ -410,7 +406,7 @@ const SuperAdminTable = () => {
                 >
                   {/* Box 1 */}
                   <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                   >
                     {/* Name and logo */}
                     <Box
@@ -450,6 +446,21 @@ const SuperAdminTable = () => {
                         }
                       )}
                     </Typography>
+                    <Box sx={{ mt: 2 }}>
+                      <Typography sx={{ fontSize: "16px", color: "#576073" }}>
+                        Location
+                      </Typography>
+                      <Box sx={{ mt: 1 }}>
+                        <Typography sx={{ fontSize: "14px", color: "#667085" }}>
+                          {item?.company?.name}
+                        </Typography>
+                        <Typography
+                          sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
+                        >
+                          {item?.company?.address}
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Box>
                   {/* Box 2 */}
                   <Box

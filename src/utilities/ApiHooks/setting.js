@@ -38,51 +38,22 @@ export const useEditSetting = () => {
   const dispatch = useDispatch();
   const handleEditSetting = async (editedData) => {
     const token = localStorage.getItem("token");
+    console.log(editedData, "editedData");
     const formData = new FormData();
-    const data = {
-          address: editedData.data.address,
-          miscPricing: {
-            pricingFactor: editedData.data.miscPricing.pricingFactor,
-            hourlyRate: editedData.data.miscPricing.hourlyRate,
-            pricingFactorStatus:
-              editedData.data.miscPricing?.pricingFactorStatus,
-          },
-          fabricatingPricing: {
-            oneHoleOneByTwoInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleOneByTwoInchGlass,
-            oneHoleThreeByEightInchGlass:
-              editedData?.data.fabricatingPricing?.oneHoleThreeByEightInchGlass,
-            clampCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.clampCutoutOneByTwoInch,
-            clampCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.clampCutoutThreeByEightInch,
-            hingeCutoutOneByTwoInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutOneByTwoInch,
-            hingeCutoutThreeByEightInch:
-              editedData?.data.fabricatingPricing?.hingeCutoutThreeByEightInch,
-            minterOneByTwoInch:
-              editedData?.data.fabricatingPricing?.minterOneByTwoInch,
-            minterThreeByEightInch:
-              editedData?.data.fabricatingPricing?.minterThreeByEightInch,
-            notchOneByTwoInch:
-              editedData?.data.fabricatingPricing?.notchOneByTwoInch,
-            notchThreeByEightInch:
-              editedData?.data.fabricatingPricing?.notchThreeByEightInch,
-            outageOneByTwoInch:
-              editedData?.data.fabricatingPricing?.outageOneByTwoInch,
-            outageThreeByEightInch:
-              editedData?.data.fabricatingPricing?.outageThreeByEightInch,
-            polishPricePerOneByTwoInch:
-              editedData?.data.fabricatingPricing?.polishPricePerOneByTwoInch,
-            polishPricePerThreeByEightInch:
-              editedData?.data.fabricatingPricing
-                ?.polishPricePerThreeByEightInch,
-          },
-        };
-    formData.append("data", JSON.stringify(data));
+
     if (editedData.data?.image) {
       formData.append("image", editedData.data.image);
+      delete editedData.data?.image;
     }
+    formData.append("data", JSON.stringify(editedData.data));
+
+    // if (editedData.data?.name) {
+    //   formData.append("name", editedData.data.name);
+    // }
+    // if (editedData.data?.name) {
+    //   formData.append("name", editedData.data.);
+    // }
+    // console.log(formData, "formDa")
 
     try {
       const response = await axios.put(

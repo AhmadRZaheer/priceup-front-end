@@ -85,6 +85,7 @@ const CampanySetting = () => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
+      console.log(values, "editedData")
       handleEditSetting(values);
     },
   });
