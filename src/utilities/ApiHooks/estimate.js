@@ -62,7 +62,11 @@ export const useCreateEstimates = () => {
     const decodedToken = parseJwt(token);
     const username = decodedToken.name;
 
-    const randomNumbers = generateRandomNumbers(4);
+    const date = new Date();
+    var current_date =
+      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    var current_time =
+      date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     try {
       const response = await axios.post(
@@ -74,7 +78,7 @@ export const useCreateEstimates = () => {
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
             status: "pending",
-            name: `${username}${randomNumbers}`,
+            name: `${current_date} ${current_time}`,
           },
         },
         {
