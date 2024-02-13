@@ -185,7 +185,8 @@ export const useCreateAdminsMembers = () => {
     formData.append("name", props.name);
     formData.append("company_id", decodedToken?.company_id);
     formData.append("email", props.email);
-    formData.append("password", props.password);
+    formData.append("locationName", props.locationName);
+    
 
     try {
       const response = await axios.post(`${backendURL}/users/save`, formData, {

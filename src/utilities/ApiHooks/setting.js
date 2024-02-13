@@ -45,15 +45,13 @@ export const useEditSetting = () => {
       formData.append("image", editedData.data.image);
       delete editedData.data?.image;
     }
+    if (
+      editedData.data?.image === null ??
+      editedData.data?.image === undefined
+    ) {
+      delete editedData.data?.image;
+    }
     formData.append("data", JSON.stringify(editedData.data));
-
-    // if (editedData.data?.name) {
-    //   formData.append("name", editedData.data.name);
-    // }
-    // if (editedData.data?.name) {
-    //   formData.append("name", editedData.data.);
-    // }
-    // console.log(formData, "formDa")
 
     try {
       const response = await axios.put(
