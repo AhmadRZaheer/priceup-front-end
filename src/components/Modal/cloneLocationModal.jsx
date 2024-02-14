@@ -31,7 +31,7 @@ const style = {
 
 export default function CloneLocationModel({ open, close, data, refetch }) {
   const [selectedImage, setSelectedImage] = useState(null);
-
+  console.log(data, data?.user?._id, "data");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -59,7 +59,8 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
 
   const formik = useFormik({
     initialValues: {
-      id: data?._id,
+      id: data?.user?._id,
+      company_id: data?.company?._id,
       name: "",
       image: "",
       email: "",

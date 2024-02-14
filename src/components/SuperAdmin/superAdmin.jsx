@@ -27,7 +27,7 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
-import { Search } from "@mui/icons-material";
+import { ContentCopy, Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
@@ -617,19 +617,17 @@ const SuperAdminTable = () => {
                   <Box></Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <Button
-                        variant="outlined"
+                      <IconButton
                         sx={{
-                          color: "#101828",
-                          border: "1px solid #D0D5DD",
-                          "&:hover": {
-                            border: "1px solid #D0D5DD",
-                          },
+                          p: 0,
+                          borderRadius: "100%",
+                          width: 28,
+                          height: 28,
                         }}
                         onClick={() => handleOpenClone(item)}
                       >
-                        Copy
-                      </Button>
+                        <ContentCopy sx={{ width: "20px", height: "20px" }} />
+                      </IconButton>
                       <IconButton
                         sx={{
                           p: 0,

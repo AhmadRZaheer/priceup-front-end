@@ -230,23 +230,28 @@ export const useCloneLocation = () => {
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
+    console.log(decodedToken, "decodedToken");
     const formData = new FormData();
     if (props.image) {
       formData.append("image", props.image);
     }
     formData.append("id", props.id);
     formData.append("name", props.name);
-    formData.append("company_id", decodedToken?.company_id);
+    formData.append("company_id", props?.company_id);
     formData.append("email", props.email);
     formData.append("locationName", props.locationName);
 
     try {
-      const response = await axios.post(`${backendURL}/users/clonelocation/save`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
+      const response = await axios.post(
+        `${backendURL}/users/clonelocation/save`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (response.data.code === 200) {
         dispatch(
