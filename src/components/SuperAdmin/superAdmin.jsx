@@ -34,6 +34,7 @@ import { useDispatch } from "react-redux";
 import DeleteModal from "../Modal/deleteModal";
 import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
+import CloneLocationModel from "../Modal/cloneLocationModal";
 
 const SuperAdminTable = () => {
   const {
@@ -56,7 +57,7 @@ const SuperAdminTable = () => {
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
   // const [haveAccessUsers, sethaveAccessUsers] = useState([]);
-  // const [isEdit, setIsEdit] = useState(false);
+  const [OpenClone, setOpenClone] = useState(false);
   const [isUserData, setisUserData] = useState(null);
   // useEffect(() => {
   //   sethaveAccessUsers((prevHaveAccessArray) => {
@@ -98,6 +99,14 @@ const SuperAdminTable = () => {
     setEditOpen(true);
     setisUserData(data);
   };
+  const handleOpenClone = (data) => {
+    setOpenClone(true);
+    setisUserData(data);
+  };
+  const handleCloseClone = () => {
+    setOpenClone(false);
+  };
+  console.log(isUserData, "isUserData");
 
   // const actionColumn = [
   //   {
@@ -608,6 +617,19 @@ const SuperAdminTable = () => {
                   <Box></Box>
                   <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Button
+                        variant="outlined"
+                        sx={{
+                          color: "#101828",
+                          border: "1px solid #D0D5DD",
+                          "&:hover": {
+                            border: "1px solid #D0D5DD",
+                          },
+                        }}
+                        onClick={() => handleOpenClone(item)}
+                      >
+                        Copy
+                      </Button>
                       <IconButton
                         sx={{
                           p: 0,
@@ -674,6 +696,12 @@ const SuperAdminTable = () => {
         refetch={AdminRefetch}
         // data={edit}
         // isEdit={isEdit}
+      />
+      <CloneLocationModel
+        open={OpenClone}
+        close={handleCloseClone}
+        refetch={AdminRefetch}
+        data={isUserData}
       />
     </Box>
   );

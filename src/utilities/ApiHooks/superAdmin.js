@@ -186,7 +186,6 @@ export const useCreateAdminsMembers = () => {
     formData.append("company_id", decodedToken?.company_id);
     formData.append("email", props.email);
     formData.append("locationName", props.locationName);
-    
 
     try {
       const response = await axios.post(`${backendURL}/users/save`, formData, {
@@ -226,7 +225,59 @@ export const useCreateAdminsMembers = () => {
 
   return useMutation(handleCreate);
 };
+export const useCloneLocation = () => {
+  const dispatch = useDispatch();
+  const handleCreate = async (props) => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("id", props.id);
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("email", props.email);
+    formData.append("locationName", props.locationName);
 
+    try {
+      const response = await axios.post(`${backendURL}/users/clonelocation/save`, formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "User created Successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleCreate);
+};
 export const useUserStatus = () => {
   const dispatch = useDispatch();
   const handleEdit = async (status) => {
