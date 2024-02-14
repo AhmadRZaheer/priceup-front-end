@@ -75,6 +75,7 @@ export default function AddEditGlassAddon({
   };
 
   const handleEditClick = (props) => {
+    console.log(props, "props.glassAddonData");
     editGlassAddon({ glassAddonData: props, id: data?._id });
   };
   const validationSchema = Yup.object().shape({
