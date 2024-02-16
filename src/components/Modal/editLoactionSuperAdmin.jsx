@@ -19,6 +19,7 @@ import {
   useEditAccessCustomUser,
   useEditCustomUser,
   useEditUser,
+  useResetUserPassword,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
 import PasswordModal from "./addUserPassword";
@@ -71,6 +72,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   });
 
   const { mutate: editFinish, isSuccess } = useEditUser();
+  const { mutate: ResetPassword } = useResetUserPassword();
   const { mutate: updateCustomUser, isSuccess: userUpdated } =
     useEditAccessCustomUser();
   const formik = useFormik({
@@ -147,6 +149,9 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     customUserRefech();
   };
 
+  const handleRestPass = () => {
+    ResetPassword({ userid: userdata?._id });
+  };
   return (
     <>
       <Modal open={open} onClose={close}>
@@ -257,26 +262,46 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         </Typography>
                       </Box>
                     </label>
-                    {selectedImage ? (
-                      <img
-                        width={"80px"}
-                        height={"80px"}
-                        style={{ margin: 10 }}
-                        src={URL.createObjectURL(selectedImage)}
-                        alt="Selected"
-                      />
-                    ) : userdata?.image ? (
-                      <img
-                        width={"80px"}
-                        height={"80px"}
-                        style={{ margin: 10 }}
-                        src={`${backendURL}/${userdata?.image}`}
-                        alt="Selected"
-                      />
-                    ) : (
-                      ""
-                    )}
-
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "end",
+                      }}
+                    >
+                      {selectedImage ? (
+                        <img
+                          width={"80px"}
+                          height={"80px"}
+                          style={{ margin: 10 }}
+                          src={URL.createObjectURL(selectedImage)}
+                          alt="Selected"
+                        />
+                      ) : userdata?.image ? (
+                        <img
+                          width={"80px"}
+                          height={"80px"}
+                          style={{ margin: 10 }}
+                          src={`${backendURL}/${userdata?.image}`}
+                          alt="Selected"
+                        />
+                      ) : (
+                        ""
+                      )}
+                      <Button
+                        variant="outlined"
+                        onClick={handleRestPass}
+                        sx={{
+                          height: "34px",
+                          width: "45%",
+                          color: "#8477DA",
+                          border: "1px solid #8477DA",
+                          mb: 1,
+                        }}
+                      >
+                        Reset Password
+                      </Button>
+                    </Box>
                     <Box sx={{ width: "100%" }}>
                       <Typography
                         sx={{
@@ -344,7 +369,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       />
                     </Box>
                     <Box sx={{ width: "100%", mt: 1.5 }}>
-                      <Typography
+                      {/* <Typography
                         sx={{
                           color: "#344054",
                           fontSize: "14px",
@@ -367,7 +392,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         helperText={
                           formik.touched.password && formik.errors.password
                         }
-                      />
+                      /> */}
                     </Box>
                   </Box>
                   <Box sx={{ p: 1, width: "96%" }}>

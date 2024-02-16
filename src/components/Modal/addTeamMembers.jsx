@@ -13,6 +13,7 @@ import { useDropzone } from "react-dropzone";
 import {
   useCreateTeamMembers,
   useEditTeamMembers,
+  useResetPasswordTeamMembers,
 } from "../../utilities/ApiHooks/team";
 import { backendURL } from "../../utilities/common";
 import DefaultImage from "../ui-components/defaultImage";
@@ -52,6 +53,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useEditTeamMembers();
+  const { mutate: ResetPassword } = useResetPasswordTeamMembers();
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -108,6 +110,9 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
       }
     },
   });
+  const handleRestPass = () => {
+    ResetPassword({ id: data._id });
+  };
 
   return (
     <div>
@@ -177,23 +182,48 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 </Typography>
               </Box>
             </label>
-            {selectedImage ? (
-              <img
-                width={"80px"}
-                height={"80px"}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
-              />
-            ) : data?.image !== undefined || null ? (
-              <img
-                width={"80px"}
-                height={"80px"}
-                src={`${backendURL}/${data?.image}`}
-                alt="logo team"
-              />
-            ) : (
-              ""
-            )}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "end",
+              }}
+            >
+              {selectedImage ? (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                />
+              ) : data?.image !== undefined || null ? (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={`${backendURL}/${data?.image}`}
+                  alt="logo team"
+                />
+              ) : (
+                ""
+              )}
+              {isEdit ? (
+                <Button
+                  variant="outlined"
+                  onClick={handleRestPass}
+                  sx={{
+                    height: "34px",
+                    width: "45%",
+                    color: "#8477DA",
+                    border: "1px solid #8477DA",
+                    mb: 1,
+                  }}
+                >
+                  Reset Password
+                </Button>
+              ) : (
+                ""
+              )}
+            </Box>
           </Box>
           <Box>
             <Typography>Name</Typography>
