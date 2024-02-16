@@ -37,13 +37,13 @@ function SingleUser({ item, active, handleClick }) {
               width: "10%",
               display: "flex",
               justifyContent: "end",
-              mt: 1.4,
+              mt: 1.7,
             }}
           >
             <div
               style={{
-                width: 16,
-                height: 16,
+                width: 10,
+                height: 10,
                 borderRadius: "100%",
                 background: "#4de369",
               }}

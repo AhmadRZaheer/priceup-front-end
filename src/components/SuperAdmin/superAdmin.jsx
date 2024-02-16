@@ -27,13 +27,14 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
-import { Search } from "@mui/icons-material";
+import { ContentCopy, Search } from "@mui/icons-material";
 import { backendURL } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
 import DeleteModal from "../Modal/deleteModal";
 import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
+import CloneLocationModel from "../Modal/cloneLocationModal";
 
 const SuperAdminTable = () => {
   const {
@@ -56,7 +57,7 @@ const SuperAdminTable = () => {
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
   // const [haveAccessUsers, sethaveAccessUsers] = useState([]);
-  // const [isEdit, setIsEdit] = useState(false);
+  const [OpenClone, setOpenClone] = useState(false);
   const [isUserData, setisUserData] = useState(null);
   // useEffect(() => {
   //   sethaveAccessUsers((prevHaveAccessArray) => {
@@ -98,6 +99,14 @@ const SuperAdminTable = () => {
     setEditOpen(true);
     setisUserData(data);
   };
+  const handleOpenClone = (data) => {
+    setOpenClone(true);
+    setisUserData(data);
+  };
+  const handleCloseClone = () => {
+    setOpenClone(false);
+  };
+  console.log(isUserData, "isUserData");
 
   // const actionColumn = [
   //   {
@@ -615,6 +624,17 @@ const SuperAdminTable = () => {
                           width: 28,
                           height: 28,
                         }}
+                        onClick={() => handleOpenClone(item)}
+                      >
+                        <ContentCopy sx={{ width: "20px", height: "20px" }} />
+                      </IconButton>
+                      <IconButton
+                        sx={{
+                          p: 0,
+                          borderRadius: "100%",
+                          width: 28,
+                          height: 28,
+                        }}
                         onClick={() => handleOpenDelete(item)}
                       >
                         <img src={DeleteIcon} alt="delete icon" />
@@ -674,6 +694,12 @@ const SuperAdminTable = () => {
         refetch={AdminRefetch}
         // data={edit}
         // isEdit={isEdit}
+      />
+      <CloneLocationModel
+        open={OpenClone}
+        close={handleCloseClone}
+        refetch={AdminRefetch}
+        data={isUserData}
       />
     </Box>
   );

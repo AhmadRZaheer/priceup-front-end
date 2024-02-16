@@ -55,8 +55,8 @@ export const useDeleteFinishes = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -109,7 +109,7 @@ export const useCreateFinish = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -124,8 +124,10 @@ export const useEditFinish = () => {
   const handleEdit = async (updatedHardware) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
+    const slug = createSlug(updatedHardware?.hardwareLabel);
 
     formData.append("name", updatedHardware?.hardwareLabel);
+    formData.append("slug", slug);
     formData.append("image", updatedHardware?.image);
     formData.append("holesNeeded", updatedHardware?.thickness);
     console.log(formData,'formData finishes');
@@ -159,7 +161,7 @@ export const useEditFinish = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
     }
   };
 
