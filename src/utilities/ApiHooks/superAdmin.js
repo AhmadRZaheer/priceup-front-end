@@ -103,8 +103,7 @@ export const useDeleteStaff = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
     }
   };
 
@@ -319,7 +318,7 @@ export const useUserStatus = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: `${error}`,
+          message:`${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -377,7 +376,7 @@ export const useEditUser = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: "An error occurred while updating the user data.",
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );

@@ -55,9 +55,14 @@ export const useDeleteGlassAddonOption = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       console.error("Delete failed", error);
-      throw error;
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -89,8 +94,13 @@ export const useDeleteGlassAddon = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -138,7 +148,12 @@ export const useCreateGlassAddon = () => {
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -286,7 +301,12 @@ export const useEditGlassAddon = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error.message, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -325,7 +345,12 @@ export const useEditFullGlassAddon = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

@@ -106,7 +106,7 @@ export const useCreateEstimates = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "success",
         })
       );
@@ -171,7 +171,7 @@ export const useEditEstimates = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -211,7 +211,7 @@ export const useDeleteEstimates = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );

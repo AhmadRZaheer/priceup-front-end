@@ -55,8 +55,8 @@ export const useDeleteFinishes = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -109,7 +109,7 @@ export const useCreateFinish = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -161,7 +161,7 @@ export const useEditFinish = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
     }
   };
 

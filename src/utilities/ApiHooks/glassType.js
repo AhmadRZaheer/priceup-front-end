@@ -53,8 +53,7 @@ export const useDeleteGlassType = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      showSnackbar({ message: error, severity: "error" });
-      throw error;
+      showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" });
     }
   };
 
@@ -83,8 +82,8 @@ export const useDeleteGlassTypeFull = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -131,11 +130,11 @@ export const useCreateGlassType = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
-      throw new Error(error);
+      throw new Error(`${error.response?.data?.message}`);
     }
   };
 
@@ -184,7 +183,7 @@ export const useEditGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -223,7 +222,7 @@ export const useEditFullGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
