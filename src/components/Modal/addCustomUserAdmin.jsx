@@ -28,7 +28,6 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     isSuccess: updated,
     isLoading,
   } = useEditCustomUser();
-  const { mutate: ResetPassword } = useResetCustomUserPassword();
   const [selectedImage, setSelectedImage] = useState(null);
 
   const style = {
@@ -77,9 +76,6 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     const file = e.target.files[0];
     setSelectedImage(file);
     formik.setFieldValue("image", file);
-  };
-  const handleRestPass = () => {
-    ResetPassword({ id: isEdit?.data?._id });
   };
   return (
     <>
@@ -136,46 +132,24 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     </Typography>
                   </Box>
                 </label>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "end",
-                  }}
-                >
-                  {selectedImage ? (
-                    <img
-                      width={"80px"}
-                      height={"80px"}
-                      src={URL.createObjectURL(selectedImage)}
-                      alt="Selected"
-                    />
-                  ) : isEdit?.data?.image !== undefined || null ? (
-                    <img
-                      width={"80px"}
-                      height={"80px"}
-                      src={`${backendURL}/${isEdit?.data?.image}`}
-                      alt="logo team"
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {isEdit?.type && (
-                    <Button
-                      variant="outlined"
-                      onClick={handleRestPass}
-                      sx={{
-                        height: "34px",
-                        width: "45%",
-                        color: "#8477DA",
-                        border: "1px solid #8477DA",
-                        mb: 1,
-                      }}
-                    >
-                      Reset Password
-                    </Button>
-                  )}
-                </Box>
+
+                {selectedImage ? (
+                  <img
+                    width={"80px"}
+                    height={"80px"}
+                    src={URL.createObjectURL(selectedImage)}
+                    alt="Selected"
+                  />
+                ) : isEdit?.data?.image !== undefined || null ? (
+                  <img
+                    width={"80px"}
+                    height={"80px"}
+                    src={`${backendURL}/${isEdit?.data?.image}`}
+                    alt="logo team"
+                  />
+                ) : (
+                  ""
+                )}
               </Box>
               <Box>
                 <Typography>Name</Typography>
@@ -196,6 +170,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                 <CustomInputField
                   placeholder="Name"
                   name="email"
+                  disabled={isEdit?.type ? true : false}
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

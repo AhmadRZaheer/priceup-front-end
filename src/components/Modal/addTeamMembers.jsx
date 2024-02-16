@@ -206,19 +206,23 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
               ) : (
                 ""
               )}
-              <Button
-                variant="outlined"
-                onClick={handleRestPass}
-                sx={{
-                  height: "34px",
-                  width: "45%",
-                  color: "#8477DA",
-                  border: "1px solid #8477DA",
-                  mb: 1,
-                }}
-              >
-                Reset Password
-              </Button>
+              {isEdit ? (
+                <Button
+                  variant="outlined"
+                  onClick={handleRestPass}
+                  sx={{
+                    height: "34px",
+                    width: "45%",
+                    color: "#8477DA",
+                    border: "1px solid #8477DA",
+                    mb: 1,
+                  }}
+                >
+                  Reset Password
+                </Button>
+              ) : (
+                ""
+              )}
             </Box>
           </Box>
           <Box>
