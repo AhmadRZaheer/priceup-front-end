@@ -240,7 +240,7 @@ export const useEditGlassAddon = () => {
   const dispatch = useDispatch();
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-
+    const slug = createSlug(props.name);
     try {
       const options = {};
       const formData = new FormData();
@@ -253,6 +253,7 @@ export const useEditGlassAddon = () => {
       // Check if glassAddonData exists before appending to FormData
       if (props.glassAddonData) {
         formData.append("name", props.glassAddonData.name);
+        formData.append("slug", slug);
 
         if (props.glassAddonData.image) {
           formData.append("image", props.glassAddonData.image);

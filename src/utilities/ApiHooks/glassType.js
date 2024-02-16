@@ -148,7 +148,7 @@ export const useEditGlassType = () => {
     const token = localStorage.getItem("token");
     try {
       const formData = new FormData();
-
+      const slug = createSlug(props.glassTypeData.name);
       // Append image field
       if (props?.glassTypeData?.image) {
         formData.append("image", props.glassTypeData.image);
@@ -156,6 +156,7 @@ export const useEditGlassType = () => {
 
       if (props.glassTypeData) {
         formData.append("name", props.glassTypeData.name);
+        formData.append("slug", slug);
       }
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,

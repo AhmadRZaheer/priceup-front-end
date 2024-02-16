@@ -124,8 +124,10 @@ export const useEditFinish = () => {
   const handleEdit = async (updatedHardware) => {
     const token = localStorage.getItem("token");
     const formData = new FormData();
+    const slug = createSlug(updatedHardware?.hardwareLabel);
 
     formData.append("name", updatedHardware?.hardwareLabel);
+    formData.append("slug", slug);
     formData.append("image", updatedHardware?.image);
     formData.append("holesNeeded", updatedHardware?.thickness);
     console.log(formData,'formData finishes');

@@ -243,7 +243,7 @@ export const useCloneLocation = () => {
 
     try {
       const response = await axios.post(
-        `${backendURL}/users/clonelocation/save`,
+        `${backendURL}/companies/clone`,
         formData,
         {
           headers: {

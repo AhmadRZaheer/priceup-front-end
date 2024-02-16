@@ -260,11 +260,11 @@ export const useEditHardware = () => {
     const token = localStorage.getItem("token");
     console.log(props, "props");
     console.log(props.hardwareData.image, "props.id");
-
+    const slug = createSlug(props.hardwareData.name);
     try {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
-
+      formData.append("slug", slug);
       if (props.hardwareData.image) {
         formData.append("image", props.hardwareData.image);
       }
