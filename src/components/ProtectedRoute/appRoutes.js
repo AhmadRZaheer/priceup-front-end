@@ -23,6 +23,7 @@ import LandingPage from "../../pages/LandingPage/landingPage";
 import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 import Staff from "../../pages/Staff/staff";
 import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
+import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -39,11 +40,11 @@ const AppRoutes = () => {
   };
 
   const isAdmin = () => {
-        return decodedToken?.role === "admin";
+    return decodedToken?.role === "admin";
   };
 
   const isStaff = () => {
-        return decodedToken?.role === "staff";
+    return decodedToken?.role === "staff";
   };
 
   const getHomepageURL = () => {
@@ -110,6 +111,9 @@ const AppRoutes = () => {
           <Route index element={<Admin />} />
           <Route path="/team" element={<AdminTeam />} />
           <Route path="/user" element={<AdminUser />} />
+          {process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email && (
+            <Route path="/superadmins" element={<Super_SuperAdmin />} />
+          )}
           <Route path="*" element={<Admin />} />
         </Route>
       ) : (

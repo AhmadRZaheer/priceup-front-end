@@ -24,13 +24,21 @@ const SuperSidebar = () => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const [searchQuery, setSearchQuery] = useState("");
+  const [SuperUserAdmin, setSuperUserAdmin] = useState(null); // State for search query
   const Logout = () => {
     dispatch(logoutHandler());
     window.location.href = "/adminlogin";
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+
+  useEffect(() => {
+    if (process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email) {
+      setSuperUserAdmin(decodedToken);
+    }
+  }, []);
+  console.log(SuperUserAdmin, "setSuperUserAdmin");
 
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -135,6 +143,25 @@ const SuperSidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
+                {process.env.REACT_APP_SUPER_USER_ADMIN ==
+                  decodedToken.email && (
+                  <NavLink to="/superadmins" className="link">
+                    <li
+                      className={` ${
+                        location.pathname === "/superadmins" ? "active" : ""
+                      }`}
+                    >
+                      <IconButton sx={{ color: "white", padding: 0.2 }}>
+                        <img
+                          style={{ paddingRight: 10 }}
+                          src={TremIcon}
+                          alt="image of customer"
+                        />
+                        <span>Super Admins</span>
+                      </IconButton>
+                    </li>
+                  </NavLink>
+                )}
               </ul>
             </div>
           </Box>

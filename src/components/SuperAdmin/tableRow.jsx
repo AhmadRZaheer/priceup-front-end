@@ -6,6 +6,7 @@ import {
 } from "../../utilities/ApiHooks/superAdmin";
 import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
+import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_superAdmins";
 
 const TableRow = ({ row, onToggleChange, type }) => {
   const {
@@ -13,7 +14,7 @@ const TableRow = ({ row, onToggleChange, type }) => {
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useUserStatus();
-
+  const { mutate: updateSuper_SuperAdmin } = useUpdateSuper_SuperAdmins();
   const {
     mutate: updateStatusUser,
     isLoading: LoadingForEditUser,
@@ -33,6 +34,8 @@ const TableRow = ({ row, onToggleChange, type }) => {
       editTeamMembers({ status: !active, id: row?._id });
     } else if (type === "superAdminUser") {
       updateStatusUser({ status: !active, id: row?._id });
+    } else if (type === "super_superadmin") {
+      updateSuper_SuperAdmin({ status: !active, id: row?._id });
     }
     // Call the callback function to update non-active count
   };
