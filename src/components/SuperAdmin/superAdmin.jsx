@@ -35,6 +35,7 @@ import DeleteModal from "../Modal/deleteModal";
 import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
+import { parseJwt } from "../ProtectedRoute/authVerify";
 
 const SuperAdminTable = () => {
   const {
@@ -106,7 +107,8 @@ const SuperAdminTable = () => {
   const handleCloseClone = () => {
     setOpenClone(false);
   };
-  console.log(isUserData, "isUserData");
+  const token = localStorage.getItem("token");
+  const decodedToken = parseJwt(token);
 
   // const actionColumn = [
   //   {
@@ -221,7 +223,12 @@ const SuperAdminTable = () => {
             mt: 2,
           }}
         >
-          <Typography variant="h4">Locations</Typography>
+          <Typography variant="h4">
+            {" "}
+            {process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email
+              ? `Welcome back, ${decodedToken.name}`
+              : "Locations"}
+          </Typography>
           <Box sx={{ width: "200px" }}>
             <Button
               fullWidth
