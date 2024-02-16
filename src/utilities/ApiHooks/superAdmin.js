@@ -651,6 +651,52 @@ export const useEditCustomUser = () => {
 
   return useMutation(handleEdit);
 };
+export const useResetCustomUserPassword = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (updatedUser) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const response = await axios.put(
+        `${backendURL}/customUsers/updatePassword/${updatedUser?.id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "New password is sent to user email successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the user data.",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while updating the user data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
+      throw new Error("An error occurred while updating the user data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
 export const useEditAccessCustomUser = () => {
   const dispatch = useDispatch();
   const handleEdit = async (updatedUser) => {
