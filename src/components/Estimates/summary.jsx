@@ -46,8 +46,8 @@ const Summary = () => {
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
-      : quoteState === "edit" && selectedData?.layoutData?.image
-      ? `${backendURL}/${selectedData?.layoutData?.image}`
+      : quoteState === "edit" && selectedData?.settings?.image
+      ? `${backendURL}/${selectedData?.settings?.image}`
       : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();

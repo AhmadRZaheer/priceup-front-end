@@ -10,6 +10,7 @@ import {
   selectedItem,
   setNavigationDesktop,
   setQuoteState,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { useEffect, useState } from "react";
 import bgCustom from "../../Assets/customlayoutimage.svg";
@@ -44,6 +45,7 @@ export default function Layout() {
     setselectCustom(false);
   };
   const setStorePage = () => {
+    dispatch(updateMeasurements([]));  // reset measurement array on shifting layout
     if (selectCustom) {
       dispatch(setNavigationDesktop("custom"));
     } else dispatch(setNavigationDesktop("measurements"));
