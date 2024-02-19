@@ -107,7 +107,7 @@ const SuperSidebar = () => {
                   >
                     <IconButton sx={{ color: "white", padding: 0.2 }}>
                       <FmdGoodOutlined sx={{ color: "white", mr: 1 }} />
-                      <span>Location</span>
+                      <span>Locations</span>
                     </IconButton>
                   </li>
                 </NavLink>
@@ -139,7 +139,7 @@ const SuperSidebar = () => {
                         src={TremIcon}
                         alt="image of customer"
                       />
-                      <span>Admin</span>
+                      <span>Admins</span>
                     </IconButton>
                   </li>
                 </NavLink>
