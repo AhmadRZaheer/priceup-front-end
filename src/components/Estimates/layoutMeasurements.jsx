@@ -23,6 +23,7 @@ import {
   getMeasurementSide,
   setContent,
   getListData,
+  getQuoteState,
 } from "../../redux/estimateCalculations";
 import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { layoutVariants } from "../../utilities/constants";
@@ -39,12 +40,16 @@ const LayoutMeasurements = () => {
   const [editField, setEditField] = useState(true);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
-  const measurementSide = useSelector(getMeasurementSide);
+  const measurementSidesForCreate = useSelector(getMeasurementSide);
   const listContent = useSelector(getListData);
   const { enqueueSnackbar } = useSnackbar();
+  const QuoteState = useSelector(getQuoteState);
+  const measurementSidesForEdit = selectedData?.measurements;
+  const measurementSides =
+    QuoteState === "edit" ? measurementSidesForEdit : measurementSidesForCreate;
 
-  const initialValues = measurementSide.reduce((acc, item) => {
-    if (item.value === undefined) {
+  const initialValues = measurementSides.reduce((acc, item) => {
+    if (item?.value) {
       acc[item.key] = item.value;
     } else {
       acc = {};
@@ -103,7 +108,7 @@ const LayoutMeasurements = () => {
             item._id === selectedData?.settings?.heavyDutyOption?.heavyDutyType
         );
         dispatch(setContent({ type: "hinges", item: hingesType }));
-        enqueueSnackbar("hinges switch from standard to heavy", {
+        enqueueSnackbar("Hinges switch from standard to heavy", {
           variant: "success",
         });
       } else {
@@ -114,9 +119,9 @@ const LayoutMeasurements = () => {
         dispatch(setContent({ type: "hinges", item: hingesType }));
       }
       /** end */
-      if (!editField) {
-        dispatch(setDoorWidth(editDebouncedValue));
-      }
+      // if (!editField) {
+      //   dispatch(setDoorWidth(editDebouncedValue));
+      // }
       setHandleEstimatesPages("review");
       resetForm();
     },
@@ -157,10 +162,12 @@ const LayoutMeasurements = () => {
     );
     dispatch(setDoorWidth(result.doorWidth));
     setEditDebouncedValue(result.doorWidth);
+    dispatch(setDoorWidth(result.doorWidth));
   }, [debouncedValue]);
 
   const handleInputChange = (event) => {
     setEditDebouncedValue(event.target.value);
+    dispatch(setDoorWidth(event.target.value));
   };
 
   return (
@@ -340,7 +347,10 @@ const LayoutMeasurements = () => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(selectedData.settings.variant) && (
+                  ].includes(
+                    selectedData?.settings?.variant ??
+                      selectedData.layoutData?.variant
+                  ) && (
                     <>
                       <Typography>
                         <input
@@ -480,7 +490,9 @@ const LayoutMeasurements = () => {
                       <img
                         width="100%"
                         height="100%"
-                        src={`${backendURL}/${selectedData?.image}`}
+                        src={`${backendURL}/${
+                          selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                        }`}
                         alt="Selected"
                       />
                     </Box>
@@ -511,7 +523,11 @@ const LayoutMeasurements = () => {
                       onClick={() => {
                         dispatch(updateMeasurements([]));
                         dispatch(setDoorWidth(0));
-                        setHandleEstimatesPages("layouts");
+                        if (QuoteState === "edit") {
+                          setHandleEstimatesPages("existing");
+                        } else {
+                          setHandleEstimatesPages("layouts");
+                        }
                       }}
                       sx={{
                         boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",

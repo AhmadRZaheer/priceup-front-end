@@ -40,8 +40,9 @@ function App() {
     <div className="App">
       <QueryClientProvider client={queryClient}>
         <SnackbarProvider
-          maxSnack={4}
+          maxSnack={5}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
+          autoHideDuration={5000}
         >
           <BrowserRouter>
             <FetchId2>

@@ -55,13 +55,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
   const quoteActiveState = useMemo(() => {
-    let state = "";
-    if (updatecheck === "create") {
-      state = selectedData?.settings?.variant;
-    } else if (updatecheck === "edit") {
-      state = selectedData?.layoutData?.variant;
-    }
-    return state;
+    return selectedData?.settings?.variant
+    // let state = "";
+    // if (updatecheck === "create") {
+    //   state = selectedData?.settings?.variant;
+    // } else if (updatecheck === "edit") {
+    //   state = selectedData?.layoutData?.variant;
+    // }
+    // return state;
   }, [updatecheck]);
 
   const dispatch = useDispatch();
@@ -187,6 +188,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           ? "measurements"
           : quoteState === "custom"
           ? "custom"
+          : quoteState === "edit"
+          ? "measurements"
           : "existing"
       )
     );
