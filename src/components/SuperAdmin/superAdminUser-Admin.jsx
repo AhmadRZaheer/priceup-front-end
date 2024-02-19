@@ -166,7 +166,7 @@ const SuperAdminUser = () => {
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
           <Typography sx={{ ml: 2, fontSize: 26, fontWeight: "bold" }}>
-            Admin
+            Admins
           </Typography>
           <Button
             sx={{
@@ -195,7 +195,7 @@ const SuperAdminUser = () => {
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
             <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-              Admin
+              Admins
             </Typography>
             <TextField
               placeholder="Search by Name"
