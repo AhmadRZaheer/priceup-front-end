@@ -26,6 +26,9 @@ import {
   setProfit,
   getListData,
   getUserProfitPercentage,
+  getNotifications,
+  setNotifications,
+  setHardwareAddonsPrice,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
@@ -37,6 +40,7 @@ import { calculateTotal } from "../../utilities/common";
 import { useNavigate } from "react-router-dom";
 import { layoutVariants } from "../../utilities/constants";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { useSnackbar } from "notistack";
 
 const LayoutReview = ({ setClientDetailOpen }) => {
   const navigate = useNavigate();
@@ -54,6 +58,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const updatecheck = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
+  const notifications = useSelector(getNotifications);
+  const { enqueueSnackbar } = useSnackbar();
   const quoteActiveState = useMemo(() => {
     return selectedData?.settings?.variant
     // let state = "";
@@ -187,10 +193,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         quoteState === "create"
           ? "measurements"
           : quoteState === "custom"
-          ? "custom"
-          : quoteState === "edit"
-          ? "measurements"
-          : "existing"
+            ? "custom"
+            : quoteState === "edit"
+              ? "measurements"
+              : "existing"
       )
     );
   };
@@ -203,6 +209,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     );
     dispatch(setHardwarePrice(prices.hardwarePrice));
     dispatch(setGlassPrice(prices.glassPrice));
+    dispatch(setHardwareAddonsPrice(prices.hardwareAddonsPrice));
     dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
     dispatch(setLaborPrice(prices.laborPrice));
@@ -234,6 +241,28 @@ const LayoutReview = ({ setClientDetailOpen }) => {
 
     return () => {
       window.removeEventListener("resize", updateWindowWidth);
+    };
+  }, []);
+
+  useEffect(() => {
+    if(notifications.hingesSwitch){
+      enqueueSnackbar("Hinges switched from standard to heavy", {
+          variant: "info",
+        });
+    }
+    if(notifications.glassThicknessSwitch){
+      enqueueSnackbar("Glass thickness switched from 3/8 to 1/2", {
+        variant: "info",
+      });
+    }
+    if(notifications.panelOverweight){
+      enqueueSnackbar("Panel weight is over 160lb check your labor", {
+        variant: "info",
+      });
+    }
+    
+    return () => {
+      dispatch(setNotifications());
     };
   }, []);
 
@@ -274,8 +303,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 summaryState
                   ? setHandleEstimatesPages
                   : () => {
-                      setSummaryState(true);
-                    }
+                    setSummaryState(true);
+                  }
               }
             >
               {" "}
@@ -429,33 +458,33 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(quoteActiveState) && (
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%", display: "flex" }}>
-                        <Box
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <ChannelTypeDesktop
-                            menuOptions={listData?.channelOrClamps}
-                            title={"Mounting"}
-                            type={"mounting"}
-                            listData={listData}
-                          />
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          borderBottom: {
+                            sm: "2px solid #D0D5DD",
+                            xs: "2px solid #423f57",
+                          },
+                        }}
+                      >
+                        <Box sx={{ width: "100%", display: "flex" }}>
+                          <Box
+                            sx={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <ChannelTypeDesktop
+                              menuOptions={listData?.channelOrClamps}
+                              title={"Mounting"}
+                              type={"mounting"}
+                              listData={listData}
+                            />
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  )}
+                    )}
                   <Box
                     sx={{
                       display: "flex",
@@ -535,7 +564,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
-                        // currentItem={selectedContent?.glassAddons}
+                      // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
                   </Box>
@@ -679,65 +708,65 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(quoteActiveState) && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Clamp Cut Out</Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
+                          justifyContent: "space-between",
+                          borderBottom: {
+                            sm: "2px solid #D0D5DD",
+                            xs: "2px solid #423f57",
+                          },
+                          paddingLeft: 3,
+                          paddingBottom: 1,
+                          color: { sm: "#000000  ", xs: "white" },
                         }}
                       >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
+                        <Typography>Clamp Cut Out</Typography>
+                        <Box
                           sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            width: "120px",
+                            padddingY: 4,
                           }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.clampCut}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "clampCut",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
+                        >
+                          <TextField
+                            type="number"
+                            InputProps={{
+                              style: {
+                                color: "black",
+                                borderRadius: 10,
+                                border: "1px solid #cccccc",
+                                backgroundColor: "white",
+                              },
+                              inputProps: { min: 0 },
+                            }}
+                            InputLabelProps={{
+                              style: {
+                                color: "rgba(255, 255, 255, 0.5)",
+                              },
+                            }}
+                            sx={{
+                              color: { sm: "black", xs: "white" },
+                              width: "100%",
+                            }}
+                            variant="outlined"
+                            size="small"
+                            value={selectedContent.clampCut}
+                            onChange={(event) =>
+                              dispatch(
+                                setInputContent({
+                                  type: "clampCut",
+                                  value: event.target.value,
+                                })
+                              )
+                            }
+                          />
+                        </Box>
                       </Box>
-                    </Box>
-                  )}
+                    )}
                   <Box
                     sx={{
                       display: "flex",
@@ -1169,8 +1198,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     summaryState
                       ? setHandleEstimatesPages
                       : () => {
-                          setSummaryState(true);
-                        }
+                        setSummaryState(true);
+                      }
                   }
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",

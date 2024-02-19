@@ -24,12 +24,15 @@ import {
   setContent,
   getListData,
   getQuoteState,
+  setNotifications,
+  setThickness,
+  setDoorWeight,
+  setPanelWeight,
+  setReturnWeight,
 } from "../../redux/estimateCalculations";
-import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
-import { layoutVariants } from "../../utilities/constants";
+import { backendURL, calculateAreaAndPerimeter, getGlassThickness } from "../../utilities/common";
+import { layoutVariants, notificationTypes, panelOverWeightAmount } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { NavLink } from "react-router-dom";
-import { useSnackbar } from "notistack";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -42,7 +45,6 @@ const LayoutMeasurements = () => {
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
   const listContent = useSelector(getListData);
-  const { enqueueSnackbar } = useSnackbar();
   const QuoteState = useSelector(getQuoteState);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
@@ -91,8 +93,21 @@ const LayoutMeasurements = () => {
       // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
       const result = calculateAreaAndPerimeter(
         measurementsArray,
-        selectedData?.settings?.variant
+        selectedData?.settings?.variant,
+        selectedData?.settings?.glassType?.thickness
       );
+      if(result?.doorWeight){
+        dispatch(setDoorWeight(result?.doorWeight));
+      }
+      if(result?.panelWeight){
+        if(result?.panelWeight > panelOverWeightAmount){
+          dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
+        }
+        dispatch(setPanelWeight(result?.panelWeight));
+      }
+      if(result?.returnWeight){
+        dispatch(setReturnWeight(result?.returnWeight));
+      }
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
@@ -108,15 +123,22 @@ const LayoutMeasurements = () => {
             item._id === selectedData?.settings?.heavyDutyOption?.heavyDutyType
         );
         dispatch(setContent({ type: "hinges", item: hingesType }));
-        enqueueSnackbar("Hinges switch from standard to heavy", {
-          variant: "success",
-        });
+        dispatch(setNotifications(notificationTypes.HINGESSWITCH));
       } else {
         let hingesType = null;
         hingesType = listContent?.hinges?.find(
           (item) => item._id === selectedData?.settings?.hinges?.hingesType
         );
         dispatch(setContent({ type: "hinges", item: hingesType }));
+      }
+      /** end */
+      /** switch glass thickness if glass size is greater than provided */
+      const glassThickness = getGlassThickness(selectedData?.settings?.variant,measurementsArray);
+      if(glassThickness){
+        dispatch(setThickness(glassThickness));
+      }
+      if(glassThickness && glassThickness === '1/2'){
+        dispatch(setNotifications(notificationTypes.GLASSTHICKNESSSWITCH));
       }
       /** end */
       // if (!editField) {
@@ -158,8 +180,21 @@ const LayoutMeasurements = () => {
       }));
     const result = calculateAreaAndPerimeter(
       measurementsArray,
-      selectedData?.settings?.variant
+      selectedData?.settings?.variant,
+      selectedData?.settings?.glassType?.thickness
     );
+    if(result?.doorWeight){
+      dispatch(setDoorWeight(result?.doorWeight));
+    }
+    if(result?.panelWeight){
+      if(result?.panelWeight > panelOverWeightAmount){
+        dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
+      }
+      dispatch(setPanelWeight(result?.panelWeight));
+    }
+    if(result?.returnWeight){
+      dispatch(setReturnWeight(result?.returnWeight));
+    }
     dispatch(setDoorWidth(result.doorWidth));
     setEditDebouncedValue(result.doorWidth);
     dispatch(setDoorWidth(result.doorWidth));

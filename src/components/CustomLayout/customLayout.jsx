@@ -9,6 +9,7 @@ import {
   setLayoutPerimeter,
   setNavigation,
   setNavigationDesktop,
+  setPanelWeight,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { useDispatch } from "react-redux";
@@ -88,7 +89,9 @@ const CustomLayout = () => {
       measurementsArray,
       layoutVariants.CUSTOM
     );
-    console.log("chck", updateMeasurements(measurementsArray));
+    if(result?.panelWeight){
+      dispatch(setPanelWeight(result?.panelWeight));
+    }
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(arrayForMeasurement));

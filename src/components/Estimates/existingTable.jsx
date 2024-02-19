@@ -13,10 +13,14 @@ import {
   addSelectedItem,
   initializeStateForEditQuote,
   resetState,
+  setDoorWeight,
   setDoorWidth,
   setListData,
   setNavigationDesktop,
+  setNotifications,
+  setPanelWeight,
   setQuoteState,
+  setReturnWeight,
 } from "../../redux/estimateCalculations";
 import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { useNavigate } from "react-router-dom";
@@ -24,6 +28,7 @@ import { calculateAreaAndPerimeter } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
+import { notificationTypes, panelOverWeightAmount } from "../../utilities/constants";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
@@ -55,9 +60,21 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(
       item.measurements,
-      item?.layoutData?.variant
+      item?.layoutData?.variant,
+      item.glassType.thickness
     );
-
+    if(result?.doorWeight){
+      dispatch(setDoorWeight(result?.doorWeight));
+    }
+    if(result?.panelWeight){
+      if(result?.panelWeight > panelOverWeightAmount){
+        dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
+      }
+      dispatch(setPanelWeight(result?.panelWeight));
+    }
+    if(result?.returnWeight){
+      dispatch(setReturnWeight(result?.returnWeight));
+    }
     dispatch(setDoorWidth(result.doorWidth));
     dispatch(setNavigationDesktop("measurements"));
   };

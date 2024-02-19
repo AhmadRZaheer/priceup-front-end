@@ -17,6 +17,10 @@ import {
   getLayoutArea,
   getUserProfitPercentage,
   setUserProfitPercentage,
+  getPanelWeight,
+  getReturnWeight,
+  getDoorWeight,
+  getHardwareAddonsTotal,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
@@ -25,16 +29,22 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { layoutVariants } from "../../utilities/constants";
 
 const Summary = () => {
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
   const glassAddonsPrice = useSelector(getGlassAddonsTotal);
+  const hardwareAddonsPrice = useSelector(getHardwareAddonsTotal);
   const fabricationPrice = useSelector(getFabricationTotal);
   const miscPrice = useSelector(getMiscTotal);
   const laborPrice = useSelector(getLaborTotal);
   const userProfitPercentage = useSelector(getUserProfitPercentage);
   const doorWidth = useSelector(getDoorWidth);
+  const doorWeight = useSelector(getDoorWeight);
+  const panelWeight = useSelector(getPanelWeight);
+  const returnWeight = useSelector(getReturnWeight);
+
   const totalPrice = useSelector(getTotal);
   const actualCost = useSelector(getCost);
   const grossProfit = useSelector(getProfit);
@@ -170,6 +180,19 @@ const Summary = () => {
                     <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
                     {sqftArea}
                   </Typography>
+                  {/** undefined is used for custom layout  */}
+                  {![undefined].includes(selectedData?.settings?.variant) && <Typography>
+                    <span style={{ fontWeight: "bold" }}>Door Weight: </span>{" "}
+                    {doorWeight}
+                  </Typography>}
+                  {![layoutVariants.DOOR,layoutVariants.DOUBLEBARN,layoutVariants.DOUBLEDOOR].includes(selectedData?.settings?.variant) &&  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
+                    {panelWeight}
+                  </Typography>}
+                  {[layoutVariants.DOORNOTCHEDPANELANDRETURN,layoutVariants.DOORPANELANDRETURN].includes(selectedData?.settings?.variant) &&  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Return Weight: </span>{" "}
+                    {returnWeight}
+                  </Typography>}
                 </AccordionDetails>
               </Accordion>
               <Box
@@ -659,10 +682,10 @@ const Summary = () => {
                         }}
                       >
                         <Typography sx={{ fontWeight: "bold" }}>
-                          Misc Price
+                          Hardware Addons Price
                         </Typography>
                         <Typography variant="h6">
-                          ${miscPrice?.toFixed(2) || 0}
+                          ${hardwareAddonsPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
                       <Box

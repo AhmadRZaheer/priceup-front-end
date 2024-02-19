@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { layoutVariants } from "../utilities/constants";
+import { layoutVariants, notificationTypes } from "../utilities/constants";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getCost = (state) => state.estimateCalculations.actualCost;
 export const getProfit = (state) => state.estimateCalculations.grossProfit;
@@ -10,6 +10,8 @@ export const getHardwareTotal = (state) =>
 export const getGlassTotal = (state) => state.estimateCalculations.glassPrice;
 export const getGlassAddonsTotal = (state) =>
   state.estimateCalculations.glassAddonsPrice;
+export const getHardwareAddonsTotal = (state) =>
+  state.estimateCalculations.hardwareAddonsPrice;
 export const getFabricationTotal = (state) =>
   state.estimateCalculations.fabricationPrice;
 export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
@@ -31,6 +33,10 @@ export const getLayoutPerimeter = (state) =>
   state.estimateCalculations.perimeter;
 export const getLayoutArea = (state) => state.estimateCalculations.sqftArea;
 export const getPanelWidth = (state) => state.estimateCalculations.panelWidth;
+export const getDoorWeight = (state) => state.estimateCalculations.doorWeight;
+export const getPanelWeight = (state) => state.estimateCalculations.panelWeight;
+export const getReturnWeight = (state) => state.estimateCalculations.returnWeight;
+export const getNotifications = (state) => state.estimateCalculations.notifications;
 
 const initialState = {
   quoteId: null,
@@ -41,7 +47,15 @@ const initialState = {
   sqftArea: 0,
   doorWidth: 0,
   panelWidth: 0,
+  doorWeight: 0,
+  panelWeight: 0,
+  returnWeight: 0,
   measurements: [],
+  notifications: {
+    hingesSwitch: false,
+    glassThicknessSwitch: false,
+    panelOverweight: false
+  },
   selectedItem: null,
   listData: null,
   content: {
@@ -100,6 +114,7 @@ const initialState = {
   hardwarePrice: 0,
   glassPrice: 0,
   glassAddonsPrice: 0,
+  hardwareAddonsPrice: 0,
   fabricationPrice: 0,
   miscPrice: 0,
   laborPrice: 0,
@@ -119,6 +134,40 @@ const estimateCalcSlice = createSlice({
     },
     setPanelWidth: (state, action) => {
       state.panelWidth = action.payload;
+    },
+    setDoorWeight: (state, action) => {
+      state.doorWeight = action.payload;
+    },
+    setPanelWeight: (state, action) => {
+      state.panelWeight = action.payload;
+    },
+    setReturnWeight: (state, action) => {
+      state.returnWeight = action.payload;
+    },
+    setNotifications:(state, action) => {
+      switch(action.payload){
+        case notificationTypes.HINGESSWITCH:
+            state.notifications = {
+              ...state.notifications,
+              hingesSwitch:true,
+            }
+        break;
+        case notificationTypes.GLASSTHICKNESSSWITCH:
+          state.notifications = {
+            ...state.notifications,
+            glassThicknessSwitch:true,
+          }
+        break;
+        case notificationTypes.PANLEOVERWEIGHT:
+          state.notifications = {
+            ...state.notifications,
+            panelOverweight:true,
+          }
+        break;
+        default:
+          state.notifications = initialState.notifications; 
+        break;
+      }
     },
     setContent: (state, action) => {
       const { type, item } = action.payload;
@@ -358,6 +407,10 @@ const estimateCalcSlice = createSlice({
     setGlassAddonsPrice: (state, action) => {
       const { payload } = action;
       state.glassAddonsPrice = payload;
+    },
+    setHardwareAddonsPrice: (state, action) => {
+      const { payload } = action;
+      state.hardwareAddonsPrice = payload;
     },
     setFabricationPrice: (state, action) => {
       const { payload } = action;
@@ -1085,6 +1138,7 @@ export const {
   setGlassPrice,
   setHardwarePrice,
   setGlassAddonsPrice,
+  setHardwareAddonsPrice,
   setFabricationPrice,
   setMiscPrice,
   setLaborPrice,
@@ -1111,5 +1165,9 @@ export const {
   initializeStateForCreateQuote,
   initializeStateForEditQuote,
   setPanelWidth,
+  setDoorWeight,
+  setPanelWeight,
+  setReturnWeight,
+  setNotifications
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
