@@ -52,7 +52,7 @@ export const useDeleteTeamMembers = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw error;
     }
   };
@@ -169,6 +169,50 @@ export const useEditTeamMembers = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "success",
+          })
+        );
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "success",
+        })
+      );
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+export const useResetPasswordTeamMembers = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (editTeamMembers) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/staffs/updatePassword/${editTeamMembers?.id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "New password is sent to user email successfully",
+            severity: "success",
+          })
         );
         return response.data.data;
       } else {

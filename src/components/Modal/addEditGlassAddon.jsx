@@ -70,12 +70,13 @@ export default function AddEditGlassAddon({
     }
   }, [SuccessForEdit]);
 
-  const handleCreateClick = (props) => {
-    addGlassAddon(props);
+  const handleCreateClick = async (props) => {
+    await addGlassAddon(props);
   };
 
-  const handleEditClick = (props) => {
-    editGlassAddon({ glassAddonData: props, id: data?._id });
+  const handleEditClick = async (props) => {
+    console.log(props, "props.glassAddonData");
+    await editGlassAddon({ glassAddonData: props, id: data?._id });
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("glassAddons Label is required"),
@@ -93,7 +94,7 @@ export default function AddEditGlassAddon({
           name: "",
           image: "",
         },
-    enableReinitialize: true,
+    enableReinitialize: false,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       {

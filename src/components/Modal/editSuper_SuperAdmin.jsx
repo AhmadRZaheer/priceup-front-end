@@ -13,10 +13,13 @@ import { useDropzone } from "react-dropzone";
 import {
   useCreateTeamMembers,
   useEditTeamMembers,
-  useResetPasswordTeamMembers,
 } from "../../utilities/ApiHooks/team";
 import { backendURL } from "../../utilities/common";
 import DefaultImage from "../ui-components/defaultImage";
+import {
+  useCreateSuper_SuperAdmins,
+  useUpdateSuper_SuperAdmins,
+} from "../../utilities/ApiHooks/super_superAdmins";
 
 const style = {
   position: "absolute",
@@ -32,7 +35,13 @@ const style = {
   p: 4,
 };
 
-export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
+export default function Create_Edit_SuperSuperAdmin({
+  open,
+  close,
+  isEdit,
+  data,
+  refetch,
+}) {
   const [selectedImage, setSelectedImage] = useState(
     isEdit ? data?.image : null
   );
@@ -44,44 +53,26 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
 
   const { getInputProps } = useDropzone({ onDrop });
   const {
-    mutate: addTeamMembers,
+    mutate: CreateSuper_SuperAdmins,
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
-  } = useCreateTeamMembers();
+  } = useCreateSuper_SuperAdmins();
   const {
-    mutate: editTeamMembers,
+    mutate: editSuper_SuperAdmin,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
-  } = useEditTeamMembers();
-  const { mutate: ResetPassword } = useResetPasswordTeamMembers();
+  } = useUpdateSuper_SuperAdmins();
 
   React.useEffect(() => {
-    if (CreatedSuccessfully) {
+    if (CreatedSuccessfully || SuccessForEdit) {
       refetch();
       close();
     }
-  }, [CreatedSuccessfully]);
-
-  React.useEffect(() => {
-    if (SuccessForEdit) {
-      refetch();
-      close();
-    }
-  }, [SuccessForEdit]);
-
-  const handleCreateClick = (props) => {
-    addTeamMembers(props);
-  };
-
-  const handleEditClick = (props) => {
-    const id = data;
-    editTeamMembers(props, id);
-  };
+  }, [CreatedSuccessfully, SuccessForEdit]);
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     email: Yup.string().email("Invalid email address"),
-
     image: Yup.mixed(),
   });
 
@@ -102,17 +93,14 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
     onSubmit: (values, { resetForm }) => {
       {
         isEdit
-          ? handleEditClick({ teamData: values, id: data._id })
-          : handleCreateClick(values);
+          ? editSuper_SuperAdmin({ data: values, id: data._id })
+          : CreateSuper_SuperAdmins(values);
         setSelectedImage(null);
 
         resetForm();
       }
     },
   });
-  const handleRestPass = () => {
-    ResetPassword({ id: data._id });
-  };
 
   return (
     <div>
@@ -182,48 +170,23 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 </Typography>
               </Box>
             </label>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "end",
-              }}
-            >
-              {selectedImage ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected"
-                />
-              ) : data?.image !== undefined || null ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={`${backendURL}/${data?.image}`}
-                  alt="logo team"
-                />
-              ) : (
-                ""
-              )}
-              {isEdit ? (
-                <Button
-                  variant="outlined"
-                  onClick={handleRestPass}
-                  sx={{
-                    height: "34px",
-                    width: "45%",
-                    color: "#8477DA",
-                    border: "1px solid #8477DA",
-                    mb: 1,
-                  }}
-                >
-                  Reset Password
-                </Button>
-              ) : (
-                ""
-              )}
-            </Box>
+            {selectedImage ? (
+              <img
+                width={"80px"}
+                height={"80px"}
+                src={URL.createObjectURL(selectedImage)}
+                alt="Selected"
+              />
+            ) : data?.image !== undefined || null ? (
+              <img
+                width={"80px"}
+                height={"80px"}
+                src={`${backendURL}/${data?.image}`}
+                alt="logo team"
+              />
+            ) : (
+              ""
+            )}
           </Box>
           <Box>
             <Typography>Name</Typography>

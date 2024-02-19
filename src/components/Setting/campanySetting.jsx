@@ -47,6 +47,7 @@ const CampanySetting = () => {
   const { getInputProps } = useDropzone({ onDrop });
   const formik = useFormik({
     initialValues: {
+      name: settingData?.name,
       address: settingData?.address,
       image: selectedImage,
 
@@ -85,6 +86,7 @@ const CampanySetting = () => {
     },
     enableReinitialize: true,
     onSubmit: (values) => {
+      console.log(values, "editedData");
       handleEditSetting(values);
     },
   });
@@ -229,7 +231,27 @@ const CampanySetting = () => {
               alignItems: "center",
             }}
           >
-            <Typography>Location</Typography>
+            <Typography>Location name</Typography>
+            <Box sx={{ width: "400px" }}>
+              {" "}
+              <CustomInputField
+                fullWidth
+                type="text"
+                name="name"
+                value={formik.values?.name}
+                placeholder={"Add location"}
+                onChange={formik.handleChange}
+              />
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography>Location Address</Typography>
             <Box sx={{ width: "400px" }}>
               {" "}
               <CustomInputField
@@ -237,7 +259,7 @@ const CampanySetting = () => {
                 type="text"
                 name="address"
                 value={formik.values?.address}
-                placeholder={"Add location"}
+                placeholder={"change name"}
                 onChange={formik.handleChange}
               />
             </Box>

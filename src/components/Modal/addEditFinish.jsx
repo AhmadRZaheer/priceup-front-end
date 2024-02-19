@@ -93,8 +93,10 @@ export default function AddEditFinish({
     onSubmit: (values, { resetForm }) => {
       {
         isEdit ? handleEditClick(values) : handleCreateClick(values);
-        setSelectedImage(null);
-        resetForm();
+        if (SuccessForEdit || CreatedSuccessfully) {
+          setSelectedImage(null);
+          resetForm();
+        }
       }
     },
   });

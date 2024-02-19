@@ -12,6 +12,7 @@ import InputImageIcon from "../../Assets/imageUploader.svg";
 import {
   useCreateCustomUser,
   useEditCustomUser,
+  useResetCustomUserPassword,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
 import { backendURL } from "../../utilities/common";
@@ -131,6 +132,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     </Typography>
                   </Box>
                 </label>
+
                 {selectedImage ? (
                   <img
                     width={"80px"}
@@ -138,7 +140,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     src={URL.createObjectURL(selectedImage)}
                     alt="Selected"
                   />
-                ) : isEdit?.data?.image ? (
+                ) : isEdit?.data?.image !== undefined || null ? (
                   <img
                     width={"80px"}
                     height={"80px"}
@@ -168,6 +170,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                 <CustomInputField
                   placeholder="Name"
                   name="email"
+                  disabled={isEdit?.type ? true : false}
                   value={formik.values.email}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}

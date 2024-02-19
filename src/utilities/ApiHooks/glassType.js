@@ -53,8 +53,7 @@ export const useDeleteGlassType = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      showSnackbar({ message: error, severity: "error" });
-      throw error;
+      showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" });
     }
   };
 
@@ -70,7 +69,7 @@ export const useDeleteGlassTypeFull = () => {
       });
       if (response.data.code === 200) {
         dispatch(
-          showSnackbar({ message: "Deleted Successfully", severity: "success" })
+          showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
         return response.data.data;
       } else {
@@ -83,8 +82,8 @@ export const useDeleteGlassTypeFull = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
-      throw error;
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      throw `${error.response?.data?.message}`;
     }
   };
 
@@ -131,11 +130,11 @@ export const useCreateGlassType = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
-      throw new Error(error);
+      throw new Error(`${error.response?.data?.message}`);
     }
   };
 
@@ -148,7 +147,7 @@ export const useEditGlassType = () => {
     const token = localStorage.getItem("token");
     try {
       const formData = new FormData();
-
+      const slug = createSlug(props.glassTypeData.name);
       // Append image field
       if (props?.glassTypeData?.image) {
         formData.append("image", props.glassTypeData.image);
@@ -156,6 +155,7 @@ export const useEditGlassType = () => {
 
       if (props.glassTypeData) {
         formData.append("name", props.glassTypeData.name);
+        formData.append("slug", slug);
       }
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,
@@ -183,7 +183,7 @@ export const useEditGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -222,7 +222,7 @@ export const useEditFullGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };

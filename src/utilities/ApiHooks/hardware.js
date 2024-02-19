@@ -108,7 +108,7 @@ export const useDeleteHardwares = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw error;
     }
   };
@@ -159,7 +159,7 @@ export const useCreateHardware = () => {
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -244,7 +244,7 @@ export const useEditFullHardware = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -260,11 +260,11 @@ export const useEditHardware = () => {
     const token = localStorage.getItem("token");
     console.log(props, "props");
     console.log(props.hardwareData.image, "props.id");
-
+    const slug = createSlug(props.hardwareData.name);
     try {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
-
+      formData.append("slug", slug);
       if (props.hardwareData.image) {
         formData.append("image", props.hardwareData.image);
       }
@@ -295,7 +295,7 @@ export const useEditHardware = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -332,7 +332,7 @@ export const useDeleteHardwareFinish = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw error;
     }
   };

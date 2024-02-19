@@ -72,8 +72,12 @@ const TeamTable = () => {
     }
   };
 
-  useEffect(() => {
-    teamMemberRefetch();
+  React.useEffect(() => {
+    if (deleteSuccess) {
+      teamMemberRefetch();
+    } else if (isSuccess) {
+      teamMemberRefetch();
+    }
   }, [deleteSuccess, isSuccess]);
   const { data: locationData, refetch } = useFetchAdminLocation();
   useEffect(() => {

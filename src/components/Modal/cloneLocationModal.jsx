@@ -6,17 +6,14 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
-
 import { useState } from "react";
 import { CircularProgress, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
-  useCreateTeamMembers,
-  useEditTeamMembers,
-  useResetPasswordTeamMembers,
-} from "../../utilities/ApiHooks/team";
-import { backendURL } from "../../utilities/common";
-import DefaultImage from "../ui-components/defaultImage";
+  useCloneLocation,
+  useCreateAdminsMembers,
+  useEditUser,
+} from "../../utilities/ApiHooks/superAdmin";
 
 const style = {
   position: "absolute",
@@ -28,15 +25,13 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 400,
   bgcolor: "background.paper",
-  borderRadius: "12px",
+  borderRadius: "4px",
   p: 4,
 };
 
-export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
-  const [selectedImage, setSelectedImage] = useState(
-    isEdit ? data?.image : null
-  );
-
+export default function CloneLocationModel({ open, close, data, refetch }) {
+  const [selectedImage, setSelectedImage] = useState(null);
+  console.log(data, data?.user?._id, "data");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
@@ -44,16 +39,41 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
 
   const { getInputProps } = useDropzone({ onDrop });
   const {
-    mutate: addTeamMembers,
+    mutate: addTeamAdminsMembers,
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
-  } = useCreateTeamMembers();
-  const {
-    mutate: editTeamMembers,
-    isLoading: LoadingForEdit,
-    isSuccess: SuccessForEdit,
-  } = useEditTeamMembers();
-  const { mutate: ResetPassword } = useResetPasswordTeamMembers();
+  } = useCloneLocation();
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required")
+      .matches(
+        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+        "Invalid email address format"
+      ),
+    image: Yup.mixed(),
+    locationName: Yup.string().required("Location Name is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      id: data?.user?._id,
+      company_id: data?.company?._id,
+      name: "",
+      image: "",
+      email: "",
+      locationName: "",
+    },
+    enableReinitialize: true,
+    validationSchema: validationSchema,
+    onSubmit: (values, { resetForm }) => {
+      addTeamAdminsMembers(values);
+      setSelectedImage(null);
+      resetForm();
+    },
+  });
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -61,59 +81,6 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
       close();
     }
   }, [CreatedSuccessfully]);
-
-  React.useEffect(() => {
-    if (SuccessForEdit) {
-      refetch();
-      close();
-    }
-  }, [SuccessForEdit]);
-
-  const handleCreateClick = (props) => {
-    addTeamMembers(props);
-  };
-
-  const handleEditClick = (props) => {
-    const id = data;
-    editTeamMembers(props, id);
-  };
-
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email address"),
-
-    image: Yup.mixed(),
-  });
-
-  const formik = useFormik({
-    initialValues: isEdit
-      ? {
-          name: data?.name,
-          email: data?.email,
-          image: data?.image,
-        }
-      : {
-          name: "",
-          image: "",
-          email: "",
-        },
-    enableReinitialize: true,
-    validationSchema: validationSchema,
-    onSubmit: (values, { resetForm }) => {
-      {
-        isEdit
-          ? handleEditClick({ teamData: values, id: data._id })
-          : handleCreateClick(values);
-        setSelectedImage(null);
-
-        resetForm();
-      }
-    },
-  });
-  const handleRestPass = () => {
-    ResetPassword({ id: data._id });
-  };
-
   return (
     <div>
       <Modal
@@ -126,14 +93,14 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
         }}
       >
         <Box sx={style}>
-          <Box>
-            <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
-              {isEdit ? "Edit User" : "Add New User"}
-            </Typography>
-            <Typography sx={{ color: "#667085", marginTop: 1 }}>
-              Your new project has been created. Invite colleagues to
-              collaborate on this project.
-            </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "baseline",
+            }}
+          >
+            <Typography>Add Location</Typography>
           </Box>
 
           <Box>
@@ -144,12 +111,11 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
               {...getInputProps()}
               style={{ display: "none" }}
             />
-            <Typography sx={{ color: "black", marginTop: 1 }}>
-              Add Image
-            </Typography>
+
             {formik.errors.image && (
               <Typography color="error">{formik.errors.image}</Typography>
             )}
+
             <label htmlFor="image-input">
               <Box
                 sx={{
@@ -182,51 +148,17 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 </Typography>
               </Box>
             </label>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "end",
-              }}
-            >
-              {selectedImage ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected"
-                />
-              ) : data?.image !== undefined || null ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={`${backendURL}/${data?.image}`}
-                  alt="logo team"
-                />
-              ) : (
-                ""
-              )}
-              {isEdit ? (
-                <Button
-                  variant="outlined"
-                  onClick={handleRestPass}
-                  sx={{
-                    height: "34px",
-                    width: "45%",
-                    color: "#8477DA",
-                    border: "1px solid #8477DA",
-                    mb: 1,
-                  }}
-                >
-                  Reset Password
-                </Button>
-              ) : (
-                ""
-              )}
-            </Box>
+            {selectedImage && (
+              <img
+                width={"80px"}
+                height={"80px"}
+                src={URL.createObjectURL(selectedImage)}
+                alt="Selected"
+              />
+            )}
           </Box>
           <Box>
-            <Typography>Name</Typography>
+            <Typography>Admin Name</Typography>
             <TextField
               placeholder="Name"
               name="name"
@@ -240,7 +172,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
             />
           </Box>
           <Box>
-            <Typography>Email</Typography>
+            <Typography>Admin Email</Typography>
             <TextField
               placeholder="email"
               name="email"
@@ -251,7 +183,22 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
               helperText={formik.touched.name && formik.errors.email}
               variant="outlined"
               fullWidth
-              disabled={isEdit ? true : false}
+            />
+          </Box>
+          <Box>
+            <Typography>Location Name</Typography>
+            <TextField
+              placeholder="location name"
+              name="locationName"
+              value={formik.values.locationName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.locationName}
+              helperText={
+                formik.touched.locationName && formik.errors.locationName
+              }
+              variant="outlined"
+              fullWidth
             />
           </Box>
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
@@ -262,6 +209,9 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 color: "#101828",
                 border: "1px solid #D0D5DD",
                 width: "50%",
+                "&:hover": {
+                  border: "1px solid #D0D5DD",
+                },
               }}
             >
               Cancel
@@ -270,7 +220,7 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
               fullWidth
               variant="contained"
               onClick={formik.handleSubmit}
-              disabled={LoadingForAdd || LoadingForEdit}
+              disabled={LoadingForAdd}
               sx={{
                 backgroundColor: "#8477DA",
                 width: "50%",
@@ -279,12 +229,10 @@ export default function AddTeamMembers({ open, close, isEdit, data, refetch }) {
                 },
               }}
             >
-              {LoadingForAdd || LoadingForEdit ? (
+              {LoadingForAdd ? (
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-              ) : isEdit ? (
-                "Update"
               ) : (
-                "Create"
+                "Copy"
               )}
             </Button>
           </Box>

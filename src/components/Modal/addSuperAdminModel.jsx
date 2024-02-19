@@ -63,6 +63,7 @@ export default function AddSuperAdminModel({
         "Invalid email address format"
       ),
     image: Yup.mixed(),
+    locationName: Yup.string().required("Location Name is required"),
   });
 
   const formik = useFormik({
@@ -70,7 +71,7 @@ export default function AddSuperAdminModel({
       name: "",
       image: "",
       email: "",
-      password: "",
+      locationName: "",
     },
     enableReinitialize: false,
     validationSchema: validationSchema,
@@ -164,7 +165,7 @@ export default function AddSuperAdminModel({
             )}
           </Box>
           <Box>
-            <Typography>Name</Typography>
+            <Typography>Admin Name</Typography>
             <TextField
               placeholder="Name"
               name="name"
@@ -178,7 +179,7 @@ export default function AddSuperAdminModel({
             />
           </Box>
           <Box>
-            <Typography>Email</Typography>
+            <Typography>Admin Email</Typography>
             <TextField
               placeholder="email"
               name="email"
@@ -187,6 +188,22 @@ export default function AddSuperAdminModel({
               onBlur={formik.handleBlur}
               error={formik.touched.name && Boolean(formik.errors.email)}
               helperText={formik.touched.name && formik.errors.email}
+              variant="outlined"
+              fullWidth
+            />
+          </Box>
+          <Box>
+            <Typography>Location Name</Typography>
+            <TextField
+              placeholder="location name"
+              name="locationName"
+              value={formik.values.locationName}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.locationName}
+              helperText={
+                formik.touched.locationName && formik.errors.locationName
+              }
               variant="outlined"
               fullWidth
             />

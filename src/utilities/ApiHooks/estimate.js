@@ -62,7 +62,11 @@ export const useCreateEstimates = () => {
     const decodedToken = parseJwt(token);
     const username = decodedToken.name;
 
-    const randomNumbers = generateRandomNumbers(4);
+    const date = new Date();
+    var current_date =
+      date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
+    var current_time =
+      date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
     try {
       const response = await axios.post(
@@ -74,7 +78,7 @@ export const useCreateEstimates = () => {
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
             status: "pending",
-            name: `${username}${randomNumbers}`,
+            name: `${current_date} ${current_time}`,
           },
         },
         {
@@ -102,7 +106,7 @@ export const useCreateEstimates = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "success",
         })
       );
@@ -130,9 +134,16 @@ export const useEditEstimates = () => {
       const response = await axios.put(
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
-          customerData: updatedEstimate.customerData,
+          ...(updatedEstimate.customerData
+            ? { customerData: updatedEstimate.customerData }
+            : {}),
           estimateData: {
-            ...updatedEstimate.estimateData,
+            ...(updatedEstimate.estimateData
+              ? { ...updatedEstimate.estimateData }
+              : {}),
+            ...(updatedEstimate.status
+              ? { status: updatedEstimate.status }
+              : {}),
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
           },
@@ -160,7 +171,7 @@ export const useEditEstimates = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: error, severity: "error" }));
+      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -200,7 +211,7 @@ export const useDeleteEstimates = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message: error,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );

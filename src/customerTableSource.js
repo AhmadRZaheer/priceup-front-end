@@ -264,6 +264,63 @@ export const CustomerColumns = [
   },
   ,
 ];
+
+export const Super_SuperColumns = [
+  {
+    field: "name",
+    headerName: "Name",
+    headerClassName: "customHeaderClass",
+    flex: 1.2,
+    renderCell: (params) => {
+      return (
+        <>
+          <div className="Super_cellWrapper">
+            <div className="customerImg">
+              <DefaultImage image={params.row.image} name={params.row.name} />
+            </div>
+            <div className="customerNameTable">
+              {params.row.name}
+              <div className="userNameTable">{params.row.username}</div>
+            </div>
+          </div>
+        </>
+      );
+    },
+  },
+  {
+    field: "email",
+    headerName: "Email address",
+    headerClassName: "customHeaderClass",
+    flex: 1.4,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>{params.row.email}</Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Date Added",
+    headerName: "Date Added",
+    headerClassName: "customHeaderClass",
+    flex: 2,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography color={"#667085"}>
+            {new Date(params.row.createdAt).toLocaleDateString(undefined, {
+              weekday: "long",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            })}
+          </Typography>
+        </>
+      );
+    },
+  },
+];
 export const CustomerQuoteColumns = [
   {
     field: "name",
