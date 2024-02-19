@@ -28,6 +28,7 @@ import { backendURL, calculateAreaAndPerimeter } from "../../utilities/common";
 import { layoutVariants } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { NavLink } from "react-router-dom";
+import { useSnackbar } from "notistack";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const LayoutMeasurements = () => {
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSide = useSelector(getMeasurementSide);
   const listContent = useSelector(getListData);
+  const { enqueueSnackbar } = useSnackbar();
 
   const initialValues = measurementSide.reduce((acc, item) => {
     if (item.value === undefined) {
@@ -91,7 +93,8 @@ const LayoutMeasurements = () => {
       dispatch(updateMeasurements(measurementsArray));
 
       /** switch hinges if width increases layout defaults */
-      if (selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
+      if (
+        selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
         doorWidthFromredux > selectedData?.settings?.heavyDutyOption?.threshold
       ) {
         let hingesType = null;
@@ -100,6 +103,9 @@ const LayoutMeasurements = () => {
             item._id === selectedData?.settings?.heavyDutyOption?.heavyDutyType
         );
         dispatch(setContent({ type: "hinges", item: hingesType }));
+        enqueueSnackbar("hinges switch from standard to heavy", {
+          variant: "success",
+        });
       } else {
         let hingesType = null;
         hingesType = listContent?.hinges?.find(
