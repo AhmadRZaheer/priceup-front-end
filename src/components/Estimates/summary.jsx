@@ -31,6 +31,23 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { layoutVariants } from "../../utilities/constants";
 
+const renderMeasurements = (quoteState, measurements, layoutID) => {
+  let result = '';
+  if ((quoteState === 'create' || quoteState === 'edit') && layoutID) {
+    result = measurements
+      .filter(
+        (measurement) =>
+          measurement.value !== null && measurement.value !== ""
+      )
+      .map((measurement) => measurement.value)
+      .join("’’/ ")
+  }
+  else if (quoteState === 'edit' || quoteState === 'custom') {
+    Object.entries(measurements).forEach(([key, value]) => { result += `${value['width']} ’’/ ${value['height']}’’` });
+  }
+  return result;
+}
+
 const Summary = () => {
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
@@ -57,8 +74,8 @@ const Summary = () => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-      ? `${backendURL}/${selectedData?.settings?.image}`
-      : CustomImage;
+        ? `${backendURL}/${selectedData?.settings?.image}`
+        : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
 
@@ -160,13 +177,7 @@ const Summary = () => {
                   }}
                 >
                   <Typography>
-                    {measurements
-                      .filter(
-                        (measurement) =>
-                          measurement.value !== null && measurement.value !== ""
-                      )
-                      .map((measurement) => measurement.value)
-                      .join("’’/ ")}
+                    {renderMeasurements(quoteState, measurements, quoteState === 'edit' ? selectedData?.layout_id : selectedData?._id)}
                   </Typography>
                   {doorWidth ? (
                     <Typography>
@@ -185,11 +196,11 @@ const Summary = () => {
                     <span style={{ fontWeight: "bold" }}>Door Weight: </span>{" "}
                     {doorWeight}
                   </Typography>}
-                  {![layoutVariants.DOOR,layoutVariants.DOUBLEBARN,layoutVariants.DOUBLEDOOR].includes(selectedData?.settings?.variant) &&  <Typography>
+                  {![layoutVariants.DOOR, layoutVariants.DOUBLEBARN, layoutVariants.DOUBLEDOOR].includes(selectedData?.settings?.variant) && <Typography>
                     <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
                     {panelWeight}
                   </Typography>}
-                  {[layoutVariants.DOORNOTCHEDPANELANDRETURN,layoutVariants.DOORPANELANDRETURN].includes(selectedData?.settings?.variant) &&  <Typography>
+                  {[layoutVariants.DOORNOTCHEDPANELANDRETURN, layoutVariants.DOORPANELANDRETURN].includes(selectedData?.settings?.variant) && <Typography>
                     <span style={{ fontWeight: "bold" }}>Return Weight: </span>{" "}
                     {returnWeight}
                   </Typography>}

@@ -5,6 +5,8 @@ import { useFormik } from "formik";
 import CustomImage from "../../Assets/customlayoutimage.svg";
 import { KeyboardArrowLeft, NoEncryption } from "@mui/icons-material";
 import {
+  getContent,
+  getMeasurementSide,
   setLayoutArea,
   setLayoutPerimeter,
   setNavigation,
@@ -12,7 +14,7 @@ import {
   setPanelWeight,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { layoutVariants } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -31,25 +33,29 @@ const isThereHigherKeyAvailable = (values, iterator) => {
 };
 
 const CustomLayout = () => {
+  const selectedContent = useSelector(getContent);
+  const measurements = useSelector(getMeasurementSide);
+
   const customInitalValues = {
-    [1]: {
+    [0]: {
       count: 1,
     },
   };
   const dispatch = useDispatch();
 
-  const [values, setValues] = useState({ ...customInitalValues });
+  const [values, setValues] = useState(Object.keys(measurements)?.length ? {...measurements} : { ...customInitalValues });
 
   const rows = Object.keys(values).map(
     (key) => parseInt(values[key].count) || 1
   );
+
   const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
   console.log(numRows, "log");
 
   const addRow = () => {
     setValues((vals) => ({
       ...vals,
-      [parseInt(numRows) + 1]: { count: 1 },
+      [parseInt(numRows)]: { count: 1 },
     }));
     console.log(numRows, "log in add row");
   };
@@ -62,44 +68,46 @@ const CustomLayout = () => {
     dispatch(setNavigationDesktop("layouts"));
   };
   const handleSubmit = async () => {
-    const measurementsArray = Object.keys(values)
-      .map((k) => values[k])
-      .reduce((prev, current) => {
-        let count = current.count;
-        if (count === 1) return [...prev, current];
-        let results = [];
-        while (count >= 1) {
-          const { width, height } = current;
-          results.push({ width, height });
-          count--;
-        }
 
-        return [...prev, ...results];
-      }, []);
+    // const measurementsArray = Object.keys(values)
+    //   .map((k) => values[k])
+    //   .reduce((prev, current) => {
+    //     let count = current.count;
+    //     if (count === 1) return [...prev, current];
+    //     let results = [];
+    //     while (count >= 1) {
+    //       const { width, height } = current;
+    //       results.push({ width, height });
+    //       count--;
+    //     }
 
-    const arrayForMeasurement = measurementsArray
-      .map((v) =>
-        Object.keys(v).map((k) =>
-          k !== "count" ? { value: v[k] } : { value: "" }
-        )
-      )
-      .flat();
+    //     return [...prev, ...results];
+    //   }, []);
+
+    // const arrayForMeasurement = measurementsArray
+    //   .map((v) =>
+    //     Object.keys(v).map((k) =>
+    //       k !== "count" ? { value: v[k] } : { value: "" }
+    //     )
+    //   )
+    //   .flat();
 
     const result = calculateAreaAndPerimeter(
-      measurementsArray,
-      layoutVariants.CUSTOM
+      values,
+      layoutVariants.CUSTOM,
+      selectedContent.glassType?.thickness
     );
     if(result?.panelWeight){
       dispatch(setPanelWeight(result?.panelWeight));
     }
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
-    dispatch(updateMeasurements(arrayForMeasurement));
+    dispatch(updateMeasurements(values));
     dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 
     // Reset the form
-    setValues({ ...customInitalValues });
+    // setValues({ ...customInitalValues });
     // setNumRows(customInitalValues.count);
   };
 
@@ -324,7 +332,7 @@ const CustomLayout = () => {
                         placeholder="0"
                         style={{
                           display:
-                            typeof values[index + 1]?.count == "undefined"
+                            typeof values[index]?.count == "undefined"
                               ? "none"
                               : "block",
                           background: "white",
@@ -334,15 +342,15 @@ const CustomLayout = () => {
                         }}
                         value={
                           (
-                            getNearestSmallerKeyWithValues(values, index + 1) ||
-                            values[`${index + 1}`]
+                            getNearestSmallerKeyWithValues(values, index) ||
+                            values[`${index}`]
                           )?.width || ""
                         }
                         onChange={(e) => {
                           setValues((vals) => ({
                             ...vals,
-                            [index + 1]: {
-                              ...vals[index + 1],
+                            [index]: {
+                              ...vals[index],
                               width: e.target.value,
                             },
                           }));
@@ -359,7 +367,7 @@ const CustomLayout = () => {
                         placeholder="0"
                         style={{
                           display:
-                            typeof values[index + 1]?.count == "undefined"
+                            typeof values[index]?.count == "undefined"
                               ? "none"
                               : "block",
                           background: "white",
@@ -369,26 +377,26 @@ const CustomLayout = () => {
                         }}
                         value={
                           (
-                            getNearestSmallerKeyWithValues(values, index + 1) ||
-                            values[`${index + 1}`]
+                            getNearestSmallerKeyWithValues(values, index) ||
+                            values[`${index}`]
                           )?.height || ""
                         }
                         onChange={(e) => {
                           setValues((vals) => ({
                             ...vals,
-                            [index + 1]: {
-                              ...vals[index + 1],
+                            [index]: {
+                              ...vals[index],
                               height: e.target.value,
                             },
                           }));
                         }}
                       />
-                      {typeof values[index + 1]?.count !== "undefined" && (
+                      {typeof values[index]?.count !== "undefined" && (
                         <>
                           <TextField
                             disabled={isThereHigherKeyAvailable(
                               values,
-                              index + 1
+                              index
                             )}
                             type="number"
                             size="small"
@@ -397,7 +405,7 @@ const CustomLayout = () => {
                             InputProps={{
                               inputProps: { min: 1 },
                             }}
-                            value={values[index + 1]?.count || ""}
+                            value={values[index]?.count || ""}
                             placeholder="quantity"
                             style={{
                               background: "white",
@@ -408,21 +416,21 @@ const CustomLayout = () => {
                             onChange={(e) => {
                               setValues((vals) => ({
                                 ...vals,
-                                [index + 1]: {
-                                  ...vals[index + 1],
+                                [index]: {
+                                  ...vals[index],
                                   count: parseInt(e.target.value),
                                 },
                               }));
                             }}
                           />
-                          {Math.max(...Object.keys(values)) === index + 1 &&
-                            index + 1 !== 1 && (
+                          {Math.max(...Object.keys(values)) === index &&
+                            index !== 0 && (
                               <a
                                 href="#"
                                 onClick={(event) => {
                                   event.preventDefault();
                                   setValues((vals) => {
-                                    const { [index + 1]: notWanted, ...rest } =
+                                    const { [index]: notWanted, ...rest } =
                                       vals;
 
                                     return rest;

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { layoutVariants, notificationTypes } from "../utilities/constants";
+import { layoutVariants, notificationTypes, thicknessTypes } from "../utilities/constants";
+import { calculateAreaAndPerimeter } from "../utilities/common";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getCost = (state) => state.estimateCalculations.actualCost;
 export const getProfit = (state) => state.estimateCalculations.grossProfit;
@@ -92,7 +93,7 @@ const initialState = {
     },
     glassType: {
       item: null,
-      thickness: "1/2",
+      thickness: thicknessTypes.THREEBYEIGHT,
     },
     glassAddons: [],
     oneInchHoles: 0,
@@ -446,13 +447,13 @@ const estimateCalcSlice = createSlice({
       const { payload } = action;
       /** on change glass thickness shift active channel of layout */
       let channel = state.content.mountingChannel.item;
-      if (payload === "1/2") {
+      if (payload === thicknessTypes.ONEBYTWO) {
         if (channel) {
           channel = state.listData?.mountingChannel?.find(
             (item) => item.slug === "u-channel-1-2"
           );
         }
-      } else if (payload === "3/8") {
+      } else if (payload === thicknessTypes.THREEBYEIGHT) {
         if (channel) {
           channel = state.listData?.mountingChannel?.find(
             (item) => item.slug === "u-channel-3-8"
@@ -460,8 +461,15 @@ const estimateCalcSlice = createSlice({
         }
       }
       /** end */
-
-      state.content = {
+     /** Calculate all weights on shifting glass thickness */
+     const result = calculateAreaAndPerimeter(state.measurements,state.selectedItem?.settings?.variant ?? layoutVariants.CUSTOM,payload);
+     /** end */
+     return {
+      ...state,
+      doorWeight: result?.doorWeight ?? state.doorWeight,
+      panelWeight: result?.panelWeight ?? state.panelWeight,
+      returnWeight: result?.returnWeight ?? state.returnWeight,
+      content : {
         ...state.content,
         glassType: {
           ...state.content.glassType,
@@ -471,7 +479,9 @@ const estimateCalcSlice = createSlice({
           item: channel,
           count: channel ? 1 : 0,
         },
-      };
+      }
+    };
+      
     },
     updateMeasurements: (state, action) => {
       const newMeasurements = action.payload;
@@ -719,7 +729,7 @@ const estimateCalcSlice = createSlice({
         hardwareFinishes: hardwareFinishes,
         glassType: {
           item: glassType,
-          thickness: "3/8",
+          thickness: thicknessTypes.THREEBYEIGHT,
         },
         glassAddons: glassAddons ? [glassAddons] : [],
         people: 0,
@@ -856,7 +866,7 @@ const estimateCalcSlice = createSlice({
         },
         glassType: {
           item: glassType || null,
-          thickness: layoutData?.settings?.glassType?.thickness || "1/2",
+          thickness: layoutData?.settings?.glassType?.thickness || thicknessTypes.THREEBYEIGHT,
         },
         mountingChannel: {
           item: channelItem || null,

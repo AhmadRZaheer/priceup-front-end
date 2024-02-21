@@ -319,7 +319,7 @@ export const convertArrayKeysToObject = (array) => {
 };
 
 export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickness = thicknessTypes.THREEBYEIGHT) => {
-  let measurements = convertArrayKeysToObject(measurementSides);
+  let measurements = variant !== layoutVariants.CUSTOM ? convertArrayKeysToObject(measurementSides) : null;
   if (variant === layoutVariants.DOOR) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
     const door = {
@@ -328,17 +328,18 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const areaSqft =
       Math.round(((door.width * door.height) / 144) * doorQuantity * 100) / 100;
+    const weight = getWeightByThickness(layoutVariants.DOOR,glassThickness,areaSqft);
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
     };
     const perimeter = perimeterDoor.width + perimeterDoor.height;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * areaSqft)?.toFixed(2));
     return {
       areaSqft: areaSqft,
       perimeter: perimeter,
       doorWidth: door.width,
-      doorWeight: doorWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOORANDPANEL) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
@@ -363,8 +364,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
     const areaSqft = Math.round((doorSqft + panelSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOORANDPANEL,glassThickness,{door:doorSqft,panel:panelSqft});
 
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
@@ -383,8 +383,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOUBLEDOOR) {
     const doorLeftQuantity = measurements?.b === 0 ? 0 : 1;
@@ -402,8 +401,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     const doorRightSqft =
       ((doorRight.width * doorRight.height) / 144) * doorRightQuantity;
     const areaSqft = Math.round((doorLeftSqft + doorRightSqft) * 100) / 100;
-    const doorLeftWeight = Number((getweightMultiplier(glassThickness) * doorLeftSqft)?.toFixed(2));
-    const doorRightWeight = Number((getweightMultiplier(glassThickness) * doorRightSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOUBLEDOOR,glassThickness,{doorLeft:doorLeftSqft,doorRight:doorRightSqft});
+
     const perimeterDoorLeft = {
       width: doorLeft.width * 2 * doorLeftQuantity,
       height: doorLeft.height * 2 * doorLeftQuantity,
@@ -420,7 +419,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       areaSqft: areaSqft,
       perimeter: perimeter,
       doorWidth: doorLeft.width,
-      doorWeight: `${doorLeftWeight}, ${doorRightWeight}`
+      ...weight
     };
   } else if (variant === layoutVariants.DOORANDNIB) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
@@ -436,8 +435,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
     const areaSqft = Math.round((doorSqft + panelSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOORANDNIB,glassThickness,{door:doorSqft,panel:panelSqft});
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
@@ -455,8 +454,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOORANDNOTCHEDPANEL) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
@@ -486,8 +484,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
     const areaSqft = Math.round((doorSqft + panelSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOORANDNOTCHEDPANEL,glassThickness,{door:doorSqft,panel:panelSqft});
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
@@ -506,8 +504,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOORPANELANDRETURN) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
@@ -540,9 +537,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       ((layoutReturn.width * layoutReturn.height) / 144) * returnQuantity;
     const areaSqft =
       Math.round((doorSqft + panelSqft + returnSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
-    const returnWeight = Number((getweightMultiplier(glassThickness) * returnSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOORPANELANDRETURN,glassThickness,{door:doorSqft,panel:panelSqft,return:returnSqft});
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
@@ -565,9 +561,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight,
-      returnWeight: returnWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOORNOTCHEDPANELANDRETURN) {
     const doorQuantity = measurements?.a === 0 ? 0 : 1;
@@ -603,9 +597,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       ((layoutReturn.width * layoutReturn.height) / 144) * returnQuantity;
     const areaSqft =
       Math.round((doorSqft + panelSqft + returnSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
-    const returnWeight = Number((getweightMultiplier(glassThickness) * returnSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOORNOTCHEDPANELANDRETURN,glassThickness,{door:doorSqft,panel:panelSqft,return:returnSqft});
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
@@ -628,9 +621,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight,
-      returnWeight: returnWeight
+      ...weight
     };
   } else if (variant === layoutVariants.SINGLEBARN) {
     const doorQuantity = measurements?.b === 0 ? 0 : 1;
@@ -646,8 +637,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
     const areaSqft = Math.round((doorSqft + panelSqft) * 100) / 100;
-    const doorWeight = Number((getweightMultiplier(glassThickness) * doorSqft)?.toFixed(2));
-    const panelWeight = Number((getweightMultiplier(glassThickness) * panelSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.SINGLEBARN,glassThickness,{door:doorSqft,panel:panelSqft});
+
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
       height: door.height * 2 * doorQuantity,
@@ -665,8 +656,7 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: door.width,
       panelWidth: panel.width,
-      doorWeight: doorWeight,
-      panelWeight: panelWeight
+      ...weight
     };
   } else if (variant === layoutVariants.DOUBLEBARN) {
     const doorLeftQuantity = measurements?.b === 0 ? 0 : 1;
@@ -682,8 +672,8 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
     };
     const doorRightSqft = ((doorRight.width * doorRight.height) / 144) * doorRightQuantity;
     const areaSqft = Math.round((doorLeftSqft + doorRightSqft) * 100) / 100;
-    const doorLeftWeight = Number((getweightMultiplier(glassThickness) * doorLeftSqft)?.toFixed(2));
-    const doorRightWeight = Number((getweightMultiplier(glassThickness) * doorRightSqft)?.toFixed(2));
+    const weight = getWeightByThickness(layoutVariants.DOUBLEBARN,glassThickness,{doorLeft:doorLeftSqft,doorRight:doorRightSqft});
+
     const perimeterDoorLeft = {
       width: doorLeft.width * 2 * doorLeftQuantity,
       height: doorLeft.height * 2 * doorLeftQuantity,
@@ -701,24 +691,30 @@ export const calculateAreaAndPerimeter = (measurementSides, variant, glassThickn
       perimeter: perimeter,
       doorWidth: doorLeft.width,
       panelWidth: doorRight.width,
-      doorWeight: `${doorLeftWeight}, ${doorRightWeight}`
+      ...weight
     };
   } else if (variant === layoutVariants.CUSTOM) {
     measurements = measurementSides;
-    console.log(measurements, "cal");
     let totalSqft = 0;
     let totalPerimeter = 0;
     let panelWeight = '';
 
-    for (const panelKey in measurements) {
-      const { width, height } = measurements[panelKey];
-      console.log({ width, height }, "loop");
-      const panel = calculatePanel(width, height);
-      console.log("panel", panel);
-      totalSqft += panel.sqft;
-      totalPerimeter += panel.perimeter;
-      panelWeight += `${Number((getweightMultiplier(glassThickness) * panel.sqft)?.toFixed(2))}, `
-    }
+    // for (const panelKey in measurements) {
+      Object.entries(measurements).forEach(([key, value]) => {
+        const count = value['count'];
+        const width = value['width'];
+        const height = value['height'];
+        for (let i = 0; i < count; i++) {
+                const panel = calculatePanel(width, height);
+                totalSqft += panel.sqft;
+                totalPerimeter += panel.perimeter;
+                panelWeight += getWeightByThickness(layoutVariants.CUSTOM,glassThickness,panel.sqft)
+        }
+        
+    });
+      // const { width, height } = measurements[panelKey];
+     
+    // }
 
     return {
       areaSqft: Math.round((totalSqft + Number.EPSILON) * 100) / 100,
@@ -741,7 +737,7 @@ const calculatePanel = (width, height) => {
 
 
 export const getGlassThickness = (variant,measurementSides) => {
-  let measurements = convertArrayKeysToObject(measurementSides);
+  const measurements = convertArrayKeysToObject(measurementSides);
   switch (variant){
     case layoutVariants.DOOR:
     return measurements?.b < 85 ? '3/8' : '1/2';
@@ -775,4 +771,56 @@ export const getweightMultiplier = (thickness) => {
   default:
     return weightMultiplier.THREEBYEIGHT;
  }
+}
+
+export const getWeightByThickness = (variant,glassThickness,sqft) => {
+  const weightMultiplier = getweightMultiplier(glassThickness);
+  let doorWeight = 0;
+  let panelWeight = 0;
+  let returnWeight = 0;
+  let doorLeftWeight = 0;
+  let doorRightWeight = 0;
+  switch(variant){
+    case layoutVariants.DOOR:
+        doorWeight = Number((weightMultiplier * sqft)?.toFixed(2));
+        return {doorWeight};
+      case layoutVariants.DOORANDPANEL:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        return {doorWeight,panelWeight};
+      case layoutVariants.DOUBLEDOOR:
+        doorLeftWeight = Number((weightMultiplier * sqft.doorLeft)?.toFixed(2));
+        doorRightWeight = Number((weightMultiplier * sqft.doorRight)?.toFixed(2));
+        return {doorWeight:`${doorLeftWeight}, ${doorRightWeight}`};
+      case layoutVariants.DOORANDNIB:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        return {doorWeight,panelWeight};
+      case layoutVariants.DOORANDNOTCHEDPANEL:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        return {doorWeight,panelWeight};
+      case layoutVariants.DOORPANELANDRETURN:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        returnWeight = Number((weightMultiplier * sqft.return)?.toFixed(2));
+        return {doorWeight,panelWeight,returnWeight};
+      case layoutVariants.DOORNOTCHEDPANELANDRETURN:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        returnWeight = Number((weightMultiplier * sqft.return)?.toFixed(2));
+        return {doorWeight,panelWeight,returnWeight};
+      case layoutVariants.SINGLEBARN:
+        doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
+        panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
+        return {doorWeight,panelWeight};
+      case layoutVariants.DOUBLEBARN:
+        doorLeftWeight = Number((weightMultiplier * sqft.doorLeft)?.toFixed(2));
+        doorRightWeight = Number((weightMultiplier * sqft.doorRight)?.toFixed(2));
+        return {doorWeight:`${doorLeftWeight}, ${doorRightWeight}`};
+      case layoutVariants.CUSTOM:
+        return `${Number((weightMultiplier * sqft)?.toFixed(2))}, `;
+      default:
+        return {};
+  }
 }

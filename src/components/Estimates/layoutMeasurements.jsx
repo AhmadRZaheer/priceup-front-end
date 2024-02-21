@@ -89,12 +89,19 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      // const perimeter = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.perimeterFormula);
-      // const sqftArea = calculateAreaOrPerimeter(measurementsArray, selectedData?.settings?.priceBySqftFormula);
+      /** switch glass thickness if glass size is greater than provided */
+      const glassThickness = getGlassThickness(selectedData?.settings?.variant,measurementsArray);
+      if(glassThickness){
+        dispatch(setThickness(glassThickness));
+      }
+      if(glassThickness && glassThickness === '1/2'){
+        dispatch(setNotifications(notificationTypes.GLASSTHICKNESSSWITCH));
+      }
+      /** end */
       const result = calculateAreaAndPerimeter(
         measurementsArray,
         selectedData?.settings?.variant,
-        selectedData?.settings?.glassType?.thickness
+        glassThickness
       );
       if(result?.doorWeight){
         dispatch(setDoorWeight(result?.doorWeight));
@@ -132,15 +139,7 @@ const LayoutMeasurements = () => {
         dispatch(setContent({ type: "hinges", item: hingesType }));
       }
       /** end */
-      /** switch glass thickness if glass size is greater than provided */
-      const glassThickness = getGlassThickness(selectedData?.settings?.variant,measurementsArray);
-      if(glassThickness){
-        dispatch(setThickness(glassThickness));
-      }
-      if(glassThickness && glassThickness === '1/2'){
-        dispatch(setNotifications(notificationTypes.GLASSTHICKNESSSWITCH));
-      }
-      /** end */
+      
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -183,19 +182,19 @@ const LayoutMeasurements = () => {
       selectedData?.settings?.variant,
       selectedData?.settings?.glassType?.thickness
     );
-    if(result?.doorWeight){
-      dispatch(setDoorWeight(result?.doorWeight));
-    }
-    if(result?.panelWeight){
-      if(result?.panelWeight > panelOverWeightAmount){
-        dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
-      }
-      dispatch(setPanelWeight(result?.panelWeight));
-    }
-    if(result?.returnWeight){
-      dispatch(setReturnWeight(result?.returnWeight));
-    }
-    dispatch(setDoorWidth(result.doorWidth));
+    // if(result?.doorWeight){
+    //   dispatch(setDoorWeight(result?.doorWeight));
+    // }
+    // if(result?.panelWeight){
+    //   if(result?.panelWeight > panelOverWeightAmount){
+    //     dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
+    //   }
+    //   dispatch(setPanelWeight(result?.panelWeight));
+    // }
+    // if(result?.returnWeight){
+    //   dispatch(setReturnWeight(result?.returnWeight));
+    // }
+    // dispatch(setDoorWidth(result.doorWidth));
     setEditDebouncedValue(result.doorWidth);
     dispatch(setDoorWidth(result.doorWidth));
   }, [debouncedValue]);
