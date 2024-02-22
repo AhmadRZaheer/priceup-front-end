@@ -7,6 +7,7 @@ import { KeyboardArrowLeft, NoEncryption } from "@mui/icons-material";
 import {
   getContent,
   getMeasurementSide,
+  getQuoteState,
   setLayoutArea,
   setLayoutPerimeter,
   setNavigation,
@@ -35,7 +36,7 @@ const isThereHigherKeyAvailable = (values, iterator) => {
 const CustomLayout = () => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
-
+  const quoteState = useSelector(getQuoteState);
   const customInitalValues = {
     [0]: {
       count: 1,
@@ -64,8 +65,13 @@ const CustomLayout = () => {
     dispatch(setNavigationDesktop("review"));
   };
   const handleback = () => {
-    dispatch(setNavigation("layouts"));
-    dispatch(setNavigationDesktop("layouts"));
+    // dispatch(setNavigation("layouts"));
+    if(quoteState === 'custom'){
+      dispatch(setNavigationDesktop("layouts"));
+    }
+    else{
+    dispatch(setNavigationDesktop("existing"));
+    }
   };
   const handleSubmit = async () => {
 
@@ -597,7 +603,7 @@ const CustomLayout = () => {
                   <Button
                     type="submit"
                     fullWidth
-                    // disabled={}
+                    disabled={(!values['0']?.width || !values['0']?.height || !values['0']?.count)}
                     sx={{
                       height: 40,
                       fontSize: 20,

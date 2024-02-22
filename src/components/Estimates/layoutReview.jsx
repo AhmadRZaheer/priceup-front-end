@@ -73,6 +73,15 @@ const LayoutReview = ({ setClientDetailOpen }) => {
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
+    let measurementsArray = measurements;
+    if(quoteState === 'edit' && !selectedData?.layout_id){
+      let newArray = [];
+      for (const key in measurementsArray) {
+        const index = parseInt(key);
+        newArray[index] = measurementsArray[key];
+    }
+    measurementsArray = newArray;
+    }
     const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
@@ -174,7 +183,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       hardwareAddons: [...hardwareAddonsArray],
       sleeveOverCount: selectedContent?.sleeveOverCount,
       towelBarsCount: selectedContent?.sleeveOverCount,
-      measurements: measurements,
+      measurements: measurementsArray,
       perimeter: perimeter,
       sqftArea: sqftArea,
     };
@@ -194,8 +203,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
           ? "measurements"
           : quoteState === "custom"
             ? "custom"
-            : quoteState === "edit"
+            : quoteState === "edit" && selectedData?.layout_id
               ? "measurements"
+              : quoteState === "edit" && !selectedData?.layout_id
+              ? "custom"
               : "existing"
       )
     );

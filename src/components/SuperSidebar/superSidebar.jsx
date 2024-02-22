@@ -34,9 +34,9 @@ const SuperSidebar = () => {
   const decodedToken = parseJwt(token);
 
   useEffect(() => {
-    if (process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email) {
-      setSuperUserAdmin(decodedToken);
-    }
+  if (process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email) {
+  setSuperUserAdmin(decodedToken);
+  }
   }, []);
   console.log(SuperUserAdmin, "setSuperUserAdmin");
 

@@ -43,7 +43,7 @@ const renderMeasurements = (quoteState, measurements, layoutID) => {
       .join("’’/ ")
   }
   else if (quoteState === 'edit' || quoteState === 'custom') {
-    Object.entries(measurements).forEach(([key, value]) => { result += `${value['width']} ’’/ ${value['height']}’’` });
+    Object.entries(measurements).forEach(([key, value]) => { result += `${value['width']}’’ / ${value['height']}’’  ` });
   }
   return result;
 }

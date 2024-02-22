@@ -52,15 +52,26 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   const estimatesContent = useSelector(getContent);
   const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
-  const measurements = useSelector(getMeasurementSide);
+  let measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
   const sqftArea = useSelector(getLayoutArea);
   const updatecheck = useSelector(getQuoteState);
   const quoteId = useSelector(getQuoteId);
+  const quoteState = useSelector(getQuoteState);
   const dispatch = useDispatch();
   const { data: customerData, refetch, isLoading } = useFetchDataCustomer();
   const [selectedUser, setSelectedUser] = useState();
   const [Tabs, setTabs] = useState("create");
+  
+  if(quoteState === 'custom'){
+    let newArray = [];
+    for (const key in measurements) {
+      const index = parseInt(key);
+      newArray[index] = measurements[key];
+  }
+    measurements = newArray;
+  }
+
   const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
     return {
       type: row.item._id,

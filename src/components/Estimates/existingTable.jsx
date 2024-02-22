@@ -76,7 +76,11 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
     dispatch(setDoorWidth(result.doorWidth));
-    dispatch(setNavigationDesktop("measurements"));
+    if(item?.layout_id){  // default layout edit
+      dispatch(setNavigationDesktop("measurements"));
+    }else{ // custom layout edit
+      dispatch(setNavigationDesktop("custom"));
+    }
   };
 
   const handleCreateQuote = () => {
