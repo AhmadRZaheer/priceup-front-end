@@ -57,11 +57,7 @@ export default function AddSuperAdminModel({
     name: Yup.string().required("Name is required"),
     email: Yup.string()
       .email("Invalid email address")
-      .required("Email is required")
-      .matches(
-        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-        "Invalid email address format"
-      ),
+      .required("Email is required"),
     image: Yup.mixed(),
     locationName: Yup.string().required("Location Name is required"),
   });

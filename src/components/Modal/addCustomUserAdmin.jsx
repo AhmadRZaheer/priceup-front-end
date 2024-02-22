@@ -52,11 +52,8 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     enableReinitialize: isEdit?.type ? true : false,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      email: Yup.string()
-        .matches(
-          /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-          "Invalid email address"
-        )
+      email:
+        Yup.string()
         .required("Email is required"),
     }),
     onSubmit: (values) => {

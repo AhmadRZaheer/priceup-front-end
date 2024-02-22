@@ -56,10 +56,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
       .email("Invalid email address")
-      .matches(
-        /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-        "Invalid email format"
-      )
       .required("Email is required"),
     password: Yup.string().matches(
       /^.{8,}$/,
