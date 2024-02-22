@@ -16,6 +16,7 @@ import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
 import SingleUser from "../ui-components/SingleUser";
+import { super_superAdmin } from "../../utilities/constants";
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -25,20 +26,12 @@ const SuperSidebar = () => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [SuperUserAdmin, setSuperUserAdmin] = useState(null); // State for search query
   const Logout = () => {
     dispatch(logoutHandler());
     window.location.href = "/adminlogin";
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
-
-  useEffect(() => {
-    if (process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email) {
-      setSuperUserAdmin(decodedToken);
-    }
-  }, []);
-  console.log(SuperUserAdmin, "setSuperUserAdmin");
 
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -143,8 +136,7 @@ const SuperSidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
-                {process.env.REACT_APP_SUPER_USER_ADMIN ==
-                  decodedToken.email && (
+                {super_superAdmin.includes(decodedToken.email) && (
                   <NavLink to="/superadmins" className="link">
                     <li
                       className={` ${

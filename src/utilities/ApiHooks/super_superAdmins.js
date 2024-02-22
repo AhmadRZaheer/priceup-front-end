@@ -31,31 +31,28 @@ export const useUpdateSuper_SuperAdmins = () => {
   const dispatch = useDispatch();
   const handleEdit = async (UpdatedData) => {
     const token = localStorage.getItem("token");
-    // const formData = new FormData();
-    // console.log(UpdatedData, "status");
-    // if (UpdatedData.status !== null) {
-    //   formData.append("status", UpdatedData.status);
-    // }
-    // if (UpdatedData.name) {
-    //   formData.append("name", UpdatedData.name);
-    // }
-    // if (UpdatedData.email) {
-    //   formData.append("email", UpdatedData.email);
-    // }
-    // if (UpdatedData.image) {
-    //   formData.append("image", UpdatedData.image);
-    // }
+    const formData = new FormData();
+
+    // Append data to formData
+    if (UpdatedData.status !== null && UpdatedData.status !== undefined) {
+      formData.append("status", UpdatedData.status);
+    }
+    if (UpdatedData.data !== undefined) {
+      formData.append("name", UpdatedData.data.name);
+    }
+    if (UpdatedData.data !== undefined) {
+      formData.append("email", UpdatedData.data.email);
+    }
+    if (UpdatedData.data !== undefined) {
+      formData.append("image", UpdatedData.data.image);
+    }
     try {
       const response = await axios.put(
         `${backendURL}/admins/${UpdatedData?.id}`,
-        {
-          ...(UpdatedData.status !== null
-            ? { status: UpdatedData.status }
-            : {}),
-          ...(UpdatedData.data ? UpdatedData.data : {}),
-        },
+        formData,
         {
           headers: { Authorization: `Bearer ${token}` },
+          "Content-Type": "multipart/form-data",
         }
       );
 
@@ -96,30 +93,20 @@ export const useCreateSuper_SuperAdmins = () => {
   const dispatch = useDispatch();
   const handleEdit = async (UpdatedData) => {
     const token = localStorage.getItem("token");
-    // const formData = new FormData();
-    // console.log(UpdatedData, "status");
-    // if (UpdatedData.status !== null) {
-    //   formData.append("status", UpdatedData.status);
-    // }
-    // if (UpdatedData.name) {
-    //   formData.append("name", UpdatedData.name);
-    // }
-    // if (UpdatedData.email) {
-    //   formData.append("email", UpdatedData.email);
-    // }
-    // if (UpdatedData.image) {
-    //   formData.append("image", UpdatedData.image);
-    // }
+    const formData = new FormData();
+    if (UpdatedData.name) {
+      formData.append("name", UpdatedData.name);
+    }
+    if (UpdatedData.email) {
+      formData.append("email", UpdatedData.email);
+    }
+    if (UpdatedData.image) {
+      formData.append("image", UpdatedData.image);
+    }
     try {
-      const response = await axios.post(
-        `${backendURL}/admins/save`,
-        {
-          ...(UpdatedData ? UpdatedData : {}),
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.post(`${backendURL}/admins/save`, formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
 
       if (response.data.code === 200) {
         dispatch(
@@ -181,4 +168,49 @@ export const useDeleteSuper_SuperAdmin = () => {
   };
 
   return useMutation(handleDelete);
+};
+
+export const useResetPasswordSuper_SuperAdmin = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (editSuper_SuperAdmin) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/admins/updatePassword/${editSuper_SuperAdmin?.id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "New password is sent to user email successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while updating the data",
+            severity: "success",
+          })
+        );
+        throw new Error("An error occurred while updating the data.");
+      }
+    } catch (error) {
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "success",
+        })
+      );
+      throw new Error("An error occurred while updating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
 };
