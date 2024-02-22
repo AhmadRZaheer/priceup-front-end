@@ -18,6 +18,7 @@ import { backendURL } from "../../utilities/common";
 import DefaultImage from "../ui-components/defaultImage";
 import {
   useCreateSuper_SuperAdmins,
+  useResetPasswordSuper_SuperAdmin,
   useUpdateSuper_SuperAdmins,
 } from "../../utilities/ApiHooks/super_superAdmins";
 
@@ -62,6 +63,7 @@ export default function Create_Edit_SuperSuperAdmin({
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useUpdateSuper_SuperAdmins();
+  const { mutate: ResetPassword } = useResetPasswordSuper_SuperAdmin();
 
   React.useEffect(() => {
     if (CreatedSuccessfully || SuccessForEdit) {
@@ -101,6 +103,9 @@ export default function Create_Edit_SuperSuperAdmin({
       }
     },
   });
+  const handleRestPass = () => {
+    ResetPassword({ id: data._id });
+  };
 
   return (
     <div>
@@ -170,23 +175,49 @@ export default function Create_Edit_SuperSuperAdmin({
                 </Typography>
               </Box>
             </label>
-            {selectedImage ? (
-              <img
-                width={"80px"}
-                height={"80px"}
-                src={URL.createObjectURL(selectedImage)}
-                alt="Selected"
-              />
-            ) : data?.image !== undefined || null ? (
-              <img
-                width={"80px"}
-                height={"80px"}
-                src={`${backendURL}/${data?.image}`}
-                alt="logo team"
-              />
-            ) : (
-              ""
-            )}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              {selectedImage ? (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={URL.createObjectURL(selectedImage)}
+                  alt="Selected"
+                />
+              ) : data?.image !== undefined || null ? (
+                <img
+                  width={"80px"}
+                  height={"80px"}
+                  src={`${backendURL}/${data?.image}`}
+                  alt="logo team"
+                />
+              ) : (
+                ""
+              )}
+
+              {isEdit ? (
+                <Button
+                  variant="outlined"
+                  onClick={handleRestPass}
+                  sx={{
+                    height: "34px",
+                    width: "45%",
+                    color: "#8477DA",
+                    border: "1px solid #8477DA",
+                    mb: 1,
+                  }}
+                >
+                  Reset Password
+                </Button>
+              ) : (
+                ""
+              )}
+            </Box>
           </Box>
           <Box>
             <Typography>Name</Typography>

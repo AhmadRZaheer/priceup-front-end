@@ -36,6 +36,7 @@ import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
 import { parseJwt } from "../ProtectedRoute/authVerify";
+import { super_superAdmin } from "../../utilities/constants";
 
 const SuperAdminTable = () => {
   const {
@@ -225,7 +226,7 @@ const SuperAdminTable = () => {
         >
           <Typography variant="h4">
             {" "}
-            {process.env.REACT_APP_SUPER_USER_ADMIN == decodedToken.email
+            {super_superAdmin.includes(decodedToken.email)
               ? `Welcome back, ${decodedToken.name}`
               : "Locations"}
           </Typography>
