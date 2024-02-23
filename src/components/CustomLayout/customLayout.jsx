@@ -243,7 +243,7 @@ const CustomLayout = () => {
               <Box
                 sx={{
                   display: "flex",
-                  width: { md: "48.5%", xs: "91%" },
+                  width: { md: "48%", xs: "90%" },
                   minHeight: "27vh",
                   maxHeight: { md: 340, xs: "34vh" },
                   marginX: "auto",
@@ -264,58 +264,6 @@ const CustomLayout = () => {
               >
                 <Box sx={{ pb: { md: 0, xs: 0 }, my: 2 }}>
                   {" "}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: { md: 12, xs: 7 },
-                      ml: { md: 2, xs: 0 },
-                      justifyContent: { md: "center", xs: "flex-start" },
-                      width: { md: 315, xs: "90%" },
-                      paddingLeft: "25px",
-                    }}
-                  >
-                    <Box sx={{}}>
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: { sm: "black", xs: "white" },
-                        }}
-                      >
-                        Width
-                      </Typography>
-                    </Box>
-
-                    <Box
-                      sx={{
-                        paddingLeft: "20px",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: { sm: "black", xs: "white" },
-                        }}
-                      >
-                        Height
-                      </Typography>
-                    </Box>
-
-                    <Box
-                      sx={{
-                        paddingLeft: "10px",
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: { sm: "black", xs: "white" },
-                        }}
-                      >
-                        Quantity
-                      </Typography>
-                    </Box>
-                  </Box>
                   {/* a */}
                   {Array.from({ length: numRows }).map((_, index) => (
                     <Box
@@ -327,127 +275,163 @@ const CustomLayout = () => {
                         mb: 1,
                       }}
                     >
-                      {/* <Typography sx={{ mr: 2, width: 9 }}>{`a${
-                      index + 1
-                    }`}</Typography> */}
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="outlined"
-                        name={`aWidth${index}`}
-                        InputProps={{
-                          inputProps: { min: 0 },
-                        }}
-                        placeholder="0"
-                        style={{
-                          display:
-                            typeof values[index]?.count == "undefined"
-                              ? "none"
-                              : "block",
-                          background: "white",
-                          borderRadius: "8px",
-                          border: "1px solid #D0D5DD",
-                          width: { md: "28%", xs: "20%" },
-                        }}
-                        value={
-                          (
-                            getNearestSmallerKeyWithValues(values, index) ||
-                            values[`${index}`]
-                          )?.width || ""
-                        }
-                        onChange={(e) => {
-                          setValues((vals) => ({
-                            ...vals,
-                            [index]: {
-                              ...vals[index],
-                              width: e.target.value,
-                            },
-                          }));
-                        }}
-                      />
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="outlined"
-                        name={`aHeight${index}`}
-                        InputProps={{
-                          inputProps: { min: 0 },
-                        }}
-                        placeholder="0"
-                        style={{
-                          display:
-                            typeof values[index]?.count == "undefined"
-                              ? "none"
-                              : "block",
-                          background: "white",
-                          borderRadius: "8px",
-                          border: "1px solid #D0D5DD",
-                          width: { md: "28%", xs: "20%" },
-                        }}
-                        value={
-                          (
-                            getNearestSmallerKeyWithValues(values, index) ||
-                            values[`${index}`]
-                          )?.height || ""
-                        }
-                        onChange={(e) => {
-                          setValues((vals) => ({
-                            ...vals,
-                            [index]: {
-                              ...vals[index],
-                              height: e.target.value,
-                            },
-                          }));
-                        }}
-                      />
+                      <Box sx={{}}>
+                        <Typography
+                          sx={{
+                            fontSize: 18,
+                            color: { sm: "black", xs: "white" },
+                          }}
+                        >
+                          Width
+                        </Typography>
+
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={`aWidth${index}`}
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          placeholder="0"
+                          style={{
+                            display:
+                              typeof values[index]?.count == "undefined"
+                                ? "none"
+                                : "block",
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: { md: "28%", xs: "20%" },
+                          }}
+                          value={
+                            (
+                              getNearestSmallerKeyWithValues(values, index) ||
+                              values[`${index}`]
+                            )?.width || ""
+                          }
+                          onChange={(e) => {
+                            setValues((vals) => ({
+                              ...vals,
+                              [index]: {
+                                ...vals[index],
+                                width: e.target.value,
+                              },
+                            }));
+                          }}
+                        />
+                      </Box>
+
+                      <Box>
+                        <Typography
+                          sx={{
+                            fontSize: 18,
+                            color: { sm: "black", xs: "white" },
+                          }}
+                        >
+                          Height
+                        </Typography>
+
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={`aHeight${index}`}
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          placeholder="0"
+                          style={{
+                            display:
+                              typeof values[index]?.count == "undefined"
+                                ? "none"
+                                : "block",
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: { md: "28%", xs: "20%" },
+                          }}
+                          value={
+                            (
+                              getNearestSmallerKeyWithValues(values, index) ||
+                              values[`${index}`]
+                            )?.height || ""
+                          }
+                          onChange={(e) => {
+                            setValues((vals) => ({
+                              ...vals,
+                              [index]: {
+                                ...vals[index],
+                                height: e.target.value,
+                              },
+                            }));
+                          }}
+                        />
+                      </Box>
                       {typeof values[index]?.count !== "undefined" && (
                         <>
-                          <TextField
-                            disabled={isThereHigherKeyAvailable(values, index)}
-                            type="number"
-                            size="small"
-                            variant="outlined"
-                            name={`Count${index}`}
-                            InputProps={{
-                              inputProps: { min: 1 },
-                            }}
-                            value={values[index]?.count || ""}
-                            placeholder="quantity"
-                            style={{
-                              background: "white",
-                              borderRadius: "8px",
-                              border: "1px solid #D0D5DD",
-                              width: { md: "15%", xs: "20%" },
-                            }}
-                            onChange={(e) => {
-                              setValues((vals) => ({
-                                ...vals,
-                                [index]: {
-                                  ...vals[index],
-                                  count: parseInt(e.target.value),
-                                },
-                              }));
-                            }}
-                          />
-                          {Math.max(...Object.keys(values)) === index &&
-                            index !== 0 && (
-                              <a
-                                href="#"
-                                onClick={(event) => {
-                                  event.preventDefault();
-                                  setValues((vals) => {
-                                    const { [index]: notWanted, ...rest } =
-                                      vals;
+                          <Box>
+                            <Typography
+                              sx={{
+                                fontSize: 18,
+                                color: { sm: "black", xs: "white" },
+                              }}
+                            >
+                              Quantity
+                            </Typography>
 
-                                    return rest;
-                                  });
-                                }}
-                              >
-                                <DeleteIcon
-                                  sx={{ color: { md: "#101828", xs: "white" } }}
-                                />
-                              </a>
-                            )}
+                            <TextField
+                              disabled={isThereHigherKeyAvailable(
+                                values,
+                                index
+                              )}
+                              type="number"
+                              size="small"
+                              variant="outlined"
+                              name={`Count${index}`}
+                              InputProps={{
+                                inputProps: { min: 1 },
+                              }}
+                              value={values[index]?.count || ""}
+                              placeholder="quantity"
+                              style={{
+                                background: "white",
+                                borderRadius: "8px",
+                                border: "1px solid #D0D5DD",
+                                width: { md: "15%", xs: "20%" },
+                              }}
+                              onChange={(e) => {
+                                setValues((vals) => ({
+                                  ...vals,
+                                  [index]: {
+                                    ...vals[index],
+                                    count: parseInt(e.target.value),
+                                  },
+                                }));
+                              }}
+                            />
+                            {Math.max(...Object.keys(values)) === index &&
+                              index !== 0 && (
+                                <a
+                                  href="#"
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    setValues((vals) => {
+                                      const { [index]: notWanted, ...rest } =
+                                        vals;
+
+                                      return rest;
+                                    });
+                                  }}
+                                >
+                                  <DeleteIcon
+                                    sx={{
+                                      color: { md: "#101828", xs: "white" },
+                                    }}
+                                  />
+                                </a>
+                              )}
+                          </Box>
                         </>
                       )}
                     </Box>
