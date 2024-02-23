@@ -410,28 +410,28 @@ const CustomLayout = () => {
                                 }));
                               }}
                             />
-                            {Math.max(...Object.keys(values)) === index &&
-                              index !== 0 && (
-                                <a
-                                  href="#"
-                                  onClick={(event) => {
-                                    event.preventDefault();
-                                    setValues((vals) => {
-                                      const { [index]: notWanted, ...rest } =
-                                        vals;
-
-                                      return rest;
-                                    });
-                                  }}
-                                >
-                                  <DeleteIcon
-                                    sx={{
-                                      color: { md: "#101828", xs: "white" },
-                                    }}
-                                  />
-                                </a>
-                              )}
                           </Box>
+                          {Math.max(...Object.keys(values)) === index &&
+                            index !== 0 && (
+                              <a
+                                href="#"
+                                onClick={(event) => {
+                                  event.preventDefault();
+                                  setValues((vals) => {
+                                    const { [index]: notWanted, ...rest } =
+                                      vals;
+
+                                    return rest;
+                                  });
+                                }}
+                              >
+                                <DeleteIcon
+                                  sx={{
+                                    color: { md: "#101828", xs: "white" },
+                                  }}
+                                />
+                              </a>
+                            )}
                         </>
                       )}
                     </Box>
