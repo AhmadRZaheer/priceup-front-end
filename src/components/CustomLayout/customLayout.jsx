@@ -44,7 +44,11 @@ const CustomLayout = () => {
   };
   const dispatch = useDispatch();
 
-  const [values, setValues] = useState(Object.keys(measurements)?.length ? {...measurements} : { ...customInitalValues });
+  const [values, setValues] = useState(
+    Object.keys(measurements)?.length
+      ? { ...measurements }
+      : { ...customInitalValues }
+  );
 
   const rows = Object.keys(values).map(
     (key) => parseInt(values[key].count) || 1
@@ -66,15 +70,13 @@ const CustomLayout = () => {
   };
   const handleback = () => {
     // dispatch(setNavigation("layouts"));
-    if(quoteState === 'custom'){
+    if (quoteState === "custom") {
       dispatch(setNavigationDesktop("layouts"));
-    }
-    else{
-    dispatch(setNavigationDesktop("existing"));
+    } else {
+      dispatch(setNavigationDesktop("existing"));
     }
   };
   const handleSubmit = async () => {
-
     // const measurementsArray = Object.keys(values)
     //   .map((k) => values[k])
     //   .reduce((prev, current) => {
@@ -103,7 +105,7 @@ const CustomLayout = () => {
       layoutVariants.CUSTOM,
       selectedContent.glassType?.thickness
     );
-    if(result?.panelWeight){
+    if (result?.panelWeight) {
       dispatch(setPanelWeight(result?.panelWeight));
     }
     dispatch(setLayoutArea(result.areaSqft));
@@ -195,6 +197,7 @@ const CustomLayout = () => {
               flexDirection: "column",
               minWidth: { md: 700, xs: "100%" },
               maxWidth: { md: 1000, xs: "100%" },
+              justifyContent: { md: "", xs: "space-between" },
             }}
           >
             <Box
@@ -240,7 +243,7 @@ const CustomLayout = () => {
               <Box
                 sx={{
                   display: "flex",
-                  width: { md: "48.5%", xs: "90%" },
+                  width: { md: "48.5%", xs: "91%" },
                   minHeight: "27vh",
                   maxHeight: { md: 340, xs: "34vh" },
                   marginX: "auto",
@@ -400,10 +403,7 @@ const CustomLayout = () => {
                       {typeof values[index]?.count !== "undefined" && (
                         <>
                           <TextField
-                            disabled={isThereHigherKeyAvailable(
-                              values,
-                              index
-                            )}
+                            disabled={isThereHigherKeyAvailable(values, index)}
                             type="number"
                             size="small"
                             variant="outlined"
@@ -515,9 +515,26 @@ const CustomLayout = () => {
                 pb: { sm: 2, xs: 10 },
                 display: { md: "none", xs: "flex" },
                 justifyContent: { md: "space-between", xs: "center" },
-                width: "100%",
+                width: "95%",
+                gap: 2,
+                px: 1,
               }}
             >
+              <Button
+                fullWidth
+                onClick={handleReset}
+                sx={{
+                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                  color: "#344054",
+                  textTransform: "initial",
+                  border: "1px solid #D0D5DD",
+                  backgroundColor: { md: "transparent", xs: "white" },
+                  height: 40,
+                  fontSize: 20,
+                }}
+              >
+                Reset
+              </Button>
               <Button
                 fullWidth
                 onClick={addRow}
@@ -603,7 +620,11 @@ const CustomLayout = () => {
                   <Button
                     type="submit"
                     fullWidth
-                    disabled={(!values['0']?.width || !values['0']?.height || !values['0']?.count)}
+                    disabled={
+                      !values["0"]?.width ||
+                      !values["0"]?.height ||
+                      !values["0"]?.count
+                    }
                     sx={{
                       height: 40,
                       fontSize: 20,
