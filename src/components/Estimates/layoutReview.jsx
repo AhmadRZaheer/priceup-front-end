@@ -27,12 +27,13 @@ import {
   getListData,
   getUserProfitPercentage,
   getNotifications,
-  setNotifications,
+  // setNotifications,
   setHardwareAddonsPrice,
+  resetNotifications,
 } from "../../redux/estimateCalculations";
 import {
   useEditEstimates,
-  useFetchDataEstimate,
+  // useFetchDataEstimate,
 } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
@@ -74,13 +75,13 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     let measurementsArray = measurements;
-    if(quoteState === 'edit' && !selectedData?.layout_id){
+    if (quoteState === 'edit' && !selectedData?.layout_id) {
       let newArray = [];
       for (const key in measurementsArray) {
         const index = parseInt(key);
         newArray[index] = measurementsArray[key];
-    }
-    measurementsArray = newArray;
+      }
+      measurementsArray = newArray;
     }
     const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
       return {
@@ -206,8 +207,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
             : quoteState === "edit" && selectedData?.layout_id
               ? "measurements"
               : quoteState === "edit" && !selectedData?.layout_id
-              ? "custom"
-              : "existing"
+                ? "custom"
+                : "existing"
       )
     );
   };
@@ -256,24 +257,27 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   }, []);
 
   useEffect(() => {
-    if(notifications.hingesSwitch){
-      enqueueSnackbar("Hinges switched from standard to heavy", {
-          variant: "info",
+    console.log('mount');
+    Object.entries(notifications).forEach(([key, value]) => {
+      if (['glassAddonsNotAvailable', 'hardwareAddonsNotAvailable'].includes(key)) {
+        value?.forEach((item) => {
+          if (item.status) {
+            enqueueSnackbar(item.message, {
+              variant: item.variant,
+            });
+          }
         });
-    }
-    if(notifications.glassThicknessSwitch){
-      enqueueSnackbar("Glass thickness switched from 3/8 to 1/2", {
-        variant: "info",
-      });
-    }
-    if(notifications.panelOverweight){
-      enqueueSnackbar("Panel weight is over 160lb check your labor", {
-        variant: "info",
-      });
-    }
-    
+      } else {
+        if (value.status) {
+          enqueueSnackbar(value.message, {
+            variant: value.variant,
+          });
+        }
+      }
+    });
     return () => {
-      dispatch(setNotifications());
+      console.log('unmount');
+      dispatch(resetNotifications());
     };
   }, []);
 

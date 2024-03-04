@@ -1,5 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { layoutVariants, notificationTypes, thicknessTypes } from "../utilities/constants";
+import {
+  layoutVariants,
+  notificationTypes,
+  notificationsVariant,
+  thicknessTypes,
+} from "../utilities/constants";
 import { calculateAreaAndPerimeter } from "../utilities/common";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getCost = (state) => state.estimateCalculations.actualCost;
@@ -36,8 +41,10 @@ export const getLayoutArea = (state) => state.estimateCalculations.sqftArea;
 export const getPanelWidth = (state) => state.estimateCalculations.panelWidth;
 export const getDoorWeight = (state) => state.estimateCalculations.doorWeight;
 export const getPanelWeight = (state) => state.estimateCalculations.panelWeight;
-export const getReturnWeight = (state) => state.estimateCalculations.returnWeight;
-export const getNotifications = (state) => state.estimateCalculations.notifications;
+export const getReturnWeight = (state) =>
+  state.estimateCalculations.returnWeight;
+export const getNotifications = (state) =>
+  state.estimateCalculations.notifications;
 
 const initialState = {
   quoteId: null,
@@ -53,9 +60,48 @@ const initialState = {
   returnWeight: 0,
   measurements: [],
   notifications: {
-    hingesSwitch: false,
-    glassThicknessSwitch: false,
-    panelOverweight: false
+    hingesSwitch: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassThicknessSwitch: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    panelOverweight: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    handleNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    hingeNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassTypeNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    slidingDoorSystemNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    headerNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassAddonsNotAvailable: [],
+    hardwareAddonsNotAvailable: [],
   },
   selectedItem: null,
   listData: null,
@@ -145,30 +191,39 @@ const estimateCalcSlice = createSlice({
     setReturnWeight: (state, action) => {
       state.returnWeight = action.payload;
     },
-    setNotifications:(state, action) => {
-      switch(action.payload){
+    setSingleNotification: (state, action) => {
+      const { type, payload } = action.payload;
+      switch (type) {
         case notificationTypes.HINGESSWITCH:
-            state.notifications = {
-              ...state.notifications,
-              hingesSwitch:true,
-            }
-        break;
+          state.notifications = {
+            ...state.notifications,
+            hingesSwitch: payload,
+          };
+          break;
         case notificationTypes.GLASSTHICKNESSSWITCH:
           state.notifications = {
             ...state.notifications,
-            glassThicknessSwitch:true,
-          }
-        break;
+            glassThicknessSwitch: payload,
+          };
+          break;
         case notificationTypes.PANLEOVERWEIGHT:
           state.notifications = {
             ...state.notifications,
-            panelOverweight:true,
-          }
-        break;
+            panelOverweight: payload,
+          };
+          break;
         default:
-          state.notifications = initialState.notifications; 
-        break;
+          state.notifications = initialState.notifications;
+          break;
       }
+    },
+    setMultipleNotifications:(state, action) => {
+      const {selectedContent,notifications} = action.payload;
+      state.notifications = notifications;
+      state.content = selectedContent;
+    },
+    resetNotifications: (state) => {
+      state.notifications = initialState.notifications
     },
     setContent: (state, action) => {
       const { type, item } = action.payload;
@@ -188,43 +243,64 @@ const estimateCalcSlice = createSlice({
         /** handles */
         const handleItem = state.content.handles.item;
         let handleStatus = false;
-        if(handleItem){
-        handleStatus = state.content.handles.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        if (handleItem) {
+          handleStatus = state.content.handles.item.finishes.find(
+            (finish) => finish.finish_id === item._id
+          )?.status;
         }
         /** hinges */
         const hingeItem = state.content.hinges.item;
         let hingeStatus = false;
-        if(hingeItem){
-        hingeStatus = state.content.hinges.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        if (hingeItem) {
+          hingeStatus = state.content.hinges.item.finishes.find(
+            (finish) => finish.finish_id === item._id
+          )?.status;
         }
         /** sliding door system */
         const slidingDoorItem = state.content.slidingDoorSystem.item;
         let slidingDoorSystemStatus = false;
-        if(slidingDoorItem){
-          slidingDoorSystemStatus = state.content.slidingDoorSystem.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        if (slidingDoorItem) {
+          slidingDoorSystemStatus =
+            state.content.slidingDoorSystem.item.finishes.find(
+              (finish) => finish.finish_id === item._id
+            )?.status;
         }
         /** header */
         const headerItem = state.content.header.item;
         let headerStatus = false;
-        if(headerItem){
-          headerStatus = state.content.header.item.finishes.find((finish) => finish.finish_id===item._id)?.status;
+        if (headerItem) {
+          headerStatus = state.content.header.item.finishes.find(
+            (finish) => finish.finish_id === item._id
+          )?.status;
         }
         state.content = {
           ...state.content,
           handles: {
-            item: handleItem && handleStatus === true ? state.content.handles?.item : null,
+            item:
+              handleItem && handleStatus === true
+                ? state.content.handles?.item
+                : null,
             count: state.content.handles?.count,
           },
           hinges: {
-            item: hingeItem && hingeStatus === true ? state.content.hinges?.item : null,
+            item:
+              hingeItem && hingeStatus === true
+                ? state.content.hinges?.item
+                : null,
             count: state.content.hinges?.count,
           },
           slidingDoorSystem: {
-            item: slidingDoorItem && slidingDoorSystemStatus === true ? state.content.slidingDoorSystem?.item : null,
+            item:
+              slidingDoorItem && slidingDoorSystemStatus === true
+                ? state.content.slidingDoorSystem?.item
+                : null,
             count: state.content.slidingDoorSystem?.count,
           },
           header: {
-            item: headerItem && headerStatus === true ? state.content.header?.item : null,
+            item:
+              headerItem && headerStatus === true
+                ? state.content.header?.item
+                : null,
             count: state.content.header?.count,
           },
           [type]: item,
@@ -461,27 +537,30 @@ const estimateCalcSlice = createSlice({
         }
       }
       /** end */
-     /** Calculate all weights on shifting glass thickness */
-     const result = calculateAreaAndPerimeter(state.measurements,state.selectedItem?.settings?.variant ?? layoutVariants.CUSTOM,payload);
-     /** end */
-     return {
-      ...state,
-      doorWeight: result?.doorWeight ?? state.doorWeight,
-      panelWeight: result?.panelWeight ?? state.panelWeight,
-      returnWeight: result?.returnWeight ?? state.returnWeight,
-      content : {
-        ...state.content,
-        glassType: {
-          ...state.content.glassType,
-          thickness: payload,
+      /** Calculate all weights on shifting glass thickness */
+      const result = calculateAreaAndPerimeter(
+        state.measurements,
+        state.selectedItem?.settings?.variant ?? layoutVariants.CUSTOM,
+        payload
+      );
+      /** end */
+      return {
+        ...state,
+        doorWeight: result?.doorWeight ?? state.doorWeight,
+        panelWeight: result?.panelWeight ?? state.panelWeight,
+        returnWeight: result?.returnWeight ?? state.returnWeight,
+        content: {
+          ...state.content,
+          glassType: {
+            ...state.content.glassType,
+            thickness: payload,
+          },
+          mountingChannel: {
+            item: channel,
+            count: channel ? 1 : 0,
+          },
         },
-        mountingChannel: {
-          item: channel,
-          count: channel ? 1 : 0,
-        },
-      }
-    };
-      
+      };
     },
     updateMeasurements: (state, action) => {
       const newMeasurements = action.payload;
@@ -712,18 +791,38 @@ const estimateCalcSlice = createSlice({
       }
     },
     initializeStateForCustomQuote: (state, action) => {
+      let notifications = state.notifications;
       let hardwareFinishes = null;
       hardwareFinishes = state.listData?.hardwareFinishes?.find(
         (item) => item.slug === "polished-chrome"
       );
+
       let glassType = null;
       glassType = state.listData?.glassType?.find(
         (item) => item.slug === "clear"
       );
+      // if (glassType) {
+      //   // generate glass type not available notification in current thickness
+      //   if (
+      //     glassType.options.find(
+      //       (option) => option.thickness === thicknessTypes.THREEBYEIGHT
+      //     )?.status === false
+      //   ) {
+      //     notifications.glassTypeNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Glass type ${glassType.name} is not available in thickness ${thicknessTypes.THREEBYEIGHT}.`,
+      //     };
+      //     glassType = null;
+      //   }
+      // }
+
       let glassAddons = null;
       glassAddons = state.listData?.glassAddons?.find(
         (item) => item.slug === "no-treatment"
       );
+
+      state.notifications = notifications;
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -738,36 +837,133 @@ const estimateCalcSlice = createSlice({
     },
     initializeStateForCreateQuote: (state, action) => {
       const { layoutData } = action.payload;
+      let notifications = state.notifications;
       let hardwareFinishes = null;
       hardwareFinishes = state.listData?.hardwareFinishes?.find(
         (item) => item._id === layoutData?.settings?.hardwareFinishes
       );
+
       let handleType = null;
       handleType = state.listData?.handles?.find(
-        (item) => (item._id === layoutData?.settings?.handles?.handleType) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) => item._id === layoutData?.settings?.handles?.handleType
       );
+      // if (handleType) {
+      //   // generate handle not available notification in current finish
+      //   if (
+      //     handleType.finishes.find(
+      //       (row) => row.finish_id === hardwareFinishes?._id
+      //     )?.status === false
+      //   ) {
+      //     notifications.handleNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Handle ${handleType.name} is not available in finish ${hardwareFinishes.name}.`,
+      //     };
+      //     handleType = null;
+      //   }
+      // }
+
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
-        (item) => (item._id === layoutData?.settings?.hinges?.hingesType) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) => item._id === layoutData?.settings?.hinges?.hingesType
       );
+      // if (hingesType) {
+      //   // generate hinges not available notification in current finish
+      //   if (
+      //     hingesType.finishes.find(
+      //       (row) => row.finish_id === hardwareFinishes?._id
+      //     )?.status === false
+      //   ) {
+      //     notifications.hingeNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Hinge ${hingesType.name} is not available in finish ${hardwareFinishes.name}.`,
+      //     };
+      //     hingesType = null;
+      //   }
+      // }
+
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => (item._id === layoutData?.settings?.slidingDoorSystem?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
       );
+      // if (slidingDoorSystemType) {
+      //   // generate sliding door system not available notification in current finish
+      //   if (
+      //     slidingDoorSystemType.finishes.find(
+      //       (row) => row.finish_id === hardwareFinishes?._id
+      //     )?.status === false
+      //   ) {
+      //     notifications.slidingDoorSystemNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Sliding Door System ${slidingDoorSystemType.name} is not available in finish ${hardwareFinishes.name}.`,
+      //     };
+      //     slidingDoorSystemType = null;
+      //   }
+      // }
+
       let headerType = null;
       headerType = state.listData?.header?.find(
-        (item) => (item._id === layoutData?.settings?.header) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) => item._id === layoutData?.settings?.header
       );
+      // if (headerType) {
+      //   // generate header type not available notification in current finish
+      //   if (
+      //     headerType.finishes.find(
+      //       (row) => row.finish_id === hardwareFinishes?._id
+      //     )?.status === false
+      //   ) {
+      //     notifications.headerNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Header ${headerType.name} is not available in finish ${hardwareFinishes.name}.`,
+      //     };
+      //     headerType = null;
+      //   }
+      // }
 
       let glassType = null;
       glassType = state.listData?.glassType?.find(
         (item) => item._id === layoutData?.settings?.glassType?.type
       );
+      let glassThickness =
+        layoutData?.settings?.glassType?.thickness ||
+        thicknessTypes.THREEBYEIGHT;
+      // if (glassType) {
+      //   // generate glass type not available notification in current thickness
+      //   if (
+      //     glassType.options.find(
+      //       (option) => option.thickness === glassThickness
+      //     )?.status === false
+      //   ) {
+      //     notifications.glassTypeNotAvailable = {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Glass type ${glassType.name} is not available in thickness ${glassThickness}.`,
+      //     };
+      //     glassType = null;
+      //   }
+      // }
 
       let glassAddon = null;
       glassAddon = state.listData?.glassAddons?.find(
         (item) => item._id === layoutData?.settings?.glassAddon
       );
+      // if (
+      //   glassAddon &&
+      //   glassAddon?.options?.length &&
+      //   glassAddon?.options?.[0]?.status === false
+      // ) {
+      //   notifications.glassAddonsNotAvailable = [
+      //     {
+      //       status: true,
+      //       variant: notificationsVariant.WARNING,
+      //       message: `Glass Addon ${glassAddon.name} is not available.`,
+      //     },
+      //   ];
+      //   glassAddon = null;
+      // }
 
       let clampCutOut = 0;
       let wallClampItem,
@@ -785,7 +981,7 @@ const estimateCalcSlice = createSlice({
         cornerGlassToGlassItem =
         channelItem =
           null;
-      // do not calculate if a lyout does not have mounting channel or clamp
+      // do not calculate if a layout does not have mounting channel or clamp
       if (
         ![
           layoutVariants.DOOR,
@@ -845,6 +1041,9 @@ const estimateCalcSlice = createSlice({
       const noGlassAddon = state.listData.glassAddons?.find(
         (item) => item.slug === "no-treatment"
       );
+
+      state.notifications = notifications;
+
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -866,7 +1065,7 @@ const estimateCalcSlice = createSlice({
         },
         glassType: {
           item: glassType || null,
-          thickness: layoutData?.settings?.glassType?.thickness || thicknessTypes.THREEBYEIGHT,
+          thickness: glassThickness,
         },
         mountingChannel: {
           item: channelItem || null,
@@ -955,20 +1154,32 @@ const estimateCalcSlice = createSlice({
       );
       let handleType = null;
       handleType = state.listData?.handles?.find(
-        (item) => (item._id === estimateData?.handles?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) =>
+          item._id === estimateData?.handles?.type &&
+          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
+            ?.status === true
       );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
-        (item) => (item._id === estimateData?.hinges?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) =>
+          item._id === estimateData?.hinges?.type &&
+          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
+            ?.status === true
       );
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => (item._id === estimateData?.slidingDoorSystem?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) =>
+          item._id === estimateData?.slidingDoorSystem?.type &&
+          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
+            ?.status === true
       );
 
       let headerType = null;
       headerType = state.listData?.header?.find(
-        (item) => (item._id === estimateData?.header?.type) && (item.finishes.find((row)=>row.finish_id === hardwareFinishes?._id)?.status === true)
+        (item) =>
+          item._id === estimateData?.header?.type &&
+          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
+            ?.status === true
       );
 
       let glassTypee = null;
@@ -1178,6 +1389,8 @@ export const {
   setDoorWeight,
   setPanelWeight,
   setReturnWeight,
-  setNotifications
+  setSingleNotification,
+  setMultipleNotifications,
+  resetNotifications
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

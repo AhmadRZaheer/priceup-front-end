@@ -17,7 +17,7 @@ import {
   setDoorWidth,
   setListData,
   setNavigationDesktop,
-  setNotifications,
+  // setNotifications,
   setPanelWeight,
   setQuoteState,
   setReturnWeight,
@@ -28,7 +28,7 @@ import { calculateAreaAndPerimeter } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
-import { notificationTypes, panelOverWeightAmount } from "../../utilities/constants";
+import { notificationTypes, notificationsVariant, panelOverWeightAmount } from "../../utilities/constants";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
@@ -63,22 +63,22 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
       item?.layoutData?.variant,
       item.glassType.thickness
     );
-    if(result?.doorWeight){
+    if (result?.doorWeight) {
       dispatch(setDoorWeight(result?.doorWeight));
     }
-    if(result?.panelWeight){
-      if(result?.panelWeight > panelOverWeightAmount){
-        dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
-      }
+    if (result?.panelWeight) {
+      // if (result?.panelWeight > panelOverWeightAmount) {
+      //   dispatch(setNotifications({ type: notificationTypes.PANLEOVERWEIGHT, payload: { status: true, variant: notificationsVariant.INFO, message: `Panel weight is over ${panelOverWeightAmount}lb check your labor` } }));
+      // }
       dispatch(setPanelWeight(result?.panelWeight));
     }
-    if(result?.returnWeight){
+    if (result?.returnWeight) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
     dispatch(setDoorWidth(result.doorWidth));
-    if(item?.layout_id){  // default layout edit
+    if (item?.layout_id) {  // default layout edit
       dispatch(setNavigationDesktop("measurements"));
-    }else{ // custom layout edit
+    } else { // custom layout edit
       dispatch(setNavigationDesktop("custom"));
     }
   };

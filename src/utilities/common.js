@@ -16,37 +16,37 @@ export function createSlug(string) {
 export const backendURL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
-export const evaluateFormula = (
-  formulaString,
-  a = 0,
-  b = 0,
-  c = 0,
-  d = 0,
-  e = 0,
-  f = 0
-) => {
-  try {
-    if (formulaString.length) {
-      // Replace 'a', 'b', and 'c' in the formula string with their respective values
-      const substitutedFormula = formulaString
-        .replace(/a/g, a)
-        .replace(/b/g, b)
-        .replace(/c/g, c)
-        .replace(/d/g, d)
-        .replace(/e/g, e)
-        .replace(/f/g, f);
+// export const evaluateFormula = (
+//   formulaString,
+//   a = 0,
+//   b = 0,
+//   c = 0,
+//   d = 0,
+//   e = 0,
+//   f = 0
+// ) => {
+//   try {
+//     if (formulaString.length) {
+//       // Replace 'a', 'b', and 'c' in the formula string with their respective values
+//       const substitutedFormula = formulaString
+//         .replace(/a/g, a)
+//         .replace(/b/g, b)
+//         .replace(/c/g, c)
+//         .replace(/d/g, d)
+//         .replace(/e/g, e)
+//         .replace(/f/g, f);
 
-      // Evaluate the formula using eval()
-      const result = eval(substitutedFormula);
-      return result;
-    } else {
-      return 0;
-    }
-  } catch (error) {
-    console.error("Error evaluating formula:", error);
-    return 0;
-  }
-};
+//       // Evaluate the formula using eval()
+//       const result = eval(substitutedFormula);
+//       return result;
+//     } else {
+//       return 0;
+//     }
+//   } catch (error) {
+//     console.error("Error evaluating formula:", error);
+//     return 0;
+//   }
+// };
 
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   // hardware
@@ -67,21 +67,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     : 0;
 
   let mountingWallClamps = 0;
-  selectedContent?.mountingClamps?.wallClamp?.map((row) => {
+  selectedContent?.mountingClamps?.wallClamp?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     mountingWallClamps += price ? price * row.count : 0;
   });
   let mountingsleeveOver = 0;
-  selectedContent?.mountingClamps?.sleeveOver?.map((row) => {
+  selectedContent?.mountingClamps?.sleeveOver?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     mountingsleeveOver += price ? price * row.count : 0;
   });
   let mountingglassToGlass = 0;
-  selectedContent?.mountingClamps?.glassToGlass?.map((row) => {
+  selectedContent?.mountingClamps?.glassToGlass?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
@@ -89,21 +89,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   });
 
   let cornerWallClamps = 0;
-  selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+  selectedContent?.cornerClamps?.cornerWallClamp?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
-  selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+  selectedContent?.cornerClamps?.cornerSleeveOver?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
-  selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+  selectedContent?.cornerClamps?.cornerGlassToGlass?.forEach((row) => {
     const price = row.item.finishes?.find(
       (item) => selectedContent.hardwareFinishes._id === item.finish_id
     )?.cost;
@@ -200,7 +200,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //     (item) => item?.finish_id === selectedContent?.hardwareFinishes?._id
   //   )?.cost || 0;
   let hardwareAddons = 0;
-  selectedContent?.hardwareAddons?.map((row) => {
+  selectedContent?.hardwareAddons?.forEach((row) => {
     const price =
       row?.item?.finishes?.find(
         (finish) => finish?.finish_id === selectedContent?.hardwareFinishes?._id
@@ -221,7 +221,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   //glassAddons
   let glassAddonsPrice = 0;
-  selectedContent?.glassAddons?.map((item) => {
+  selectedContent?.glassAddons?.forEach((item) => {
     let price = 0;
     if (item?.options?.length) {
       price = item?.options[0]?.cost || 0;
@@ -238,10 +238,10 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-  console.log(
-    estimatesData?.miscPricing?.pricingFactorStatus,
-    " estimatesData?.miscPricing?.pricingFactor"
-  );
+  // console.log(
+  //   estimatesData?.miscPricing?.pricingFactorStatus,
+  //   " estimatesData?.miscPricing?.pricingFactor"
+  // );
   let total =
     (hardwareTotals +
       fabricationPrice +
@@ -286,25 +286,25 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   };
 };
 
-export const calculateAreaOrPerimeter = (measurementSides, formula) => {
-  const measurementObject = measurementSides.reduce((obj, item) => {
-    const { key, value } = item;
-    if (!obj[key]) {
-      obj[key] = [];
-    }
-    obj[key].push(value);
-    return obj;
-  }, {});
-  return evaluateFormula(
-    formula,
-    measurementObject?.a,
-    measurementObject?.b,
-    measurementObject?.c,
-    measurementObject?.d,
-    measurementObject?.e,
-    measurementObject?.f
-  );
-};
+// export const calculateAreaOrPerimeter = (measurementSides, formula) => {
+//   const measurementObject = measurementSides.reduce((obj, item) => {
+//     const { key, value } = item;
+//     if (!obj[key]) {
+//       obj[key] = [];
+//     }
+//     obj[key].push(value);
+//     return obj;
+//   }, {});
+//   return evaluateFormula(
+//     formula,
+//     measurementObject?.a,
+//     measurementObject?.b,
+//     measurementObject?.c,
+//     measurementObject?.d,
+//     measurementObject?.e,
+//     measurementObject?.f
+//   );
+// };
 
 export const convertArrayKeysToObject = (array) => {
   const obj = array.reduce((result, item) => {
@@ -740,7 +740,7 @@ export const getGlassThickness = (variant,measurementSides) => {
   const measurements = convertArrayKeysToObject(measurementSides);
   switch (variant){
     case layoutVariants.DOOR:
-    return measurements?.b < 85 ? '3/8' : '1/2';
+    return measurements?.a < 85 ? '3/8' : '1/2';
     case layoutVariants.DOORANDPANEL:
     return measurements?.a < 85 ? '3/8' : '1/2';
     case layoutVariants.DOUBLEDOOR:

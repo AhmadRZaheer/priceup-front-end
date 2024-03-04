@@ -21,21 +21,20 @@ import {
   getDoorWidth,
   setDoorWidth,
   getMeasurementSide,
-  setContent,
-  getListData,
   getQuoteState,
-  setNotifications,
-  setThickness,
   setDoorWeight,
   setPanelWeight,
   setReturnWeight,
+  setMultipleNotifications,
 } from "../../redux/estimateCalculations";
 import { backendURL, calculateAreaAndPerimeter, getGlassThickness } from "../../utilities/common";
-import { layoutVariants, notificationTypes, panelOverWeightAmount } from "../../utilities/constants";
+import { layoutVariants } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
+  const estimateState = useSelector((state) => state.estimateCalculations);
 
   const setHandleEstimatesPages = (item) => {
     dispatch(setNavigationDesktop(item));
@@ -44,7 +43,6 @@ const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
-  const listContent = useSelector(getListData);
   const QuoteState = useSelector(getQuoteState);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
@@ -89,57 +87,28 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      /** switch glass thickness if glass size is greater than provided */
-      const glassThickness = getGlassThickness(selectedData?.settings?.variant,measurementsArray);
-      if(glassThickness){
-        dispatch(setThickness(glassThickness));
-      }
-      if(glassThickness && glassThickness === '1/2'){
-        dispatch(setNotifications(notificationTypes.GLASSTHICKNESSSWITCH));
-      }
-      /** end */
+      const glassThickness = getGlassThickness(selectedData?.settings?.variant, measurementsArray);
       const result = calculateAreaAndPerimeter(
         measurementsArray,
         selectedData?.settings?.variant,
         glassThickness
       );
-      if(result?.doorWeight){
+      if (result?.doorWeight) {
         dispatch(setDoorWeight(result?.doorWeight));
       }
-      if(result?.panelWeight){
-        if(result?.panelWeight > panelOverWeightAmount){
-          dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
-        }
+      if (result?.panelWeight) {
         dispatch(setPanelWeight(result?.panelWeight));
       }
-      if(result?.returnWeight){
+      if (result?.returnWeight) {
         dispatch(setReturnWeight(result?.returnWeight));
       }
       dispatch(setLayoutArea(result.areaSqft));
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
 
-      /** switch hinges if width increases layout defaults */
-      if (
-        selectedData?.settings?.heavyDutyOption?.threshold > 0 &&
-        doorWidthFromredux > selectedData?.settings?.heavyDutyOption?.threshold
-      ) {
-        let hingesType = null;
-        hingesType = listContent?.hinges?.find(
-          (item) =>
-            item._id === selectedData?.settings?.heavyDutyOption?.heavyDutyType
-        );
-        dispatch(setContent({ type: "hinges", item: hingesType }));
-        dispatch(setNotifications(notificationTypes.HINGESSWITCH));
-      } else {
-        let hingesType = null;
-        hingesType = listContent?.hinges?.find(
-          (item) => item._id === selectedData?.settings?.hinges?.hingesType
-        );
-        dispatch(setContent({ type: "hinges", item: hingesType }));
-      }
-      /** end */
-      
+      const notificationsResult = generateNotificationsForCurrentItem({ ...estimateState, doorWeight: result?.doorWeight ?? estimateState.doorWeight, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, glassThickness);
+      dispatch(setMultipleNotifications({ ...notificationsResult }));
+
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -383,83 +352,83 @@ const LayoutMeasurements = () => {
                     layoutVariants.DOUBLEBARN,
                   ].includes(
                     selectedData?.settings?.variant ??
-                      selectedData.layoutData?.variant
+                    selectedData.layoutData?.variant
                   ) && (
-                    <>
-                      <Typography>
-                        <input
-                          type="checkbox"
-                          onChange={() => setEditField(!editField)}
-                          style={{
-                            width: "20px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                          }}
-                        >
-                          Select if you want to customize the door width
-                        </span>
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 1,
-                        }}
-                      >
+                      <>
+                        <Typography>
+                          <input
+                            type="checkbox"
+                            onChange={() => setEditField(!editField)}
+                            style={{
+                              width: "20px",
+                            }}
+                          />
+                          <span
+                            style={{
+                              marginLeft: "10px",
+                            }}
+                          >
+                            Select if you want to customize the door width
+                          </span>
+                        </Typography>
                         <Box
                           sx={{
                             display: "flex",
-                            width: "100%",
-                            alignItems: "center",
+                            gap: 1,
                           }}
                         >
                           <Box
                             sx={{
                               display: "flex",
+                              width: "100%",
                               alignItems: "center",
-                              width: "200px",
                             }}
                           >
-                            <Typography
+                            <Box
                               sx={{
-                                color: editField ? "gray" : "",
+                                display: "flex",
+                                alignItems: "center",
+                                width: "200px",
                               }}
                             >
-                              Door Width
-                            </Typography>
-                            <Tooltip
-                              title={
-                                "If you want to customize the door width, check the above checkbox"
-                              }
-                            >
-                              <IconButton>
-                                <InfoOutlinedIcon />
-                              </IconButton>
-                            </Tooltip>
+                              <Typography
+                                sx={{
+                                  color: editField ? "gray" : "",
+                                }}
+                              >
+                                Door Width
+                              </Typography>
+                              <Tooltip
+                                title={
+                                  "If you want to customize the door width, check the above checkbox"
+                                }
+                              >
+                                <IconButton>
+                                  <InfoOutlinedIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </Box>
+                            <TextField
+                              InputProps={{
+                                inputProps: { min: 1 },
+                              }}
+                              disabled={editField}
+                              placeholder={editDebouncedValue}
+                              type="number"
+                              size="small"
+                              variant="outlined"
+                              value={editDebouncedValue}
+                              style={{
+                                background: "white",
+                                borderRadius: "8px",
+                                border: "1px solid #D0D5DD",
+                                width: "100%",
+                              }}
+                              name="door"
+                              onChange={(e) => handleInputChange(e)}
+                            />
                           </Box>
-                          <TextField
-                            InputProps={{
-                              inputProps: { min: 1 },
-                            }}
-                            disabled={editField}
-                            placeholder={editDebouncedValue}
-                            type="number"
-                            size="small"
-                            variant="outlined"
-                            value={editDebouncedValue}
-                            style={{
-                              background: "white",
-                              borderRadius: "8px",
-                              border: "1px solid #D0D5DD",
-                              width: "100%",
-                            }}
-                            name="door"
-                            onChange={(e) => handleInputChange(e)}
-                          />
-                        </Box>
-                        {/* <Box
+                          {/* <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -485,9 +454,9 @@ const LayoutMeasurements = () => {
                           name="panel"
                         />
                       </Box> */}
-                      </Box>
-                    </>
-                  )}
+                        </Box>
+                      </>
+                    )}
                 </Box>
 
                 <Box
@@ -524,9 +493,8 @@ const LayoutMeasurements = () => {
                       <img
                         width="100%"
                         height="100%"
-                        src={`${backendURL}/${
-                          selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                        }`}
+                        src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                          }`}
                         alt="Selected"
                       />
                     </Box>
