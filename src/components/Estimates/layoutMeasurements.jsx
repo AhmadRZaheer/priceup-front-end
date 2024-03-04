@@ -296,15 +296,16 @@ const LayoutMeasurements = () => {
                     borderRadius: "34px 34px 0px 0px",
                     background: { xs: "rgba(16, 13, 36, 0.01)", sm: "none" },
                     backdropFilter: { xs: "blur(81.5px)", sm: "none" },
-                    // background: {
-                    //   sm: "none",
-                    //   xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
-                    // },
+                    background: {
+                      sm: "none",
+                      xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                    },
                     borderTopLeftRadius: { sm: 0, xs: 30 },
                     borderTopRightRadius: { sm: 0, xs: 30 },
                     borderTop: { sm: 0, xs: "1px solid #667085" },
                     paddingX: { sm: 0, xs: 2 },
                     paddingTop: 4,
+                    pb: { sm: 0, xs: 12 },
                   }}
                 >
                   {Array.from({
@@ -507,8 +508,10 @@ const LayoutMeasurements = () => {
                   display: "flex",
                   justifyContent: "center",
                   width: "100%",
-                  paddingBottom: { xs: "20px", sm: "0px" },
+                  paddingY: { xs: "20px", sm: "0px" },
                   bgcolor: { sm: "white", xs: "#08061B" },
+                  position: { sm: "static", xs: "absolute" },
+                  bottom: 0,
                 }}
               >
                 <Box

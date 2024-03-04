@@ -8,9 +8,9 @@ import image1 from "../../Assets/test.png";
 import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
 
-const widget = ({ type , value }) => {
+const widget = ({ type, value }) => {
   let data;
-
+  console.log(value, "value");
   switch (type) {
     case "estimates":
       data = {
@@ -85,13 +85,12 @@ const widget = ({ type , value }) => {
       <div className="left">
         <div className="estimate-card">
           <img width={50} src={data.iconTitle} alt="" />
-          <span style={{fontSize: 18}}>{data.title}</span>
+          <span style={{ fontSize: 18 }}>{data.title}</span>
         </div>
         <div className="card-num">
           {data.isMoney && "$"} {data.cardNum}
         </div>
       </div>
-
     </div>
   );
 };
