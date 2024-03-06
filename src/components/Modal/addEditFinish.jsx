@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Box from "@mui/material/Box";
@@ -58,20 +59,17 @@ export default function AddEditFinish({
     isError: ErrorForAddEidt,
   } = useEditFinish();
 
-  const handleCreateClick = (props) => {
-    addFinish(props);
+  const handleCreateClick = async (props) => {
+    await addFinish(props);
   };
 
-  const handleEditClick = (props) => {
+  const handleEditClick = async (props) => {
     const id = data;
-    editFinish(props, id);
+    await editFinish(props, id);
   };
 
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
-    image: Yup.mixed().test("required", "Image is required", (value) => {
-      return value !== undefined && value !== null;
-    }),
     thickness: Yup.string().required("Thickness is required"),
   });
 
@@ -93,27 +91,23 @@ export default function AddEditFinish({
     onSubmit: (values, { resetForm }) => {
       {
         isEdit ? handleEditClick(values) : handleCreateClick(values);
-        if (SuccessForEdit || CreatedSuccessfully) {
-          setSelectedImage(null);
-          resetForm();
-        }
       }
     },
   });
-  React.useEffect(() => {
-    if (SuccessForEdit) {
-      finishesRefetch();
-      close();
-    }
-  }, [SuccessForEdit, ErrorForAddEidt]);
-  React.useEffect(() => {
+  useEffect(() => {
     if (CreatedSuccessfully) {
+      setSelectedImage(null);
+      formik.resetForm();
       finishesRefetch();
       close();
-    } else if (ErrorForAdd) {
-      const errorMessage = ErrorForAdd.message || "An error occurred";
     }
-  }, [CreatedSuccessfully, ErrorForAdd]);
+    if (SuccessForEdit) {
+      setSelectedImage(null);
+      formik.resetForm();
+      finishesRefetch();
+      close();
+    }
+  }, [CreatedSuccessfully, SuccessForEdit]);
   return (
     <div>
       <Modal

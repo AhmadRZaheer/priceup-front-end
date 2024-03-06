@@ -54,29 +54,13 @@ export default function AddEditGlassAddon({
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useEditGlassAddon();
-  useEffect(() => {
-    if (CreatedSuccessfully) {
-      console.log("CreatedSuccessfully useEffect triggered");
-      refetch();
-      close();
-    }
-  }, [CreatedSuccessfully]);
-
-  useEffect(() => {
-    if (SuccessForEdit) {
-      console.log("SuccessForEdit useEffect triggered");
-      refetch();
-      close();
-    }
-  }, [SuccessForEdit]);
 
   const handleCreateClick = async (props) => {
     await addGlassAddon(props);
   };
 
   const handleEditClick = async (props) => {
-    console.log(props, "props.glassAddonData");
-    await editGlassAddon({ glassAddonData: props, id: data?._id });
+    editGlassAddon({ glassAddonData: props, id: data?._id });
   };
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("glassAddons Label is required"),
@@ -94,16 +78,32 @@ export default function AddEditGlassAddon({
           name: "",
           image: "",
         },
-    enableReinitialize: false,
+    enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
       {
         isEdit ? handleEditClick(values) : handleCreateClick(values);
-        setSelectedImage(null);
-        resetForm();
       }
     },
   });
+
+  useEffect(() => {
+    if (CreatedSuccessfully) {
+      refetch();
+      close();
+      setSelectedImage(null);
+      formik.resetForm();
+    }
+  }, [CreatedSuccessfully]);
+
+  useEffect(() => {
+    if (SuccessForEdit) {
+      refetch();
+      close();
+      setSelectedImage(null);
+      formik.resetForm();
+    }
+  }, [SuccessForEdit]);
 
   return (
     <div>

@@ -55,7 +55,12 @@ export const useDeleteFinishes = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw `${error.response?.data?.message}`;
     }
   };
@@ -128,9 +133,10 @@ export const useEditFinish = () => {
 
     formData.append("name", updatedHardware?.hardwareLabel);
     formData.append("slug", slug);
-    formData.append("image", updatedHardware?.image);
+    if (updatedHardware?.image) {
+      formData.append("image", updatedHardware?.image);
+    }
     formData.append("holesNeeded", updatedHardware?.thickness);
-    console.log(formData,'formData finishes');
     try {
       const response = await axios.put(
         `${backendURL}/finishes/${updatedHardware?.id}`,
@@ -161,7 +167,12 @@ export const useEditFinish = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
     }
   };
 

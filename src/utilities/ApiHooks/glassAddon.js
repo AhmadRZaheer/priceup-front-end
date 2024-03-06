@@ -255,17 +255,16 @@ export const useEditGlassAddon = () => {
   const dispatch = useDispatch();
   const handleEdit = async (props) => {
     const token = localStorage.getItem("token");
-    const slug = createSlug(props.name);
+    const slug = createSlug(props.glassAddonData.name);
     try {
+      console.log(props, "props");
       const options = {};
       const formData = new FormData();
 
-      // Check if optionsData is defined and is an array
       if (Array.isArray(props.optionsData) && props.optionsData.length > 0) {
         options.options = props.optionsData;
       }
 
-      // Check if glassAddonData exists before appending to FormData
       if (props.glassAddonData) {
         formData.append("name", props.glassAddonData.name);
         formData.append("slug", slug);

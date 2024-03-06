@@ -80,7 +80,6 @@ const FinishesTable = () => {
       headerClassName: "customHeaderClass-finishes",
       flex: 1,
       renderCell: (params) => {
-        console.log("params", params.row);
         const id = params.row._id;
         const isMatchingId = id === matchingId;
         return (
