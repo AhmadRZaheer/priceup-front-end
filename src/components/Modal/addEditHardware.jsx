@@ -15,6 +15,7 @@ import {
 } from "../../utilities/ApiHooks/hardware";
 import { useEffect } from "react";
 import { backendURL } from "../../utilities/common";
+import CustomInputField from "../ui-components/CustomInput";
 
 const style = {
   position: "absolute",
@@ -89,25 +90,41 @@ export default function AddEditHardware({
     initialValues: isEdit
       ? {
           name: data?.name,
+          oneInchHoles: data?.oneInchHoles,
+          hingeCut: data?.hingeCut,
+          clampCut: data?.clampCut,
+          notch: data?.notch,
+          outages: data?.outages,
           image: "",
         }
       : {
           name: "",
           image: "",
+          oneInchHoles: "",
+          hingeCut: "",
+          clampCut: "",
+          notch: "",
+          outages: "",
           hardware_category_slug: categorySlug,
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
-    onSubmit: (values, { resetForm }) => {
+    onSubmit: (values) => {
       {
         isEdit
           ? handleEditClick({ hardwareData: values, id: data._id })
           : handleCreateClick(values);
-        setSelectedImage(null);
-        resetForm();
+        resetFormHandle();
       }
     },
   });
+
+  const resetFormHandle = async () => {
+    if (CreatedSuccessfully || SuccessForEdit) {
+      await formik.resetForm();
+      setSelectedImage(null);
+    }
+  };
 
   return (
     <div>
@@ -203,7 +220,8 @@ export default function AddEditHardware({
           </Box>
           <Box>
             <Typography>Hardware Label</Typography>
-            <TextField
+            <CustomInputField
+              size="small"
               placeholder="Hardware Label"
               name="name"
               value={formik.values.name}
@@ -211,6 +229,114 @@ export default function AddEditHardware({
               onBlur={formik.handleBlur}
               error={formik.touched.name && Boolean(formik.errors.name)}
               helperText={formik.touched.name && formik.errors.name}
+              variant="outlined"
+              fullWidth
+            />
+          </Box>
+          <Box sx={{ display: "flex", gap: 3 }}>
+            <Box>
+              <Typography>1" Holes</Typography>
+              <CustomInputField
+                size="small"
+                placeholder='1" Holes'
+                name="oneInchHoles"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                value={formik.values.oneInchHoles}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.oneInchHoles &&
+                  Boolean(formik.errors.oneInchHoles)
+                }
+                helperText={
+                  formik.touched.oneInchHoles && formik.errors.oneInchHoles
+                }
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+            <Box>
+              <Typography>Hinge Cut Out</Typography>
+              <CustomInputField
+                size="small"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                placeholder="Hinge Cut Out"
+                name="hingeCut"
+                type="number"
+                value={formik.values.hingeCut}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.hingeCut && Boolean(formik.errors.hingeCut)
+                }
+                helperText={formik.touched.hingeCut && formik.errors.hingeCut}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+          </Box>
+          <Box sx={{ display: "flex", gap: 3 }}>
+            <Box>
+              <Typography>Clamp Cut Out</Typography>
+              <CustomInputField
+                size="small"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                placeholder="Clamp Cut Out"
+                name="clampCut"
+                type="number"
+                value={formik.values.clampCut}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={
+                  formik.touched.clampCut && Boolean(formik.errors.clampCut)
+                }
+                helperText={formik.touched.clampCut && formik.errors.clampCut}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+            <Box>
+              <Typography>Notch</Typography>
+              <CustomInputField
+                size="small"
+                InputProps={{
+                  inputProps: { min: 0 },
+                }}
+                placeholder="Notch"
+                name="notch"
+                type="number"
+                value={formik.values.notch}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.notch && Boolean(formik.errors.notch)}
+                helperText={formik.touched.notch && formik.errors.notch}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+          </Box>
+          <Box sx={{ width: "47%" }}>
+            <Typography>Outages</Typography>
+            <CustomInputField
+              size="small"
+              InputProps={{
+                inputProps: { min: 0 },
+              }}
+              placeholder="Outages"
+              name="outages"
+              type="number"
+              value={formik.values.outages}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.touched.outages && Boolean(formik.errors.outages)}
+              helperText={formik.touched.outages && formik.errors.outages}
               variant="outlined"
               fullWidth
             />

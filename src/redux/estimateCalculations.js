@@ -217,13 +217,13 @@ const estimateCalcSlice = createSlice({
           break;
       }
     },
-    setMultipleNotifications:(state, action) => {
-      const {selectedContent,notifications} = action.payload;
+    setMultipleNotifications: (state, action) => {
+      const { selectedContent, notifications } = action.payload;
       state.notifications = notifications;
       state.content = selectedContent;
     },
     resetNotifications: (state) => {
-      state.notifications = initialState.notifications
+      state.notifications = initialState.notifications;
     },
     setContent: (state, action) => {
       const { type, item } = action.payload;
@@ -240,69 +240,69 @@ const estimateCalcSlice = createSlice({
         };
       } else if (["hardwareFinishes"].includes(type)) {
         // recheck hardwares availability with current finish
-        /** handles */
-        const handleItem = state.content.handles.item;
-        let handleStatus = false;
-        if (handleItem) {
-          handleStatus = state.content.handles.item.finishes.find(
-            (finish) => finish.finish_id === item._id
-          )?.status;
-        }
-        /** hinges */
-        const hingeItem = state.content.hinges.item;
-        let hingeStatus = false;
-        if (hingeItem) {
-          hingeStatus = state.content.hinges.item.finishes.find(
-            (finish) => finish.finish_id === item._id
-          )?.status;
-        }
-        /** sliding door system */
-        const slidingDoorItem = state.content.slidingDoorSystem.item;
-        let slidingDoorSystemStatus = false;
-        if (slidingDoorItem) {
-          slidingDoorSystemStatus =
-            state.content.slidingDoorSystem.item.finishes.find(
-              (finish) => finish.finish_id === item._id
-            )?.status;
-        }
-        /** header */
-        const headerItem = state.content.header.item;
-        let headerStatus = false;
-        if (headerItem) {
-          headerStatus = state.content.header.item.finishes.find(
-            (finish) => finish.finish_id === item._id
-          )?.status;
-        }
+        // /** handles */
+        // const handleItem = state.content.handles.item;
+        // let handleStatus = false;
+        // if (handleItem) {
+        //   handleStatus = state.content.handles.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
+        // /** hinges */
+        // const hingeItem = state.content.hinges.item;
+        // let hingeStatus = false;
+        // if (hingeItem) {
+        //   hingeStatus = state.content.hinges.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
+        // /** sliding door system */
+        // const slidingDoorItem = state.content.slidingDoorSystem.item;
+        // let slidingDoorSystemStatus = false;
+        // if (slidingDoorItem) {
+        //   slidingDoorSystemStatus =
+        //     state.content.slidingDoorSystem.item.finishes.find(
+        //       (finish) => finish.finish_id === item._id
+        //     )?.status;
+        // }
+        // /** header */
+        // const headerItem = state.content.header.item;
+        // let headerStatus = false;
+        // if (headerItem) {
+        //   headerStatus = state.content.header.item.finishes.find(
+        //     (finish) => finish.finish_id === item._id
+        //   )?.status;
+        // }
         state.content = {
           ...state.content,
-          handles: {
-            item:
-              handleItem && handleStatus === true
-                ? state.content.handles?.item
-                : null,
-            count: state.content.handles?.count,
-          },
-          hinges: {
-            item:
-              hingeItem && hingeStatus === true
-                ? state.content.hinges?.item
-                : null,
-            count: state.content.hinges?.count,
-          },
-          slidingDoorSystem: {
-            item:
-              slidingDoorItem && slidingDoorSystemStatus === true
-                ? state.content.slidingDoorSystem?.item
-                : null,
-            count: state.content.slidingDoorSystem?.count,
-          },
-          header: {
-            item:
-              headerItem && headerStatus === true
-                ? state.content.header?.item
-                : null,
-            count: state.content.header?.count,
-          },
+          // handles: {
+          //   item:
+          //     handleItem && handleStatus === true
+          //       ? state.content.handles?.item
+          //       : null,
+          //   count: state.content.handles?.count,
+          // },
+          // hinges: {
+          //   item:
+          //     hingeItem && hingeStatus === true
+          //       ? state.content.hinges?.item
+          //       : null,
+          //   count: state.content.hinges?.count,
+          // },
+          // slidingDoorSystem: {
+          //   item:
+          //     slidingDoorItem && slidingDoorSystemStatus === true
+          //       ? state.content.slidingDoorSystem?.item
+          //       : null,
+          //   count: state.content.slidingDoorSystem?.count,
+          // },
+          // header: {
+          //   item:
+          //     headerItem && headerStatus === true
+          //       ? state.content.header?.item
+          //       : null,
+          //   count: state.content.header?.count,
+          // },
           [type]: item,
         };
       } else if (["hardwareAddons"].includes(type)) {
@@ -329,6 +329,24 @@ const estimateCalcSlice = createSlice({
             state.content.glassAddons.splice(indexOfNoTreatment, 1);
           }
         }
+      } else if (["handles"].includes(type)) {
+        state.content = {
+          ...state.content,
+          [type]: {
+            ...state.content[type],
+            item: item,
+          },
+          oneInchHoles: item.oneInchHoles * state.content[type].count,
+        };
+      } else if (["hinges"].includes(type)) {
+        state.content = {
+          ...state.content,
+          [type]: {
+            ...state.content[type],
+            item: item,
+          },
+          hingeCut: item.hingeCut * state.content[type].count,
+        };
       } else {
         state.content = {
           ...state.content,
@@ -341,6 +359,7 @@ const estimateCalcSlice = createSlice({
     },
     setCounters: (state, action) => {
       const { type, value, item } = action.payload;
+      console.log(value, "value", state.content.handles?.item?.hingeCut);
       let allClamps = ["wallClamp", "sleeveOver", "glassToGlass"];
       let allCorners = [
         "cornerWallClamp",
@@ -422,14 +441,19 @@ const estimateCalcSlice = createSlice({
       } else if (["hinges"].includes(type)) {
         state.content = {
           ...state.content,
-          hingeCut: value,
+          hingeCut:
+            value *
+            (state.content.hinges?.item?.hingeCut === 0
+              ? 1
+              : state.content.hinges?.item?.hingeCut),
           [type]: {
             ...state.content[type],
             count: value,
           },
         };
       } else if (["handles"].includes(type)) {
-        const handleHoles = value * 2;
+        const handleHoles =
+          value * (state.content.handles?.item?.oneInchHoles ?? 1); // multiply with 0 if value is null
         let layoutHoles = 0;
         layoutHoles =
           state.selectedItem?.settings?.variant === layoutVariants.SINGLEBARN
@@ -1043,7 +1067,7 @@ const estimateCalcSlice = createSlice({
       );
 
       state.notifications = notifications;
-
+      console.log(handleType, "handleType");
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -1132,9 +1156,12 @@ const estimateCalcSlice = createSlice({
         glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],
         outages: layoutData?.settings?.outages,
         notch: layoutData?.settings?.notch,
-        hingeCut: layoutData?.settings?.hinges?.count,
+        hingeCut:
+          layoutData?.settings?.hinges?.count *
+          (hingesType?.hingeCut === 0 ? 1 : hingesType?.hingeCut), // multiply with one if the value is 0
         oneInchHoles:
-          layoutData?.settings?.handles?.count * 2 +
+          layoutData?.settings?.handles?.count *
+            (handleType?.oneInchHoles === 0 ? 1 : handleType?.oneInchHoles) +
           (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
             ? 6
             : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
@@ -1391,6 +1418,6 @@ export const {
   setReturnWeight,
   setSingleNotification,
   setMultipleNotifications,
-  resetNotifications
+  resetNotifications,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
