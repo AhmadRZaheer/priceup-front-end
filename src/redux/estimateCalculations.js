@@ -336,7 +336,9 @@ const estimateCalcSlice = createSlice({
             ...state.content[type],
             item: item,
           },
-          oneInchHoles: item.oneInchHoles * state.content[type].count,
+          oneInchHoles:
+            (item.oneInchHoles === 0 ? 1 : item.oneInchHoles) *
+            state.content[type].count,
         };
       } else if (["hinges"].includes(type)) {
         state.content = {
@@ -345,7 +347,9 @@ const estimateCalcSlice = createSlice({
             ...state.content[type],
             item: item,
           },
-          hingeCut: item.hingeCut * state.content[type].count,
+          hingeCut:
+            (item.hingeCut === 0 ? 1 : item.hingeCut) *
+            state.content[type].count,
         };
       } else {
         state.content = {
@@ -453,7 +457,10 @@ const estimateCalcSlice = createSlice({
         };
       } else if (["handles"].includes(type)) {
         const handleHoles =
-          value * (state.content.handles?.item?.oneInchHoles ?? 1); // multiply with 0 if value is null
+          value *
+          (state.content.handles?.item?.oneInchHoles === 0
+            ? 1
+            : state.content.handles?.item?.oneInchHoles); // multiply with 0 if value is null
         let layoutHoles = 0;
         layoutHoles =
           state.selectedItem?.settings?.variant === layoutVariants.SINGLEBARN
@@ -1067,7 +1074,6 @@ const estimateCalcSlice = createSlice({
       );
 
       state.notifications = notifications;
-      console.log(handleType, "handleType");
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
