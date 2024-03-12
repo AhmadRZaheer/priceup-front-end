@@ -254,7 +254,7 @@ const TeamTable = () => {
             <Box>
               <CustomIconButton
                 handleClick={() => (setOpen(true), setIsEdit(false))}
-                buttonText="Add member"
+                buttonText="Add User"
               />
             </Box>
           </Box>
@@ -354,9 +354,14 @@ const TeamTable = () => {
               </>
             ) : (
               <Typography
-                sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
+                sx={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "#667085",
+                  py: 2,
+                }}
               >
-                No team member found
+                No Users found
               </Typography>
             )}
           </div>

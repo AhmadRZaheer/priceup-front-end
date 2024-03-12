@@ -45,7 +45,7 @@ export default function Layout() {
     setselectCustom(false);
   };
   const setStorePage = () => {
-    dispatch(updateMeasurements([]));  // reset measurement array on shifting layout
+    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     if (selectCustom) {
       dispatch(setNavigationDesktop("custom"));
     } else dispatch(setNavigationDesktop("measurements"));
@@ -268,6 +268,9 @@ export default function Layout() {
                   backgroundColor: "#8477DA",
                   fontSize: 18,
                   "&:hover": { backgroundColor: "#8477DA" },
+                  ":disabled": {
+                    bgcolor: "#c2c2c2",
+                  },
                   color: "white",
                 }}
                 onClick={setStorePage}

@@ -55,7 +55,7 @@ function PasswordModal({ open, close, user, companyId, customUserRefech }) {
     <>
       <Modal open={open} onClose={close}>
         <Box sx={style}>
-          <Typography>Enter the Password of the User</Typography>
+          <Typography>Enter the Password of the Admin</Typography>
           <Box sx={{ mt: 3 }}>
             <Typography>Password</Typography>
             <CustomInputField

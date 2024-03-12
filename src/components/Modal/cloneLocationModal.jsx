@@ -96,7 +96,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
               alignItems: "baseline",
             }}
           >
-            <Typography>Add Location</Typography>
+            <Typography>Clone Location</Typography>
           </Box>
 
           <Box>
@@ -228,7 +228,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
               {LoadingForAdd ? (
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
-                "Copy"
+                "Clone"
               )}
             </Button>
           </Box>

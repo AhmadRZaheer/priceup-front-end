@@ -80,7 +80,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
         <Box sx={style}>
           <form onSubmit={formik.handleSubmit}>
             <Typography sx={{ fontSize: 24, mb: 2, fontWeight: "bold" }}>
-              Create User
+              Create Admin
             </Typography>
             <Box>
               <Box sx={{ pb: 2 }}>

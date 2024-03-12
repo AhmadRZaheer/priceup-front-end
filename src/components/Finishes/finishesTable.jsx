@@ -217,7 +217,7 @@ const FinishesTable = () => {
               <CustomIconButton
                 handleClick={handleOpen}
                 icon={<Add style={{ color: "white" }} />}
-                buttonText="Add"
+                buttonText="Add Finishes"
               />
             </div>
           </div>

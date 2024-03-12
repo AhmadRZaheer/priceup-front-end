@@ -200,7 +200,7 @@ const SuperAdminUser = () => {
             <TextField
               placeholder="Search by Name"
               variant="standard"
-              fullWidth
+              fullWidth={false}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               sx={{
@@ -235,9 +235,9 @@ const SuperAdminUser = () => {
             </Box>
           ) : customUserData.length === 0 ? (
             <Typography sx={{ color: "#667085", textAlign: "center", p: 3 }}>
-              No Costom user Found
+              No Admin Found
             </Typography>
-          ) : (
+          ) : filteredData.length !== 0 ? (
             <div className="CustomerTable">
               <DataGrid
                 style={{
@@ -330,6 +330,10 @@ const SuperAdminUser = () => {
                 </Button>
               </Box>
             </div>
+          ) : (
+            <Box sx={{ color: "#667085", textAlign: "center", p: 3 }}>
+              No Admin Found
+            </Box>
           )}
         </Box>
         <DeleteModal

@@ -195,7 +195,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         mb: -1,
                       }}
                     >
-                      User Info{" "}
+                      Admin Info{" "}
                     </Typography>
                   ) : (
                     <Typography
@@ -204,7 +204,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         fontSize: "15px",
                       }}
                     >
-                      User Info{" "}
+                      Admin Info{" "}
                     </Typography>
                   )}
                 </AccordionSummary>
@@ -440,7 +440,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       mb: -1,
                     }}
                   >
-                    User Allotment{" "}
+                    Admin Allotment{" "}
                   </Typography>
                 ) : (
                   <Typography
@@ -449,7 +449,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       fontSize: "15px",
                     }}
                   >
-                    User Allotment{" "}
+                    Admin Allotment{" "}
                   </Typography>
                 )}
               </AccordionSummary>
@@ -466,45 +466,58 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                     }}
                     component="ul"
                   >
-                    {haveAccessArray.map((data) => {
-                      return (
-                        <Tooltip
-                          // title={
-                          //   selectedRow.company_id === data.id
-                          //     ? "Cannot Remove"
-                          //     : ""
-                          // }
-                          key={data._id}
-                        >
-                          <Box
-                            sx={{
-                              borderRadius: "7px",
-                            }}
+                    {haveAccessArray.length !== 0 ? (
+                      haveAccessArray.map((data) => {
+                        return (
+                          <Tooltip
+                            // title={
+                            //   selectedRow.company_id === data.id
+                            //     ? "Cannot Remove"
+                            //     : ""
+                            // }
                             key={data._id}
                           >
-                            <Chip
-                              label={data.name}
-                              onDelete={() => removeLocationAccess(data)}
-                              deleteIcon={
-                                <Close
-                                  style={{
-                                    color: "white",
-                                    width: "16px",
-                                    height: "16px",
-                                    display: "block",
-                                  }}
-                                />
-                              }
+                            <Box
                               sx={{
-                                color: "white",
-                                bgcolor: "#C6C6C6",
                                 borderRadius: "7px",
                               }}
-                            />
-                          </Box>
-                        </Tooltip>
-                      );
-                    })}
+                              key={data._id}
+                            >
+                              <Chip
+                                label={data.name}
+                                onDelete={() => removeLocationAccess(data)}
+                                deleteIcon={
+                                  <Close
+                                    style={{
+                                      color: "white",
+                                      width: "16px",
+                                      height: "16px",
+                                      display: "block",
+                                    }}
+                                  />
+                                }
+                                sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
+                                  borderRadius: "7px",
+                                }}
+                              />
+                            </Box>
+                          </Tooltip>
+                        );
+                      })
+                    ) : (
+                      <Box
+                        sx={{
+                          color: "#667085",
+                          textAlign: "center",
+                          fontSize: "12px",
+                          width: "100%",
+                        }}
+                      >
+                        Currently no admin is allotted to this location.
+                      </Box>
+                    )}
                   </Box>
                 </Box>
                 <Accordion
@@ -534,7 +547,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                           pl: 0.2,
                         }}
                       >
-                        Add User
+                        Allot Admin
                       </Typography>
                     ) : (
                       <Typography
@@ -543,7 +556,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                           fontSize: "14px",
                         }}
                       >
-                        Add User
+                        Allot Admin
                       </Typography>
                     )}
                   </AccordionSummary>
@@ -558,25 +571,41 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       }}
                       component="ul"
                     >
-                      {giveAccessArray?.map((data) => {
-                        return (
-                          <Box sx={{ borderRadius: "7px", p: 0 }} key={data.id}>
-                            <Chip
-                              onClick={() => handleOpen(data)}
-                              label={data.name}
-                              // onDelete={
-                              //   data._id ? undefined : handleDelete(data)
-                              // }
-                              sx={{
-                                color: "white",
-                                bgcolor: "#C6C6C6",
-                                borderRadius: "7px",
-                                cursor: "pointer",
-                              }}
-                            />
-                          </Box>
-                        );
-                      })}
+                      {giveAccessArray.length !== 0 ? (
+                        giveAccessArray?.map((data) => {
+                          return (
+                            <Box
+                              sx={{ borderRadius: "7px", p: 0 }}
+                              key={data.id}
+                            >
+                              <Chip
+                                onClick={() => handleOpen(data)}
+                                label={data.name}
+                                // onDelete={
+                                //   data._id ? undefined : handleDelete(data)
+                                // }
+                                sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
+                                  borderRadius: "7px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Box>
+                          );
+                        })
+                      ) : (
+                        <Box
+                          sx={{
+                            color: "#667085",
+                            textAlign: "center",
+                            fontSize: "12px",
+                            width: "100%",
+                          }}
+                        >
+                          No Admin Found
+                        </Box>
+                      )}
                     </Box>
                   </AccordionDetails>
                 </Accordion>

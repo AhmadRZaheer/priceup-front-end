@@ -1246,6 +1246,9 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     "&:hover": {
                       backgroundColor: "#8477da",
                     },
+                    ":disabled": {
+                      bgcolor: "#c2c2c2",
+                    },
                   }}
                 >
                   {" "}

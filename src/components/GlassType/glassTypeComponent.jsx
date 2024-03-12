@@ -164,15 +164,19 @@ const GlassTypeComponent = ({ type }) => {
             overflowY: "scroll",
           }}
         >
-          {GlassTypeData?.map((entry, mainIndex) => (
-            <GlassTypeDataItem
-              key={mainIndex}
-              entry={entry}
-              mainIndex={mainIndex}
-              GlassTypeRefetch={GlassTypeRefetch}
-              type={type}
-            />
-          ))}
+          {GlassTypeData.length !== 0 ? (
+            GlassTypeData?.map((entry, mainIndex) => (
+              <GlassTypeDataItem
+                key={mainIndex}
+                entry={entry}
+                mainIndex={mainIndex}
+                GlassTypeRefetch={GlassTypeRefetch}
+                type={type}
+              />
+            ))
+          ) : (
+            <Box sx={{ color: "#667085" }}>No GlassType Found</Box>
+          )}
         </Box>
       )}
 
