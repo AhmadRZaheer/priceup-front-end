@@ -3,9 +3,11 @@ import {
   layoutVariants,
   notificationTypes,
   notificationsVariant,
+  quoteState,
   thicknessTypes,
 } from "../utilities/constants";
 import { calculateAreaAndPerimeter } from "../utilities/common";
+import { getHardwareFabricationQuantity } from "../utilities/hardwarefabrication";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getCost = (state) => state.estimateCalculations.actualCost;
 export const getProfit = (state) => state.estimateCalculations.grossProfit;
@@ -329,28 +331,6 @@ const estimateCalcSlice = createSlice({
             state.content.glassAddons.splice(indexOfNoTreatment, 1);
           }
         }
-      } else if (["handles"].includes(type)) {
-        state.content = {
-          ...state.content,
-          [type]: {
-            ...state.content[type],
-            item: item,
-          },
-          oneInchHoles:
-            (item.oneInchHoles === 0 ? 1 : item.oneInchHoles) *
-            state.content[type].count,
-        };
-      } else if (["hinges"].includes(type)) {
-        state.content = {
-          ...state.content,
-          [type]: {
-            ...state.content[type],
-            item: item,
-          },
-          hingeCut:
-            (item.hingeCut === 0 ? 1 : item.hingeCut) *
-            state.content[type].count,
-        };
       } else {
         state.content = {
           ...state.content,
@@ -358,6 +338,22 @@ const estimateCalcSlice = createSlice({
             ...state.content[type],
             item: item,
           },
+        };
+      }
+
+      if (["handles", "hinges"].includes(type)) {
+        const hardwareFabrication = getHardwareFabricationQuantity(
+          { ...state.content },
+          state.quoteState,
+          state.selectedItem
+        );
+        state.content = {
+          ...state.content,
+          oneInchHoles: hardwareFabrication.oneInchHoles,
+          hingeCut: hardwareFabrication.hingeCut,
+          clampCut: hardwareFabrication.clampCut,
+          notch: hardwareFabrication.notch,
+          outages: hardwareFabrication.outages,
         };
       }
     },
@@ -445,33 +441,16 @@ const estimateCalcSlice = createSlice({
       } else if (["hinges"].includes(type)) {
         state.content = {
           ...state.content,
-          hingeCut:
-            value *
-            (state.content.hinges?.item?.hingeCut === 0
-              ? 1
-              : state.content.hinges?.item?.hingeCut),
+          hingeCut: value,
           [type]: {
             ...state.content[type],
             count: value,
           },
         };
       } else if (["handles"].includes(type)) {
-        const handleHoles =
-          value *
-          (state.content.handles?.item?.oneInchHoles === 0
-            ? 1
-            : state.content.handles?.item?.oneInchHoles); // multiply with 0 if value is null
-        let layoutHoles = 0;
-        layoutHoles =
-          state.selectedItem?.settings?.variant === layoutVariants.SINGLEBARN
-            ? 6
-            : state.selectedItem?.settings?.variant ===
-              layoutVariants.DOUBLEBARN
-            ? 8
-            : 0;
         state.content = {
           ...state.content,
-          oneInchHoles: handleHoles + layoutHoles,
+          oneInchHoles: value,
           [type]: {
             ...state.content[type],
             count: value,
@@ -484,6 +463,22 @@ const estimateCalcSlice = createSlice({
             ...state.content[type],
             count: value,
           },
+        };
+      }
+
+      if (["handles", "hinges"].includes(type)) {
+        const hardwareFabrication = getHardwareFabricationQuantity(
+          { ...state.content },
+          state.quoteState,
+          state.selectedItem
+        );
+        state.content = {
+          ...state.content,
+          oneInchHoles: hardwareFabrication.oneInchHoles,
+          hingeCut: hardwareFabrication.hingeCut,
+          clampCut: hardwareFabrication.clampCut,
+          notch: hardwareFabrication.notch,
+          outages: hardwareFabrication.outages,
         };
       }
     },
@@ -591,6 +586,18 @@ const estimateCalcSlice = createSlice({
             count: channel ? 1 : 0,
           },
         },
+      };
+    },
+    setHardwareFabricationQuantity: (state, action) => {
+      const { oneInchHoles, hingeCut, clampCut, notch, outages } =
+        action.payload;
+      state.content = {
+        ...state.content,
+        oneInchHoles,
+        hingeCut,
+        clampCut,
+        notch,
+        outages,
       };
     },
     updateMeasurements: (state, action) => {
@@ -832,21 +839,6 @@ const estimateCalcSlice = createSlice({
       glassType = state.listData?.glassType?.find(
         (item) => item.slug === "clear"
       );
-      // if (glassType) {
-      //   // generate glass type not available notification in current thickness
-      //   if (
-      //     glassType.options.find(
-      //       (option) => option.thickness === thicknessTypes.THREEBYEIGHT
-      //     )?.status === false
-      //   ) {
-      //     notifications.glassTypeNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Glass type ${glassType.name} is not available in thickness ${thicknessTypes.THREEBYEIGHT}.`,
-      //     };
-      //     glassType = null;
-      //   }
-      // }
 
       let glassAddons = null;
       glassAddons = state.listData?.glassAddons?.find(
@@ -878,81 +870,21 @@ const estimateCalcSlice = createSlice({
       handleType = state.listData?.handles?.find(
         (item) => item._id === layoutData?.settings?.handles?.handleType
       );
-      // if (handleType) {
-      //   // generate handle not available notification in current finish
-      //   if (
-      //     handleType.finishes.find(
-      //       (row) => row.finish_id === hardwareFinishes?._id
-      //     )?.status === false
-      //   ) {
-      //     notifications.handleNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Handle ${handleType.name} is not available in finish ${hardwareFinishes.name}.`,
-      //     };
-      //     handleType = null;
-      //   }
-      // }
 
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
         (item) => item._id === layoutData?.settings?.hinges?.hingesType
       );
-      // if (hingesType) {
-      //   // generate hinges not available notification in current finish
-      //   if (
-      //     hingesType.finishes.find(
-      //       (row) => row.finish_id === hardwareFinishes?._id
-      //     )?.status === false
-      //   ) {
-      //     notifications.hingeNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Hinge ${hingesType.name} is not available in finish ${hardwareFinishes.name}.`,
-      //     };
-      //     hingesType = null;
-      //   }
-      // }
 
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
         (item) => item._id === layoutData?.settings?.slidingDoorSystem?.type
       );
-      // if (slidingDoorSystemType) {
-      //   // generate sliding door system not available notification in current finish
-      //   if (
-      //     slidingDoorSystemType.finishes.find(
-      //       (row) => row.finish_id === hardwareFinishes?._id
-      //     )?.status === false
-      //   ) {
-      //     notifications.slidingDoorSystemNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Sliding Door System ${slidingDoorSystemType.name} is not available in finish ${hardwareFinishes.name}.`,
-      //     };
-      //     slidingDoorSystemType = null;
-      //   }
-      // }
 
       let headerType = null;
       headerType = state.listData?.header?.find(
         (item) => item._id === layoutData?.settings?.header
       );
-      // if (headerType) {
-      //   // generate header type not available notification in current finish
-      //   if (
-      //     headerType.finishes.find(
-      //       (row) => row.finish_id === hardwareFinishes?._id
-      //     )?.status === false
-      //   ) {
-      //     notifications.headerNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Header ${headerType.name} is not available in finish ${hardwareFinishes.name}.`,
-      //     };
-      //     headerType = null;
-      //   }
-      // }
 
       let glassType = null;
       glassType = state.listData?.glassType?.find(
@@ -961,40 +893,11 @@ const estimateCalcSlice = createSlice({
       let glassThickness =
         layoutData?.settings?.glassType?.thickness ||
         thicknessTypes.THREEBYEIGHT;
-      // if (glassType) {
-      //   // generate glass type not available notification in current thickness
-      //   if (
-      //     glassType.options.find(
-      //       (option) => option.thickness === glassThickness
-      //     )?.status === false
-      //   ) {
-      //     notifications.glassTypeNotAvailable = {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Glass type ${glassType.name} is not available in thickness ${glassThickness}.`,
-      //     };
-      //     glassType = null;
-      //   }
-      // }
 
       let glassAddon = null;
       glassAddon = state.listData?.glassAddons?.find(
         (item) => item._id === layoutData?.settings?.glassAddon
       );
-      // if (
-      //   glassAddon &&
-      //   glassAddon?.options?.length &&
-      //   glassAddon?.options?.[0]?.status === false
-      // ) {
-      //   notifications.glassAddonsNotAvailable = [
-      //     {
-      //       status: true,
-      //       variant: notificationsVariant.WARNING,
-      //       message: `Glass Addon ${glassAddon.name} is not available.`,
-      //     },
-      //   ];
-      //   glassAddon = null;
-      // }
 
       let clampCutOut = 0;
       let wallClampItem,
@@ -1162,12 +1065,9 @@ const estimateCalcSlice = createSlice({
         glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],
         outages: layoutData?.settings?.outages,
         notch: layoutData?.settings?.notch,
-        hingeCut:
-          layoutData?.settings?.hinges?.count *
-          (hingesType?.hingeCut === 0 ? 1 : hingesType?.hingeCut), // multiply with one if the value is 0
+        hingeCut: layoutData?.settings?.hinges?.count,
         oneInchHoles:
-          layoutData?.settings?.handles?.count *
-            (handleType?.oneInchHoles === 0 ? 1 : handleType?.oneInchHoles) +
+          layoutData?.settings?.handles?.count * 2 +
           (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
             ? 6
             : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
@@ -1177,7 +1077,7 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      const { estimateData, quoteState, quotesId } = action.payload;
+      const { estimateData, quotesId } = action.payload;
 
       state.quoteId = quotesId;
 
@@ -1379,11 +1279,11 @@ const estimateCalcSlice = createSlice({
         hardwareAddons: [...hardwareAddons],
         userProfitPercentage: estimateData?.userProfitPercentage,
       };
-      state.quoteState = quoteState;
+      state.quoteState = quoteState.EDIT;
       state.measurements = measurements;
       state.perimeter = estimateData.perimeter;
       state.sqftArea = estimateData.sqftArea;
-      state.selectedItem = estimateData.layoutData;
+      state.selectedItem = estimateData;
     },
   },
 });
@@ -1425,5 +1325,6 @@ export const {
   setSingleNotification,
   setMultipleNotifications,
   resetNotifications,
+  setHardwareFabricationQuantity,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

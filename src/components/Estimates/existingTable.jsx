@@ -50,12 +50,12 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const handleIconButtonClick = (item) => {
     dispatch(resetState());
     dispatch(setListData(allHardwaresList));
-    dispatch(
-      initializeStateForEditQuote({
-        estimateData: item,
-        quotesId: item._id,
-      })
-    );
+    // dispatch(
+    //   initializeStateForEditQuote({
+    //     estimateData: item,
+    //     quotesId: item._id,
+    //   })
+    // );
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(
@@ -67,9 +67,6 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
       dispatch(setDoorWeight(result?.doorWeight));
     }
     if (result?.panelWeight) {
-      // if (result?.panelWeight > panelOverWeightAmount) {
-      //   dispatch(setNotifications({ type: notificationTypes.PANLEOVERWEIGHT, payload: { status: true, variant: notificationsVariant.INFO, message: `Panel weight is over ${panelOverWeightAmount}lb check your labor` } }));
-      // }
       dispatch(setPanelWeight(result?.panelWeight));
     }
     if (result?.returnWeight) {

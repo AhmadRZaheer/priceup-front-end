@@ -26,11 +26,15 @@ import {
   setPanelWeight,
   setReturnWeight,
   setMultipleNotifications,
+  initializeStateForCreateQuote,
+  initializeStateForEditQuote,
+  setHardwareFabricationQuantity,
 } from "../../redux/estimateCalculations";
 import { backendURL, calculateAreaAndPerimeter, getGlassThickness } from "../../utilities/common";
-import { layoutVariants } from "../../utilities/constants";
+import { layoutVariants, quoteState } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -43,10 +47,10 @@ const LayoutMeasurements = () => {
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
-  const QuoteState = useSelector(getQuoteState);
+  const currentQuoteState = useSelector(getQuoteState);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
-    QuoteState === "edit" ? measurementSidesForEdit : measurementSidesForCreate;
+    currentQuoteState === quoteState.EDIT ? measurementSidesForEdit : measurementSidesForCreate;
 
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
@@ -108,7 +112,9 @@ const LayoutMeasurements = () => {
 
       const notificationsResult = generateNotificationsForCurrentItem({ ...estimateState, doorWeight: result?.doorWeight ?? estimateState.doorWeight, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, glassThickness);
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-
+      const fabricationValues = getHardwareFabricationQuantity({...notificationsResult.selectedContent,glassThickness},currentQuoteState,selectedData);
+      console.log(fabricationValues,'fabrication values');
+      dispatch(setHardwareFabricationQuantity({...fabricationValues}));
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -173,6 +179,22 @@ const LayoutMeasurements = () => {
     dispatch(setDoorWidth(event.target.value));
   };
 
+  useEffect(() => {
+    if (currentQuoteState === quoteState.CREATE) {
+      dispatch(initializeStateForCreateQuote({ layoutData: selectedData }))
+    }
+    else if (currentQuoteState === quoteState.EDIT) {
+      dispatch(
+        initializeStateForEditQuote({
+          estimateData: selectedData,
+          quotesId: selectedData._id,
+        })
+      );
+    }
+    return () => {
+
+    }
+  }, []);
   return (
     <>
       <Box
@@ -352,8 +374,7 @@ const LayoutMeasurements = () => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(
-                    selectedData?.settings?.variant ??
-                    selectedData.layoutData?.variant
+                    selectedData?.settings?.variant
                   ) && (
                       <>
                         <Typography>
@@ -528,7 +549,7 @@ const LayoutMeasurements = () => {
                       onClick={() => {
                         dispatch(updateMeasurements([]));
                         dispatch(setDoorWidth(0));
-                        if (QuoteState === "edit") {
+                        if (currentQuoteState === quoteState.EDIT) {
                           setHandleEstimatesPages("existing");
                         } else {
                           setHandleEstimatesPages("layouts");
