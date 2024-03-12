@@ -137,24 +137,24 @@ export const SingleField = ({ item, index }) => {
           mt: 2.4,
         }}
       >
-        <Tooltip title={"Delete"} placement="top">
-          <IconButton onClick={handleDeleteField}>
-            <Delete sx={{color: {md: "black", xs: "white"}}} />
-          </IconButton>
-        </Tooltip>
         {isEditField ? (
           <Tooltip title={"Edit"} placement="top">
             <IconButton onClick={handleEditField}>
-              <Edit sx={{color: {md: "black", xs: "white"}}} />
+              <Edit sx={{ color: { md: "black", xs: "white" } }} />
             </IconButton>
           </Tooltip>
         ) : (
           <Tooltip title={"Save"} placement="top">
             <IconButton onClick={handleSaveField}>
-              <Done sx={{color: {md: "black", xs: "white"}}} />
+              <Done sx={{ color: { md: "black", xs: "white" } }} />
             </IconButton>
           </Tooltip>
         )}
+        <Tooltip title={"Delete"} placement="top">
+          <IconButton onClick={handleDeleteField}>
+            <Delete sx={{ color: { md: "black", xs: "white" } }} />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );
