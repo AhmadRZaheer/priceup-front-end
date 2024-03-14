@@ -363,7 +363,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               }}
               variant="h4"
             >
-              Create New Qoute
+              Create New Estimates
             </Typography>
           </Box>
         </Box>

@@ -29,7 +29,14 @@ export const SingleField = ({ item, index }) => {
       label: AddedValue.label,
       cost: AddedValue.cost,
     };
-    if (AddedValue.label !== "" && AddedValue.cost > 0) {
+
+    if (
+      AddedValue.label !== "" &&
+      AddedValue.cost > 0 &&
+      !addedFields.some(
+        (field, i) => field.label === AddedValue.label && i !== index
+      )
+    ) {
       dispatch(setContent({ type: "additionalFields", item: updatedFields }));
       setisEditField(true);
     } else if (AddedValue.label === "") {
@@ -39,11 +46,17 @@ export const SingleField = ({ item, index }) => {
       });
     } else if (AddedValue.cost <= 0) {
       enqueueSnackbar({
-        message: "Cost must be greater then 0",
+        message: "Cost must be greater than 0",
+        variant: "warning",
+      });
+    } else if (addedFields.some((field) => field.label === AddedValue.label)) {
+      enqueueSnackbar({
+        message: "Label already exists",
         variant: "warning",
       });
     }
   };
+
   const handleEditField = () => {
     setisEditField(false);
   };
@@ -97,7 +110,6 @@ export const SingleField = ({ item, index }) => {
               border: "1px solid #cccccc",
               backgroundColor: "white",
             },
-            inputProps: { min: 0 },
           }}
           InputLabelProps={{
             style: {
@@ -123,7 +135,7 @@ export const SingleField = ({ item, index }) => {
         <TextField
           disabled={isEditField}
           placeholder="cost"
-          type="number"
+          type="text"
           InputProps={{
             style: {
               color: "black",
@@ -131,7 +143,7 @@ export const SingleField = ({ item, index }) => {
               border: "1px solid #cccccc",
               backgroundColor: "white",
             },
-            inputProps: { min: 0 },
+            inputProps: { min: 0, maxLength: 7 },
           }}
           InputLabelProps={{
             style: {
