@@ -72,13 +72,16 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     measurements = newArray;
   }
 
+  let filteredFields = estimatesContent.additionalFields.filter(
+    (item) => item.label !== "" && item.cost !== 0
+  );
   const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
     return {
       type: row.item._id,
       count: row.count,
     };
   });
-  const additionalFieldsArray = estimatesContent.additionalFields.map((row) => {
+  const additionalFieldsArray = filteredFields.map((row) => {
     return {
       cost: row.cost,
       label: row.label,

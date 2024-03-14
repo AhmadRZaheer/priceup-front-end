@@ -69,10 +69,12 @@ export const SingleField = ({ item, index }) => {
   };
 
   const handleCostChange = (value) => {
-    setAddedValue((prevState) => ({
-      ...prevState,
-      cost: Number(value),
-    }));
+    if (/^\d*$/.test(value)) {
+      setAddedValue((prevState) => ({
+        ...prevState,
+        cost: Number(value),
+      }));
+    }
   };
 
   const handleDeleteField = () => {
