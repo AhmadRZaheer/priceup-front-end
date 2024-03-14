@@ -1353,6 +1353,7 @@ const estimateCalcSlice = createSlice({
         towelBarsCount: estimateData?.towelBarsCount,
         hardwareAddons: [...hardwareAddons],
         userProfitPercentage: estimateData?.userProfitPercentage,
+        additionalFields: estimateData?.additionalFields,
       };
       state.quoteState = quoteState;
       state.measurements = measurements;

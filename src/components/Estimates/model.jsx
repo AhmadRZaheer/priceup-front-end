@@ -92,7 +92,6 @@ export default function ClientDetailsModel({ open, handleCancel }) {
       };
     }
   );
-  console.log(estimatesContent, "estimatesContent");
 
   const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
     (row) => {

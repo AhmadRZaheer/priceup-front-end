@@ -252,6 +252,13 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         ? estimatesData?.miscPricing?.pricingFactor
         : 1) +
     laborPrice;
+    // additonal fields sum
+  if (selectedContent.additionalFields.length > 0) {
+    total += selectedContent.additionalFields.reduce(
+      (acc, item) => acc + item.cost,
+      0
+    );
+  }
   const cost =
     hardwareTotals +
     fabricationPrice +
@@ -279,12 +286,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     //   total = total + price;
     // }
   }
-  if (selectedContent.additionalFields.length !== 0) {
-    total += selectedContent.additionalFields.reduce(
-      (acc, item) => acc + item.cost,
-      0
-    );
-  }
+
   return {
     hardwarePrice: hardwareTotals,
     fabricationPrice: fabricationPrice,

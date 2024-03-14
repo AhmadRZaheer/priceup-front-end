@@ -68,7 +68,6 @@ export const useCreateEstimates = () => {
     var current_time =
       date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
 
-    console.log(props.estimateData, "estimateData");
     try {
       const response = await axios.post(
         `${backendURL}/estimates/save`,

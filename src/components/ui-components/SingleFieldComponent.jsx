@@ -3,19 +3,24 @@ import { Box, IconButton, TextField, Tooltip, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   getAdditionalFields,
+  getQuoteState,
   setContent,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
+import { quoteState } from "../../utilities/constants";
 
 export const SingleField = ({ item, index }) => {
   const dispatch = useDispatch();
+  const updatecheck = useSelector(getQuoteState);
   const addedFields = useSelector(getAdditionalFields);
   const [AddedValue, setAddedValue] = useState({
     label: item.label,
     cost: item.cost,
   });
-  const [isEditField, setisEditField] = useState(false);
+  const [isEditField, setisEditField] = useState(
+    updatecheck === quoteState.EDIT && item.label ? true : false
+  );
   const { enqueueSnackbar } = useSnackbar();
 
   const handleSaveField = () => {
@@ -24,12 +29,17 @@ export const SingleField = ({ item, index }) => {
       label: AddedValue.label,
       cost: AddedValue.cost,
     };
-    if (AddedValue.label !== "") {
+    if (AddedValue.label !== "" && AddedValue.cost > 0) {
       dispatch(setContent({ type: "additionalFields", item: updatedFields }));
       setisEditField(true);
-    } else {
+    } else if (AddedValue.label === "") {
       enqueueSnackbar({
         message: "Please Enter the label",
+        variant: "warning",
+      });
+    } else if (AddedValue.cost <= 0) {
+      enqueueSnackbar({
+        message: "Cost must be greater then 0",
         variant: "warning",
       });
     }

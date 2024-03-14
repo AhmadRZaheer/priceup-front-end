@@ -1,10 +1,5 @@
 import React, { useMemo } from "react";
-import {
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,9 +29,7 @@ import {
   setContent,
   getAdditionalFields,
 } from "../../redux/estimateCalculations";
-import {
-  useEditEstimates,
-} from "../../utilities/ApiHooks/estimate";
+import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
@@ -76,6 +69,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     // }
     // return state;
   }, [updatecheck]);
+  console.log(addedFields, "addedFields");
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
@@ -107,6 +101,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         return {
           type: row.item._id,
           count: row.count,
+        };
+      }
+    );
+    const additionalFieldsArray = selectedContent.additionalFields.map(
+      (row) => {
+        return {
+          cost: row.cost,
+          label: row.label,
         };
       }
     );
@@ -142,6 +144,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       (item) => item?._id
     );
     const estimate = {
+      additionalFields: [...additionalFieldsArray],
       hardwareFinishes: selectedContent?.hardwareFinishes?._id,
       handles: {
         type: selectedContent?.handles?.item?._id,
@@ -1156,7 +1159,12 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     </Box>
                   </Box>
                   {/* additional Fields */}
-                  <Typography variant="h5" sx={{color: {md: "black", xs: "white"}}}>Additonal Fields</Typography>
+                  <Typography
+                    variant="h5"
+                    sx={{ color: { md: "black", xs: "white" } }}
+                  >
+                    Additonal Fields
+                  </Typography>
                   {addedFields &&
                     addedFields.map((item, index) => {
                       return <SingleField item={item} index={index} />;
