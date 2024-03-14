@@ -62,13 +62,13 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   const { data: customerData, refetch, isLoading } = useFetchDataCustomer();
   const [selectedUser, setSelectedUser] = useState();
   const [Tabs, setTabs] = useState("create");
-  
-  if(quoteState === 'custom'){
+
+  if (quoteState === "custom") {
     let newArray = [];
     for (const key in measurements) {
       const index = parseInt(key);
       newArray[index] = measurements[key];
-  }
+    }
     measurements = newArray;
   }
 
@@ -76,6 +76,12 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     return {
       type: row.item._id,
       count: row.count,
+    };
+  });
+  const additionalFieldsArray = estimatesContent.additionalFields.map((row) => {
+    return {
+      cost: row.cost,
+      label: row.label,
     };
   });
   const wallClampArray = estimatesContent?.mountingClamps?.wallClamp?.map(
@@ -86,6 +92,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
       };
     }
   );
+
   const sleeveOverArray = estimatesContent?.mountingClamps?.sleeveOver?.map(
     (row) => {
       return {
@@ -127,6 +134,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     (item) => item?._id
   );
   const estimate = {
+    additionalFields: [...additionalFieldsArray],
     hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
     handles: {
       type: estimatesContent?.handles?.item?._id,
@@ -686,7 +694,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                       sx={{
                         mt: 2,
                         p: 1,
-                        height: {sm:"212px", xs: "171px"},
+                        height: { sm: "212px", xs: "171px" },
                         width: "97%",
                         borderRadius: 2,
                         display: "flex",

@@ -7,6 +7,8 @@ import {
 } from "../utilities/constants";
 import { calculateAreaAndPerimeter } from "../utilities/common";
 export const getContent = (state) => state.estimateCalculations.content;
+export const getAdditionalFields = (state) =>
+  state.estimateCalculations.content.additionalFields;
 export const getCost = (state) => state.estimateCalculations.actualCost;
 export const getProfit = (state) => state.estimateCalculations.grossProfit;
 export const getTotal = (state) => state.estimateCalculations.totalPrice;
@@ -106,6 +108,7 @@ const initialState = {
   selectedItem: null,
   listData: null,
   content: {
+    additionalFields: [],
     hardwareFinishes: null,
     handles: {
       item: null,
@@ -217,13 +220,13 @@ const estimateCalcSlice = createSlice({
           break;
       }
     },
-    setMultipleNotifications:(state, action) => {
-      const {selectedContent,notifications} = action.payload;
+    setMultipleNotifications: (state, action) => {
+      const { selectedContent, notifications } = action.payload;
       state.notifications = notifications;
       state.content = selectedContent;
     },
     resetNotifications: (state) => {
-      state.notifications = initialState.notifications
+      state.notifications = initialState.notifications;
     },
     setContent: (state, action) => {
       const { type, item } = action.payload;
@@ -329,6 +332,11 @@ const estimateCalcSlice = createSlice({
             state.content.glassAddons.splice(indexOfNoTreatment, 1);
           }
         }
+      } else if (["additionalFields"].includes(type)) {
+        state.content = {
+          ...state.content,
+          [type]: item,
+        };
       } else {
         state.content = {
           ...state.content,
@@ -1345,6 +1353,7 @@ const estimateCalcSlice = createSlice({
         towelBarsCount: estimateData?.towelBarsCount,
         hardwareAddons: [...hardwareAddons],
         userProfitPercentage: estimateData?.userProfitPercentage,
+        additionalFields: estimateData?.additionalFields,
       };
       state.quoteState = quoteState;
       state.measurements = measurements;
@@ -1391,6 +1400,6 @@ export const {
   setReturnWeight,
   setSingleNotification,
   setMultipleNotifications,
-  resetNotifications
+  resetNotifications,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
