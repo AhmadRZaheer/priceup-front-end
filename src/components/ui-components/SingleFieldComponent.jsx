@@ -6,6 +6,7 @@ import {
   setContent,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
+import { useSnackbar } from "notistack";
 
 export const SingleField = ({ item, index }) => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ export const SingleField = ({ item, index }) => {
     cost: item.cost,
   });
   const [isEditField, setisEditField] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleSaveField = () => {
     const updatedFields = [...addedFields];
@@ -22,8 +24,15 @@ export const SingleField = ({ item, index }) => {
       label: AddedValue.label,
       cost: AddedValue.cost,
     };
-    dispatch(setContent({ type: "additionalFields", item: updatedFields }));
-    setisEditField(true);
+    if (AddedValue.label !== "") {
+      dispatch(setContent({ type: "additionalFields", item: updatedFields }));
+      setisEditField(true);
+    } else {
+      enqueueSnackbar({
+        message: "Please Enter the label",
+        variant: "warning",
+      });
+    }
   };
   const handleEditField = () => {
     setisEditField(false);
@@ -32,7 +41,7 @@ export const SingleField = ({ item, index }) => {
   const handleLabelChange = (value) => {
     setAddedValue((prevState) => ({
       ...prevState,
-      label: value,
+      label: value.toString(),
     }));
   };
 
