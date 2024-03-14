@@ -399,6 +399,7 @@ const SuperAdminTable = () => {
             // }
 
             const adminID = item?.user?._id;
+            console.log(item, 'item')
             return (
               <Box
                 key={item?.user?._id}
@@ -442,14 +443,16 @@ const SuperAdminTable = () => {
                           fontWeight: 500,
                         }}
                       >
-                        {item?.user?.name}
+                          {item?.company?.name}
+                        {/* {item?.user?.name} */}
                       </Typography>
                     </Box>
                     {/* Email */}
                     <Typography
                       sx={{ color: "#667085", fontSize: "14px", mt: 1 }}
                     >
-                      {item?.user?.email}
+                             {item?.company?.email}
+                      {/* {item?.user?.email} */}
                     </Typography>
                     {/* Date Added */}
                     <Typography sx={{ color: "#667085", fontSize: "14px" }}>
@@ -469,7 +472,8 @@ const SuperAdminTable = () => {
                       </Typography>
                       <Box sx={{ mt: 1 }}>
                         <Typography sx={{ fontSize: "14px", color: "#667085" }}>
-                          {item?.company?.name}
+                          {/* {item?.company?.name} */}
+                          {item?.user?.name}
                         </Typography>
                         <Typography
                           sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
