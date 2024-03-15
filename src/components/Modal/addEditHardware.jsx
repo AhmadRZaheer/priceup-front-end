@@ -7,7 +7,13 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import { CircularProgress, TextField } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  CircularProgress,
+  TextField,
+} from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCreateHardware,
@@ -16,6 +22,8 @@ import {
 import { useEffect } from "react";
 import { backendURL } from "../../utilities/common";
 import CustomInputField from "../ui-components/CustomInput";
+import { ExpandMore } from "@mui/icons-material";
+import { SingleFieldEdit } from "../ui-components/SingleFieldEdit";
 
 const style = {
   position: "absolute",
@@ -118,6 +126,21 @@ export default function AddEditHardware({
       }
     },
   });
+  const typeOfValue = () => {
+    let statement = "";
+    if (
+      formik.values.clampCut === 0 &&
+      formik.values.hingeCut === 0 &&
+      formik.values.notch === 0 &&
+      formik.values.oneInchHoles === 0 &&
+      formik.values.outages === 0
+    ) {
+      statement = "using default values";
+    } else {
+      statement = "using customized values";
+    }
+    return statement;
+  };
 
   const resetFormHandle = async () => {
     if (CreatedSuccessfully || SuccessForEdit) {
@@ -233,114 +256,145 @@ export default function AddEditHardware({
               fullWidth
             />
           </Box>
-          <Box sx={{ display: "flex", gap: 3 }}>
-            <Box>
-              <Typography>1" Holes</Typography>
-              <CustomInputField
-                size="small"
-                placeholder='1" Holes'
-                name="oneInchHoles"
-                type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
-                }}
-                value={formik.values.oneInchHoles}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.oneInchHoles &&
-                  Boolean(formik.errors.oneInchHoles)
-                }
-                helperText={
-                  formik.touched.oneInchHoles && formik.errors.oneInchHoles
-                }
-                variant="outlined"
-                fullWidth
-              />
-            </Box>
-            <Box>
-              <Typography>Hinge Cut Out</Typography>
-              <CustomInputField
-                size="small"
-                InputProps={{
-                  inputProps: { min: 0 },
-                }}
-                placeholder="Hinge Cut Out"
-                name="hingeCut"
-                type="number"
-                value={formik.values.hingeCut}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.hingeCut && Boolean(formik.errors.hingeCut)
-                }
-                helperText={formik.touched.hingeCut && formik.errors.hingeCut}
-                variant="outlined"
-                fullWidth
-              />
-            </Box>
-          </Box>
-          <Box sx={{ display: "flex", gap: 3 }}>
-            <Box>
-              <Typography>Clamp Cut Out</Typography>
-              <CustomInputField
-                size="small"
-                InputProps={{
-                  inputProps: { min: 0 },
-                }}
-                placeholder="Clamp Cut Out"
-                name="clampCut"
-                type="number"
-                value={formik.values.clampCut}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.clampCut && Boolean(formik.errors.clampCut)
-                }
-                helperText={formik.touched.clampCut && formik.errors.clampCut}
-                variant="outlined"
-                fullWidth
-              />
-            </Box>
-            <Box>
-              <Typography>Notch</Typography>
-              <CustomInputField
-                size="small"
-                InputProps={{
-                  inputProps: { min: 0 },
-                }}
-                placeholder="Notch"
-                name="notch"
-                type="number"
-                value={formik.values.notch}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.notch && Boolean(formik.errors.notch)}
-                helperText={formik.touched.notch && formik.errors.notch}
-                variant="outlined"
-                fullWidth
-              />
-            </Box>
-          </Box>
-          <Box sx={{ width: "47%" }}>
-            <Typography>Outages</Typography>
-            <CustomInputField
-              size="small"
-              InputProps={{
-                inputProps: { min: 0 },
+          <Accordion
+            sx={{
+              paddingX: "6px",
+              border: "none",
+              ".MuiPaper-elevation": {
+                border: " none !important",
+                boxShadow: "none !important",
+              },
+            }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+              sx={{
+                padding: 0,
+                margin: 0,
+                borderBottom: "none",
+                height: "30px",
               }}
-              placeholder="Outages"
-              name="outages"
-              type="number"
-              value={formik.values.outages}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.outages && Boolean(formik.errors.outages)}
-              helperText={formik.touched.outages && formik.errors.outages}
-              variant="outlined"
-              fullWidth
-            />
-          </Box>
+            >
+              <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                Fabrication
+                <span
+                  style={{
+                    fontSize: 15,
+                    paddingLeft: 6,
+                    fontWeight: "lighter",
+                  }}
+                >
+                  ( {typeOfValue()} )
+                </span>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails
+              sx={{
+                padding: 0,
+                borderTop: "2px solid #D0D5DD",
+                paddingY: 1,
+              }}
+            >
+              <Box>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      flexDirection: "column",
+                      width: "45%",
+                    }}
+                  >
+                    <SingleFieldEdit
+                      label='1" Holes'
+                      value={formik.values.oneInchHoles}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.oneInchHoles &&
+                        Boolean(formik.errors.oneInchHoles)
+                      }
+                      helperText={
+                        formik.touched.oneInchHoles &&
+                        formik.errors.oneInchHoles
+                      }
+                      placeholder='1" Holes'
+                      name="oneInchHoles"
+                    />
+                    <SingleFieldEdit
+                      label="Clamp Cut Out"
+                      value={formik.values.clampCut}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.clampCut &&
+                        Boolean(formik.errors.clampCut)
+                      }
+                      helperText={
+                        formik.touched.clampCut && formik.errors.clampCut
+                      }
+                      placeholder="Clamp Cut Out"
+                      name="clampCut"
+                    />
+                  </Box>
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 1,
+                      flexDirection: "column",
+                      width: "45%",
+                    }}
+                  >
+                    <SingleFieldEdit
+                      label="Hinge Cut Out"
+                      value={formik.values.hingeCut}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.hingeCut &&
+                        Boolean(formik.errors.hingeCut)
+                      }
+                      helperText={
+                        formik.touched.hingeCut && formik.errors.hingeCut
+                      }
+                      placeholder="Hinge Cut Out"
+                      name="hingeCut"
+                    />
+                    <SingleFieldEdit
+                      label="Notch"
+                      value={formik.values.notch}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.notch && Boolean(formik.errors.notch)
+                      }
+                      helperText={formik.touched.notch && formik.errors.notch}
+                      placeholder="Notch"
+                      name="notch"
+                    />
+                  </Box>
+                </Box>
+                <Box sx={{ width: "45%", mt: 1 }}>
+                  <SingleFieldEdit
+                    label="Outages"
+                    value={formik.values.outages}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={
+                      formik.touched.outages && Boolean(formik.errors.outages)
+                    }
+                    helperText={formik.touched.outages && formik.errors.outages}
+                    placeholder="Outages"
+                    name="outages"
+                  />
+                </Box>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+
           <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
             <Button
               variant="outlined"
