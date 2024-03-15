@@ -30,7 +30,11 @@ import {
   initializeStateForEditQuote,
   setHardwareFabricationQuantity,
 } from "../../redux/estimateCalculations";
-import { backendURL, calculateAreaAndPerimeter, getGlassThickness } from "../../utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  getGlassThickness,
+} from "../../utilities/common";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
@@ -50,7 +54,9 @@ const LayoutMeasurements = () => {
   const currentQuoteState = useSelector(getQuoteState);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
-    currentQuoteState === quoteState.EDIT ? measurementSidesForEdit : measurementSidesForCreate;
+    currentQuoteState === quoteState.EDIT
+      ? measurementSidesForEdit
+      : measurementSidesForCreate;
 
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
@@ -116,15 +122,25 @@ const LayoutMeasurements = () => {
       const notificationsResult = generateNotificationsForCurrentItem(
         {
           ...estimateState,
+          content: {
+            ...estimateState.content,
+            polish: result.perimeter - estimateState.content.mitre,
+          },
+          perimeter: result.perimeter,
+          areaSqft: result.areaSqft,
           doorWeight: result?.doorWeight ?? estimateState.doorWeight,
           panelWeight: result?.panelWeight ?? estimateState.panelWeight,
         },
         glassThickness
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-      const fabricationValues = getHardwareFabricationQuantity({...notificationsResult.selectedContent,glassThickness},currentQuoteState,selectedData);
-      console.log(fabricationValues,'fabrication values');
-      dispatch(setHardwareFabricationQuantity({...fabricationValues}));
+      const fabricationValues = getHardwareFabricationQuantity(
+        { ...notificationsResult.selectedContent, glassThickness },
+        currentQuoteState,
+        selectedData
+      );
+      console.log(fabricationValues, "fabrication values");
+      dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -191,9 +207,8 @@ const LayoutMeasurements = () => {
 
   useEffect(() => {
     if (currentQuoteState === quoteState.CREATE) {
-      dispatch(initializeStateForCreateQuote({ layoutData: selectedData }))
-    }
-    else if (currentQuoteState === quoteState.EDIT) {
+      dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
+    } else if (currentQuoteState === quoteState.EDIT) {
       dispatch(
         initializeStateForEditQuote({
           estimateData: selectedData,
@@ -201,9 +216,7 @@ const LayoutMeasurements = () => {
         })
       );
     }
-    return () => {
-
-    }
+    return () => {};
   }, []);
   return (
     <>
@@ -383,9 +396,7 @@ const LayoutMeasurements = () => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(
-                    selectedData?.settings?.variant
-                  ) && (
+                  ].includes(selectedData?.settings?.variant) && (
                     <>
                       <Typography>
                         <input
