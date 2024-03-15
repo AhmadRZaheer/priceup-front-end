@@ -8,17 +8,22 @@ import {
   getContent,
   getMeasurementSide,
   getQuoteState,
+  initializeStateForCustomQuote,
+  setHardwareFabricationQuantity,
   setLayoutArea,
   setLayoutPerimeter,
+  setMultipleNotifications,
   setNavigation,
   setNavigationDesktop,
   setPanelWeight,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { layoutVariants } from "../../utilities/constants";
+import { layoutVariants, quoteState } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -34,9 +39,10 @@ const isThereHigherKeyAvailable = (values, iterator) => {
 };
 
 const CustomLayout = () => {
+  const estimateState = useSelector((state) => state.estimateCalculations);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
-  const quoteState = useSelector(getQuoteState);
+  const currentQuoteState = useSelector(getQuoteState);
   const customInitalValues = {
     [0]: {
       count: 1,
@@ -70,7 +76,7 @@ const CustomLayout = () => {
   };
   const handleback = () => {
     // dispatch(setNavigation("layouts"));
-    if (quoteState === "custom") {
+    if (currentQuoteState === quoteState.CUSTOM) {
       dispatch(setNavigationDesktop("layouts"));
     } else {
       dispatch(setNavigationDesktop("existing"));
@@ -111,7 +117,11 @@ const CustomLayout = () => {
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(values));
-    dispatch(setNavigation("review"));
+    const notificationsResult = generateNotificationsForCurrentItem({ ...estimateState, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
+    dispatch(setMultipleNotifications({ ...notificationsResult }));
+    const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: '3/8' }, currentQuoteState, null);
+    dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+    // dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 
     // Reset the form
@@ -130,6 +140,15 @@ const CustomLayout = () => {
       [name]: value,
     });
   };
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.CUSTOM) {
+      dispatch(initializeStateForCustomQuote());
+    }
+    return () => {
+
+    }
+  }, []);
 
   return (
     <>
