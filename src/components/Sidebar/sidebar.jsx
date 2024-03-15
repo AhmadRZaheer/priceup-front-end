@@ -78,7 +78,7 @@ const Sidebar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const filteredAdminData = AdminData?.filter((admin) =>
-    admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
+    admin?.company?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const filteredCustomUser = haveAccessData?.filter((data) =>
     data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -87,7 +87,7 @@ const Sidebar = () => {
     /** Added for branch PD-28 */
     setActiveLocation(admin);
     /** Added for branch PD-28 */
-    navigate(`/?userID=${admin?._id}`);
+    navigate(`/?userID=${admin?.user?._id}`);
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
   };
@@ -127,8 +127,8 @@ const Sidebar = () => {
         const record = await filteredAdminData.find(
           (admin) => admin?.company?._id === decodedToken?.company_id
         );
-        if (record?.user) {
-          setActiveLocation(record?.user);
+        if (record) {
+          setActiveLocation(record);
         }
       }
     };
@@ -148,6 +148,7 @@ const Sidebar = () => {
       setCustomActiveUser(user?.name, "user");
     }
   }, [filteredCustomUser, decodedToken]);
+  console.log(activeLocation, "activeLocation");
 
   const drawer = (
     <Box
@@ -173,6 +174,12 @@ const Sidebar = () => {
                 <span className="logo">
                   <img src={Logo} alt="price up logo" />
                 </span>
+                <div style={{ paddingLeft: 20}}>
+                  <DefaultImage
+                    image={activeLocation?.company?.image}
+                    name={activeLocation?.company?.name}
+                  />
+                </div>
               </div>
             </NavLink>
             <div className="center">
@@ -196,7 +203,7 @@ const Sidebar = () => {
                         <PinDrop sx={{ color: "white" }} />
                         <span style={{ flexGrow: 1 }}>
                           {" "}
-                          {activeLocation?.name}
+                          {activeLocation?.user?.name}
                         </span>
                         <UnfoldMore sx={{ color: "white", mr: 1 }} />
                       </IconButton>
@@ -723,10 +730,10 @@ const Sidebar = () => {
           {superAdminToken &&
             filteredAdminData.map((admin) => (
               <SingleUser
-                key={admin?.user?._id}
-                item={admin?.user}
+                key={admin?.company?._id}
+                item={admin?.company}
                 active={admin?.company?._id === decodedToken?.company_id}
-                handleClick={() => handleAdminNameClick(admin?.user)}
+                handleClick={() => handleAdminNameClick(admin)}
               />
               // <Typography
               //   key={admin?.user?._id}

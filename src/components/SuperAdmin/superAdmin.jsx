@@ -399,7 +399,7 @@ const SuperAdminTable = () => {
             // }
 
             const adminID = item?.user?._id;
-            console.log(item, 'item')
+            console.log(item, "item");
             return (
               <Box
                 key={item?.user?._id}
@@ -432,8 +432,8 @@ const SuperAdminTable = () => {
                     >
                       <Box>
                         <DefaultImage
-                          image={item?.user?.image}
-                          name={item?.user?.name}
+                          image={item?.company?.image}
+                          name={item?.company?.name}
                         />
                       </Box>
                       <Typography
@@ -443,7 +443,7 @@ const SuperAdminTable = () => {
                           fontWeight: 500,
                         }}
                       >
-                          {item?.company?.name}
+                        {item?.company?.name}
                         {/* {item?.user?.name} */}
                       </Typography>
                     </Box>
@@ -451,25 +451,11 @@ const SuperAdminTable = () => {
                     <Typography
                       sx={{ color: "#667085", fontSize: "14px", mt: 1 }}
                     >
-                             {item?.company?.email}
+                      {item?.company?.address ? item?.company?.address : ""}
                       {/* {item?.user?.email} */}
                     </Typography>
-                    {/* Date Added */}
-                    <Typography sx={{ color: "#667085", fontSize: "14px" }}>
-                      {new Date(item?.user?.updatedAt).toLocaleDateString(
-                        undefined,
-                        {
-                          weekday: "long",
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        }
-                      )}
-                    </Typography>
-                    <Box sx={{ mt: 2 }}>
-                      <Typography sx={{ fontSize: "16px", color: "#576073" }}>
-                        Location
-                      </Typography>
+
+                    <Box sx={{ mt: 1 }}>
                       <Box sx={{ mt: 1 }}>
                         <Typography sx={{ fontSize: "14px", color: "#667085" }}>
                           {/* {item?.company?.name} */}
@@ -477,8 +463,23 @@ const SuperAdminTable = () => {
                         </Typography>
                         <Typography
                           sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
+                          >
+                          {/* {item?.company?.address} */}
+                          {item?.user?.email}{" "}
+                        </Typography>
+                        {/* Date Added */}
+                        <Typography
+                          sx={{ color: "#667085", fontSize: "14px", mt: 0.4 }}
                         >
-                          {item?.company?.address}
+                          {new Date(item?.user?.updatedAt).toLocaleDateString(
+                            undefined,
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
                         </Typography>
                       </Box>
                     </Box>
@@ -507,7 +508,7 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ height: "125px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-                        Admin
+                        Admins
                       </Typography>
                       <Grid container mt={1} gap={2}>
                         {matchingUserData.map((user, index) => {
