@@ -255,7 +255,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     // additonal fields sum
   if (selectedContent.additionalFields.length > 0) {
     total += selectedContent.additionalFields.reduce(
-      (acc, item) => acc + item.cost,
+      (acc, item) => acc + Number(item.cost),
       0
     );
   }

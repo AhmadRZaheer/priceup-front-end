@@ -72,7 +72,7 @@ export const SingleField = ({ item, index }) => {
     if (/^\d*$/.test(value)) {
       setAddedValue((prevState) => ({
         ...prevState,
-        cost: Number(value),
+        cost: value,
       }));
     }
   };
@@ -145,7 +145,7 @@ export const SingleField = ({ item, index }) => {
               border: "1px solid #cccccc",
               backgroundColor: "white",
             },
-            inputProps: { min: 0, maxLength: 7 },
+            inputProps: { maxLength: 7 },
           }}
           InputLabelProps={{
             style: {
