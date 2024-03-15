@@ -39,7 +39,7 @@ export default function Layout() {
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    dispatch(initializeStateForCreateQuote({ layoutData: layout }));
+    // dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
     setselectCustom(false);
@@ -52,7 +52,7 @@ export default function Layout() {
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
-    dispatch(initializeStateForCustomQuote());
+    // dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
     setselectCustom(true);

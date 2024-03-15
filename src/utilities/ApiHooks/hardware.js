@@ -108,7 +108,12 @@ export const useDeleteHardwares = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw error;
     }
   };
@@ -131,6 +136,11 @@ export const useCreateHardware = () => {
     formData.append("name", props.name);
     formData.append("slug", slug);
     formData.append("hardware_category_slug", props.hardware_category_slug);
+    formData.append("clampCut", props.clampCut);
+    formData.append("hingeCut", props.hingeCut);
+    formData.append("notch", props.notch);
+    formData.append("oneInchHoles", props.oneInchHoles);
+    formData.append("outages", props.outages);
     formData.append("company_id", decodedToken?.company_id);
     try {
       const response = await axios.post(
@@ -159,7 +169,12 @@ export const useCreateHardware = () => {
         throw new Error("An error occurred while creating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while creating the data.");
     }
   };
@@ -265,6 +280,11 @@ export const useEditHardware = () => {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
       formData.append("slug", slug);
+      formData.append("clampCut", props.hardwareData.clampCut);
+      formData.append("hingeCut", props.hardwareData.hingeCut);
+      formData.append("notch", props.hardwareData.notch);
+      formData.append("oneInchHoles", props.hardwareData.oneInchHoles);
+      formData.append("outages", props.hardwareData.outages);
       if (props.hardwareData.image) {
         formData.append("image", props.hardwareData.image);
       }
@@ -295,7 +315,12 @@ export const useEditHardware = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -332,7 +357,12 @@ export const useDeleteHardwareFinish = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw error;
     }
   };
