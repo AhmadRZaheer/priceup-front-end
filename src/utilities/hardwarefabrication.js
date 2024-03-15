@@ -34,9 +34,109 @@ export const getHardwareFabricationQuantity = (
     notch += hingeResult.notch;
     outages += hingeResult.outages;
   }
+  // for mounting channel
+  if(selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item){
+    const mountingChannelResult = getMountingFabrication(
+      selectedContent.mountingChannel.item,
+      selectedContent.mountingChannel.count
+    );
+    oneInchHoles += mountingChannelResult.oneInchHoles;
+    hingeCut += mountingChannelResult.hingeCut;
+    clampCut += mountingChannelResult.clampCut;
+    notch += mountingChannelResult.notch;
+    outages += mountingChannelResult.outages;
+  }
+  else if(selectedContent.mountingState === 'clamps'){
+    // for wall clamp
+    if(selectedContent.mountingClamps.wallClamp?.length){
+      selectedContent.mountingClamps.wallClamp.forEach((record)=>{
+      const wallClampResult = getMountingFabrication(
+        record.item,
+        record.count
+      );
+      console.log(wallClampResult,'wall clamp result');
+      oneInchHoles += wallClampResult.oneInchHoles;
+      hingeCut += wallClampResult.hingeCut;
+      clampCut += wallClampResult.clampCut;
+      notch += wallClampResult.notch;
+      outages += wallClampResult.outages;
+      });
+      
+    }
+    // for sleeve over
+    if(selectedContent.mountingClamps.sleeveOver?.length){
+      selectedContent.mountingClamps.sleeveOver.forEach((record)=>{
+      const sleeveOverResult = getMountingFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += sleeveOverResult.oneInchHoles;
+      hingeCut += sleeveOverResult.hingeCut;
+      clampCut += sleeveOverResult.clampCut;
+      notch += sleeveOverResult.notch;
+      outages += sleeveOverResult.outages;
+      });
+    }
+    // for glass to glass
+    if(selectedContent.mountingClamps.glassToGlass?.length){
+      selectedContent.mountingClamps.glassToGlass.forEach((record)=>{
+      const glassToGlassResult = getMountingFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += glassToGlassResult.oneInchHoles;
+      hingeCut += glassToGlassResult.hingeCut;
+      clampCut += glassToGlassResult.clampCut;
+      notch += glassToGlassResult.notch;
+      outages += glassToGlassResult.outages;
+      });
+    }
+  }
+  // for corner wall clamps
+  if(selectedContent.cornerClamps.cornerWallClamp?.length){
+    selectedContent.cornerClamps.cornerWallClamp.forEach((record)=>{
+    const cornerWallClampResult = getMountingFabrication(
+      record.item,
+      record.count
+    );
+    oneInchHoles += cornerWallClampResult.oneInchHoles;
+    hingeCut += cornerWallClampResult.hingeCut;
+    clampCut += cornerWallClampResult.clampCut;
+    notch += cornerWallClampResult.notch;
+    outages += cornerWallClampResult.outages;
+    });
+  }
+  // for corner sleeve over
+  if(selectedContent.cornerClamps.cornerSleeveOver?.length){
+    selectedContent.cornerClamps.cornerSleeveOver.forEach((record)=>{
+      const cornerSleeveOverResult = getMountingFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += cornerSleeveOverResult.oneInchHoles;
+      hingeCut += cornerSleeveOverResult.hingeCut;
+      clampCut += cornerSleeveOverResult.clampCut;
+      notch += cornerSleeveOverResult.notch;
+      outages += cornerSleeveOverResult.outages;
+      });
+  }
+  // for corner glass to glass
+  if(selectedContent.cornerClamps.cornerGlassToGlass?.length){
+    selectedContent.cornerClamps.cornerGlassToGlass.forEach((record)=>{
+      const cornerGlassToGlassResult = getMountingFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += cornerGlassToGlassResult.oneInchHoles;
+      hingeCut += cornerGlassToGlassResult.hingeCut;
+      clampCut += cornerGlassToGlassResult.clampCut;
+      notch += cornerGlassToGlassResult.notch;
+      outages += cornerGlassToGlassResult.outages;
+      });
+  }
   // for sliding door system
   if (selectedContent.slidingDoorSystem?.item){
-    const slidingDoorSystemResult = getFabrication(
+    const slidingDoorSystemResult = getGenericFabrication(
         selectedContent.slidingDoorSystem?.item,
         selectedContent.slidingDoorSystem?.count
       );
@@ -48,7 +148,7 @@ export const getHardwareFabricationQuantity = (
   }
   // for header
   if (selectedContent.slidingDoorSystem?.item){
-    const headerResult = getFabrication(
+    const headerResult = getGenericFabrication(
         selectedContent.header?.item,
         selectedContent.header?.count
       );
@@ -61,7 +161,7 @@ export const getHardwareFabricationQuantity = (
   // for hardware addons
   if(selectedContent.hardwareAddons.length){
     selectedContent.hardwareAddons.forEach((record)=>{
-        const hardwareAddonResult = getFabrication(
+        const hardwareAddonResult = getGenericFabrication(
             record.item,
             record.count
           );
@@ -101,16 +201,16 @@ export const getHandleFabrication = (item, count) => {
   oneInchHoles = count * selectedItemHoles;
   let selectedItemhingeCut = item?.hingeCut > 0 ? item?.hingeCut : 0;
 
-  hingeCut = selectedItemhingeCut;
+  hingeCut = count * selectedItemhingeCut;
   let selectedItemClampCut = item?.clampCut > 0 ? item?.clampCut : 0;
 
-  clampCut = selectedItemClampCut;
+  clampCut = count * selectedItemClampCut;
   let selectedItemNotch = item?.notch > 0 ? item?.notch : 0;
 
-  notch = selectedItemNotch;
+  notch = count * selectedItemNotch;
   let selectedItemOutages = item?.outages > 0 ? item?.outages : 0;
 
-  outages = selectedItemOutages;
+  outages = count * selectedItemOutages;
   return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
@@ -122,23 +222,47 @@ export const getHingeFabrication = (item, count) => {
   let outages = 0;
   let selectedItemHoles = item?.oneInchHoles > 0 ? item?.oneInchHoles : 0;
 
-  oneInchHoles = selectedItemHoles;
+  oneInchHoles = count * selectedItemHoles;
   let selectedItemHingeCut = item?.hingeCut > 0 ? item?.hingeCut : 1;
 
   hingeCut = count * selectedItemHingeCut;
   let selectedItemClampCut = item?.clampCut > 0 ? item?.clampCut : 0;
 
-  clampCut = selectedItemClampCut;
+  clampCut = count * selectedItemClampCut;
   let selectedItemNotch = item?.notch > 0 ? item?.notch : 0;
 
-  notch = selectedItemNotch;
+  notch = count * selectedItemNotch;
   let selectedItemOutages = item?.outages > 0 ? item?.outages : 0;
 
-  outages = selectedItemOutages;
+  outages = count * selectedItemOutages;
   return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
-export const getFabrication = (item, count) => {
+export const getMountingFabrication = (item, count) => {
+  let oneInchHoles = 0;
+  let hingeCut = 0;
+  let clampCut = 0;
+  let notch = 0;
+  let outages = 0;
+  let selectedItemHoles = item?.oneInchHoles > 0 ? item?.oneInchHoles : 0;
+
+  oneInchHoles = count * selectedItemHoles;
+  let selectedItemHingeCut = item?.hingeCut > 0 ? item?.hingeCut : 0;
+
+  hingeCut = count * selectedItemHingeCut;
+  let selectedItemClampCut = item?.clampCut > 0 ? item?.clampCut : 0;
+
+  clampCut = count * selectedItemClampCut;
+  let selectedItemNotch = item?.notch > 0 ? item?.notch : 0;
+
+  notch = count * selectedItemNotch;
+  let selectedItemOutages = item?.outages > 0 ? item?.outages : 0;
+
+  outages = count * selectedItemOutages;
+  return { oneInchHoles, hingeCut, clampCut, notch, outages };
+};
+
+export const getGenericFabrication = (item, count) => {
     let oneInchHoles = 0;
     let hingeCut = 0;
     let clampCut = 0;
@@ -146,18 +270,18 @@ export const getFabrication = (item, count) => {
     let outages = 0;
     let selectedItemHoles = item?.oneInchHoles > 0 ? item?.oneInchHoles : 0;
   
-    oneInchHoles = selectedItemHoles;
+    oneInchHoles = count * selectedItemHoles;
     let selectedItemHingeCut = item?.hingeCut > 0 ? item?.hingeCut : 0;
   
     hingeCut = count * selectedItemHingeCut;
     let selectedItemClampCut = item?.clampCut > 0 ? item?.clampCut : 0;
   
-    clampCut = selectedItemClampCut;
+    clampCut = count * selectedItemClampCut;
     let selectedItemNotch = item?.notch > 0 ? item?.notch : 0;
   
-    notch = selectedItemNotch;
+    notch = count * selectedItemNotch;
     let selectedItemOutages = item?.outages > 0 ? item?.outages : 0;
   
-    outages = selectedItemOutages;
+    outages = count * selectedItemOutages;
     return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };

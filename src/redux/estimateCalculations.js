@@ -341,7 +341,15 @@ const estimateCalcSlice = createSlice({
         };
       }
 
-      if (["handles", "hinges"].includes(type)) {
+      if (
+        [
+          "handles",
+          "hinges",
+          "slidingDoorSystem",
+          "header",
+          "channel",
+        ].includes(type)
+      ) {
         const hardwareFabrication = getHardwareFabricationQuantity(
           { ...state.content },
           state.quoteState,
@@ -359,7 +367,6 @@ const estimateCalcSlice = createSlice({
     },
     setCounters: (state, action) => {
       const { type, value, item } = action.payload;
-      console.log(value, "value", state.content.handles?.item?.hingeCut);
       let allClamps = ["wallClamp", "sleeveOver", "glassToGlass"];
       let allCorners = [
         "cornerWallClamp",
@@ -466,7 +473,21 @@ const estimateCalcSlice = createSlice({
         };
       }
 
-      if (["handles", "hinges"].includes(type)) {
+      if (
+        [
+          "handles",
+          "hinges",
+          "slidingDoorSystem",
+          "header",
+          "hardwareAddons",
+          "wallClamp",
+          "sleeveOver",
+          "glassToGlass",
+          "cornerWallClamp",
+          "cornerSleeveOver",
+          "cornerGlassToGlass",
+        ].includes(type)
+      ) {
         const hardwareFabrication = getHardwareFabricationQuantity(
           { ...state.content },
           state.quoteState,
