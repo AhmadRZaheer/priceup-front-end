@@ -301,7 +301,7 @@ export const useUserStatus = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User Status Updated Successfully",
+            message: "Location Status Updated Successfully",
             severity: "success",
           })
         );
@@ -551,7 +551,7 @@ export const useCustomUserStatus = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User status Updated successfully",
+            message: "Admin status Updated successfully",
             severity: "success",
           })
         );
@@ -635,7 +635,7 @@ export const useDeleteCustomerUser = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User deleted successfully",
+            message: "Admin deleted successfully",
             severity: "error",
           })
         );

@@ -49,17 +49,18 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
       email: isEdit?.type ? isEdit?.data?.email : "",
       image: isEdit?.type ? isEdit?.data?.image : "",
     },
-    enableReinitialize: isEdit?.type ? true : false,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      email:
-        Yup.string()
-        .required("Email is required"),
+      email: Yup.string().required("Email is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       if (isEdit.type) {
         uesEditUser(values);
-      } else userCreateData(values);
+      } else {
+        userCreateData(values);
+      }
+      resetForm();
     },
   });
   useEffect(() => {
@@ -80,7 +81,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
         <Box sx={style}>
           <form onSubmit={formik.handleSubmit}>
             <Typography sx={{ fontSize: 24, mb: 2, fontWeight: "bold" }}>
-              Create Admin
+              {isEdit.type ? "Edit" : "Create"} Admin
             </Typography>
             <Box>
               <Box sx={{ pb: 2 }}>
@@ -165,7 +166,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
               <Box>
                 <Typography>Email</Typography>
                 <CustomInputField
-                  placeholder="Name"
+                  placeholder="email"
                   name="email"
                   disabled={isEdit?.type ? true : false}
                   value={formik.values.email}

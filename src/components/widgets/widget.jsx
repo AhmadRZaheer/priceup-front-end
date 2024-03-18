@@ -30,7 +30,7 @@ const widget = ({ type, value }) => {
       break;
     case "team":
       data = {
-        title: "Team Members",
+        title: "Users",
         iconTitle: TeamIcon,
         cardNum: value,
         isMoney: false,
