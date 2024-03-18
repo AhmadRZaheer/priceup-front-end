@@ -83,7 +83,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values, "values formik");
       editFinish(values);
       close();
       refetch();
@@ -99,7 +98,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const [giveAccessArray, setGiveAccessArray] = useState([]);
   const [user, setuser] = useState(null);
   const [isOpen, setisOpen] = useState(false);
-
   const handleOpen = (data) => {
     if (isOpen) {
       setisOpen(false);
@@ -477,32 +475,41 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                             // }
                             key={data._id}
                           >
-                            <Box
-                              sx={{
-                                borderRadius: "7px",
-                              }}
-                              key={data._id}
+                            <Tooltip
+                              title={
+                                !data.status ? "This Admin is not active" : ""
+                              }
+                              placement="top"
+                              arrow
                             >
-                              <Chip
-                                label={data.name}
-                                onDelete={() => removeLocationAccess(data)}
-                                deleteIcon={
-                                  <Close
-                                    style={{
-                                      color: "white",
-                                      width: "16px",
-                                      height: "16px",
-                                      display: "block",
-                                    }}
-                                  />
-                                }
+                              <Box
                                 sx={{
-                                  color: "white",
-                                  bgcolor: "#C6C6C6",
                                   borderRadius: "7px",
                                 }}
-                              />
-                            </Box>
+                                key={data._id}
+                              >
+                                <Chip
+                                  disabled={!data.status}
+                                  label={data.name}
+                                  onDelete={() => removeLocationAccess(data)}
+                                  deleteIcon={
+                                    <Close
+                                      style={{
+                                        color: "white",
+                                        width: "16px",
+                                        height: "16px",
+                                        display: "block",
+                                      }}
+                                    />
+                                  }
+                                  sx={{
+                                    color: "white",
+                                    bgcolor: "#C6C6C6",
+                                    borderRadius: "7px",
+                                  }}
+                                />
+                              </Box>
+                            </Tooltip>
                           </Tooltip>
                         );
                       })
@@ -574,24 +581,33 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       {giveAccessArray.length !== 0 ? (
                         giveAccessArray?.map((data) => {
                           return (
-                            <Box
-                              sx={{ borderRadius: "7px", p: 0 }}
-                              key={data.id}
+                            <Tooltip
+                              title={
+                                !data.status ? "This Admin is not active" : ""
+                              }
+                              placement="top"
+                              arrow
                             >
-                              <Chip
-                                onClick={() => handleOpen(data)}
-                                label={data.name}
-                                // onDelete={
-                                //   data._id ? undefined : handleDelete(data)
-                                // }
-                                sx={{
-                                  color: "white",
-                                  bgcolor: "#C6C6C6",
-                                  borderRadius: "7px",
-                                  cursor: "pointer",
-                                }}
-                              />
-                            </Box>
+                              <Box
+                                sx={{ borderRadius: "7px", p: 0 }}
+                                key={data.id}
+                              >
+                                <Chip
+                                  disabled={!data.status}
+                                  onClick={() => handleOpen(data)}
+                                  label={data.name}
+                                  // onDelete={
+                                  //   data._id ? undefined : handleDelete(data)
+                                  // }
+                                  sx={{
+                                    color: "white",
+                                    bgcolor: "#C6C6C6",
+                                    borderRadius: "7px",
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              </Box>
+                            </Tooltip>
                           );
                         })
                       ) : (

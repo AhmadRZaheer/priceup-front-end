@@ -1,4 +1,10 @@
-import { Box, CircularProgress, FormControlLabel, Switch } from "@mui/material";
+import {
+  Box,
+  CircularProgress,
+  FormControlLabel,
+  Switch,
+  Tooltip,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   useCustomUserStatus,
@@ -8,7 +14,7 @@ import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_superAdmins";
 
-const TableRow = ({ row, onToggleChange, type }) => {
+const TableRow = ({ row, onToggleChange, type, refetch }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
@@ -23,29 +29,30 @@ const TableRow = ({ row, onToggleChange, type }) => {
   const { mutate: editTeamMembers } = useEditTeamMembers();
 
   const [active, setActive] = useState(row.status);
+  const popupMessage = ""
 
-  const handleSwitch = () => {
+  const handleSwitch = async () => {
     setActive(!active);
     if (type === "superAdmin") {
-      updateStatus({ status: !active, id: row?._id });
+      await updateStatus({ status: !active, id: row?._id });
       onToggleChange(active);
     } else if (type === "superAdminTeam") {
-      console.log(active, "activeactiveactive");
-      editTeamMembers({ status: !active, id: row?._id });
+      await editTeamMembers({ status: !active, id: row?._id });
     } else if (type === "superAdminUser") {
-      updateStatusUser({ status: !active, id: row?._id });
+      await updateStatusUser({ status: !active, id: row?._id });
     } else if (type === "super_superadmin") {
-      updateSuper_SuperAdmin({ status: !active, id: row?._id });
+      await updateSuper_SuperAdmin({ status: !active, id: row?._id });
     }
     // Call the callback function to update non-active count
   };
-
   return (
     <div className="cellAction">
       <div>
-        <Box sx={{ height: 50 }}>
-          <CustomToggle checked={active} onClick={() => handleSwitch()} />
-        </Box>
+        <Tooltip title={popupMessage} placement="top" arrow>
+          <Box sx={{ height: 50 }}>
+            <CustomToggle checked={active} onClick={() => handleSwitch()} />
+          </Box>
+        </Tooltip>
       </div>
     </div>
   );
