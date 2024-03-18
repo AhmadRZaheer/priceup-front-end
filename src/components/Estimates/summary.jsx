@@ -43,7 +43,22 @@ const renderMeasurements = (quoteState, measurements, layoutID) => {
       .join("’’/ ")
   }
   else if (quoteState === 'edit' || quoteState === 'custom') {
-    Object.entries(measurements).forEach(([key, value]) => { result += `${value['width']}’’ / ${value['height']}’’  ` });
+    Object.entries(measurements).forEach(([key, value]) => { 
+      const { count, width, height } = value;
+  
+      // Iterate until the count value of the current element is reached
+      for (let i = 1; i <= count; i++) {
+          result += `${width}'' / ${height}'' `;
+          // Perform any other operations with the current element and count value
+  
+          if (i === count) {
+              break; // Exit the loop when the count value is reached
+          }
+      }
+  });
+    // Object.entries(measurements).forEach(([key, value]) => {
+    //   result += `${value["width"]}’’ / ${value["height"]}’’  `;
+    // });
   }
   return result;
 }

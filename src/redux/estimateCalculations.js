@@ -3,6 +3,7 @@ import {
   layoutVariants,
   notificationTypes,
   notificationsVariant,
+  quoteState,
   thicknessTypes,
 } from "../utilities/constants";
 import { calculateAreaAndPerimeter } from "../utilities/common";
@@ -1144,7 +1145,7 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      const { estimateData, quoteState, quotesId } = action.payload;
+      const { estimateData, quotesId } = action.payload;
 
       state.quoteId = quotesId;
 
@@ -1346,11 +1347,11 @@ const estimateCalcSlice = createSlice({
         hardwareAddons: [...hardwareAddons],
         userProfitPercentage: estimateData?.userProfitPercentage,
       };
-      state.quoteState = quoteState;
+      state.quoteState = quoteState.EDIT;
       state.measurements = measurements;
       state.perimeter = estimateData.perimeter;
       state.sqftArea = estimateData.sqftArea;
-      state.selectedItem = estimateData.layoutData;
+      state.selectedItem = estimateData;
     },
   },
 });

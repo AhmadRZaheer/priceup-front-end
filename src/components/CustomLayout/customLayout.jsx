@@ -8,17 +8,22 @@ import {
   getContent,
   getMeasurementSide,
   getQuoteState,
+  initializeStateForCustomQuote,
+  initializeStateForEditQuote,
+  selectedItem,
   setLayoutArea,
   setLayoutPerimeter,
+  setMultipleNotifications,
   setNavigation,
   setNavigationDesktop,
   setPanelWeight,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { layoutVariants } from "../../utilities/constants";
+import { layoutVariants, quoteState } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -34,28 +39,30 @@ const isThereHigherKeyAvailable = (values, iterator) => {
 };
 
 const CustomLayout = () => {
+  const estimateState = useSelector((state) => state.estimateCalculations);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
-  const quoteState = useSelector(getQuoteState);
+  const currentQuoteState = useSelector(getQuoteState);
+  const selectedData = useSelector(selectedItem);
   const customInitalValues = {
     [0]: {
       count: 1,
     },
   };
   const dispatch = useDispatch();
-
+  console.log(measurements,'measurements');
   const [values, setValues] = useState(
     Object.keys(measurements)?.length
       ? { ...measurements }
       : { ...customInitalValues }
   );
-
+  console.log(values,'val');
   const rows = Object.keys(values).map(
-    (key) => parseInt(values[key].count) || 1
+    (key) => parseInt(values[key]) || 1
   );
 
   const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
-  console.log(numRows, "log");
+  console.log(numRows, "log",rows);
 
   const addRow = () => {
     setValues((vals) => ({
@@ -70,7 +77,7 @@ const CustomLayout = () => {
   };
   const handleback = () => {
     // dispatch(setNavigation("layouts"));
-    if (quoteState === "custom") {
+    if (currentQuoteState === quoteState.CUSTOM) {
       dispatch(setNavigationDesktop("layouts"));
     } else {
       dispatch(setNavigationDesktop("existing"));
@@ -111,7 +118,9 @@ const CustomLayout = () => {
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(values));
-    dispatch(setNavigation("review"));
+    const notificationsResult = generateNotificationsForCurrentItem({ ...estimateState, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
+    dispatch(setMultipleNotifications({ ...notificationsResult }));
+    // dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 
     // Reset the form
@@ -130,6 +139,32 @@ const CustomLayout = () => {
       [name]: value,
     });
   };
+
+  let lockNext = false;
+
+  Object.entries(values).forEach?.(([key, value])=>{
+    const { count, width, height } = value;
+    if(!width || !height){
+      lockNext = true;
+    }
+  })
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.CUSTOM) {
+      dispatch(initializeStateForCustomQuote());
+    }
+    else if(currentQuoteState === quoteState.EDIT){
+      dispatch(
+        initializeStateForEditQuote({
+          estimateData: selectedData,
+          quotesId: selectedData._id,
+        })
+      );
+    }
+    return () => {
+
+    }
+  }, []);
 
   return (
     <>
@@ -605,9 +640,10 @@ const CustomLayout = () => {
                     type="submit"
                     fullWidth
                     disabled={
-                      !values["0"]?.width ||
-                      !values["0"]?.height ||
-                      !values["0"]?.count
+                      // !values["0"]?.width ||
+                      // !values["0"]?.height ||
+                      // !values["0"]?.count
+                      lockNext
                     }
                     sx={{
                       height: 40,
