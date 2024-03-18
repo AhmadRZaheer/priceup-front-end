@@ -31,6 +31,7 @@ import { useState } from "react";
 import DefaultImage from "../ui-components/defaultImage";
 import { useEffect } from "react";
 import { Close } from "@mui/icons-material";
+import CustomInputField from "../ui-components/CustomInput";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("First Name is required"),
@@ -72,13 +73,16 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     measurements = newArray;
   }
 
+  let filteredFields = estimatesContent.additionalFields.filter(
+    (item) => item.label !== "" && item.cost !== 0
+  );
   const hardwareAddonsArray = estimatesContent?.hardwareAddons?.map((row) => {
     return {
       type: row.item._id,
       count: row.count,
     };
   });
-  const additionalFieldsArray = estimatesContent.additionalFields.map((row) => {
+  const additionalFieldsArray = filteredFields.map((row) => {
     return {
       cost: row.cost,
       label: row.label,
@@ -194,16 +198,20 @@ export default function ClientDetailsModel({ open, handleCancel }) {
       email: "",
       phone: "",
       address: "",
+      label: "",
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values, "values");
       if (["create", "custom"].includes(updatecheck)) {
+        const filteredValues = Object.fromEntries(
+          Object.entries(values).filter(([key]) => key !== "label")
+        );
         mutate({
-          customerData: values,
+          customerData: filteredValues,
           estimateData: {
             ...estimate,
             layout_id: estimatesLayout?._id || null,
+            label: values.label,
           },
         });
       } else {
@@ -366,103 +374,134 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                   >
                     <Typography>Customer Detail</Typography>
                   </Box>
+                  <Box sx={{ width: "100%", pb: 1 }}>
+                    <Typography>Label</Typography>
+                    <TextField
+                      id="label"
+                      name="label"
+                      placeholder="label"
+                      size="small"
+                      variant="outlined"
+                      InputProps={{
+                        style: {
+                          color: "black",
+                          borderRadius: 4,
+                          border: "1px solid #cccccc",
+                          backgroundColor: "white",
+                        },
+                        inputProps: { min: 0, max: 50 },
+                      }}
+                      InputLabelProps={{
+                        style: {
+                          color: "rgba(255, 255, 255, 0.5)",
+                        },
+                      }}
+                      sx={{
+                        color: { sm: "black", xs: "white" },
+                      }}
+                      fullWidth
+                      value={formik.values.label}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.label && formik.errors.label}
+                      helperText={formik.touched.label && formik.errors.label}
+                    />
+                  </Box>
 
-                  <Box sx={{ display: "flex", gap: 4 }}>
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          paddingY: { sm: 0, xs: 2 },
-                        }}
-                      >
-                        <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                          <label htmlFor="firstName">First Name</label>
-                        </Box>
+                  <Box sx={{ display: "flex", gap: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        paddingY: { sm: 0, xs: 2 },
+                      }}
+                    >
+                      <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                        <label htmlFor="firstName">First Name</label>
+                      </Box>
 
-                        <TextField
-                          id="firstName"
-                          name="firstName"
-                          placeholder="First Name"
-                          size="small"
-                          variant="outlined"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 4,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          value={formik.values.firstName}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.firstName && formik.errors.firstName
-                          }
-                          helperText={
-                            formik.touched.firstName && formik.errors.firstName
-                          }
-                        />
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          paddingY: { sm: 0, xs: 2 },
+                      <TextField
+                        id="firstName"
+                        name="firstName"
+                        placeholder="First Name"
+                        size="small"
+                        variant="outlined"
+                        InputProps={{
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            border: "1px solid #cccccc",
+                            backgroundColor: "white",
+                          },
+                          inputProps: { min: 0, max: 50 },
                         }}
-                      >
-                        <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                          {" "}
-                          <label htmlFor="lastName">Last Name</label>
-                        </Box>
-                        <TextField
-                          id="lastName"
-                          name="lastName"
-                          placeholder="Last Name"
-                          size="small"
-                          variant="outlined"
-                          value={formik.values.lastName}
-                          onChange={formik.handleChange}
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 4,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          onBlur={formik.handleBlur}
-                          error={
-                            formik.touched.lastName && formik.errors.lastName
-                          }
-                          helperText={
-                            formik.touched.lastName && formik.errors.lastName
-                          }
-                        />
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={formik.values.firstName}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={
+                          formik.touched.firstName && formik.errors.firstName
+                        }
+                        helperText={
+                          formik.touched.firstName && formik.errors.firstName
+                        }
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        paddingY: { sm: 0, xs: 2 },
+                      }}
+                    >
+                      <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                        {" "}
+                        <label htmlFor="lastName">Last Name</label>
                       </Box>
+                      <TextField
+                        id="lastName"
+                        name="lastName"
+                        placeholder="Last Name"
+                        size="small"
+                        variant="outlined"
+                        value={formik.values.lastName}
+                        onChange={formik.handleChange}
+                        InputProps={{
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            border: "1px solid #cccccc",
+                            backgroundColor: "white",
+                          },
+                          inputProps: { min: 0, max: 50 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        onBlur={formik.handleBlur}
+                        error={
+                          formik.touched.lastName && formik.errors.lastName
+                        }
+                        helperText={
+                          formik.touched.lastName && formik.errors.lastName
+                        }
+                      />
                     </Box>
                   </Box>
 

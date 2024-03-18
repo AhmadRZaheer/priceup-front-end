@@ -82,6 +82,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       }
       measurementsArray = newArray;
     }
+    let filteredFields = selectedContent.additionalFields.filter(
+      (item) => item.label !== "" && item.cost !== 0
+    )
+
     const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
@@ -104,7 +108,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         };
       }
     );
-    const additionalFieldsArray = selectedContent.additionalFields.map(
+    const additionalFieldsArray = filteredFields.map(
       (row) => {
         return {
           cost: row.cost,
@@ -363,7 +367,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               }}
               variant="h4"
             >
-              Create New Qoute
+              Create New Estimates
             </Typography>
           </Box>
         </Box>

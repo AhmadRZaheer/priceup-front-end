@@ -30,7 +30,11 @@ import {
   initializeStateForEditQuote,
   setHardwareFabricationQuantity,
 } from "../../redux/estimateCalculations";
-import { backendURL, calculateAreaAndPerimeter, getGlassThickness } from "../../utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  getGlassThickness,
+} from "../../utilities/common";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
@@ -50,7 +54,9 @@ const LayoutMeasurements = () => {
   const currentQuoteState = useSelector(getQuoteState);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
-    currentQuoteState === quoteState.EDIT ? measurementSidesForEdit : measurementSidesForCreate;
+    currentQuoteState === quoteState.EDIT
+      ? measurementSidesForEdit
+      : measurementSidesForCreate;
 
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
@@ -193,9 +199,8 @@ const LayoutMeasurements = () => {
 
   useEffect(() => {
     if (currentQuoteState === quoteState.CREATE) {
-      dispatch(initializeStateForCreateQuote({ layoutData: selectedData }))
-    }
-    else if (currentQuoteState === quoteState.EDIT) {
+      dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
+    } else if (currentQuoteState === quoteState.EDIT) {
       dispatch(
         initializeStateForEditQuote({
           estimateData: selectedData,
@@ -203,9 +208,7 @@ const LayoutMeasurements = () => {
         })
       );
     }
-    return () => {
-
-    }
+    return () => {};
   }, []);
   return (
     <>
