@@ -21,6 +21,7 @@ import {
   setPanelWeight,
   setQuoteState,
   setReturnWeight,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
 import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { useNavigate } from "react-router-dom";
@@ -56,6 +57,7 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     //     quotesId: item._id,
     //   })
     // );
+    dispatch(updateMeasurements(item.measurements))
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(

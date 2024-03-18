@@ -9,6 +9,8 @@ import {
   getMeasurementSide,
   getQuoteState,
   initializeStateForCustomQuote,
+  initializeStateForEditQuote,
+  selectedItem,
   setHardwareFabricationQuantity,
   setLayoutArea,
   setLayoutPerimeter,
@@ -43,25 +45,26 @@ const CustomLayout = () => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
+  const selectedData = useSelector(selectedItem);
   const customInitalValues = {
     [0]: {
       count: 1,
     },
   };
   const dispatch = useDispatch();
-
+  console.log(measurements,'measurements');
   const [values, setValues] = useState(
     Object.keys(measurements)?.length
       ? { ...measurements }
       : { ...customInitalValues }
   );
-
+  console.log(values,'val');
   const rows = Object.keys(values).map(
-    (key) => parseInt(values[key].count) || 1
+    (key) => parseInt(values[key]) || 1
   );
 
   const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
-  console.log(numRows, "log");
+  console.log(numRows, "log",rows);
 
   const addRow = () => {
     setValues((vals) => ({
@@ -141,9 +144,26 @@ const CustomLayout = () => {
     });
   };
 
+  let lockNext = false;
+
+  Object.entries(values).forEach?.(([key, value])=>{
+    const { count, width, height } = value;
+    if(!width || !height){
+      lockNext = true;
+    }
+  })
+
   useEffect(() => {
     if (currentQuoteState === quoteState.CUSTOM) {
       dispatch(initializeStateForCustomQuote());
+    }
+    else if(currentQuoteState === quoteState.EDIT){
+      dispatch(
+        initializeStateForEditQuote({
+          estimateData: selectedData,
+          quotesId: selectedData._id,
+        })
+      );
     }
     return () => {
 
@@ -624,9 +644,10 @@ const CustomLayout = () => {
                     type="submit"
                     fullWidth
                     disabled={
-                      !values["0"]?.width ||
-                      !values["0"]?.height ||
-                      !values["0"]?.count
+                      // !values["0"]?.width ||
+                      // !values["0"]?.height ||
+                      // !values["0"]?.count
+                      lockNext
                     }
                     sx={{
                       height: 40,
