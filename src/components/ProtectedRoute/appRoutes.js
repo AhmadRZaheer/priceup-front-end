@@ -24,7 +24,7 @@ import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 import Staff from "../../pages/Staff/staff";
 import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
 import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
-import { super_superAdmin } from "../../utilities/constants";
+import { super_superAdmin, userRoles } from "../../utilities/constants";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -37,15 +37,19 @@ const AppRoutes = () => {
   };
 
   const isSuperAdmin = () => {
-    return decodedToken?.role === "super_admin";
+    return decodedToken?.role === userRoles.SUPER_ADMIN;
   };
 
   const isAdmin = () => {
-    return decodedToken?.role === "admin";
+    return decodedToken?.role === userRoles.ADMIN;
   };
 
   const isStaff = () => {
-    return decodedToken?.role === "staff";
+    return decodedToken?.role === userRoles.STAFF;
+  };
+
+  const isCustomAdmin = () => {
+    return decodedToken?.role === userRoles.CUSTOM_ADMIN;
   };
 
   const getHomepageURL = () => {
@@ -53,6 +57,8 @@ const AppRoutes = () => {
       return "/admin";
     } else if (isAdmin()) {
       return "/overview";
+    } else if (isCustomAdmin()) {
+      return "/locations";
     } else if (isStaff()) {
       return "/staff";
     } else {
@@ -78,7 +84,7 @@ const AppRoutes = () => {
           !isAuthenticated() ? <Login /> : <Navigate to={getHomepageURL()} />
         }
       />
-      {isAdmin() ? (
+      {isAdmin() || (isCustomAdmin() && decodedToken?.company_id) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="/estimates/">
@@ -116,6 +122,11 @@ const AppRoutes = () => {
             <Route path="/superadmins" element={<Super_SuperAdmin />} />
           )}
           <Route path="*" element={<Admin />} />
+        </Route>
+      ) : isCustomAdmin() && !decodedToken?.company_id ? (
+        <Route path="/">
+          <Route index element={<Admin />} />
+          <Route path="/locations" element={<Admin />} />
         </Route>
       ) : (
         ""

@@ -47,3 +47,10 @@ export const quoteState = {
   EDIT : 'edit',
   CUSTOM : 'custom'
 }
+
+export const userRoles = {
+  ADMIN: "admin",
+  SUPER_ADMIN: "super_admin",
+  STAFF: "staff",
+  CUSTOM_ADMIN: "custom_admin",
+}
