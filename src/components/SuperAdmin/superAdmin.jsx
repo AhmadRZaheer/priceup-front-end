@@ -269,6 +269,9 @@ const SuperAdminTable = () => {
                 (accessData) => accessData?.company_id === item?.company?._id
               )
             );
+            const filterNonActive = matchingUserData.filter(
+              (data) => data.status
+            );
             const handleToggleChange = (active) => {
               setInActiveCount((prevCount) => {
                 if (!active && prevCount > 0) {
@@ -409,8 +412,8 @@ const SuperAdminTable = () => {
                         Admin
                       </Typography>
                       <Grid container mt={1} gap={2}>
-                        {matchingUserData.length !== 0 ? (
-                          matchingUserData.map((user, index) => {
+                        {filterNonActive.length !== 0 ? (
+                          filterNonActive.map((user, index) => {
                             return (
                               <DefaultImage
                                 key={index}
@@ -424,7 +427,7 @@ const SuperAdminTable = () => {
                             sx={{ display: "flex", gap: 1.5, color: "#667085" }}
                           >
                             <img src={TeamIcon} alt="image of customer" />
-                            <Typography>{matchingUserData.length}</Typography>
+                            <Typography>{filterNonActive.length}</Typography>
                           </Box>
                         )}
                       </Grid>

@@ -104,6 +104,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     } else setisOpen(true);
     setuser(data);
   };
+  console.log(customUserData, "customUserData");
   useEffect(() => {
     setHaveAccessArray((prevHaveAccessArray) => {
       const matchingUserData = customUserData.filter((userData) =>
@@ -146,6 +147,8 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const handleRestPass = () => {
     ResetPassword({ userid: userdata?._id });
   };
+  const filterhaveAccessArray = haveAccessArray.filter((item) => item.status);
+  const filtergiveAccessArray = giveAccessArray.filter((item) => item.status);
   return (
     <>
       <Modal open={open} onClose={close}>
@@ -464,8 +467,8 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                     }}
                     component="ul"
                   >
-                    {haveAccessArray.length !== 0 ? (
-                      haveAccessArray.map((data) => {
+                    {filterhaveAccessArray.length !== 0 ? (
+                      filterhaveAccessArray.map((data) => {
                         return (
                           <Tooltip
                             // title={
@@ -475,41 +478,32 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                             // }
                             key={data._id}
                           >
-                            <Tooltip
-                              title={
-                                !data.status ? "This Admin is not active" : ""
-                              }
-                              placement="top"
-                              arrow
+                            <Box
+                              sx={{
+                                borderRadius: "7px",
+                              }}
+                              key={data._id}
                             >
-                              <Box
+                              <Chip
+                                label={data.name}
+                                onDelete={() => removeLocationAccess(data)}
+                                deleteIcon={
+                                  <Close
+                                    style={{
+                                      color: "white",
+                                      width: "16px",
+                                      height: "16px",
+                                      display: "block",
+                                    }}
+                                  />
+                                }
                                 sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
                                   borderRadius: "7px",
                                 }}
-                                key={data._id}
-                              >
-                                <Chip
-                                  disabled={!data.status}
-                                  label={data.name}
-                                  onDelete={() => removeLocationAccess(data)}
-                                  deleteIcon={
-                                    <Close
-                                      style={{
-                                        color: "white",
-                                        width: "16px",
-                                        height: "16px",
-                                        display: "block",
-                                      }}
-                                    />
-                                  }
-                                  sx={{
-                                    color: "white",
-                                    bgcolor: "#C6C6C6",
-                                    borderRadius: "7px",
-                                  }}
-                                />
-                              </Box>
-                            </Tooltip>
+                              />
+                            </Box>
                           </Tooltip>
                         );
                       })
@@ -578,36 +572,27 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       }}
                       component="ul"
                     >
-                      {giveAccessArray.length !== 0 ? (
-                        giveAccessArray?.map((data) => {
+                      {filtergiveAccessArray.length !== 0 ? (
+                        filtergiveAccessArray?.map((data) => {
                           return (
-                            <Tooltip
-                              title={
-                                !data.status ? "This Admin is not active" : ""
-                              }
-                              placement="top"
-                              arrow
+                            <Box
+                              sx={{ borderRadius: "7px", p: 0 }}
+                              key={data.id}
                             >
-                              <Box
-                                sx={{ borderRadius: "7px", p: 0 }}
-                                key={data.id}
-                              >
-                                <Chip
-                                  disabled={!data.status}
-                                  onClick={() => handleOpen(data)}
-                                  label={data.name}
-                                  // onDelete={
-                                  //   data._id ? undefined : handleDelete(data)
-                                  // }
-                                  sx={{
-                                    color: "white",
-                                    bgcolor: "#C6C6C6",
-                                    borderRadius: "7px",
-                                    cursor: "pointer",
-                                  }}
-                                />
-                              </Box>
-                            </Tooltip>
+                              <Chip
+                                onClick={() => handleOpen(data)}
+                                label={data.name}
+                                // onDelete={
+                                //   data._id ? undefined : handleDelete(data)
+                                // }
+                                sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
+                                  borderRadius: "7px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Box>
                           );
                         })
                       ) : (

@@ -76,7 +76,6 @@ const SuperAdminUser = () => {
       headerClassName: "customHeaderClass-admin-team",
       flex: 1,
       renderCell: (params) => {
-        console.log(params.row);
         return (
           <TableRow
             row={params.row}
