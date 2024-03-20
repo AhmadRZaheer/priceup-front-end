@@ -17,6 +17,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { thicknessTypes } from "../../utilities/constants";
 
 const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
   const [anchorEl, setAnchorEl] = useState(false);
@@ -25,19 +26,19 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
     let active = null;
-    if (selectedContent?.glassType?.thickness === "1/2") {
+    if (selectedContent?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
       active = listData?.mountingChannel?.find(
         (item) => item.slug === "u-channel-1-2"
       );
-    } else if (selectedContent?.glassType?.thickness === "3/8") {
+    } else if (selectedContent?.glassType?.thickness === thicknessTypes.THREEBYEIGHT) {
       active = listData?.mountingChannel?.find(
         (item) => item.slug === "u-channel-3-8"
       );
     }
-    return active;
+        return active;
   }, [selectedContent?.glassType?.thickness]);
   /** end */
-  const dispatch = useDispatch();
+    const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
       dispatch(setContent({ type: type, item: item }));
