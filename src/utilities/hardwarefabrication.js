@@ -147,7 +147,7 @@ export const getHardwareFabricationQuantity = (
       outages += slidingDoorSystemResult.outages;
   }
   // for header
-  if (selectedContent.slidingDoorSystem?.item){
+  if (selectedContent.header?.item){
     const headerResult = getGenericFabrication(
         selectedContent.header?.item,
         selectedContent.header?.count
