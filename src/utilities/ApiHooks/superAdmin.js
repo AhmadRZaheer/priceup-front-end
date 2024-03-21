@@ -896,3 +896,31 @@ export const useSwitchLocationUser = () => {
 
   return useMutation(handleSwitch);
 };
+
+export const useBackToCustomAdminLocations = () => {
+  const handleSwitch = async () => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/customUsers/switchBackToSuperView`,
+        {
+          userId: decodedToken?.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};

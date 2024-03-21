@@ -43,8 +43,9 @@ const SuperSidebar = () => {
   useEffect(() => {
     teamMemberRefetch();
   }, []);
+  console.log(AdminData, "AdminData");
   const filteredAdminData = AdminData.filter((admin) =>
-    admin.user.name.toLowerCase().includes(searchQuery.toLowerCase())
+    admin.company.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (adminId) => {
     navigate(`/?adminID=${adminId}`);
@@ -240,8 +241,8 @@ const SuperSidebar = () => {
           ) : (
             filteredAdminData.map((admin) => (
               <SingleUser
-                key={admin?.user?._id}
-                item={admin?.user}
+                key={admin?.company?._id}
+                item={admin?.company}
                 active={false}
                 handleClick={() => handleAdminNameClick(admin.user._id)}
               />

@@ -45,6 +45,7 @@ function DefaultImage({ image, name, type = 1 }) {
             color: "#7F56D9",
             textTransform: "uppercase",
             fontWeight: "bold",
+            overflow: "hidden",
           }}
         >
           {firstNameInitial}
@@ -84,7 +85,8 @@ function DefaultImage({ image, name, type = 1 }) {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#7F56D9",
+            color: "#7F56D9", width: type === 1 ? 40 : 50,
+            height: type === 1 ? 40 : 50,
             textTransform: "uppercase",
             fontWeight: "bold",
           }}
@@ -185,7 +187,13 @@ function DefaultImage({ image, name, type = 1 }) {
             aria-haspopup="true"
             onMouseEnter={handlePopoverOpen}
             onMouseLeave={handlePopoverClose}
-            sx={{ cursor: "pointer" }}
+            sx={{
+              cursor: "pointer",
+              overflow: "hidden",
+              borderRadius: "100%",
+              width: type === 1 ? 40 : 50,
+              height: type === 1 ? 40 : 50,
+            }}
           >
             <img
               className="cellImg"

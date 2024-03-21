@@ -13,32 +13,23 @@ import HardWairIcon from "../../Assets/box.svg";
 import DefaultIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import {
-  Box,
-  IconButton,
-  Tooltip,
-  Popover,
-  Typography,
-  Drawer,
-  CircularProgress,
-} from "@mui/material";
+import { Box, IconButton, Tooltip, Popover, Drawer } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { backendURL } from "../../utilities/common";
 import { AttachMoney, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
 import {
+  useBackToCustomAdminLocations,
   useFetchCustomAdminHaveAccessTo,
   useFetchDataAdmin,
-  useHaveAccessCustomUser,
   useSwitchLocationUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import BackIcon from "../../Assets/back.svg";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import { setDataRefetch } from "../../redux/staff";
 import DefaultImage from "../ui-components/defaultImage";
 import SingleUser from "../ui-components/SingleUser";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
+import { userRoles } from "../../utilities/constants";
 
 const drawerWidth = 320;
 
@@ -52,6 +43,11 @@ const Sidebar = () => {
     isSuccess: switched,
     isLoading: isSwitching,
   } = useSwitchLocationUser();
+  const {
+    mutate: backRefetch,
+    data: useTokenBack,
+    isSuccess: switchedBack,
+  } = useBackToCustomAdminLocations();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
@@ -78,16 +74,13 @@ const Sidebar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const filteredAdminData = AdminData?.filter((admin) =>
-    admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredCustomUser = haveAccessData?.filter((data) =>
-    data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    admin?.company?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (admin) => {
     /** Added for branch PD-28 */
     setActiveLocation(admin);
     /** Added for branch PD-28 */
-    navigate(`/?userID=${admin?._id}`);
+    navigate(`/?userID=${admin?.user?._id}`);
     const urlWithoutQuery = window.location.pathname;
     window.history.replaceState({}, document.title, urlWithoutQuery);
   };
@@ -101,19 +94,29 @@ const Sidebar = () => {
       console.log("user changed");
     }
   };
+  const handleBackCustomAdminClick = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      await backRefetch();
+      console.log("user backed");
+    }
+  };
   useEffect(() => {
     refetch();
   }, []);
-  const [refetchKey, setRefetchKey] = useState(0);
   useEffect(() => {
     if (switched) {
       localStorage.setItem("token", useToken);
-      // dispatch(setDataRefetch());
-      // console.log(switched);
-      // setRefetchKey((prevKey) => prevKey + 1);
       window.location.href = "/";
     }
-  }, [switched]);
+    if (switchedBack) {
+      localStorage.setItem("token", useTokenBack.token);
+      window.location.href = "/locations";
+    }
+  }, [switched, switchedBack]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -128,8 +131,8 @@ const Sidebar = () => {
         const record = await filteredAdminData.find(
           (admin) => admin?.company?._id === decodedToken?.company_id
         );
-        if (record?.user) {
-          setActiveLocation(record?.user);
+        if (record) {
+          setActiveLocation(record);
         }
       }
     };
@@ -137,18 +140,17 @@ const Sidebar = () => {
     fetchData();
   }, [filteredAdminData]);
   /** Added for branch PD-28 */
-  // console.log(token, "token");
-  // console.log(decodedToken, "decodedToken");
-  // console.log(haveAccessData, "haveAccsessData");
   useEffect(() => {
-    if (filteredCustomUser) {
-      const user = filteredCustomUser.find(
-        (item) => item.id === decodedToken?.company_id
+    if (haveAccessData) {
+      const user = haveAccessData.find(
+        (item) => item?.company?._id === decodedToken?.company_id
       );
 
-      setCustomActiveUser(user?.name, "user");
+      console.log(user, "user", haveAccessData, decodedToken?.company_id);
+
+      setCustomActiveUser(user?.company?.name);
     }
-  }, [filteredCustomUser, decodedToken]);
+  }, [haveAccessData, decodedToken]);
 
   const drawer = (
     <Box
@@ -174,6 +176,12 @@ const Sidebar = () => {
                 <span className="logo">
                   <img src={Logo} alt="price up logo" />
                 </span>
+                <div style={{ paddingLeft: 20 }}>
+                  <DefaultImage
+                    image={activeLocation?.company?.image}
+                    name={activeLocation?.company?.name}
+                  />
+                </div>
               </div>
             </NavLink>
             <div className="center">
@@ -195,9 +203,17 @@ const Sidebar = () => {
                         }}
                       >
                         <PinDrop sx={{ color: "white" }} />
-                        <span style={{ flexGrow: 1 }}>
+                        <span
+                          style={{
+                            flexGrow: 1,
+                            whiteSpace: "nowrap",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                          }}
+                        >
                           {" "}
-                          {activeLocation?.name}
+                          {activeLocation?.company?.name}
                         </span>
                         <UnfoldMore sx={{ color: "white", mr: 1 }} />
                       </IconButton>
@@ -205,8 +221,7 @@ const Sidebar = () => {
                   </li>
                   /** Added for branch PD-28 */
                 )}
-                {decodedToken?.role === "admin" ||
-                decodedToken?.role === "custom_admin" ? (
+                {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
                   <li
                     style={{ padding: 10, marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
@@ -223,7 +238,17 @@ const Sidebar = () => {
                       }}
                     >
                       <PinDrop sx={{ color: "white" }} />
-                      <span>{CustomActiveUser}</span>
+                      <span
+                        style={{
+                          flexGrow: 1,
+                          whiteSpace: "nowrap",
+                          display: "block",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {CustomActiveUser}
+                      </span>
                       <UnfoldMore sx={{ color: "white", mr: 1 }} />
                     </IconButton>
                   </li>
@@ -555,13 +580,14 @@ const Sidebar = () => {
         </Box>
       </Box>
 
-      {decodedToken.role === "custom_admin" ? (
+      {decodedToken.role === userRoles.CUSTOM_ADMIN ? (
         <SwitchLocationPopup
           anchorEl={anchorEl}
           data={haveAccessData}
           handleClosePopup={handleClosePopup}
           handleUserClick={handleCustomUserClick}
           isSwitching={isSwitching}
+          handleBack={handleBackCustomAdminClick}
         />
       ) : (
         <Popover
@@ -651,43 +677,13 @@ const Sidebar = () => {
               marginBottom: 10,
             }}
           >
-            {/* {filteredAdminData.length === 0 ? (
-            <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
-              No location found
-            </Typography>
-          ) : (
-            decodedToken?.role === "admin" &&
-            (isSwitching ? (
-              <Box
-                sx={{
-                  width: "100%",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "100px",
-                  alignItems: "center",
-                }}
-              >
-                <CircularProgress sx={{ color: "#8477DA" }} />
-              </Box>
-            ) : (
-              filteredCustomUser?.map((item) => (
-                <SingleUser
-                  key={item?.id}
-                  item={item}
-                  active={item.id === decodedToken?.company_id}
-                  handleClick={() => handleCustomUserClick(item)}
-                />
-              ))
-            ))
-          )} */}
             {superAdminToken &&
               filteredAdminData.map((admin) => (
                 <SingleUser
-                  key={admin?.user?._id}
-                  item={admin?.user}
+                  key={admin?.company?._id}
+                  item={admin?.company}
                   active={admin?.company?._id === decodedToken?.company_id}
-                  handleClick={() => handleAdminNameClick(admin?.user)}
+                  handleClick={() => handleAdminNameClick(admin)}
                 />
               ))}
           </div>

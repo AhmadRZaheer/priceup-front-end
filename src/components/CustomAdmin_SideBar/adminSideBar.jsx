@@ -9,14 +9,13 @@ import LagoutModal from "../Modal/logOut";
 import { Box, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import TremIcon from "../../Assets/users.svg";
-import { FmdGoodOutlined, Search } from "@mui/icons-material";
+import { FmdGoodOutlined } from "@mui/icons-material";
 import {
   useFetchCustomAdminHaveAccessTo,
   useSwitchLocationUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
-import SingleUser from "../ui-components/SingleUser";
 import { super_superAdmin } from "../../utilities/constants";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 
@@ -52,7 +51,6 @@ const AdminSidebar = () => {
   }, []);
 
   const handleSwitchLocation = async (companyId) => {
-    console.log(companyId, "company id selected");
     if (!companyId || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
@@ -64,8 +62,6 @@ const AdminSidebar = () => {
   };
   useEffect(() => {
     if (switched) {
-      const decode = parseJwt(newToken);
-      console.log(decode, "switched");
       localStorage.setItem("token", newToken);
       window.location.href = "/";
     }
