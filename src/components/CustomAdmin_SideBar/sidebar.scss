@@ -1,0 +1,102 @@
+.sidebar {
+  background-color: #100d24;
+  color: #f2f4f7;
+  height: 100vh;
+  .top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .logo {
+      padding: 0px;
+      margin-top: 10px;
+    }
+  }
+  .line {
+    height: 0;
+    border: 1px solid #475467;
+    width: 85%;
+    margin: 0px auto;
+  }
+  .center {
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      .estimates {
+        margin-top: 30px;
+      }
+      .setting {
+        margin-top: 0px;
+      }
+
+      li {
+        display: flex;
+        align-items: baseline;
+        padding: 7px;
+        cursor: pointer;
+        margin: 15px;
+        border-radius: 5px;
+
+        &:hover {
+          background-color: #8477da;
+        }
+        &.active {
+          background-color: #8477da;
+        }
+
+        .icon {
+          font-size: 16px;
+          margin-right: 10px;
+        }
+
+        span {
+          font-size: 18px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .bottom {
+    display: flex;
+    align-items: center;
+    margin: 0px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    cursor: pointer;
+    border: none;
+
+    .UserIcon {
+      margin-right: 5px;
+    }
+    .usernameInSidebar {
+      font-size: 11px;
+    }
+    .emailUser {
+      font-size: 10px;
+      color: #f2f4f7;
+    }
+    .logOutIcon {
+      font-size: 10px;
+      margin-left: 5px;
+    }
+  }
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
+  .active {
+    font-weight: 800;
+  }
+}
+
+.UserIcon-1 {
+  margin-right: -5px;
+  margin-top: 4px !important;
+  width: 32px;
+  height: 32px;
+  overflow: hidden;
+  border-radius: 100%;
+}

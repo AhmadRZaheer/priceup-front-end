@@ -87,7 +87,7 @@ const SuperAdminUser = () => {
     },
     {
       field: "Action",
-      flex: 0.5, //
+      flex: 0.5,
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
         const id = params.row._id;

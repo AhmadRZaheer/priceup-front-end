@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import Snackbars from "../Modal/snackBar";
 import desktopImage from "../../Assets/desktop.svg";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { getHomepageURL } from "../../utilities/authentications";
+import { parseJwt } from "../ProtectedRoute/authVerify";
 
 const Login = (props) => {
   const [email, setEmail] = useState("");
@@ -23,34 +25,18 @@ const Login = (props) => {
   const handleLogin = (e) => {
     e.preventDefault();
     axios
-      .post(`${backendURL}/users/login`, {
+      .post(`${backendURL}/login`, {
         email,
         password,
       })
       .then((response) => {
         localStorage.setItem("email", email);
         dispatch(loginHandler(response.data.data));
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        const errorMessage =
-          error.response?.data?.message || "Login failed. Please try again.";
-        showSnackbarHandler(errorMessage, "error");
-      });
-  };
-
-  const handleLoginAgent = (e) => {
-    e.preventDefault();
-    axios
-      .post(`${backendURL}/staffs/login`, {
-        email,
-        password,
-      })
-      .then((response) => {
-        localStorage.setItem("email", email);
-
-        dispatch(loginHandler(response.data.data));
-        window.location.href = "/staff";
+        console.log(response.data.data, "response.data.data");
+        const decodedToken = parseJwt(response.data.data.token);
+        const redirection =getHomepageURL(decodedToken);
+        console.log(redirection,'path',decodedToken)
+        window.location.href = redirection;
       })
       .catch((error) => {
         const errorMessage =
@@ -99,15 +85,15 @@ const Login = (props) => {
               className="login"
               type="submit"
             >
-              Login as Admin
+              Login
             </button>
 
-            <button
+            {/* <button
               className="loginAsfield"
               onClick={(e) => handleLoginAgent(e)}
             >
               Login as Field Agent
-            </button>
+            </button> */}
           </form>
           <button
             className="forget-pass"
