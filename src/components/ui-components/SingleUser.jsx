@@ -27,9 +27,26 @@ function SingleUser({ item, active, handleClick }) {
         <div style={{ width: "20%" }}>
           <DefaultImage image={item?.image} name={item?.name} />
         </div>
-        <div style={{ paddingLeft: "10px", width: "100%" }}>
-          <a style={{ cursor: "pointer" }}>{item?.name}</a>
-          <p style={{ fontSize: "10px" }}>{item?.email}</p>
+        <div
+          style={{
+            paddingLeft: "10px",
+            width: "100%",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <a
+            style={{
+              cursor: "pointer",
+              display: "inline-block",
+              maxWidth: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {item?.name}
+          </a>
+          <p style={{ fontSize: "10px", marginTop: -5 }}>{item?.address}</p>
         </div>
         {active ? (
           <Box

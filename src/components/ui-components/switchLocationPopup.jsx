@@ -10,6 +10,7 @@ import SingleUser from "./SingleUser";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import BackIcon from "../../Assets/back.svg";
+import { userRoles } from "../../utilities/constants";
 
 const SwitchLocationPopup = ({
   isSwitching,
@@ -25,7 +26,7 @@ const SwitchLocationPopup = ({
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (decodedToken.role === "custom_admin" || decodedToken.role === "admin") {
+    if (decodedToken.role === userRoles.CUSTOM_ADMIN || decodedToken.role === userRoles.ADMIN) {
       setRole(true);
     } else {
       setRole(false);
@@ -38,7 +39,7 @@ const SwitchLocationPopup = ({
 
     const result = data?.filter((admin) =>
       role
-        ? admin?.user?.name.toLowerCase().includes(lowercasedQuery)
+        ? admin?.company?.name.toLowerCase().includes(lowercasedQuery)
         : admin?.name?.toLowerCase().includes(lowercasedQuery)
     );
 
@@ -88,7 +89,11 @@ const SwitchLocationPopup = ({
           onClick={handleBack}
         >
           <img src={BackIcon} alt="back icon" />
-          Back to super admin view
+          Back to{" "}
+          {decodedToken.role === userRoles.CUSTOM_ADMIN
+            ? "Custom Admin"
+            : "Super Admin"}{" "}
+          view
         </IconButton>
       )}
 
@@ -149,16 +154,16 @@ const SwitchLocationPopup = ({
         ) : (
           filteredData.map((admin) => (
             <SingleUser
-              key={role ? admin?.user?._id : admin?.id}
-              item={role ? admin?.user : admin}
+              key={role ? admin?.company?._id : admin?.id}
+              item={role ? admin?.company : admin}
               active={
                 role ? admin?.company?._id === decodedToken?.company_id : false
               }
               handleClick={() =>
                 handleUserClick(
-                  decodedToken.role === "custom_admin"
+                  decodedToken.role === userRoles.CUSTOM_ADMIN
                     ? admin?.company?._id
-                    : decodedToken.role === "admin"
+                    : decodedToken.role === userRoles.ADMIN
                     ? admin?.user
                     : admin
                 )
