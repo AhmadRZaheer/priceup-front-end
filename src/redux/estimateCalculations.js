@@ -235,7 +235,7 @@ const estimateCalcSlice = createSlice({
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
         console.log("Nice Try.");
       } else if (["channel"].includes(type)) {
-        const found = item?._id === state.content.mountingChannel.item?._id;
+                const found = item?._id === state.content.mountingChannel.item?._id;
         state.content = {
           ...state.content,
           mountingChannel: {
@@ -856,6 +856,22 @@ const estimateCalcSlice = createSlice({
           };
         }
       }
+      /** calculcate fabrication of hardware */
+      const hardwareFabrication = getHardwareFabricationQuantity(
+        { ...state.content },
+        state.quoteState,
+        state.selectedItem
+      );
+      state.content = {
+        ...state.content,
+        oneInchHoles: hardwareFabrication.oneInchHoles,
+        hingeCut: hardwareFabrication.hingeCut,
+        clampCut: hardwareFabrication.clampCut,
+        notch: hardwareFabrication.notch,
+        outages: hardwareFabrication.outages,
+      };
+      /** end */
+
     },
     initializeStateForCustomQuote: (state, action) => {
       let notifications = state.notifications;
