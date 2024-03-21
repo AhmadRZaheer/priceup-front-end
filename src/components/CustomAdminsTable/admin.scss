@@ -1,0 +1,61 @@
+.CustomerTable {
+  padding: 0px;
+  .cellWrapper {
+    display: flex;
+    align-items: center;
+
+    .customerImg {
+      margin-right: 10px;
+    }
+    .customerNameTable {
+      font-weight: 500;
+
+      .userNameTable {
+        font-size: 11px;
+        color: #667085;
+      }
+    }
+  }
+
+  .cellAction {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    .viewButton {
+      color: #667085;
+      cursor: pointer;
+    }
+    .deleteButton {
+      color: #667085;
+      cursor: pointer;
+    }
+  }
+}
+
+.page-title {
+  padding: 20px;
+  h2 {
+    font-size: 25px;
+    font-weight: 500;
+    color: #101828;
+  }
+}
+.types-main-contianer {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  width: 96%;
+  margin: auto;
+}
+.hardwareTable-superadmin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 97%;
+  margin: auto;
+}
+.customHeaderClass-admin-team {
+  background-color: #f9fafb;
+  color: #667085;
+}

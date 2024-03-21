@@ -25,6 +25,8 @@ import Staff from "../../pages/Staff/staff";
 import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
 import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
 import { super_superAdmin, userRoles } from "../../utilities/constants";
+import { getHomepageURL, isAdmin, isAuthenticated, isCustomAdmin, isStaff, isSuperAdmin } from "../../utilities/authentications";
+import CustomAdminPage from "../../pages/CustomAdmins/customAdmin";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -32,59 +34,26 @@ const AppRoutes = () => {
     return parseJwt(token);
   }, [token]);
 
-  const isAuthenticated = () => {
-    return !!decodedToken;
-  };
-
-  const isSuperAdmin = () => {
-    return decodedToken?.role === userRoles.SUPER_ADMIN;
-  };
-
-  const isAdmin = () => {
-    return decodedToken?.role === userRoles.ADMIN;
-  };
-
-  const isStaff = () => {
-    return decodedToken?.role === userRoles.STAFF;
-  };
-
-  const isCustomAdmin = () => {
-    return decodedToken?.role === userRoles.CUSTOM_ADMIN;
-  };
-
-  const getHomepageURL = () => {
-    if (isSuperAdmin()) {
-      return "/admin";
-    } else if (isAdmin()) {
-      return "/overview";
-    } else if (isCustomAdmin()) {
-      return "/locations";
-    } else if (isStaff()) {
-      return "/staff";
-    } else {
-      return "/";
-    }
-  };
 
   return (
     <Routes>
-      <Route
+      {/* <Route
         path="/adminlogin"
         element={
-          !isAuthenticated() ? (
+          !isAuthenticated(decodedToken) ? (
             <SuperAdminLogin />
           ) : (
-            <Navigate to={getHomepageURL()} />
+            <Navigate to={getHomepageURL(decodedToken)} />
           )
         }
-      />
+      /> */}
       <Route
         path="/login"
         element={
-          !isAuthenticated() ? <Login /> : <Navigate to={getHomepageURL()} />
+          !isAuthenticated(decodedToken) ? <Login /> : <Navigate to={getHomepageURL(decodedToken)} />
         }
       />
-      {isAdmin() || (isCustomAdmin() && decodedToken?.company_id) ? (
+      {isAdmin(decodedToken) || (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="/estimates/">
@@ -108,12 +77,12 @@ const AppRoutes = () => {
           <Route path="glass-addons" element={<GlassAddon />} />
           <Route path="*" element={<Overview />}></Route>
         </Route>
-      ) : isStaff() ? (
+      ) : isStaff(decodedToken) ? (
         <Route path="/">
           <Route index element={<Staff />} />
           <Route path="*" element={<Staff />}></Route>
         </Route>
-      ) : isSuperAdmin() ? (
+      ) : isSuperAdmin(decodedToken) ? (
         <Route path="/">
           <Route index element={<Admin />} />
           <Route path="/team" element={<AdminTeam />} />
@@ -123,16 +92,16 @@ const AppRoutes = () => {
           )}
           <Route path="*" element={<Admin />} />
         </Route>
-      ) : isCustomAdmin() && !decodedToken?.company_id ? (
+      ) : isCustomAdmin(decodedToken) && decodedToken?.company_id === "" ? (
         <Route path="/">
-          <Route index element={<Admin />} />
-          <Route path="/locations" element={<Admin />} />
+          <Route index element={<CustomAdminPage />} />
+          <Route path="/locations" element={<CustomAdminPage />} />
         </Route>
       ) : (
         ""
       )}
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/*" element={<LandingPage />} />
     </Routes>
   );
 };
