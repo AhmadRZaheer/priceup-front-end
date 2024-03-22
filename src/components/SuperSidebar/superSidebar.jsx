@@ -8,11 +8,9 @@ import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
 import { Box, IconButton, Tooltip, Popover, Typography } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-// import { backendURL } from "../../utilities/common";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined, Search } from "@mui/icons-material";
 import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-// import { Link } from "react-router-dom";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
 import SingleUser from "../ui-components/SingleUser";
@@ -244,39 +242,11 @@ const SuperSidebar = () => {
                 key={admin?.company?._id}
                 item={admin?.company}
                 active={false}
-                handleClick={() => handleAdminNameClick(admin.user._id)}
+                handleClick={() =>
+                  admin?.user?.status && handleAdminNameClick(admin.user._id)
+                }
+                disabled={!admin?.user?.status}
               />
-              // <Typography
-              //   onClick={() => handleAdminNameClick(admin.user._id)}
-              //   key={admin.user._id}
-              //   sx={{
-              //     width: "83%",
-              //     ml: "10px",
-              //     marginBottom: "5px",
-              //     textTransform: "lowercase",
-              //     marginLeft: "20px",
-              //     display: "flex",
-              //     border: "1px solid #D9D9D9",
-              //     ":hover": {
-              //       bgcolor: "rgba(0, 0, 0, 0.1)",
-              //       cursor: "pointer",
-              //     },
-              //     py: 0.4,
-              //     px: 1,
-              //     borderRadius: "14px",
-              //   }}
-              // >
-              //   <div>
-              //     <DefaultImage
-              //       image={decodedToken?.image}
-              //       name={admin.user.name}
-              //     />
-              //   </div>
-              //   <div style={{ paddingLeft: "10px" }}>
-              //     <a style={{ cursor: "pointer" }}>{admin.user.name}</a>
-              //     <p style={{ fontSize: "10px" }}>{admin.user.email}</p>
-              //   </div>
-              // </Typography>
             ))
           )}
         </div>

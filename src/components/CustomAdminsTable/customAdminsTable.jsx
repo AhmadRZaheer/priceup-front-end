@@ -8,6 +8,7 @@ import {
   InputAdornment,
   CircularProgress,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
 import DefaultIcon from "../../Assets/layout-gray.svg";
@@ -55,6 +56,7 @@ const CustomAdminsTable = () => {
       console.log("user changed");
     }
   };
+  console.log(filteredData, "filteredData");
   useEffect(() => {
     if (switched) {
       localStorage.setItem("token", newToken);
@@ -83,7 +85,9 @@ const CustomAdminsTable = () => {
       }}
     >
       <div className="page-title">
-        <Typography variant="h4" pt={1} pl={2}>Locations</Typography>
+        <Typography variant="h4" pt={1} pl={2}>
+          Locations
+        </Typography>
       </div>
 
       <Box sx={{ mt: 4, ml: 4, mb: 2 }}>
@@ -310,20 +314,28 @@ const CustomAdminsTable = () => {
                   }}
                 >
                   <Box></Box>
-               
-                  <Button
-                    onClick={() => handleSwitchLocation(item.company._id)}
-                    variant="text"
-                    sx={{
-                      p: 1,
-                      m: 0,
-                      color: "#7F56D9",
-                      textTransform: "capitalize",
-                      borderLeft: "1px solid #EAECF0",
-                    }}
+                  <Tooltip
+                    title={!item.user.status && "This Location is not Active"}
+                    placement="top"
+                    arrow
                   >
-                    Access Location
-                  </Button>
+                    <Box>
+                      <Button
+                        onClick={() => handleSwitchLocation(item.company._id)}
+                        variant="text"
+                        disabled={!item.user.status}
+                        sx={{
+                          p: 1,
+                          m: 0,
+                          color: "#7F56D9",
+                          textTransform: "capitalize",
+                          borderLeft: "1px solid #EAECF0",
+                        }}
+                      >
+                        Access Location
+                      </Button>
+                    </Box>
+                  </Tooltip>
                 </Box>
               </Box>
             );

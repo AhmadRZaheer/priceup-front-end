@@ -73,7 +73,7 @@ const Sidebar = () => {
   const [activeLocation, setActiveLocation] =
     useState(null); /** Added for branch PD-28 */
 
-  const filteredAdminData = AdminData?.filter((admin) =>
+const filteredAdminData = AdminData?.filter((admin) =>
     admin?.company?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const handleAdminNameClick = (admin) => {
@@ -591,103 +591,106 @@ const Sidebar = () => {
         />
       ) : (
         <Popover
-          open={Boolean(anchorEl)}
-          anchorEl={anchorEl}
-          onClose={handleClosePopup}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          PaperProps={{
-            style: {
-              borderRadius: "34px",
-              width: "317px",
-            },
-          }}
-          sx={{ left: 30, top: -72 }}
-        >
-          {superAdminToken && (
-            <IconButton
-              sx={{
-                fontSize: "15px",
-                borderRadius: 1,
-                ml: 2.2,
-                mt: 2,
-                color: "#667085",
-                position: "sticky",
-                bg: "white",
-                top: 0,
-                display: "flex",
-                gap: 2,
-                bgcolor: "white",
-                ":hover": {
+            open={Boolean(anchorEl)}
+            anchorEl={anchorEl}
+            onClose={handleClosePopup}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "left",
+            }}
+            PaperProps={{
+              style: {
+                borderRadius: "34px",
+                width: "317px",
+              },
+            }}
+            sx={{ left: 30, top: -72 }}
+          >
+            {superAdminToken && (
+              <IconButton
+                sx={{
+                  fontSize: "15px",
+                  borderRadius: 1,
+                  ml: 2.2,
+                  mt: 2,
+                  color: "#667085",
+                  position: "sticky",
+                  bg: "white",
+                  top: 0,
+                  display: "flex",
+                  gap: 2,
                   bgcolor: "white",
-                },
-                p: 1,
-              }}
-              onClick={() => {
-                localStorage.setItem("token", superAdminToken);
-                localStorage.removeItem("superAdminToken");
+                  ":hover": {
+                    bgcolor: "white",
+                  },
+                  p: 1,
+                }}
+                onClick={() => {
+                  localStorage.setItem("token", superAdminToken);
+                  localStorage.removeItem("superAdminToken");
 
-                window.location.href = "/";
+                  window.location.href = "/";
+                }}
+              >
+                <img src={BackIcon} alt="back icon" />
+                Back to super admin view
+              </IconButton>
+            )}
+            <Box sx={{ position: "relative" }}>
+              <input
+                type="text"
+                placeholder="Search Admin Names"
+                style={{
+                  width: "230px",
+                  padding: "8px",
+                  paddingLeft: "35px",
+                  height: "26px",
+                  marginBottom: "10px",
+                  marginLeft: "20px",
+                  marginRight: "20px",
+                  marginTop: "20px",
+                  borderRadius: "14px",
+                }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <span style={{ position: "absolute", left: "28px", top: "30px" }}>
+                <Search sx={{ color: "#8477DA" }} />
+              </span>
+            </Box>
+            <div
+              style={{
+                maxHeight: "260px",
+                overflowY: "auto",
+                paddingX: 25,
+                width: "315px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 5,
+                pt: 100,
+                position: "relative",
+                marginTop: 10,
+                marginBottom: 10,
               }}
             >
-              <img src={BackIcon} alt="back icon" />
-              Back to super admin view
-            </IconButton>
-          )}
-          <Box sx={{ position: "relative" }}>
-            <input
-              type="text"
-              placeholder="Search Admin Names"
-              style={{
-                width: "230px",
-                padding: "8px",
-                paddingLeft: "35px",
-                height: "26px",
-                marginBottom: "10px",
-                marginLeft: "20px",
-                marginRight: "20px",
-                marginTop: "20px",
-                borderRadius: "14px",
-              }}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-              <Search sx={{ color: "#8477DA" }} />
-            </span>
-          </Box>
-          <div
-            style={{
-              maxHeight: "260px",
-              overflowY: "auto",
-              paddingX: 25,
-              width: "315px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 5,
-              pt: 100,
-              position: "relative",
-              marginTop: 10,
-              marginBottom: 10,
-            }}
-          >
-            {superAdminToken &&
-              filteredAdminData.map((admin) => (
-                <SingleUser
-                  key={admin?.company?._id}
-                  item={admin?.company}
-                  active={admin?.company?._id === decodedToken?.company_id}
-                  handleClick={() => handleAdminNameClick(admin)}
-                />
-              ))}
-          </div>
-        </Popover>
+              {superAdminToken &&
+                filteredAdminData.map((admin) => (
+                  <SingleUser
+                    key={admin?.company?._id}
+                    item={admin?.company}
+                    active={admin?.company?._id === decodedToken?.company_id}
+                    handleClick={() =>
+                      admin?.user?.status && handleAdminNameClick(admin)
+                    }
+                    disabled={!admin?.user?.status}
+                  />
+                ))}
+                          </div>
+          </Popover>
       )}
 
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
