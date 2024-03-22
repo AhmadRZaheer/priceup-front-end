@@ -155,7 +155,7 @@ export const useEditGlassType = () => {
 
       if (props.glassTypeData) {
         formData.append("name", props.glassTypeData.name);
-        formData.append("slug", slug);
+        // formData.append("slug", slug);
       }
       const response = await axios.put(
         `${backendURL}/glassTypes/${props?.id}`,

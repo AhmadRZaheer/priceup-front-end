@@ -132,7 +132,7 @@ export const useEditFinish = () => {
     const slug = createSlug(updatedHardware?.hardwareLabel);
 
     formData.append("name", updatedHardware?.hardwareLabel);
-    formData.append("slug", slug);
+    // formData.append("slug", slug);
     if (updatedHardware?.image) {
       formData.append("image", updatedHardware?.image);
     }

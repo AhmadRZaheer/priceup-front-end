@@ -279,7 +279,7 @@ export const useEditHardware = () => {
     try {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
-      formData.append("slug", slug);
+      // formData.append("slug", slug);
       formData.append("clampCut", props.hardwareData.clampCut);
       formData.append("hingeCut", props.hardwareData.hingeCut);
       formData.append("notch", props.hardwareData.notch);
