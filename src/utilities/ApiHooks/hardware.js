@@ -264,7 +264,7 @@ export const useEditHardware = () => {
     try {
       const formData = new FormData();
       formData.append("name", props.hardwareData.name);
-      formData.append("slug", slug);
+      // formData.append("slug", slug);
       if (props.hardwareData.image) {
         formData.append("image", props.hardwareData.image);
       }

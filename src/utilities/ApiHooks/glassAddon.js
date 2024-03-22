@@ -267,7 +267,7 @@ export const useEditGlassAddon = () => {
 
       if (props.glassAddonData) {
         formData.append("name", props.glassAddonData.name);
-        formData.append("slug", slug);
+        // formData.append("slug", slug);
 
         if (props.glassAddonData.image) {
           formData.append("image", props.glassAddonData.image);
