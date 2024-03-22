@@ -90,7 +90,8 @@ const MenuItem = ({
                 : ["handles", "hinges", "slidingDoorSystem", "header"].includes(
                     type
                   )
-                ? status && item === selectedItem
+                ? item === selectedItem
+                // status && item === selectedItem
                 : item === selectedItem
             )
               ? "2px solid blue"

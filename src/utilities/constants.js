@@ -54,3 +54,10 @@ export const userRoles = {
   STAFF: "staff",
   CUSTOM_ADMIN: "custom_admin",
 }
+
+export const hardwareTypes = {
+  HANDLES: "handles",
+  HINGES: "hinges",
+  SLIDINGDOORSYSTEM: "slidingDoorSystem",
+  HEADER: "header"
+}
