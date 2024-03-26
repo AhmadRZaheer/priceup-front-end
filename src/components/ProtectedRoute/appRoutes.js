@@ -89,10 +89,17 @@ const AppRoutes = () => {
           <Route path="glass-addons" element={<GlassAddon />} />
           <Route path="*" element={<Overview />}></Route>
         </Route>
-      ) : isStaff(decodedToken) ? (
+      ) : isStaff(decodedToken) && decodedToken?.company_id === "" ? (
         <Route path="/">
           <Route index element={<StaffLocationPage />} />
-          <Route path="*" element={<Staff />}></Route>
+          <Route path="/locations" element={<StaffLocationPage />} />
+          <Route path="*" element={<StaffLocationPage />} />
+        </Route>
+      ) : isStaff(decodedToken) && decodedToken?.company_id.length ? (
+        <Route path="/">
+          <Route index element={<Staff />} />
+          <Route path="/estimates" element={<Staff />} />
+          <Route path="*" element={<Staff />} />
         </Route>
       ) : isSuperAdmin(decodedToken) ? (
         <Route path="/">

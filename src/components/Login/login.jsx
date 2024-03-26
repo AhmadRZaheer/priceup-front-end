@@ -32,10 +32,8 @@ const Login = (props) => {
       .then((response) => {
         localStorage.setItem("email", email);
         dispatch(loginHandler(response.data.data));
-        console.log(response.data.data, "response.data.data");
         const decodedToken = parseJwt(response.data.data.token);
         const redirection =getHomepageURL(decodedToken);
-        console.log(redirection,'path',decodedToken)
         window.location.href = redirection;
       })
       .catch((error) => {

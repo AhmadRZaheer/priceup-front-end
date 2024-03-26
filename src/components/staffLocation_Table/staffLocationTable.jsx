@@ -12,34 +12,35 @@ import {
 } from "@mui/material";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
 import DefaultIcon from "../../Assets/layout-gray.svg";
-import { useSwitchLocationUser } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import DefaultImage from "../ui-components/defaultImage";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { useFetchStaffHaveAccessTo } from "../../utilities/ApiHooks/team";
+import {
+  useFetchStaffHaveAccessTo,
+  useSwitchStaffLocation,
+} from "../../utilities/ApiHooks/team";
 
 const StaffLocationsTable = () => {
   const {
     data: locationsData,
-    mutate: fetchLocations,
+    refetch: fetchLocations,
     isLoading,
   } = useFetchStaffHaveAccessTo();
-
+  console.log(locationsData, "locationsData");
   const {
     mutate: switchLocationUser,
     data: newToken,
     isSuccess: switched,
     isLoading: isSwitching,
-  } = useSwitchLocationUser();
-
+  } = useSwitchStaffLocation();
   const [search, setSearch] = useState("");
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
 
   const filteredData = useMemo(() => {
     const result = locationsData?.filter((admin) =>
-      admin.user.name.toLowerCase().includes(search.toLowerCase())
+      admin.company.name.toLowerCase().includes(search.toLowerCase())
     );
     return result ?? [];
   }, [locationsData, search]);
@@ -61,14 +62,6 @@ const StaffLocationsTable = () => {
       window.location.href = "/";
     }
   }, [switched]);
-  // useEffect(() => {
-  //   if (switched) {
-  //     localStorage.setItem("token", useToken);
-  //     dispatch(setDataRefetch());
-  //     console.log(switched);
-  //     setRefetchKey((prevKey) => prevKey + 1);
-  //   }
-  // }, [switched]);
 
   useEffect(() => {
     fetchLocations();
@@ -112,7 +105,7 @@ const StaffLocationsTable = () => {
         />
       </Box>
       <div className="hardwareTable-superadmin">
-        {isLoading ? (
+        {isLoading || isSwitching ? (
           <Box
             sx={{
               width: "100%",

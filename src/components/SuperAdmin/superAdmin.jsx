@@ -594,7 +594,7 @@ const SuperAdminTable = () => {
                       arrow
                     >
                       <Link
-                        to={`/?adminID=${adminID}`}
+                        to={`/?adminID=${item.user.status && adminID}`}
                         style={{ textDecoration: "none" }}
                       >
                         <Button

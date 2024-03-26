@@ -24,11 +24,11 @@ const SwitchLocationPopup = ({
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => parseJwt(token), [token]);
   const [searchQuery, setSearchQuery] = useState("");
-
   useEffect(() => {
     if (
       decodedToken.role === userRoles.CUSTOM_ADMIN ||
-      decodedToken.role === userRoles.ADMIN
+      decodedToken.role === userRoles.ADMIN ||
+      decodedToken.role === userRoles.STAFF
     ) {
       setRole(true);
     } else {
@@ -95,6 +95,8 @@ const SwitchLocationPopup = ({
           Back to{" "}
           {decodedToken.role === userRoles.CUSTOM_ADMIN
             ? "Custom Admin"
+            : decodedToken.role === userRoles.STAFF
+            ? "all Locations"
             : "Super Admin"}{" "}
           view
         </IconButton>
