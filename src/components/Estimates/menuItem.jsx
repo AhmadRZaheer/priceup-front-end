@@ -4,6 +4,7 @@ import { Box, Typography } from "@mui/material";
 import OptionWithCounter from "./optionWithCounter";
 import { getActiveStatus } from "../../utilities/estimatorHelper";
 import { useState } from "react";
+import { hardwareTypes } from "../../utilities/constants";
 
 const MenuItem = ({
   item,
@@ -12,7 +13,8 @@ const MenuItem = ({
   selectedItem,
   selectedContent,
 }) => {
-  const status = getActiveStatus(item, selectedContent?.hardwareFinishes, type);
+  const activeFinishOrThickness = type === hardwareTypes.GLASSTYPE ? selectedContent.glassType.thickness : type === hardwareTypes.GLASSADDONS ? null : selectedContent?.hardwareFinishes;
+  const status = getActiveStatus(item, activeFinishOrThickness, type);
   const [showToolTip, setShowTooltip] = useState(false);
   const handleItemClick = () => {
     if (status) {
@@ -37,7 +39,7 @@ const MenuItem = ({
     <Tooltip
       title={
         <h3 style={{ color: "white" }}>
-          This hardware is not availabe in current selcted finish.
+          This {type === hardwareTypes.GLASSTYPE ? 'glass type' : type === hardwareTypes.GLASSADDONS ? 'glass Addon' : 'hardware'} is not availabe {type === hardwareTypes.GLASSTYPE ? 'in current selected thickness' : type === hardwareTypes.GLASSADDONS ? '' : 'in current selected finish'}.
         </h3>
       }
       sx={{ fontSize: "20px" }}
@@ -90,7 +92,8 @@ const MenuItem = ({
                 : ["handles", "hinges", "slidingDoorSystem", "header"].includes(
                     type
                   )
-                ? status && item === selectedItem
+                ? item === selectedItem
+                // status && item === selectedItem
                 : item === selectedItem
             )
               ? "2px solid blue"

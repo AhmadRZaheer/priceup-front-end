@@ -34,12 +34,13 @@ import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
 import { useNavigate } from "react-router-dom";
-import { layoutVariants } from "../../utilities/constants";
+import { layoutVariants, quoteState } from "../../utilities/constants";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { useSnackbar } from "notistack";
 import { SingleField } from "../ui-components/SingleFieldComponent";
+import { getEstimateErrorStatus } from "../../utilities/estimatorHelper";
 
-const LayoutReview = ({ setClientDetailOpen }) => {
+const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -52,29 +53,29 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const perimeter = useSelector(getLayoutPerimeter);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
-  const updatecheck = useSelector(getQuoteState);
+  const currentQuoteState = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
   const notifications = useSelector(getNotifications);
   const addedFields = useSelector(getAdditionalFields);
 
   const { enqueueSnackbar } = useSnackbar();
-  const quoteActiveState = useMemo(() => {
+  const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
     // let state = "";
-    // if (updatecheck === "create") {
+    // if (currentQuoteState === "create") {
     //   state = selectedData?.settings?.variant;
-    // } else if (updatecheck === "edit") {
+    // } else if (currentQuoteState === "edit") {
     //   state = selectedData?.layoutData?.variant;
     // }
     // return state;
-  }, [updatecheck]);
+  }, [currentQuoteState]);
   console.log(addedFields, "addedFields");
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     let measurementsArray = measurements;
-    if (quoteState === "edit" && !selectedData?.layout_id) {
+    if (currentQuoteState === quoteState.EDIT && !selectedData?.layout_id) {
       let newArray = [];
       for (const key in measurementsArray) {
         const index = parseInt(key);
@@ -208,17 +209,16 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     });
   };
 
-  const quoteState = useSelector(getQuoteState);
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
-        quoteState === "create"
+        currentQuoteState === quoteState.CREATE
           ? "measurements"
-          : quoteState === "custom"
+          : currentQuoteState === quoteState.CUSTOM
           ? "custom"
-          : quoteState === "edit" && selectedData?.layout_id
+          : currentQuoteState === quoteState.EDIT && selectedData?.layout_id
           ? "measurements"
-          : quoteState === "edit" && !selectedData?.layout_id
+          : currentQuoteState === quoteState.EDIT && !selectedData?.layout_id
           ? "custom"
           : "existing"
       )
@@ -242,12 +242,28 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     );
   };
 
+  const handleEstimateSubmit = () => {
+    const allGoodStatus = getEstimateErrorStatus(selectedContent);
+    console.log(allGoodStatus,'Estimate Status');
+    if(allGoodStatus){
+      if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
+        setClientDetailOpen(true);
+      } else {
+        handleEditEstimate();
+        showSnackbar("Estimate Edit successfully", "success");
+      }
+    }
+    else{
+      setHardwareMissingAlert(true);
+    }
+  }
+
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
       sqftArea,
       listData,
-      quoteState
+      currentQuoteState
     );
     dispatch(setHardwarePrice(prices.hardwarePrice));
     dispatch(setGlassPrice(prices.glassPrice));
@@ -290,7 +306,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     console.log("mount");
     Object.entries(notifications).forEach(([key, value]) => {
       if (
-        ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable"].includes(key)
+        ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable", "wallClampNotAvailable", "sleeveOverNotAvailable", "glassToGlassNotAvailable", "cornerWallClampNotAvailable", "cornerSleeveOverNotAvailable", "cornerGlassToGlassNotAvailable"].includes(key)
       ) {
         value?.forEach((item) => {
           if (item.status) {
@@ -504,7 +520,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(quoteActiveState) && (
+                  ].includes(selectedItemVariant) && (
                     <Box
                       sx={{
                         alignItems: "center",
@@ -754,7 +770,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(quoteActiveState) && (
+                  ].includes(selectedItemVariant) && (
                     <Box
                       sx={{
                         display: "flex",
@@ -1290,14 +1306,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   fullWidth
                   disabled={selectedContent?.hardwareFinishes === null}
                   variant="contained"
-                  onClick={() => {
-                    if (["create", "custom"].includes(updatecheck)) {
-                      setClientDetailOpen(true);
-                    } else {
-                      handleEditEstimate();
-                      showSnackbar("Estimate Edit successfully", "success");
-                    }
-                  }}
+                  onClick={handleEstimateSubmit}
                   sx={{
                     backgroundColor: "#8477da",
                     "&:hover": {
