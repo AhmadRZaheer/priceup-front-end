@@ -184,6 +184,7 @@ const Sidebar = () => {
     }
   }, [haveAccessData, decodedToken]);
 
+  const userReference = localStorage.getItem("userReference");
   const drawer = (
     <Box
       sx={{
@@ -218,37 +219,40 @@ const Sidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-                <li
-                  style={{ marginBottom: 0 }}
-                  className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                  onClick={handleSeeLocationsClick}
-                >
-                  <Tooltip title="Switch Location">
-                    <IconButton
-                      sx={{
-                        color: "white",
-                        padding: 0.2,
-                        display: "flex",
-                        width: "100%",
-                      }}
-                    >
-                      <PinDrop sx={{ color: "white" }} />
-                      <span
-                        style={{
-                          flexGrow: 1,
-                          whiteSpace: "nowrap",
-                          display: "block",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
+                {userReference && (
+                  <li
+                    style={{ marginBottom: 0 }}
+                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                    onClick={handleSeeLocationsClick}
+                  >
+                    <Tooltip title="Switch Location">
+                      <IconButton
+                        sx={{
+                          color: "white",
+                          padding: 0.2,
+                          display: "flex",
+                          width: "100%",
                         }}
                       >
-                        {" "}
-                        {activeLocation?.company?.name}
-                      </span>
-                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
-                    </IconButton>
-                  </Tooltip>
-                </li>
+                        <PinDrop sx={{ color: "white" }} />
+                        <span
+                          style={{
+                            flexGrow: 1,
+                            whiteSpace: "nowrap",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {" "}
+                          {activeLocation?.company?.name}
+                        </span>
+                        <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                      </IconButton>
+                    </Tooltip>
+                  </li>
+                )}
+
                 {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
                   <li
                     style={{ padding: 10, marginBottom: 0 }}
