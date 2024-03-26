@@ -25,15 +25,22 @@ import Staff from "../../pages/Staff/staff";
 import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
 import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
 import { super_superAdmin, userRoles } from "../../utilities/constants";
-import { getHomepageURL, isAdmin, isAuthenticated, isCustomAdmin, isStaff, isSuperAdmin } from "../../utilities/authentications";
+import {
+  getHomepageURL,
+  isAdmin,
+  isAuthenticated,
+  isCustomAdmin,
+  isStaff,
+  isSuperAdmin,
+} from "../../utilities/authentications";
 import CustomAdminPage from "../../pages/CustomAdmins/customAdmin";
+import StaffLocationPage from "../../pages/stafffLocations/staffLocationPage";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => {
     return parseJwt(token);
   }, [token]);
-
 
   return (
     <Routes>
@@ -50,10 +57,15 @@ const AppRoutes = () => {
       <Route
         path="/login"
         element={
-          !isAuthenticated(decodedToken) ? <Login /> : <Navigate to={getHomepageURL(decodedToken)} />
+          !isAuthenticated(decodedToken) ? (
+            <Login />
+          ) : (
+            <Navigate to={getHomepageURL(decodedToken)} />
+          )
         }
       />
-      {isAdmin(decodedToken) || (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
+      {isAdmin(decodedToken) ||
+      (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="/estimates/">
@@ -79,7 +91,7 @@ const AppRoutes = () => {
         </Route>
       ) : isStaff(decodedToken) ? (
         <Route path="/">
-          <Route index element={<Staff />} />
+          <Route index element={<StaffLocationPage />} />
           <Route path="*" element={<Staff />}></Route>
         </Route>
       ) : isSuperAdmin(decodedToken) ? (
