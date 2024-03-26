@@ -26,7 +26,11 @@ const SwitchLocationPopup = ({
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    if (decodedToken.role === userRoles.CUSTOM_ADMIN || decodedToken.role === userRoles.ADMIN) {
+    if (
+      decodedToken.role === userRoles.CUSTOM_ADMIN ||
+      decodedToken.role === userRoles.ADMIN ||
+      decodedToken.role === userRoles.SUPER_ADMIN
+    ) {
       setRole(true);
     } else {
       setRole(false);
@@ -163,8 +167,6 @@ const SwitchLocationPopup = ({
                 handleUserClick(
                   decodedToken.role === userRoles.CUSTOM_ADMIN
                     ? admin?.company?._id
-                    : decodedToken.role === userRoles.ADMIN
-                    ? admin?.user
                     : admin
                 )
               }
