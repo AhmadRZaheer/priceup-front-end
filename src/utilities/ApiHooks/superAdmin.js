@@ -161,8 +161,6 @@ export const FetchId2 = ({ children }) => {
             }
           )
           .then((resp) => {
-            console.log({ resp });
-
             const newToken = resp.data.data.token;
             localStorage.removeItem("token");
 
@@ -487,7 +485,6 @@ export const useDataCustomAdmins = () => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
-    console.log(decodedToken, "decodedToken");
     try {
       const response = await axios.get(
         `${backendURL}/customUsers/haveAccess/${decodedToken.id}`,
@@ -906,6 +903,63 @@ export const useBackToCustomAdminLocations = () => {
         `${backendURL}/customUsers/switchBackToSuperView`,
         {
           userId: decodedToken?.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};
+
+export const useSwitchLocationSuperAdmin = () => {
+  const handleSwitch = async (company_id) => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/admins/switchLocation`,
+        {
+          userId: decodedToken?.id,
+          companyId: company_id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};
+
+export const useBackToSuperAdmin = () => {
+  const handleSwitch = async (superAdminId) => {
+    const token = localStorage.getItem("token");
+    // const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/admins/switchBackToSuperView`,
+        {
+          userId: superAdminId,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

@@ -18,8 +18,10 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { AttachMoney, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
 import {
   useBackToCustomAdminLocations,
+  useBackToSuperAdmin,
   useFetchCustomAdminHaveAccessTo,
   useFetchDataAdmin,
+  useSwitchLocationSuperAdmin,
   useSwitchLocationUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import BackIcon from "../../Assets/back.svg";
@@ -44,14 +46,23 @@ const Sidebar = () => {
     isLoading: isSwitching,
   } = useSwitchLocationUser();
   const {
+    mutate: switchLocationSuperAdmin,
+    data: useTokenSuperAdmin,
+    isSuccess: switchedSuperAdmin,
+    isLoading: isSwitchingSuperAdmin,
+  } = useSwitchLocationSuperAdmin();
+  const {
     mutate: backRefetch,
     data: useTokenBack,
     isSuccess: switchedBack,
   } = useBackToCustomAdminLocations();
-  const navigate = useNavigate();
+  const {
+    mutate: backToSuperAdmin,
+    data: useTokenBackSuperAdmin,
+    isSuccess: switchedBackSuperAdmin,
+  } = useBackToSuperAdmin();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
-  const [searchQuery, setSearchQuery] = useState("");
   const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
@@ -73,16 +84,14 @@ const Sidebar = () => {
   const [activeLocation, setActiveLocation] =
     useState(null); /** Added for branch PD-28 */
 
-  const filteredAdminData = AdminData?.filter((admin) =>
-    admin?.company?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   const handleAdminNameClick = (admin) => {
     /** Added for branch PD-28 */
     setActiveLocation(admin);
     /** Added for branch PD-28 */
-    navigate(`/?userID=${admin?.user?._id}`);
-    const urlWithoutQuery = window.location.pathname;
-    window.history.replaceState({}, document.title, urlWithoutQuery);
+    switchLocationSuperAdmin(admin.company._id);
+    // navigate(`/?userID=${admin?.user?._id}`);
+    // const urlWithoutQuery = window.location.pathname;
+    // window.history.replaceState({}, document.title, urlWithoutQuery);
   };
   const handleCustomUserClick = async (companyId) => {
     if (!companyId || !decodedToken) {
@@ -104,6 +113,17 @@ const Sidebar = () => {
       console.log("user backed");
     }
   };
+  const handleBackToSuperAdmin = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      const superAdminReference = localStorage.getItem('userReference');
+      await backToSuperAdmin(superAdminReference);
+      console.log("user backed");
+    }
+  };
   useEffect(() => {
     refetch();
   }, []);
@@ -116,7 +136,25 @@ const Sidebar = () => {
       localStorage.setItem("token", useTokenBack.token);
       window.location.href = "/locations";
     }
-  }, [switched, switchedBack]);
+    if (switchedSuperAdmin) {
+      localStorage.setItem('userReference',decodedToken.id);
+      localStorage.setItem("token", useTokenSuperAdmin);
+      window.location.href = "/";
+    }
+    if (switchedBack) {
+      localStorage.setItem("token", useTokenBack.token);
+      window.location.href = "/locations";
+    }
+    if (switchedBackSuperAdmin) {
+      localStorage.removeItem('userReference');
+      localStorage.setItem("token", useTokenBackSuperAdmin.token);
+      console.log(
+        useTokenBackSuperAdmin.token,
+        "useTokenBackSuperAdmin.token)"
+      );
+      // window.location.href = "/";
+    }
+  }, [switched, switchedBack, switchedBackSuperAdmin, switchedSuperAdmin]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -127,8 +165,8 @@ const Sidebar = () => {
   /** Added for branch PD-28 */
   useEffect(() => {
     const fetchData = async () => {
-      if (filteredAdminData && filteredAdminData.length) {
-        const record = await filteredAdminData.find(
+      if (AdminData && AdminData.length) {
+        const record = await AdminData.find(
           (admin) => admin?.company?._id === decodedToken?.company_id
         );
         if (record) {
@@ -138,15 +176,13 @@ const Sidebar = () => {
     };
 
     fetchData();
-  }, [filteredAdminData]);
+  }, [AdminData]);
   /** Added for branch PD-28 */
   useEffect(() => {
     if (haveAccessData) {
       const user = haveAccessData.find(
         (item) => item?.company?._id === decodedToken?.company_id
       );
-
-      console.log(user, "user", haveAccessData, decodedToken?.company_id);
 
       setCustomActiveUser(user?.company?.name);
     }
@@ -590,104 +626,14 @@ const Sidebar = () => {
           handleBack={handleBackCustomAdminClick}
         />
       ) : (
-        <Popover
-          open={Boolean(anchorEl)}
+        <SwitchLocationPopup
           anchorEl={anchorEl}
-          onClose={handleClosePopup}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          transformOrigin={{
-            vertical: "top",
-            horizontal: "left",
-          }}
-          PaperProps={{
-            style: {
-              borderRadius: "34px",
-              width: "317px",
-            },
-          }}
-          sx={{ left: 30, top: -72 }}
-        >
-          {superAdminToken && (
-            <IconButton
-              sx={{
-                fontSize: "15px",
-                borderRadius: 1,
-                ml: 2.2,
-                mt: 2,
-                color: "#667085",
-                position: "sticky",
-                bg: "white",
-                top: 0,
-                display: "flex",
-                gap: 2,
-                bgcolor: "white",
-                ":hover": {
-                  bgcolor: "white",
-                },
-                p: 1,
-              }}
-              onClick={() => {
-                localStorage.setItem("token", superAdminToken);
-                localStorage.removeItem("superAdminToken");
-
-                window.location.href = "/";
-              }}
-            >
-              <img src={BackIcon} alt="back icon" />
-              Back to super admin view
-            </IconButton>
-          )}
-          <Box sx={{ position: "relative" }}>
-            <input
-              type="text"
-              placeholder="Search Admin Names"
-              style={{
-                width: "230px",
-                padding: "8px",
-                paddingLeft: "35px",
-                height: "26px",
-                marginBottom: "10px",
-                marginLeft: "20px",
-                marginRight: "20px",
-                marginTop: "20px",
-                borderRadius: "14px",
-              }}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-              <Search sx={{ color: "#8477DA" }} />
-            </span>
-          </Box>
-          <div
-            style={{
-              maxHeight: "260px",
-              overflowY: "auto",
-              paddingX: 25,
-              width: "315px",
-              display: "flex",
-              flexDirection: "column",
-              gap: 5,
-              pt: 100,
-              position: "relative",
-              marginTop: 10,
-              marginBottom: 10,
-            }}
-          >
-            {superAdminToken &&
-              filteredAdminData.map((admin) => (
-                <SingleUser
-                  key={admin?.company?._id}
-                  item={admin?.company}
-                  active={admin?.company?._id === decodedToken?.company_id}
-                  handleClick={() => handleAdminNameClick(admin)}
-                />
-              ))}
-          </div>
-        </Popover>
+          handleClosePopup={handleClosePopup}
+          handleUserClick={handleAdminNameClick}
+          isSwitching={isSwitchingSuperAdmin}
+          handleBack={handleBackToSuperAdmin}
+          data={AdminData}
+        />
       )}
 
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />

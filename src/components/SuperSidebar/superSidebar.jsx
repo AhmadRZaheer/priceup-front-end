@@ -11,21 +11,28 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 // import { backendURL } from "../../utilities/common";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined, Search } from "@mui/icons-material";
-import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
+import {
+  useFetchDataAdmin,
+  useSwitchLocationSuperAdmin,
+} from "../../utilities/ApiHooks/superAdmin";
 // import { Link } from "react-router-dom";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
-import SingleUser from "../ui-components/SingleUser";
 import { super_superAdmin } from "../../utilities/constants";
+import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
+  const {
+    mutate: switchLocationSuperAdmin,
+    data: useTokenSuperAdmin,
+    isSuccess: switchedSuperAdmin,
+    isLoading: isSwitchingSuperAdmin,
+  } = useSwitchLocationSuperAdmin();
   const [open, setOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
   const Logout = () => {
     dispatch(logoutHandler());
     window.location.href = "/adminlogin";
@@ -43,15 +50,17 @@ const SuperSidebar = () => {
   useEffect(() => {
     teamMemberRefetch();
   }, []);
-  console.log(AdminData, "AdminData");
-  const filteredAdminData = AdminData.filter((admin) =>
-    admin.company.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const handleAdminNameClick = (adminId) => {
-    navigate(`/?adminID=${adminId}`);
-    const urlWithoutQuery = window.location.pathname;
-    window.history.replaceState({}, document.title, urlWithoutQuery);
+  const handleAdminNameClick = (admin) => {
+    switchLocationSuperAdmin(admin.user._id);
   };
+  useEffect(() => {
+    if (switchedSuperAdmin) {
+      localStorage.removeItem("token");
+      localStorage.setItem("userReference", decodedToken.id);
+      localStorage.setItem("token", useTokenSuperAdmin);
+      window.location.href = "/";
+    }
+  }, [switchedSuperAdmin]);
   return (
     <>
       <div className="sidebar">
@@ -180,107 +189,13 @@ const SuperSidebar = () => {
           </Box>
         </Box>
       </div>
-
-      <Popover
-        open={Boolean(anchorEl)}
+      <SwitchLocationPopup
         anchorEl={anchorEl}
-        onClose={handleClosePopup}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        PaperProps={{
-          style: {
-            borderRadius: "34px",
-            width: "317px",
-          },
-        }}
-        sx={{ left: 30, top: -73 }}
-      >
-        <input
-          type="text"
-          placeholder="Search Admin Names"
-          style={{
-            width: "230px",
-            padding: "8px",
-            paddingLeft: "35px",
-            height: "26px",
-            marginBottom: "10px",
-            marginLeft: "20px",
-            marginRight: "20px",
-            marginTop: "20px",
-            position: "relative",
-            borderRadius: "14px",
-          }}
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-          <Search sx={{ color: "#8477DA" }} />
-        </span>
-        <div
-          style={{
-            maxHeight: "260px",
-            overflowY: "auto",
-            paddingX: 25,
-            width: "315px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            marginBottom: 10,
-          }}
-        >
-          {filteredAdminData.length === 0 ? (
-            <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
-              No location found
-            </Typography>
-          ) : (
-            filteredAdminData.map((admin) => (
-              <SingleUser
-                key={admin?.company?._id}
-                item={admin?.company}
-                active={false}
-                handleClick={() => handleAdminNameClick(admin.user._id)}
-              />
-              // <Typography
-              //   onClick={() => handleAdminNameClick(admin.user._id)}
-              //   key={admin.user._id}
-              //   sx={{
-              //     width: "83%",
-              //     ml: "10px",
-              //     marginBottom: "5px",
-              //     textTransform: "lowercase",
-              //     marginLeft: "20px",
-              //     display: "flex",
-              //     border: "1px solid #D9D9D9",
-              //     ":hover": {
-              //       bgcolor: "rgba(0, 0, 0, 0.1)",
-              //       cursor: "pointer",
-              //     },
-              //     py: 0.4,
-              //     px: 1,
-              //     borderRadius: "14px",
-              //   }}
-              // >
-              //   <div>
-              //     <DefaultImage
-              //       image={decodedToken?.image}
-              //       name={admin.user.name}
-              //     />
-              //   </div>
-              //   <div style={{ paddingLeft: "10px" }}>
-              //     <a style={{ cursor: "pointer" }}>{admin.user.name}</a>
-              //     <p style={{ fontSize: "10px" }}>{admin.user.email}</p>
-              //   </div>
-              // </Typography>
-            ))
-          )}
-        </div>
-      </Popover>
+        handleClosePopup={handleClosePopup}
+        handleUserClick={handleAdminNameClick}
+        isSwitching={isSwitchingSuperAdmin}
+        data={AdminData}
+      />
 
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>

@@ -20,6 +20,7 @@ import {
   useDeleteUser,
   useFetchAllStaff,
   useFetchDataAdmin,
+  useSwitchLocationSuperAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
@@ -45,6 +46,12 @@ const SuperAdminTable = () => {
     isFetched,
     isFetching,
   } = useFetchDataAdmin();
+  const {
+    mutate: switchLocationSuperAdmin,
+    data: useTokenSuperAdmin,
+    isSuccess: switchedSuperAdmin,
+    isLoading: isSwitchingSuperAdmin,
+  } = useSwitchLocationSuperAdmin();
   const { data: customUserData } = useDataCustomUser();
   const { data: staffData } = useFetchAllStaff();
   const {
@@ -114,6 +121,16 @@ const SuperAdminTable = () => {
   const filteredData = AdminData?.filter((admin) =>
     admin.user.name.toLowerCase().includes(search.toLowerCase())
   );
+  const handleAdminClick = (admin) => {
+    switchLocationSuperAdmin(admin.company._id);
+  };
+  useEffect(() => {
+    if (switchedSuperAdmin) {
+      localStorage.setItem("userReference", decodedToken.id);
+      localStorage.setItem("token", useTokenSuperAdmin);
+      window.location.href = "/";
+    }
+  }, [switchedSuperAdmin]);
 
   return (
     <Box sx={{ height: "97vh", overflow: "auto" }}>
@@ -293,19 +310,7 @@ const SuperAdminTable = () => {
               });
             };
 
-            // if (item?.user && item?.user?.name) {
-            //   var firstNameInitial = item?.user?.name?.charAt(0);
-            // } else {
-            //   var firstNameInitial = "";
-            // }
-            // if (item?.user && item?.user?.name) {
-            //   var lastNameInitial = item?.user?.name?.charAt(1);
-            // } else {
-            //   var lastNameInitial = "";
-            // }
-
-            const adminID = item?.user?._id;
-            console.log(item, "item");
+         
             return (
               <Box
                 key={item?.user?._id}
@@ -369,7 +374,7 @@ const SuperAdminTable = () => {
                         </Typography>
                         <Typography
                           sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
-                          >
+                        >
                           {/* {item?.company?.address} */}
                           {item?.user?.email}{" "}
                         </Typography>
@@ -579,23 +584,20 @@ const SuperAdminTable = () => {
                         <img src={EditIcon} alt="delete icon" />
                       </IconButton>
                     </Box>
-                    <Link
-                      to={`/?adminID=${adminID}`}
-                      style={{ textDecoration: "none" }}
+
+                    <Button
+                      onClick={() => handleAdminClick(item)}
+                      variant="text"
+                      sx={{
+                        p: 1,
+                        m: 0,
+                        color: "#7F56D9",
+                        textTransform: "capitalize",
+                        borderLeft: "1px solid #EAECF0",
+                      }}
                     >
-                      <Button
-                        variant="text"
-                        sx={{
-                          p: 1,
-                          m: 0,
-                          color: "#7F56D9",
-                          textTransform: "capitalize",
-                          borderLeft: "1px solid #EAECF0",
-                        }}
-                      >
-                        Access Location
-                      </Button>
-                    </Link>
+                      Access Location
+                    </Button>
                   </Box>
                 </Box>
               </Box>
