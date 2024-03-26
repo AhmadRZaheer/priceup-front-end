@@ -4,6 +4,7 @@ import {
   IconButton,
   Popover,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import SingleUser from "./SingleUser";
@@ -24,12 +25,12 @@ const SwitchLocationPopup = ({
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => parseJwt(token), [token]);
   const [searchQuery, setSearchQuery] = useState("");
-
   useEffect(() => {
     if (
       decodedToken.role === userRoles.CUSTOM_ADMIN ||
       decodedToken.role === userRoles.ADMIN ||
-      decodedToken.role === userRoles.SUPER_ADMIN
+      decodedToken.role === userRoles.SUPER_ADMIN ||
+      decodedToken.role === userRoles.STAFF
     ) {
       setRole(true);
     } else {
@@ -49,7 +50,7 @@ const SwitchLocationPopup = ({
 
     return result;
   }, [data, searchQuery, role]);
-
+  const mobile = useMediaQuery("(max-width: 600px)");
   return (
     <Popover
       open={Boolean(anchorEl)}
@@ -57,19 +58,19 @@ const SwitchLocationPopup = ({
       onClose={handleClosePopup}
       anchorOrigin={{
         vertical: "top",
-        horizontal: "right",
+        horizontal: mobile ? "left" : "right",
       }}
       transformOrigin={{
-        vertical: "top",
-        horizontal: "left",
+        vertical: { sm: "top" },
+        horizontal: { sm: "left" },
       }}
       PaperProps={{
         style: {
           borderRadius: "34px",
-          width: "317px",
+          width: mobile ? "290px" : "317px",
         },
       }}
-      sx={{ left: 30, top: -72 }}
+      sx={{ left: { sm: 30, xs: 0 }, top: { sm: -72, xs: 50 } }}
     >
       {decodedToken.company_id !== "" && (
         <IconButton
@@ -96,6 +97,8 @@ const SwitchLocationPopup = ({
           Back to{" "}
           {decodedToken.role === userRoles.CUSTOM_ADMIN
             ? "Custom Admin"
+            : decodedToken.role === userRoles.STAFF
+            ? "all Locations"
             : "Super Admin"}{" "}
           view
         </IconButton>
@@ -106,7 +109,7 @@ const SwitchLocationPopup = ({
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: "230px",
+            width: mobile ? "206px" : "230px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",
@@ -128,7 +131,7 @@ const SwitchLocationPopup = ({
           maxHeight: "260px",
           overflowY: "auto",
           paddingX: 25,
-          width: "315px",
+          width: mobile ? "280px" : "315px",
           display: "flex",
           flexDirection: "column",
           gap: 5,
@@ -164,12 +167,14 @@ const SwitchLocationPopup = ({
                 role ? admin?.company?._id === decodedToken?.company_id : false
               }
               handleClick={() =>
+                admin?.user?.status &&
                 handleUserClick(
                   decodedToken.role === userRoles.CUSTOM_ADMIN
                     ? admin?.company?._id
                     : admin
                 )
               }
+              disabled={role ? !admin?.user?.status : !admin.status}
             />
           ))
         )}

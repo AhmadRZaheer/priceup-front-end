@@ -52,7 +52,12 @@ export const useDeleteTeamMembers = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw error;
     }
   };
@@ -316,15 +321,15 @@ export const useFetchStaffHaveAccessTo = () => {
 };
 
 export const useSwitchStaffLocation = () => {
-  const switchLocation = async (props) => {
+  const switchLocation = async (companyId) => {
     const token = localStorage.getItem("token");
-
+    const decodedToken = parseJwt(token);
     try {
       const response = await axios.post(
         `${backendURL}/staffs/switchLocation`,
         {
-          staffId: props.staffId,
-          companyId: props.companyId,
+          staffId: decodedToken.id,
+          companyId: companyId,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -342,4 +347,32 @@ export const useSwitchStaffLocation = () => {
   };
 
   return useMutation(switchLocation);
+};
+
+export const useBackToStaffLocations = () => {
+  const handleSwitch = async () => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/staffs/switchBackToSuperView`,
+        {
+          userId: decodedToken?.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
 };

@@ -10,6 +10,7 @@ import {
   Grid,
   CircularProgress,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
@@ -410,11 +411,18 @@ const SuperAdminTable = () => {
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
                         Status
                       </Typography>
+
                       <Box sx={{ ml: -1.2 }}>
                         <TableRow
+                          title={
+                            item?.user?.status
+                              ? ""
+                              : "This Location is not Active"
+                          }
                           row={item?.user}
                           onToggleChange={handleToggleChange}
                           type={"superAdmin"}
+                          refetch={AdminRefetch}
                         />
                       </Box>
                     </Box>
@@ -586,20 +594,30 @@ const SuperAdminTable = () => {
                         <img src={EditIcon} alt="delete icon" />
                       </IconButton>
                     </Box>
-
-                    <Button
-                      onClick={() => handleAdminClick(item)}
-                      variant="text"
-                      sx={{
-                        p: 1,
-                        m: 0,
-                        color: "#7F56D9",
-                        textTransform: "capitalize",
-                        borderLeft: "1px solid #EAECF0",
-                      }}
+                    <Tooltip
+                      title={
+                        !item.user.status && "Active this Location to Access"
+                      }
+                      placement="top"
+                      arrow
                     >
-                      Access Location
-                    </Button>
+                      <Box>
+                        <Button
+                          disabled={!item.user.status}
+                          onClick={() => handleAdminClick(item)}
+                          variant="text"
+                          sx={{
+                            p: 1,
+                            m: 0,
+                            color: "#7F56D9",
+                            textTransform: "capitalize",
+                            borderLeft: "1px solid #EAECF0",
+                          }}
+                        >
+                          Access Location
+                        </Button>
+                      </Box>
+                    </Tooltip>
                   </Box>
                 </Box>
               </Box>

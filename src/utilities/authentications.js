@@ -28,7 +28,7 @@ export const getHomepageURL = (decodedToken) => {
   } else if (isCustomAdmin(decodedToken)) {
     return "/locations";
   } else if (isStaff(decodedToken)) {
-    return "/staff";
+    return "/locations";
   } else {
     return "/";
   }

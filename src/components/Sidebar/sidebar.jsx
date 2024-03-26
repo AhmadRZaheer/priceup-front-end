@@ -13,9 +13,9 @@ import HardWairIcon from "../../Assets/box.svg";
 import DefaultIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip, Popover, Drawer } from "@mui/material";
+import { Box, IconButton, Tooltip, Drawer } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { AttachMoney, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
+import { AttachMoney, PinDrop, UnfoldMore } from "@mui/icons-material";
 import {
   useBackToCustomAdminLocations,
   useBackToSuperAdmin,
@@ -24,12 +24,10 @@ import {
   useSwitchLocationSuperAdmin,
   useSwitchLocationUser,
 } from "../../utilities/ApiHooks/superAdmin";
-import BackIcon from "../../Assets/back.svg";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import DefaultImage from "../ui-components/defaultImage";
-import SingleUser from "../ui-components/SingleUser";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import { userRoles } from "../../utilities/constants";
 

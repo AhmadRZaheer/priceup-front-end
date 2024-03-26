@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import "./admin.scss";
+import "./staffLocation.scss";
 import TeamIcon from "../../Assets/user-gary.svg";
 import {
   Box,
@@ -12,36 +12,34 @@ import {
 } from "@mui/material";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
 import DefaultIcon from "../../Assets/layout-gray.svg";
-import {
-  useFetchCustomAdminHaveAccessTo,
-  useSwitchLocationUser,
-} from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import DefaultImage from "../ui-components/defaultImage";
 import { parseJwt } from "../ProtectedRoute/authVerify";
+import {
+  useFetchStaffHaveAccessTo,
+  useSwitchStaffLocation,
+} from "../../utilities/ApiHooks/team";
 
-const CustomAdminsTable = () => {
+const StaffLocationsTable = () => {
   const {
     data: locationsData,
-    mutate: fetchLocations,
+    refetch: fetchLocations,
     isLoading,
-  } = useFetchCustomAdminHaveAccessTo();
-
+  } = useFetchStaffHaveAccessTo();
   const {
     mutate: switchLocationUser,
     data: newToken,
     isSuccess: switched,
     isLoading: isSwitching,
-  } = useSwitchLocationUser();
-
+  } = useSwitchStaffLocation();
   const [search, setSearch] = useState("");
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
 
   const filteredData = useMemo(() => {
     const result = locationsData?.filter((admin) =>
-      admin.user.name.toLowerCase().includes(search.toLowerCase())
+      admin.company.name.toLowerCase().includes(search.toLowerCase())
     );
     return result ?? [];
   }, [locationsData, search]);
@@ -62,14 +60,6 @@ const CustomAdminsTable = () => {
       window.location.href = "/";
     }
   }, [switched]);
-  // useEffect(() => {
-  //   if (switched) {
-  //     localStorage.setItem("token", useToken);
-  //     dispatch(setDataRefetch());
-  //     console.log(switched);
-  //     setRefetchKey((prevKey) => prevKey + 1);
-  //   }
-  // }, [switched]);
 
   useEffect(() => {
     fetchLocations();
@@ -113,7 +103,7 @@ const CustomAdminsTable = () => {
         />
       </Box>
       <div className="hardwareTable-superadmin">
-        {isLoading ? (
+        {isLoading || isSwitching ? (
           <Box
             sx={{
               width: "100%",
@@ -349,4 +339,4 @@ const CustomAdminsTable = () => {
   );
 };
 
-export default CustomAdminsTable;
+export default StaffLocationsTable;
