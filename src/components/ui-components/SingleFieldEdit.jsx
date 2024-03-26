@@ -35,9 +35,9 @@ export const SingleFieldEdit = ({
           size="small"
           placeholder={placeholder}
           name={name}
-          type="number"
+          type="text"
           InputProps={{
-            inputProps: { min: 0 },
+            inputProps: { min: 0, maxLength: 7 },
             endAdornment: (
               <InputAdornment
                 onClick={handleEdit}

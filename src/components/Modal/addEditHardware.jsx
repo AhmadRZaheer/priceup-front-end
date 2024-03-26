@@ -310,7 +310,12 @@ export default function AddEditHardware({
                     <SingleFieldEdit
                       label='1" Holes'
                       value={formik.values.oneInchHoles}
-                      onChange={formik.handleChange}
+                      onChange={(event) => {
+                        const userInput = event.target.value;
+                        if (/^\d*$/.test(userInput)) {
+                          formik.handleChange(event);
+                        }
+                      }}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.oneInchHoles &&
@@ -326,7 +331,12 @@ export default function AddEditHardware({
                     <SingleFieldEdit
                       label="Clamp Cut Out"
                       value={formik.values.clampCut}
-                      onChange={formik.handleChange}
+                      onChange={(event) => {
+                        const userInput = event.target.value;
+                        if (/^\d*$/.test(userInput)) {
+                          formik.handleChange(event);
+                        }
+                      }}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.clampCut &&
@@ -351,7 +361,12 @@ export default function AddEditHardware({
                     <SingleFieldEdit
                       label="Hinge Cut Out"
                       value={formik.values.hingeCut}
-                      onChange={formik.handleChange}
+                      onChange={(event) => {
+                        const userInput = event.target.value;
+                        if (/^\d*$/.test(userInput)) {
+                          formik.handleChange(event);
+                        }
+                      }}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.hingeCut &&
@@ -366,7 +381,12 @@ export default function AddEditHardware({
                     <SingleFieldEdit
                       label="Notch"
                       value={formik.values.notch}
-                      onChange={formik.handleChange}
+                      onChange={(event) => {
+                        const userInput = event.target.value;
+                        if (/^\d*$/.test(userInput)) {
+                          formik.handleChange(event);
+                        }
+                      }}
                       onBlur={formik.handleBlur}
                       error={
                         formik.touched.notch && Boolean(formik.errors.notch)
@@ -381,7 +401,12 @@ export default function AddEditHardware({
                   <SingleFieldEdit
                     label="Outages"
                     value={formik.values.outages}
-                    onChange={formik.handleChange}
+                    onChange={(event) => {
+                      const userInput = event.target.value;
+                      if (/^\d*$/.test(userInput)) {
+                        formik.handleChange(event);
+                      }
+                    }}
                     onBlur={formik.handleBlur}
                     error={
                       formik.touched.outages && Boolean(formik.errors.outages)
