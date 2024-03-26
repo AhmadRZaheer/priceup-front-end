@@ -51,7 +51,10 @@ const SuperSidebar = () => {
     teamMemberRefetch();
   }, []);
   const handleAdminNameClick = (admin) => {
-    switchLocationSuperAdmin(admin.user._id);
+    switchLocationSuperAdmin({
+      company_id: admin.company._id,
+      adminId: admin.company.user_id,
+    });
   };
   useEffect(() => {
     if (switchedSuperAdmin) {
@@ -61,6 +64,7 @@ const SuperSidebar = () => {
       window.location.href = "/";
     }
   }, [switchedSuperAdmin]);
+  console.log(decodedToken, "decodedToken");
   return (
     <>
       <div className="sidebar">

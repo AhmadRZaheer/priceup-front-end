@@ -923,15 +923,14 @@ export const useBackToCustomAdminLocations = () => {
 };
 
 export const useSwitchLocationSuperAdmin = () => {
-  const handleSwitch = async (company_id) => {
+  const handleSwitch = async (props) => {
     const token = localStorage.getItem("token");
-    const decodedToken = parseJwt(token);
     try {
       const response = await axios.post(
         `${backendURL}/admins/switchLocation`,
         {
-          userId: decodedToken?.id,
-          companyId: company_id,
+          userId: props.adminId,
+          companyId: props.company_id,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

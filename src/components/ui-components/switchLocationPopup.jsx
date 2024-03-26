@@ -50,7 +50,6 @@ const SwitchLocationPopup = ({
     return result;
   }, [data, searchQuery, role]);
 
-
   return (
     <Popover
       open={Boolean(anchorEl)}
@@ -168,8 +167,6 @@ const SwitchLocationPopup = ({
                 handleUserClick(
                   decodedToken.role === userRoles.CUSTOM_ADMIN
                     ? admin?.company?._id
-                    : decodedToken.role === userRoles.ADMIN
-                    ? admin?.user
                     : admin
                 )
               }

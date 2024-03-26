@@ -85,13 +85,11 @@ const Sidebar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const handleAdminNameClick = (admin) => {
-    /** Added for branch PD-28 */
     setActiveLocation(admin);
-    /** Added for branch PD-28 */
-    switchLocationSuperAdmin(admin.company._id);
-    // navigate(`/?userID=${admin?.user?._id}`);
-    // const urlWithoutQuery = window.location.pathname;
-    // window.history.replaceState({}, document.title, urlWithoutQuery);
+    switchLocationSuperAdmin({
+      company_id: admin?.company?._id,
+      adminId: admin?.company?.user_id,
+    });
   };
   const handleCustomUserClick = async (companyId) => {
     if (!companyId || !decodedToken) {
@@ -119,7 +117,7 @@ const Sidebar = () => {
       return;
     }
     if (decodedToken.company_id) {
-      const superAdminReference = localStorage.getItem('userReference');
+      const superAdminReference = localStorage.getItem("userReference");
       await backToSuperAdmin(superAdminReference);
       console.log("user backed");
     }
@@ -137,7 +135,9 @@ const Sidebar = () => {
       window.location.href = "/locations";
     }
     if (switchedSuperAdmin) {
-      localStorage.setItem('userReference',decodedToken.id);
+      if (decodedToken.role === userRoles.SUPER_ADMIN) {
+        localStorage.setItem("userReference", decodedToken.id);
+      }
       localStorage.setItem("token", useTokenSuperAdmin);
       window.location.href = "/";
     }
@@ -146,13 +146,9 @@ const Sidebar = () => {
       window.location.href = "/locations";
     }
     if (switchedBackSuperAdmin) {
-      localStorage.removeItem('userReference');
+      localStorage.removeItem("userReference");
       localStorage.setItem("token", useTokenBackSuperAdmin.token);
-      console.log(
-        useTokenBackSuperAdmin.token,
-        "useTokenBackSuperAdmin.token)"
-      );
-      // window.location.href = "/";
+      window.location.href = "/";
     }
   }, [switched, switchedBack, switchedBackSuperAdmin, switchedSuperAdmin]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -222,41 +218,37 @@ const Sidebar = () => {
             </NavLink>
             <div className="center">
               <ul>
-                {superAdminToken && (
-                  /** Added for branch PD-28 */
-                  <li
-                    style={{ marginBottom: 0 }}
-                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                    onClick={handleSeeLocationsClick}
-                  >
-                    <Tooltip title="Switch Location">
-                      <IconButton
-                        sx={{
-                          color: "white",
-                          padding: 0.2,
-                          display: "flex",
-                          width: "100%",
+                <li
+                  style={{ marginBottom: 0 }}
+                  className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                  onClick={handleSeeLocationsClick}
+                >
+                  <Tooltip title="Switch Location">
+                    <IconButton
+                      sx={{
+                        color: "white",
+                        padding: 0.2,
+                        display: "flex",
+                        width: "100%",
+                      }}
+                    >
+                      <PinDrop sx={{ color: "white" }} />
+                      <span
+                        style={{
+                          flexGrow: 1,
+                          whiteSpace: "nowrap",
+                          display: "block",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
                         }}
                       >
-                        <PinDrop sx={{ color: "white" }} />
-                        <span
-                          style={{
-                            flexGrow: 1,
-                            whiteSpace: "nowrap",
-                            display: "block",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                          }}
-                        >
-                          {" "}
-                          {activeLocation?.company?.name}
-                        </span>
-                        <UnfoldMore sx={{ color: "white", mr: 1 }} />
-                      </IconButton>
-                    </Tooltip>
-                  </li>
-                  /** Added for branch PD-28 */
-                )}
+                        {" "}
+                        {activeLocation?.company?.name}
+                      </span>
+                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                    </IconButton>
+                  </Tooltip>
+                </li>
                 {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
                   <li
                     style={{ padding: 10, marginBottom: 0 }}

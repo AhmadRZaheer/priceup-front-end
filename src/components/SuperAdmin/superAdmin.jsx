@@ -122,7 +122,10 @@ const SuperAdminTable = () => {
     admin.user.name.toLowerCase().includes(search.toLowerCase())
   );
   const handleAdminClick = (admin) => {
-    switchLocationSuperAdmin(admin.company._id);
+    switchLocationSuperAdmin({
+      company_id: admin.company._id,
+      adminId: admin.company.user_id,
+    });
   };
   useEffect(() => {
     if (switchedSuperAdmin) {
@@ -310,7 +313,6 @@ const SuperAdminTable = () => {
               });
             };
 
-         
             return (
               <Box
                 key={item?.user?._id}
