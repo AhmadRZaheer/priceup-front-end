@@ -8,9 +8,11 @@ import { getPageDesktopNavigation } from "../../redux/estimateCalculations";
 import { useSelector } from "react-redux";
 import ExistingQuotes from "./existingQuotes";
 import CustomLayout from "../CustomLayout/customLayout";
+import HardwareMissingAlert from "../Modal/hardwareMissingAlert";
 
 const Index = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
+  const [hardwareMissingAlert,setHardwareMissingAlert] = useState(false);
   const Navigation = useSelector(getPageDesktopNavigation);
 
   return (
@@ -30,7 +32,7 @@ const Index = () => {
         {Navigation === "layouts" && <Layout />}
         {Navigation === "measurements" && <LayoutMeasurements />}
         {Navigation === "review" && (
-          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+          <LayoutReview setClientDetailOpen={setClientDetailOpen} setHardwareMissingAlert={setHardwareMissingAlert} />
         )}
         {Navigation === "custom" && <CustomLayout />}
       </Box>
@@ -38,6 +40,10 @@ const Index = () => {
       <ClientDetailsModel
         open={clientDetailOpen}
         handleCancel={() => setClientDetailOpen(false)}
+      />
+      <HardwareMissingAlert
+        open={hardwareMissingAlert}
+        handleClose={() => setHardwareMissingAlert(false)}
       />
     </>
   );

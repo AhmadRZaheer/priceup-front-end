@@ -104,8 +104,19 @@ const initialState = {
       variant: notificationsVariant.DEFAULT,
       message: "",
     },
+    channelNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
     glassAddonsNotAvailable: [],
     hardwareAddonsNotAvailable: [],
+    wallClampNotAvailable: [],
+    sleeveOverNotAvailable: [],
+    glassToGlassNotAvailable: [],
+    cornerWallClampNotAvailable: [],
+    cornerSleeveOverNotAvailable: [],
+    cornerGlassToGlassNotAvailable: []
   },
   selectedItem: null,
   listData: null,
@@ -1257,7 +1268,9 @@ const estimateCalcSlice = createSlice({
         );
         return { item: found, count: row.count };
       });
-
+      const noGlassAddon = state.listData.glassAddons?.find(
+        (item) => item.slug === "no-treatment"
+      );
       const measurements = estimateData.measurements.map(
         ({ _id, ...rest }) => rest
       );
@@ -1312,7 +1325,7 @@ const estimateCalcSlice = createSlice({
         hours: estimateData?.hours,
         glassAddons: glassAddons?.length
           ? [...glassAddons]
-          : [state.listData.glassAddons[0]],
+          : [noGlassAddon],
         oneInchHoles: estimateData?.oneInchHoles,
         clampCut: estimateData?.clampCut,
         notch: estimateData?.notch,

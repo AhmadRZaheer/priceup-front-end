@@ -40,7 +40,7 @@ import { useSnackbar } from "notistack";
 import { SingleField } from "../ui-components/SingleFieldComponent";
 import { getEstimateErrorStatus } from "../../utilities/estimatorHelper";
 
-const LayoutReview = ({ setClientDetailOpen }) => {
+const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -245,11 +245,16 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
     console.log(allGoodStatus,'Estimate Status');
-    if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
-      setClientDetailOpen(true);
-    } else {
-      handleEditEstimate();
-      showSnackbar("Estimate Edit successfully", "success");
+    if(allGoodStatus){
+      if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
+        setClientDetailOpen(true);
+      } else {
+        handleEditEstimate();
+        showSnackbar("Estimate Edit successfully", "success");
+      }
+    }
+    else{
+      setHardwareMissingAlert(true);
     }
   }
 
@@ -301,7 +306,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     console.log("mount");
     Object.entries(notifications).forEach(([key, value]) => {
       if (
-        ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable"].includes(key)
+        ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable", "wallClampNotAvailable", "sleeveOverNotAvailable", "glassToGlassNotAvailable", "cornerWallClampNotAvailable", "cornerSleeveOverNotAvailable", "cornerGlassToGlassNotAvailable"].includes(key)
       ) {
         value?.forEach((item) => {
           if (item.status) {

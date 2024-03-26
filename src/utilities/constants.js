@@ -59,5 +59,15 @@ export const hardwareTypes = {
   HANDLES: "handles",
   HINGES: "hinges",
   SLIDINGDOORSYSTEM: "slidingDoorSystem",
-  HEADER: "header"
+  HEADER: "header",
+  HARDWAREADDONS: "hardwareAddons",
+  GLASSTYPE: "glassType",
+  GLASSADDONS: "glassAddons",
+  CHANNEL: "channel",
+  CORNERWALLCLAMP: "cornerWallClamp",
+  CORNERSLEEVEOVER: "cornerSleeveOver",
+  CORNERGLASSTOGLASS: "cornerGlassToGlass",
+  WALLCLAMP: "wallClamp",
+  SLEEVEOVER: "sleeveOver",
+  GLASSTOGLASS: "glassToGlass"
 }

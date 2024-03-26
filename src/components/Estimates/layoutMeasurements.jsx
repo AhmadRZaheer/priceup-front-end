@@ -37,8 +37,9 @@ import {
 } from "../../utilities/common";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+// import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
+import { generateNotificationsForCurrentEstimate } from "../../utilities/estimatorHelper";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -119,7 +120,7 @@ const LayoutMeasurements = () => {
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
 
-      const notificationsResult = generateNotificationsForCurrentItem(
+      const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
           content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },

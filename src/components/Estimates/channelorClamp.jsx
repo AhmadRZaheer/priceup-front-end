@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
-import Button from "@mui/material/Button";
+// import Button from "@mui/material/Button";
 import Logo from "../../Assets/bar-chart-2.svg";
-import MenuItem from "@mui/material/MenuItem";
+// import MenuItem from "@mui/material/MenuItem";
 import { ChevronRight } from "@mui/icons-material";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, MenuItem as MuiMenuItem, Button } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -12,12 +12,13 @@ import {
   setContent,
 } from "../../redux/estimateCalculations";
 import MenuList from "./menuList";
-import { backendURL } from "../../utilities/common";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import Tooltip from "@mui/material/Tooltip";
-import IconButton from "@mui/material/IconButton";
+// import { backendURL } from "../../utilities/common";
+// import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
+// import Tooltip from "@mui/material/Tooltip";
+// import IconButton from "@mui/material/IconButton";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { thicknessTypes } from "../../utilities/constants";
+import MenuItem from "./menuItem";
 
 const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
   const [anchorEl, setAnchorEl] = useState(false);
@@ -121,7 +122,7 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
             }}
           >
             {["Channel", "Clamps"].map((item, index) => (
-              <MenuItem
+              <MuiMenuItem
                 sx={{ p: 0.1 }}
                 key={index}
                 onClick={() => handleItemSelect(item)}
@@ -161,7 +162,7 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
                     <Typography>{item}</Typography>
                   </Box>
                 </Box>
-              </MenuItem>
+              </MuiMenuItem>
             ))}
           </Box>
           <Box
@@ -192,42 +193,49 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
             )}
             {selectedContent.mountingState === "channel" && (
               <MenuItem
-                key={activeChannel?.id}
-                onClick={() => handleChannelSelect(activeChannel)}
-              >
-                <Box
-                  sx={{
-                    width: "200px",
-                    borderRadius: "12px",
-                    border:
-                      activeChannel === selectedContent?.mountingChannel?.item
-                        ? "2px solid blue"
-                        : "1px solid #EAECF0",
-                    boxShadow:
-                      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                    p: 2,
-                    display: "flex",
-                    gap: 2,
-                    alignItems: "center",
-                    width: { md: "100%", xs: "95%" },
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    <img
-                      width={"25px"}
-                      height={"25px"}
-                      src={`${backendURL}/${activeChannel?.image}`}
-                      alt="Selected"
-                    />
-                    <Typography>{activeChannel?.name}</Typography>
-                  </Box>
-                </Box>
-              </MenuItem>
+              type={'channel'}
+              item={activeChannel}
+              selectedItem={selectedContent.mountingChannel.item}
+              handleItemSelect={handleChannelSelect}
+              selectedContent={selectedContent}
+            />
+              // <MuiMenuItem
+              //   key={activeChannel?.id}
+              //   onClick={() => handleChannelSelect(activeChannel)}
+              // >
+              //   <Box
+              //     sx={{
+              //       width: "200px",
+              //       borderRadius: "12px",
+              //       border:
+              //         activeChannel === selectedContent?.mountingChannel?.item
+              //           ? "2px solid blue"
+              //           : "1px solid #EAECF0",
+              //       boxShadow:
+              //         "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+              //       p: 2,
+              //       display: "flex",
+              //       gap: 2,
+              //       alignItems: "center",
+              //       width: { md: "100%", xs: "95%" },
+              //       justifyContent: "space-between",
+              //     }}
+              //   >
+              //     <Box sx={{ display: "flex", gap: 2 }}>
+              //       <img
+              //         width={"25px"}
+              //         height={"25px"}
+              //         src={`${backendURL}/${activeChannel?.image}`}
+              //         alt="Selected"
+              //       />
+              //       <Typography>{activeChannel?.name}</Typography>
+              //     </Box>
+              //   </Box>
+              // </MuiMenuItem>
             )}
           </Box>
           {["Corner Clamps"].map((item, index) => (
-            <MenuItem
+            <MuiMenuItem
               sx={{
                 borderRadius: "12px",
                 padding: "5px",
@@ -272,7 +280,7 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
                   <Typography>{item}</Typography>
                 </Box>
               </Box>
-            </MenuItem>
+            </MuiMenuItem>
           ))}
           {cornerActive && (
             <>
