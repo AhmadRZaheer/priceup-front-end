@@ -265,7 +265,7 @@ const LayoutMeasurements = () => {
                 }}
                 variant="h4"
               >
-                Create New Qoute
+                {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
               </Typography>
             </Box>
           </div>
