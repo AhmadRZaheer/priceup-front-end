@@ -116,7 +116,7 @@ export default function Layout() {
                 }}
                 variant="h4"
               >
-                Create New Qoute
+                Create New Estimate
               </Typography>
             </Box>
           </Box>

@@ -383,7 +383,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
               }}
               variant="h4"
             >
-              Create New Estimates
+            {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
             </Typography>
           </Box>
         </Box>
