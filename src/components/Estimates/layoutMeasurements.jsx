@@ -29,6 +29,7 @@ import {
   initializeStateForCreateQuote,
   initializeStateForEditQuote,
   setHardwareFabricationQuantity,
+  getAdditionalFields,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
@@ -53,6 +54,7 @@ const LayoutMeasurements = () => {
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
+  const reduxAdditionalFields = useSelector(getAdditionalFields)
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
     currentQuoteState === quoteState.EDIT
@@ -204,7 +206,12 @@ const LayoutMeasurements = () => {
     } else if (currentQuoteState === quoteState.EDIT) {
       dispatch(
         initializeStateForEditQuote({
-          estimateData: selectedData,
+          estimateData: {
+            ...selectedData,
+            additionalFields: reduxAdditionalFields.length
+              ? reduxAdditionalFields
+              : selectedData.additionalFields,
+          },
           quotesId: selectedData._id,
         })
       );

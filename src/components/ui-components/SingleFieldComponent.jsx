@@ -81,6 +81,14 @@ export const SingleField = ({ item, index }) => {
     const updatedFields = addedFields.filter((field, i) => i !== index);
     dispatch(setContent({ type: "additionalFields", item: updatedFields }));
   };
+
+  useEffect(() => {
+    setAddedValue({
+      label: item.label,
+      cost: item.cost,
+    });
+  }, [item]);
+
   return (
     <Box
       sx={{
