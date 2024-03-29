@@ -49,11 +49,6 @@ export default function ExitingQuotes() {
               pageSizeOptions={[10]}
               style={{ backgroundColor: "white" }}
             />
-            {/* <Typography
-                            sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
-                        >
-                            No Customer Found
-                        </Typography> */}
           </div>
         </Box>
       </Box>

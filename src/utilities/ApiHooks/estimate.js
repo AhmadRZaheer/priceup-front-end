@@ -171,7 +171,12 @@ export const useEditEstimates = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -191,7 +196,6 @@ export const useDeleteEstimates = () => {
       });
       if (response.data.code === 200) {
         dispatch(setEstimatesListRefetch());
-        // enqueueSnackbar("Estimate Deleted Successfuly", { variant: "error" });
         dispatch(
           showSnackbar({
             message: "Estimate Deleted Successfuly",

@@ -323,10 +323,21 @@ export const Super_SuperColumns = [
 ];
 export const CustomerQuoteColumns = [
   {
+    headerName: "Label",
+    width: 300,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography>{params.row.label}</Typography>
+        </>
+      );
+    },
+  },
+  {
     field: "name",
     headerName: "Reference",
-    width: 500,
-  },
+    width: 200,
+  }
 ];
 export const userColumns = [
   {

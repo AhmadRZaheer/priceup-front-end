@@ -13,6 +13,7 @@ import {
   useCreateCustomUser,
   useEditCustomUser,
   useResetCustomUserPassword,
+  useResetPasswordCustomUser,
 } from "../../utilities/ApiHooks/superAdmin";
 import * as Yup from "yup";
 import { backendURL } from "../../utilities/common";
@@ -28,6 +29,8 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     isSuccess: updated,
     isLoading,
   } = useEditCustomUser();
+  const { mutate: updatePassword, isSuccess: updatedPassword } =
+  useResetPasswordCustomUser();
   const [selectedImage, setSelectedImage] = useState(null);
 
   const style = {
@@ -49,17 +52,18 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
       email: isEdit?.type ? isEdit?.data?.email : "",
       image: isEdit?.type ? isEdit?.data?.image : "",
     },
-    enableReinitialize: isEdit?.type ? true : false,
+    enableReinitialize: true,
     validationSchema: Yup.object({
       name: Yup.string().required("Name is required"),
-      email:
-        Yup.string()
-        .required("Email is required"),
+      email: Yup.string().required("Email is required"),
     }),
-    onSubmit: (values) => {
+    onSubmit: (values, { resetForm }) => {
       if (isEdit.type) {
         uesEditUser(values);
-      } else userCreateData(values);
+      } else {
+        userCreateData(values);
+      }
+      resetForm();
     },
   });
   useEffect(() => {
@@ -74,13 +78,16 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
     setSelectedImage(file);
     formik.setFieldValue("image", file);
   };
+  const handleUpdatePassword = () => {
+    updatePassword(isEdit?.data);
+  };
   return (
     <>
       <Modal open={open} onClose={close}>
         <Box sx={style}>
           <form onSubmit={formik.handleSubmit}>
             <Typography sx={{ fontSize: 24, mb: 2, fontWeight: "bold" }}>
-              Create User
+              {isEdit.type ? "Edit" : "Create"} Admin
             </Typography>
             <Box>
               <Box sx={{ pb: 2 }}>
@@ -129,24 +136,48 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
                     </Typography>
                   </Box>
                 </label>
-
-                {selectedImage ? (
-                  <img
-                    width={"80px"}
-                    height={"80px"}
-                    src={URL.createObjectURL(selectedImage)}
-                    alt="Selected"
-                  />
-                ) : isEdit?.data?.image !== undefined || null ? (
-                  <img
-                    width={"80px"}
-                    height={"80px"}
-                    src={`${backendURL}/${isEdit?.data?.image}`}
-                    alt="logo team"
-                  />
-                ) : (
-                  ""
-                )}
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "end",
+                  }}
+                >
+                  {selectedImage ? (
+                    <img
+                      width={"80px"}
+                      height={"80px"}
+                      src={URL.createObjectURL(selectedImage)}
+                      alt="Selected"
+                    />
+                  ) : isEdit?.data?.image !== undefined || null ? (
+                    <img
+                      width={"80px"}
+                      height={"80px"}
+                      src={`${backendURL}/${isEdit?.data?.image}`}
+                      alt="logo team"
+                    />
+                  ) : (
+                    ""
+                  )}
+                  {isEdit?.type ? (
+                    <Button
+                      variant="outlined"
+                      onClick={handleUpdatePassword}
+                      sx={{
+                        height: "34px",
+                        width: "45%",
+                        color: "#8477DA",
+                        border: "1px solid #8477DA",
+                        mb: 1,
+                      }}
+                    >
+                      Reset Password
+                    </Button>
+                  ) : (
+                    ""
+                  )}
+                </Box>
               </Box>
               <Box>
                 <Typography>Name</Typography>
@@ -165,7 +196,7 @@ function CustomUserCreateModal({ open, close, refetch, isEdit }) {
               <Box>
                 <Typography>Email</Typography>
                 <CustomInputField
-                  placeholder="Name"
+                  placeholder="email"
                   name="email"
                   disabled={isEdit?.type ? true : false}
                   value={formik.values.email}

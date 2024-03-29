@@ -33,6 +33,7 @@ import {
   UnfoldMore,
 } from "@mui/icons-material";
 import {
+  useBackToStaffLocations,
   useFetchStaffHaveAccessTo,
   useSwitchStaffLocation,
 } from "../../utilities/ApiHooks/team";
@@ -42,6 +43,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import DefaultImage from "../ui-components/defaultImage";
 import SingleUser from "../ui-components/SingleUser";
+import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 
 const drawerWidth = 280;
 
@@ -54,25 +56,23 @@ function MobileBar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("esti");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // State for search query
   const { data: haveAccess, isFetched: haveAccessFetched } =
     useFetchStaffHaveAccessTo();
   const {
     mutate: switchLocation,
     data: switchLocationData,
-    isLoading: switchLocationLoading,
     isSuccess: switchLocationSuccess,
     isError: switchLocationError,
+    isLoading: isSwitchingLocation,
   } = useSwitchStaffLocation();
+  const {
+    mutate: backToStaffLocationsRefetch,
+    data: useTokenBack,
+    isSuccess: switchedBack,
+  } = useBackToStaffLocations();
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
   const [activeLocation, setActiveLocation] = useState(null);
-  const staffhaveAccessTo = useMemo(() => {
-    let result = haveAccess?.filter((item) =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return result ? result : [];
-  }, [haveAccess, searchQuery]);
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -105,27 +105,38 @@ function MobileBar() {
     dispatch(setNavigationDesktop("existing"));
   };
   const handleSwitchLocation = (location) => {
-    if (location.id !== activeLocation.id) {
+    if (location?.company?._id !== activeLocation?.company?._id) {
       setActiveLocation(location);
-      switchLocation({ staffId: decodedToken?.id, companyId: location.id });
+      switchLocation(location.company._id);
       handleClosePopup();
       toggleSidebar();
     }
   };
+  const handleBacktoStaffLocation = () => {
+    backToStaffLocationsRefetch();
+  };
   useEffect(() => {
     if (switchLocationSuccess) {
       localStorage.setItem("token", switchLocationData);
-      dispatch(setDataRefetch());
+      window.location.href = "/locations";
     }
-  }, [switchLocationSuccess, switchLocationError]);
-  useEffect(() => {
+    if (switchedBack) {
+      localStorage.setItem("token", useTokenBack.token);
+      window.location.href = "/";
+    }
     if (haveAccessFetched) {
       setActiveLocation(
-        haveAccess?.find((item) => item?.id === decodedToken?.company_id)
+        haveAccess?.find(
+          (item) => item?.company?._id === decodedToken?.company_id
+        )
       );
     }
-  }, [haveAccessFetched]);
-  const location = useLocation();
+  }, [
+    switchLocationSuccess,
+    switchLocationError,
+    haveAccessFetched,
+    switchedBack,
+  ]);
   const drawer = (
     <Box
       sx={{
@@ -177,13 +188,23 @@ function MobileBar() {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
+                    width: "82%",
                   }}
                 >
-                  <Typography sx={{ fontSize: "16px", paddingLeft: "2px" }}>
-                    {activeLocation?.name} Location
+                  <Typography
+                    sx={{
+                      fontSize: "16px",
+                      paddingLeft: "2px",
+                      whiteSpace: "nowrap",
+                      display: "block",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {activeLocation?.company?.name} Location
                   </Typography>
                 </Box>
-                {/* <UnfoldMore sx={{ color: "white", mr: 1 }} /> */}
+                <UnfoldMore sx={{ color: "white", mr: 1 }} />
               </Button>
             </Tooltip>
           </Box>
@@ -438,8 +459,16 @@ function MobileBar() {
           </Drawer>
         </Box>
       </Box>
+      <SwitchLocationPopup
+        anchorEl={anchorEl}
+        handleClosePopup={handleClosePopup}
+        data={haveAccess}
+        handleUserClick={handleSwitchLocation}
+        isSwitching={isSwitchingLocation}
+        handleBack={handleBacktoStaffLocation}
+      />
 
-      <Popover
+      {/* <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}
         onClose={handleClosePopup}
@@ -511,7 +540,7 @@ function MobileBar() {
             >
               All Locations
             </Typography>
-          </Box> */}
+          </Box> 
           {staffhaveAccessTo.length === 0 ? (
             <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
               No location found
@@ -524,58 +553,10 @@ function MobileBar() {
                 active={activeLocation?.id === location?.id}
                 handleClick={() => handleSwitchLocation(location)}
               />
-              // <Box
-              //   key={location.id}
-              //   sx={{
-              //     width: "83.8%",
-              //     ml: "10px",
-              //     marginBottom: "5px",
-              //     textTransform: "lowercase",
-              //     marginLeft: "20px",
-              //     display: "flex",
-              //     border: "1px solid #D9D9D9",
-              //     ":hover": {
-              //       bgcolor: "rgba(0, 0, 0, 0.1)",
-              //       cursor: "pointer",
-              //     },
-              //     py: 0.4,
-              //     px: 1,
-              //     borderRadius: "14px",
-              //   }}
-              // >
-              //   <Box className="UserIcon-1">
-              //     <DefaultImage image={location?.image} name={location?.name} />
-              //   </Box>
-              //   <Box
-              //     style={{ flexGrow: 1 }}
-              //     onClick={() => {
-              //       console.log("suleman", location);
-              //       handleSwitchLocation(location);
-              //     }}
-              //     sx={{ paddingLeft: "12px" }}
-              //   >
-              //     <a style={{ cursor: "pointer" }}>
-              //       <Typography sx={{ fontSize: "16px" }}>
-              //         {location?.name}
-              //       </Typography>
-              //     </a>
-              //     <Typography style={{ fontSize: "10px" }}>
-              //       {location?.email}
-              //     </Typography>
-              //   </Box>
-
-              //   {activeLocation?.id === location?.id && (
-              //     <Box>
-              //       <FiberManualRecord
-              //         sx={{ color: "#5cb85c", mr: 1, mb: -0.6 }}
-              //       />
-              //     </Box>
-              //   )}
-              // </Box>
             ))
           )}
         </div>
-      </Popover>
+      </Popover> */}
     </>
   );
 }

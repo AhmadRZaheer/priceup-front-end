@@ -104,7 +104,7 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
         </Typography>
         {/* Search input field */}
         <TextField
-          placeholder="Search by Name"
+          placeholder="Search by Customer Name"
           value={search}
           variant="standard"
           onChange={(e) => setSearch(e.target.value)}

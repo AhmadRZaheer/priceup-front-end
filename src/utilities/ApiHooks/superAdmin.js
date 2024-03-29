@@ -103,7 +103,12 @@ export const useDeleteStaff = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
     }
   };
 
@@ -156,8 +161,6 @@ export const FetchId2 = ({ children }) => {
             }
           )
           .then((resp) => {
-            console.log({ resp });
-
             const newToken = resp.data.data.token;
             localStorage.removeItem("token");
 
@@ -228,8 +231,6 @@ export const useCloneLocation = () => {
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
-    const decodedToken = parseJwt(token);
-    console.log(decodedToken, "decodedToken");
     const formData = new FormData();
     if (props.image) {
       formData.append("image", props.image);
@@ -301,7 +302,7 @@ export const useUserStatus = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User Status Updated Successfully",
+            message: "Location Status Updated Successfully",
             severity: "success",
           })
         );
@@ -318,7 +319,7 @@ export const useUserStatus = () => {
     } catch (error) {
       dispatch(
         showSnackbar({
-          message:`${error.response?.data?.message}`,
+          message: `${error.response?.data?.message}`,
           severity: "error",
         })
       );
@@ -480,7 +481,33 @@ export const useDataCustomUser = () => {
     placeholderData: [],
   });
 };
-
+export const useDataCustomAdmins = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.get(
+        `${backendURL}/customUsers/haveAccess/${decodedToken.id}`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["customAdmin"],
+    queryFn: fetchData,
+    enabled: true,
+    placeholderData: [],
+  });
+};
 export const useCreateCustomUser = () => {
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
@@ -551,7 +578,7 @@ export const useCustomUserStatus = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User status Updated successfully",
+            message: "Admin status Updated successfully",
             severity: "success",
           })
         );
@@ -635,7 +662,7 @@ export const useDeleteCustomerUser = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User deleted successfully",
+            message: "Admin deleted successfully",
             severity: "error",
           })
         );
@@ -673,7 +700,6 @@ export const useEditCustomUser = () => {
     }
 
     formData.append("name", updatedUser?.name);
-    // formData.append("email", updatedUser?.email);
     try {
       const response = await axios.put(
         `${backendURL}/customUsers/${updatedUser?._id}`,
@@ -707,6 +733,48 @@ export const useEditCustomUser = () => {
 
   return useMutation(handleEdit);
 };
+
+export const useResetPasswordCustomUser = () => {
+  const dispatch = useDispatch();
+  const handleEdit = async (updatedUser) => {
+    const token = localStorage.getItem("token");
+
+    try {
+      const response = await axios.put(
+        `${backendURL}/customUsers/updatePassword/${updatedUser?._id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.code === 200) {
+        dispatch(
+          showSnackbar({
+            message: "New password is sent to Admin email successfully",
+            severity: "success",
+          })
+        );
+        return response.data.data;
+      } else {
+        dispatch(
+          showSnackbar({
+            message: "An error occurred while creating the data",
+            severity: "error",
+          })
+        );
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      dispatch(showSnackbar({ message: error, severity: "error" }));
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleEdit);
+};
+
 export const useEditAccessCustomUser = () => {
   const dispatch = useDispatch();
   const handleEdit = async (updatedUser) => {
@@ -774,12 +842,13 @@ export const useEditAccessCustomUser = () => {
 //     placeholderData: [],
 //   });
 // };
-export const useHaveAccessCustomUser = () => {
-  const handleGetData = async (userData) => {
+export const useFetchCustomAdminHaveAccessTo = () => {
+  const handleGetData = async () => {
     try {
       const token = localStorage.getItem("token");
+      const decodedToken = parseJwt(token);
       const response = await axios.get(
-        `${backendURL}/customUsers/haveAccess/${userData}`,
+        `${backendURL}/customUsers/haveAccess/${decodedToken.id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -797,7 +866,7 @@ export const useHaveAccessCustomUser = () => {
   return useMutation(handleGetData);
 };
 export const useSwitchLocationUser = () => {
-  const handleSwitch = async (props) => {
+  const handleSwitch = async (company_id) => {
     const token = localStorage.getItem("token");
     const decodedToken = parseJwt(token);
     try {
@@ -805,7 +874,91 @@ export const useSwitchLocationUser = () => {
         `${backendURL}/customUsers/switchLocation`,
         {
           userId: decodedToken?.id,
-          companyId: props?.id,
+          companyId: company_id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};
+
+export const useBackToCustomAdminLocations = () => {
+  const handleSwitch = async () => {
+    const token = localStorage.getItem("token");
+    const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/customUsers/switchBackToSuperView`,
+        {
+          userId: decodedToken?.id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};
+
+export const useSwitchLocationSuperAdmin = () => {
+  const handleSwitch = async (props) => {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.post(
+        `${backendURL}/admins/switchLocation`,
+        {
+          userId: props.adminId,
+          companyId: props.company_id,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+
+      if (response.data.code === 200) {
+        return response.data.data;
+      } else {
+        throw new Error("An error occurred while creating the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while creating the data.");
+    }
+  };
+
+  return useMutation(handleSwitch);
+};
+
+export const useBackToSuperAdmin = () => {
+  const handleSwitch = async (superAdminId) => {
+    const token = localStorage.getItem("token");
+    // const decodedToken = parseJwt(token);
+    try {
+      const response = await axios.post(
+        `${backendURL}/admins/switchBackToSuperView`,
+        {
+          userId: superAdminId,
         },
         {
           headers: { Authorization: `Bearer ${token}` },

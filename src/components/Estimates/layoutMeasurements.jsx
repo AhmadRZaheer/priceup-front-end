@@ -28,6 +28,8 @@ import {
   setMultipleNotifications,
   initializeStateForCreateQuote,
   initializeStateForEditQuote,
+  setHardwareFabricationQuantity,
+  getAdditionalFields,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
@@ -36,7 +38,9 @@ import {
 } from "../../utilities/common";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+// import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
+import { generateNotificationsForCurrentEstimate } from "../../utilities/estimatorHelper";
 
 const LayoutMeasurements = () => {
   const dispatch = useDispatch();
@@ -50,6 +54,7 @@ const LayoutMeasurements = () => {
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
+  const reduxAdditionalFields = useSelector(getAdditionalFields)
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
     currentQuoteState === quoteState.EDIT
@@ -117,7 +122,7 @@ const LayoutMeasurements = () => {
       dispatch(setLayoutPerimeter(result.perimeter));
       dispatch(updateMeasurements(measurementsArray));
 
-      const notificationsResult = generateNotificationsForCurrentItem(
+      const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
           content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
@@ -128,6 +133,9 @@ const LayoutMeasurements = () => {
         glassThickness
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
+      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
+      console.log(fabricationValues, 'fabrication values');
+      dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -198,7 +206,12 @@ const LayoutMeasurements = () => {
     } else if (currentQuoteState === quoteState.EDIT) {
       dispatch(
         initializeStateForEditQuote({
-          estimateData: selectedData,
+          estimateData: {
+            ...selectedData,
+            additionalFields: reduxAdditionalFields.length
+              ? reduxAdditionalFields
+              : selectedData.additionalFields,
+          },
           quotesId: selectedData._id,
         })
       );
@@ -259,7 +272,7 @@ const LayoutMeasurements = () => {
                 }}
                 variant="h4"
               >
-                Create New Qoute
+                {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
               </Typography>
             </Box>
           </div>

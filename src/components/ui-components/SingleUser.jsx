@@ -1,9 +1,13 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Tooltip, Typography } from "@mui/material";
 import DefaultImage from "./defaultImage";
 
-function SingleUser({ item, active, handleClick }) {
+function SingleUser({ item, active, handleClick, disabled = false }) {
   return (
-    <>
+    <Tooltip
+      title={disabled ? "This Location is no Active" : ""}
+      placement="top"
+      arrow
+    >
       <Typography
         key={item?.id}
         sx={{
@@ -16,20 +20,39 @@ function SingleUser({ item, active, handleClick }) {
           border: "1px solid #D9D9D9",
           ":hover": {
             bgcolor: "rgba(0, 0, 0, 0.1)",
-            cursor: "pointer",
+            cursor: disabled ? "" : "pointer",
           },
           py: 0.4,
           px: 1,
           borderRadius: "14px",
+          bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : "",
+          opacity: disabled ? 0.6 : 1,
         }}
         onClick={handleClick}
       >
         <div style={{ width: "20%" }}>
-          <DefaultImage image={item?.image} name={item?.name} />
+          <DefaultImage image={item?.image} name={item?.name} type={3} />
         </div>
-        <div style={{ paddingLeft: "10px", width: "100%" }}>
-          <a style={{ cursor: "pointer" }}>{item?.name}</a>
-          <p style={{ fontSize: "10px" }}>{item?.email}</p>
+        <div
+          style={{
+            paddingLeft: "10px",
+            width: "100%",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <a
+            style={{
+              cursor: "pointer",
+              display: "inline-block",
+              maxWidth: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+          >
+            {item?.name}
+          </a>
+          <p style={{ fontSize: "10px", marginTop: -5 }}>{item?.address}</p>
         </div>
         {active ? (
           <Box
@@ -53,7 +76,7 @@ function SingleUser({ item, active, handleClick }) {
           ""
         )}
       </Typography>
-    </>
+    </Tooltip>
   );
 }
 export default SingleUser;

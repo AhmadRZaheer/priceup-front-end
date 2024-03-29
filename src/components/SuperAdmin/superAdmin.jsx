@@ -10,6 +10,7 @@ import {
   Grid,
   CircularProgress,
   TextField,
+  Tooltip,
 } from "@mui/material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
@@ -20,6 +21,7 @@ import {
   useDeleteUser,
   useFetchAllStaff,
   useFetchDataAdmin,
+  useSwitchLocationSuperAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
 import TableRow from "./tableRow";
@@ -45,6 +47,12 @@ const SuperAdminTable = () => {
     isFetched,
     isFetching,
   } = useFetchDataAdmin();
+  const {
+    mutate: switchLocationSuperAdmin,
+    data: useTokenSuperAdmin,
+    isSuccess: switchedSuperAdmin,
+    isLoading: isSwitchingSuperAdmin,
+  } = useSwitchLocationSuperAdmin();
   const { data: customUserData } = useDataCustomUser();
   const { data: staffData } = useFetchAllStaff();
   const {
@@ -111,106 +119,22 @@ const SuperAdminTable = () => {
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
 
-  // const actionColumn = [
-  //   {
-  //     field: "Status",
-  //     paddingLeft: 3,
-  //     width: 220,
-  //     renderCell: (params) => {
-  //       const id = params.row._id;
-  //       // const isActive = params.row.Status === "Active";
-
-  //       const handleToggleChange = (active) => {
-  //         setInActiveCount((prevCount) => {
-  //           if (!active && prevCount > 0) {
-  //             return prevCount - 1;
-  //           } else if (active) {
-  //             return prevCount + 1;
-  //           }
-  //           return prevCount; // No change if not active and count is 0
-  //         });
-
-  //         setActiveCount((prevCount) => {
-  //           if (active && prevCount > 0) {
-  //             return prevCount - 1;
-  //           } else if (!active) {
-  //             return prevCount + 1;
-  //           }
-
-  //           return prevCount; // No change if not active and count is 0
-  //         });
-  //       };
-
-  //       return (
-  //         <TableRow row={params.row} onToggleChange={handleToggleChange} />
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: "users",
-  //     headerName: "users",
-  //     width: 120,
-  //     renderCell: (params) => {
-  //       return (
-  //         <Grid container>
-  //           <DefaultImage image={params.row.image} name={params.row.name} />
-  //         </Grid>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     width: 140,
-  //     renderCell: (params) => {
-  //       const adminID = params.row._id;
-  //       return (
-  //         <>
-  //           <Link
-  //             to={`/?adminID=${adminID}`}
-  //             style={{ textDecoration: "none" }}
-  //           >
-  //             <Button
-  //               variant="text"
-  //               sx={{
-  //                 p: 0.5,
-  //                 m: 0,
-  //                 color: "#7F56D9",
-  //                 textTransform: "capitalize",
-  //               }}
-  //             >
-  //               Access Location
-  //             </Button>
-  //           </Link>
-  //         </>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     field: " ",
-  //     width: 165,
-  //     align: "right",
-  //     renderCell: (params) => {
-  //       return (
-  //         <>
-  //           <IconButton
-  //             onClick={handleOpenDelete}
-  //             sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-  //           >
-  //             <img src={DeleteIcon} alt="delete icon" />
-  //           </IconButton>
-  //           <IconButton
-  //             onClick={() => handleOpenEdit(params.row)}
-  //             sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-  //           >
-  //             <img src={EditIcon} alt="delete icon" />
-  //           </IconButton>
-  //         </>
-  //       );
-  //     },
-  //   },
-  // ];
   const filteredData = AdminData?.filter((admin) =>
     admin.user.name.toLowerCase().includes(search.toLowerCase())
   );
+  const handleAdminClick = (admin) => {
+    switchLocationSuperAdmin({
+      company_id: admin.company._id,
+      adminId: admin.company.user_id,
+    });
+  };
+  useEffect(() => {
+    if (switchedSuperAdmin) {
+      localStorage.setItem("userReference", decodedToken.id);
+      localStorage.setItem("token", useTokenSuperAdmin);
+      window.location.href = "/";
+    }
+  }, [switchedSuperAdmin]);
 
   return (
     <Box sx={{ height: "97vh", overflow: "auto" }}>
@@ -359,12 +283,15 @@ const SuperAdminTable = () => {
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
-        ) : (
+        ) : filteredData.length !== 0 ? (
           filteredData?.map((item) => {
             const matchingUserData = customUserData.filter((userData) =>
               userData?.locationsAccess?.some(
                 (accessData) => accessData?.company_id === item?.company?._id
               )
+            );
+            const filterNonActive = matchingUserData.filter(
+              (data) => data.status
             );
             const handleToggleChange = (active) => {
               setInActiveCount((prevCount) => {
@@ -387,18 +314,6 @@ const SuperAdminTable = () => {
               });
             };
 
-            // if (item?.user && item?.user?.name) {
-            //   var firstNameInitial = item?.user?.name?.charAt(0);
-            // } else {
-            //   var firstNameInitial = "";
-            // }
-            // if (item?.user && item?.user?.name) {
-            //   var lastNameInitial = item?.user?.name?.charAt(1);
-            // } else {
-            //   var lastNameInitial = "";
-            // }
-
-            const adminID = item?.user?._id;
             return (
               <Box
                 key={item?.user?._id}
@@ -431,8 +346,8 @@ const SuperAdminTable = () => {
                     >
                       <Box>
                         <DefaultImage
-                          image={item?.user?.image}
-                          name={item?.user?.name}
+                          image={item?.company?.image}
+                          name={item?.company?.name}
                         />
                       </Box>
                       <Typography
@@ -442,39 +357,43 @@ const SuperAdminTable = () => {
                           fontWeight: 500,
                         }}
                       >
-                        {item?.user?.name}
+                        {item?.company?.name}
+                        {/* {item?.user?.name} */}
                       </Typography>
                     </Box>
                     {/* Email */}
                     <Typography
                       sx={{ color: "#667085", fontSize: "14px", mt: 1 }}
                     >
-                      {item?.user?.email}
+                      {item?.company?.address ? item?.company?.address : ""}
+                      {/* {item?.user?.email} */}
                     </Typography>
-                    {/* Date Added */}
-                    <Typography sx={{ color: "#667085", fontSize: "14px" }}>
-                      {new Date(item?.user?.updatedAt).toLocaleDateString(
-                        undefined,
-                        {
-                          weekday: "long",
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        }
-                      )}
-                    </Typography>
-                    <Box sx={{ mt: 2 }}>
-                      <Typography sx={{ fontSize: "16px", color: "#576073" }}>
-                        Location
-                      </Typography>
+
+                    <Box sx={{ mt: 1 }}>
                       <Box sx={{ mt: 1 }}>
                         <Typography sx={{ fontSize: "14px", color: "#667085" }}>
-                          {item?.company?.name}
+                          {/* {item?.company?.name} */}
+                          {item?.user?.name}
                         </Typography>
                         <Typography
                           sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
                         >
-                          {item?.company?.address}
+                          {/* {item?.company?.address} */}
+                          {item?.user?.email}{" "}
+                        </Typography>
+                        {/* Date Added */}
+                        <Typography
+                          sx={{ color: "#667085", fontSize: "14px", mt: 0.4 }}
+                        >
+                          {new Date(item?.user?.updatedAt).toLocaleDateString(
+                            undefined,
+                            {
+                              weekday: "long",
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            }
+                          )}
                         </Typography>
                       </Box>
                     </Box>
@@ -492,29 +411,45 @@ const SuperAdminTable = () => {
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
                         Status
                       </Typography>
+
                       <Box sx={{ ml: -1.2 }}>
                         <TableRow
+                          title={
+                            item?.user?.status
+                              ? ""
+                              : "This Location is not Active"
+                          }
                           row={item?.user}
                           onToggleChange={handleToggleChange}
                           type={"superAdmin"}
+                          refetch={AdminRefetch}
                         />
                       </Box>
                     </Box>
 
                     <Box sx={{ height: "125px" }}>
                       <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-                        Admin
+                        Admins
                       </Typography>
                       <Grid container mt={1} gap={2}>
-                        {matchingUserData.map((user, index) => {
-                          return (
-                            <DefaultImage
-                              key={index}
-                              image={user?.image}
-                              name={user?.name}
-                            />
-                          );
-                        })}
+                        {filterNonActive.length !== 0 ? (
+                          filterNonActive.map((user, index) => {
+                            return (
+                              <DefaultImage
+                                key={index}
+                                image={user?.image}
+                                name={user?.name}
+                              />
+                            );
+                          })
+                        ) : (
+                          <Box
+                            sx={{ display: "flex", gap: 1.5, color: "#667085" }}
+                          >
+                            <img src={TeamIcon} alt="image of customer" />
+                            <Typography>{filterNonActive.length}</Typography>
+                          </Box>
+                        )}
                       </Grid>
                     </Box>
                   </Box>
@@ -659,28 +594,39 @@ const SuperAdminTable = () => {
                         <img src={EditIcon} alt="delete icon" />
                       </IconButton>
                     </Box>
-                    <Link
-                      to={`/?adminID=${adminID}`}
-                      style={{ textDecoration: "none" }}
+                    <Tooltip
+                      title={
+                        !item.user.status && "Active this Location to Access"
+                      }
+                      placement="top"
+                      arrow
                     >
-                      <Button
-                        variant="text"
-                        sx={{
-                          p: 1,
-                          m: 0,
-                          color: "#7F56D9",
-                          textTransform: "capitalize",
-                          borderLeft: "1px solid #EAECF0",
-                        }}
-                      >
-                        Access Location
-                      </Button>
-                    </Link>
+                      <Box>
+                        <Button
+                          disabled={!item.user.status}
+                          onClick={() => handleAdminClick(item)}
+                          variant="text"
+                          sx={{
+                            p: 1,
+                            m: 0,
+                            color: "#7F56D9",
+                            textTransform: "capitalize",
+                            borderLeft: "1px solid #EAECF0",
+                          }}
+                        >
+                          Access Location
+                        </Button>
+                      </Box>
+                    </Tooltip>
                   </Box>
                 </Box>
               </Box>
             );
           })
+        ) : (
+          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
+            No Locations Found
+          </Box>
         )}
       </div>
       <DeleteModal

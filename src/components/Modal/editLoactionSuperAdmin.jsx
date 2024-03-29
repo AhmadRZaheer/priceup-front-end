@@ -83,7 +83,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      console.log(values, "values formik");
       editFinish(values);
       close();
       refetch();
@@ -99,7 +98,6 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
   const [giveAccessArray, setGiveAccessArray] = useState([]);
   const [user, setuser] = useState(null);
   const [isOpen, setisOpen] = useState(false);
-
   const handleOpen = (data) => {
     if (isOpen) {
       setisOpen(false);
@@ -107,21 +105,25 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     setuser(data);
   };
   useEffect(() => {
-    setHaveAccessArray((prevHaveAccessArray) => {
-      const matchingUserData = customUserData.filter((userData) =>
-        userData?.locationsAccess?.some(
-          (accessData) => accessData?.company_id === companydata?._id
-        )
+    setHaveAccessArray(() => {
+      const matchingUserData = customUserData.filter(
+        (userData) => userData.locationsAccess.includes(companydata?._id)
+        // userData?.locationsAccess?.some(
+        //   (accessData) => accessData?.company_id === companydata?._id
+        // )
+      );
+      console.log(
+        matchingUserData,
+        "matching",
+        customUserData,
+        companydata?._id
       );
       return matchingUserData;
     });
 
-    setGiveAccessArray((prevGiveAccessArray) => {
+    setGiveAccessArray(() => {
       const nonMatchingUserData = customUserData.filter(
-        (userData) =>
-          !userData.locationsAccess?.some(
-            (accessData) => accessData?.company_id === companydata?._id
-          )
+        (userData) => !userData.locationsAccess.includes(companydata?._id)
       );
       return nonMatchingUserData;
     });
@@ -131,23 +133,38 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     customUserRefech();
   }, [userUpdated, customerSuc]);
 
-  const removeLocationAccess = async (ToRemove) => {
-    const updatedLocationsAccess = ToRemove?.locationsAccess.filter(
-      (location) => location?.company_id !== companydata?._id
-    );
+  const handleRestPass = () => {
+    ResetPassword({ userid: userdata?._id });
+  };
+
+  const handleAddLocation = async (chipToAdd) => {
+    if (!chipToAdd.locationsAccess.includes(companydata._id)) {
+      chipToAdd.locationsAccess.push(companydata._id);
+    }
 
     const updatedUser = {
-      ...ToRemove,
-      locationsAccess: updatedLocationsAccess,
+      _id: chipToAdd._id,
+      locationsAccess: chipToAdd.locationsAccess,
     };
-
     await updateCustomUser(updatedUser);
     customUserRefech();
   };
 
-  const handleRestPass = () => {
-    ResetPassword({ userid: userdata?._id });
+  const handleDelete = async (chipToDelete) => {
+    if (chipToDelete.locationsAccess.includes(companydata._id)) {
+      chipToDelete.locationsAccess = chipToDelete.locationsAccess.filter(
+        (locationId) => locationId !== companydata._id
+      );
+    }
+    const updatedUser = {
+      _id: chipToDelete._id,
+      locationsAccess: chipToDelete.locationsAccess,
+    };
+    await updateCustomUser(updatedUser);
+    customUserRefech();
   };
+  const filterhaveAccessArray = haveAccessArray.filter((item) => item.status);
+  const filtergiveAccessArray = giveAccessArray.filter((item) => item.status);
   return (
     <>
       <Modal open={open} onClose={close}>
@@ -195,7 +212,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         mb: -1,
                       }}
                     >
-                      User Info{" "}
+                      Admin Info{" "}
                     </Typography>
                   ) : (
                     <Typography
@@ -204,7 +221,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                         fontSize: "15px",
                       }}
                     >
-                      User Info{" "}
+                      Admin Info{" "}
                     </Typography>
                   )}
                 </AccordionSummary>
@@ -440,7 +457,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       mb: -1,
                     }}
                   >
-                    User Allotment{" "}
+                    Admin Allotment{" "}
                   </Typography>
                 ) : (
                   <Typography
@@ -449,7 +466,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       fontSize: "15px",
                     }}
                   >
-                    User Allotment{" "}
+                    Admin Allotment{" "}
                   </Typography>
                 )}
               </AccordionSummary>
@@ -466,16 +483,9 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                     }}
                     component="ul"
                   >
-                    {haveAccessArray.map((data) => {
-                      return (
-                        <Tooltip
-                          // title={
-                          //   selectedRow.company_id === data.id
-                          //     ? "Cannot Remove"
-                          //     : ""
-                          // }
-                          key={data._id}
-                        >
+                    {filterhaveAccessArray.length !== 0 ? (
+                      filterhaveAccessArray.map((data) => {
+                        return (
                           <Box
                             sx={{
                               borderRadius: "7px",
@@ -484,7 +494,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                           >
                             <Chip
                               label={data.name}
-                              onDelete={() => removeLocationAccess(data)}
+                              onDelete={() => handleDelete(data)}
                               deleteIcon={
                                 <Close
                                   style={{
@@ -502,9 +512,20 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                               }}
                             />
                           </Box>
-                        </Tooltip>
-                      );
-                    })}
+                        );
+                      })
+                    ) : (
+                      <Box
+                        sx={{
+                          color: "#667085",
+                          textAlign: "center",
+                          fontSize: "12px",
+                          width: "100%",
+                        }}
+                      >
+                        Currently no admin is allotted to this location.
+                      </Box>
+                    )}
                   </Box>
                 </Box>
                 <Accordion
@@ -534,7 +555,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                           pl: 0.2,
                         }}
                       >
-                        Add User
+                        Allot Admin
                       </Typography>
                     ) : (
                       <Typography
@@ -543,7 +564,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                           fontSize: "14px",
                         }}
                       >
-                        Add User
+                        Allot Admin
                       </Typography>
                     )}
                   </AccordionSummary>
@@ -558,25 +579,41 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                       }}
                       component="ul"
                     >
-                      {giveAccessArray?.map((data) => {
-                        return (
-                          <Box sx={{ borderRadius: "7px", p: 0 }} key={data.id}>
-                            <Chip
-                              onClick={() => handleOpen(data)}
-                              label={data.name}
-                              // onDelete={
-                              //   data._id ? undefined : handleDelete(data)
-                              // }
-                              sx={{
-                                color: "white",
-                                bgcolor: "#C6C6C6",
-                                borderRadius: "7px",
-                                cursor: "pointer",
-                              }}
-                            />
-                          </Box>
-                        );
-                      })}
+                      {filtergiveAccessArray.length !== 0 ? (
+                        filtergiveAccessArray?.map((data) => {
+                          return (
+                            <Box
+                              sx={{ borderRadius: "7px", p: 0 }}
+                              key={data.id}
+                            >
+                              <Chip
+                                onClick={() => handleAddLocation(data)}
+                                label={data.name}
+                                // onDelete={
+                                //   data._id ? undefined : handleDelete(data)
+                                // }
+                                sx={{
+                                  color: "white",
+                                  bgcolor: "#C6C6C6",
+                                  borderRadius: "7px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Box>
+                          );
+                        })
+                      ) : (
+                        <Box
+                          sx={{
+                            color: "#667085",
+                            textAlign: "center",
+                            fontSize: "12px",
+                            width: "100%",
+                          }}
+                        >
+                          No Admin Found
+                        </Box>
+                      )}
                     </Box>
                   </AccordionDetails>
                 </Accordion>

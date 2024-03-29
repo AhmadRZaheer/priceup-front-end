@@ -278,109 +278,113 @@ const SuperAdminTeam = () => {
             </Box>
           ) : filteredData.length === 0 ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-              No Team Found
+              No Users Found
             </Typography>
           ) : (
             <div className="CustomerTable">
               {filteredData.length > 0 ? (
-                <DataGrid
-                  style={{
-                    border: "none",
-                  }}
-                  getRowId={(row) => row._id}
-                  rows={filteredData?.slice(
-                    (page - 1) * itemsPerPage,
-                    page * itemsPerPage
-                  )}
-                  columns={AdminColumns?.concat(actionColumn)}
-                  page={page}
-                  pageSize={itemsPerPage}
-                  rowCount={filteredData?.length}
-                  sx={{ width: "100%" }}
-                  hideFooter
-                />
+                <>
+                  <DataGrid
+                    style={{
+                      border: "none",
+                    }}
+                    getRowId={(row) => row._id}
+                    rows={filteredData?.slice(
+                      (page - 1) * itemsPerPage,
+                      page * itemsPerPage
+                    )}
+                    columns={AdminColumns?.concat(actionColumn)}
+                    page={page}
+                    pageSize={itemsPerPage}
+                    rowCount={filteredData?.length}
+                    sx={{ width: "100%" }}
+                    hideFooter
+                  />
+
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      padding: "10px",
+                      borderTop: "1px solid #EAECF0",
+                      width: "98%",
+                    }}
+                  >
+                    <Button
+                      sx={{
+                        border: "1px solid #D0D5DD",
+                        color: "#344054",
+                        borderRadius: "8px",
+                        textTransform: "capitalize",
+                        fontWeight: 500,
+                        ":hover": {
+                          border: "1px solid #D0D5DD",
+                          color: "#344054",
+                        },
+                      }}
+                      variant="outlined"
+                      onClick={handlePreviousPage}
+                      disabled={page === 0}
+                    >
+                      <ArrowBack
+                        sx={{ color: "#344054", fontSize: 20, mr: 1 }}
+                      />
+                      Previous
+                    </Button>
+
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      {pageNumbersToShow.map((pagenumber, index) => (
+                        <Box
+                          key={index}
+                          onClick={() => setPage(pagenumber)}
+                          sx={{
+                            backgroundColor:
+                              page === pagenumber
+                                ? "rgba(144, 136, 192, 0.2)"
+                                : "white",
+                            color: page === pagenumber ? "#353050" : "#667085",
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "8px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            cursor: "pointer",
+                          }}
+                        >
+                          {pagenumber}
+                        </Box>
+                      ))}
+                    </Box>
+                    <Button
+                      sx={{
+                        border: "1px solid #D0D5DD",
+                        color: "#344054",
+                        borderRadius: "8px",
+                        textTransform: "capitalize",
+                        fontWeight: 500,
+                        ":hover": {
+                          border: "1px solid #D0D5DD",
+                          color: "#344054",
+                        },
+                      }}
+                      onClick={handleNextPage}
+                      disabled={filteredData.length === 0}
+                    >
+                      Next
+                      <ArrowForward
+                        sx={{ color: "#344054", fontSize: 20, ml: 1 }}
+                      />
+                    </Button>
+                  </Box>
+                </>
               ) : (
                 <Box
-                  sx={{ padding: "10px 0px", fontSize: "18px", color: "gray" }}
+                  sx={{ color: "#667085", p: 2, textAlign: "center"}}
                 >
-                  No Team member found
+                  No Users Found
                 </Box>
               )}
-              {/* button Box */}
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "10px",
-                  borderTop: "1px solid #EAECF0",
-                  width: "98%",
-                }}
-              >
-                <Button
-                  sx={{
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                    borderRadius: "8px",
-                    textTransform: "capitalize",
-                    fontWeight: 500,
-                    ":hover": {
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                    },
-                  }}
-                  variant="outlined"
-                  onClick={handlePreviousPage}
-                  disabled={page === 0}
-                >
-                  <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
-                  Previous
-                </Button>
-
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  {pageNumbersToShow.map((pagenumber, index) => (
-                    <Box
-                      key={index}
-                      onClick={() => setPage(pagenumber)}
-                      sx={{
-                        backgroundColor:
-                          page === pagenumber
-                            ? "rgba(144, 136, 192, 0.2)"
-                            : "white",
-                        color: page === pagenumber ? "#353050" : "#667085",
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {pagenumber}
-                    </Box>
-                  ))}
-                </Box>
-                <Button
-                  sx={{
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                    borderRadius: "8px",
-                    textTransform: "capitalize",
-                    fontWeight: 500,
-                    ":hover": {
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                    },
-                  }}
-                  onClick={handleNextPage}
-                  disabled={filteredData.length === 0}
-                >
-                  Next
-                  <ArrowForward
-                    sx={{ color: "#344054", fontSize: 20, ml: 1 }}
-                  />
-                </Button>
-              </Box>
             </div>
           )}
         </Box>

@@ -13,49 +13,54 @@ import HardWairIcon from "../../Assets/box.svg";
 import DefaultIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import {
-  Box,
-  IconButton,
-  Tooltip,
-  Popover,
-  Typography,
-  Drawer,
-  CircularProgress,
-} from "@mui/material";
+import { Box, IconButton, Tooltip, Drawer } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { backendURL } from "../../utilities/common";
-import { AttachMoney, PinDrop, Search, UnfoldMore } from "@mui/icons-material";
+import { AttachMoney, PinDrop, UnfoldMore } from "@mui/icons-material";
 import {
-  useDataCustomUser,
+  useBackToCustomAdminLocations,
+  useBackToSuperAdmin,
+  useFetchCustomAdminHaveAccessTo,
   useFetchDataAdmin,
-  useHaveAccessCustomUser,
+  useSwitchLocationSuperAdmin,
   useSwitchLocationUser,
 } from "../../utilities/ApiHooks/superAdmin";
-import BackIcon from "../../Assets/back.svg";
-import EyeIcon from "../../Assets/eye-icon.svg";
 import AppBar from "@mui/material/AppBar";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import { setDataRefetch } from "../../redux/staff";
 import DefaultImage from "../ui-components/defaultImage";
-import SingleUser from "../ui-components/SingleUser";
+import SwitchLocationPopup from "../ui-components/switchLocationPopup";
+import { userRoles } from "../../utilities/constants";
 
 const drawerWidth = 320;
 
 const Sidebar = () => {
   const { data: AdminData, refetch } = useFetchDataAdmin();
   const { mutate: haveAccessSet, data: haveAccessData } =
-    useHaveAccessCustomUser();
+    useFetchCustomAdminHaveAccessTo();
   const {
     mutate: switchLocationUser,
     data: useToken,
     isSuccess: switched,
     isLoading: isSwitching,
   } = useSwitchLocationUser();
-  const navigate = useNavigate();
+  const {
+    mutate: switchLocationSuperAdmin,
+    data: useTokenSuperAdmin,
+    isSuccess: switchedSuperAdmin,
+    isLoading: isSwitchingSuperAdmin,
+  } = useSwitchLocationSuperAdmin();
+  const {
+    mutate: backRefetch,
+    data: useTokenBack,
+    isSuccess: switchedBack,
+  } = useBackToCustomAdminLocations();
+  const {
+    mutate: backToSuperAdmin,
+    data: useTokenBackSuperAdmin,
+    isSuccess: switchedBackSuperAdmin,
+  } = useBackToSuperAdmin();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
-  const [searchQuery, setSearchQuery] = useState("");
   const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
@@ -77,78 +82,107 @@ const Sidebar = () => {
   const [activeLocation, setActiveLocation] =
     useState(null); /** Added for branch PD-28 */
 
-  const filteredAdminData = AdminData?.filter((admin) =>
-    admin?.user?.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-  const filteredCustomUser = haveAccessData?.filter((data) =>
-    data?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  );
   const handleAdminNameClick = (admin) => {
-    /** Added for branch PD-28 */
     setActiveLocation(admin);
-    /** Added for branch PD-28 */
-    navigate(`/?userID=${admin?._id}`);
-    const urlWithoutQuery = window.location.pathname;
-    window.history.replaceState({}, document.title, urlWithoutQuery);
+    switchLocationSuperAdmin({
+      company_id: admin?.company?._id,
+      adminId: admin?.company?.user_id,
+    });
   };
-  const handleCustomUserClick = async (userData) => {
-    if (!userData || !decodedToken) {
+  const handleCustomUserClick = async (companyId) => {
+    if (!companyId || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
-    if (userData.id !== decodedToken.company_id) {
-      await switchLocationUser(userData);
+    if (companyId !== decodedToken.company_id) {
+      await switchLocationUser(companyId);
       console.log("user changed");
+    }
+  };
+  const handleBackCustomAdminClick = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      await backRefetch();
+      console.log("user backed");
+    }
+  };
+  const handleBackToSuperAdmin = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      const superAdminReference = localStorage.getItem("userReference");
+      await backToSuperAdmin(superAdminReference);
+      console.log("user backed");
     }
   };
   useEffect(() => {
     refetch();
   }, []);
-  const [refetchKey, setRefetchKey] = useState(0);
   useEffect(() => {
     if (switched) {
       localStorage.setItem("token", useToken);
-      dispatch(setDataRefetch());
-      console.log(switched);
-      setRefetchKey((prevKey) => prevKey + 1);
+      window.location.href = "/";
     }
-  }, [switched]);
+    if (switchedBack) {
+      localStorage.setItem("token", useTokenBack.token);
+      window.location.href = "/locations";
+    }
+    if (switchedSuperAdmin) {
+      if (decodedToken.role === userRoles.SUPER_ADMIN) {
+        localStorage.setItem("userReference", decodedToken.id);
+      }
+      localStorage.setItem("token", useTokenSuperAdmin);
+      window.location.href = "/";
+    }
+    if (switchedBack) {
+      localStorage.setItem("token", useTokenBack.token);
+      window.location.href = "/locations";
+    }
+    if (switchedBackSuperAdmin) {
+      localStorage.removeItem("userReference");
+      localStorage.setItem("token", useTokenBackSuperAdmin.token);
+      window.location.href = "/";
+    }
+  }, [switched, switchedBack, switchedBackSuperAdmin, switchedSuperAdmin]);
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
   useEffect(() => {
-    haveAccessSet(decodedToken?.id);
+    haveAccessSet();
   }, []);
   /** Added for branch PD-28 */
   useEffect(() => {
     const fetchData = async () => {
-      if (filteredAdminData && filteredAdminData.length) {
-        const record = await filteredAdminData.find(
+      if (AdminData && AdminData.length) {
+        const record = await AdminData.find(
           (admin) => admin?.company?._id === decodedToken?.company_id
         );
-        if (record?.user) {
-          setActiveLocation(record?.user);
+        if (record) {
+          setActiveLocation(record);
         }
       }
     };
 
     fetchData();
-  }, [filteredAdminData]);
+  }, [AdminData]);
   /** Added for branch PD-28 */
-  // console.log(token, "token");
-  // console.log(decodedToken, "decodedToken");
-  // console.log(haveAccessData, "haveAccsessData");
   useEffect(() => {
-    if (filteredCustomUser) {
-      const user = filteredCustomUser.find(
-        (item) => item.id === decodedToken?.company_id
+    if (haveAccessData) {
+      const user = haveAccessData.find(
+        (item) => item?.company?._id === decodedToken?.company_id
       );
 
-      setCustomActiveUser(user?.name, "user");
+      setCustomActiveUser(user?.company?.name);
     }
-  }, [filteredCustomUser, decodedToken]);
+  }, [haveAccessData, decodedToken]);
 
+  const userReference = localStorage.getItem("userReference");
   const drawer = (
     <Box
       sx={{
@@ -173,12 +207,17 @@ const Sidebar = () => {
                 <span className="logo">
                   <img src={Logo} alt="price up logo" />
                 </span>
+                <div style={{ paddingLeft: 20 }}>
+                  <DefaultImage
+                    image={activeLocation?.company?.image}
+                    name={activeLocation?.company?.name}
+                  />
+                </div>
               </div>
             </NavLink>
             <div className="center">
               <ul>
-                {superAdminToken && (
-                  /** Added for branch PD-28 */
+                {userReference && (
                   <li
                     style={{ marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
@@ -194,18 +233,25 @@ const Sidebar = () => {
                         }}
                       >
                         <PinDrop sx={{ color: "white" }} />
-                        <span style={{ flexGrow: 1 }}>
+                        <span
+                          style={{
+                            flexGrow: 1,
+                            whiteSpace: "nowrap",
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            overflow: "hidden",
+                          }}
+                        >
                           {" "}
-                          {activeLocation?.name}
+                          {activeLocation?.company?.name}
                         </span>
                         <UnfoldMore sx={{ color: "white", mr: 1 }} />
                       </IconButton>
                     </Tooltip>
                   </li>
-                  /** Added for branch PD-28 */
                 )}
-                {decodedToken?.role === "admin" &&
-                haveAccessData?.length > 0 ? (
+
+                {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
                   <li
                     style={{ padding: 10, marginBottom: 0 }}
                     className={` ${Boolean(anchorEl) ? "active" : ""}`}
@@ -222,7 +268,17 @@ const Sidebar = () => {
                       }}
                     >
                       <PinDrop sx={{ color: "white" }} />
-                      <span>{CustomActiveUser}</span>
+                      <span
+                        style={{
+                          flexGrow: 1,
+                          whiteSpace: "nowrap",
+                          display: "block",
+                          textOverflow: "ellipsis",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {CustomActiveUser}
+                      </span>
                       <UnfoldMore sx={{ color: "white", mr: 1 }} />
                     </IconButton>
                   </li>
@@ -554,214 +610,26 @@ const Sidebar = () => {
         </Box>
       </Box>
 
-      <Popover
-        open={Boolean(anchorEl)}
-        anchorEl={anchorEl}
-        onClose={handleClosePopup}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "left",
-        }}
-        PaperProps={{
-          style: {
-            borderRadius: "34px",
-            width: "317px",
-          },
-        }}
-        sx={{ left: 30, top: -72 }}
-      >
-        {superAdminToken && (
-          <IconButton
-            sx={{
-              fontSize: "15px",
-              borderRadius: 1,
-              ml: 2.2,
-              mt: 2,
-              color: "#667085",
-              position: "sticky",
-              bg: "white",
-              top: 0,
-              display: "flex",
-              gap: 2,
-              bgcolor: "white",
-              ":hover": {
-                bgcolor: "white",
-              },
-              p: 1,
-            }}
-            onClick={() => {
-              localStorage.setItem("token", superAdminToken);
-              localStorage.removeItem("superAdminToken");
+      {decodedToken.role === userRoles.CUSTOM_ADMIN ? (
+        <SwitchLocationPopup
+          anchorEl={anchorEl}
+          data={haveAccessData}
+          handleClosePopup={handleClosePopup}
+          handleUserClick={handleCustomUserClick}
+          isSwitching={isSwitching}
+          handleBack={handleBackCustomAdminClick}
+        />
+      ) : (
+        <SwitchLocationPopup
+          anchorEl={anchorEl}
+          handleClosePopup={handleClosePopup}
+          handleUserClick={handleAdminNameClick}
+          isSwitching={isSwitchingSuperAdmin}
+          handleBack={handleBackToSuperAdmin}
+          data={AdminData}
+        />
+      )}
 
-              window.location.href = "/";
-            }}
-          >
-            <img src={BackIcon} alt="back icon" />
-            Back to super admin view
-          </IconButton>
-        )}
-        <Box sx={{ position: "relative" }}>
-          <input
-            type="text"
-            placeholder="Search Admin Names"
-            style={{
-              width: "230px",
-              padding: "8px",
-              paddingLeft: "35px",
-              height: "26px",
-              marginBottom: "10px",
-              marginLeft: "20px",
-              marginRight: "20px",
-              marginTop: "20px",
-              borderRadius: "14px",
-            }}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <span style={{ position: "absolute", left: "28px", top: "30px" }}>
-            <Search sx={{ color: "#8477DA" }} />
-          </span>
-        </Box>
-        <div
-          style={{
-            maxHeight: "260px",
-            overflowY: "auto",
-            paddingX: 25,
-            width: "315px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 5,
-            pt: 100,
-            position: "relative",
-            marginTop: 10,
-            marginBottom: 10,
-          }}
-        >
-          {filteredAdminData.length === 0 ? (
-            <Typography sx={{ textAlign: "center", color: "#8f8f8f", py: 2 }}>
-              No location found
-            </Typography>
-          ) : (
-            decodedToken?.role === "admin" &&
-            (isSwitching ? (
-              <Box
-                sx={{
-                  width: "100%",
-                  textAlign: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                  height: "100px",
-                  alignItems: "center",
-                }}
-              >
-                <CircularProgress sx={{ color: "#8477DA" }} />
-              </Box>
-            ) : (
-              filteredCustomUser?.map((item) => (
-                <SingleUser
-                  key={item?.id}
-                  item={item}
-                  active={item.id === decodedToken?.company_id}
-                  handleClick={() => handleCustomUserClick(item)}
-                />
-                // <Typography
-                //   key={item?.id}
-                //   sx={{
-                //     width: "83.8%",
-                //     ml: "10px",
-                //     marginBottom: "5px",
-                //     textTransform: "lowercase",
-                //     marginLeft: "20px",
-                //     display: "flex",
-                //     border: "1px solid #D9D9D9",
-                //     ":hover": {
-                //       bgcolor: "rgba(0, 0, 0, 0.1)",
-                //       cursor: "pointer",
-                //     },
-                //     py: 0.4,
-                //     px: 1,
-                //     borderRadius: "14px",
-                //   }}
-                //   onClick={() => handleCustomUserClick(item)}
-                // >
-                //   <div style={{ width: "20%" }}>
-                //     <DefaultImage image={item?.image} name={item?.name} />
-                //   </div>
-                //   <div style={{ paddingLeft: "10px", width: "100%" }}>
-                //     <a style={{ cursor: "pointer" }}>{item?.name}</a>
-                //     <p style={{ fontSize: "10px" }}>{item?.email}</p>
-                //   </div>
-                //   {item.id === decodedToken?.company_id ? (
-                //     <Box
-                //       sx={{
-                //         width: "10%",
-                //         display: "flex",
-                //         justifyContent: "end",
-                //         mt: 1.4,
-                //       }}
-                //     >
-                //       <div
-                //         style={{
-                //           width: 16,
-                //           height: 16,
-                //           borderRadius: "100%",
-                //           background: "#4de369",
-                //         }}
-                //       ></div>
-                //     </Box>
-                //   ) : (
-                //     ""
-                //   )}
-                // </Typography>
-              ))
-            ))
-          )}
-          {superAdminToken &&
-            filteredAdminData.map((admin) => (
-              <SingleUser
-                key={admin?.user?._id}
-                item={admin?.user}
-                active={admin?.company?._id === decodedToken?.company_id}
-                handleClick={() => handleAdminNameClick(admin?.user)}
-              />
-              // <Typography
-              //   key={admin?.user?._id}
-              //   sx={{
-              //     width: "83.8%",
-              //     ml: "10px",
-              //     marginBottom: "5px",
-              //     textTransform: "lowercase",
-              //     marginLeft: "20px",
-              //     display: "flex",
-              //     border: "1px solid #D9D9D9",
-              //     ":hover": {
-              //       bgcolor: "rgba(0, 0, 0, 0.1)",
-              //       cursor: "pointer",
-              //     },
-              //     py: 0.4,
-              //     px: 1,
-              //     borderRadius: "14px",
-              //   }}
-              //   onClick={() => handleAdminNameClick(admin?.user)}
-              // >
-              //   <div>
-              //     <DefaultImage
-              //       image={admin?.user?.image}
-              //       name={admin?.user?.name}
-              //     />
-              //   </div>
-              //   <div style={{ paddingLeft: "10px" }}>
-              //     <a style={{ cursor: "pointer" }}>{admin?.user?.name}</a>
-              //     <p style={{ fontSize: "10px" }}>{admin?.user?.email}</p>
-              //   </div>
-              // </Typography>
-            ))}
-        </div>
-      </Popover>
       <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
     </>
   );

@@ -11,6 +11,7 @@ import {
   initializeStateForCustomQuote,
   initializeStateForEditQuote,
   selectedItem,
+  setHardwareFabricationQuantity,
   setLayoutArea,
   setLayoutPerimeter,
   setMultipleNotifications,
@@ -23,7 +24,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import { calculateAreaAndPerimeter } from "../../utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+// import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
+import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
+import { generateNotificationsForCurrentEstimate } from "../../utilities/estimatorHelper";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -118,8 +121,10 @@ const CustomLayout = () => {
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(values));
-    const notificationsResult = generateNotificationsForCurrentItem({ ...estimateState, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
+    const notificationsResult = generateNotificationsForCurrentEstimate({ ...estimateState, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
     dispatch(setMultipleNotifications({ ...notificationsResult }));
+    const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: '3/8' }, currentQuoteState, null);
+    dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
     // dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 

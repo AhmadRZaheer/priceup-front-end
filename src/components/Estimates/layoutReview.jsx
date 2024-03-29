@@ -14,36 +14,33 @@ import {
   getMeasurementSide,
   getLayoutPerimeter,
   getQuoteId,
-  // setNavigation,
   setHardwarePrice,
   setGlassPrice,
   setGlassAddonsPrice,
   setFabricationPrice,
   setLaborPrice,
-  // resetState,
   selectedItem,
   setCost,
   setProfit,
   getListData,
-  getUserProfitPercentage,
   getNotifications,
-  // setNotifications,
   setHardwareAddonsPrice,
   resetNotifications,
+  setContent,
+  getAdditionalFields,
 } from "../../redux/estimateCalculations";
-import {
-  useEditEstimates,
-  // useFetchDataEstimate,
-} from "../../utilities/ApiHooks/estimate";
+import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
 import { useNavigate } from "react-router-dom";
-import { layoutVariants } from "../../utilities/constants";
+import { layoutVariants, quoteState } from "../../utilities/constants";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { useSnackbar } from "notistack";
+import { SingleField } from "../ui-components/SingleFieldComponent";
+import { getEstimateErrorStatus } from "../../utilities/estimatorHelper";
 
-const LayoutReview = ({ setClientDetailOpen }) => {
+const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -56,26 +53,29 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   const perimeter = useSelector(getLayoutPerimeter);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
-  const updatecheck = useSelector(getQuoteState);
+  const currentQuoteState = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
   const notifications = useSelector(getNotifications);
+  const addedFields = useSelector(getAdditionalFields);
+
   const { enqueueSnackbar } = useSnackbar();
-  const quoteActiveState = useMemo(() => {
-    return selectedData?.settings?.variant
+  const selectedItemVariant = useMemo(() => {
+    return selectedData?.settings?.variant;
     // let state = "";
-    // if (updatecheck === "create") {
+    // if (currentQuoteState === "create") {
     //   state = selectedData?.settings?.variant;
-    // } else if (updatecheck === "edit") {
+    // } else if (currentQuoteState === "edit") {
     //   state = selectedData?.layoutData?.variant;
     // }
     // return state;
-  }, [updatecheck]);
+  }, [currentQuoteState]);
+  console.log(addedFields, "addedFields");
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     let measurementsArray = measurements;
-    if (quoteState === 'edit' && !selectedData?.layout_id) {
+    if (currentQuoteState === quoteState.EDIT && !selectedData?.layout_id) {
       let newArray = [];
       for (const key in measurementsArray) {
         const index = parseInt(key);
@@ -83,6 +83,10 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       }
       measurementsArray = newArray;
     }
+    let filteredFields = selectedContent.additionalFields.filter(
+      (item) => item.label !== "" && item.cost !== 0
+    )
+
     const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
       return {
         type: row.item._id,
@@ -102,6 +106,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
         return {
           type: row.item._id,
           count: row.count,
+        };
+      }
+    );
+    const additionalFieldsArray = filteredFields.map(
+      (row) => {
+        return {
+          cost: row.cost,
+          label: row.label,
         };
       }
     );
@@ -137,6 +149,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       (item) => item?._id
     );
     const estimate = {
+      additionalFields: [...additionalFieldsArray],
       hardwareFinishes: selectedContent?.hardwareFinishes?._id,
       handles: {
         type: selectedContent?.handles?.item?._id,
@@ -196,28 +209,61 @@ const LayoutReview = ({ setClientDetailOpen }) => {
     });
   };
 
-  const quoteState = useSelector(getQuoteState);
   const setHandleEstimatesPages = () => {
     dispatch(
       setNavigationDesktop(
-        quoteState === "create"
+        currentQuoteState === quoteState.CREATE
           ? "measurements"
-          : quoteState === "custom"
-            ? "custom"
-            : quoteState === "edit" && selectedData?.layout_id
-              ? "measurements"
-              : quoteState === "edit" && !selectedData?.layout_id
-                ? "custom"
-                : "existing"
+          : currentQuoteState === quoteState.CUSTOM
+          ? "custom"
+          : currentQuoteState === quoteState.EDIT && selectedData?.layout_id
+          ? "measurements"
+          : currentQuoteState === quoteState.EDIT && !selectedData?.layout_id
+          ? "custom"
+          : "existing"
       )
     );
   };
+
+  const handleAddField = () => {
+    const newData = [
+      ...addedFields,
+      {
+        label: "",
+        cost: 0,
+      },
+    ];
+
+    dispatch(
+      setContent({
+        type: "additionalFields",
+        item: newData,
+      })
+    );
+  };
+
+  const handleEstimateSubmit = () => {
+    const allGoodStatus = getEstimateErrorStatus(selectedContent);
+    console.log(allGoodStatus,'Estimate Status');
+    if(allGoodStatus){
+      if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
+        setClientDetailOpen(true);
+      } else {
+        handleEditEstimate();
+        showSnackbar("Estimate Edit successfully", "success");
+      }
+    }
+    else{
+      setHardwareMissingAlert(true);
+    }
+  }
+
   useEffect(() => {
     const prices = calculateTotal(
       selectedContent,
       sqftArea,
       listData,
-      quoteState
+      currentQuoteState
     );
     dispatch(setHardwarePrice(prices.hardwarePrice));
     dispatch(setGlassPrice(prices.glassPrice));
@@ -257,9 +303,11 @@ const LayoutReview = ({ setClientDetailOpen }) => {
   }, []);
 
   useEffect(() => {
-    console.log('mount');
+    console.log("mount");
     Object.entries(notifications).forEach(([key, value]) => {
-      if (['glassAddonsNotAvailable', 'hardwareAddonsNotAvailable'].includes(key)) {
+      if (
+        ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable", "wallClampNotAvailable", "sleeveOverNotAvailable", "glassToGlassNotAvailable", "cornerWallClampNotAvailable", "cornerSleeveOverNotAvailable", "cornerGlassToGlassNotAvailable"].includes(key)
+      ) {
         value?.forEach((item) => {
           if (item.status) {
             enqueueSnackbar(item.message, {
@@ -276,7 +324,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
       }
     });
     return () => {
-      console.log('unmount');
+      console.log("unmount");
       dispatch(resetNotifications());
     };
   }, []);
@@ -318,8 +366,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                 summaryState
                   ? setHandleEstimatesPages
                   : () => {
-                    setSummaryState(true);
-                  }
+                      setSummaryState(true);
+                    }
               }
             >
               {" "}
@@ -335,7 +383,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
               }}
               variant="h4"
             >
-              Create New Qoute
+            {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
             </Typography>
           </Box>
         </Box>
@@ -472,34 +520,34 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(quoteActiveState) && (
-                      <Box
-                        sx={{
-                          alignItems: "center",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                        }}
-                      >
-                        <Box sx={{ width: "100%", display: "flex" }}>
-                          <Box
-                            sx={{
-                              width: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <ChannelTypeDesktop
-                              menuOptions={listData?.channelOrClamps}
-                              title={"Mounting"}
-                              type={"mounting"}
-                              listData={listData}
-                            />
-                          </Box>
+                  ].includes(selectedItemVariant) && (
+                    <Box
+                      sx={{
+                        alignItems: "center",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                      }}
+                    >
+                      <Box sx={{ width: "100%", display: "flex" }}>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <ChannelTypeDesktop
+                            menuOptions={listData?.channelOrClamps}
+                            title={"Mounting"}
+                            type={"mounting"}
+                            listData={listData}
+                          />
                         </Box>
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -579,7 +627,7 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                         menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
-                      // currentItem={selectedContent?.glassAddons}
+                        // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
                   </Box>
@@ -722,66 +770,66 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
-                  ].includes(quoteActiveState) && (
+                  ].includes(selectedItemVariant) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                        paddingLeft: 3,
+                        paddingBottom: 1,
+                        color: { sm: "#000000  ", xs: "white" },
+                      }}
+                    >
+                      <Typography>Clamp Cut Out</Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                          paddingLeft: 3,
-                          paddingBottom: 1,
-                          color: { sm: "#000000  ", xs: "white" },
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
                         }}
                       >
-                        <Typography>Clamp Cut Out</Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            width: "120px",
-                            padddingY: 4,
+                        <TextField
+                          type="number"
+                          InputProps={{
+                            style: {
+                              color: "black",
+                              borderRadius: 10,
+                              border: "1px solid #cccccc",
+                              backgroundColor: "white",
+                            },
+                            inputProps: { min: 0 },
                           }}
-                        >
-                          <TextField
-                            type="number"
-                            InputProps={{
-                              style: {
-                                color: "black",
-                                borderRadius: 10,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                              },
-                              inputProps: { min: 0 },
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={selectedContent.clampCut}
-                            onChange={(event) =>
-                              dispatch(
-                                setInputContent({
-                                  type: "clampCut",
-                                  value: event.target.value,
-                                })
-                              )
-                            }
-                          />
-                        </Box>
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={selectedContent.clampCut}
+                          onChange={(event) =>
+                            dispatch(
+                              setInputContent({
+                                type: "clampCut",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        />
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -1130,6 +1178,31 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                       />
                     </Box>
                   </Box>
+                  {/* additional Fields */}
+                  <Typography
+                    variant="h5"
+                    sx={{ color: { md: "black", xs: "white" } }}
+                  >
+                    Additonal Fields
+                  </Typography>
+                  {addedFields &&
+                    addedFields.map((item, index) => {
+                      return <SingleField item={item} index={index} />;
+                    })}
+                  <Button
+                    onClick={handleAddField}
+                    sx={{
+                      width: "fit-content",
+                      textTransform: "capitalize",
+                      backgroundColor: "#8477da",
+                      "&:hover": {
+                        backgroundColor: "#8477da",
+                      },
+                    }}
+                    variant="contained"
+                  >
+                    Add Additional Field
+                  </Button>
                 </Box>
               </Box>
             ) : (
@@ -1213,8 +1286,8 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                     summaryState
                       ? setHandleEstimatesPages
                       : () => {
-                        setSummaryState(true);
-                      }
+                          setSummaryState(true);
+                        }
                   }
                   sx={{
                     boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -1233,18 +1306,14 @@ const LayoutReview = ({ setClientDetailOpen }) => {
                   fullWidth
                   disabled={selectedContent?.hardwareFinishes === null}
                   variant="contained"
-                  onClick={() => {
-                    if (["create", "custom"].includes(updatecheck)) {
-                      setClientDetailOpen(true);
-                    } else {
-                      handleEditEstimate();
-                      showSnackbar("Estimate Edit successfully", "success");
-                    }
-                  }}
+                  onClick={handleEstimateSubmit}
                   sx={{
                     backgroundColor: "#8477da",
                     "&:hover": {
                       backgroundColor: "#8477da",
+                    },
+                    ":disabled": {
+                      bgcolor: "#c2c2c2",
                     },
                   }}
                 >

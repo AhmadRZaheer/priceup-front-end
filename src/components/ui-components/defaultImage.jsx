@@ -1,10 +1,5 @@
 import {
-  Box,
-  Paper,
-  Popover,
-  Popper,
-  Slide,
-  Tooltip,
+  Popover, // Import Popover from @mui/material
   Typography,
 } from "@mui/material";
 import { backendURL } from "../../utilities/common";
@@ -31,131 +26,11 @@ function DefaultImage({ image, name, type = 1 }) {
   const open = Boolean(anchorEl);
   switch (image) {
     case "images/users/default.jpg":
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
-    case "images/staffs/default.jpg" || "images/staff/default.jpg":
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
+    case "images/staffs/default.jpg":
     case "images/staff/default.jpg":
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
     case "":
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
     case "null":
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
     case null:
-      return (
-        <Typography
-          sx={{
-            backgroundColor: "#F9F5FF",
-            width: 40,
-            height: 40,
-            borderRadius: "100%",
-            textAlign: "center",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#7F56D9",
-            textTransform: "uppercase",
-            fontWeight: "bold",
-          }}
-        >
-          {firstNameInitial}
-          {lastNameInitial}
-        </Typography>
-      );
     case undefined:
       return (
         <Typography
@@ -183,15 +58,21 @@ function DefaultImage({ image, name, type = 1 }) {
           <Typography
             aria-owns={open ? "mouse-over-popover" : undefined}
             aria-haspopup="true"
-            onMouseEnter={handlePopoverOpen}
-            onMouseLeave={handlePopoverClose}
-            sx={{ cursor: "pointer" }}
+            onMouseEnter={type !== 3 ? handlePopoverOpen : undefined}
+            onMouseLeave={type !== 3 ? handlePopoverClose : undefined}
+            sx={{
+              cursor: "pointer",
+              overflow: "hidden",
+              borderRadius: "100%",
+              width: type === 1 || type === 3 ? 40 : 50,
+              height: type === 1 || type === 3 ? 40 : 50,
+            }}
           >
             <img
               className="cellImg"
               style={{
-                width: type === 1 ? 40 : 50,
-                height: type === 1 ? 40 : 50,
+                width: type === 1 || type === 3 ? 40 : 50,
+                height: type === 1 || type === 3 ? 40 : 50,
               }}
               src={`${backendURL}/${image}`}
               alt="logo image"
@@ -221,8 +102,8 @@ function DefaultImage({ image, name, type = 1 }) {
           >
             <Typography
               sx={{
-                backgroundColor: "transparent  !important",
-                background: "transparent  !important",
+                backgroundColor: "transparent !important",
+                background: "transparent !important",
               }}
             >
               {" "}

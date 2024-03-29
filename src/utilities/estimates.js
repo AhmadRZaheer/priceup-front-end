@@ -23,7 +23,7 @@ export const generateNotificationsForCurrentItem = (
       const result = getHandleNotification(selectedContent);
       if (result?.handleNotAvailable)
         notifications.handleNotAvailable = result.handleNotAvailable;
-      if (result?.handles) selectedContent.handles = result.handles;
+      // if (result?.handles) selectedContent.handles = result.handles;
     }
     /** switch hinges if width increases layout defaults */
     const switchHingeResult = getSwitchHingeNotification(

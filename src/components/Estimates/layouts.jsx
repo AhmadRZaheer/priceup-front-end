@@ -39,20 +39,20 @@ export default function Layout() {
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    dispatch(initializeStateForCreateQuote({ layoutData: layout }));
+    // dispatch(initializeStateForCreateQuote({ layoutData: layout }));
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
     setselectCustom(false);
   };
   const setStorePage = () => {
-    dispatch(updateMeasurements([]));  // reset measurement array on shifting layout
+    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     if (selectCustom) {
       dispatch(setNavigationDesktop("custom"));
     } else dispatch(setNavigationDesktop("measurements"));
   };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
-    dispatch(initializeStateForCustomQuote());
+    // dispatch(initializeStateForCustomQuote());
     dispatch(addSelectedItem(null));
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
@@ -116,7 +116,7 @@ export default function Layout() {
                 }}
                 variant="h4"
               >
-                Create New Qoute
+                Create New Estimate
               </Typography>
             </Box>
           </Box>
@@ -268,6 +268,9 @@ export default function Layout() {
                   backgroundColor: "#8477DA",
                   fontSize: 18,
                   "&:hover": { backgroundColor: "#8477DA" },
+                  ":disabled": {
+                    bgcolor: "#c2c2c2",
+                  },
                   color: "white",
                 }}
                 onClick={setStorePage}

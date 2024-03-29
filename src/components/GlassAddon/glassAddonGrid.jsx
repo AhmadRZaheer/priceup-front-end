@@ -172,15 +172,19 @@ const GlassAddonGrid = ({ type }) => {
             overflowY: "scroll",
           }}
         >
-          {glassAddons?.map((entry, mainIndex) => (
-            <AddonList
-              key={mainIndex}
-              entry={entry}
-              mainIndex={mainIndex}
-              refetch={glassAddonRefetch}
-              type={type}
-            />
-          ))}
+          {glassAddons.length !== 0 ? (
+            glassAddons?.map((entry, mainIndex) => (
+              <AddonList
+                key={mainIndex}
+                entry={entry}
+                mainIndex={mainIndex}
+                refetch={glassAddonRefetch}
+                type={type}
+              />
+            ))
+          ) : (
+            <Box sx={{ color: "#667085" }}>No GlassAddons Found</Box>
+          )}
         </Box>
       )}
 

@@ -206,7 +206,7 @@ const Super_SuperAdminsTable = () => {
               </Box>
             ) : filteredData?.length === 0 ? (
               <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Estimates Found
+                No Super Admins Found
               </Typography>
             ) : (
               <Box>
