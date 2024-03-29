@@ -13,6 +13,7 @@ import {
   addSelectedItem,
   initializeStateForEditQuote,
   resetState,
+  setCustomizedDoorWidth,
   setDoorWeight,
   setDoorWidth,
   setListData,
@@ -57,7 +58,8 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     //     quotesId: item._id,
     //   })
     // );
-    dispatch(updateMeasurements(item.measurements))
+    dispatch(setCustomizedDoorWidth(item.customizedDoorWidth));
+    dispatch(updateMeasurements(item.measurements));
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(

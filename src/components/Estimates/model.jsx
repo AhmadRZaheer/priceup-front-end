@@ -15,6 +15,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
+  getCustomizedDoorWidth,
   getLayoutArea,
   getLayoutPerimeter,
   getMeasurementSide,
@@ -55,6 +56,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
   const estimatesLayout = useSelector(selectedItem);
   let measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
+  const customizedDoorWidth = useSelector(getCustomizedDoorWidth);
   const sqftArea = useSelector(getLayoutArea);
   const updatecheck = useSelector(getQuoteState);
   const quoteId = useSelector(getQuoteId);
@@ -138,6 +140,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     (item) => item?._id
   );
   const estimate = {
+    customizedDoorWidth: customizedDoorWidth,
     additionalFields: [...additionalFieldsArray],
     hardwareFinishes: estimatesContent?.hardwareFinishes?._id,
     handles: {
