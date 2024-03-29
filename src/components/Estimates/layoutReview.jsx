@@ -33,7 +33,7 @@ import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "../../utilities/common";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { layoutVariants, quoteState } from "../../utilities/constants";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { useSnackbar } from "notistack";
@@ -1279,7 +1279,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
                 paddingX: 2,
               }}
             >
-              <Box sx={{ width: "150px" }}>
+              <Box sx={{ width: {sm: "150px", xs: currentQuoteState === quoteState.EDIT ? "100px" : "150px"}  }}>
                 <Button
                   fullWidth
                   onClick={
@@ -1301,7 +1301,30 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
                   Back
                 </Button>
               </Box>
-              <Box sx={{ width: "150px" }}>
+              <Box sx={{
+                  width: { sm: currentQuoteState === quoteState.EDIT ? "310px" : "150px", xs:currentQuoteState === quoteState.EDIT ? "200px" : "150px" },
+                  display: "flex",
+                  gap: 2,
+                  // flexDirection: { sm: "row", xs: "column" },
+                }}
+              >
+                {currentQuoteState === quoteState.EDIT && (
+                  <Link to={"/estimates"} style={{textDecoration:'none',width:'100%'}}>
+                    <Button
+                      fullWidth
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { sm: "transparent", xs: "white" },
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Link>
+                )}
+
                 <Button
                   fullWidth
                   disabled={selectedContent?.hardwareFinishes === null}
