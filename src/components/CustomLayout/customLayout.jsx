@@ -121,7 +121,9 @@ const CustomLayout = () => {
     dispatch(setLayoutArea(result.areaSqft));
     dispatch(setLayoutPerimeter(result.perimeter));
     dispatch(updateMeasurements(values));
-    const notificationsResult = generateNotificationsForCurrentEstimate({ ...estimateState, panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
+    const notificationsResult = generateNotificationsForCurrentEstimate({ ...estimateState,
+      content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
+      panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
     dispatch(setMultipleNotifications({ ...notificationsResult }));
     const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: '3/8' }, currentQuoteState, null);
     dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
