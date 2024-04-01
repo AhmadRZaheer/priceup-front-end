@@ -26,8 +26,8 @@ export const getFabricationTotal = (state) =>
   state.estimateCalculations.fabricationPrice;
 export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
 export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
-export const getCustomizedDoorWidth = (state) =>
-  state.estimateCalculations.customizedDoorWidth;
+export const getisCustomizedDoorWidth = (state) =>
+  state.estimateCalculations.isCustomizedDoorWidth;
 
 export const getUserProfitPercentage = (state) =>
   state.estimateCalculations.content.userProfitPercentage;
@@ -62,7 +62,7 @@ const initialState = {
   doorWidth: 0,
   panelWidth: 0,
   doorWeight: 0,
-  customizedDoorWidth: false,
+  isCustomizedDoorWidth: false,
   panelWeight: 0,
   returnWeight: 0,
   measurements: [],
@@ -210,8 +210,8 @@ const estimateCalcSlice = createSlice({
     setReturnWeight: (state, action) => {
       state.returnWeight = action.payload;
     },
-    setCustomizedDoorWidth: (state, action) => {
-      state.customizedDoorWidth = action.payload;
+    setisCustomizedDoorWidth: (state, action) => {
+      state.isCustomizedDoorWidth = action.payload;
     },
     setSingleNotification: (state, action) => {
       const { type, payload } = action.payload;
@@ -1391,6 +1391,6 @@ export const {
   setMultipleNotifications,
   resetNotifications,
   setHardwareFabricationQuantity,
-  setCustomizedDoorWidth,
+  setisCustomizedDoorWidth,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

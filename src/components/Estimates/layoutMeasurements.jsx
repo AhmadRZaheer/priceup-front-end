@@ -30,8 +30,8 @@ import {
   initializeStateForEditQuote,
   setHardwareFabricationQuantity,
   getAdditionalFields,
-  getCustomizedDoorWidth,
-  setCustomizedDoorWidth,
+  getisCustomizedDoorWidth,
+  setisCustomizedDoorWidth,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
@@ -52,7 +52,7 @@ const LayoutMeasurements = () => {
     dispatch(setNavigationDesktop(item));
   };
   // const [editField, setEditField] = useState(true);
-  const CustomizedDoorWidthRedux = useSelector(getCustomizedDoorWidth);
+  const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
@@ -64,7 +64,7 @@ const LayoutMeasurements = () => {
       ? measurementSidesForEdit
       : measurementSidesForCreate;
 
-  const initialValues = measurementSides.reduce((acc, item) => {
+    const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
     } else {
@@ -137,7 +137,6 @@ const LayoutMeasurements = () => {
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
       const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
-      console.log(fabricationValues, 'fabrication values');
       dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
@@ -195,18 +194,18 @@ const LayoutMeasurements = () => {
     // }
     // dispatch(setDoorWidth(result.doorWidth));
 
-    if (CustomizedDoorWidthRedux) {
+    if (isCustomizedDoorWidthRedux) {
       dispatch(setDoorWidth(editDebouncedValue));
     } else {
       dispatch(setDoorWidth(result.doorWidth));
     }
-  }, [debouncedValue, CustomizedDoorWidthRedux]);
+  }, [debouncedValue, isCustomizedDoorWidthRedux]);
 
   const handleInputChange = (event) => {
     setEditDebouncedValue(event.target.value);
     dispatch(setDoorWidth(event.target.value));
   };
-
+  
   useEffect(() => {
     if (currentQuoteState === quoteState.CREATE) {
       dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
@@ -412,10 +411,12 @@ const LayoutMeasurements = () => {
                           type="checkbox"
                           onChange={() =>
                             dispatch(
-                              setCustomizedDoorWidth(!CustomizedDoorWidthRedux)
+                              setisCustomizedDoorWidth(
+                                !isCustomizedDoorWidthRedux
+                              )
                             )
                           }
-                          checked={CustomizedDoorWidthRedux}
+                          checked={isCustomizedDoorWidthRedux}
                           style={{
                             width: "20px",
                           }}
@@ -450,7 +451,9 @@ const LayoutMeasurements = () => {
                           >
                             <Typography
                               sx={{
-                                color: !CustomizedDoorWidthRedux ? "gray" : "",
+                                color: !isCustomizedDoorWidthRedux
+                                  ? "gray"
+                                  : "",
                               }}
                             >
                               Door Width
@@ -469,7 +472,7 @@ const LayoutMeasurements = () => {
                             InputProps={{
                               inputProps: { min: 1 },
                             }}
-                            disabled={!CustomizedDoorWidthRedux}
+                            disabled={!isCustomizedDoorWidthRedux}
                             placeholder={doorWidthFromredux}
                             type="number"
                             size="small"
@@ -512,7 +515,7 @@ const LayoutMeasurements = () => {
                         />
                       </Box> */}
                       </Box>
-                                          </>
+                    </>
                   )}
                 </Box>
 
@@ -608,8 +611,8 @@ const LayoutMeasurements = () => {
                       type="submit"
                       fullWidth
                       disabled={Object.keys(formik.values).some(
-                            (key) => !formik.values[key]
-                        )}
+                        (key) => !formik.values[key]
+                      )}
                       sx={{
                         height: 40,
                         fontSize: 20,

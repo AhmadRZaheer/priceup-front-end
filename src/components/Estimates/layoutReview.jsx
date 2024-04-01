@@ -28,6 +28,8 @@ import {
   resetNotifications,
   setContent,
   getAdditionalFields,
+  getDoorWidth,
+  getisCustomizedDoorWidth,
 } from "../../redux/estimateCalculations";
 import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
@@ -51,6 +53,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const estimatesTotal = useSelector(getTotal);
   const measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
+  const doorWidthredux = useSelector(getDoorWidth);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
   const currentQuoteState = useSelector(getQuoteState);
@@ -58,7 +61,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const selectedData = useSelector(selectedItem);
   const notifications = useSelector(getNotifications);
   const addedFields = useSelector(getAdditionalFields);
-
+  const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
   const { enqueueSnackbar } = useSnackbar();
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -111,11 +114,11 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     );
     const additionalFieldsArray = filteredFields.map(
       (row) => {
-        return {
-          cost: row.cost,
-          label: row.label,
-        };
-      }
+      return {
+        cost: row.cost,
+        label: row.label,
+      };
+    }
     );
     const glassToGlassArray =
       selectedContent?.mountingClamps?.glassToGlass?.map((row) => {
@@ -149,6 +152,8 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
       (item) => item?._id
     );
     const estimate = {
+      doorWidth: doorWidthredux,
+      isCustomizedDoorWidth: isCustomizedDoorWidth,
       additionalFields: [...additionalFieldsArray],
       hardwareFinishes: selectedContent?.hardwareFinishes?._id,
       handles: {
@@ -383,7 +388,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
               }}
               variant="h4"
             >
-            {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
+              {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
             </Typography>
           </Box>
         </Box>
