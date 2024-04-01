@@ -74,7 +74,7 @@ const LayoutMeasurements = () => {
   }, {});
 
   // const [width, setWidth] = useState(0);
-  const [debouncedValue, setDebouncedValue] = useState(0);
+    const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   let debounceTimeout;
@@ -197,7 +197,7 @@ const LayoutMeasurements = () => {
     if (isCustomizedDoorWidthRedux) {
       dispatch(setDoorWidth(editDebouncedValue));
     } else {
-      dispatch(setDoorWidth(result.doorWidth));
+            dispatch(setDoorWidth(result.doorWidth));
     }
   }, [debouncedValue, isCustomizedDoorWidthRedux]);
 
@@ -515,6 +515,11 @@ const LayoutMeasurements = () => {
                         />
                       </Box> */}
                       </Box>
+                      <Typography sx={{ color: "red", fontSize: "12px"}}>
+                          {formik.values.b <= doorWidthFromredux
+                            ? "Door Width can not be greater then or equal to Dimension 'b'"
+                            : ""}
+                        </Typography>
                     </>
                   )}
                 </Box>
@@ -610,9 +615,11 @@ const LayoutMeasurements = () => {
                     <Button
                       type="submit"
                       fullWidth
-                      disabled={Object.keys(formik.values).some(
-                        (key) => !formik.values[key]
-                      )}
+                      disabled={
+                        Object.keys(formik.values).some(
+                            (key) => !formik.values[key]
+                        ) || formik.values.b <= doorWidthFromredux
+                    }
                       sx={{
                         height: 40,
                         fontSize: 20,

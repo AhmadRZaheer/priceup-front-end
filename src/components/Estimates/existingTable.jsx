@@ -66,9 +66,9 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     );
     if (result?.doorWidth && item.isCustomizedDoorWidth === false) {
       dispatch(setDoorWidth(result?.doorWidth));
-    } else {
+          } else {
       dispatch(setDoorWidth(item?.doorWidth));
-    }
+          }
     if (result?.doorWeight) {
       dispatch(setDoorWeight(result?.doorWeight));
     }
@@ -78,7 +78,6 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     if (result?.returnWeight) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
-    dispatch(setDoorWidth(result.doorWidth));
     if (item?.layout_id) {  // default layout edit
       dispatch(setNavigationDesktop("measurements"));
     } else { // custom layout edit
