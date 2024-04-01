@@ -26,6 +26,8 @@ export const getFabricationTotal = (state) =>
   state.estimateCalculations.fabricationPrice;
 export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
 export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
+export const getisCustomizedDoorWidth = (state) =>
+  state.estimateCalculations.isCustomizedDoorWidth;
 
 export const getUserProfitPercentage = (state) =>
   state.estimateCalculations.content.userProfitPercentage;
@@ -60,6 +62,7 @@ const initialState = {
   doorWidth: 0,
   panelWidth: 0,
   doorWeight: 0,
+  isCustomizedDoorWidth: false,
   panelWeight: 0,
   returnWeight: 0,
   measurements: [],
@@ -116,7 +119,7 @@ const initialState = {
     glassToGlassNotAvailable: [],
     cornerWallClampNotAvailable: [],
     cornerSleeveOverNotAvailable: [],
-    cornerGlassToGlassNotAvailable: []
+    cornerGlassToGlassNotAvailable: [],
   },
   selectedItem: null,
   listData: null,
@@ -207,6 +210,9 @@ const estimateCalcSlice = createSlice({
     setReturnWeight: (state, action) => {
       state.returnWeight = action.payload;
     },
+    setisCustomizedDoorWidth: (state, action) => {
+      state.isCustomizedDoorWidth = action.payload;
+    },
     setSingleNotification: (state, action) => {
       const { type, payload } = action.payload;
       switch (type) {
@@ -246,7 +252,7 @@ const estimateCalcSlice = createSlice({
       if (["wallClamp", "sleeveOver", "glassToGlass"].includes(type)) {
         console.log("Nice Try.");
       } else if (["channel"].includes(type)) {
-                const found = item?._id === state.content.mountingChannel.item?._id;
+        const found = item?._id === state.content.mountingChannel.item?._id;
         state.content = {
           ...state.content,
           mountingChannel: {
@@ -1385,5 +1391,6 @@ export const {
   setMultipleNotifications,
   resetNotifications,
   setHardwareFabricationQuantity,
+  setisCustomizedDoorWidth,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
