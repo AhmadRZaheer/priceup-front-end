@@ -576,7 +576,7 @@ const DefaultComponent = () => {
                   alignItems: "center",
                 }}
               >
-                {/* width */}
+                {/* width
                 <Box sx={{ mb: 0.5 }}>
                   <Typography>Width</Typography>
                   <CustomInputField
@@ -596,10 +596,10 @@ const DefaultComponent = () => {
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                </Box>
+                </Box> */}
 
                 {/* height */}
-                <Box sx={{ mb: 0.5 }}>
+                <Box sx={{ mb: 0.5, width: "100%" }}>
                   <Typography>Height</Typography>
 
                   <CustomInputField

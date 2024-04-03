@@ -103,9 +103,9 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const glassThickness = getGlassThickness(
+              const glassThickness = getGlassThickness(
         selectedData?.settings?.variant,
-        measurementsArray
+        measurementsArray,
       );
       const result = calculateAreaAndPerimeter(
         measurementsArray,
@@ -128,6 +128,7 @@ const LayoutMeasurements = () => {
       const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
+          measurements: measurementsArray,
           content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
           perimeter: result.perimeter, areaSqft: result.areaSqft,
           doorWeight: result?.doorWeight ?? estimateState.doorWeight,
@@ -518,7 +519,7 @@ const LayoutMeasurements = () => {
                       <Typography sx={{ color: "red", fontSize: "12px"}}>
                           {formik.values.b <= doorWidthFromredux
                             ? "Door Width can not be greater then or equal to Dimension 'b'"
-                            : ""}
+                            :doorWidthFromredux > 36 ? "Door Width can not be greater then 36" : ""}
                         </Typography>
                     </>
                   )}
@@ -618,7 +619,7 @@ const LayoutMeasurements = () => {
                       disabled={
                         Object.keys(formik.values).some(
                             (key) => !formik.values[key]
-                        ) || formik.values.b <= doorWidthFromredux
+                        ) || formik.values.b <= doorWidthFromredux || doorWidthFromredux > 36
                     }
                       sx={{
                         height: 40,

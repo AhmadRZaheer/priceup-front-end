@@ -71,3 +71,5 @@ export const hardwareTypes = {
   SLEEVEOVER: "sleeveOver",
   GLASSTOGLASS: "glassToGlass"
 }
+
+export const standardDoorWidth = 28;
