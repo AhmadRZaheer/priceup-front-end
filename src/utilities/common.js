@@ -799,27 +799,27 @@ const calculatePanel = (width, height) => {
   return { sqft: panelSqft, perimeter: panelPerimeter };
 };
 
-export const getGlassThickness = (variant, measurementSides) => {
+export const getGlassThickness = (variant, measurementSides, height) => {
   const measurements = convertArrayKeysToObject(measurementSides);
   switch (variant) {
     case layoutVariants.DOOR:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDPANEL:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOUBLEDOOR:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDNIB:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDNOTCHEDPANEL:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORPANELANDRETURN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORNOTCHEDPANELANDRETURN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.SINGLEBARN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOUBLEBARN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     default:
       return;
   }
