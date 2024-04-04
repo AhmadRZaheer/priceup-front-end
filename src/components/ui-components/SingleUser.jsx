@@ -48,6 +48,7 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
               maxWidth: "100%",
               overflow: "hidden",
               textOverflow: "ellipsis",
+              textTransform: "capitalize"
             }}
           >
             {item?.name}

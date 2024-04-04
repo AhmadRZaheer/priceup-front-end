@@ -240,6 +240,7 @@ const Sidebar = () => {
                             display: "block",
                             textOverflow: "ellipsis",
                             overflow: "hidden",
+                            textTransform: "capitalize"
                           }}
                         >
                           {" "}
@@ -275,6 +276,7 @@ const Sidebar = () => {
                           display: "block",
                           textOverflow: "ellipsis",
                           overflow: "hidden",
+                          textTransform: "capitalize"
                         }}
                       >
                         {CustomActiveUser}
