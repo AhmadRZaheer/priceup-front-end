@@ -86,7 +86,7 @@ const CustomLayout = () => {
       dispatch(setNavigationDesktop("existing"));
     }
   };
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     // const measurementsArray = Object.keys(values)
     //   .map((k) => values[k])
     //   .reduce((prev, current) => {
@@ -223,7 +223,7 @@ const CustomLayout = () => {
         >
           Create New Estimate
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form>
           <Box
             sx={{
               height: "100%",
@@ -644,7 +644,8 @@ const CustomLayout = () => {
                 </Box>
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
-                    type="submit"
+                    onClick={handleSubmit}
+                    type="button"
                     fullWidth
                     disabled={
                       // !values["0"]?.width ||
