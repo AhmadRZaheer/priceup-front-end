@@ -400,7 +400,8 @@ export const generateNotificationsForCurrentEstimate = (
           message: `Handle "${selectedContent.handles.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
     }
-    /** switch hinges if width increases layout defaults */
+     /** switch hinges if width increases layout defaults only for layouts which have variant */
+     if(reduxSelectedItem?.settings?.variant){
     const switchHingeResult = getSwitchHingeNotification(
       selectedContent,
       reduxSelectedItem,
@@ -411,6 +412,7 @@ export const generateNotificationsForCurrentEstimate = (
       notifications.hingesSwitch = switchHingeResult.hingesSwitch;
     if (switchHingeResult?.hinges)
       selectedContent.hinges = switchHingeResult.hinges;
+    }
     /** end */
     if (selectedContent.hinges?.item) {
       // generate hinges not available notification in current finish
