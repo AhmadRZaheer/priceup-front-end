@@ -42,7 +42,8 @@ function App() {
         <SnackbarProvider
           maxSnack={5}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          autoHideDuration={5000}
+          autoHideDuration={10000}
+          transitionDuration={{ enter: 200, exit: 800 }}
         >
           <BrowserRouter>
             <FetchId2>
