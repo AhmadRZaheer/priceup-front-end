@@ -423,10 +423,10 @@ const CustomLayout = () => {
                             </Typography>
 
                             <TextField
-                              disabled={isThereHigherKeyAvailable(
-                                values,
-                                index
-                              )}
+                              // disabled={isThereHigherKeyAvailable(
+                              //   values,
+                              //   index
+                              // )}
                               type="number"
                               size="small"
                               variant="outlined"
