@@ -169,6 +169,7 @@ const CustomAdminsTable = () => {
                           color: "#101828",
                           fontSize: "18px",
                           fontWeight: 500,
+                          textTransform:"capitalize"
                         }}
                       >
                         {item?.company?.name}
@@ -182,7 +183,7 @@ const CustomAdminsTable = () => {
                     </Typography>
 
                     <Box sx={{ mt: 2 }}>
-                      <Typography sx={{ fontSize: "14px", color: "#667085" }}>
+                      <Typography sx={{ fontSize: "14px", color: "#667085", textTransform:"capitalize" }}>
                         {item?.user?.name}
                         {/* {item?.company?.name} */}
                       </Typography>
