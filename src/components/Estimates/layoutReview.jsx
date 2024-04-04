@@ -73,7 +73,6 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     // }
     // return state;
   }, [currentQuoteState]);
-  console.log(addedFields, "addedFields");
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
