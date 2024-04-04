@@ -323,7 +323,7 @@ export const Super_SuperColumns = [
 ];
 export const CustomerQuoteColumns = [
   {
-    headerName: "Label",
+    headerName: "Reference",
     width: 300,
     renderCell: (params) => {
       return (
@@ -335,7 +335,7 @@ export const CustomerQuoteColumns = [
   },
   {
     field: "name",
-    headerName: "Reference",
+    headerName: "ID",
     width: 200,
   }
 ];
