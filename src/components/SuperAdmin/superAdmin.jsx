@@ -286,9 +286,7 @@ const SuperAdminTable = () => {
         ) : filteredData.length !== 0 ? (
           filteredData?.map((item) => {
             const matchingUserData = customUserData.filter((userData) =>
-              userData?.locationsAccess?.some(
-                (accessData) => accessData?.company_id === item?.company?._id
-              )
+              userData?.locationsAccess?.includes(item?.company?._id)
             );
             const filterNonActive = matchingUserData.filter(
               (data) => data.status
