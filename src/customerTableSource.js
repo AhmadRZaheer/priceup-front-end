@@ -79,14 +79,14 @@ export const teamColumns = [
     },
   },
   {
-    field: "Total qouted",
-    headerName: "Total qouted",
+    field: "Total quoted",
+    headerName: "Total quoted",
     headerClassName: "customHeaderClass-team",
     flex: 0.8,
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>$ {params.row.totalQuoted}</Typography>
+          <Typography color={"#667085"}>$ {params.row.totalQuoted?.toFixed(2) || 0}</Typography>
         </>
       );
     },
