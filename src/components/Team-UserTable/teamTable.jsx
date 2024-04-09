@@ -28,6 +28,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { parseJwt } from "../ProtectedRoute/authVerify";
+import DeleteModal from "../Modal/deleteModal";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -43,6 +44,8 @@ const TeamTable = () => {
   const filteredData = stafData?.filter((team) =>
     team.name.toLowerCase().includes(search.toLowerCase())
   );
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
     setOpen(true);
@@ -50,26 +53,31 @@ const TeamTable = () => {
     setIsEdit(true);
   };
   const {
-    mutate: deleteFinish,
+    mutate: deleteTeamMember,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteTeamMembers();
-  const handleTeamMemberDelete = async (teamdata) => {
-    if (teamdata?.company_id !== decodedToken.company_id) {
-      const haveAccessss = teamdata.haveAccessTo.filter(
+  const handleOpenDeleteModal = (teamdata) => {
+    setDeleteRecord(teamdata);
+    setDeleteModalOpen(true);
+  }
+  const handleTeamMemberDelete = async () => {
+    if (deleteRecord?.company_id !== decodedToken.company_id) {
+      const haveAccessss = deleteRecord.haveAccessTo.filter(
         (item) => item !== decodedToken.company_id
       );
       await editTeamMembers({
         data: haveAccessss,
-        locId: teamdata._id,
+        locId: deleteRecord._id,
       });
-      teamMemberRefetch();
+      // teamMemberRefetch();
     } else {
       console.log("delete finish");
-      await deleteFinish(teamdata._id);
-      setMatchingId(teamdata._id);
-      teamMemberRefetch();
+      await deleteTeamMember(deleteRecord._id);
+      setMatchingId(deleteRecord._id);
+      // teamMemberRefetch(); 
     }
+    setDeleteModalOpen(false);
   };
 
   React.useEffect(() => {
@@ -120,7 +128,7 @@ const TeamTable = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleTeamMemberDelete(params.row)}
+              onClick={() => handleOpenDeleteModal(params.row)}
             >
               {isMatchingId && loaderForDelete ? (
                 <CircularProgress size={24} color="warning" />
@@ -366,7 +374,12 @@ const TeamTable = () => {
             )}
           </div>
         </Box>
-
+        <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleTeamMemberDelete}
+      />
         <AddTeamMembers
           open={open}
           close={handleClose}
