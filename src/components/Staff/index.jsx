@@ -13,8 +13,10 @@ import { useSelector } from "react-redux";
 import { Box, useMediaQuery } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
 import ClientDetailsModel from "../Estimates/model";
+import HardwareMissingAlert from "../Modal/hardwareMissingAlert";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);
+  const [hardwareMissingAlert,setHardwareMissingAlert] = useState(false);
   // const handleClose = () => setClientDetailOpen(false);
   // const handleOpen = () => setClientDetailOpen(true);
   // const updatecheck = useSelector(getQuoteState);
@@ -35,7 +37,7 @@ const IndexMobile = () => {
         {Navigation === "layouts" && <Layout />}
         {Navigation === "measurements" && <LayoutMeasurements />}
         {Navigation === "review" && (
-          <LayoutReview setClientDetailOpen={setClientDetailOpen} />
+          <LayoutReview setClientDetailOpen={setClientDetailOpen} setHardwareMissingAlert={setHardwareMissingAlert}/>
         )}
         {/* {Navigation === "summary" ? (
           ["create", "custom"].includes(updatecheck) ? (
@@ -50,6 +52,10 @@ const IndexMobile = () => {
           open={clientDetailOpen}
           handleCancel={() => setClientDetailOpen(false)}
         />
+        <HardwareMissingAlert
+        open={hardwareMissingAlert}
+        handleClose={() => setHardwareMissingAlert(false)}
+      />
         {/* <Model
           open={clientDetailOpen}
           handleCancel={handleClose}
