@@ -152,7 +152,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
       (item) => item?._id
     );
     const estimate = {
-      doorWidth: doorWidthredux,
+      doorWidth: Number(doorWidthredux),
       isCustomizedDoorWidth: isCustomizedDoorWidth,
       additionalFields: [...additionalFieldsArray],
       hardwareFinishes: selectedContent?.hardwareFinishes?._id,

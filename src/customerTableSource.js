@@ -79,8 +79,8 @@ export const teamColumns = [
     },
   },
   {
-    field: "Total qouted",
-    headerName: "Total qouted",
+    field: "Total quoted",
+    headerName: "Total quoted",
     headerClassName: "customHeaderClass-team",
     flex: 0.8,
     renderCell: (params) => {
