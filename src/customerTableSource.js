@@ -86,7 +86,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>$ {params.row.totalQuoted}</Typography>
+          <Typography color={"#667085"}>$ {params.row.totalQuoted?.toFixed(2) || 0}</Typography>
         </>
       );
     },
