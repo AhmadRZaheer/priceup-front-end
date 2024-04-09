@@ -13,17 +13,25 @@ import AddEditGlassAddon from "../Modal/addEditGlassAddon";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 import DefaultImage from "../ui-components/defaultImage";
+import DeleteModal from "../Modal/deleteModal";
 
 const AddonList = ({ entry, mainIndex, refetch, type }) => {
   const [open, setOpen] = useState(false);
   const [isEdit, setisEdit] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
+  const { mutate: deleteGlassAddon, isSuccess: deleteSuccess, isLoading: loaderForDelete } =
     useDeleteGlassAddon();
-  const handleHardwareDelete = (id) => {
-    deleteGlassAddon(id);
+  const handleHardwareDelete = () => {
+    deleteGlassAddon(deleteRecord);
+    setDeleteModalOpen(false);
   };
   const { mutate: editGlassAddon, isSuccess: glassAddonEditSuccess } =
     useEditFullGlassAddon();
@@ -78,7 +86,7 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
             />
           </Box>
           <Box>
-            <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+            <IconButton onClick={() => handleOpenDeleteModal(entry._id)}>
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <CustomIconButton
@@ -101,6 +109,12 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
           ))}
         </Box>
       </div>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleHardwareDelete}
+      />
       <AddEditGlassAddon
         open={open}
         close={handleClose}

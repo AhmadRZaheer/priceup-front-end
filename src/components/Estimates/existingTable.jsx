@@ -28,13 +28,19 @@ import { calculateAreaAndPerimeter } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
+import DeleteModal from "../Modal/deleteModal";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
-  const { mutate: deleteEstimates, isSuccess: deletedSuccessfully } =
+  const { mutate: deleteEstimates, isSuccess: deletedSuccessfully, isLoading: LoadingForDelete } =
     useDeleteEstimates();
   const dispatch = useDispatch();
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
@@ -42,8 +48,9 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDeleteEstimate = (id) => {
-    deleteEstimates(id);
+  const handleDeleteEstimate = () => {
+    deleteEstimates(deleteRecord);
+    setDeleteModalOpen(false);
   };
 
   const handleIconButtonClick = (item) => {
@@ -164,7 +171,7 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
               page * itemsPerPage
             )}
             columns={EstimatesColumns(
-              handleDeleteEstimate,
+              handleOpenDeleteModal,
               handleIconButtonClick
             )}
             page={page}
@@ -178,6 +185,12 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}
+          />
+          <DeleteModal
+          open={deleteModalOpen}
+          close={()=>{setDeleteModalOpen(false)}}
+          isLoading={LoadingForDelete}
+          handleDelete={handleDeleteEstimate}
           />
         </Box>
       )}

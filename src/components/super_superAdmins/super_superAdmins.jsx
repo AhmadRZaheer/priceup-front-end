@@ -23,10 +23,11 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 import Create_Edit_SuperSuperAdmin from "../Modal/editSuper_SuperAdmin";
 import CustomIconButton from "../ui-components/CustomButton";
+import DeleteModal from "../Modal/deleteModal";
 
 const Super_SuperAdminsTable = () => {
   const { data: SuperData, isLoading, refetch } = useFetchSuperSuperAdmin();
-  const { mutate: DeleteSuper_SuperAdmin, isSuccess: DeletedSuccessfully } =
+  const { mutate: DeleteSuper_SuperAdmin, isSuccess: DeletedSuccessfully, isLoading: loaderForDelete } =
     useDeleteSuper_SuperAdmin();
   const [Super_SuperData, setSuper_SuperData] = useState([]);
   const [Super_ModalOpen, setSuper_ModalOpen] = useState(false);
@@ -34,7 +35,12 @@ const Super_SuperAdminsTable = () => {
   const [Super_SelectedData, setSuper_SelectedData] = useState(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const filteredData = Super_SuperData?.filter((item) =>
     item?.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -58,8 +64,9 @@ const Super_SuperAdminsTable = () => {
     setSuper_isEdit(false);
   };
 
-  const handleDeleteAdmin = (id) => {
-    DeleteSuper_SuperAdmin(id);
+  const handleDeleteAdmin = () => {
+    DeleteSuper_SuperAdmin(deleteRecord);
+    setDeleteModalOpen(false);
   };
   useEffect(() => {
     if (DeletedSuccessfully) {
@@ -119,7 +126,7 @@ const Super_SuperAdminsTable = () => {
                   width: 28,
                   height: 28,
                 }}
-                onClick={() => handleDeleteAdmin(params.row?._id)}
+                onClick={() => handleOpenDeleteModal(params.row?._id)}
               >
                 <img src={DeleteIcon} alt="delete icon" />
               </IconButton>
@@ -237,6 +244,12 @@ const Super_SuperAdminsTable = () => {
           </Box>
         </Box>
       </Box>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleDeleteAdmin}
+      />
       <Create_Edit_SuperSuperAdmin
         open={Super_ModalOpen}
         close={handldeEditClose}

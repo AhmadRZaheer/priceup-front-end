@@ -25,6 +25,7 @@ import CustomIconButton from "../ui-components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { getDataRefetch } from "../../redux/staff";
+import DeleteModal from "../Modal/deleteModal";
 
 const FinishesTable = () => {
   const refetchData = useSelector(getDataRefetch);
@@ -43,7 +44,12 @@ const FinishesTable = () => {
   const [isEdit, setIsEdit] = React.useState(false);
   const [matchingId, setMatchingId] = useState("");
   const [search, setSearch] = useState("");
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   useEffect(() => {
     finishesRefetch();
   }, [refetchData]);
@@ -63,9 +69,10 @@ const FinishesTable = () => {
     setIsEdit(true);
   };
 
-  const handleFinishDelete = (id) => {
-    deleteFinish(id);
-    setMatchingId(id);
+  const handleFinishDelete = () => {
+    deleteFinish(deleteRecord);
+    setMatchingId(deleteRecord);
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
@@ -86,7 +93,7 @@ const FinishesTable = () => {
           <div className="cellAction">
             <div
               className="deleteButton"
-              onClick={() => handleFinishDelete(id)}
+              onClick={() => handleOpenDeleteModal(id)}
             >
               {isMatchingId && loaderForDelete ? (
                 <CircularProgress size={24} color="warning" />
@@ -334,6 +341,12 @@ const FinishesTable = () => {
           </Box>
         </Box>
         <Box />
+        <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleFinishDelete}
+      />
         <AddEditFinish
           open={open}
           close={handleClose}
