@@ -515,9 +515,9 @@ const LayoutMeasurements = () => {
                         />
                       </Box> */}
                       </Box>
-                      <Typography sx={{ color: "red", fontSize: "12px"}}>
-                          {formik.values.b <= doorWidthFromredux
-                            ? "Door Width can not be greater then or equal to Dimension 'b'"
+                      <Typography sx={{ color: "red", fontSize: "14px"}}>
+                          {doorWidthFromredux > formik.values.b
+                            ? "Door width can not be greater then dimension ' b '"
                             : ""}
                         </Typography>
                     </>
@@ -618,7 +618,7 @@ const LayoutMeasurements = () => {
                       disabled={
                         Object.keys(formik.values).some(
                             (key) => !formik.values[key]
-                        ) || formik.values.b <= doorWidthFromredux
+                        ) || doorWidthFromredux > formik.values.b
                     }
                       sx={{
                         height: 40,
