@@ -125,8 +125,10 @@ const CustomLayout = () => {
       content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
       panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
     dispatch(setMultipleNotifications({ ...notificationsResult }));
+    if (currentQuoteState === quoteState.CREATE) {
     const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: '3/8' }, currentQuoteState, null);
     dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+    }
     // dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 
