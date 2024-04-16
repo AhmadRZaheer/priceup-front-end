@@ -14,33 +14,40 @@ import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
 import CustomerQoute from "../Estimates/customerQuotTable";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
-import { getDataRefetch } from "../../redux/staff";
-import { useSelector } from "react-redux";
+// import { getDataRefetch } from "../../redux/staff";
+// import { useSelector } from "react-redux";
+import ModeIcon from "@mui/icons-material/Mode";
+import EditCustomer from "../Modal/editCustomer";
 
 const CustomerTable = () => {
-  const { data: customerData, refetch } = useFetchDataCustomer();
-  const refetchData = useSelector(getDataRefetch);
-  const [search, setSearch] = React.useState("");
-  const [open, setOpen] = React.useState(false);
-  const [selectedRowData, setSelectedRowData] = React.useState(null);
+  const { data: customerData, refetch: customersRefetch } = useFetchDataCustomer();
+  // const refetchData = useSelector(getDataRefetch);
+  const [search, setSearch] = useState("");
+  const [openQuotesModal, setOpenQuotesModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedRowData, setSelectedRowData] = useState(null);
   const filteredData = customerData?.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
   );
+  // useEffect(() => {
+  //   refetch();
+  // }, [refetchData]);
   useEffect(() => {
-    refetch();
-  }, [refetchData]);
-  useEffect(() => {
-    refetch();
+    customersRefetch();
   }, []);
-  const handleClose = () => setOpen(false);
-
-  const handleOpenEdit = (params) => {
+  const handleCloseQuotes = () => setOpenQuotesModal(false);
+  const handleCloseEdit = () => setOpenEditModal(false);
+  const handleViewQuotes = (params) => {
     setSelectedRowData(params.row);
-    setOpen(true);
+    setOpenQuotesModal(true);
   };
+  const handleOpenEdit = (item) => {
+    setSelectedRowData(item);
+    setOpenEditModal(true);
+  }
   const actionColumn = [
     {
-      field: "Status",
+      field: "Actions",
       align: "left",
       headerClassName: "customHeaderClass",
       flex: 1.3,
@@ -48,7 +55,7 @@ const CustomerTable = () => {
         return (
           <>
             <CustomIconButton
-              handleClick={() => handleOpenEdit(params)}
+              handleClick={() => handleViewQuotes(params)}
               icon={
                 <img
                   width={"20px"}
@@ -60,6 +67,19 @@ const CustomerTable = () => {
               }
               buttonText="View Quotes"
             />
+            <Box
+              sx={{marginLeft:'10px'}}
+              className="viewButton"
+              onClick={() => handleOpenEdit(params.row)}
+            >
+              <CustomIconButton
+                handleClick={() => handleOpenEdit(params.row)}
+                icon={
+                  <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} />
+                }
+                buttonText="Edit"
+              />
+            </Box>
           </>
         );
       },
@@ -272,9 +292,16 @@ const CustomerTable = () => {
         </Box>
 
         <CustomerQoute
-          open={open}
-          close={handleClose}
+          open={openQuotesModal}
+          close={handleCloseQuotes}
           quoteId={selectedRowData ? selectedRowData : null}
+        />
+
+        <EditCustomer
+          open={openEditModal}
+          close={handleCloseEdit}
+          data={selectedRowData}
+          refetch={customersRefetch}
         />
       </Box>
     </>
