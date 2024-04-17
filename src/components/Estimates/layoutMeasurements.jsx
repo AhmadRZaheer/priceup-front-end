@@ -138,8 +138,10 @@ const LayoutMeasurements = () => {
         result?.panelWeight && result?.panelWeight > panelOverWeightAmount ? thicknessTypes.ONEBYTWO : glassThickness
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: result?.panelWeight && result?.panelWeight > panelOverWeightAmount ? thicknessTypes.ONEBYTWO : glassThickness }, currentQuoteState, selectedData);
+      if (currentQuoteState === quoteState.CREATE) {
+      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
       dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+      }
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
