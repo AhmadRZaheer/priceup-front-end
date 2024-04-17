@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteGlassAddonOption,
   useEditGlassAddon,
@@ -20,6 +20,7 @@ import {
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
 
 const ListOption = ({
   data,
@@ -29,6 +30,7 @@ const ListOption = ({
   SetUpdateValue,
   UpdateValue,
 }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const {
     mutate: deleteGlassAddon,
     isLoading: LoadingForDelete,
@@ -78,11 +80,15 @@ const ListOption = ({
       }
     }
   }, []);
-  const handleFinishDelete = (event) => {
+  const handleDeleteModalOpen = () => {
+    setDeleteModalOpen(true);
+  }
+  const handleOptionDelete = () => {
     deleteGlassAddon({
       glassAddonId: glassAddonId,
       optionId: data._id,
     });
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
@@ -240,7 +246,7 @@ const ListOption = ({
               ) : (
                 <IconButton
                   type="button"
-                  onClick={(event) => handleFinishDelete(event)}
+                  onClick={handleDeleteModalOpen}
                   sx={{ mt: 2.6 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
@@ -268,6 +274,12 @@ const ListOption = ({
           </Box>
         </Box>
       </form>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleOptionDelete}
+      />
     </Box>
   );
 };

@@ -12,16 +12,24 @@ import GlassTypeItem from "./glassTypeItems";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 import DefaultImage from "../ui-components/defaultImage";
+import DeleteModal from "../Modal/deleteModal";
 
 const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteGlassType, isSuccess: deleteSuccess } =
+  const { mutate: deleteGlassType, isSuccess: deleteSuccess, isLoading: loaderForDelete } =
     useDeleteGlassTypeFull();
-  const handleHardwareDelete = (id) => {
-    deleteGlassType(id);
+  const handleHardwareDelete = () => {
+    deleteGlassType(deleteRecord);
+    setDeleteModalOpen(false);
   };
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
     useEditFullGlassType();
@@ -76,7 +84,7 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
             />
           </Box>
           <Box>
-            <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+            <IconButton onClick={() => handleOpenDeleteModal(entry._id)}>
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
             <CustomIconButton
@@ -99,6 +107,12 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
           ))}
         </Box>
       </div>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={loaderForDelete}
+        handleDelete={handleHardwareDelete}
+      />
       <AddEditGlassType
         open={open}
         close={handleClose}
