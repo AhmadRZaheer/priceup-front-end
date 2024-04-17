@@ -353,6 +353,7 @@ const SuperAdminTable = () => {
                           color: "#101828",
                           fontSize: "18px",
                           fontWeight: 500,
+                          textTransform:'capitalize'
                         }}
                       >
                         {item?.company?.name}
@@ -369,7 +370,7 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ mt: 1 }}>
                       <Box sx={{ mt: 1 }}>
-                        <Typography sx={{ fontSize: "14px", color: "#667085" }}>
+                        <Typography sx={{ fontSize: "14px", color: "#667085", textTransform: 'capitalize' }}>
                           {/* {item?.company?.name} */}
                           {item?.user?.name}
                         </Typography>

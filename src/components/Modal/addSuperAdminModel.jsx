@@ -59,7 +59,7 @@ export default function AddSuperAdminModel({
       .email("Invalid email address")
       .required("Email is required"),
     image: Yup.mixed(),
-    locationName: Yup.string().required("Location Name is required"),
+    locationName: Yup.string().required("Location Name is required").matches(/^[a-zA-Z0-9_]+$/, 'Special characters are not allowed'),
   });
 
   const formik = useFormik({
