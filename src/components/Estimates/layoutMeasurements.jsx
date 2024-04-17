@@ -38,7 +38,7 @@ import {
   calculateAreaAndPerimeter,
   getGlassThickness,
 } from "../../utilities/common";
-import { layoutVariants, quoteState } from "../../utilities/constants";
+import { layoutVariants, panelOverWeightAmount, quoteState, thicknessTypes } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
@@ -103,9 +103,10 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const glassThickness = getGlassThickness(
+              const glassThickness = getGlassThickness(
         selectedData?.settings?.variant,
-        measurementsArray
+        measurementsArray,
+        selectedData?.settings?.heavyDutyOption?.height || 85
       );
       const result = calculateAreaAndPerimeter(
         measurementsArray,
@@ -128,15 +129,16 @@ const LayoutMeasurements = () => {
       const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
+          measurements: measurementsArray,
           content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
           perimeter: result.perimeter, areaSqft: result.areaSqft,
           doorWeight: result?.doorWeight ?? estimateState.doorWeight,
           panelWeight: result?.panelWeight ?? estimateState.panelWeight,
         },
-        glassThickness
+        result?.panelWeight && result?.panelWeight > panelOverWeightAmount ? thicknessTypes.ONEBYTWO : glassThickness
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
+      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: result?.panelWeight && result?.panelWeight > panelOverWeightAmount ? thicknessTypes.ONEBYTWO : glassThickness }, currentQuoteState, selectedData);
       dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
