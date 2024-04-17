@@ -308,22 +308,32 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
 
   useEffect(() => {
     console.log("mount");
+    const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
+    let delay = 0;
     Object.entries(notifications).forEach(([key, value]) => {
       if (
         ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable", "wallClampNotAvailable", "sleeveOverNotAvailable", "glassToGlassNotAvailable", "cornerWallClampNotAvailable", "cornerSleeveOverNotAvailable", "cornerGlassToGlassNotAvailable"].includes(key)
       ) {
         value?.forEach((item) => {
           if (item.status) {
-            enqueueSnackbar(item.message, {
-              variant: item.variant,
-            });
+            setTimeout(() => {
+              enqueueSnackbar(item.message, {
+                variant: item.variant,
+                // autoHideDuration: 5000, // Set a custom duration for each snackbar
+              });
+            }, delay);
+            delay += delayBetweenSnackbars;
           }
         });
       } else {
         if (value.status) {
-          enqueueSnackbar(value.message, {
-            variant: value.variant,
-          });
+          setTimeout(() => {
+            enqueueSnackbar(value.message, {
+              variant: value.variant,
+              // autoHideDuration: 5000, // Set a custom duration for each snackbar
+            });
+          }, delay);
+          delay += delayBetweenSnackbars;
         }
       }
     });
