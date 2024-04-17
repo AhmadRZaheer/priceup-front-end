@@ -103,7 +103,7 @@ export const useEditCustomer = () => {
         dispatch(
           showSnackbar({
             message: "An error occurred while updating the data",
-            severity: "success",
+            severity: "error",
           })
         );
         throw new Error("An error occurred while updating the data.");
@@ -112,7 +112,7 @@ export const useEditCustomer = () => {
       dispatch(
         showSnackbar({
           message: `${error.response?.data?.message}`,
-          severity: "success",
+          severity: "error",
         })
       );
       throw new Error("An error occurred while updating the data.");
