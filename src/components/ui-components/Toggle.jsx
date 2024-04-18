@@ -1,6 +1,14 @@
 import { Box, Switch, Tooltip, Typography } from "@mui/material";
 
-function CustomToggle({ checked, onChange, name, onBlur, onClick, title }) {
+function CustomToggle({
+  checked,
+  onChange,
+  name,
+  onBlur,
+  onClick,
+  title,
+  text,
+}) {
   return (
     <>
       <Tooltip title={title} placement="top" arrow>
@@ -41,7 +49,9 @@ function CustomToggle({ checked, onChange, name, onBlur, onClick, title }) {
               },
             }}
           />
-          <Typography sx={{ mt: 1.4, width: 60 }}>Active</Typography>
+          <Typography sx={{ mt: 1.4, width: text ? "100%" : 60, }}>
+            {text ? text : "Active"}
+          </Typography>
         </Box>
       </Tooltip>
     </>
