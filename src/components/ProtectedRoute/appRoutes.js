@@ -35,6 +35,7 @@ import {
 } from "../../utilities/authentications";
 import CustomAdminPage from "../../pages/CustomAdmins/customAdmin";
 import StaffLocationPage from "../../pages/stafffLocations/staffLocationPage";
+import PDFPreview from "../../pages/PDFPreview";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -64,6 +65,7 @@ const AppRoutes = () => {
           )
         }
       />
+      <Route path="/preview" element={<PDFPreview />} />
       {isAdmin(decodedToken) ||
       (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
