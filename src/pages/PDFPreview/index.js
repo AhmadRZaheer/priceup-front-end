@@ -1,4 +1,4 @@
-import { PDFViewer } from "@react-pdf/renderer";
+import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import PDFFile from "../../components/PDFFile";
 import { Box, IconButton, Typography } from "@mui/material";
 import CustomToggle from "../../components/ui-components/Toggle";
