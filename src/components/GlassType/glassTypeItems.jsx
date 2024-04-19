@@ -190,8 +190,8 @@ const GlassTypeItem = ({
               variant="outlined"
               name="cost"
               type="number"
-              InputProps={{
-                inputProps: { min: 0 },
+              inputProps={{
+                min: 0
               }}
               placeholder="Cost"
               style={{ width: "100%" }}
