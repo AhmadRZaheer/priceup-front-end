@@ -32,6 +32,7 @@ import {
   getAdditionalFields,
   getisCustomizedDoorWidth,
   setisCustomizedDoorWidth,
+  getListData,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
@@ -63,7 +64,7 @@ const LayoutMeasurements = () => {
     currentQuoteState === quoteState.EDIT
       ? measurementSidesForEdit
       : measurementSidesForCreate;
-
+  const listsData = useSelector(getListData);
     const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
@@ -520,8 +521,8 @@ const LayoutMeasurements = () => {
                       </Box> */}
                       </Box>
                       <Typography sx={{ color: "red", fontSize: "14px"}}>
-                          {doorWidthFromredux > formik.values.b
-                            ? "Door width can not be greater then dimension ' b '"
+                          {doorWidthFromredux > listsData?.doorWidth
+                            ? `Door width can not be greater then location default ${listsData?.doorWidth}`
                             : ""}
                         </Typography>
                     </>
@@ -622,7 +623,7 @@ const LayoutMeasurements = () => {
                       disabled={
                         Object.keys(formik.values).some(
                             (key) => !formik.values[key]
-                        ) || doorWidthFromredux > formik.values.b
+                        ) || doorWidthFromredux > listsData?.doorWidth
                     }
                       sx={{
                         height: 40,
