@@ -4,8 +4,37 @@ import { Box, IconButton, Typography } from "@mui/material";
 import CustomToggle from "../../components/ui-components/Toggle";
 import { Close } from "@mui/icons-material";
 import CustomInputField from "../../components/ui-components/CustomInput";
+import { useState } from "react";
+
+const customerContact = {
+  name: "sdasdas",
+  phone: "2342343223",
+  email: "someone@something.com",
+};
+
+const quoteInfo = {
+  name: "2/29/2024",
+  label: "Unique label",
+  layoutName: "Door and Panel",
+};
+
+const locationInfo = {
+  name: "GCS Glass & Mirror",
+  street: "20634 N. 28th Street, Suite 150",
+  state: "Phoenix",
+  zipCode: "AZ 85050",
+  website: "www.gcs.glass",
+};
+
+const tableRows = [
+  { name: "8x8 MT Pull", qty: 1, type: "Handle", cost: 92.09 },
+  { name: "STD-Bevel", qty: 2, type: "Hinge", cost: 34.89 },
+  { name: "clear", type: "Glass", cost: 54 },
+];
 
 const PDFPreview = () => {
+  const [viewQty, setViewQty] = useState(false);
+  const [viewCostPerUnit, setViewCostPerUnit] = useState(false);
   return (
     <Box
       sx={{
@@ -16,10 +45,30 @@ const PDFPreview = () => {
       }}
     >
       <Box sx={{ width: "20%", background: "white", p: 2, py: 3 }}>
-        {/* Title */}
-        <Typography variant="h6" fontWeight={"bold"}>
-          Quote Settings
-        </Typography>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6" fontWeight={"bold"}>
+            PDF Settings
+          </Typography>
+          <IconButton
+            onClick={() => {
+              window.alert("close clicked!");
+            }}
+            title={"Close"}
+            sx={{
+              borderRadius: "100%",
+              border: "2px solid black",
+              color: "black",
+              width: "30px",
+              height: "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Close sx={{ width: "20px", height: "20px" }} />
+          </IconButton>
+        </Box>
+
         <Box
           sx={{
             mt: 2,
@@ -63,23 +112,46 @@ const PDFPreview = () => {
                 component={"div"}
                 sx={{ display: "flex", gap: 2, alignItems: "center" }}
               >
-                <CustomToggle text={"Group SubTotals"} />
+                <CustomToggle
+                  text={"Quantity"}
+                  checked={viewQty}
+                  onChange={() => setViewQty(!viewQty)}
+                />
               </Typography>
               <Typography
                 component={"div"}
                 sx={{ display: "flex", gap: 2, alignItems: "center" }}
               >
-                <CustomToggle text={"Quantity"} />
+                <CustomToggle
+                  text={"Cost/Unit"}
+                  checked={viewCostPerUnit}
+                  onChange={() => setViewCostPerUnit(!viewCostPerUnit)}
+                />
+              </Typography>
+              <Typography
+                component={"div"}
+                sx={{ display: "flex", gap: 2, alignItems: "center" }}
+              >
+                <CustomToggle text={"Gross Profit Margin"} />
               </Typography>
             </Box>
           </Box>
         </Box>
       </Box>
-      <PDFViewer width={"60%"}>
-        <PDFFile />
+      <PDFViewer width={"80%"}>
+        <PDFFile
+          props={{
+            viewQty,
+            viewCostPerUnit,
+            customerContact,
+            quoteInfo,
+            locationInfo,
+            tableRows
+          }}
+          key={"pdfFile"}
+        />
       </PDFViewer>
-      <Box sx={{ width: "20%", p: 2 }}>
-        {/* Title */}
+      {/* <Box sx={{ width: "20%", p: 2 }}>
         <Typography
           variant="h6"
           fontWeight={"bold"}
@@ -151,6 +223,8 @@ const PDFPreview = () => {
                   padding: 10,
                   fontSize: "15px",
                 }}
+                value={customerContact}
+                onChange={(event)=>{setCustomerContact(event.target.value)}}
               />
             </Box>
             <Box>
@@ -184,9 +258,18 @@ const PDFPreview = () => {
                 }}
               />
             </Box>
+            <PDFDownloadLink document={<PDFFile />} filename="FORM">
+              {({ loading }) =>
+                loading ? (
+                  <button>Loading Document...</button>
+                ) : (
+                  <button>Download</button>
+                )
+              }
+            </PDFDownloadLink>
           </Box>
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };
