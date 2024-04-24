@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
+  logo2: {
+    width: 150,
+    height: 175,
+  },
   title: {
     color: "#000",
     fontSize: "20px",
@@ -121,13 +125,15 @@ const PDFFile = ({props}) => (
         <Text style={{fontWeight:'16px',fontWeight:'semibold'}}>Total: ${'2,343,32.00'}</Text>
        </View>
        <PDFTable viewQty={props?.viewQty} viewCostPerUnit={props?.viewCostPerUnit} rows={props?.tableRows}/>
-       {/* <View style={{border:'1px solid #ccc',borderRadius:'5px'}}>
-        <View style={{backgroundColor:'#ccc',padding:'5px 10px',}}>
-          <Text>Items</Text>
-          <Text></Text>
+       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'baseline'}}>
+       <Image style={styles.logo2} src={props?.quoteInfo?.layoutImage} alt="logo" />
+        <View style={{padding:'5px 10px'}}>
+        <View style={{borderTop:'1px solid #ccc',borderBottom:'1px solid #ccc'}}>
+        <Text>Pricing SubCategories</Text>
           <Text></Text>
         </View>
-       </View> */}
+        </View>
+       </View>
       </View>
       {props?.check && <View style={styles.section}>
         <Text>{props?.text}</Text>

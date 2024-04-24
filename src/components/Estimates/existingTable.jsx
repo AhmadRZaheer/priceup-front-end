@@ -29,6 +29,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
+import { generateObjectForPDFPreview } from "../../utilities/estimates";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
@@ -52,6 +53,12 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     deleteEstimates(deleteRecord);
     setDeleteModalOpen(false);
   };
+
+  const handlePreviewPDFClick = (item) => {
+    const formattedData = generateObjectForPDFPreview(allHardwaresList,item);
+    localStorage.setItem('pdf-estimate',JSON.stringify(formattedData));
+    navigate(`/estimates/${item?._id}/pdf-preview`);
+  }
 
   const handleIconButtonClick = (item) => {
     dispatch(resetState());
@@ -172,7 +179,8 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
             )}
             columns={EstimatesColumns(
               handleOpenDeleteModal,
-              handleIconButtonClick
+              handleIconButtonClick,
+              handlePreviewPDFClick
             )}
             page={page}
             pageSize={itemsPerPage}

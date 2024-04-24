@@ -65,7 +65,6 @@ const AppRoutes = () => {
           )
         }
       />
-      <Route path="/preview" element={<PDFPreview />} />
       {isAdmin(decodedToken) ||
       (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
@@ -73,6 +72,7 @@ const AppRoutes = () => {
           <Route path="/estimates/">
             <Route index element={<Existing />} />
             <Route path="steps" element={<Estimates />} />
+            <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />

@@ -4,7 +4,9 @@ import { Box, IconButton, Typography } from "@mui/material";
 import CustomToggle from "../../components/ui-components/Toggle";
 import { Close } from "@mui/icons-material";
 import CustomInputField from "../../components/ui-components/CustomInput";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { backendURL } from "../../utilities/common";
+import { Link, useNavigate } from "react-router-dom";
 
 const customerContact = {
   name: "sdasdas",
@@ -16,6 +18,7 @@ const quoteInfo = {
   name: "2/29/2024",
   label: "Unique label",
   layoutName: "Door and Panel",
+  layoutImage: `${backendURL}/images/layouts/layout_1.png`,
 };
 
 const locationInfo = {
@@ -35,6 +38,16 @@ const tableRows = [
 const PDFPreview = () => {
   const [viewQty, setViewQty] = useState(false);
   const [viewCostPerUnit, setViewCostPerUnit] = useState(false);
+  const navigate = useNavigate();
+  const [item, setItem] = useState(null);
+  useEffect(() => {
+    const item = localStorage.getItem("pdf-estimate");
+    if (!item) {
+      navigate(-1);
+    }
+    setItem(JSON.parse(item));
+  }, [navigate]);
+  console.log(item,'item',new Date(item?.updatedAt)?.toLocaleDateString());
   return (
     <Box
       sx={{
@@ -51,7 +64,7 @@ const PDFPreview = () => {
           </Typography>
           <IconButton
             onClick={() => {
-              window.alert("close clicked!");
+              navigate(-1);
             }}
             title={"Close"}
             sx={{

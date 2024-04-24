@@ -11,12 +11,13 @@ import DeleteIcon from "../Assets/Delete-Icon.svg";
 import DefaultImage from "../components/ui-components/defaultImage";
 import { Link } from "react-router-dom";
 import CustomIconButton from "../components/ui-components/CustomButton";
-import { Edit } from "@mui/icons-material";
+import { Edit, Preview } from "@mui/icons-material";
 import SelectMenu_Status from "../components/ui-components/selectMenu-status";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
-  handleIconButtonClick
+  handleIconButtonClick,
+  handlePDFPreviewClick
 ) => {
   return [
     {
@@ -156,9 +157,15 @@ export const EstimatesColumns = (
                 alt="delete icon"
               />
             </IconButton>
+            <CustomIconButton
+              handleClick={() => handlePDFPreviewClick(params?.row)}
+              // disable={estimateDataFetching}
+              buttonText="PDF"
+              icon={<Preview sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
+            />
             <Link
               to="/estimates/steps"
-              style={{ marginLeft: 2, marginRight: 1, marginTop: 6 }}
+              style={{ marginLeft: 2, marginRight: 1, marginTop: 0 }}
             >
               <CustomIconButton
                 handleClick={() => handleIconButtonClick(params?.row)}
