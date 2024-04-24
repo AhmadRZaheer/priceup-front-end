@@ -30,6 +30,7 @@ import {
   getAdditionalFields,
   getDoorWidth,
   getisCustomizedDoorWidth,
+  setAdditionalFieldsPrice,
 } from "../../redux/estimateCalculations";
 import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
@@ -275,6 +276,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
     dispatch(setLaborPrice(prices.laborPrice));
+    dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
     dispatch(setTotal(prices.total));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
