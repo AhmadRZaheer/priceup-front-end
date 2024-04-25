@@ -21,6 +21,8 @@ import {
   getReturnWeight,
   getDoorWeight,
   getHardwareAddonsTotal,
+  getAdditionalFieldsTotal,
+  getListData,
 } from "../../redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { backendURL } from "../../utilities/common";
@@ -40,12 +42,13 @@ const Summary = () => {
   const fabricationPrice = useSelector(getFabricationTotal);
   const miscPrice = useSelector(getMiscTotal);
   const laborPrice = useSelector(getLaborTotal);
+  const additionalFieldsPrice = useSelector(getAdditionalFieldsTotal);
   const userProfitPercentage = useSelector(getUserProfitPercentage);
   const doorWidth = useSelector(getDoorWidth);
   const doorWeight = useSelector(getDoorWeight);
   const panelWeight = useSelector(getPanelWeight);
   const returnWeight = useSelector(getReturnWeight);
-
+  const listData = useSelector(getListData);
   const totalPrice = useSelector(getTotal);
   const actualCost = useSelector(getCost);
   const grossProfit = useSelector(getProfit);
@@ -58,8 +61,8 @@ const Summary = () => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-      ? `${backendURL}/${selectedData?.settings?.image}`
-      : CustomImage;
+        ? `${backendURL}/${selectedData?.settings?.image}`
+        : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
 
@@ -193,22 +196,22 @@ const Summary = () => {
                     layoutVariants.DOUBLEBARN,
                     layoutVariants.DOUBLEDOOR,
                   ].includes(selectedData?.settings?.variant) && (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
-                      {panelWeight}
-                    </Typography>
-                  )}
+                      <Typography>
+                        <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
+                        {panelWeight}
+                      </Typography>
+                    )}
                   {[
                     layoutVariants.DOORNOTCHEDPANELANDRETURN,
                     layoutVariants.DOORPANELANDRETURN,
                   ].includes(selectedData?.settings?.variant) && (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>
-                        Return Weight:{" "}
-                      </span>{" "}
-                      {returnWeight}
-                    </Typography>
-                  )}
+                      <Typography>
+                        <span style={{ fontWeight: "bold" }}>
+                          Return Weight:{" "}
+                        </span>{" "}
+                        {returnWeight}
+                      </Typography>
+                    )}
                 </AccordionDetails>
               </Accordion>
               <Box
@@ -609,7 +612,9 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost}</Typography>
+                            <Typography>{item.cost} * {(listData?.miscPricing?.pricingFactorStatus
+                              ? listData?.miscPricing?.pricingFactor
+                              : 1)}</Typography>
                           </Box>
                         )
                     )}
@@ -740,6 +745,23 @@ const Summary = () => {
                         </Typography>
                         <Typography variant="h6">
                           ${laborPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          borderTop: "2px solid #D0D5DD",
+
+                          paddingY: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Additional Fields Price
+                        </Typography>
+                        <Typography variant="h6">
+                          ${additionalFieldsPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
                     </Typography>

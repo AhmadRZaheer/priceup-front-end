@@ -26,6 +26,7 @@ export const getFabricationTotal = (state) =>
   state.estimateCalculations.fabricationPrice;
 export const getMiscTotal = (state) => state.estimateCalculations.miscPrice;
 export const getLaborTotal = (state) => state.estimateCalculations.laborPrice;
+export const getAdditionalFieldsTotal = (state) => state.estimateCalculations.additionalFieldsPrice;
 export const getisCustomizedDoorWidth = (state) =>
   state.estimateCalculations.isCustomizedDoorWidth;
 
@@ -184,6 +185,7 @@ const initialState = {
   fabricationPrice: 0,
   miscPrice: 0,
   laborPrice: 0,
+  additionalFieldsPrice:0
 };
 const estimateCalcSlice = createSlice({
   name: "estimateCalculations",
@@ -573,6 +575,10 @@ const estimateCalcSlice = createSlice({
       const { payload } = action;
       state.laborPrice = payload;
     },
+    setAdditionalFieldsPrice: (state, action) => {
+      const { payload } = action;
+      state.additionalFieldsPrice = payload;
+    }, 
 
     setInputContent: (state, action) => {
       const { type, value } = action.payload;
@@ -1384,5 +1390,6 @@ export const {
   resetNotifications,
   setHardwareFabricationQuantity,
   setisCustomizedDoorWidth,
+  setAdditionalFieldsPrice
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;
