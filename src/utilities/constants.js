@@ -73,3 +73,11 @@ export const hardwareTypes = {
 }
 
 export const standardDoorWidth = 28;
+
+export const severity = {
+  DEFAULT: "default",
+  ERROR: "error",
+  INFO: "info",
+  SUCCESS: "success",
+  WARNING: "warning",
+};
