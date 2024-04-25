@@ -1,40 +1,13 @@
-import {
-  Box,
-  FormControl,
-  IconButton,
-  Menu,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Typography,
-} from "@mui/material";
-import DeleteIcon from "../Assets/Delete-Icon.svg";
+import { Box, Typography } from "@mui/material";
 import DefaultImage from "../components/ui-components/defaultImage";
-import { Link } from "react-router-dom";
-import CustomIconButton from "../components/ui-components/CustomButton";
-import {
-  DeleteOutline,
-  Edit,
-  ManageSearch,
-  Preview,
-  RemoveRedEyeOutlined,
-} from "@mui/icons-material";
 import SelectMenu_Status from "../components/ui-components/selectMenu-status";
-import { useState } from "react";
+import EstimateActionsDropdown from "../components/EstimateActionsDropdown";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
   handleIconButtonClick,
   handlePDFPreviewClick
 ) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return [
     {
       field: "Creator Name",
@@ -153,72 +126,12 @@ export const EstimatesColumns = (
       flex: 1,
       renderCell: (params) => {
         return (
-          <>
-            <IconButton
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              sx={{ borderRadius: 2, fontSize: "14px" }}
-            >
-              <ManageSearch /> view more
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              PaperProps={{
-                style: {
-                  boxShadow: "0px 10px 15px -3px rgba(0,0,0,0.1)",
-                  borderRadius: "8px",
-                },
-              }}
-            >
-              <MenuItem>
-                {" "}
-                <Link
-                  to="/estimates/steps"
-                  style={{ marginLeft: 2, marginRight: 1, marginTop: 0 }}
-                >
-                  <CustomIconButton
-                    handleClick={() => handleIconButtonClick(params?.row)}
-                    // disable={estimateDataFetching}
-                    buttonText="Edit"
-                    icon={
-                      <Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
-                    }
-                  />
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                {" "}
-                <CustomIconButton
-                  handleClick={() => handlePDFPreviewClick(params?.row)}
-                  // disable={estimateDataFetching}
-                  buttonText="PDF"
-                  icon={
-                    <RemoveRedEyeOutlined
-                      sx={{ color: "white", fontSize: 18, mr: 0.4 }}
-                    />
-                  }
-                />
-              </MenuItem>
-              <MenuItem>
-                <CustomIconButton
-                  onClick={() => handleDeleteEstimate(params?.row?._id)}
-                  buttonText="Delete"
-                  severity={"error"}
-                  icon={
-                    <DeleteOutline
-                      sx={{ color: "white", fontSize: 18, mr: 0.4 }}
-                    />
-                  }
-                />
-              </MenuItem>
-            </Menu>
-          </>
+          <EstimateActionsDropdown
+            params={params}
+            handleDeleteEstimate={handleDeleteEstimate}
+            handleIconButtonClick={handleIconButtonClick}
+            handlePDFPreviewClick={handlePDFPreviewClick}
+          />
         );
       },
     },
