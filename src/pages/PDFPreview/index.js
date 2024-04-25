@@ -15,18 +15,27 @@ const location = {
 };
 
 const PDFPreview = () => {
-  const [viewQty, setViewQty] = useState(false);
-  const [viewCostPerUnit, setViewCostPerUnit] = useState(false);
+  const [viewPricingSubCategory, setViewPricingSubCategory] = useState(true);
+  const [viewGrossProfit, setViewGrossProfit] = useState(true);
+  const [viewSummary, setViewSummary] = useState(true);
+  const [viewLayoutImage, setViewLayoutImage] = useState(true);
+  const [viewFabrication, setViewFabrication] = useState(true);
+  const [viewAdditionalFields, setViewAdditionalFields] = useState(true);
+
   const navigate = useNavigate();
   const [quote, setQuote] = useState(null);
+  const handleClose = () => {
+    localStorage.removeItem('pdf-estimate')
+    navigate('/estimates');
+  }
   useEffect(() => {
     const item = localStorage.getItem("pdf-estimate");
-    if (!item) {
-      navigate(-1);
-    }
+    // if (!item) {
+    //   navigate(-1);
+    // }
     setQuote(JSON.parse(item));
   }, [navigate]);
-  console.log(quote, "quote", new Date(quote?.updatedAt)?.toLocaleDateString());
+  console.log(quote, "quote", new Date(quote?.updatedAt)?.toLocaleDateString(),quote?.glassType?.item?.name);
   return (
     <Box
       sx={{
@@ -42,9 +51,7 @@ const PDFPreview = () => {
             PDF Settings
           </Typography>
           <IconButton
-            onClick={() => {
-              navigate(-1);
-            }}
+            onClick={handleClose}
             title={"Close"}
             sx={{
               borderRadius: "100%",
@@ -105,9 +112,9 @@ const PDFPreview = () => {
                 sx={{ display: "flex", gap: 2, alignItems: "center" }}
               >
                 <CustomToggle
-                  text={"Quantity"}
-                  checked={viewQty}
-                  onChange={() => setViewQty(!viewQty)}
+                  text={"Pricing Sub Categories"}
+                  checked={viewPricingSubCategory}
+                  onChange={() => setViewPricingSubCategory(!viewPricingSubCategory)}
                 />
               </Typography>
               <Typography
@@ -115,16 +122,42 @@ const PDFPreview = () => {
                 sx={{ display: "flex", gap: 2, alignItems: "center" }}
               >
                 <CustomToggle
-                  text={"Cost/Unit"}
-                  checked={viewCostPerUnit}
-                  onChange={() => setViewCostPerUnit(!viewCostPerUnit)}
+                  text={"Gross Profit"}
+                  checked={viewGrossProfit}
+                  onChange={() => setViewGrossProfit(!viewGrossProfit)}
                 />
               </Typography>
               <Typography
                 component={"div"}
                 sx={{ display: "flex", gap: 2, alignItems: "center" }}
               >
-                <CustomToggle text={"Gross Profit Margin"} />
+                <CustomToggle text={"Summary"}
+                  checked={viewSummary}
+                  onChange={() => setViewSummary(!viewSummary)} />
+              </Typography>
+              <Typography
+                component={"div"}
+                sx={{ display: "flex", gap: 2, alignItems: "center" }}
+              >
+                <CustomToggle text={"Layout Image"}
+                  checked={viewLayoutImage}
+                  onChange={() => setViewLayoutImage(!viewLayoutImage)} />
+              </Typography>
+              <Typography
+                component={"div"}
+                sx={{ display: "flex", gap: 2, alignItems: "center" }}
+              >
+                <CustomToggle text={"Fabrication"}
+                  checked={viewFabrication}
+                  onChange={() => setViewFabrication(!viewFabrication)} />
+              </Typography>
+              <Typography
+                component={"div"}
+                sx={{ display: "flex", gap: 2, alignItems: "center" }}
+              >
+                <CustomToggle text={"Additional Fields"}
+                  checked={viewAdditionalFields}
+                  onChange={() => setViewAdditionalFields(!viewAdditionalFields)} />
               </Typography>
             </Box>
           </Box>
@@ -132,7 +165,7 @@ const PDFPreview = () => {
       </Box>
       <PDFViewer width={"80%"}>
         <PDFFile
-          controls={{ viewQty, viewCostPerUnit }}
+          controls={{ viewPricingSubCategory, viewGrossProfit, viewSummary, viewLayoutImage, viewFabrication, viewAdditionalFields }}
           data={{ quote, location }}
           key={"pdfFile"}
         />

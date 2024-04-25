@@ -504,9 +504,9 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
   const noGlassAddon = listData?.glassAddons?.find(
     (item) => item.slug === "no-treatment"
   );
-  const measurements = estimateData.measurements.map(
-    ({ _id, ...rest }) => rest
-  );
+  // const measurements = estimateData.measurements.map(
+  //   ({ _id, ...rest }) => rest
+  // );
 
   estimateInfoObject = {
     ...estimateInfoObject,
@@ -554,6 +554,9 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
         : "channel",
     glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
     hardwareAddons: [...hardwareAddons],
+    pricingFactor: listData?.miscPricing?.pricingFactorStatus
+      ? listData?.miscPricing?.pricingFactor
+      : 1,
   };
   return estimateInfoObject;
 };
@@ -570,17 +573,17 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
   } else if (quoteState === "edit" || quoteState === "custom") {
     Object.entries(measurements).forEach(([key, value]) => {
       const { count, width, height } = value;
-  
+
       // Iterate until the count value of the current element is reached
       for (let i = 1; i <= count; i++) {
-          result += `${width}'' / ${height}'' `;
-          // Perform any other operations with the current element and count value
-  
-          if (i === count) {
-              break; // Exit the loop when the count value is reached
-          }
+        result += `${width}'' / ${height}'' `;
+        // Perform any other operations with the current element and count value
+
+        if (i === count) {
+          break; // Exit the loop when the count value is reached
+        }
       }
-  });
+    });
     // Object.entries(measurements).forEach(([key, value]) => {
     //   result += `${value["width"]}’’ / ${value["height"]}’’  `;
     // });
