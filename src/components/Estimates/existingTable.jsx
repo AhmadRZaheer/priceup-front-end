@@ -24,12 +24,13 @@ import {
 } from "../../redux/estimateCalculations";
 import PlusWhiteIcon from "../../Assets/plus-white.svg";
 import { useNavigate } from "react-router-dom";
-import { calculateAreaAndPerimeter } from "../../utilities/common";
+import { calculateAreaAndPerimeter, calculateTotal } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
-import { generateObjectForPDFPreview } from "../../utilities/estimates";
+import { generateObjectForPDFPreview, renderMeasurementSides } from "../../utilities/estimates";
+import { quoteState } from "../../utilities/constants";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
@@ -56,7 +57,9 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
 
   const handlePreviewPDFClick = (item) => {
     const formattedData = generateObjectForPDFPreview(allHardwaresList,item);
-    localStorage.setItem('pdf-estimate',JSON.stringify(formattedData));
+    const pricing = calculateTotal(formattedData,formattedData?.sqftArea,allHardwaresList);
+    const measurementString = renderMeasurementSides(quoteState.EDIT,formattedData?.measurements,formattedData?.layout_id);
+    localStorage.setItem('pdf-estimate',JSON.stringify({...formattedData,measurements:measurementString,pricing}));
     navigate(`/estimates/${item?._id}/pdf-preview`);
   }
 

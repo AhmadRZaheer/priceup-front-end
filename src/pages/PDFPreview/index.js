@@ -3,25 +3,10 @@ import PDFFile from "../../components/PDFFile";
 import { Box, IconButton, Typography } from "@mui/material";
 import CustomToggle from "../../components/ui-components/Toggle";
 import { Close } from "@mui/icons-material";
-import CustomInputField from "../../components/ui-components/CustomInput";
 import { useEffect, useState } from "react";
-import { backendURL } from "../../utilities/common";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-const customerContact = {
-  name: "sdasdas",
-  phone: "2342343223",
-  email: "someone@something.com",
-};
-
-const quoteInfo = {
-  name: "2/29/2024",
-  label: "Unique label",
-  layoutName: "Door and Panel",
-  layoutImage: `${backendURL}/images/layouts/layout_1.png`,
-};
-
-const locationInfo = {
+const location = {
   name: "GCS Glass & Mirror",
   street: "20634 N. 28th Street, Suite 150",
   state: "Phoenix",
@@ -29,25 +14,19 @@ const locationInfo = {
   website: "www.gcs.glass",
 };
 
-const tableRows = [
-  { name: "8x8 MT Pull", qty: 1, type: "Handle", cost: 92.09 },
-  { name: "STD-Bevel", qty: 2, type: "Hinge", cost: 34.89 },
-  { name: "clear", type: "Glass", cost: 54 },
-];
-
 const PDFPreview = () => {
   const [viewQty, setViewQty] = useState(false);
   const [viewCostPerUnit, setViewCostPerUnit] = useState(false);
   const navigate = useNavigate();
-  const [item, setItem] = useState(null);
+  const [quote, setQuote] = useState(null);
   useEffect(() => {
     const item = localStorage.getItem("pdf-estimate");
     if (!item) {
       navigate(-1);
     }
-    setItem(JSON.parse(item));
+    setQuote(JSON.parse(item));
   }, [navigate]);
-  console.log(item,'item',new Date(item?.updatedAt)?.toLocaleDateString());
+  console.log(quote, "quote", new Date(quote?.updatedAt)?.toLocaleDateString());
   return (
     <Box
       sx={{
@@ -153,14 +132,8 @@ const PDFPreview = () => {
       </Box>
       <PDFViewer width={"80%"}>
         <PDFFile
-          props={{
-            viewQty,
-            viewCostPerUnit,
-            customerContact,
-            quoteInfo,
-            locationInfo,
-            tableRows
-          }}
+          controls={{ viewQty, viewCostPerUnit }}
+          data={{ quote, location }}
           key={"pdfFile"}
         />
       </PDFViewer>
