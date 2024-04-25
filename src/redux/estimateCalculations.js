@@ -1156,31 +1156,23 @@ const estimateCalcSlice = createSlice({
       let handleType = null;
       handleType = state.listData?.handles?.find(
         (item) =>
-          item._id === estimateData?.handles?.type &&
-          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
-            ?.status === true
+          item._id === estimateData?.handles?.type
       );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
         (item) =>
-          item._id === estimateData?.hinges?.type &&
-          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
-            ?.status === true
+          item._id === estimateData?.hinges?.type
       );
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
         (item) =>
-          item._id === estimateData?.slidingDoorSystem?.type &&
-          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
-            ?.status === true
+          item._id === estimateData?.slidingDoorSystem?.type
       );
 
       let headerType = null;
       headerType = state.listData?.header?.find(
         (item) =>
-          item._id === estimateData?.header?.type &&
-          item.finishes.find((row) => row.finish_id === hardwareFinishes?._id)
-            ?.status === true
+          item._id === estimateData?.header?.type
       );
 
       let glassTypee = null;

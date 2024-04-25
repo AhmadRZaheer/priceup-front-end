@@ -35,6 +35,7 @@ import {
 } from "../../utilities/authentications";
 import CustomAdminPage from "../../pages/CustomAdmins/customAdmin";
 import StaffLocationPage from "../../pages/stafffLocations/staffLocationPage";
+import PDFPreview from "../../pages/PDFPreview";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -71,6 +72,7 @@ const AppRoutes = () => {
           <Route path="/estimates/">
             <Route index element={<Existing />} />
             <Route path="steps" element={<Estimates />} />
+            <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
