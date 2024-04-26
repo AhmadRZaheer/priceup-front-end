@@ -1,8 +1,8 @@
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Box, Button } from "@mui/material";
 
-const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
-  const totalPages = Math.ceil(rows?.length / itemsPerPage);
+const Pagination = ({ totalRecords, itemsPerPage, page, setPage }) => {
+  const totalPages = Math.ceil(totalRecords / itemsPerPage);
   const MAX_PAGES_DISPLAYED = 5;
 
   const getPageNumbersToShow = () => {
@@ -60,6 +60,7 @@ const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
           borderRadius: "8px",
           textTransform: "capitalize",
           fontWeight: 500,
+          background:'white',
           ":hover": {
             border: "1px solid #D0D5DD",
             color: "#344054",
@@ -67,7 +68,7 @@ const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
         }}
         variant="outlined"
         onClick={handlePreviousPage}
-        disabled={page === 0}
+        disabled={page === 1}
       >
         <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
         Previous
@@ -79,8 +80,8 @@ const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
             onClick={() => setPage(pagenumber)}
             sx={{
               backgroundColor:
-                page === pagenumber ? "rgba(144, 136, 192, 0.2)" : "white",
-              color: page === pagenumber ? "#353050" : "#667085",
+              page === pagenumber ? "#8477DA" : "white",
+              color: page === pagenumber ? "white" : "#8477DA",
               width: "40px",
               height: "40px",
               borderRadius: "8px",
@@ -88,6 +89,7 @@ const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
               alignItems: "center",
               justifyContent: "center",
               cursor: "pointer",
+              border: page === pagenumber ? "1px solid #8477DA" : "1px solid #D0D5DD"
             }}
           >
             {pagenumber}
@@ -101,6 +103,7 @@ const Pagination = ({ rows, itemsPerPage, page, setPage }) => {
           borderRadius: "8px",
           textTransform: "capitalize",
           fontWeight: 500,
+          background:'white',
           ":hover": {
             border: "1px solid #D0D5DD",
             color: "#344054",
