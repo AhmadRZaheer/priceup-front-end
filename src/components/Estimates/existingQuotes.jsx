@@ -1,38 +1,24 @@
-import { Box, CircularProgress, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import image1 from "../../Assets/test.png";
 import image2 from "../../Assets/ok.png";
 import image3 from "../../Assets/cancel.png";
 import image4 from "../../Assets/calculator.svg";
-import {
-  useFetchDataEstimate,
-  useGetEstimates,
-} from "../../utilities/ApiHooks/estimate";
+import { useGetEstimatesStats } from "../../utilities/ApiHooks/estimate";
 
 import ExistingTable from "./existingTable";
 import { useEffect } from "react";
-import { getEstimatesListRefetch } from "../../redux/refetch";
-import { useSelector } from "react-redux";
 // import { getDataRefetch } from "../../redux/staff";
 
 export default function ExistingQuotes() {
-  const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   // const refetchOnUserChange = useSelector(getDataRefetch);
   const {
-    data: estimatesList,
-    isLoading: estimatesFetching,
-    refetch: refetchEstimatesList,
-  } = useGetEstimates();
-  const {
-    data: allHardwaresList,
-    isLoading: listFetching,
-    refetch: refetchHardwaresList,
-  } = useFetchDataEstimate();
+    data: estimatesStats,
+    // isLoading: estimatesStatsFetching,
+    refetch: refetchEstimatesStats,
+  } = useGetEstimatesStats();
   useEffect(() => {
-    refetchEstimatesList();
-    if (refetchEstimatesCounter <= 0) {
-      refetchHardwaresList();
-    }
-  }, [refetchEstimatesCounter]);
+    refetchEstimatesStats();
+  }, []);
   return (
     <>
       <Box sx={{ backgroundColor: "white" }}>
@@ -87,7 +73,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {estimatesList?.pending}
+                {estimatesStats?.pending}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -115,7 +101,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {estimatesList?.approved}
+                {estimatesStats?.approved}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -143,7 +129,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pt={0.5} pl={0.8} fontSize={26} fontWeight="bold">
-                {estimatesList?.voided}
+                {estimatesStats?.voided}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 0.5 }}>
@@ -171,7 +157,7 @@ export default function ExistingQuotes() {
                 alt=""
               />
               <Typography pl={0.8} fontSize={26} fontWeight="bold">
-                ${estimatesList?.total?.toFixed(2)}
+                ${estimatesStats?.total?.toFixed(2)}
               </Typography>
             </Box>
             <Box sx={{ paddingLeft: 1, pt: 1.5 }}>
@@ -187,26 +173,7 @@ export default function ExistingQuotes() {
             mb: 2,
           }}
         >
-          {estimatesFetching || listFetching ? (
-            <Box
-              sx={{
-                width: 40,
-                m: "auto",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                maxHeight: "70vh",
-                minHeight: "20vh",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
-            </Box>
-          ) : (
-            <ExistingTable
-              estimatesList={estimatesList}
-              allHardwaresList={allHardwaresList}
-            />
-          )}
+          <ExistingTable />
         </Box>
       </Box>
     </>

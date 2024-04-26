@@ -234,7 +234,7 @@ const Super_SuperAdminsTable = () => {
                   hideFooter
                 />
                 <Pagination
-                  rows={filteredData}
+                  totalRecords={filteredData ? filteredData?.length : 0}
                   itemsPerPage={itemsPerPage}
                   page={page}
                   setPage={setPage}

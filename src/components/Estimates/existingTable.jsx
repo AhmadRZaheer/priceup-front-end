@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   IconButton,
   Typography,
   InputAdornment,
   TextField,
+  CircularProgress,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { useDeleteEstimates } from "../../utilities/ApiHooks/estimate";
-import { useDispatch } from "react-redux";
+import { useDeleteEstimates, useFetchDataEstimate, useGetEstimates } from "../../utilities/ApiHooks/estimate";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
   resetState,
@@ -29,25 +30,44 @@ import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
+import { getEstimatesListRefetch } from "../../redux/refetch";
 
-export default function ExistingTable({ estimatesList, allHardwaresList }) {
+export default function ExistingTable() {
   const navigate = useNavigate();
+  const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
+  const { data: estimatesList,
+    isLoading: estimatesListFetching,
+    refetch: refetchEstimatesList,
+  } = useGetEstimates(page, itemsPerPage);
+  const {
+    data: allHardwaresList,
+    isLoading: listFetching,
+    refetch: refetchHardwaresList,
+  } = useFetchDataEstimate();
   const { mutate: deleteEstimates, isSuccess: deletedSuccessfully, isLoading: LoadingForDelete } =
     useDeleteEstimates();
   const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord,setDeleteRecord] = useState(null);
+  const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
   }
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-  const filteredData = estimatesList?.estimates?.filter((item) =>
-    item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
-  );
-
+  
+  const filteredData = useMemo(() => {
+    if (estimatesList && estimatesList?.estimates?.length) {
+      return estimatesList?.estimates?.filter((item) =>
+        item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+    else {
+      return [];
+    }
+  }, [estimatesList, search]);
+  
   const handleDeleteEstimate = () => {
     deleteEstimates(deleteRecord);
     setDeleteModalOpen(false);
@@ -73,9 +93,9 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     );
     if (result?.doorWidth && item.isCustomizedDoorWidth === false) {
       dispatch(setDoorWidth(result?.doorWidth));
-          } else {
+    } else {
       dispatch(setDoorWidth(item?.doorWidth));
-          }
+    }
     if (result?.doorWeight) {
       dispatch(setDoorWeight(result?.doorWeight));
     }
@@ -99,6 +119,12 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     dispatch(setNavigationDesktop("layouts"));
     navigate("/estimates/steps");
   };
+  useEffect(() => {
+    refetchEstimatesList();
+    if (refetchEstimatesCounter <= 0) {
+      refetchHardwaresList();
+    }
+  }, [page,refetchEstimatesCounter]);
 
   return (
     <>
@@ -134,7 +160,7 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
         />
         <IconButton
           onClick={handleCreateQuote}
-          //   disabled={estimateDataFetching}
+          disabled={estimatesListFetching || listFetching}
           sx={{
             backgroundColor: "#8477DA",
             color: "white",
@@ -155,7 +181,21 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
           Add
         </IconButton>
       </Box>
-      {filteredData?.length === 0 ? (
+      {estimatesListFetching ? 
+        <Box
+        sx={{
+          width: 40,
+          m: "auto",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          maxHeight: "70vh",
+          minHeight: "20vh",
+        }}
+      >
+        <CircularProgress sx={{ color: "#8477DA" }} />
+      </Box>
+      : filteredData?.length === 0 && !estimatesListFetching ? (
         <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
           No Estimates Found
         </Typography>
@@ -166,22 +206,23 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
               border: "none",
             }}
             getRowId={(row) => row._id}
-            rows={filteredData?.slice(
-              (page - 1) * itemsPerPage,
-              page * itemsPerPage
-            )}
+            // rows={filteredData?.slice(
+            //   (page - 1) * itemsPerPage,
+            //   page * itemsPerPage
+            // )}
+            rows={filteredData}
             columns={EstimatesColumns(
               handleOpenDeleteModal,
               handleIconButtonClick
             )}
             page={page}
             pageSize={itemsPerPage}
-            rowCount={filteredData ? filteredData?.length : 0}
+            rowCount={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
             sx={{ width: "100%" }}
             hideFooter
           />
           <Pagination
-            rows={filteredData}
+            totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}

@@ -31,12 +31,13 @@ export const useFetchDataEstimate = () => {
   });
 };
 
-export const useGetEstimates = () => {
+export const useGetEstimates = (page,limit) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${backendURL}/estimates`, {
         headers: { Authorization: `Bearer ${token}` },
+        params: { page, limit },
       });
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : null;
@@ -51,7 +52,6 @@ export const useGetEstimates = () => {
     queryKey: ["estimates"],
     queryFn: fetchData,
     enabled: false,
-    // placeholderData: [],
   });
 };
 
@@ -224,4 +224,27 @@ export const useDeleteEstimates = () => {
   };
 
   return useMutation(handleDelete);
+};
+
+export const useGetEstimatesStats = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(`${backendURL}/estimates/allStats`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : null;
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["estimatesStats"],
+    queryFn: fetchData,
+    enabled: false,
+  });
 };
