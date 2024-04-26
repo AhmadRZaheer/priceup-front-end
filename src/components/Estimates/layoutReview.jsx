@@ -1357,7 +1357,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
                   }}
                 >
                   {" "}
-                  Next
+                  {currentQuoteState === quoteState.EDIT ? 'Update' : 'Next'}
                 </Button>
               </Box>
             </Box>
