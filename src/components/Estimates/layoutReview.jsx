@@ -28,6 +28,9 @@ import {
   resetNotifications,
   setContent,
   getAdditionalFields,
+  getDoorWidth,
+  getisCustomizedDoorWidth,
+  setAdditionalFieldsPrice,
 } from "../../redux/estimateCalculations";
 import { useEditEstimates } from "../../utilities/ApiHooks/estimate";
 import Summary from "./summary";
@@ -51,6 +54,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const estimatesTotal = useSelector(getTotal);
   const measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
+  const doorWidthredux = useSelector(getDoorWidth);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
   const currentQuoteState = useSelector(getQuoteState);
@@ -58,7 +62,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const selectedData = useSelector(selectedItem);
   const notifications = useSelector(getNotifications);
   const addedFields = useSelector(getAdditionalFields);
-
+  const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
   const { enqueueSnackbar } = useSnackbar();
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -70,7 +74,6 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     // }
     // return state;
   }, [currentQuoteState]);
-  console.log(addedFields, "addedFields");
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
@@ -111,11 +114,11 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     );
     const additionalFieldsArray = filteredFields.map(
       (row) => {
-        return {
-          cost: row.cost,
-          label: row.label,
-        };
-      }
+      return {
+        cost: row.cost,
+        label: row.label,
+      };
+    }
     );
     const glassToGlassArray =
       selectedContent?.mountingClamps?.glassToGlass?.map((row) => {
@@ -149,6 +152,8 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
       (item) => item?._id
     );
     const estimate = {
+      doorWidth: Number(doorWidthredux),
+      isCustomizedDoorWidth: isCustomizedDoorWidth,
       additionalFields: [...additionalFieldsArray],
       hardwareFinishes: selectedContent?.hardwareFinishes?._id,
       handles: {
@@ -271,6 +276,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
     dispatch(setLaborPrice(prices.laborPrice));
+    dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
     dispatch(setTotal(prices.total));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
@@ -304,22 +310,32 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
 
   useEffect(() => {
     console.log("mount");
+    const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
+    let delay = 0;
     Object.entries(notifications).forEach(([key, value]) => {
       if (
         ["glassAddonsNotAvailable", "hardwareAddonsNotAvailable", "wallClampNotAvailable", "sleeveOverNotAvailable", "glassToGlassNotAvailable", "cornerWallClampNotAvailable", "cornerSleeveOverNotAvailable", "cornerGlassToGlassNotAvailable"].includes(key)
       ) {
         value?.forEach((item) => {
           if (item.status) {
-            enqueueSnackbar(item.message, {
-              variant: item.variant,
-            });
+            setTimeout(() => {
+              enqueueSnackbar(item.message, {
+                variant: item.variant,
+                // autoHideDuration: 5000, // Set a custom duration for each snackbar
+              });
+            }, delay);
+            delay += delayBetweenSnackbars;
           }
         });
       } else {
         if (value.status) {
-          enqueueSnackbar(value.message, {
-            variant: value.variant,
-          });
+          setTimeout(() => {
+            enqueueSnackbar(value.message, {
+              variant: value.variant,
+              // autoHideDuration: 5000, // Set a custom duration for each snackbar
+            });
+          }, delay);
+          delay += delayBetweenSnackbars;
         }
       }
     });
@@ -383,7 +399,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
               }}
               variant="h4"
             >
-            {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
+              {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
             </Typography>
           </Box>
         </Box>

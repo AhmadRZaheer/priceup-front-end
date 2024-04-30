@@ -199,9 +199,10 @@ function MobileBar() {
                       display: "block",
                       textOverflow: "ellipsis",
                       overflow: "hidden",
+                      textTransform: "capitalize"
                     }}
                   >
-                    {activeLocation?.company?.name} Location
+                    {activeLocation?.company?.name}
                   </Typography>
                 </Box>
                 <UnfoldMore sx={{ color: "white", mr: 1 }} />

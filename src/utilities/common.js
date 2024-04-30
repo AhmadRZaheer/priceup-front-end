@@ -239,10 +239,17 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     selectedContent?.people *
     selectedContent?.hours *
     estimatesData?.miscPricing?.hourlyRate;
-  // console.log(
-  //   estimatesData?.miscPricing?.pricingFactorStatus,
-  //   " estimatesData?.miscPricing?.pricingFactor"
-  // );
+  
+  //additionalField price
+  let additionalFieldPrice = 0;
+  selectedContent?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost *
+        (estimatesData?.miscPricing?.pricingFactorStatus
+          ? estimatesData?.miscPricing?.pricingFactor
+          : 1)
+    );
+  });
   let total =
     (hardwareTotals +
       fabricationPrice +
@@ -252,20 +259,29 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       (estimatesData?.miscPricing?.pricingFactorStatus
         ? estimatesData?.miscPricing?.pricingFactor
         : 1) +
-    laborPrice;
-    // additonal fields sum
-  if (selectedContent.additionalFields.length > 0) {
-    total += selectedContent.additionalFields.reduce(
-      (acc, item) => acc + Number(item.cost),
-      0
-    );
-  }
+    laborPrice + 
+    additionalFieldPrice;
+  // additonal fields sum
+  // if (selectedContent.additionalFields.length > 0) {
+  //   total += selectedContent.additionalFields.reduce(
+  //     (acc, item) =>
+  //       acc +
+  //       Number(
+  //         item.cost *
+  //           (estimatesData?.miscPricing?.pricingFactorStatus
+  //             ? estimatesData?.miscPricing?.pricingFactor
+  //             : 1)
+  //       ),
+  //     0
+  //   );
+  // }
   const cost =
     hardwareTotals +
     fabricationPrice +
     glassPrice +
     glassAddonsPrice +
-    hardwareAddons;
+    hardwareAddons +
+    additionalFieldPrice;
   // const profit = total - cost;
   // const totalPercentage = ((total - cost) * 100) / total;
   if (
@@ -296,6 +312,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     miscPricing: 0,
     hardwareAddonsPrice: hardwareAddons,
     laborPrice: laborPrice,
+    additionalFieldPrice: additionalFieldPrice,
     total: total,
     cost: cost,
     profit: ((total - cost) * 100) / total,
@@ -799,27 +816,27 @@ const calculatePanel = (width, height) => {
   return { sqft: panelSqft, perimeter: panelPerimeter };
 };
 
-export const getGlassThickness = (variant, measurementSides) => {
+export const getGlassThickness = (variant, measurementSides, height) => {
   const measurements = convertArrayKeysToObject(measurementSides);
   switch (variant) {
     case layoutVariants.DOOR:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDPANEL:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOUBLEDOOR:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDNIB:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORANDNOTCHEDPANEL:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORPANELANDRETURN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOORNOTCHEDPANELANDRETURN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.SINGLEBARN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     case layoutVariants.DOUBLEBARN:
-      return measurements?.a < 85 ? "3/8" : "1/2";
+      return measurements?.a < height ? "3/8" : "1/2";
     default:
       return;
   }

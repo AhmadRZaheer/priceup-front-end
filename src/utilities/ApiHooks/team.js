@@ -178,7 +178,7 @@ export const useEditTeamMembers = () => {
         dispatch(
           showSnackbar({
             message: "An error occurred while updating the data",
-            severity: "success",
+            severity: "error",
           })
         );
         throw new Error("An error occurred while updating the data.");
@@ -187,7 +187,7 @@ export const useEditTeamMembers = () => {
       dispatch(
         showSnackbar({
           message: `${error.response?.data?.message}`,
-          severity: "success",
+          severity: "error",
         })
       );
       throw new Error("An error occurred while updating the data.");

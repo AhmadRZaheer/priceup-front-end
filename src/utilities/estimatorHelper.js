@@ -1,4 +1,5 @@
-import { hardwareTypes, notificationsVariant, panelOverWeightAmount, thicknessTypes } from "./constants";
+import { convertArrayKeysToObject } from "./common";
+import { hardwareTypes, notificationsVariant, panelOverWeightAmount, standardDoorWidth, thicknessTypes } from "./constants";
 
 export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
  switch(type){
@@ -389,6 +390,8 @@ export const generateNotificationsForCurrentEstimate = (
   let notifications = { ...estimateState.notifications };
   const panelWeight = estimateState.panelWeight;
   const doorWeight = estimateState.doorWeight;
+  const doorWidth = estimateState.doorWidth;
+  const measurements = estimateState.measurements;
 
     if (selectedContent.handles?.item) {
       // generate handle not available notification in current finish
@@ -400,17 +403,21 @@ export const generateNotificationsForCurrentEstimate = (
           message: `Handle "${selectedContent.handles.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
     }
-    /** switch hinges if width increases layout defaults */
+     /** switch hinges if width increases layout defaults only for layouts which have variant */
+     if(reduxSelectedItem?.settings?.variant){
     const switchHingeResult = getSwitchHingeNotification(
       selectedContent,
       reduxSelectedItem,
-      doorWeight,
-      reduxListData
+      panelWeight,
+      reduxListData,
+      doorWidth,
+      measurements,
     );
     if (switchHingeResult?.hingesSwitch)
       notifications.hingesSwitch = switchHingeResult.hingesSwitch;
     if (switchHingeResult?.hinges)
       selectedContent.hinges = switchHingeResult.hinges;
+    }
     /** end */
     if (selectedContent.hinges?.item) {
       // generate hinges not available notification in current finish
@@ -449,7 +456,7 @@ export const generateNotificationsForCurrentEstimate = (
      /** switch glass thickness if glass size is greater than provided */
      const thicknessShiftResult = getGlassThicknessShiftNotification(
       selectedContent,
-      calculatedGlassThickness
+      calculatedGlassThickness,
     );
     if (thicknessShiftResult?.glassThicknessSwitch)
       notifications.glassThicknessSwitch =
@@ -625,14 +632,19 @@ export const generateNotificationsForCurrentEstimate = (
 const getSwitchHingeNotification = (
   selectedContent,
   reduxSelectedItem,
-  doorWeight,
-  reduxListData
+  panelWeight,
+  reduxListData,
+  doorWidth,
+  measurements,
 ) => {
+  const measurementsObject = convertArrayKeysToObject(measurements);
   // console.log('hinges switch',doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80),doorWeight,(reduxSelectedItem?.settings?.heavyDutyOption?.height || 80))
   if (
     // reduxSelectedItem?.settings?.heavyDutyOption?.threshold > 0 &&
     // doorWidth > reduxSelectedItem?.settings?.heavyDutyOption?.threshold
-   doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80)
+  //  doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80) || doorWidth > 28 ||
+  //  measurements[0].value > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80)
+  doorWidth > standardDoorWidth || measurementsObject?.a > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 85) || panelWeight > panelOverWeightAmount 
   ) {
     let hinge = reduxListData?.hinges?.find(
       (item) =>

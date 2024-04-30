@@ -286,9 +286,7 @@ const SuperAdminTable = () => {
         ) : filteredData.length !== 0 ? (
           filteredData?.map((item) => {
             const matchingUserData = customUserData.filter((userData) =>
-              userData?.locationsAccess?.some(
-                (accessData) => accessData?.company_id === item?.company?._id
-              )
+              userData?.locationsAccess?.includes(item?.company?._id)
             );
             const filterNonActive = matchingUserData.filter(
               (data) => data.status
@@ -355,6 +353,7 @@ const SuperAdminTable = () => {
                           color: "#101828",
                           fontSize: "18px",
                           fontWeight: 500,
+                          textTransform:'capitalize'
                         }}
                       >
                         {item?.company?.name}
@@ -371,7 +370,7 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ mt: 1 }}>
                       <Box sx={{ mt: 1 }}>
-                        <Typography sx={{ fontSize: "14px", color: "#667085" }}>
+                        <Typography sx={{ fontSize: "14px", color: "#667085", textTransform: 'capitalize' }}>
                           {/* {item?.company?.name} */}
                           {item?.user?.name}
                         </Typography>

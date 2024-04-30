@@ -12,16 +12,24 @@ import {
 import AddEditHardware from "../Modal/addEditHardware";
 import CustomIconButton from "../ui-components/CustomButton";
 import DefaultImage from "../ui-components/defaultImage";
+import DeleteModal from "../Modal/deleteModal";
 
 const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteHardware, isSuccess: deleteSuccess } =
+  const { mutate: deleteHardware, isSuccess: deleteSuccess, isLoading: LoadingForDelete } =
     useDeleteHardwares();
-  const handleHardwareDelete = (id) => {
-    deleteHardware(id);
+  const handleHardwareDelete = () => {
+    deleteHardware(deleteRecord);
+    setDeleteModalOpen(false);
   };
   const { mutate: editFinish, isSuccess: hardwareEditSuccess } =
     useEditFullHardware();
@@ -84,7 +92,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
           />
         </Box>
         <Box>
-          <IconButton onClick={() => handleHardwareDelete(entry._id)}>
+          <IconButton onClick={() => handleOpenDeleteModal(entry._id)}>
             <img src={DeleteIcon} alt="delete icon" />
           </IconButton>
           <CustomIconButton
@@ -106,6 +114,12 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
           />
         ))}
       </Box>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleHardwareDelete}
+      />
       <AddEditHardware
         open={open}
         close={handleClose}

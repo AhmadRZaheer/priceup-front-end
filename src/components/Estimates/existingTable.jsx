@@ -11,13 +11,12 @@ import { useDeleteEstimates } from "../../utilities/ApiHooks/estimate";
 import { useDispatch } from "react-redux";
 import {
   addSelectedItem,
-  initializeStateForEditQuote,
   resetState,
+  setisCustomizedDoorWidth,
   setDoorWeight,
   setDoorWidth,
   setListData,
   setNavigationDesktop,
-  // setNotifications,
   setPanelWeight,
   setQuoteState,
   setReturnWeight,
@@ -29,14 +28,19 @@ import { calculateAreaAndPerimeter } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
 import Pagination from "../Pagination";
-import { notificationTypes, notificationsVariant, panelOverWeightAmount } from "../../utilities/constants";
+import DeleteModal from "../Modal/deleteModal";
 
 export default function ExistingTable({ estimatesList, allHardwaresList }) {
   const navigate = useNavigate();
-  const { mutate: deleteEstimates, isSuccess: deletedSuccessfully } =
+  const { mutate: deleteEstimates, isSuccess: deletedSuccessfully, isLoading: LoadingForDelete } =
     useDeleteEstimates();
   const dispatch = useDispatch();
-
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord,setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  }
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
@@ -44,8 +48,9 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const handleDeleteEstimate = (id) => {
-    deleteEstimates(id);
+  const handleDeleteEstimate = () => {
+    deleteEstimates(deleteRecord);
+    setDeleteModalOpen(false);
   };
 
   const handleIconButtonClick = (item) => {
@@ -57,14 +62,20 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     //     quotesId: item._id,
     //   })
     // );
-    dispatch(updateMeasurements(item.measurements))
+    dispatch(setisCustomizedDoorWidth(item.isCustomizedDoorWidth));
+    dispatch(updateMeasurements(item.measurements));
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(
       item.measurements,
-      item?.layoutData?.variant,
+      item?.settings?.variant,
       item.glassType.thickness
     );
+    if (result?.doorWidth && item.isCustomizedDoorWidth === false) {
+      dispatch(setDoorWidth(result?.doorWidth));
+          } else {
+      dispatch(setDoorWidth(item?.doorWidth));
+          }
     if (result?.doorWeight) {
       dispatch(setDoorWeight(result?.doorWeight));
     }
@@ -74,7 +85,6 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
     if (result?.returnWeight) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
-    dispatch(setDoorWidth(result.doorWidth));
     if (item?.layout_id) {  // default layout edit
       dispatch(setNavigationDesktop("measurements"));
     } else { // custom layout edit
@@ -161,7 +171,7 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
               page * itemsPerPage
             )}
             columns={EstimatesColumns(
-              handleDeleteEstimate,
+              handleOpenDeleteModal,
               handleIconButtonClick
             )}
             page={page}
@@ -175,6 +185,12 @@ export default function ExistingTable({ estimatesList, allHardwaresList }) {
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}
+          />
+          <DeleteModal
+          open={deleteModalOpen}
+          close={()=>{setDeleteModalOpen(false)}}
+          isLoading={LoadingForDelete}
+          handleDelete={handleDeleteEstimate}
           />
         </Box>
       )}

@@ -30,13 +30,15 @@ import {
   initializeStateForEditQuote,
   setHardwareFabricationQuantity,
   getAdditionalFields,
+  getisCustomizedDoorWidth,
+  setisCustomizedDoorWidth,
 } from "../../redux/estimateCalculations";
 import {
   backendURL,
   calculateAreaAndPerimeter,
   getGlassThickness,
 } from "../../utilities/common";
-import { layoutVariants, quoteState } from "../../utilities/constants";
+import { layoutVariants, panelOverWeightAmount, quoteState, thicknessTypes } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
@@ -49,19 +51,20 @@ const LayoutMeasurements = () => {
   const setHandleEstimatesPages = (item) => {
     dispatch(setNavigationDesktop(item));
   };
-  const [editField, setEditField] = useState(true);
+  // const [editField, setEditField] = useState(true);
+  const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSidesForCreate = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
-  const reduxAdditionalFields = useSelector(getAdditionalFields)
+  const reduxAdditionalFields = useSelector(getAdditionalFields);
   const measurementSidesForEdit = selectedData?.measurements;
   const measurementSides =
     currentQuoteState === quoteState.EDIT
       ? measurementSidesForEdit
       : measurementSidesForCreate;
 
-  const initialValues = measurementSides.reduce((acc, item) => {
+    const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
     } else {
@@ -71,7 +74,7 @@ const LayoutMeasurements = () => {
   }, {});
 
   // const [width, setWidth] = useState(0);
-  const [debouncedValue, setDebouncedValue] = useState(0);
+    const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   let debounceTimeout;
@@ -100,9 +103,10 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-      const glassThickness = getGlassThickness(
+              const glassThickness = getGlassThickness(
         selectedData?.settings?.variant,
-        measurementsArray
+        measurementsArray,
+        selectedData?.settings?.heavyDutyOption?.height || 85
       );
       const result = calculateAreaAndPerimeter(
         measurementsArray,
@@ -125,17 +129,19 @@ const LayoutMeasurements = () => {
       const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
+          measurements: measurementsArray,
           content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
           perimeter: result.perimeter, areaSqft: result.areaSqft,
           doorWeight: result?.doorWeight ?? estimateState.doorWeight,
           panelWeight: result?.panelWeight ?? estimateState.panelWeight,
         },
-        glassThickness
+        result?.panelWeight && result?.panelWeight > panelOverWeightAmount ? thicknessTypes.ONEBYTWO : glassThickness
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
+      if (currentQuoteState === quoteState.CREATE) {
       const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
-      console.log(fabricationValues, 'fabrication values');
       dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+      }
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
       // }
@@ -191,15 +197,19 @@ const LayoutMeasurements = () => {
     //   dispatch(setReturnWeight(result?.returnWeight));
     // }
     // dispatch(setDoorWidth(result.doorWidth));
-    setEditDebouncedValue(result.doorWidth);
-    dispatch(setDoorWidth(result.doorWidth));
-  }, [debouncedValue]);
+
+    if (isCustomizedDoorWidthRedux) {
+      dispatch(setDoorWidth(editDebouncedValue));
+    } else {
+            dispatch(setDoorWidth(result.doorWidth));
+    }
+  }, [debouncedValue, isCustomizedDoorWidthRedux]);
 
   const handleInputChange = (event) => {
     setEditDebouncedValue(event.target.value);
     dispatch(setDoorWidth(event.target.value));
   };
-
+  
   useEffect(() => {
     if (currentQuoteState === quoteState.CREATE) {
       dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
@@ -399,81 +409,90 @@ const LayoutMeasurements = () => {
                   ].includes(
                     selectedData?.settings?.variant
                   ) && (
-                      <>
-                        <Typography>
-                          <input
-                            type="checkbox"
-                            onChange={() => setEditField(!editField)}
-                            style={{
-                              width: "20px",
-                            }}
-                          />
-                          <span
-                            style={{
-                              marginLeft: "10px",
-                            }}
-                          >
-                            Select if you want to customize the door width
-                          </span>
-                        </Typography>
+                    <>
+                      <Typography>
+                        <input
+                          type="checkbox"
+                          onChange={() =>
+                            dispatch(
+                              setisCustomizedDoorWidth(
+                                !isCustomizedDoorWidthRedux
+                              )
+                            )
+                          }
+                          checked={isCustomizedDoorWidthRedux}
+                          style={{
+                            width: "20px",
+                          }}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "10px",
+                          }}
+                        >
+                          Select if you want to customize the door width
+                        </span>
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 1,
+                        }}
+                      >
                         <Box
                           sx={{
                             display: "flex",
-                            gap: 1,
+                            width: "100%",
+                            alignItems: "center",
                           }}
                         >
                           <Box
                             sx={{
                               display: "flex",
-                              width: "100%",
                               alignItems: "center",
+                              width: "200px",
                             }}
                           >
-                            <Box
+                            <Typography
                               sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                width: "200px",
+                                color: !isCustomizedDoorWidthRedux
+                                  ? "gray"
+                                  : "",
                               }}
                             >
-                              <Typography
-                                sx={{
-                                  color: editField ? "gray" : "",
-                                }}
-                              >
-                                Door Width
-                              </Typography>
-                              <Tooltip
-                                title={
-                                  "If you want to customize the door width, check the above checkbox"
-                                }
-                              >
-                                <IconButton>
-                                  <InfoOutlinedIcon />
-                                </IconButton>
-                              </Tooltip>
-                            </Box>
-                            <TextField
-                              InputProps={{
-                                inputProps: { min: 1 },
-                              }}
-                              disabled={editField}
-                              placeholder={editDebouncedValue}
-                              type="number"
-                              size="small"
-                              variant="outlined"
-                              value={editDebouncedValue}
-                              style={{
-                                background: "white",
-                                borderRadius: "8px",
-                                border: "1px solid #D0D5DD",
-                                width: "100%",
-                              }}
-                              name="door"
-                              onChange={(e) => handleInputChange(e)}
-                            />
+                              Door Width
+                            </Typography>
+                            <Tooltip
+                              title={
+                                "If you want to customize the door width, check the above checkbox"
+                              }
+                            >
+                              <IconButton>
+                                <InfoOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
                           </Box>
-                          {/* <Box
+                          <TextField
+                            InputProps={{
+                              inputProps: { min: 1 },
+                            }}
+                            disabled={!isCustomizedDoorWidthRedux}
+                            placeholder={doorWidthFromredux}
+                            type="number"
+                            size="small"
+                            variant="outlined"
+                            value={doorWidthFromredux}
+                            style={{
+                              background: "white",
+                              borderRadius: "8px",
+                              border: "1px solid #D0D5DD",
+                              width: "100%",
+                            }}
+                            name="door"
+                            onChange={(e) => handleInputChange(e)}
+                          />
+                        </Box>
+                        {/* <Box
                         sx={{
                           display: "flex",
                           flexDirection: "column",
@@ -499,9 +518,14 @@ const LayoutMeasurements = () => {
                           name="panel"
                         />
                       </Box> */}
-                        </Box>
-                      </>
-                    )}
+                      </Box>
+                      <Typography sx={{ color: "red", fontSize: "14px"}}>
+                          {doorWidthFromredux > formik.values.b
+                            ? "Door width can not be greater then dimension ' b '"
+                            : ""}
+                        </Typography>
+                    </>
+                  )}
                 </Box>
 
                 <Box
@@ -539,7 +563,7 @@ const LayoutMeasurements = () => {
                         width="100%"
                         height="100%"
                         src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                          }`}
+                        }`}
                         alt="Selected"
                       />
                     </Box>
@@ -595,9 +619,11 @@ const LayoutMeasurements = () => {
                     <Button
                       type="submit"
                       fullWidth
-                      disabled={Object.keys(formik.values).some(
-                        (key) => !formik.values[key]
-                      )}
+                      disabled={
+                        Object.keys(formik.values).some(
+                            (key) => !formik.values[key]
+                        ) || doorWidthFromredux > formik.values.b
+                    }
                       sx={{
                         height: 40,
                         fontSize: 20,

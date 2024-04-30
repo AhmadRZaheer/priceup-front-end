@@ -86,7 +86,7 @@ const CustomLayout = () => {
       dispatch(setNavigationDesktop("existing"));
     }
   };
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     // const measurementsArray = Object.keys(values)
     //   .map((k) => values[k])
     //   .reduce((prev, current) => {
@@ -125,8 +125,10 @@ const CustomLayout = () => {
       content: { ...estimateState.content, polish: result.perimeter - estimateState.content.mitre },
       panelWeight: result?.panelWeight ?? estimateState.panelWeight }, '3/8');
     dispatch(setMultipleNotifications({ ...notificationsResult }));
+    if (currentQuoteState === quoteState.CREATE) {
     const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness: '3/8' }, currentQuoteState, null);
     dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+    }
     // dispatch(setNavigation("review"));
     dispatch(setNavigationDesktop("review"));
 
@@ -223,7 +225,7 @@ const CustomLayout = () => {
         >
           Create New Estimate
         </Typography>
-        <form onSubmit={handleSubmit}>
+        <form>
           <Box
             sx={{
               height: "100%",
@@ -423,10 +425,10 @@ const CustomLayout = () => {
                             </Typography>
 
                             <TextField
-                              disabled={isThereHigherKeyAvailable(
-                                values,
-                                index
-                              )}
+                              // disabled={isThereHigherKeyAvailable(
+                              //   values,
+                              //   index
+                              // )}
                               type="number"
                               size="small"
                               variant="outlined"
@@ -644,7 +646,8 @@ const CustomLayout = () => {
                 </Box>
                 <Box sx={{ width: { md: "150px", xs: "50%" } }}>
                   <Button
-                    type="submit"
+                    onClick={handleSubmit}
+                    type="button"
                     fullWidth
                     disabled={
                       // !values["0"]?.width ||

@@ -15,9 +15,10 @@ import {
   useDeleteHardwareFinish,
   useEditHardware,
 } from "../../utilities/ApiHooks/hardware";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
 
 const FinishItem = ({
   data,
@@ -27,6 +28,11 @@ const FinishItem = ({
   SetUpdateValue,
   UpdateValue,
 }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const handleOpenDeleteModal = (event) => {
+    event.preventDefault();
+    setDeleteModalOpen(true);
+  }
   const {
     mutate: deleteFinish,
     isLoading: LoadingForDelete,
@@ -75,9 +81,9 @@ const FinishItem = ({
     }
   }, []);
 
-  const handleFinishDelete = (event) => {
-    event.preventDefault();
+  const handleFinishDelete = () => {
     deleteFinish({ hardwareId: hardwareId, finishId: data._id });
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
@@ -238,7 +244,7 @@ const FinishItem = ({
               ) : (
                 <IconButton
                   type="button"
-                  onClick={(event) => handleFinishDelete(event)}
+                  onClick={(event) => handleOpenDeleteModal(event)}
                   sx={{ mt: 2 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
@@ -266,6 +272,12 @@ const FinishItem = ({
           </Box>
         </Box>
       </form>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleFinishDelete}
+      />
     </Box>
   );
 };

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useDeleteGlassType,
   useEditGlassType,
@@ -19,6 +19,7 @@ import {
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
+import DeleteModal from "../Modal/deleteModal";
 
 const GlassTypeItem = ({
   data,
@@ -28,6 +29,11 @@ const GlassTypeItem = ({
   SetUpdateValue,
   UpdateValue,
 }) => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const handleOpenDeleteModal = (event) => {
+    event.preventDefault();
+    setDeleteModalOpen(true);
+  }
   const {
     mutate: deleteGlassType,
     isLoading: LoadingForDelete,
@@ -74,9 +80,9 @@ const GlassTypeItem = ({
       }
     }
   }, []);
-  const handleFinishDelete = (event) => {
-    event.preventDefault();
+  const handleOptionDelete = () => {
     deleteGlassType({ glassTypeId: glassTypeId, optionId: data._id });
+    setDeleteModalOpen(false);
   };
 
   useEffect(() => {
@@ -233,7 +239,7 @@ const GlassTypeItem = ({
               ) : (
                 <IconButton
                   type="button"
-                  onClick={(event) => handleFinishDelete(event)}
+                  onClick={(event) => handleOpenDeleteModal(event)}
                   sx={{ mt: 3.2 }}
                 >
                   <img src={DeleteIcon} alt="delete icon" />
@@ -261,6 +267,12 @@ const GlassTypeItem = ({
           </Box>
         </Box>
       </form>
+      <DeleteModal
+        open={deleteModalOpen}
+        close={()=>{setDeleteModalOpen(false)}}
+        isLoading={LoadingForDelete}
+        handleDelete={handleOptionDelete}
+      />
     </Box>
   );
 };
