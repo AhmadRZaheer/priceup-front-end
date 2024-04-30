@@ -153,19 +153,17 @@ export const useEditTeamMembers = () => {
       formData.append("name", editTeamMembers?.teamData?.name);
     }
 
-    if (editTeamMembers?.status !== undefined) {
-      formData.append("status", editTeamMembers?.status);
-    }
-
-    // const updatedData = {
-    //   ...(editTeamMembers?.teamData ? formData : {}),
-    //   status: editTeamMembers?.status,
-    // };
+    const updatedData =
+      editTeamMembers?.status !== undefined
+        ? {
+            status: editTeamMembers?.status,
+          }
+        : formData;
 
     try {
       const response = await axios.put(
         `${backendURL}/staffs/${editTeamMembers?.id}`,
-        formData,
+        updatedData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
