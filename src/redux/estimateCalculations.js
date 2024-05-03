@@ -1351,7 +1351,7 @@ const estimateCalcSlice = createSlice({
         additionalFields: estimateData?.additionalFields,
       };
       state.quoteState = quoteState.EDIT;
-      state.measurements = measurements;
+      // state.measurements = measurements;
       state.perimeter = estimateData.perimeter;
       state.sqftArea = estimateData.sqftArea;
       state.selectedItem = estimateData;

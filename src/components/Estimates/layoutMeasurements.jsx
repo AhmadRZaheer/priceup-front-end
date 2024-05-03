@@ -55,14 +55,9 @@ const LayoutMeasurements = () => {
   const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
-  const measurementSidesForCreate = useSelector(getMeasurementSide);
+  const measurementSides = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
   const reduxAdditionalFields = useSelector(getAdditionalFields);
-  const measurementSidesForEdit = selectedData?.measurements;
-  const measurementSides =
-    currentQuoteState === quoteState.EDIT
-      ? measurementSidesForEdit
-      : measurementSidesForCreate;
 
     const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
@@ -72,7 +67,7 @@ const LayoutMeasurements = () => {
     }
     return acc;
   }, {});
-
+  console.log(measurementSides,'sides');
   // const [width, setWidth] = useState(0);
     const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
