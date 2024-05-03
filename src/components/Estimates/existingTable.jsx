@@ -121,10 +121,14 @@ export default function ExistingTable() {
   };
   useEffect(() => {
     refetchEstimatesList();
-    if (refetchEstimatesCounter <= 0) {
+    // if (refetchEstimatesCounter <= 0) {
       refetchHardwaresList();
-    }
-  }, [page,refetchEstimatesCounter]);
+    // }
+  }, [refetchEstimatesCounter]);
+
+  useEffect(()=>{
+    refetchEstimatesList();
+  },[page])
 
   return (
     <>

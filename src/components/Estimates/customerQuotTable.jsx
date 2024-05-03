@@ -1,26 +1,36 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { DataGrid } from "@mui/x-data-grid";
 import { CustomerQuoteColumns } from "../../customerTableSource";
-import { Box, CircularProgress, IconButton, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import { backendURL } from "../../utilities/common";
+import { Box, CircularProgress, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { calculateAreaAndPerimeter } from "../../utilities/common";
 import {
-  useDeleteEstimates,
+  // useDeleteEstimates,
   useFetchDataEstimate,
-  useGetEstimates,
+  // useGetEstimates,
 } from "../../utilities/ApiHooks/estimate";
 import {
-  initializeStateForEditQuote,
+  addSelectedItem,
+  // initializeStateForEditQuote,
+  resetState,
+  setDoorWeight,
+  setDoorWidth,
   setListData,
   setNavigationDesktop,
+  setPanelWeight,
+  setQuoteState,
+  setReturnWeight,
+  setisCustomizedDoorWidth,
+  updateMeasurements,
 } from "../../redux/estimateCalculations";
-import { Link, useNavigate } from "react-router-dom";
-import { ArrowBack, ArrowForward, Close, Edit } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+import { Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "../ui-components/CustomButton";
-import { getDataRefetch } from "../../redux/staff";
-import { useFetchDataCustomerEstimtes } from "../../utilities/ApiHooks/customer";
+// import { getDataRefetch } from "../../redux/staff";
+import { useFetchDataCustomerEstimates } from "../../utilities/ApiHooks/customer";
+import Pagination from "../Pagination";
 
 const style = {
   position: "absolute",
@@ -42,23 +52,25 @@ const dataGridStyle = {
 };
 
 export default function AddEditFinish({ open, close, quoteId }) {
-  const refetchData = useSelector(getDataRefetch);
+  // const refetchData = useSelector(getDataRefetch);
+  const [page, setPage] = useState(1);
+  const itemsPerPage = 10;
   const {
-    data: estimateListData,
-    isFetching: estimateDataFetching,
-    refetch: Refetched,
+    data: allHardwaresList,
+    isFetching: listFetching,
+    refetch: refetchHardwaresList,
   } = useFetchDataEstimate();
   const {
     mutate: setQuoteId,
-    data: estimates,
+    data: estimatesList,
     isLoading: estimateQuoteFetching,
     error,
-  } = useFetchDataCustomerEstimtes();
+  } = useFetchDataCustomerEstimates(page, itemsPerPage);
+  // useEffect(() => {
+  //   Refetched();
+  // }, [refetchData]);
   useEffect(() => {
-    Refetched();
-  }, [refetchData]);
-  useEffect(() => {
-    Refetched();
+    refetchHardwaresList();
   }, []);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -67,15 +79,37 @@ export default function AddEditFinish({ open, close, quoteId }) {
     }
   }, [open, quoteId, setQuoteId]);
 
-  const handleIconButtonClick = (params) => {
-    dispatch(setListData(estimateListData));
-    dispatch(
-      initializeStateForEditQuote({
-        estimateData: params.row,
-        quotesId: params.row.id,
-      })
+  const handleIconButtonClick = (item) => {
+    dispatch(resetState());
+    dispatch(setListData(allHardwaresList));
+    dispatch(setisCustomizedDoorWidth(item.isCustomizedDoorWidth));
+    dispatch(updateMeasurements(item.measurements));
+    dispatch(addSelectedItem(item));
+    dispatch(setQuoteState("edit"));
+    const result = calculateAreaAndPerimeter(
+      item.measurements,
+      item?.settings?.variant,
+      item.glassType.thickness
     );
-    dispatch(setNavigationDesktop("review"));
+    if (result?.doorWidth && item.isCustomizedDoorWidth === false) {
+      dispatch(setDoorWidth(result?.doorWidth));
+    } else {
+      dispatch(setDoorWidth(item?.doorWidth));
+    }
+    if (result?.doorWeight) {
+      dispatch(setDoorWeight(result?.doorWeight));
+    }
+    if (result?.panelWeight) {
+      dispatch(setPanelWeight(result?.panelWeight));
+    }
+    if (result?.returnWeight) {
+      dispatch(setReturnWeight(result?.returnWeight));
+    }
+    if (item?.layout_id) {  // default layout edit
+      dispatch(setNavigationDesktop("measurements"));
+    } else { // custom layout edit
+      dispatch(setNavigationDesktop("custom"));
+    }
   };
 
   const actionColumn = [
@@ -84,13 +118,13 @@ export default function AddEditFinish({ open, close, quoteId }) {
       align: "left",
       width: 80,
       renderCell: (params) => {
-        console.log(params);
+        // console.log(params);
         return (
           <>
             <Link to="/customers/steps">
               <CustomIconButton
-                disable={estimateQuoteFetching}
-                handleClick={() => handleIconButtonClick(params)}
+                disable={estimateQuoteFetching || listFetching}
+                handleClick={() => handleIconButtonClick(params?.row)}
                 icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
               />
             </Link>
@@ -99,51 +133,16 @@ export default function AddEditFinish({ open, close, quoteId }) {
       },
     },
   ];
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 4;
 
-  const totalPages = estimates ? Math.ceil(estimates.length / itemsPerPage) : 0;
-  const MAX_PAGES_DISPLAYED = 5;
-
-  const getPageNumbersToShow = () => {
-    if (totalPages <= MAX_PAGES_DISPLAYED) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
+  const filteredData = useMemo(() => {
+    if (estimatesList && estimatesList?.estimates?.length) {
+      return estimatesList?.estimates;
     }
-
-    const pagesToShow = [];
-    const startPage = Math.max(1, page - 2); // Display three on the first side
-    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
-
-    if (startPage > 1) {
-      pagesToShow.push(1);
-      if (startPage > 2) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
+    else {
+      return [];
     }
+  }, [estimatesList]);
 
-    for (let i = startPage; i <= endPage; i++) {
-      pagesToShow.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-      pagesToShow.push(totalPages);
-    }
-
-    return pagesToShow;
-  };
-
-  const pageNumbersToShow = getPageNumbersToShow();
-
-  const handlePreviousPage = () => {
-    setPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
 
   return (
     <div>
@@ -179,99 +178,37 @@ export default function AddEditFinish({ open, close, quoteId }) {
             </Box>
           ) : error ? (
             <p>Error: {error.message}</p>
-          ) : estimates && estimates.length > 0 ? (
+          ) : filteredData && filteredData.length > 0 ? (
             <Box
               sx={{ border: "1px solid #EAECF0", borderRadius: "8px", mb: 2 }}
             >
               <DataGrid
                 style={dataGridStyle}
                 getRowId={(row) => row._id}
-                rows={estimates?.slice(
-                  (page - 1) * itemsPerPage,
-                  page * itemsPerPage
-                )}
+                // rows={estimates?.slice(
+                //   (page - 1) * itemsPerPage,
+                //   page * itemsPerPage
+                // )}
+                rows={filteredData}
                 columns={CustomerQuoteColumns.concat(actionColumn)}
                 page={page}
                 pageSize={itemsPerPage}
-                rowCount={estimates?.length}
-                pageSizeOptions={[1, , 25]}
+                // rowCount={estimates?.length}
+                rowCount={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+                // pageSizeOptions={[1, , 25]}
                 sx={{ width: "100%" }}
                 hideFooter
               />
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  padding: "10px",
-                }}
-              >
-                <Button
-                  sx={{
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                    borderRadius: "8px",
-                    textTransform: "capitalize",
-                    fontWeight: 500,
-                    ":hover": {
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                    },
-                  }}
-                  variant="outlined"
-                  onClick={handlePreviousPage}
-                  disabled={page === 0}
-                >
-                  <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
-                  Previous
-                </Button>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                  {pageNumbersToShow.map((pagenumber, index) => (
-                    <Box
-                      key={index}
-                      onClick={() => setPage(pagenumber)}
-                      sx={{
-                        backgroundColor:
-                          page === pagenumber
-                            ? "rgba(144, 136, 192, 0.2)"
-                            : "white",
-                        color: page === pagenumber ? "#353050" : "#667085",
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {pagenumber}
-                    </Box>
-                  ))}
-                </Box>
-                <Button
-                  sx={{
-                    border: "1px solid #D0D5DD",
-                    color: "#344054",
-                    borderRadius: "8px",
-                    textTransform: "capitalize",
-                    fontWeight: 500,
-                    ":hover": {
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                    },
-                  }}
-                  onClick={handleNextPage}
-                  disabled={estimates?.length === 0}
-                >
-                  Next
-                  <ArrowForward
-                    sx={{ color: "#344054", fontSize: 20, ml: 1 }}
-                  />
-                </Button>
-              </Box>
+              <Pagination
+                totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+                itemsPerPage={itemsPerPage}
+                page={page}
+                setPage={setPage}
+              />
+
             </Box>
           ) : (
-            <Typography>No estimates Quotes found.</Typography>
+            <Typography>No estimates found.</Typography>
           )}
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button

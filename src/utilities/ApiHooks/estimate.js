@@ -5,7 +5,7 @@ import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { setEstimatesListRefetch } from "../../redux/refetch";
-import { useSnackbar } from "notistack";
+// import { useSnackbar } from "notistack";
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -154,6 +154,7 @@ export const useEditEstimates = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({
             message: "Estimate Updated Successfully",
