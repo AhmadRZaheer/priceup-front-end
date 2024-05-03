@@ -47,18 +47,19 @@ export const useGetQuote = () => {
 
   return useMutation(handleGetQuote);
 };
-export const useFetchDataCustomerEstimtes = () => {
+export const useFetchDataCustomerEstimates = (page,limit) => {
   const fetchData = async ({ quoteId }) => {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(
-        `${backendURL}/users/getQuote/${quoteId?._id}`,
+        `${backendURL}/customers/getEstimates/${quoteId?._id}`,
         {
           headers: { Authorization: `Bearer ${token}` },
+          params: { page, limit },
         }
       );
       if (response?.data && response?.data?.code === 200) {
-        return response?.data?.data ? response?.data?.data : [];
+        return response?.data?.data ? response?.data?.data : null
       } else {
         throw new Error("An error occurred while fetching the data.");
       }
