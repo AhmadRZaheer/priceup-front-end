@@ -340,15 +340,11 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 // };
 
 export const convertArrayKeysToObject = (array) => {
-  const obj = array.reduce((result, item) => {
-    const { key, value } = item;
-    if (!result[key]) {
-      result[key] = [];
-    }
-    result[key].push(value);
-    return result;
-  }, {});
-  return obj;
+  const result = array.reduce((obj, item) => {
+    obj[item.key] = item.value;
+    return obj;
+}, {});
+return result;
 };
 
 export const calculateAreaAndPerimeter = (
