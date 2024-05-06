@@ -39,7 +39,7 @@ import {
   calculateAreaAndPerimeter,
   getGlassThickness,
 } from "../../utilities/common";
-import { layoutVariants, panelOverWeightAmount, quoteState, thicknessTypes } from "../../utilities/constants";
+import { layoutVariants, panelOverWeightAmount, quoteState, standardDoorWidth, thicknessTypes } from "../../utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "../../utilities/hardwarefabrication";
@@ -403,16 +403,16 @@ const LayoutMeasurements = () => {
                     </Box>
                   ))}
 
-                  {![
-                    layoutVariants.DOOR,
-                    layoutVariants.DOUBLEDOOR,
-                    layoutVariants.DOUBLEBARN,
-                  ].includes(
-                    selectedData?.settings?.variant
-                  ) && (
                     <>
                       <Typography>
                         <input
+                          disabled={[
+                            layoutVariants.DOOR,
+                            layoutVariants.DOUBLEDOOR,
+                            layoutVariants.DOUBLEBARN,
+                          ].includes(
+                            selectedData?.settings?.variant
+                          )}
                           type="checkbox"
                           onChange={() =>
                             dispatch(
@@ -430,8 +430,15 @@ const LayoutMeasurements = () => {
                           style={{
                             marginLeft: "10px",
                           }}
-                        >
-                          Select if you want to customize the door width
+                        >{
+                          [
+                            layoutVariants.DOOR,
+                            layoutVariants.DOUBLEDOOR,
+                            layoutVariants.DOUBLEBARN,
+                          ].includes(
+                            selectedData?.settings?.variant
+                          ) ? "You cannot modify current layout door width" : "Select if you want to modify the door width"
+                        }
                         </span>
                       </Typography>
                       <Box
@@ -493,40 +500,15 @@ const LayoutMeasurements = () => {
                             onChange={(e) => handleInputChange(e)}
                           />
                         </Box>
-                        {/* <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                        }}
-                      >
-                        <Typography
-                          sx={{ mr: 2, color: editField ? "gray" : "" }}
-                        >
-                          Panel
-                        </Typography>
-                        <TextField
-                          disabled={editField}
-                          type="number"
-                          size="small"
-                          variant="outlined"
-                          value={doorPanelFromredux}
-                          style={{
-                            background: "white",
-                            borderRadius: "8px",
-                            border: "1px solid #D0D5DD",
-                            width: "100%",
-                          }}
-                          name="panel"
-                        />
-                      </Box> */}
                       </Box>
-                      <Typography sx={{ color: "red", fontSize: "14px"}}>
-                          {doorWidthFromredux > listsData?.doorWidth
-                            ? `Door width can not be greater then location default ${listsData?.doorWidth}`
-                            : ""}
-                        </Typography>
+                      {(doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < standardDoorWidth) ?
+                  <Box sx={{display:'flex',flexWrap:'nowrap',gap:'10px',alignItems:'center'}}>
+                    <InfoOutlinedIcon fontSize="medium"/>
+                    <Typography sx={{ fontSize: "15px"}}>
+                    Door width must be in range between {standardDoorWidth} - {listsData?.doorWidth}
+                  </Typography>
+                  </Box> : ""}
                     </>
-                  )}
                 </Box>
 
                 <Box
@@ -623,7 +605,7 @@ const LayoutMeasurements = () => {
                       disabled={
                         Object.keys(formik.values).some(
                             (key) => !formik.values[key]
-                        ) || doorWidthFromredux > listsData?.doorWidth
+                        ) || (doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < standardDoorWidth)
                     }
                       sx={{
                         height: 40,
