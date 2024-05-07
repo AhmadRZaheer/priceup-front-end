@@ -59,11 +59,6 @@ const LayoutMeasurements = () => {
   const measurementSides = useSelector(getMeasurementSide);
   const currentQuoteState = useSelector(getQuoteState);
   const reduxAdditionalFields = useSelector(getAdditionalFields);
-  const measurementSidesForEdit = selectedData?.measurements;
-  const measurementSides =
-    currentQuoteState === quoteState.EDIT
-      ? measurementSidesForEdit
-      : measurementSidesForCreate;
   const listsData = useSelector(getListData);
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
