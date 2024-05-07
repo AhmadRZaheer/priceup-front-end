@@ -7,7 +7,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -65,7 +65,7 @@ const LayoutMeasurements = () => {
       ? measurementSidesForEdit
       : measurementSidesForCreate;
   const listsData = useSelector(getListData);
-    const initialValues = measurementSides.reduce((acc, item) => {
+  const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
     } else {
@@ -74,13 +74,13 @@ const LayoutMeasurements = () => {
     return acc;
   }, {});
 
-  // const [width, setWidth] = useState(0);
-    const [debouncedValue, setDebouncedValue] = useState(0);
+  const noOfSidesOFCurrentLayout = selectedData?.settings?.measurementSides;
+  const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
-  let debounceTimeout;
+  // let debounceTimeout;
   const validationSchema = Yup.object().shape({
-    ...Array.from({ length: selectedData?.settings?.measurementSides }).reduce(
+    ...Array.from({ length: noOfSidesOFCurrentLayout }).reduce(
       (schema, _, index) => {
         const fieldName = String.fromCharCode(97 + index);
         return {
@@ -104,7 +104,7 @@ const LayoutMeasurements = () => {
           key,
           value,
         }));
-              const glassThickness = getGlassThickness(
+      const glassThickness = getGlassThickness(
         selectedData?.settings?.variant,
         measurementsArray,
         selectedData?.settings?.heavyDutyOption?.height || 85
@@ -140,8 +140,8 @@ const LayoutMeasurements = () => {
       );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
       if (currentQuoteState === quoteState.CREATE) {
-      const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
-      dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
+        const fabricationValues = getHardwareFabricationQuantity({ ...notificationsResult.selectedContent, glassThickness }, currentQuoteState, selectedData);
+        dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       }
       // if (!editField) {
       //   dispatch(setDoorWidth(editDebouncedValue));
@@ -150,67 +150,49 @@ const LayoutMeasurements = () => {
       resetForm();
     },
   });
-  const doorandPanel = (event) => {
-    const inputVal = event.target.value;
-    const valuesOfFormik = formik.values;
-    const measurementsArray = Object.entries(valuesOfFormik)
-      .filter(([key, value]) => value !== "")
-      .map(([key, value]) => ({
-        key,
-        value,
-      }));
-    if (measurementsArray.length === selectedData?.settings?.measurementSides) {
-      clearTimeout(debounceTimeout);
-
-      debounceTimeout = setTimeout(() => {
-        setDebouncedValue(inputVal);
-      }, 500);
-    } else {
-      console.log(
-        "Cannot calculate result as there are empty values in measurementsArray"
-      );
-    }
-  };
+  const dynamicFieldAllocationEqualToLayoutCount = useMemo(() => {
+    return Object.keys(formik.values)?.length === noOfSidesOFCurrentLayout;
+  }, [noOfSidesOFCurrentLayout, formik.values])
+  const allAllocatedFieldsPopulated = useMemo(() => {
+    let check = true;
+    Object.keys(formik.values).forEach(
+      (key) => {
+        if (!formik.values[key]) {
+          check = false;
+        }
+      }
+    );
+    return check;
+  }, [formik.values]);
 
   useEffect(() => {
-    const valuesOfFormik = formik.values;
-    const measurementsArray = Object.entries(valuesOfFormik)
-      .filter(([key, value]) => value !== "")
-      .map(([key, value]) => ({
-        key,
-        value,
-      }));
-    const result = calculateAreaAndPerimeter(
-      measurementsArray,
-      selectedData?.settings?.variant,
-      selectedData?.settings?.glassType?.thickness
-    );
-    // if(result?.doorWeight){
-    //   dispatch(setDoorWeight(result?.doorWeight));
-    // }
-    // if(result?.panelWeight){
-    //   if(result?.panelWeight > panelOverWeightAmount){
-    //     dispatch(setNotifications(notificationTypes.PANLEOVERWEIGHT));
-    //   }
-    //   dispatch(setPanelWeight(result?.panelWeight));
-    // }
-    // if(result?.returnWeight){
-    //   dispatch(setReturnWeight(result?.returnWeight));
-    // }
-    // dispatch(setDoorWidth(result.doorWidth));
+    if (dynamicFieldAllocationEqualToLayoutCount && allAllocatedFieldsPopulated) {
+      const valuesOfFormik = formik.values;
+      const measurementsArray = Object.entries(valuesOfFormik)
+        .filter(([key, value]) => value !== "")
+        .map(([key, value]) => ({
+          key,
+          value,
+        }));
 
-    if (isCustomizedDoorWidthRedux) {
-      dispatch(setDoorWidth(editDebouncedValue));
-    } else {
-            dispatch(setDoorWidth(result.doorWidth));
+      const result = calculateAreaAndPerimeter(
+        measurementsArray,
+        selectedData?.settings?.variant,
+        selectedData?.settings?.glassType?.thickness
+      );
+      if (isCustomizedDoorWidthRedux) {
+        dispatch(setDoorWidth(editDebouncedValue));
+      } else {
+        dispatch(setDoorWidth(result.doorWidth));
+      }
     }
-  }, [debouncedValue, isCustomizedDoorWidthRedux]);
+  }, [debouncedValue, isCustomizedDoorWidthRedux, formik.values]);
 
   const handleInputChange = (event) => {
     setEditDebouncedValue(event.target.value);
     dispatch(setDoorWidth(event.target.value));
   };
-  
+
   useEffect(() => {
     if (currentQuoteState === quoteState.CREATE) {
       dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
@@ -227,8 +209,9 @@ const LayoutMeasurements = () => {
         })
       );
     }
-    return () => {};
+    return () => { };
   }, []);
+  console.log(doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < 1, 'state', doorWidthFromredux, listsData?.doorWidth)
   return (
     <>
       <Box
@@ -365,7 +348,7 @@ const LayoutMeasurements = () => {
                   }}
                 >
                   {Array.from({
-                    length: selectedData?.settings?.measurementSides,
+                    length: noOfSidesOFCurrentLayout,
                   }).map((_, index) => (
                     <Box
                       key={index}
@@ -393,7 +376,7 @@ const LayoutMeasurements = () => {
                         value={formik.values[String.fromCharCode(97 + index)]}
                         onChange={(e) => {
                           formik.handleChange(e);
-                          doorandPanel(e);
+                          // doorandPanel(e);
                         }}
                         onBlur={formik.handleBlur}
                         InputProps={{
@@ -403,34 +386,34 @@ const LayoutMeasurements = () => {
                     </Box>
                   ))}
 
-                    <>
-                      <Typography>
-                        <input
-                          disabled={[
-                            layoutVariants.DOOR,
-                            layoutVariants.DOUBLEDOOR,
-                            layoutVariants.DOUBLEBARN,
-                          ].includes(
-                            selectedData?.settings?.variant
-                          )}
-                          type="checkbox"
-                          onChange={() =>
-                            dispatch(
-                              setisCustomizedDoorWidth(
-                                !isCustomizedDoorWidthRedux
-                              )
+                  <>
+                    <Typography>
+                      <input
+                        disabled={[
+                          layoutVariants.DOOR,
+                          layoutVariants.DOUBLEDOOR,
+                          layoutVariants.DOUBLEBARN,
+                        ].includes(
+                          selectedData?.settings?.variant
+                        )}
+                        type="checkbox"
+                        onChange={() =>
+                          dispatch(
+                            setisCustomizedDoorWidth(
+                              !isCustomizedDoorWidthRedux
                             )
-                          }
-                          checked={isCustomizedDoorWidthRedux}
-                          style={{
-                            width: "20px",
-                          }}
-                        />
-                        <span
-                          style={{
-                            marginLeft: "10px",
-                          }}
-                        >{
+                          )
+                        }
+                        checked={isCustomizedDoorWidthRedux}
+                        style={{
+                          width: "20px",
+                        }}
+                      />
+                      <span
+                        style={{
+                          marginLeft: "10px",
+                        }}
+                      >{
                           [
                             layoutVariants.DOOR,
                             layoutVariants.DOUBLEDOOR,
@@ -439,76 +422,76 @@ const LayoutMeasurements = () => {
                             selectedData?.settings?.variant
                           ) ? "You cannot modify current layout door width" : "Select if you want to modify the door width"
                         }
-                        </span>
-                      </Typography>
+                      </span>
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 1,
+                      }}
+                    >
                       <Box
                         sx={{
                           display: "flex",
-                          gap: 1,
+                          width: "100%",
+                          alignItems: "center",
                         }}
                       >
                         <Box
                           sx={{
                             display: "flex",
-                            width: "100%",
                             alignItems: "center",
+                            width: "200px",
                           }}
                         >
-                          <Box
+                          <Typography
                             sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              width: "200px",
+                              color: !isCustomizedDoorWidthRedux
+                                ? "gray"
+                                : "",
                             }}
                           >
-                            <Typography
-                              sx={{
-                                color: !isCustomizedDoorWidthRedux
-                                  ? "gray"
-                                  : "",
-                              }}
-                            >
-                              Door Width
-                            </Typography>
-                            <Tooltip
-                              title={
-                                "If you want to customize the door width, check the above checkbox"
-                              }
-                            >
-                              <IconButton>
-                                <InfoOutlinedIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </Box>
-                          <TextField
-                            InputProps={{
-                              inputProps: { min: 1 },
-                            }}
-                            disabled={!isCustomizedDoorWidthRedux}
-                            placeholder={doorWidthFromredux}
-                            type="number"
-                            size="small"
-                            variant="outlined"
-                            value={doorWidthFromredux}
-                            style={{
-                              background: "white",
-                              borderRadius: "8px",
-                              border: "1px solid #D0D5DD",
-                              width: "100%",
-                            }}
-                            name="door"
-                            onChange={(e) => handleInputChange(e)}
-                          />
+                            Door Width
+                          </Typography>
+                          <Tooltip
+                            title={
+                              "If you want to modify the door width, check the above checkbox"
+                            }
+                          >
+                            <IconButton>
+                              <InfoOutlinedIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Box>
+                        <TextField
+                          InputProps={{
+                            inputProps: { min: 1 },
+                          }}
+                          disabled={!isCustomizedDoorWidthRedux}
+                          placeholder={doorWidthFromredux}
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          value={doorWidthFromredux}
+                          style={{
+                            background: "white",
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: "100%",
+                          }}
+                          name="door"
+                          onChange={(e) => handleInputChange(e)}
+                        />
                       </Box>
-                      {(doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < standardDoorWidth) ?
-                  <Box sx={{display:'flex',flexWrap:'nowrap',gap:'10px',alignItems:'center'}}>
-                    <InfoOutlinedIcon fontSize="medium"/>
-                    <Typography sx={{ fontSize: "15px"}}>
-                    Door width must be in range between {standardDoorWidth} - {listsData?.doorWidth}
-                  </Typography>
-                  </Box> : ""}
-                    </>
+                    </Box>
+                    {(doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < 1) ?
+                      <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '10px', alignItems: 'flex-start' }}>
+                        <InfoOutlinedIcon fontSize="small" sx={{ mt: '5px' }} />
+                        <Typography sx={{ fontSize: "15px" }}>
+                          Door width must be in range between 1 - {listsData?.doorWidth}. Max door width can be customized in company settings.
+                        </Typography>
+                      </Box> : ""}
+                  </>
                 </Box>
 
                 <Box
@@ -546,7 +529,7 @@ const LayoutMeasurements = () => {
                         width="100%"
                         height="100%"
                         src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                        }`}
+                          }`}
                         alt="Selected"
                       />
                     </Box>
@@ -603,10 +586,8 @@ const LayoutMeasurements = () => {
                       type="submit"
                       fullWidth
                       disabled={
-                        Object.keys(formik.values).some(
-                            (key) => !formik.values[key]
-                        ) || (doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < standardDoorWidth)
-                    }
+                        !dynamicFieldAllocationEqualToLayoutCount || !allAllocatedFieldsPopulated || (doorWidthFromredux > listsData?.doorWidth || doorWidthFromredux < 1)
+                      }
                       sx={{
                         height: 40,
                         fontSize: 20,

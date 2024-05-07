@@ -10,6 +10,7 @@ import {
   selectedItem,
   setNavigationDesktop,
   setQuoteState,
+  setisCustomizedDoorWidth,
   updateMeasurements,
 } from "../../redux/estimateCalculations";
 import { useEffect, useState } from "react";
@@ -39,7 +40,7 @@ export default function Layout() {
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
   const handleBoxClick = (layout) => {
-    // dispatch(initializeStateForCreateQuote({ layoutData: layout }));
+    dispatch(setisCustomizedDoorWidth(false));
     dispatch(addSelectedItem(layout));
     dispatch(setQuoteState("create"));
     setselectCustom(false);
