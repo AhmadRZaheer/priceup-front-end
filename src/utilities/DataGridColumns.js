@@ -1,22 +1,12 @@
-import {
-  Box,
-  FormControl,
-  IconButton,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Typography,
-} from "@mui/material";
-import DeleteIcon from "../Assets/Delete-Icon.svg";
+import { Box, Typography } from "@mui/material";
 import DefaultImage from "../components/ui-components/defaultImage";
-import { Link } from "react-router-dom";
-import CustomIconButton from "../components/ui-components/CustomButton";
-import { Edit } from "@mui/icons-material";
 import SelectMenu_Status from "../components/ui-components/selectMenu-status";
+import EstimateActionsDropdown from "../components/EstimateActionsDropdown";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
-  handleIconButtonClick
+  handleIconButtonClick,
+  handlePDFPreviewClick
 ) => {
   return [
     {
@@ -136,38 +126,12 @@ export const EstimatesColumns = (
       flex: 1,
       renderCell: (params) => {
         return (
-          <>
-            <IconButton
-              onClick={() => handleDeleteEstimate(params?.row?._id)}
-              sx={{
-                padding: 1,
-                margin: 0,
-                borderRadius: "100%",
-                mt: -0.5,
-                mr: 1,
-                "&:hover": { backgroundColor: "white" },
-                "&:active": { backgroundColor: "white" },
-              }}
-            >
-              <img
-                width={"20px"}
-                height={"20px"}
-                src={DeleteIcon}
-                alt="delete icon"
-              />
-            </IconButton>
-            <Link
-              to="/estimates/steps"
-              style={{ marginLeft: 2, marginRight: 1, marginTop: 6 }}
-            >
-              <CustomIconButton
-                handleClick={() => handleIconButtonClick(params?.row)}
-                // disable={estimateDataFetching}
-                buttonText="Edit"
-                icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
-              />
-            </Link>
-          </>
+          <EstimateActionsDropdown
+            params={params}
+            handleDeleteEstimate={handleDeleteEstimate}
+            handleIconButtonClick={handleIconButtonClick}
+            handlePDFPreviewClick={handlePDFPreviewClick}
+          />
         );
       },
     },

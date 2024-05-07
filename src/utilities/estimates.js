@@ -1,4 +1,5 @@
 import {
+  layoutVariants,
   notificationsVariant,
   panelOverWeightAmount,
   quoteState,
@@ -61,8 +62,8 @@ export const generateNotificationsForCurrentItem = (
       if (result?.header) selectedContent.header = result.header;
     }
 
-     /** switch glass thickness if glass size is greater than provided */
-     const thicknessShiftResult = getGlassThicknessShiftNotification(
+    /** switch glass thickness if glass size is greater than provided */
+    const thicknessShiftResult = getGlassThicknessShiftNotification(
       selectedContent,
       calculatedGlassThickness
     );
@@ -80,7 +81,7 @@ export const generateNotificationsForCurrentItem = (
         notifications.glassTypeNotAvailable = result.glassTypeNotAvailable;
       if (result?.glassType) selectedContent.glassType = result.glassType;
     }
-    
+
     if (
       selectedContent.glassAddons.length &&
       selectedContent.glassAddons?.[0]?.options?.length &&
@@ -349,11 +350,16 @@ const getSwitchHingeNotification = (
   doorWeight,
   reduxListData
 ) => {
-  console.log('hinges switch',doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80),doorWeight,(reduxSelectedItem?.settings?.heavyDutyOption?.height || 80))
+  console.log(
+    "hinges switch",
+    doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80),
+    doorWeight,
+    reduxSelectedItem?.settings?.heavyDutyOption?.height || 80
+  );
   if (
     // reduxSelectedItem?.settings?.heavyDutyOption?.threshold > 0 &&
     // doorWidth > reduxSelectedItem?.settings?.heavyDutyOption?.threshold
-   doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80)
+    doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80)
   ) {
     let hinge = reduxListData?.hinges?.find(
       (item) =>
@@ -378,4 +384,209 @@ const getSwitchHingeNotification = (
   } else {
     return null;
   }
+};
+
+export const generateObjectForPDFPreview = (listData, estimateData) => {
+  let estimateInfoObject = estimateData;
+  let hardwareFinishes = null;
+  hardwareFinishes = listData?.hardwareFinishes?.find(
+    (item) => item._id === estimateData?.hardwareFinishes
+  );
+  let handleType = null;
+  handleType = listData?.handles?.find(
+    (item) => item._id === estimateData?.handles?.type
+  );
+  let hingesType = null;
+  hingesType = listData?.hinges?.find(
+    (item) => item._id === estimateData?.hinges?.type
+  );
+  let slidingDoorSystemType = null;
+  slidingDoorSystemType = listData?.slidingDoorSystem?.find(
+    (item) => item._id === estimateData?.slidingDoorSystem?.type
+  );
+
+  let headerType = null;
+  headerType = listData?.header?.find(
+    (item) => item._id === estimateData?.header?.type
+  );
+
+  let glassTypee = null;
+  glassTypee = listData?.glassType?.find(
+    (item) => item._id === estimateData?.glassType?.type
+  );
+
+  let glassAddons = [];
+  glassAddons = estimateData?.glassAddons?.map((item) => {
+    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    return record;
+  });
+
+  let wallClampArray,
+    sleeveOverArray,
+    glassToGlassArray,
+    cornerWallClampArray,
+    cornerSleeveOverArray,
+    cornerGlassToGlassArray,
+    channelItem;
+  wallClampArray =
+    sleeveOverArray =
+    glassToGlassArray =
+    cornerWallClampArray =
+    cornerSleeveOverArray =
+    cornerGlassToGlassArray =
+      [];
+  channelItem = null;
+  // do not calculate if a layout does not have mounting channel or clamp
+  if (
+    ![
+      layoutVariants.DOOR,
+      layoutVariants.DOUBLEDOOR,
+      layoutVariants.DOUBLEBARN,
+    ].includes(estimateData?.layoutData?.variant)
+  ) {
+    wallClampArray = estimateData?.mountingClamps?.wallClamp?.map((row) => {
+      const record = listData?.wallClamp?.find(
+        (clamp) => clamp._id === row?.type
+      );
+      return { item: record, count: row.count };
+    });
+    sleeveOverArray = estimateData?.mountingClamps?.sleeveOver?.map((row) => {
+      const record = listData?.sleeveOver?.find(
+        (clamp) => clamp._id === row?.type
+      );
+      return { item: record, count: row.count };
+    });
+    glassToGlassArray = estimateData?.mountingClamps?.glassToGlass?.map(
+      (row) => {
+        const record = listData?.glassToGlass?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
+
+    cornerWallClampArray = estimateData?.cornerClamps?.wallClamp?.map((row) => {
+      const record = listData?.cornerWallClamp?.find(
+        (clamp) => clamp._id === row?.type
+      );
+      return { item: record, count: row.count };
+    });
+
+    cornerSleeveOverArray = estimateData?.cornerClamps?.sleeveOver?.map(
+      (row) => {
+        const record = listData?.cornerSleeveOver?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
+
+    cornerGlassToGlassArray = estimateData?.cornerClamps?.glassToGlass?.map(
+      (row) => {
+        const record = listData?.cornerGlassToGlass?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
+
+    channelItem = listData?.mountingChannel?.find(
+      (item) => item._id === estimateData?.mountingChannel
+    );
+  }
+  let hardwareAddons = [];
+  hardwareAddons = estimateData?.hardwareAddons?.map((row) => {
+    const found = listData?.hardwareAddons?.find(
+      (item) => item?._id === row.type
+    );
+    return { item: found, count: row.count };
+  });
+  const noGlassAddon = listData?.glassAddons?.find(
+    (item) => item.slug === "no-treatment"
+  );
+  // const measurements = estimateData.measurements.map(
+  //   ({ _id, ...rest }) => rest
+  // );
+
+  estimateInfoObject = {
+    ...estimateInfoObject,
+    hardwareFinishes: hardwareFinishes,
+    handles: {
+      item: handleType,
+      count: estimateData?.handles?.count,
+    },
+    hinges: {
+      item: hingesType,
+      count: estimateData?.hinges?.count,
+    },
+    header: {
+      item: headerType,
+      count: estimateData?.header?.count,
+    },
+    slidingDoorSystem: {
+      item: slidingDoorSystemType,
+      count: estimateData?.slidingDoorSystem?.count,
+    },
+    glassType: {
+      item: glassTypee,
+      thickness: estimateData?.glassType?.thickness,
+    },
+
+    mountingClamps: {
+      wallClamp: [...wallClampArray],
+      sleeveOver: [...sleeveOverArray],
+      glassToGlass: [...glassToGlassArray],
+    },
+    cornerClamps: {
+      cornerWallClamp: [...cornerWallClampArray],
+      cornerSleeveOver: [...cornerSleeveOverArray],
+      cornerGlassToGlass: [...cornerGlassToGlassArray],
+    },
+    mountingChannel: {
+      item: channelItem || null,
+      count: channelItem ? 1 : 0,
+    },
+    mountingState:
+      wallClampArray?.length ||
+      sleeveOverArray?.length ||
+      glassToGlassArray?.length
+        ? "clamps"
+        : "channel",
+    glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
+    hardwareAddons: [...hardwareAddons],
+    pricingFactor: listData?.miscPricing?.pricingFactorStatus
+      ? listData?.miscPricing?.pricingFactor
+      : 1,
+  };
+  return estimateInfoObject;
+};
+
+export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
+  let result = "";
+  if ((quoteState === "create" || quoteState === "edit") && layoutID) {
+    result = measurements
+      .filter(
+        (measurement) => measurement.value !== null && measurement.value !== ""
+      )
+      .map((measurement) => measurement.value)
+      .join("’’/ ");
+  } else if (quoteState === "edit" || quoteState === "custom") {
+    Object.entries(measurements).forEach(([key, value]) => {
+      const { count, width, height } = value;
+
+      // Iterate until the count value of the current element is reached
+      for (let i = 1; i <= count; i++) {
+        result += `${width}'' / ${height}'' `;
+        // Perform any other operations with the current element and count value
+
+        if (i === count) {
+          break; // Exit the loop when the count value is reached
+        }
+      }
+    });
+    // Object.entries(measurements).forEach(([key, value]) => {
+    //   result += `${value["width"]}’’ / ${value["height"]}’’  `;
+    // });
+  }
+  return result;
 };

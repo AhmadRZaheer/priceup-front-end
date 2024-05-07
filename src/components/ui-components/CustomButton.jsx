@@ -1,22 +1,31 @@
 import { IconButton } from "@mui/material";
-import PlusWhiteIcon from "../../Assets/plus-white.svg";
-import { Edit } from "@mui/icons-material";
+import { severity as typeSeverity } from "../../utilities/constants";
 
-function CustomIconButton({ handleClick, disable, buttonText = "Edit", icon }) {
+function CustomIconButton({
+  handleClick,
+  disable,
+  buttonText = "Edit",
+  icon,
+  severity,
+}) {
   return (
     <>
       <IconButton
         onClick={handleClick}
         disabled={disable}
         sx={{
-          backgroundColor: "#8477DA",
+          backgroundColor: severity === typeSeverity.ERROR ? "red" : "#8477DA",
           color: "white",
-          "&:hover": { backgroundColor: "#8477DA" },
+          "&:hover": {
+            backgroundColor:
+              severity === typeSeverity.ERROR ? "red" : "#8477DA",
+          },
           borderRadius: 1,
           padding: 1,
           textTransform: "capitalize",
           fontSize: 16,
           height: 35,
+          zIndex: 3,
         }}
       >
         {icon}
