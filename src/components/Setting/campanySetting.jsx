@@ -1,5 +1,6 @@
 import imageUploader from "../../Assets/imageUploader.svg";
 import { useFormik } from "formik";
+import * as Yup from "yup";
 
 import {
   Box,
@@ -43,14 +44,20 @@ const CampanySetting = () => {
     setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
   };
-
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required("Name is required"),
+    doorWidth: Yup.number()
+    .required("Max door width is required")
+    .min(1, "Door width must be at least 1")
+    .max(39, "Door width cannot exceed 39"),
+});
   const { getInputProps } = useDropzone({ onDrop });
   const formik = useFormik({
     initialValues: {
       name: settingData?.name,
       address: settingData?.address,
       image: selectedImage,
-
+      doorWidth: settingData?.doorWidth,
       miscPricing: {
         pricingFactor: settingData?.miscPricing?.pricingFactor,
         hourlyRate: settingData?.miscPricing?.hourlyRate,
@@ -85,6 +92,7 @@ const CampanySetting = () => {
       },
     },
     enableReinitialize: true,
+    validationSchema:validationSchema,
     onSubmit: (values) => {
       console.log(values, "editedData");
       handleEditSetting(values);
@@ -241,6 +249,9 @@ const CampanySetting = () => {
                 value={formik.values?.name}
                 placeholder={"Add location"}
                 onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
               />
             </Box>
           </Box>
@@ -261,6 +272,42 @@ const CampanySetting = () => {
                 value={formik.values?.address}
                 placeholder={"change name"}
                 onChange={formik.handleChange}
+              />
+            </Box>
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            borderTop: "1px solid #EAECF0",
+            // borderBottom: "1px solid #EAECF0",
+            paddingTop: 3,
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+          }}
+        >
+          {/* <Typography variant="h6">Max Door Width</Typography> */}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography>Max Door Width</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+              <p className="explain">Door width value must be in range between 1-39 </p>
+              <CustomInputField
+                type="number"
+                name="doorWidth"
+                size="small"
+                value={formik.values?.doorWidth}
+                onChange={formik.handleChange}
+                inputProps={{ min: 1, max: 39, style: { width: "200px" } }}
+                onBlur={formik.handleBlur}
+                error={formik.touched.doorWidth && Boolean(formik.errors.doorWidth)}
+                helperText={formik.touched.doorWidth && formik.errors.doorWidth}
               />
             </Box>
           </Box>
@@ -319,8 +366,8 @@ const CampanySetting = () => {
               <Typography>Hourly rates to be used for labour price</Typography>
               <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="miscPricing.hourlyRate"
                 size="small"
@@ -358,8 +405,8 @@ const CampanySetting = () => {
             <Box mr={19}>
               <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.oneHoleOneByTwoInchGlass"
                 size="small"
@@ -381,8 +428,8 @@ const CampanySetting = () => {
             <Box sx={{ paddingRight: 19 }}>
               <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.oneHoleThreeByEightInchGlass"
                 size="small"
@@ -406,8 +453,8 @@ const CampanySetting = () => {
             <Box sx={{ paddingRight: 19 }}>
               <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.clampCutoutOneByTwoInch"
                 size="small"
@@ -430,8 +477,8 @@ const CampanySetting = () => {
             <Box sx={{ paddingRight: 19 }}>
               <CustomInputField
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.clampCutoutThreeByEightInch"
                 size="small"
@@ -455,8 +502,8 @@ const CampanySetting = () => {
               <CustomInputField
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.hingeCutoutOneByTwoInch"
                 value={
@@ -478,8 +525,8 @@ const CampanySetting = () => {
               <CustomInputField
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 name="fabricatingPricing.hingeCutoutThreeByEightInch"
                 value={
@@ -503,8 +550,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.minterOneByTwoInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={formik.values?.fabricatingPricing?.minterOneByTwoInch}
                 onChange={formik.handleChange}
@@ -525,8 +572,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.minterThreeByEightInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={
                   formik.values?.fabricatingPricing?.minterThreeByEightInch
@@ -549,8 +596,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.notchOneByTwoInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={formik.values?.fabricatingPricing?.notchOneByTwoInch}
                 onChange={formik.handleChange}
@@ -571,8 +618,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.notchThreeByEightInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={formik.values?.fabricatingPricing?.notchThreeByEightInch}
                 onChange={formik.handleChange}
@@ -592,8 +639,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.outageOneByTwoInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={formik.values?.fabricatingPricing?.outageOneByTwoInch}
                 onChange={formik.handleChange}
@@ -614,8 +661,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.outageThreeByEightInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={
                   formik.values?.fabricatingPricing?.outageThreeByEightInch
@@ -637,8 +684,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.polishPricePerOneByTwoInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={
                   formik.values?.fabricatingPricing?.polishPricePerOneByTwoInch
@@ -661,8 +708,8 @@ const CampanySetting = () => {
                 name="fabricatingPricing.polishPricePerThreeByEightInch"
                 size="small"
                 type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+                inputProps={{
+                  min: 0
                 }}
                 value={
                   formik.values?.fabricatingPricing

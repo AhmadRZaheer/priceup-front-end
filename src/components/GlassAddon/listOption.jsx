@@ -199,8 +199,8 @@ const ListOption = ({
               placeholder="Cost"
               style={{ width: "100%" }}
               type="number"
-              InputProps={{
-                inputProps: { min: 0 },
+              inputProps={{
+                 min: 0
               }}
               value={formik.values.cost}
               onChange={(event) => handleCostChange(event)}

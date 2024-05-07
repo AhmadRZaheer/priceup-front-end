@@ -195,8 +195,8 @@ const FinishItem = ({
               size="small"
               variant="outlined"
               type="number"
-              InputProps={{
-                inputProps: { min: 0 },
+              inputProps={{
+                min: 0
               }}
               name="cost"
               placeholder="Cost"
