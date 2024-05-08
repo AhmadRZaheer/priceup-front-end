@@ -10,6 +10,7 @@ function CustomInputField({
   fullWidth,
   size,
   inputProps,
+  InputProps,
   error,
   helperText,
   onBlur,
@@ -26,7 +27,8 @@ function CustomInputField({
         value={value}
         disabled={disabled}
         error={error}
-        inputProps={{ ...inputProps}}
+        inputProps={{...inputProps}}
+        InputProps={InputProps}
         placeholder={placeholder}
         onChange={onChange}
         helperText={helperText}

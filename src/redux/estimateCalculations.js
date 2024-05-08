@@ -1135,12 +1135,12 @@ const estimateCalcSlice = createSlice({
         notch: layoutData?.settings?.notch,
         hingeCut: layoutData?.settings?.hinges?.count,
         oneInchHoles:
-          layoutData?.settings?.handles?.count * 2 +
-          (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
-            ? 6
-            : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
-            ? 8
-            : 0),
+          layoutData?.settings?.handles?.count * 2,
+          //  + (layoutData?.settings?.variant === layoutVariants.SINGLEBARN
+          //   ? 6
+          //   : layoutData?.settings?.variant === layoutVariants.DOUBLEBARN
+          //   ? 8
+          //   : 0),
         clampCut: clampCutOut,
       };
     },
