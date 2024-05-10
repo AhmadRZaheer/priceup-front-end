@@ -462,7 +462,21 @@ export const generateNotificationsForCurrentEstimate = (
       notifications.glassThicknessSwitch =
         thicknessShiftResult.glassThicknessSwitch;
     if (thicknessShiftResult?.glassType)
+      {
       selectedContent.glassType = thicknessShiftResult.glassType;
+       // if glass thickness shift than shift active mounting channel according it
+      if (thicknessShiftResult?.glassType?.thickness === thicknessTypes.ONEBYTWO && selectedContent.mountingChannel?.item) { 
+          let itemFound = reduxListData?.mountingChannel?.find(
+            (item) => item.slug === "u-channel-1-2"
+          );
+          if(itemFound){
+            selectedContent.mountingChannel = {
+               item: itemFound,
+               count: 1
+            };
+          }
+      }
+      }
     /** end */
 
     if (selectedContent.glassType?.item) {
