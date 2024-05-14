@@ -43,11 +43,11 @@ const Super_SuperAdminsTable = () => {
   }
   const filteredData = Super_SuperData?.filter((item) =>
     item?.name.toLowerCase().includes(search.toLowerCase())
-  );
+  ) ?? [];
   const itemsPerPage = 10;
-
-  const token = localStorage.getItem("token");
-  const decodedToken = parseJwt(token);
+  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
+  // const token = localStorage.getItem("token");
+  // const decodedToken = parseJwt(token);
 
   const handldeEditClose = () => {
     setSuper_ModalOpen(false);
@@ -76,7 +76,8 @@ const Super_SuperAdminsTable = () => {
   useEffect(() => {
     const filterLoginUser = async () => {
       let filterUsers = await SuperData?.filter(
-        (item) => item?.email !== decodedToken?.email
+        (item) => !superSuperAdminsList.includes(item?.email)
+          // item?.email !== decodedToken?.email
       );
       setSuper_SuperData(filterUsers);
     };

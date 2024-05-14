@@ -17,7 +17,6 @@ import {
 // import { Link } from "react-router-dom";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
-import { super_superAdmin } from "../../utilities/constants";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 
 const SuperSidebar = () => {
@@ -38,6 +37,7 @@ const SuperSidebar = () => {
   };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
+  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -148,7 +148,7 @@ const SuperSidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
-                {super_superAdmin.includes(decodedToken.email) && (
+                {superSuperAdminsList?.includes(decodedToken.email) && (
                   <NavLink to="/superadmins" className="link">
                     <li
                       className={` ${
