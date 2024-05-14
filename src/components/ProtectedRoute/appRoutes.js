@@ -24,7 +24,7 @@ import AdminTeam from "../../pages/TeamAdmin/adminTeam";
 import Staff from "../../pages/Staff/staff";
 import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
 import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
-import { super_superAdmin, userRoles } from "../../utilities/constants";
+
 import {
   getHomepageURL,
   isAdmin,
@@ -42,6 +42,7 @@ const AppRoutes = () => {
   const decodedToken = useMemo(() => {
     return parseJwt(token);
   }, [token]);
+  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
 
   return (
     <Routes>
@@ -108,7 +109,7 @@ const AppRoutes = () => {
           <Route index element={<Admin />} />
           <Route path="/team" element={<AdminTeam />} />
           <Route path="/user" element={<AdminUser />} />
-          {super_superAdmin.includes(decodedToken.email) && (
+          {superSuperAdminsList?.includes(decodedToken.email) && (
             <Route path="/superadmins" element={<Super_SuperAdmin />} />
           )}
           <Route path="*" element={<Admin />} />

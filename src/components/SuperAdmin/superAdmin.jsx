@@ -38,7 +38,6 @@ import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { super_superAdmin } from "../../utilities/constants";
 
 const SuperAdminTable = () => {
   const {
@@ -60,6 +59,7 @@ const SuperAdminTable = () => {
     isSuccess,
     isLoading: deleteisLoading,
   } = useDeleteUser();
+  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
 
   const [open, setOpen] = useState(false);
   const [DeleteOpen, setDeleteOpen] = useState(false);
@@ -150,7 +150,7 @@ const SuperAdminTable = () => {
         >
           <Typography variant="h4">
             {" "}
-            {super_superAdmin.includes(decodedToken.email)
+            {superSuperAdminsList?.includes(decodedToken.email)
               ? `Welcome back, ${decodedToken.name}`
               : "Locations"}
           </Typography>

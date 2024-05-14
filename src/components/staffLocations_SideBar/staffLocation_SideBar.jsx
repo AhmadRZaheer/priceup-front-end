@@ -12,7 +12,6 @@ import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined } from "@mui/icons-material";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
-import { super_superAdmin } from "../../utilities/constants";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import {
   useFetchStaffHaveAccessTo,
@@ -42,6 +41,7 @@ const StaffLocationsSidebar = () => {
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
 
   const handleClosePopup = () => {
     setAnchorEl(null);
@@ -120,7 +120,7 @@ const StaffLocationsSidebar = () => {
                   </li>
                 </NavLink>
 
-                {super_superAdmin.includes(decodedToken.email) && (
+                {/* {superSuperAdminsList?.includes(decodedToken.email) && (
                   <NavLink to="/superadmins" className="link">
                     <li
                       className={` ${
@@ -137,7 +137,7 @@ const StaffLocationsSidebar = () => {
                       </IconButton>
                     </li>
                   </NavLink>
-                )}
+                )} */}
               </ul>
             </div>
           </Box>

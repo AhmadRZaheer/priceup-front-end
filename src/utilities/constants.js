@@ -32,7 +32,7 @@ export const weightMultiplier = {
 
 export const panelOverWeightAmount = 160;
 
-export const super_superAdmin = ["zaheer@gcs.glass","brandon@gcs.glass","chance@gcs.glass"];
+// export const super_superAdmin = ["zaheer@gcs.glass","brandon@gcs.glass","chance@gcs.glass"];
 
 export const notificationsVariant = {
   DEFAULT : 'default',
