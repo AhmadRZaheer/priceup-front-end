@@ -36,25 +36,30 @@ export const SingleFieldEdit = ({
           placeholder={placeholder}
           name={name}
           type="text"
+          inputProps={{
+            min: 0,
+            maxLength: 7,
+          }}
           InputProps={{
-            inputProps: { min: 0, maxLength: 7 },
             endAdornment: (
-              <InputAdornment
-                onClick={handleEdit}
-                position="end"
-                style={{ cursor: "pointer", borderLeft: "1px solid" }}
-              >
-                {isEdit ? (
-                  <Tooltip title="Edit">
-                    <Edit fontSize="20px" />
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Done">
-                    <Done fontSize="20px" />
-                  </Tooltip>
-                )}
+              <InputAdornment position="end">
+                <Tooltip title={isEdit ? "Done" : "Edit"}>
+                  {isEdit ? (
+                    <Done
+                      fontSize="small"
+                      onClick={handleEdit}
+                      style={{ cursor: "pointer" }}
+                    />
+                  ) : (
+                    <Edit
+                      fontSize="small"
+                      onClick={handleEdit}
+                      style={{ cursor: "pointer" }}
+                    />
+                  )}
+                </Tooltip>
               </InputAdornment>
-            ),
+            )
           }}
           value={value}
           onChange={onChange}

@@ -180,13 +180,13 @@ export const getHardwareFabricationQuantity = (
     outages += layoutOutageValue;
   }
   // if selected item is SINGLE BARN
-  if (selectedItem?.settings?.variant === layoutVariants.SINGLEBARN) {
-    oneInchHoles += 6;
-  }
+  // if (selectedItem?.settings?.variant === layoutVariants.SINGLEBARN) {
+  //   oneInchHoles += 6;
+  // }
   // if selected item is DOUBLE BARN
-  if (selectedItem?.settings?.variant === layoutVariants.DOUBLEBARN) {
-    oneInchHoles += 8;
-  }
+  // if (selectedItem?.settings?.variant === layoutVariants.DOUBLEBARN) {
+  //   oneInchHoles += 8;
+  // }
   return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
