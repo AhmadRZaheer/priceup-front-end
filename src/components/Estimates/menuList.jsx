@@ -49,7 +49,7 @@ const MenuList = ({
   const handleCountSet = (value) => {
     if (value >= 0) {
       setCountVal(value);
-      dispatch(setCounters({ item: null, type: type, value: value }));
+      dispatch(setCounters({ item: selectedItem, type: type, value: value }));
     }
   };
   const handleThicknessSet = (thickness) => {
