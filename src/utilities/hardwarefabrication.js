@@ -317,7 +317,13 @@ export const getHardwareSpecificFabrication = (
   currentHardware,
   newSelectedHardware
 ) => {
-  let existingFabricationValues = { ...fabricationValues };
+  let existingFabricationValues = { 
+    oneInchHoles: Number(fabricationValues.oneInchHoles),
+    hingeCut: Number(fabricationValues.hingeCut),
+    clampCut: Number(fabricationValues.clampCut),
+    notch: Number(fabricationValues.notch),
+    outages: Number(fabricationValues.outages)
+   };
   let currentHardwareFabrication = null;
 
   if (currentHardware?.item) {
