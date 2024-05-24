@@ -525,7 +525,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     <TextField
                       id="email"
                       name="email"
-                      placeholder="Client Email address"
+                      placeholder="Enter Email address"
                       size="small"
                       variant="outlined"
                       value={formik.values.email}
@@ -568,7 +568,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     <TextField
                       id="phone"
                       name="phone"
-                      placeholder="Client Email address"
+                      placeholder="Enter Phone Number"
                       size="small"
                       variant="outlined"
                       value={formik.values.phone}
@@ -611,7 +611,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     <TextField
                       id="address"
                       name="address"
-                      placeholder="Client address"
+                      placeholder="Enter address"
                       size="small"
                       variant="outlined"
                       value={formik.values.address}
