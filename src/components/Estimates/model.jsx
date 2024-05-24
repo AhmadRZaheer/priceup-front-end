@@ -381,11 +381,11 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                     <Typography>Customer Detail</Typography>
                   </Box>
                   <Box sx={{ width: "100%", pb: 1 }}>
-                    <Typography>Label</Typography>
+                    <Typography>Estimate Label</Typography>
                     <TextField
                       id="label"
                       name="label"
-                      placeholder="label"
+                      placeholder="Give your Estimate a unique label"
                       size="small"
                       variant="outlined"
                       InputProps={{
@@ -516,7 +516,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
-                      paddingBottom: { sm: 0, xs: 2 },
+                      paddingBottom: { sm: 1, xs: 2 },
                     }}
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -559,7 +559,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
-                      paddingBottom: { sm: 0, xs: 2 },
+                      paddingBottom: { sm: 1, xs: 2 },
                     }}
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -602,11 +602,12 @@ export default function ClientDetailsModel({ open, handleCancel }) {
                       display: "flex",
                       flexDirection: "column",
                       gap: 1,
+                      paddingBottom: { sm: 1, xs: 2 },
                     }}
                   >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
                       {" "}
-                      <label htmlFor="address">address</label>
+                      <label htmlFor="address">Address</label>
                     </Box>
                     <TextField
                       id="address"
