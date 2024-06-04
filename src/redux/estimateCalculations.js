@@ -1440,33 +1440,33 @@ const estimateCalcSlice = createSlice({
 
       let hardwareFinishes = null;
       hardwareFinishes = state.listData?.hardwareFinishes?.find(
-        (item) => item._id === estimateData?.hardwareFinishes
+        (item) => item._id === estimateData?.config?.hardwareFinishes
       );
       let handleType = null;
       handleType = state.listData?.handles?.find(
-        (item) => item._id === estimateData?.handles?.type
+        (item) => item._id === estimateData?.config?.handles?.type
       );
       let hingesType = null;
       hingesType = state.listData?.hinges?.find(
-        (item) => item._id === estimateData?.hinges?.type
+        (item) => item._id === estimateData?.config?.hinges?.type
       );
       let slidingDoorSystemType = null;
       slidingDoorSystemType = state.listData?.slidingDoorSystem?.find(
-        (item) => item._id === estimateData?.slidingDoorSystem?.type
+        (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
       );
 
       let headerType = null;
       headerType = state.listData?.header?.find(
-        (item) => item._id === estimateData?.header?.type
+        (item) => item._id === estimateData?.config?.header?.type
       );
 
       let glassTypee = null;
       glassTypee = state.listData?.glassType?.find(
-        (item) => item._id === estimateData?.glassType?.type
+        (item) => item._id === estimateData?.config?.glassType?.type
       );
 
       let glassAddons = [];
-      glassAddons = estimateData?.glassAddons?.map((item) => {
+      glassAddons = estimateData?.config?.glassAddons?.map((item) => {
         const record = state.listData?.glassAddons.find(
           (addon) => addon._id === item
         );
@@ -1494,15 +1494,15 @@ const estimateCalcSlice = createSlice({
           layoutVariants.DOOR,
           layoutVariants.DOUBLEDOOR,
           layoutVariants.DOUBLEBARN,
-        ].includes(estimateData?.layoutData?.variant)
+        ].includes(estimateData?.settings?.variant)
       ) {
-        wallClampArray = estimateData?.mountingClamps?.wallClamp?.map((row) => {
+        wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map((row) => {
           const record = state.listData?.wallClamp?.find(
             (clamp) => clamp._id === row?.type
           );
           return { item: record, count: row.count };
         });
-        sleeveOverArray = estimateData?.mountingClamps?.sleeveOver?.map(
+        sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
           (row) => {
             const record = state.listData?.sleeveOver?.find(
               (clamp) => clamp._id === row?.type
@@ -1510,7 +1510,7 @@ const estimateCalcSlice = createSlice({
             return { item: record, count: row.count };
           }
         );
-        glassToGlassArray = estimateData?.mountingClamps?.glassToGlass?.map(
+        glassToGlassArray = estimateData?.config?.mountingClamps?.glassToGlass?.map(
           (row) => {
             const record = state.listData?.glassToGlass?.find(
               (clamp) => clamp._id === row?.type
@@ -1519,7 +1519,7 @@ const estimateCalcSlice = createSlice({
           }
         );
 
-        cornerWallClampArray = estimateData?.cornerClamps?.wallClamp?.map(
+        cornerWallClampArray = estimateData?.config?.cornerClamps?.wallClamp?.map(
           (row) => {
             const record = state.listData?.cornerWallClamp?.find(
               (clamp) => clamp._id === row?.type
@@ -1528,7 +1528,7 @@ const estimateCalcSlice = createSlice({
           }
         );
 
-        cornerSleeveOverArray = estimateData?.cornerClamps?.sleeveOver?.map(
+        cornerSleeveOverArray = estimateData?.config?.cornerClamps?.sleeveOver?.map(
           (row) => {
             const record = state.listData?.cornerSleeveOver?.find(
               (clamp) => clamp._id === row?.type
@@ -1537,7 +1537,7 @@ const estimateCalcSlice = createSlice({
           }
         );
 
-        cornerGlassToGlassArray = estimateData?.cornerClamps?.glassToGlass?.map(
+        cornerGlassToGlassArray = estimateData?.config?.cornerClamps?.glassToGlass?.map(
           (row) => {
             const record = state.listData?.cornerGlassToGlass?.find(
               (clamp) => clamp._id === row?.type
@@ -1547,11 +1547,11 @@ const estimateCalcSlice = createSlice({
         );
 
         channelItem = state.listData?.mountingChannel?.find(
-          (item) => item._id === estimateData?.mountingChannel
+          (item) => item._id === estimateData?.config?.mountingChannel
         );
       }
       let hardwareAddons = [];
-      hardwareAddons = estimateData?.hardwareAddons?.map((row) => {
+      hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
         const found = state.listData?.hardwareAddons?.find(
           (item) => item?._id === row.type
         );
@@ -1560,7 +1560,7 @@ const estimateCalcSlice = createSlice({
       const noGlassAddon = state.listData.glassAddons?.find(
         (item) => item.slug === "no-treatment"
       );
-      const measurements = estimateData.measurements.map(
+      const measurements = estimateData.config.measurements.map(
         ({ _id, ...rest }) => rest
       );
       state.content = {
@@ -1569,24 +1569,24 @@ const estimateCalcSlice = createSlice({
         handles: {
           ...state.handles,
           item: handleType,
-          count: estimateData?.handles?.count,
+          count: estimateData?.config?.handles?.count,
         },
         hinges: {
           ...state.hinges,
           item: hingesType,
-          count: estimateData?.hinges?.count,
+          count: estimateData?.config?.hinges?.count,
         },
         header: {
           item: headerType,
-          count: estimateData?.header?.count,
+          count: estimateData?.config?.header?.count,
         },
         slidingDoorSystem: {
           item: slidingDoorSystemType,
-          count: estimateData?.slidingDoorSystem?.count,
+          count: estimateData?.config?.slidingDoorSystem?.count,
         },
         glassType: {
           item: glassTypee,
-          thickness: estimateData?.glassType?.thickness,
+          thickness: estimateData?.config?.glassType?.thickness,
         },
 
         mountingClamps: {
@@ -1609,26 +1609,26 @@ const estimateCalcSlice = createSlice({
           glassToGlassArray?.length
             ? "clamps"
             : "channel",
-        hingeCut: estimateData?.hingeCut,
-        people: estimateData?.people,
-        hours: estimateData?.hours,
+        hingeCut: estimateData?.config?.hingeCut,
+        people: estimateData?.config?.people,
+        hours: estimateData?.config?.hours,
         glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
-        oneInchHoles: estimateData?.oneInchHoles,
-        clampCut: estimateData?.clampCut,
-        notch: estimateData?.notch,
-        outages: estimateData?.outages,
-        mitre: estimateData?.mitre,
-        polish: estimateData?.polish,
-        sleeveOverCount: estimateData?.sleeveOverCount,
-        towelBarsCount: estimateData?.towelBarsCount,
+        oneInchHoles: estimateData?.config?.oneInchHoles,
+        clampCut: estimateData?.config?.clampCut,
+        notch: estimateData?.config?.notch,
+        outages: estimateData?.config?.outages,
+        mitre: estimateData?.config?.mitre,
+        polish: estimateData?.config?.polish,
+        // sleeveOverCount: estimateData?.sleeveOverCount,
+        // towelBarsCount: estimateData?.towelBarsCount,
         hardwareAddons: [...hardwareAddons],
-        userProfitPercentage: estimateData?.userProfitPercentage,
-        additionalFields: estimateData?.additionalFields,
+        userProfitPercentage: estimateData?.config?.userProfitPercentage,
+        additionalFields: estimateData?.config?.additionalFields,
       };
       state.quoteState = quoteState.EDIT;
       // state.measurements = measurements;
-      state.perimeter = estimateData.perimeter;
-      state.sqftArea = estimateData.sqftArea;
+      state.perimeter = estimateData.config.perimeter;
+      state.sqftArea = estimateData.config.sqftArea;
       state.selectedItem = estimateData;
     },
   },

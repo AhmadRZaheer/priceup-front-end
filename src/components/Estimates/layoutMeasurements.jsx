@@ -198,7 +198,7 @@ const LayoutMeasurements = () => {
             ...selectedData,
             additionalFields: reduxAdditionalFields.length
               ? reduxAdditionalFields
-              : selectedData.additionalFields,
+              : selectedData.config.additionalFields,
           },
           quotesId: selectedData._id,
         })

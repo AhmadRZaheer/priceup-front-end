@@ -92,16 +92,16 @@ export default function ExistingTable() {
     //     quotesId: item._id,
     //   })
     // );
-    dispatch(setisCustomizedDoorWidth(item.isCustomizedDoorWidth));
-    dispatch(updateMeasurements(item.measurements));
+    dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
+    dispatch(updateMeasurements(item.config.measurements));
     dispatch(addSelectedItem(item));
     dispatch(setQuoteState("edit"));
     const result = calculateAreaAndPerimeter(
-      item.measurements,
+      item.config.measurements,
       item?.settings?.variant,
-      item.glassType.thickness
+      item.config.glassType.thickness
     );
-    if (result?.doorWidth && item.isCustomizedDoorWidth === false) {
+    if (result?.doorWidth && item.config.isCustomizedDoorWidth === false) {
       dispatch(setDoorWidth(result?.doorWidth));
     } else {
       dispatch(setDoorWidth(item?.doorWidth));
@@ -115,7 +115,7 @@ export default function ExistingTable() {
     if (result?.returnWeight) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
-    if (item?.layout_id) {  // default layout edit
+    if (item?.config?.layout_id) {  // default layout edit
       dispatch(setNavigationDesktop("measurements"));
     } else { // custom layout edit
       dispatch(setNavigationDesktop("custom"));

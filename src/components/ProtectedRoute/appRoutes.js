@@ -32,17 +32,20 @@ import {
   isCustomAdmin,
   isStaff,
   isSuperAdmin,
-} from "../../utilities/authentications";
-import CustomAdminPage from "../../pages/CustomAdmins/customAdmin";
-import StaffLocationPage from "../../pages/stafffLocations/staffLocationPage";
-import PDFPreview from "../../pages/PDFPreview";
+} from "@/utilities/authentications";
+import CustomAdminPage from "@/pages/CustomAdmins/customAdmin";
+import StaffLocationPage from "@/pages/stafffLocations/staffLocationPage";
+import PDFPreview from "@/pages/PDFPreview";
+import MirrorsEdgeWork from "@/pages/Mirrors/EdgeWorks";
+import MirrorsGlassType from "@/pages/Mirrors/GlassTypes";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => {
     return parseJwt(token);
   }, [token]);
-  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
+  const superSuperAdminsList =
+    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
   return (
     <Routes>
@@ -90,6 +93,14 @@ const AppRoutes = () => {
           <Route path="hardware-addons" element={<AddOns />} />
           <Route path="glass-types" element={<GlassType />} />
           <Route path="glass-addons" element={<GlassAddon />} />
+          {/** Mirros */}
+          <Route path="mirrors/">
+            <Route index element={<MirrorsEdgeWork />} />
+            <Route path="edge-works" element={<MirrorsEdgeWork />} />
+            <Route path="glass-types" element={<MirrorsGlassType />} />
+            <Route path="*" element={<MirrorsEdgeWork />} />
+          </Route>
+          {/** End */}
           <Route path="*" element={<Overview />}></Route>
         </Route>
       ) : isStaff(decodedToken) && decodedToken?.company_id === "" ? (
