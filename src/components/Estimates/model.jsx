@@ -187,7 +187,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
     polish: estimatesContent?.polish,
     people: estimatesContent?.people,
     hours: estimatesContent?.hours,
-    cost: Number(estimatesTotal),
+    // cost: Number(estimatesTotal),
     hardwareAddons: [...hardwareAddonsArray],
     sleeveOverCount: estimatesContent?.sleeveOverCount,
     towelBarsCount: estimatesContent?.sleeveOverCount,
@@ -219,6 +219,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
             layout_id: estimatesLayout?._id || null,
             label: values.label,
           },
+          cost: Number(estimatesTotal)
         });
       } else {
         mutateEdit({
@@ -291,6 +292,7 @@ export default function ClientDetailsModel({ open, handleCancel }) {
         ...estimate,
         layout_id: estimatesLayout?._id || null,
       },
+      cost: Number(estimatesTotal)
     });
   };
   useEffect(() => {

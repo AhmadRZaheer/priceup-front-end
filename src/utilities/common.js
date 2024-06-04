@@ -1,3 +1,4 @@
+import { parseJwt } from "@/components/ProtectedRoute/authVerify";
 import { layoutVariants, thicknessTypes, weightMultiplier } from "./constants";
 
 export const generateId = () => {
@@ -12,6 +13,14 @@ export function createSlug(string) {
     .replace(/--+/g, "-") // Replace multiple hyphens with a single hyphen
     .replace(/^-+|-+$/g, "") // Trim leading and trailing hyphens
     .replace(/\//g, "-"); // Replace forward slashes with hyphens
+}
+
+export const getDecryptedToken = () => {
+  const token = localStorage.getItem("token");
+  if(token){
+   return parseJwt(token);
+  }
+  return null;
 }
 
 export const backendURL =

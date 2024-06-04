@@ -78,7 +78,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     let measurementsArray = measurements;
-    if (currentQuoteState === quoteState.EDIT && !selectedData?.layout_id) {
+    if (currentQuoteState === quoteState.EDIT && !selectedData?.config?.layout_id) {
       let newArray = [];
       for (const key in measurementsArray) {
         const index = parseInt(key);
@@ -198,7 +198,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
       people: selectedContent?.people,
       hours: selectedContent?.hours,
       userProfitPercentage: selectedContent?.userProfitPercentage,
-      cost: Number(estimatesTotal),
+      // cost: Number(estimatesTotal),
       hardwareAddons: [...hardwareAddonsArray],
       sleeveOverCount: selectedContent?.sleeveOverCount,
       towelBarsCount: selectedContent?.sleeveOverCount,
@@ -208,6 +208,7 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
     };
 
     mutateEdit({
+      cost:Number(estimatesTotal),
       customerData: {},
       estimateData: estimate,
       id: quoteId,
@@ -221,9 +222,9 @@ const LayoutReview = ({ setClientDetailOpen, setHardwareMissingAlert }) => {
           ? "measurements"
           : currentQuoteState === quoteState.CUSTOM
           ? "custom"
-          : currentQuoteState === quoteState.EDIT && selectedData?.layout_id
+          : currentQuoteState === quoteState.EDIT && selectedData?.config?.layout_id
           ? "measurements"
-          : currentQuoteState === quoteState.EDIT && !selectedData?.layout_id
+          : currentQuoteState === quoteState.EDIT && !selectedData?.config?.layout_id
           ? "custom"
           : "existing"
       )
