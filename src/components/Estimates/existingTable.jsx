@@ -36,7 +36,7 @@ import { generateObjectForPDFPreview, renderMeasurementSides } from "@/utilities
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import { setEstimateMeasurements, setSelectedItem } from "@/redux/mirrorsEstimateSlice";
+import { resetMirrorEstimateState, setEstimateMeasurements, setSelectedItem } from "@/redux/mirrorsEstimateSlice";
 
 export default function ExistingTable() {
   const navigate = useNavigate();
@@ -91,43 +91,44 @@ export default function ExistingTable() {
   }
 
   const handleIconButtonClick = (item) => {
-    if(item?.category === EstimateCategory.SHOWERS){
-    dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-    dispatch(setEstimateState(quoteState.EDIT));
-    dispatch(resetState());
-    dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
-    dispatch(updateMeasurements(item.config.measurements));
-    dispatch(addSelectedItem(item));
-    dispatch(setQuoteState("edit"));
-    const result = calculateAreaAndPerimeter(
-      item.config.measurements,
-      item?.settings?.variant,
-      item.config.glassType.thickness
-    );
-    if (result?.doorWidth && item.config.isCustomizedDoorWidth === false) {
-      dispatch(setDoorWidth(result?.doorWidth));
-    } else {
-      dispatch(setDoorWidth(item?.doorWidth));
+    if (item?.category === EstimateCategory.SHOWERS) {
+      dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+      dispatch(setEstimateState(quoteState.EDIT));
+      dispatch(resetState());
+      dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
+      dispatch(updateMeasurements(item.config.measurements));
+      dispatch(addSelectedItem(item));
+      dispatch(setQuoteState("edit"));
+      const result = calculateAreaAndPerimeter(
+        item.config.measurements,
+        item?.settings?.variant,
+        item.config.glassType.thickness
+      );
+      if (result?.doorWidth && item.config.isCustomizedDoorWidth === false) {
+        dispatch(setDoorWidth(result?.doorWidth));
+      } else {
+        dispatch(setDoorWidth(item?.doorWidth));
+      }
+      if (result?.doorWeight) {
+        dispatch(setDoorWeight(result?.doorWeight));
+      }
+      if (result?.panelWeight) {
+        dispatch(setPanelWeight(result?.panelWeight));
+      }
+      if (result?.returnWeight) {
+        dispatch(setReturnWeight(result?.returnWeight));
+      }
+      navigate('/estimates/dimensions');
     }
-    if (result?.doorWeight) {
-      dispatch(setDoorWeight(result?.doorWeight));
+    else if (item?.category === EstimateCategory.MIRRORS) {
+      dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
+      dispatch(setEstimateState(quoteState.EDIT));
+      dispatch(resetMirrorEstimateState());
+      dispatch(setSelectedItem(item));
+      dispatch(setEstimateMeasurements(item.config.measurements));
+      console.log('mirror edit', item);
+      navigate('/estimates/dimensions');
     }
-    if (result?.panelWeight) {
-      dispatch(setPanelWeight(result?.panelWeight));
-    }
-    if (result?.returnWeight) {
-      dispatch(setReturnWeight(result?.returnWeight));
-    }
-    navigate('/estimates/dimensions');
-  }
-  else if(item?.category === EstimateCategory.MIRRORS){
-    dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-    dispatch(setEstimateState(quoteState.EDIT));
-    dispatch(setSelectedItem(item));
-    dispatch(setEstimateMeasurements(item.config.measurements));
-    console.log('mirror edit',item);
-    navigate('/estimates/dimensions');
-  }
     // if (item?.config?.layout_id) {  // default layout edit
     //   dispatch(setNavigationDesktop("measurements"));
     // } else { // custom layout edit
