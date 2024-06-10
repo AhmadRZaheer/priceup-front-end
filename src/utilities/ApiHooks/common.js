@@ -27,6 +27,30 @@ export const useFetchAllDocuments = (apiRoute) => {
   });
 };
 
+export const useFetchSingleDocument = (apiRoute) => {
+  async function fetch() {
+    const token = localStorage.getItem("token");
+    try {
+      const response = await axios.get(apiRoute, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : {};
+      } else {
+        throw new Error("An error occurred while fetching records.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching records.");
+    }
+  }
+  return useQuery({
+    queryKey: [`key-${apiRoute}`],
+    queryFn: fetch,
+    enabled: false,
+    placeholderData: {},
+  });
+};
+
 export const useDeleteDocumentProp = () => {
   const dispatch = useDispatch();
   const handleDelete = async (props) => {

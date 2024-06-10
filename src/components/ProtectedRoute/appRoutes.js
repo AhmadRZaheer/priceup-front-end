@@ -1,29 +1,29 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 // import Staff from "../../pages/EstimatesMobile/staff";
-import Overview from "../../pages/home/overview";
-import Customers from "../../pages/Customers/customers";
-import Single from "../../pages/singlle/single";
-import New from "../../pages/new/new";
-import Team from "../../pages/Team/team";
-import Hardware from "../../pages/Hardware/hardware";
-import Finishes from "../../pages/Finishes/finishes";
-import Defaults from "../../pages/Layouts/defaults";
-import Estimates from "../../pages/Estimates/estimates";
-import Settings from "../../pages/Settings/settings";
-import AddOns from "../../pages/AddOns/addOns";
-import GlassType from "../../pages/GlassType/glassType";
-import GlassAddon from "../../pages/GlassAddon/glassAddon";
-import Existing from "../../pages/Existing/existing";
-import Login from "../Login/login";
-import SuperAdminLogin from "../superLogin/superAdmin";
+import Overview from "@/pages/home/overview";
+import Customers from "@/pages/Customers/customers";
+import Single from "@/pages/singlle/single";
+import New from "@/pages/new/new";
+import Team from "@/pages/Team/team";
+import Hardware from "@/pages/Hardware/hardware";
+import Finishes from "@/pages/Finishes/finishes";
+import Defaults from "@/pages/Layouts/defaults";
+import Estimates from "@/pages/Estimates";
+import Settings from "@/pages/Settings/settings";
+import AddOns from "@/pages/AddOns/addOns";
+import GlassType from "@/pages/GlassType/glassType";
+import GlassAddon from "@/pages/GlassAddon/glassAddon";
+// import Existing from "@/pages/Existing/existing";
+import Login from "@/components/Login/login";
+// import SuperAdminLogin from "../superLogin/superAdmin";
 import { parseJwt } from "./authVerify";
-import Admin from "../../pages/Admin/admin";
+import Admin from "@/pages/Admin/admin";
 import { useMemo } from "react";
-import LandingPage from "../../pages/LandingPage/landingPage";
-import AdminTeam from "../../pages/TeamAdmin/adminTeam";
-import Staff from "../../pages/Staff/staff";
-import AdminUser from "../../pages/UserSuperAdmin/userAdmin";
-import Super_SuperAdmin from "../../pages/Super_Super-Admin/superAdmins";
+import LandingPage from "@/pages/LandingPage/landingPage";
+import AdminTeam from "@/pages/TeamAdmin/adminTeam";
+import Staff from "@/pages/Staff/staff";
+import AdminUser from "@/pages/UserSuperAdmin/userAdmin";
+import Super_SuperAdmin from "@/pages/Super_Super-Admin/superAdmins";
 
 import {
   getHomepageURL,
@@ -38,6 +38,10 @@ import StaffLocationPage from "@/pages/stafffLocations/staffLocationPage";
 import PDFPreview from "@/pages/PDFPreview";
 import MirrorsEdgeWork from "@/pages/Mirrors/EdgeWorks";
 import MirrorsGlassType from "@/pages/Mirrors/GlassTypes";
+import EstimateCategory from "@/pages/EstimateCategory";
+import EstimateLayouts from "@/pages/EstimateLayouts";
+import EstimateDimensions from "@/pages/EstimateDimensions";
+import EstimateReview from "@/pages/EstimateReview";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -74,8 +78,12 @@ const AppRoutes = () => {
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="/estimates/">
-            <Route index element={<Existing />} />
-            <Route path="steps" element={<Estimates />} />
+            <Route index element={<Estimates />} />
+            <Route path="category" element={<EstimateCategory />} />
+            <Route path="layouts" element={<EstimateLayouts />} />
+            <Route path="dimensions" element={<EstimateDimensions />} />
+            <Route path="review" element={<EstimateReview />} />
+            {/* <Route path="steps" element={<Estimates />} /> */}
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/customers/">

@@ -317,7 +317,7 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink to="/estimates" className="link">
                   <li
-                    className={` ${location.pathname === "/estimates" ? "active" : ""
+                    className={` ${location.pathname.includes("/estimates") ? "active" : ""
                       }`}
                   >
                     <IconButton

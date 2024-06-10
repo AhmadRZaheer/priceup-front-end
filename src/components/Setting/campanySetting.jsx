@@ -23,11 +23,13 @@ import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
 import { useDropzone } from "react-dropzone";
 import InputImageIcon from "@/Assets/imageUploader.svg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getDataRefetch } from "@/redux/staff";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
+import { setLocationSettingsRefetch } from "@/redux/refetch";
 
 const CampanySetting = () => {
+  const dispatch = useDispatch();
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const { mutate: editSetting, isSuccess: SuccessForEdit } = useEditSetting();
@@ -41,6 +43,7 @@ const CampanySetting = () => {
   useEffect(() => {
     if (SuccessForEdit) {
       reFetchDataSetting();
+      dispatch(setLocationSettingsRefetch());
     }
   }, [SuccessForEdit]);
   useEffect(() => {

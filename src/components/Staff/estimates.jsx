@@ -3,8 +3,8 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import ExistingTable from "../Estimates/existingTable";
-import ExistingListMobile from "../Estimates/existingListMobile";
+import ExistingTable from "../Estimates_dep/existingTable";
+import ExistingListMobile from "../Estimates_dep/existingListMobile";
 
 export default function Estimates() {
   const isMobile = useMediaQuery("(max-width:600px)");

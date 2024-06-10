@@ -9,6 +9,10 @@ import defaultSlice from "./defaultSlice";
 import staffSlice from "./staff";
 import snackBarSlice from "./snackBarSlice";
 import refetchSlice from "./refetch";
+import locationReducer from "./locationSlice";
+import mirrorsHardwareReducer from "./mirrorsHardwareSlice";
+import estimateReducer from "./estimateSlice";
+import mirrorsEstimateReducer from "./mirrorsEstimateSlice";
 
 const store = configureStore({
   reducer: {
@@ -21,6 +25,10 @@ const store = configureStore({
     staff: staffSlice,
     snackbar: snackBarSlice,
     refetch: refetchSlice,
+    location: locationReducer,
+    mirrorsHardware: mirrorsHardwareReducer,
+    estimate: estimateReducer,
+    mirrorsEstimate: mirrorsEstimateReducer,
   },
 });
 

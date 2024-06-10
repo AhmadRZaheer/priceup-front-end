@@ -78,6 +78,23 @@ export const EstimatesColumns = (
     },
 
     {
+      field: "Estimate Category",
+      headerClassName: "customHeaderClass",
+      flex: 1.5,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography
+              sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+            >
+              {params?.row?.category}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
       field: "Date quoted",
       headerClassName: "customHeaderClass",
       flex: 1,
