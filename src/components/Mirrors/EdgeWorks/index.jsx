@@ -12,9 +12,11 @@ import HardwareItem from "@/components/common/HardwareItem";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
+import { setShowersHardwareRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const MirrorsGlassTypeComponent = () => {
-
+    const dispatch = useDispatch();
     const routePrefix = `${backendURL}/mirrors/edgeWorks`;
     const decodedToken = getDecryptedToken();
     const {
@@ -92,12 +94,15 @@ const MirrorsGlassTypeComponent = () => {
         refetchEdgeWorksList();
         if (editSuccess) {
             setUpdateModalOpen(false);
+            dispatch(setShowersHardwareRefetch());
         }
         if (createSuccess) {
             setCreateModalOpen(false);
+            dispatch(setShowersHardwareRefetch());
         }
         if (deleteSuccess) {
             setDeleteModalOpen(false);
+            dispatch(setShowersHardwareRefetch());
         }
     }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
 

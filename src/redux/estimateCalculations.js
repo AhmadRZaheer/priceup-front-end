@@ -200,6 +200,7 @@ const estimateCalcSlice = createSlice({
     resetState: (state) => {
       return {
         ...initialState,
+        listData: state.listData,
         handlePageDesktopNavigation: state.handlePageDesktopNavigation,
       };
     },

@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
 import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
-import CustomerQoute from "../Estimates/customerQuotTable";
+import CustomerQoute from "../Estimates_dep/customerQuotTable";
 import EyeIcon from "../../Assets/eye-icon.svg";
 import CustomIconButton from "../ui-components/CustomButton";
 // import { getDataRefetch } from "../../redux/staff";

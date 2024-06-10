@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import LayoutMeasurements from "../Estimates/layoutMeasurements";
-import LayoutReview from "../Estimates/layoutReview";
+import LayoutMeasurements from "../Estimates_dep/layoutMeasurements";
+import LayoutReview from "../Estimates_dep/layoutReview";
 import Estimates from "./estimates";
 import CustomerTable from "./customerTable";
 import StaffTable from "./staffTable";
@@ -8,11 +8,11 @@ import {
   getPageDesktopNavigation,
   getQuoteState,
 } from "../../redux/estimateCalculations";
-import Layout from "../Estimates/layouts";
+import Layout from "../Estimates_dep/layouts";
 import { useSelector } from "react-redux";
 import { Box, useMediaQuery } from "@mui/material";
 import CustomLayout from "../CustomLayout/customLayout";
-import ClientDetailsModel from "../Estimates/model";
+import ClientDetailsModel from "../Estimates_dep/model";
 import HardwareMissingAlert from "../Modal/hardwareMissingAlert";
 const IndexMobile = () => {
   const [clientDetailOpen, setClientDetailOpen] = useState(false);

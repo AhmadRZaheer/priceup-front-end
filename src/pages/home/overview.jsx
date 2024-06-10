@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import Sidebar from "../../components/Sidebar/sidebar";
+import Sidebar from "@/components/Sidebar/sidebar";
 import "./overview.scss";
-import Widget from "../../components/widgets/widget";
-import { useFetchDataEstimateCard } from "../../utilities/ApiHooks/estimateDataCard";
-import ExistingQuotes from "../../components/Estimates/existingQuotes";
-import { parseJwt } from "../../components/ProtectedRoute/authVerify";
+import Widget from "@/components/widgets/widget";
+import { useFetchDataEstimateCard } from "@/utilities/ApiHooks/estimateDataCard";
+import Estimates from "@/components/Estimates";
+import { parseJwt } from "@/components/ProtectedRoute/authVerify";
 import { Box } from "@mui/material";
 
 const Overview = () => {
@@ -35,7 +35,7 @@ const Overview = () => {
           <Widget value={data?.staff || 0} type="team" />
           <Widget value={data?.staff || 0} type="invoice" />
         </div>
-        <ExistingQuotes />
+        <Estimates />
       </Box>
     </div>
   );

@@ -4,6 +4,7 @@ import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { setShowersHardwareRefetch } from "@/redux/refetch";
 
 export const useFetchDataGlassType = () => {
   async function fetchData() {
@@ -41,6 +42,7 @@ export const useDeleteGlassType = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
@@ -68,6 +70,7 @@ export const useDeleteGlassTypeFull = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
@@ -114,6 +117,7 @@ export const useCreateGlassType = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Created Successfuly", severity: "success" })
         );
@@ -169,6 +173,7 @@ export const useEditGlassType = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
         );
@@ -208,6 +213,7 @@ export const useEditFullGlassType = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
         );

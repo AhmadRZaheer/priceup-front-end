@@ -386,37 +386,37 @@ const getSwitchHingeNotification = (
   }
 };
 
-export const generateObjectForPDFPreview = (listData, estimateData) => {
-  let estimateInfoObject = estimateData;
+export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPricing) => {
+  let estimateInfoObject;
   let hardwareFinishes = null;
   hardwareFinishes = listData?.hardwareFinishes?.find(
-    (item) => item._id === estimateData?.hardwareFinishes
+    (item) => item._id === estimateData?.config?.hardwareFinishes
   );
   let handleType = null;
   handleType = listData?.handles?.find(
-    (item) => item._id === estimateData?.handles?.type
+    (item) => item._id === estimateData?.config?.handles?.type
   );
   let hingesType = null;
   hingesType = listData?.hinges?.find(
-    (item) => item._id === estimateData?.hinges?.type
+    (item) => item._id === estimateData?.config?.hinges?.type
   );
   let slidingDoorSystemType = null;
   slidingDoorSystemType = listData?.slidingDoorSystem?.find(
-    (item) => item._id === estimateData?.slidingDoorSystem?.type
+    (item) => item._id === estimateData?.config?.slidingDoorSystem?.type
   );
 
   let headerType = null;
   headerType = listData?.header?.find(
-    (item) => item._id === estimateData?.header?.type
+    (item) => item._id === estimateData?.config?.header?.type
   );
 
   let glassTypee = null;
   glassTypee = listData?.glassType?.find(
-    (item) => item._id === estimateData?.glassType?.type
+    (item) => item._id === estimateData?.config?.glassType?.type
   );
 
   let glassAddons = [];
-  glassAddons = estimateData?.glassAddons?.map((item) => {
+  glassAddons = estimateData?.config?.glassAddons?.map((item) => {
     const record = listData?.glassAddons.find((addon) => addon._id === item);
     return record;
   });
@@ -444,19 +444,19 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
       layoutVariants.DOUBLEBARN,
     ].includes(estimateData?.layoutData?.variant)
   ) {
-    wallClampArray = estimateData?.mountingClamps?.wallClamp?.map((row) => {
+    wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map((row) => {
       const record = listData?.wallClamp?.find(
         (clamp) => clamp._id === row?.type
       );
       return { item: record, count: row.count };
     });
-    sleeveOverArray = estimateData?.mountingClamps?.sleeveOver?.map((row) => {
+    sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map((row) => {
       const record = listData?.sleeveOver?.find(
         (clamp) => clamp._id === row?.type
       );
       return { item: record, count: row.count };
     });
-    glassToGlassArray = estimateData?.mountingClamps?.glassToGlass?.map(
+    glassToGlassArray = estimateData?.config?.mountingClamps?.glassToGlass?.map(
       (row) => {
         const record = listData?.glassToGlass?.find(
           (clamp) => clamp._id === row?.type
@@ -465,14 +465,14 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
       }
     );
 
-    cornerWallClampArray = estimateData?.cornerClamps?.wallClamp?.map((row) => {
+    cornerWallClampArray = estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
       const record = listData?.cornerWallClamp?.find(
         (clamp) => clamp._id === row?.type
       );
       return { item: record, count: row.count };
     });
 
-    cornerSleeveOverArray = estimateData?.cornerClamps?.sleeveOver?.map(
+    cornerSleeveOverArray = estimateData?.config?.cornerClamps?.sleeveOver?.map(
       (row) => {
         const record = listData?.cornerSleeveOver?.find(
           (clamp) => clamp._id === row?.type
@@ -481,7 +481,7 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
       }
     );
 
-    cornerGlassToGlassArray = estimateData?.cornerClamps?.glassToGlass?.map(
+    cornerGlassToGlassArray = estimateData?.config?.cornerClamps?.glassToGlass?.map(
       (row) => {
         const record = listData?.cornerGlassToGlass?.find(
           (clamp) => clamp._id === row?.type
@@ -491,11 +491,11 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
     );
 
     channelItem = listData?.mountingChannel?.find(
-      (item) => item._id === estimateData?.mountingChannel
+      (item) => item._id === estimateData?.config?.mountingChannel
     );
   }
   let hardwareAddons = [];
-  hardwareAddons = estimateData?.hardwareAddons?.map((row) => {
+  hardwareAddons = estimateData?.config?.hardwareAddons?.map((row) => {
     const found = listData?.hardwareAddons?.find(
       (item) => item?._id === row.type
     );
@@ -509,27 +509,38 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
   // );
 
   estimateInfoObject = {
-    ...estimateInfoObject,
+    name:estimateData?.name,
+    category:estimateData?.category,
+    cost:estimateData?.cost,
+    creatorData:estimateData?.creatorData,
+    creator_type:estimateData?.creator_type,
+    customerData:estimateData?.customerData,
+    settings:estimateData?.settings,
+    status:estimateData?.status,
+    updatedAt:estimateData?.updatedAt,
+    doorWidth:estimateData?.config?.doorWidth,
+    isCustomizedDoorWidth:estimateData?.config?.isCustomizedDoorWidth,
+    additionalFields:estimateData?.config?.additionalFields,
     hardwareFinishes: hardwareFinishes,
     handles: {
       item: handleType,
-      count: estimateData?.handles?.count,
+      count: estimateData?.config?.handles?.count,
     },
     hinges: {
       item: hingesType,
-      count: estimateData?.hinges?.count,
+      count: estimateData?.config?.hinges?.count,
     },
     header: {
       item: headerType,
-      count: estimateData?.header?.count,
+      count: estimateData?.config?.header?.count,
     },
     slidingDoorSystem: {
       item: slidingDoorSystemType,
-      count: estimateData?.slidingDoorSystem?.count,
+      count: estimateData?.config?.slidingDoorSystem?.count,
     },
     glassType: {
       item: glassTypee,
-      thickness: estimateData?.glassType?.thickness,
+      thickness: estimateData?.config?.glassType?.thickness,
     },
 
     mountingClamps: {
@@ -554,8 +565,23 @@ export const generateObjectForPDFPreview = (listData, estimateData) => {
         : "channel",
     glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
     hardwareAddons: [...hardwareAddons],
-    pricingFactor: listData?.miscPricing?.pricingFactorStatus
-      ? listData?.miscPricing?.pricingFactor
+    oneInchHoles: estimateData?.config?.oneInchHoles,
+    hingeCut: estimateData?.config?.hingeCut,
+    clampCut: estimateData?.config?.clampCut,
+    notch: estimateData?.config?.notch,
+    outages: estimateData?.config?.outages,
+    mitre: estimateData?.config?.mitre,
+    polish: estimateData?.config?.polish,
+    people: estimateData?.config?.people,
+    hours: estimateData?.config?.hours,
+    perimeter: estimateData?.config?.perimeter,
+    sqftArea: estimateData?.config?.sqftArea,
+    userProfitPercentage: estimateData?.config?.userProfitPercentage,
+    label: estimateData?.config?.label,
+    layout_id:estimateData?.config?.layout_id,
+    measurements:estimateData?.config?.measurements,
+    pricingFactor: showerMiscPricing?.pricingFactorStatus
+      ? showerMiscPricing?.pricingFactor
       : 1,
   };
   return estimateInfoObject;

@@ -35,25 +35,25 @@ export const panelOverWeightAmount = 160;
 // export const super_superAdmin = ["zaheer@gcs.glass","brandon@gcs.glass","chance@gcs.glass"];
 
 export const notificationsVariant = {
-  DEFAULT : 'default',
-  ERROR : 'error',
-  INFO : 'info',
-  SUCCESS : 'success',
-  WARNING : 'warning'
-}
+  DEFAULT: "default",
+  ERROR: "error",
+  INFO: "info",
+  SUCCESS: "success",
+  WARNING: "warning",
+};
 
 export const quoteState = {
-  CREATE : 'create',
-  EDIT : 'edit',
-  CUSTOM : 'custom'
-}
+  CREATE: "create",
+  EDIT: "edit",
+  CUSTOM: "custom",
+};
 
 export const userRoles = {
   ADMIN: "admin",
   SUPER_ADMIN: "super_admin",
   STAFF: "staff",
   CUSTOM_ADMIN: "custom_admin",
-}
+};
 
 export const hardwareTypes = {
   HANDLES: "handles",
@@ -69,8 +69,8 @@ export const hardwareTypes = {
   CORNERGLASSTOGLASS: "cornerGlassToGlass",
   WALLCLAMP: "wallClamp",
   SLEEVEOVER: "sleeveOver",
-  GLASSTOGLASS: "glassToGlass"
-}
+  GLASSTOGLASS: "glassToGlass",
+};
 
 export const standardDoorWidth = 28;
 
@@ -80,4 +80,9 @@ export const severity = {
   INFO: "info",
   SUCCESS: "success",
   WARNING: "warning",
+};
+
+export const EstimateCategory = {
+  SHOWERS: "showers",
+  MIRRORS: "mirrors",
 };
