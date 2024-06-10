@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import bgCustom from "@/Assets/customlayoutimage.svg";
 import { getEstimateCategory, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { EstimateCategory } from "@/utilities/constants";
+import { resetMirrorEstimateState } from "@/redux/mirrorsEstimateSlice";
 
 const boxStyles = {
     minHeight: "182px",
@@ -32,6 +33,7 @@ export const SelectCategory = () => {
     const handleBoxClick = (category) => {
         dispatch(setEstimateCategory(category));
         dispatch(setEstimateState("create"));
+        dispatch(resetMirrorEstimateState());
     };
 
     useEffect(() => {

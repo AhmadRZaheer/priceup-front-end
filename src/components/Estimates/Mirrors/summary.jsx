@@ -210,7 +210,7 @@ const Summary = () => {
                         }}
                       >
                         <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Type:
+                          Edge Work:
                         </Typography>
                         <Typography>
                           {selectedContent?.edgeWork?.item?.name} (
@@ -227,7 +227,7 @@ const Summary = () => {
                         }}
                       >
                         <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Type:
+                          Floating Size:
                         </Typography>
                         <Typography>
                           {selectedContent?.floatingSize?.name}

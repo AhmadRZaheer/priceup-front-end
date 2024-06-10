@@ -59,6 +59,11 @@ const mirrorsEstimateSlice = createSlice({
   name: "mirrorsEstimate",
   initialState,
   reducers: {
+    resetMirrorEstimateState: (state) => {
+      return {
+        ...initialState,
+      };
+    },
     setThickness: (state, action) => {
       const { thickness, type } = action.payload;
       state.content = {
@@ -183,6 +188,7 @@ const mirrorsEstimateSlice = createSlice({
 });
 
 export const {
+  resetMirrorEstimateState,
   setEstimateMeasurements,
   setEstimateState,
   setSelectedContent,
