@@ -230,7 +230,7 @@ const Summary = () => {
                           Floating Size:
                         </Typography>
                         <Typography>
-                          {selectedContent?.floatingSize?.name}
+                          {selectedContent?.floatingSize}
                         </Typography>
                       </Box>
                     )}
@@ -350,7 +350,7 @@ const Summary = () => {
                           Labor Price
                         </Typography>
                         <Typography variant="h6">
-                          ${pricing.people?.toFixed(2) || 0}
+                          ${pricing.labor?.toFixed(2) || 0}
                         </Typography>
                       </Box>
                       <Box

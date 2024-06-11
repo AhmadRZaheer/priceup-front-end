@@ -161,6 +161,10 @@ export const MirrorReview = () => {
         };
     }, []);
 
+    const floatingSize = useMemo(() => {
+        return floatingSizes.find((item) => item.name === selectedContent.floatingSize);
+    }, [selectedContent.floatingSize])
+
     return (
         <>
             <Box
@@ -343,7 +347,7 @@ export const MirrorReview = () => {
                                                 menuOptions={floatingSizes}
                                                 title={"Floating"}
                                                 type={"floatingSize"}
-                                                currentItem={selectedContent.floatingSize}
+                                                currentItem={floatingSize}
                                             />
                                         </Box>
                                     </Box>
