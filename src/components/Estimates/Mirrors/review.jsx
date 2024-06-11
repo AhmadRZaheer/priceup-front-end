@@ -374,9 +374,10 @@ export const MirrorReview = () => {
                                                 gap: 2,
                                                 width: "120px",
                                                 padddingY: 4,
+                                                justifyContent: "center"
                                             }}
                                         >
-                                            <Typography>{selectedContent.sandBlasting}</Typography>
+                                            <Typography>{selectedContent.sandBlasting?.toFixed(2) || 0}</Typography>
                                         </Box>
                                     </Box>
 
