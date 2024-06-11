@@ -35,7 +35,7 @@ import { getEstimatesListRefetch } from "@/redux/refetch";
 import { generateObjectForPDFPreview, renderMeasurementSides } from "@/utilities/estimates";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
-import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { resetMirrorEstimateState, setEstimateMeasurements, setSelectedItem } from "@/redux/mirrorsEstimateSlice";
 
 export default function ExistingTable() {
@@ -137,6 +137,8 @@ export default function ExistingTable() {
   };
 
   const handleCreateQuote = () => {
+    dispatch(resetMirrorEstimateState());
+    dispatch(resetEstimateState());
     navigate("/estimates/category");
   };
   useEffect(() => {

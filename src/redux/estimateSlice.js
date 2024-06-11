@@ -11,6 +11,11 @@ const estimateSlice = createSlice({
   name: "estimate",
   initialState,
   reducers: {
+    resetEstimateState: (state) => {
+      return {
+        ...initialState,
+      };
+    },
     setEstimateCategory: (state, actions) => {
       const { payload } = actions;
       state.estimateCategory = payload;
@@ -22,6 +27,7 @@ const estimateSlice = createSlice({
   },
 });
 
-export const { setEstimateCategory, setEstimateState } = estimateSlice.actions;
+export const { setEstimateCategory, setEstimateState, resetEstimateState } =
+  estimateSlice.actions;
 
 export default estimateSlice.reducer;
