@@ -81,49 +81,69 @@ export const calculateTotal = (
   measurements
 ) => {
   //glass
-  const glassPrice =
-    (selectedContent?.glassType?.item?.options?.find(
-      (glass) => glass.thickness === selectedContent?.glassType?.thickness
-    )?.cost || 0) * sqftArea;
+  let glassPrice = 0;
+  if (selectedContent.glassType?.item) {
+    glassPrice =
+      (selectedContent?.glassType?.item?.options?.find(
+        (glass) => glass.thickness === selectedContent?.glassType?.thickness
+      )?.cost || 0) * sqftArea;
+  }
 
   //edgeWork
-  const edgeWork =
-    selectedContent?.edgeWork?.item?.options?.find(
-      (polish) => polish.thickness === selectedContent?.edgeWork?.thickness
-    )?.cost || 0;
-  console.log(edgeWork, "edgework");
   let edgeWorkPrice = 0;
+  if (selectedContent.edgeWork?.item) {
+    const edgeWork =
+      selectedContent?.edgeWork?.item?.options?.find(
+        (polish) => polish.thickness === selectedContent?.edgeWork?.thickness
+      )?.cost || 0;
+    Object.entries(measurements).forEach(([key, value]) => {
+      const count = value["count"];
+      const width = value["width"];
+      const height = value["height"];
+      for (let i = 0; i < count; i++) {
+        const value = edgeWork * (width * 2 + height * 2) * 1;
+        edgeWorkPrice += value;
+      }
+    });
+  }
 
-  Object.entries(measurements).forEach(([key, value]) => {
-    const count = value["count"];
-    const width = value["width"];
-    const height = value["height"];
-    for (let i = 0; i < count; i++) {
-      const value = edgeWork * (width * 2 + height * 2) * 1;
-      edgeWorkPrice += value;
-    }
-  });
+  console.log(edgeWorkPrice, "edgeWork Price");
 
   let floatingPrice = 0;
-  floatingPrice = getFloatingPrice(
-    selectedContent.floatingSize,
-    mirrorLocationSettings
-  );
+  if (selectedContent.floatingSize?.length) {
+    floatingPrice = getFloatingPrice(
+      selectedContent.floatingSize,
+      mirrorLocationSettings
+    );
+  }
+
+  console.log(floatingPrice, "floating price");
+
   let bevelStripPrice = 0;
-  Object.entries(measurements).forEach(([key, value]) => {
-    const count = value["count"];
-    const width = value["width"];
-    const height = value["height"];
-    // for (let i = 0; i < count; i++) {
-    const price =
-      mirrorLocationSettings.bevelStrip *
-      ((Number(width) + Number(height)) * 2);
-    bevelStripPrice += price;
-    // }
-  });
+  if (selectedContent.bevelStrip) {
+    Object.entries(measurements).forEach(([key, value]) => {
+      const count = value["count"];
+      const width = value["width"];
+      const height = value["height"];
+      // for (let i = 0; i < count; i++) {
+      const price =
+        mirrorLocationSettings.bevelStrip *
+        ((Number(width) + Number(height)) * 2);
+      bevelStripPrice += price;
+      // }
+    });
+  }
+
+  console.log(bevelStripPrice, "bevel strip price");
 
   let safetyBackingPrice = 0;
-  safetyBackingPrice = mirrorLocationSettings.safetyBacking * sqftArea;
+  if (selectedContent.safetyBacking) {
+    safetyBackingPrice = mirrorLocationSettings.safetyBacking * sqftArea;
+  }
+
+  console.log(safetyBackingPrice, "safety backing price");
+
+  console.log(selectedContent.sandBlasting, "sandBlasting price");
 
   let fabricationPrice = 0;
   fabricationPrice =
@@ -151,6 +171,8 @@ export const calculateTotal = (
     bevelStripPrice +
     safetyBackingPrice +
     floatingPrice;
+
+  console.log(fabricationPrice, "fabrication price");
 
   //labor price
   const laborPrice =

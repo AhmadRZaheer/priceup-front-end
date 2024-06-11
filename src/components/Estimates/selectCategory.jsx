@@ -33,7 +33,7 @@ export const SelectCategory = () => {
     const handleBoxClick = (category) => {
         dispatch(setEstimateCategory(category));
         dispatch(setEstimateState("create"));
-        dispatch(resetMirrorEstimateState());
+        
     };
 
     useEffect(() => {
