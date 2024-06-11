@@ -34,7 +34,7 @@ const initialState = {
       item: null,
       thickness: "1/4",
     },
-    floatingSize: null,
+    floatingSize: "",
     sandBlasting: 0,
     bevelStrip: false, // true, false
     safetyBacking: false, //true, false
@@ -92,7 +92,7 @@ const mirrorsEstimateSlice = createSlice({
       if (type === "floatingSize") {
         state.content = {
           ...state.content,
-          [type]: item,
+          floatingSize: item.name,
         };
       } else {
         state.content = {
