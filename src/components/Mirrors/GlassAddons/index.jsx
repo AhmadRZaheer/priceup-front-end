@@ -15,22 +15,22 @@ import HardwareCreateModal from "@/components/common/HardwareCreateModal";
 import { setMirrorsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
 
-const MirrorsEdgeWorkComponent = () => {
+const MirrorsGlassAddonComponent = () => {
     const dispatch = useDispatch();
-    const routePrefix = `${backendURL}/mirrors/edgeWorks`;
+    const routePrefix = `${backendURL}/mirrors/glassAddons`;
     const decodedToken = getDecryptedToken();
     const {
-        data: edgeWorksList,
-        refetch: refetchEdgeWorksList,
-        isFetching: fetchingEdgeWorksList,
+        data: glassAddonsList,
+        refetch: refetchGlassAddonsList,
+        isFetching: fetchingGlassAddonsList,
     } = useFetchAllDocuments(routePrefix);
-    const { mutate: deleteGlassType, isLoading: deleteEdgeWorkLoading, isSuccess: deleteSuccess } =
+    const { mutate: deleteGlassAddon, isLoading: deleteGlassAddonLoading, isSuccess: deleteSuccess } =
         useDeleteDocument();
-    const { mutate: deleteGlassTypeOption, isLoading: deleteEdgeWorkOptionLoading, isSuccess: deleteOptionSuccess } =
+    const { mutate: deleteGlassAddonOption, isLoading: deleteGlassAddonOptionLoading, isSuccess: deleteOptionSuccess } =
         useDeleteDocumentProp();
-    const { mutate: editGlassType, isLoading: editEdgeWorkLoading, isSuccess: editSuccess } =
+    const { mutate: editGlassAddon, isLoading: editGlassAddonLoading, isSuccess: editSuccess } =
         useEditDocument();
-    const { mutate: createGlassType, isLoading: createEdgeWorkLoading, isSuccess: createSuccess } =
+    const { mutate: createGlassAddon, isLoading: createGlassAddonLoading, isSuccess: createSuccess } =
         useCreateDocument();
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -41,11 +41,11 @@ const MirrorsEdgeWorkComponent = () => {
     }
 
     const handleHardwareDelete = () => {
-        deleteGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
+        deleteGlassAddon({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
     };
 
     const handleHardwareOptionDelete = (itemId, optionId) => {
-        deleteGlassTypeOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
+        deleteGlassAddonOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
     };
 
     const handleOpenUpdateModal = () => {
@@ -56,7 +56,7 @@ const MirrorsEdgeWorkComponent = () => {
         console.log(props, 'item modified')
         const isFile = typeof props?.image === 'object';
         if (props?.options) {
-            editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
+            editGlassAddon({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
         } else {
 
             const formData = new FormData();
@@ -70,7 +70,7 @@ const MirrorsEdgeWorkComponent = () => {
                 formData.append("options", props.options);
             }
             console.log(formData, 'form data')
-            editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+            editGlassAddon({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
         }
         localStorage.setItem("scrollToIndex", props.id);
     };
@@ -88,10 +88,10 @@ const MirrorsEdgeWorkComponent = () => {
         formData.append("name", props.name);
         formData.append("company_id", decodedToken?.company_id);
         formData.append("slug", slug);
-        createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
+        createGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
     }
     useEffect(() => {
-        refetchEdgeWorksList();
+        refetchGlassAddonsList();
         if (editSuccess) {
             setUpdateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
@@ -131,7 +131,7 @@ const MirrorsEdgeWorkComponent = () => {
                     }}
                 >
                     <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-                        {'Edge Works'}
+                        {'Glass Addons'}
                     </p>
                 </div>
                 <div
@@ -188,7 +188,7 @@ const MirrorsEdgeWorkComponent = () => {
                     Status
                 </div>{" "}
             </div>
-            {fetchingEdgeWorksList ? (
+            {fetchingGlassAddonsList ? (
                 <Box
                     sx={{
                         display: "flex",
@@ -210,8 +210,8 @@ const MirrorsEdgeWorkComponent = () => {
                         overflowY: "scroll",
                     }}
                 >
-                    {edgeWorksList?.length !== 0 ? (
-                        edgeWorksList?.map((entry, mainIndex) => (
+                    {glassAddonsList?.length !== 0 ? (
+                        glassAddonsList?.map((entry, mainIndex) => (
                             <HardwareItem entry={entry} key={mainIndex}
                                 mainIndex={mainIndex} handleOpenDeleteModal={handleOpenDeleteModal}
                                 handleOpenUpdateModal={handleOpenUpdateModal}
@@ -228,26 +228,26 @@ const MirrorsEdgeWorkComponent = () => {
             <DeleteModal
                 open={deleteModalOpen}
                 close={() => { setDeleteModalOpen(false) }}
-                isLoading={deleteEdgeWorkLoading}
+                isLoading={deleteGlassAddonLoading}
                 handleDelete={handleHardwareDelete}
             />
             <HardwareEditModal
                 open={updateModalOpen}
                 close={() => { setUpdateModalOpen(false) }}
                 data={itemToModify}
-                isLoading={editEdgeWorkLoading}
+                isLoading={editGlassAddonLoading}
                 handleEdit={handleUpdateItem}
-                hardwareType={'Edge Work'}
+                hardwareType={'Glass Addon'}
             />
             <HardwareCreateModal
                 open={createModalOpen}
                 close={() => { setCreateModalOpen(false) }}
-                isLoading={createEdgeWorkLoading}
+                isLoading={createGlassAddonLoading}
                 handleCreate={handleCreateItem}
-                hardwareType={'Edge Work'}
+                hardwareType={'Glass Addon'}
             />
         </>
     );
 };
 
-export default MirrorsEdgeWorkComponent;
+export default MirrorsGlassAddonComponent;

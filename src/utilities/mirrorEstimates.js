@@ -109,70 +109,112 @@ export const calculateTotal = (
 
   console.log(edgeWorkPrice, "edgeWork Price");
 
-  let floatingPrice = 0;
-  if (selectedContent.floatingSize?.length) {
-    floatingPrice = getFloatingPrice(
-      selectedContent.floatingSize,
-      mirrorLocationSettings
-    );
-  }
+  // let floatingPrice = 0;
+  // if (selectedContent.floatingSize?.length) {
+  //   floatingPrice = getFloatingPrice(
+  //     selectedContent.floatingSize,
+  //     mirrorLocationSettings
+  //   );
+  // }
 
-  console.log(floatingPrice, "floating price");
+  //glassAddons
+  let glassAddonsPrice = 0;
+  selectedContent?.glassAddons?.forEach((item) => {
+    let price = 0;
+    if (item?.options?.length) {
+      price = item?.options[0]?.cost || 0;
+    }
+    glassAddonsPrice = glassAddonsPrice + price * sqftArea;
+  });
 
-  let bevelStripPrice = 0;
-  if (selectedContent.bevelStrip) {
-    Object.entries(measurements).forEach(([key, value]) => {
-      const count = value["count"];
-      const width = value["width"];
-      const height = value["height"];
-      // for (let i = 0; i < count; i++) {
-      const price =
-        mirrorLocationSettings.bevelStrip *
-        ((Number(width) + Number(height)) * 2);
-      bevelStripPrice += price;
-      // }
-    });
-  }
+  console.log(glassAddonsPrice, "glass Addons price");
 
-  console.log(bevelStripPrice, "bevel strip price");
+  // let bevelStripPrice = 0;
+  // if (selectedContent.bevelStrip) {
+  //   Object.entries(measurements).forEach(([key, value]) => {
+  //     const count = value["count"];
+  //     const width = value["width"];
+  //     const height = value["height"];
+  //     // for (let i = 0; i < count; i++) {
+  //     const price =
+  //       mirrorLocationSettings.bevelStrip *
+  //       ((Number(width) + Number(height)) * 2);
+  //     bevelStripPrice += price;
+  //     // }
+  //   });
+  // }
+  //hardwares
+  let hardwaresPrice = 0;
+  const measurementsArray = Object.values(measurements);
+  console.log(measurementsArray, "mm", selectedContent?.hardwares);
 
-  let safetyBackingPrice = 0;
-  if (selectedContent.safetyBacking) {
-    safetyBackingPrice = mirrorLocationSettings.safetyBacking * sqftArea;
-  }
+  selectedContent?.hardwares?.forEach((item) => {
+    let price = 0;
+    console.log(item, "item");
+    if (item?.options?.length && measurementsArray?.length) {
+      console.log(item?.options?.length, measurementsArray?.length, "eeee");
+      price =
+        (item?.options[0]?.cost || 0) *
+        ((Number(measurementsArray[0]?.width ?? 0) +
+          Number(measurementsArray[0]?.height ?? 0)) *
+          2);
+    }
+    hardwaresPrice = hardwaresPrice + price;
+  });
 
-  console.log(safetyBackingPrice, "safety backing price");
+  console.log(hardwaresPrice, "hardwares price");
 
-  console.log(selectedContent.sandBlasting, "sandBlasting price");
+  // let safetyBackingPrice = 0;
+  // if (selectedContent.safetyBacking) {
+  //   safetyBackingPrice = mirrorLocationSettings.safetyBacking * sqftArea;
+  // }
+
+  // console.log(safetyBackingPrice, "safety backing price");
+
+  // console.log(selectedContent.sandBlasting, "sandBlasting price");
 
   let fabricationPrice = 0;
   fabricationPrice =
     selectedContent.simpleHoles * mirrorLocationSettings.holeMultiplier +
-    selectedContent.outlets * mirrorLocationSettings.outletMultiplier +
+    // selectedContent.outlets * mirrorLocationSettings.outletMultiplier +
     selectedContent.lightHoles * mirrorLocationSettings.lightHoleMultiplier +
     selectedContent.notch * mirrorLocationSettings.notchMultiplier +
-    selectedContent.singleDecora *
-      mirrorLocationSettings.singleDecoraMultiplier +
-    selectedContent.doubleDecora *
-      mirrorLocationSettings.doubleDecoraMultiplier +
-    selectedContent.tripleDecora *
-      mirrorLocationSettings.tripleDecoraMultiplier +
-    selectedContent.quadDecora * mirrorLocationSettings.quadDecoraMultiplier +
-    selectedContent.singleDuplex *
-      mirrorLocationSettings.singleDuplexMultiplier +
-    selectedContent.doubleDuplex *
-      mirrorLocationSettings.doubleDuplexMultiplier +
-    selectedContent.tripleDuplex *
-      mirrorLocationSettings.tripleDuplexMultiplier;
+    selectedContent.singleOutletCutout *
+      mirrorLocationSettings.singleOutletCutoutMultiplier +
+    selectedContent.doubleOutletCutout *
+      mirrorLocationSettings.doubleOutletCutoutMultiplier +
+    selectedContent.tripleOutletCutout *
+      mirrorLocationSettings.tripleOutletCutoutMultiplier +
+    selectedContent.quadOutletCutout *
+      mirrorLocationSettings.quadOutletCutoutMultiplier;
+  // selectedContent.singleDuplex *
+  //   mirrorLocationSettings.singleDuplexMultiplier +
+  // selectedContent.doubleDuplex *
+  //   mirrorLocationSettings.doubleDuplexMultiplier +
+  // selectedContent.tripleDuplex *
+  //   mirrorLocationSettings.tripleDuplexMultiplier;
 
   fabricationPrice +=
     edgeWorkPrice +
-    selectedContent.sandBlasting +
-    bevelStripPrice +
-    safetyBackingPrice +
-    floatingPrice;
+    glassAddonsPrice +
+    // selectedContent.sandBlasting +
+    // safetyBackingPrice +
+    // floatingPrice +
+    // bevelStripPrice
+    hardwaresPrice;
 
   console.log(fabricationPrice, "fabrication price");
+
+  //additionalField price
+  let additionalFieldPrice = 0;
+  selectedContent?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost *
+        (mirrorLocationSettings.pricingFactorStatus
+          ? mirrorLocationSettings.pricingFactor
+          : 1)
+    );
+  });
 
   //labor price
   const laborPrice =
@@ -180,18 +222,34 @@ export const calculateTotal = (
     selectedContent?.hours *
     mirrorLocationSettings?.hourlyRate;
 
-  const totalPrice =
-    (glassPrice + fabricationPrice) *
+  const misc = 0;
+
+  const cost = glassPrice + fabricationPrice + misc + additionalFieldPrice;
+
+  let totalPrice =
+    (glassPrice + fabricationPrice + misc) *
       (mirrorLocationSettings.pricingFactorStatus
         ? mirrorLocationSettings.pricingFactor
         : 1) +
-    laborPrice;
+    laborPrice +
+    additionalFieldPrice;
+
+  if (
+    selectedContent.modifiedProfitPercentage > 0 &&
+    selectedContent.modifiedProfitPercentage < 100
+  ) {
+    totalPrice =
+      ((cost * 100) / (selectedContent.modifiedProfitPercentage - 100)) * -1;
+  }
+
   return {
     glass: glassPrice,
     labor: laborPrice,
     fabrication: fabricationPrice,
-    misc: 0,
-    cost: totalPrice,
+    additionalFields: additionalFieldPrice,
+    misc: misc,
+    cost: cost,
     total: totalPrice,
+    profitPercentage: ((totalPrice - cost) * 100) / totalPrice,
   };
 };

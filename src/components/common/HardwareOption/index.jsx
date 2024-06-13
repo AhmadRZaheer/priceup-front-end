@@ -164,7 +164,7 @@ const HardwareOption = ({
                         justifyContent: "center",
                     }}
                 >
-                    <Box
+                    {optionState?.thickness && <Box
                         style={{
                             width: "150px",
                             padding: 4,
@@ -176,7 +176,7 @@ const HardwareOption = ({
                             <Typography>Thickness</Typography>
                             <Typography variant="h6">{optionState?.thickness}</Typography>
                         </FormControl>
-                    </Box>
+                    </Box>}
 
                     <Box style={{ marginTop: "18px" }}>
                         <CustomToggle

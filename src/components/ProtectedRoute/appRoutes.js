@@ -38,6 +38,9 @@ import StaffLocationPage from "@/pages/stafffLocations/staffLocationPage";
 import PDFPreview from "@/pages/PDFPreview";
 import MirrorsEdgeWork from "@/pages/Mirrors/EdgeWorks";
 import MirrorsGlassType from "@/pages/Mirrors/GlassTypes";
+import MirrorsGlassAddon from "@/pages/Mirrors/GlassAddons";
+import MirrorsHardware from "@/pages/Mirrors/Hardwares";
+
 import EstimateCategory from "@/pages/EstimateCategory";
 import EstimateLayouts from "@/pages/EstimateLayouts";
 import EstimateDimensions from "@/pages/EstimateDimensions";
@@ -103,10 +106,12 @@ const AppRoutes = () => {
           <Route path="glass-addons" element={<GlassAddon />} />
           {/** Mirros */}
           <Route path="mirrors/">
-            <Route index element={<MirrorsEdgeWork />} />
+            <Route index element={<MirrorsHardware />} />
+            <Route path="hardwares" element={<MirrorsHardware />} />
             <Route path="edge-works" element={<MirrorsEdgeWork />} />
             <Route path="glass-types" element={<MirrorsGlassType />} />
-            <Route path="*" element={<MirrorsEdgeWork />} />
+            <Route path="glass-addons" element={<MirrorsGlassAddon />} />
+            <Route path="*" element={<MirrorsHardware />} />
           </Route>
           {/** End */}
           <Route path="*" element={<Overview />}></Route>

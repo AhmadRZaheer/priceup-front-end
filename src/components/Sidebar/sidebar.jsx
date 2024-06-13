@@ -504,6 +504,42 @@ const Sidebar = () => {
                     <Typography>Mirrors</Typography>
                   </AccordionSummary>
                   <AccordionDetails style={{ padding: '10px' }}>
+                  <NavLink to="/mirrors/hardwares">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/mirrors/hardwares" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={SettingsIcon}
+                            alt="image of customer"
+                          />
+
+                          <span>Hardwares</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                  <NavLink to="/mirrors/glass-addons">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/mirrors/glass-addons" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={SettingsIcon}
+                            alt="image of customer"
+                          />
+
+                          <span>Glass Addons</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
                     <NavLink to="/mirrors/edge-works">
                       <li style={{ margin: '8px 0px' }}
                         className={` ${location.pathname === "/mirrors/edge-works" ? "active" : ""
