@@ -4,6 +4,7 @@ import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { useDispatch } from "react-redux";
+import { setShowersHardwareRefetch } from "@/redux/refetch";
 
 export const useFetchDataFinishes = () => {
   async function fetchData() {
@@ -38,6 +39,7 @@ export const useDeleteFinishes = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({
             message: "Finishes Deleted Successfully",
@@ -96,6 +98,7 @@ export const useCreateFinish = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({
             message: "Finishes Created Succesccfully",
@@ -150,6 +153,7 @@ export const useEditFinish = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({
             message: "Finishes Updated Successfully",

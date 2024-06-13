@@ -12,9 +12,11 @@ import HardwareItem from "@/components/common/HardwareItem";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
+import { setMirrorsHardwareRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const MirrorsGlassTypeComponent = () => {
-
+    const dispatch = useDispatch();
     const routePrefix = `${backendURL}/mirrors/glassTypes`;
     const decodedToken = getDecryptedToken();
     const {
@@ -92,12 +94,15 @@ const MirrorsGlassTypeComponent = () => {
         refetchGlassTypesList();
         if (editSuccess) {
             setUpdateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
         }
         if (createSuccess) {
             setCreateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
         }
         if (deleteSuccess) {
             setDeleteModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
         }
     }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
 

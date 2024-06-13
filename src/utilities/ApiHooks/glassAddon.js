@@ -4,6 +4,7 @@ import axios from "axios";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { setShowersHardwareRefetch } from "@/redux/refetch";
 
 export const useFetchGlassAddons = () => {
   async function fetchData() {
@@ -41,6 +42,7 @@ export const useDeleteGlassAddonOption = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
@@ -80,6 +82,7 @@ export const useDeleteGlassAddon = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Deleted Successfully", severity: "error" })
         );
@@ -134,6 +137,7 @@ export const useCreateGlassAddon = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Created Successfully", severity: "success" })
         );
@@ -286,6 +290,7 @@ export const useEditGlassAddon = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
         );
@@ -330,6 +335,7 @@ export const useEditFullGlassAddon = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
         );

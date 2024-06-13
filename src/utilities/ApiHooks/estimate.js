@@ -79,7 +79,7 @@ export const useCreateEstimates = () => {
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
             status: "pending",
-            category: "showers",
+            category: props.category,
             name: `${current_date} ${current_time}`,
           },
         },

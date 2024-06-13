@@ -5,6 +5,7 @@ import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
+import { setShowersHardwareRefetch } from "@/redux/refetch";
 
 export const useFetchDatahardwareCategory = () => {
   async function fetchData() {
@@ -94,6 +95,7 @@ export const useDeleteHardwares = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Deleted Successfuly", severity: "error" })
         );
@@ -155,6 +157,7 @@ export const useCreateHardware = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Created Successfully", severity: "success" })
         );
@@ -240,6 +243,7 @@ export const useEditFullHardware = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({
             message: "Hardware Updated Successfully",
@@ -301,6 +305,7 @@ export const useEditHardware = () => {
       );
 
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({ message: "Updated Successfully", severity: "success" })
         );
@@ -340,6 +345,7 @@ export const useDeleteHardwareFinish = () => {
         }
       );
       if (response.data.code === 200) {
+        dispatch(setShowersHardwareRefetch());
         dispatch(
           showSnackbar({
             message: "Finish Type Deleted Successfully",

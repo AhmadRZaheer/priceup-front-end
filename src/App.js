@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { BrowserRouter, useLocation } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AppRoutes from "./components/ProtectedRoute/appRoutes";
@@ -10,6 +10,7 @@ import { FetchId2 } from "./utilities/ApiHooks/superAdmin";
 import Snackbars from "./components/Modal/snackBar";
 import { closeSnackbar, selectSnackbar } from "./redux/snackBarSlice";
 import { SnackbarProvider } from "notistack";
+import { CustomHooks } from "@/utilities/CustomHooks";
 
 function App() {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ function App() {
         >
           <BrowserRouter>
             <FetchId2>
+              <CustomHooks />
               <AppRoutes />
               <AuthVerify logOut={logOut} />
             </FetchId2>
