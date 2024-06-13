@@ -6,15 +6,16 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import { Link, useNavigate } from "react-router-dom";
-import { quoteState } from "@/utilities/constants";
+import { mirrorHardwareTypes, quoteState } from "@/utilities/constants";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { ClientDetailsModel } from "../clientDetailsModel";
 import { getEstimateState } from "@/redux/estimateSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getEstimateId, getEstimateMeasurements, getPricing, getSelectedContent, getSqftArea, setInputContent, setPricing, setToggles } from "@/redux/mirrorsEstimateSlice";
+import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getPricing, getSelectedContent, getSqftArea, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
 import { calculateTotal, getSandBlasting } from "@/utilities/mirrorEstimates";
 import { showSnackbar } from "@/redux/snackBarSlice";
+import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 
 const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -29,6 +30,27 @@ export const generateEstimatePayload = (measurements, selectedContent, sqftArea)
     measurementsArray = newArray;
     // }
 
+    const glassAddonsArray = selectedContent?.glassAddons?.map(
+        (item) => item?._id
+    );
+
+    const hardwaresArray = selectedContent?.hardwares?.map(
+        (item) => item?._id
+    );
+
+    const filteredFields = selectedContent.additionalFields?.filter(
+        (item) => item.label !== "" && item.cost !== 0
+    )
+
+    const additionalFieldsArray = filteredFields?.map(
+        (row) => {
+            return {
+                cost: row.cost,
+                label: row.label,
+            };
+        }
+    );
+
     const estimateConfig = {
         glassType: {
             type: selectedContent?.glassType?.item?._id,
@@ -38,21 +60,25 @@ export const generateEstimatePayload = (measurements, selectedContent, sqftArea)
             type: selectedContent?.edgeWork?.item?._id,
             thickness: selectedContent?.edgeWork?.thickness,
         },
-        floatingSize: selectedContent.floatingSize,
-        sandBlasting: selectedContent.sandBlasting,
-        bevelStrip: selectedContent.bevelStrip,
-        safetyBacking: selectedContent.safetyBacking,
+        glassAddons: [...glassAddonsArray],
+        hardwares: [...hardwaresArray],
+        // floatingSize: selectedContent.floatingSize,
+        // sandBlasting: selectedContent.sandBlasting,
+        // bevelStrip: selectedContent.bevelStrip,
+        // safetyBacking: selectedContent.safetyBacking,
         simpleHoles: selectedContent.simpleHoles,
-        outlets: selectedContent.outlets,
+        // outlets: selectedContent.outlets,
         lightHoles: selectedContent.lightHoles,
         notch: selectedContent.notch,
-        singleDecora: selectedContent.singleDecora,
-        doubleDecora: selectedContent.doubleDecora,
-        tripleDecora: selectedContent.tripleDecora,
-        quadDecora: selectedContent.quadDecora,
-        singleDuplex: selectedContent.singleDuplex,
-        doubleDuplex: selectedContent.doubleDuplex,
-        tripleDuplex: selectedContent.tripleDuplex,
+        singleOutletCutout: selectedContent.singleOutletCutout,
+        doubleOutletCutout: selectedContent.doubleOutletCutout,
+        tripleOutletCutout: selectedContent.tripleOutletCutout,
+        quadOutletCutout: selectedContent.quadOutletCutout,
+        // singleDuplex: selectedContent.singleDuplex,
+        // doubleDuplex: selectedContent.doubleDuplex,
+        // tripleDuplex: selectedContent.tripleDuplex,
+        modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
+        additionalFields: [...additionalFieldsArray],
         people: selectedContent.people,
         hours: selectedContent.hours,
         measurements: measurementsArray,
@@ -75,10 +101,10 @@ export const MirrorReview = () => {
     const measurements = useSelector(getEstimateMeasurements);
     const estimateId = useSelector(getEstimateId);
     const sqftArea = useSelector(getSqftArea);
-    const currentQuoteState = useSelector(getEstimateState);
+    const currentEstimateState = useSelector(getEstimateState);
     const selectedContent = useSelector(getSelectedContent);
     const pricing = useSelector(getPricing);
-    // const addedFields = useSelector(getAdditionalFields);
+    const addedFields = useSelector(getAdditionalFields);
 
     const handleToggleShift = (type, value) => {
         console.log(value, 'val');
@@ -100,25 +126,25 @@ export const MirrorReview = () => {
         navigate('/estimates/dimensions');
     };
 
-    // const handleAddField = () => {
-    //     const newData = [
-    //         ...addedFields,
-    //         {
-    //             label: "",
-    //             cost: 0,
-    //         },
-    //     ];
+    const handleAddField = () => {
+        const newData = [
+            ...addedFields,
+            {
+                label: "",
+                cost: 0,
+            },
+        ];
 
-    //     dispatch(
-    //         setContent({
-    //             type: "additionalFields",
-    //             item: newData,
-    //         })
-    //     );
-    // };
+        dispatch(
+            setSelectedContent({
+                type: "additionalFields",
+                item: newData,
+            })
+        );
+    };
 
     const handleEstimateSubmit = () => {
-        if (currentQuoteState === quoteState.CREATE) {
+        if (currentEstimateState === quoteState.CREATE) {
             const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
             setEstimateConfig(estimateConfig);
             setClientDetailModelOpen(true);
@@ -151,6 +177,10 @@ export const MirrorReview = () => {
         setWindowWidth(window.innerWidth);
     };
 
+    const handleAdditionalFieldModify = (fields) => {
+        dispatch(setSelectedContent({ type: "additionalFields", item: fields }));
+    }
+
     useEffect(() => {
         setWindowWidth(window.innerWidth);
 
@@ -161,9 +191,9 @@ export const MirrorReview = () => {
         };
     }, []);
 
-    const floatingSize = useMemo(() => {
-        return floatingSizes.find((item) => item.name === selectedContent.floatingSize);
-    }, [selectedContent.floatingSize])
+    // const floatingSize = useMemo(() => {
+    //     return floatingSizes.find((item) => item.name === selectedContent.floatingSize);
+    // }, [selectedContent.floatingSize])
 
     return (
         <>
@@ -219,7 +249,7 @@ export const MirrorReview = () => {
                             }}
                             variant="h4"
                         >
-                            {currentQuoteState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
+                            {currentEstimateState === quoteState.EDIT ? 'Edit Estimate' : 'Create New Estimate'}
                         </Typography>
                     </Box>
                 </Box>
@@ -304,7 +334,7 @@ export const MirrorReview = () => {
                                             <MenuList
                                                 menuOptions={hardwaresList?.glassTypes}
                                                 title={"Glass type"}
-                                                type={"glassType"}
+                                                type={mirrorHardwareTypes.GLASSTYPE}
                                                 thickness={selectedContent.glassType.thickness}
                                                 currentItem={selectedContent.glassType.item}
                                             />
@@ -325,7 +355,7 @@ export const MirrorReview = () => {
                                             <MenuList
                                                 menuOptions={hardwaresList?.edgeWorks}
                                                 title={"Edge Work"}
-                                                type={"edgeWork"}
+                                                type={mirrorHardwareTypes.EDGEWORK}
                                                 thickness={selectedContent.edgeWork.thickness}
                                                 currentItem={selectedContent.edgeWork.item}
                                             />
@@ -344,15 +374,35 @@ export const MirrorReview = () => {
                                     >
                                         <Box sx={{ width: "100%" }}>
                                             <MenuList
-                                                menuOptions={floatingSizes}
-                                                title={"Floating"}
-                                                type={"floatingSize"}
-                                                currentItem={floatingSize}
+                                                menuOptions={hardwaresList?.hardwares}
+                                                title={"Hardwares"}
+                                                type={mirrorHardwareTypes.HARDWARES}
+                                            // currentItem={selectedContent.hardwares.item}
+                                            />
+                                        </Box>
+                                    </Box>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            borderBottom: {
+                                                sm: "2px solid #D0D5DD",
+                                                xs: "2px solid #423f57",
+                                            },
+                                        }}
+                                    >
+                                        <Box sx={{ width: "100%" }}>
+                                            <MenuList
+                                                menuOptions={hardwaresList?.glassAddons}
+                                                title={"Glass Addons"}
+                                                type={mirrorHardwareTypes.GLASSADDONS}
+                                            // currentItem={selectedContent.hardwares.item}
                                             />
                                         </Box>
                                     </Box>
 
-                                    <Box
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -379,9 +429,9 @@ export const MirrorReview = () => {
                                         >
                                             <Typography>{selectedContent.sandBlasting?.toFixed(2) || 0}</Typography>
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
-                                    <Box
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -412,9 +462,9 @@ export const MirrorReview = () => {
                                                 name="bevelStrip"
                                             />
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
-                                    <Box
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -444,7 +494,7 @@ export const MirrorReview = () => {
                                                 name="safetyBacking"
                                             />
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
                                     <Box
                                         sx={{
@@ -504,7 +554,7 @@ export const MirrorReview = () => {
                                             />
                                         </Box>
                                     </Box>
-                                    <Box
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -561,7 +611,7 @@ export const MirrorReview = () => {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
                                     <Box
                                         sx={{
@@ -694,7 +744,7 @@ export const MirrorReview = () => {
                                             color: { sm: "#000000  ", xs: "white" },
                                         }}
                                     >
-                                        <Typography>Single Decora</Typography>
+                                        <Typography>Single Outlet Cutout</Typography>
                                         <Box
                                             sx={{
                                                 display: "flex",
@@ -726,11 +776,11 @@ export const MirrorReview = () => {
                                                 }}
                                                 variant="outlined"
                                                 size="small"
-                                                value={selectedContent.singleDecora}
+                                                value={selectedContent.singleOutletCutout}
                                                 onChange={(event) =>
                                                     dispatch(
                                                         setInputContent({
-                                                            type: "singleDecora",
+                                                            type: "singleOutletCutout",
                                                             value: event.target.value,
                                                         })
                                                     )
@@ -752,7 +802,7 @@ export const MirrorReview = () => {
                                             color: { sm: "#000000  ", xs: "white" },
                                         }}
                                     >
-                                        <Typography>Double Decora</Typography>
+                                        <Typography>Double Outlet Cutout</Typography>
                                         <Box
                                             sx={{
                                                 display: "flex",
@@ -784,11 +834,11 @@ export const MirrorReview = () => {
                                                 }}
                                                 variant="outlined"
                                                 size="small"
-                                                value={selectedContent.doubleDecora}
+                                                value={selectedContent.doubleOutletCutout}
                                                 onChange={(event) =>
                                                     dispatch(
                                                         setInputContent({
-                                                            type: "doubleDecora",
+                                                            type: "doubleOutletCutout",
                                                             value: event.target.value,
                                                         })
                                                     )
@@ -810,7 +860,7 @@ export const MirrorReview = () => {
                                             color: { sm: "#000000  ", xs: "white" },
                                         }}
                                     >
-                                        <Typography>Triple Decora</Typography>
+                                        <Typography>Triple Outlet Cutout</Typography>
                                         <Box
                                             sx={{
                                                 display: "flex",
@@ -842,11 +892,11 @@ export const MirrorReview = () => {
                                                 }}
                                                 variant="outlined"
                                                 size="small"
-                                                value={selectedContent.tripleDecora}
+                                                value={selectedContent.tripleOutletCutout}
                                                 onChange={(event) =>
                                                     dispatch(
                                                         setInputContent({
-                                                            type: "tripleDecora",
+                                                            type: "tripleOutletCutout",
                                                             value: event.target.value,
                                                         })
                                                     )
@@ -868,7 +918,7 @@ export const MirrorReview = () => {
                                             color: { sm: "#000000  ", xs: "white" },
                                         }}
                                     >
-                                        <Typography>Quad Decora</Typography>
+                                        <Typography>Quad Outlet Cutout</Typography>
                                         <Box
                                             sx={{
                                                 display: "flex",
@@ -900,11 +950,11 @@ export const MirrorReview = () => {
                                                 }}
                                                 variant="outlined"
                                                 size="small"
-                                                value={selectedContent.tripleDecora}
+                                                value={selectedContent.quadOutletCutout}
                                                 onChange={(event) =>
                                                     dispatch(
                                                         setInputContent({
-                                                            type: "quadDecora",
+                                                            type: "quadOutletCutout",
                                                             value: event.target.value,
                                                         })
                                                     )
@@ -912,7 +962,7 @@ export const MirrorReview = () => {
                                             />
                                         </Box>
                                     </Box>
-                                    <Box
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -969,8 +1019,8 @@ export const MirrorReview = () => {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
-                                    <Box
+                                    </Box> */}
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -1027,8 +1077,8 @@ export const MirrorReview = () => {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
-                                    <Box
+                                    </Box> */}
+                                    {/* <Box
                                         sx={{
                                             display: "flex",
                                             alignItems: "center",
@@ -1085,7 +1135,7 @@ export const MirrorReview = () => {
                                                 }
                                             />
                                         </Box>
-                                    </Box>
+                                    </Box> */}
                                     <Box
                                         sx={{
                                             display: "flex",
@@ -1203,16 +1253,16 @@ export const MirrorReview = () => {
                                         </Box>
                                     </Box>
                                     {/* additional Fields */}
-                                    {/* <Typography
+                                    <Typography
                                         variant="h5"
                                         sx={{ color: { md: "black", xs: "white" } }}
                                     >
                                         Additonal Fields
                                     </Typography>
                                     {addedFields &&
-                                        addedFields.map((item, index) => {
-                                            return <SingleField item={item} index={index} />;
-                                        })}
+                                        addedFields.map((item, index) =>
+                                            <SingleField item={item} index={index} estimateState={currentEstimateState} addedFields={addedFields} handleModify={handleAdditionalFieldModify} />
+                                        )}
                                     <Button
                                         onClick={handleAddField}
                                         sx={{
@@ -1226,7 +1276,7 @@ export const MirrorReview = () => {
                                         variant="contained"
                                     >
                                         Add Additional Field
-                                    </Button> */}
+                                    </Button>
                                     {/** additional fields end */}
                                 </Box>
                             </Box>
@@ -1304,7 +1354,7 @@ export const MirrorReview = () => {
                                 paddingX: 2,
                             }}
                         >
-                            <Box sx={{ width: { sm: "150px", xs: currentQuoteState === quoteState.EDIT ? "100px" : "150px" } }}>
+                            <Box sx={{ width: { sm: "150px", xs: currentEstimateState === quoteState.EDIT ? "100px" : "150px" } }}>
                                 <Button
                                     fullWidth
                                     onClick={
@@ -1327,13 +1377,13 @@ export const MirrorReview = () => {
                                 </Button>
                             </Box>
                             <Box sx={{
-                                width: { sm: currentQuoteState === quoteState.EDIT ? "310px" : "150px", xs: currentQuoteState === quoteState.EDIT ? "200px" : "150px" },
+                                width: { sm: currentEstimateState === quoteState.EDIT ? "310px" : "150px", xs: currentEstimateState === quoteState.EDIT ? "200px" : "150px" },
                                 display: "flex",
                                 gap: 2,
                                 // flexDirection: { sm: "row", xs: "column" },
                             }}
                             >
-                                {currentQuoteState === quoteState.EDIT && (
+                                {currentEstimateState === quoteState.EDIT && (
                                     <Link to={"/estimates"} style={{ textDecoration: 'none', width: '100%' }}>
                                         <Button
                                             fullWidth
@@ -1366,7 +1416,7 @@ export const MirrorReview = () => {
                                     }}
                                 >
                                     {" "}
-                                    {currentQuoteState === quoteState.EDIT ? 'Update' : 'Next'}
+                                    {currentEstimateState === quoteState.EDIT ? 'Update' : 'Next'}
                                 </Button>
                             </Box>
                         </Box>

@@ -86,3 +86,10 @@ export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
 };
+
+export const mirrorHardwareTypes = {
+  HARDWARES: "hardwares",
+  GLASSADDONS: "glassAddons",
+  GLASSTYPE: "glassType",
+  EDGEWORK: "edgeWork",
+};

@@ -6,12 +6,16 @@ const mirrorsHardwareSlice = createSlice({
   initialState: {
     edgeWorks: [],
     glassTypes: [],
+    glassAddons: [],
+    hardwares: [],
   },
   reducers: {
     setMirrorsHardware: (state, actions) => {
       const { payload } = actions;
       state.edgeWorks = payload?.edgeWorks ?? [];
       state.glassTypes = payload?.glassTypes ?? [];
+      state.glassAddons = payload?.glassAddons ?? [];
+      state.hardwares = payload?.hardwares ?? [];
     },
   },
 });

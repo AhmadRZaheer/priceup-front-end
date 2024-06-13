@@ -15,22 +15,22 @@ import HardwareCreateModal from "@/components/common/HardwareCreateModal";
 import { setMirrorsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
 
-const MirrorsEdgeWorkComponent = () => {
+const MirrorsHardwareComponent = () => {
     const dispatch = useDispatch();
-    const routePrefix = `${backendURL}/mirrors/edgeWorks`;
+    const routePrefix = `${backendURL}/mirrors/hardwares`;
     const decodedToken = getDecryptedToken();
     const {
-        data: edgeWorksList,
-        refetch: refetchEdgeWorksList,
-        isFetching: fetchingEdgeWorksList,
+        data: hardwaresList,
+        refetch: refetchHardwaresList,
+        isFetching: fetchingHardwaresList,
     } = useFetchAllDocuments(routePrefix);
-    const { mutate: deleteGlassType, isLoading: deleteEdgeWorkLoading, isSuccess: deleteSuccess } =
+    const { mutate: deleteHardware, isLoading: deleteHardwareLoading, isSuccess: deleteSuccess } =
         useDeleteDocument();
-    const { mutate: deleteGlassTypeOption, isLoading: deleteEdgeWorkOptionLoading, isSuccess: deleteOptionSuccess } =
+    const { mutate: deleteHardwareOption, isLoading: deleteHardwareOptionLoading, isSuccess: deleteOptionSuccess } =
         useDeleteDocumentProp();
-    const { mutate: editGlassType, isLoading: editEdgeWorkLoading, isSuccess: editSuccess } =
+    const { mutate: editHardware, isLoading: editHardwareLoading, isSuccess: editSuccess } =
         useEditDocument();
-    const { mutate: createGlassType, isLoading: createEdgeWorkLoading, isSuccess: createSuccess } =
+    const { mutate: createHardware, isLoading: createHardwareLoading, isSuccess: createSuccess } =
         useCreateDocument();
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -41,11 +41,11 @@ const MirrorsEdgeWorkComponent = () => {
     }
 
     const handleHardwareDelete = () => {
-        deleteGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
+        deleteHardware({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
     };
 
     const handleHardwareOptionDelete = (itemId, optionId) => {
-        deleteGlassTypeOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
+        deleteHardwareOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
     };
 
     const handleOpenUpdateModal = () => {
@@ -56,7 +56,7 @@ const MirrorsEdgeWorkComponent = () => {
         console.log(props, 'item modified')
         const isFile = typeof props?.image === 'object';
         if (props?.options) {
-            editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
+            editHardware({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
         } else {
 
             const formData = new FormData();
@@ -70,7 +70,7 @@ const MirrorsEdgeWorkComponent = () => {
                 formData.append("options", props.options);
             }
             console.log(formData, 'form data')
-            editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+            editHardware({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
         }
         localStorage.setItem("scrollToIndex", props.id);
     };
@@ -88,10 +88,10 @@ const MirrorsEdgeWorkComponent = () => {
         formData.append("name", props.name);
         formData.append("company_id", decodedToken?.company_id);
         formData.append("slug", slug);
-        createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
+        createHardware({ data: formData, apiRoute: `${routePrefix}/save` });
     }
     useEffect(() => {
-        refetchEdgeWorksList();
+        refetchHardwaresList();
         if (editSuccess) {
             setUpdateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
@@ -131,7 +131,7 @@ const MirrorsEdgeWorkComponent = () => {
                     }}
                 >
                     <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-                        {'Edge Works'}
+                        {'Hardwares'}
                     </p>
                 </div>
                 <div
@@ -188,7 +188,7 @@ const MirrorsEdgeWorkComponent = () => {
                     Status
                 </div>{" "}
             </div>
-            {fetchingEdgeWorksList ? (
+            {fetchingHardwaresList ? (
                 <Box
                     sx={{
                         display: "flex",
@@ -210,8 +210,8 @@ const MirrorsEdgeWorkComponent = () => {
                         overflowY: "scroll",
                     }}
                 >
-                    {edgeWorksList?.length !== 0 ? (
-                        edgeWorksList?.map((entry, mainIndex) => (
+                    {hardwaresList?.length !== 0 ? (
+                        hardwaresList?.map((entry, mainIndex) => (
                             <HardwareItem entry={entry} key={mainIndex}
                                 mainIndex={mainIndex} handleOpenDeleteModal={handleOpenDeleteModal}
                                 handleOpenUpdateModal={handleOpenUpdateModal}
@@ -228,26 +228,26 @@ const MirrorsEdgeWorkComponent = () => {
             <DeleteModal
                 open={deleteModalOpen}
                 close={() => { setDeleteModalOpen(false) }}
-                isLoading={deleteEdgeWorkLoading}
+                isLoading={deleteHardwareLoading}
                 handleDelete={handleHardwareDelete}
             />
             <HardwareEditModal
                 open={updateModalOpen}
                 close={() => { setUpdateModalOpen(false) }}
                 data={itemToModify}
-                isLoading={editEdgeWorkLoading}
+                isLoading={editHardwareLoading}
                 handleEdit={handleUpdateItem}
-                hardwareType={'Edge Work'}
+                hardwareType={'Hardware'}
             />
             <HardwareCreateModal
                 open={createModalOpen}
                 close={() => { setCreateModalOpen(false) }}
-                isLoading={createEdgeWorkLoading}
+                isLoading={createHardwareLoading}
                 handleCreate={handleCreateItem}
-                hardwareType={'Edge Work'}
+                hardwareType={'Hardware'}
             />
         </>
     );
 };
 
-export default MirrorsEdgeWorkComponent;
+export default MirrorsHardwareComponent;
