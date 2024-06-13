@@ -125,7 +125,7 @@ const Sidebar = () => {
   };
   useEffect(() => {
     refetch();
-    if (['/mirrors/glass-types', '/mirrors/edge-works'].includes(location.pathname)) {
+    if (['/mirrors/glass-types', '/mirrors/edge-works', '/mirrors/glass-addons', '/mirrors/hardwares'].includes(location.pathname)) {
       setExpandMirrorAccordian(true);
     }
     if (['/layouts', '/glass-addons', '/glass-types', '/finishes', '/hardware'].includes(location.pathname)) {
@@ -368,26 +368,28 @@ const Sidebar = () => {
                 <Accordion
                   expanded={expandShowerAccordian} onChange={() => { setExpandShowerAccordian(!expandShowerAccordian) }}
                   sx={{
-                    margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none', "&.MuiAccordionSummary-expandIconWrapper": {
+                    margin: '12px 10px !important', border: 'none', background: 'none',
+                     "&.MuiAccordionSummary-expandIconWrapper": {
                       color: 'white !important'
                     }
                   }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
                     aria-controls="panel1-content"
                     id="panel1-header"
                     sx={{
-                      background: '#8477DA',
+                      background: ' rgba(132, 119, 218, 0.3)',
                       color: 'white',
                       "&.Mui-expanded": {
-                        minHeight: "48px"
+                        minHeight: "40px"
                       },
                       "&.MuiAccordionSummary-content": {
                         marginTop: "12px !important",
                       }
                     }}
                   >
-                    <Typography>Showers</Typography>
+                    <img src={DefaultIcon} alt="showers icon" />
+                    <Typography sx={{pl: 1}}>Showers</Typography>
                   </AccordionSummary>
                   <AccordionDetails style={{ padding: '10px' }}>
                     <NavLink to="/hardware" className="link">
@@ -485,23 +487,24 @@ const Sidebar = () => {
                     </NavLink>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none' }}>
+                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: 'none', background: 'none' }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
                     aria-controls="panel1-content"
                     id="panel1-header"
                     sx={{
-                      background: '#8477DA',
+                      background: ' rgba(132, 119, 218, 0.3)',
                       color: 'white',
                       "&.Mui-expanded": {
-                        minHeight: "48px"
+                        minHeight: "40px"
                       },
                       "&.MuiAccordionSummary-content": {
                         marginTop: "12px !important",
                       }
                     }}
                   >
-                    <Typography>Mirrors</Typography>
+                    <img src={DefaultIcon} alt="showers icon" />
+                    <Typography sx={{pl: 1}}>Mirrors</Typography>
                   </AccordionSummary>
                   <AccordionDetails style={{ padding: '10px' }}>
                   <NavLink to="/mirrors/hardwares">
