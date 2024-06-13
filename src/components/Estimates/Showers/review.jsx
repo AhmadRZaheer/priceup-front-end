@@ -291,6 +291,10 @@ export const ShowerReview = () => {
         setWindowWidth(window.innerWidth);
     };
 
+    const handleAdditionalFieldModify = (fields) => {
+        dispatch(setContent({ type: "additionalFields", item: fields }));
+    }
+
     useEffect(() => {
         setWindowWidth(window.innerWidth);
 
@@ -1195,9 +1199,9 @@ export const ShowerReview = () => {
                                         Additonal Fields
                                     </Typography>
                                     {addedFields &&
-                                        addedFields.map((item, index) => {
-                                            return <SingleField item={item} index={index} />;
-                                        })}
+                                        addedFields.map((item, index) => 
+                                            <SingleField item={item} index={index} estimateState={currentQuoteState} addedFields={addedFields} handleModify={handleAdditionalFieldModify} />
+                                        )}
                                     <Button
                                         onClick={handleAddField}
                                         sx={{

@@ -108,23 +108,23 @@ const CampanySetting = () => {
         pricingFactor: settingData?.mirrors?.pricingFactor,
         hourlyRate: settingData?.mirrors?.hourlyRate,
         pricingFactorStatus: settingData?.mirrors?.pricingFactorStatus,
-        floatingSmall: settingData?.mirrors?.floatingSmall,
-        floatingMedium: settingData?.mirrors?.floatingMedium,
-        floatingLarge: settingData?.mirrors?.floatingLarge,
-        sandBlastingMultiplier: settingData?.mirrors?.sandBlastingMultiplier,
-        bevelStrip: settingData?.mirrors?.bevelStrip,
-        safetyBacking: settingData?.mirrors?.safetyBacking,
+        // floatingSmall: settingData?.mirrors?.floatingSmall,
+        // floatingMedium: settingData?.mirrors?.floatingMedium,
+        // floatingLarge: settingData?.mirrors?.floatingLarge,
+        // sandBlastingMultiplier: settingData?.mirrors?.sandBlastingMultiplier,
+        // bevelStrip: settingData?.mirrors?.bevelStrip,
+        // safetyBacking: settingData?.mirrors?.safetyBacking,
         holeMultiplier: settingData?.mirrors?.holeMultiplier,
-        outletMultiplier: settingData?.mirrors?.outletMultiplier,
+        // outletMultiplier: settingData?.mirrors?.outletMultiplier,
         lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier,
         notchMultiplier: settingData?.mirrors?.notchMultiplier,
-        singleDecoraMultiplier: settingData?.mirrors?.singleDecoraMultiplier,
-        doubleDecoraMultiplier: settingData?.mirrors?.doubleDecoraMultiplier,
-        tripleDecoraMultiplier: settingData?.mirrors?.tripleDecoraMultiplier,
-        quadDecoraMultiplier: settingData?.mirrors?.quadDecoraMultiplier,
-        singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
-        doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
-        tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
+        singleOutletCutoutMultiplier: settingData?.mirrors?.singleOutletCutoutMultiplier,
+        doubleOutletCutoutMultiplier: settingData?.mirrors?.doubleOutletCutoutMultiplier,
+        tripleOutletCutoutMultiplier: settingData?.mirrors?.tripleOutletCutoutMultiplier,
+        quadOutletCutoutMultiplier: settingData?.mirrors?.quadOutletCutoutMultiplier,
+        // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
+        // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
+        // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
       }
     },
     enableReinitialize: true,
@@ -859,7 +859,7 @@ const CampanySetting = () => {
               paddingY: 1,
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -881,8 +881,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -904,8 +904,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -927,8 +927,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -950,8 +950,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -973,8 +973,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -996,8 +996,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1019,7 +1019,7 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
+            </Box> */}
             <Box
               sx={{
                 display: "flex",
@@ -1043,7 +1043,7 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1065,7 +1065,7 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
+            </Box> */}
             <Box
               sx={{
                 display: "flex",
@@ -1119,17 +1119,17 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Singel Decora</Typography>
+              <Typography>Singel Outlet Cutout</Typography>
               <Box mr={19}>
                 <CustomInputField
                   type="number"
                   inputProps={{
                     min: 0
                   }}
-                  name="mirrors.singleDecoraMultiplier"
+                  name="mirrors.singleOutletCutoutMultiplier"
                   size="small"
                   value={
-                    formik.values?.mirrors?.singleDecoraMultiplier
+                    formik.values?.mirrors?.singleOutletCutoutMultiplier
                   }
                   onChange={formik.handleChange}
                 />
@@ -1142,17 +1142,17 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Double Decora</Typography>
+              <Typography>Double Outlet Cutout</Typography>
               <Box mr={19}>
                 <CustomInputField
                   type="number"
                   inputProps={{
                     min: 0
                   }}
-                  name="mirrors.doubleDecoraMultiplier"
+                  name="mirrors.doubleOutletCutoutMultiplier"
                   size="small"
                   value={
-                    formik.values?.mirrors?.doubleDecoraMultiplier
+                    formik.values?.mirrors?.doubleOutletCutoutMultiplier
                   }
                   onChange={formik.handleChange}
                 />
@@ -1165,17 +1165,17 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Triple Decora</Typography>
+              <Typography>Triple Outlet Cutout</Typography>
               <Box mr={19}>
                 <CustomInputField
                   type="number"
                   inputProps={{
                     min: 0
                   }}
-                  name="mirrors.tripleDecoraMultiplier"
+                  name="mirrors.tripleOutletCutoutMultiplier"
                   size="small"
                   value={
-                    formik.values?.mirrors?.tripleDecoraMultiplier
+                    formik.values?.mirrors?.tripleOutletCutoutMultiplier
                   }
                   onChange={formik.handleChange}
                 />
@@ -1188,23 +1188,23 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Quad Decora</Typography>
+              <Typography>Quad Outlet Cutout</Typography>
               <Box mr={19}>
                 <CustomInputField
                   type="number"
                   inputProps={{
                     min: 0
                   }}
-                  name="mirrors.quadDecoraMultiplier"
+                  name="mirrors.quadOutletCutoutMultiplier"
                   size="small"
                   value={
-                    formik.values?.mirrors?.quadDecoraMultiplier
+                    formik.values?.mirrors?.quadOutletCutoutMultiplier
                   }
                   onChange={formik.handleChange}
                 />
               </Box>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1226,8 +1226,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1249,8 +1249,8 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
-            <Box
+            </Box> */}
+            {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1272,7 +1272,7 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                 />
               </Box>
-            </Box>
+            </Box> */}
           </Box>
         </CustomTabPanel>
         {/** end */}

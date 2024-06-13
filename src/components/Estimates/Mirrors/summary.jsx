@@ -1,18 +1,20 @@
-import { Box, Typography } from "@mui/material";
+import { Box, TextField, Typography } from "@mui/material";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { renderMeasurementSides } from "@/utilities/mirrorEstimates";
-import { getEstimateMeasurements, getPricing, getSelectedContent, getSqftArea } from "@/redux/mirrorsEstimateSlice";
+import { getEstimateMeasurements, getModifiedProfitPercentage, getPricing, getSelectedContent, getSqftArea, setModifiedProfitPercentage } from "@/redux/mirrorsEstimateSlice";
+import { getLocationMirrorSettings } from "@/redux/locationSlice";
 
 const Summary = () => {
+  const dispatch = useDispatch();
   const pricing = useSelector(getPricing);
-  // const additionalFieldsPrice = useSelector(getAdditionalFieldsTotal);
-  // const userProfitPercentage = useSelector(getUserProfitPercentage);
+  const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
+  const modifiedProfitPercentage = useSelector(getModifiedProfitPercentage);
   const selectedContent = useSelector(getSelectedContent);
   const measurements = useSelector(getEstimateMeasurements);
   const sqftArea = useSelector(getSqftArea);
@@ -218,7 +220,7 @@ const Summary = () => {
                         </Typography>
                       </Box>
                     )}
-                    {selectedContent?.floatingSize && (
+                    {selectedContent?.glassAddons?.length ? (
                       <Box
                         sx={{
                           display: "flex",
@@ -227,12 +229,32 @@ const Summary = () => {
                         }}
                       >
                         <Typography sx={{ fontWeight: "bold" }}>
-                          Floating Size:
+                          Glass Addons:
                         </Typography>
-                        <Typography>
-                          {selectedContent?.floatingSize}
-                        </Typography>
+                        {selectedContent?.glassAddons?.map((item, index) => (
+                          <Typography>{item?.name}{selectedContent?.glassAddons?.length - 1 !== index ? ', ' : ''}</Typography>
+                        ))}
                       </Box>
+                    ) : (
+                      ""
+                    )}
+                    {selectedContent?.hardwares?.length ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography sx={{ fontWeight: "bold" }}>
+                          Hardwares:
+                        </Typography>
+                        {selectedContent?.hardwares?.map((item, index) => (
+                          <Typography>{item?.name}{selectedContent?.hardwares?.length - 1 !== index ? ', ' : ''}</Typography>
+                        ))}
+                      </Box>
+                    ) : (
+                      ""
                     )}
 
                     <Box
@@ -251,10 +273,10 @@ const Summary = () => {
                       </Typography>
                       <Typography>{selectedContent?.hours}</Typography>
                     </Box>
-                    {/* <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+                    <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
                       Additional Fields
                     </Typography>
-                    {selectedContent.additionalFields.map(
+                    {selectedContent.additionalFields?.map(
                       (item) =>
                         item.label !== "" && (
                           <Box
@@ -268,12 +290,12 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost} * {(listData?.miscPricing?.pricingFactorStatus
-                              ? listData?.miscPricing?.pricingFactor
+                            <Typography>{item.cost} * {(mirrorLocationSettings.pricingFactorStatus
+                              ? mirrorLocationSettings.pricingFactor
                               : 1)}</Typography>
                           </Box>
                         )
-                    )} */}
+                    )}
                   </AccordionDetails>
                 </Accordion>
 
@@ -370,7 +392,7 @@ const Summary = () => {
                           ${pricing.misc?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      {/* <Box
+                      <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
@@ -384,14 +406,162 @@ const Summary = () => {
                           Additional Fields Price
                         </Typography>
                         <Typography variant="h6">
-                          ${additionalFieldsPrice?.toFixed(2) || 0}
+                          ${pricing.additionalFields?.toFixed(2) || 0}
                         </Typography>
-                      </Box> */}
+                      </Box>
                     </Typography>
                   </AccordionDetails>
                 </Accordion>
                 {/** Gross Profit Accordian */}
+                <Accordion
+                  sx={{
+                    paddingX: "6px",
+                    border: "none",
+                    boxShadow: "none !important",
+                    ".MuiPaper-elevation": {
+                      border: " none !important",
+                      boxShadow: "none !important",
+                    },
+                  }}
+                >
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                    sx={{
+                      padding: 0,
+                      margin: 0,
+                      borderBottom: "none",
+                      height: "30px",
+                    }}
+                  >
+                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      Gross Profit Margin
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails
+                    sx={{
+                      padding: 0,
+                      borderTop: "2px solid #D0D5DD",
+                      paddingY: 1,
+                    }}
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Total:
+                      </Typography>
+                      <Typography>${pricing.total?.toFixed(2) || 0}</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Actual Cost:
+                      </Typography>
+                      <Typography>${pricing.cost?.toFixed(2) || 0}</Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        textAlign: "baseline",
+                        gap: 0.6,
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Gross Profit:
+                      </Typography>
+                      <Typography>{pricing.profitPercentage?.toFixed(2) || 0} %</Typography>
+                    </Box>
 
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        paddingTop: "0px",
+                      }}
+                    >
+                      <Typography sx={{ fontWeight: "bold" }}>
+                        Adjust Profit:
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
+                        }}
+                      >
+                        <TextField
+                          type="number"
+                          InputProps={{
+                            style: {
+                              color: "black",
+                              borderRadius: 10,
+                              border: "1px solid #cccccc",
+                              backgroundColor: "white",
+                            },
+                            inputProps: { min: 0, max: 100 },
+                          }}
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={
+                            modifiedProfitPercentage > 0 ? modifiedProfitPercentage : ""
+                          }
+                          onChange={(event) => {
+                            if (
+                              Number(event.target.value) < 100 &&
+                              Number(event.target.value) > 0
+                            ) {
+                              dispatch(
+                                setModifiedProfitPercentage(
+                                  Number(event.target.value)
+                                )
+                              );
+                            }
+                          }}
+                        />{" "}
+                        %
+                      </Box>
+                      {/* <Box sx={{ width: "100px" }}>
+                        <Button
+                          fullWidth
+                          variant="contained"
+                          onClick={handleProfitPercentage}
+                          sx={{
+                            backgroundColor: "#8477da",
+                            "&:hover": {
+                              backgroundColor: "#8477da",
+                            },
+                          }}
+                        >
+                          {" "}
+                          Submit
+                        </Button>
+                      </Box> */}
+                    </Box>
+                  </AccordionDetails>
+                </Accordion>
               </Box>
             </Box>
           </Box>

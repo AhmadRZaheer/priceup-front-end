@@ -55,44 +55,14 @@ const MenuItem = ({
           width: "200px",
           borderRadius: "12px",
           border: (
-            // type === "hardwareAddons"
-            //   ? selectedContent?.hardwareAddons.some(
-            //     (row) => row?.item?._id === item?._id
-            //   )
-            //   : type === "glassAddons"
-            //     ? selectedContent?.glassAddons.some(
-            //       (selectedItem) => selectedItem?._id === item?._id
-            //     )
-            //     : type === "wallClamp"
-            //       ? selectedContent?.mountingClamps?.wallClamp.some(
-            //         (selectedItem) => selectedItem?.item?._id === item?._id
-            //       )
-            //       : type === "sleeveOver"
-            //         ? selectedContent?.mountingClamps?.sleeveOver.some(
-            //           (selectedItem) => selectedItem?.item?._id === item?._id
-            //         )
-            //         : type === "glassToGlass"
-            //           ? selectedContent?.mountingClamps?.glassToGlass.some(
-            //             (selectedItem) => selectedItem?.item?._id === item?._id
-            //           )
-            //           : type === "cornerWallClamp"
-            //             ? selectedContent?.cornerClamps?.cornerWallClamp.some(
-            //               (selectedItem) => selectedItem?.item?._id === item?._id
-            //             )
-            //             : type === "cornerSleeveOver"
-            //               ? selectedContent?.cornerClamps?.cornerSleeveOver.some(
-            //                 (selectedItem) => selectedItem?.item?._id === item?._id
-            //               )
-            //               : type === "cornerGlassToGlass"
-            //                 ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
-            //                   (selectedItem) => selectedItem?.item?._id === item?._id
-            //                 )
-            //                 : ["handles", "hinges", "slidingDoorSystem", "header"].includes(
-            //                   type
-            //                 )
-            //                   ? item === selectedItem
-            //                   // status && item === selectedItem
-            item === selectedItem
+            type === "glassAddons"
+              ? selectedContent?.glassAddons.some(
+                (selectedItem) => selectedItem?._id === item?._id
+              ) : type === "hardwares"
+                ? selectedContent?.hardwares.some(
+                  (selectedItem) => selectedItem?._id === item?._id
+                ) :
+                item === selectedItem
           )
             ? "2px solid blue"
             : "1px solid #EAECF0",

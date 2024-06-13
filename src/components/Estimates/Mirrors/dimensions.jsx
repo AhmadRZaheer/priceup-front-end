@@ -82,8 +82,8 @@ export const MirrorDimensions = () => {
         dispatch(setEstimateMeasurements(values));
         const sqft = getAreaSqft(values);
         dispatch(setSqftArea(sqft.areaSqft));
-        const sandBlasting = getSandBlasting(values, mirrorLocationSettings.sandBlastingMultiplier);
-        dispatch(setSandBlasting(sandBlasting));
+        // const sandBlasting = getSandBlasting(values, mirrorLocationSettings.sandBlastingMultiplier);
+        // dispatch(setSandBlasting(sandBlasting));
         navigate('/estimates/review');
     };
 
