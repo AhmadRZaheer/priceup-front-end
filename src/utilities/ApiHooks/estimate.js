@@ -74,10 +74,12 @@ export const useCreateEstimates = () => {
         {
           customerData: props.customerData,
           estimateData: {
-            ...props.estimateData,
+            cost: props.cost,
+            config:{...props.estimateData},
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
             status: "pending",
+            category: "showers",
             name: `${current_date} ${current_time}`,
           },
         },
@@ -139,7 +141,7 @@ export const useEditEstimates = () => {
             : {}),
           estimateData: {
             ...(updatedEstimate.estimateData
-              ? { ...updatedEstimate.estimateData }
+              ? { config:{...updatedEstimate.estimateData},cost:updatedEstimate.cost }
               : {}),
             ...(updatedEstimate.status
               ? { status: updatedEstimate.status }

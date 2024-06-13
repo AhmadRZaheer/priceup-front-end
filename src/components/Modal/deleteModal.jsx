@@ -55,7 +55,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
               {isLoading ? (
                 <CircularProgress
                   sx={{
-                    color: "#8477DA",
+                    color: "white",
                     width: "24px !important",
                     height: "24px !important",
                   }}

@@ -13,7 +13,7 @@ import HardWairIcon from "../../Assets/box.svg";
 import DefaultIcon from "../../Assets/columns.svg";
 import SettingsIcon from "../../Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip, Drawer } from "@mui/material";
+import { Box, IconButton, Tooltip, Drawer, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { AttachMoney, PinDrop, UnfoldMore } from "@mui/icons-material";
 import {
@@ -30,6 +30,7 @@ import Toolbar from "@mui/material/Toolbar";
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import { userRoles } from "../../utilities/constants";
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const drawerWidth = 320;
 
@@ -61,6 +62,8 @@ const Sidebar = () => {
   } = useBackToSuperAdmin();
   const [open, setOpen] = useState(false);
   const superAdminToken = localStorage.getItem("superAdminToken");
+  const [expandShowerAccordian, setExpandShowerAccordian] = useState(false);
+  const [expandMirrorAccordian, setExpandMirrorAccordian] = useState(false);
   const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
@@ -122,6 +125,12 @@ const Sidebar = () => {
   };
   useEffect(() => {
     refetch();
+    if (['/mirrors/glass-types', '/mirrors/edge-works'].includes(location.pathname)) {
+      setExpandMirrorAccordian(true);
+    }
+    if (['/layouts', '/glass-addons', '/glass-types', '/finishes', '/hardware'].includes(location.pathname)) {
+      setExpandShowerAccordian(true);
+    }
   }, []);
   useEffect(() => {
     if (switched) {
@@ -290,9 +299,8 @@ const Sidebar = () => {
                 <NavLink to="/" className="link">
                   <li
                     style={{ padding: 10, marginTop: 10 }}
-                    className={`estimates ${
-                      location.pathname === "/" ? "active" : ""
-                    }`}
+                    className={`estimates ${location.pathname === "/" ? "active" : ""
+                      }`}
                   >
                     <IconButton
                       sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
@@ -309,9 +317,8 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink to="/estimates" className="link">
                   <li
-                    className={` ${
-                      location.pathname === "/estimates" ? "active" : ""
-                    }`}
+                    className={` ${location.pathname === "/estimates" ? "active" : ""
+                      }`}
                   >
                     <IconButton
                       sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
@@ -324,9 +331,8 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink to="/customers" className="link">
                   <li
-                    className={` ${
-                      location.pathname === "/customers" ? "active" : ""
-                    }`}
+                    className={` ${location.pathname === "/customers" ? "active" : ""
+                      }`}
                   >
                     <IconButton
                       sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
@@ -343,9 +349,8 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink to="/team" className="link">
                   <li
-                    className={` ${
-                      location.pathname === "/team" ? "active" : ""
-                    }`}
+                    className={` ${location.pathname === "/team" ? "active" : ""
+                      }`}
                   >
                     <IconButton
                       sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
@@ -360,121 +365,187 @@ const Sidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
-                <NavLink to="/hardware" className="link">
-                  <li
-                    className={` ${
-                      location.pathname === "/hardware" ? "active" : ""
-                    }`}
+                <Accordion
+                  expanded={expandShowerAccordian} onChange={() => { setExpandShowerAccordian(!expandShowerAccordian) }}
+                  sx={{
+                    margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none', "&.MuiAccordionSummary-expandIconWrapper": {
+                      color: 'white !important'
+                    }
+                  }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    sx={{
+                      background: '#8477DA',
+                      color: 'white',
+                      "&.Mui-expanded": {
+                        minHeight: "48px"
+                      },
+                      "&.MuiAccordionSummary-content": {
+                        marginTop: "12px !important",
+                      }
+                    }}
                   >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={HardWairIcon}
-                        alt="image of customer"
-                      />
+                    <Typography>Showers</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails style={{ padding: '10px' }}>
+                    <NavLink to="/hardware" className="link">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/hardware" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={HardWairIcon}
+                            alt="image of customer"
+                          />
 
-                      <span>Hardware</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <NavLink to="/finishes" className="link">
-                  <li
-                    className={` ${
-                      location.pathname === "/finishes" ? "active" : ""
-                    }`}
+                          <span>Hardwares</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                    <NavLink to="/finishes" className="link">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/finishes" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <FormatColorFillIcon
+                            sx={{
+                              fontSize: 30,
+                              marginLeft: -0.2,
+                              p: 0,
+                              marginRight: 0.8,
+                            }}
+                          />
+
+                          <span>Finishes</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                    <NavLink to="/glass-types" className="link">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/glass-types" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={HardWairIcon}
+                            alt="image of customer"
+                          />
+
+                          <span>Glass Types</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                    <NavLink to="/glass-addons" className="link">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/glass-addons" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={HardWairIcon}
+                            alt="image of customer"
+                          />
+
+                          <span>Glass Addons</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                    <NavLink to="/layouts" className="link">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/layouts" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={DefaultIcon}
+                            alt="image of customer"
+                          />
+
+                          <span>Layouts</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                  </AccordionDetails>
+                </Accordion>
+                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none' }}>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1-content"
+                    id="panel1-header"
+                    sx={{
+                      background: '#8477DA',
+                      color: 'white',
+                      "&.Mui-expanded": {
+                        minHeight: "48px"
+                      },
+                      "&.MuiAccordionSummary-content": {
+                        marginTop: "12px !important",
+                      }
+                    }}
                   >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <FormatColorFillIcon
-                        sx={{
-                          fontSize: 30,
-                          marginLeft: -0.2,
-                          p: 0,
-                          marginRight: 0.8,
-                        }}
-                      />
+                    <Typography>Mirrors</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails style={{ padding: '10px' }}>
+                    <NavLink to="/mirrors/edge-works">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/mirrors/edge-works" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={SettingsIcon}
+                            alt="image of customer"
+                          />
 
-                      <span>Finishes</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                {/* <NavLink to="/Addons" className="link">
-          <li
-            className={` ${location.pathname === "/Addons" ? "active" : ""
-              }`}
-          >
-            <IconButton sx={{ color: "white", padding: 0.2 }}>
-              <LayersOutlinedIcon sx={{ fontSize: 30, marginLeft: -0.2, p: 0, marginRight: 0.8 }} />
+                          <span>Edge Works</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                    <NavLink to="/mirrors/glass-types">
+                      <li style={{ margin: '8px 0px' }}
+                        className={` ${location.pathname === "/mirrors/glass-types" ? "active" : ""
+                          }`}
+                      >
+                        <IconButton
+                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                        >
+                          <img
+                            style={{ paddingRight: 10 }}
+                            src={SettingsIcon}
+                            alt="image of customer"
+                          />
 
-              <span>Add ons</span>
-            </IconButton>
-          </li>
-        </NavLink> */}
-                <NavLink to="/glass-types" className="link">
-                  <li
-                    className={` ${
-                      location.pathname === "/glass-types" ? "active" : ""
-                    }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={HardWairIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Glass Types</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <NavLink to="/glass-addons" className="link">
-                  <li
-                    className={` ${
-                      location.pathname === "/glass-addons" ? "active" : ""
-                    }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={HardWairIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Glass Addons</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <NavLink to="/layouts" className="link">
-                  <li
-                    className={` ${
-                      location.pathname === "/layouts" ? "active" : ""
-                    }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={DefaultIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Layouts</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
+                          <span>Glass Types</span>
+                        </IconButton>
+                      </li>
+                    </NavLink>
+                  </AccordionDetails>
+                </Accordion>
                 <NavLink to="/settings" className="link">
                   <li
-                    className={` ${
-                      location.pathname === "/settings" ? "active" : ""
-                    }`}
+                    className={` ${location.pathname === "/settings" ? "active" : ""
+                      }`}
                   >
                     <IconButton
                       sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
