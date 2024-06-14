@@ -19,7 +19,7 @@ import {
 } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { AdminColumns } from "../../customerTableSource";
+import { AdminColumns } from "@/utilities/DataGridColumns";
 import { Search } from "@mui/icons-material";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useDispatch } from "react-redux";

@@ -1,3 +1,11 @@
+import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import { EstimateCategory, quoteState } from "./constants";
+import {
+  resetMirrorEstimateState,
+  setEstimateMeasurements,
+  setSelectedItem,
+} from "@/redux/mirrorsEstimateSlice";
+
 export const getAreaSqft = (measurements) => {
   let totalSqft = 0;
   let totalPerimeter = 0;
@@ -252,4 +260,14 @@ export const calculateTotal = (
     total: totalPrice,
     profitPercentage: ((totalPrice - cost) * 100) / totalPrice,
   };
+};
+
+export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
+  dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
+  dispatch(setEstimateState(quoteState.EDIT));
+  dispatch(resetMirrorEstimateState());
+  dispatch(setSelectedItem(item));
+  dispatch(setEstimateMeasurements(item.config.measurements));
+  // console.log("mirror edit", item);
+  navigate("/estimates/dimensions");
 };

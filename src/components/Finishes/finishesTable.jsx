@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./hardwareTable.scss";
-import { userColumnsHardware } from "../../customerTableSource";
+import { userColumnsHardware } from "@/utilities/DataGridColumns";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";

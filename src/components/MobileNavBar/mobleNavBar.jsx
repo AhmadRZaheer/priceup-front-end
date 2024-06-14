@@ -52,7 +52,8 @@ function MobileBar() {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeButton, setActiveButton] = useState("esti");
   const [anchorEl, setAnchorEl] = useState(null);
@@ -93,16 +94,15 @@ function MobileBar() {
   };
 
   const handleCustomerClick = () => {
-    setActiveButton("customr");
-    dispatch(setNavigationDesktop("customerTable"));
+    // setActiveButton("customr");
+    // dispatch(setNavigationDesktop("customerTable"));
+    navigate('/customers');
   };
-  const handleStaffClick = () => {
-    setActiveButton("staff");
-    dispatch(setNavigationDesktop("staffTable"));
-  };
+  
   const handleEstimateClick = () => {
-    setActiveButton("esti");
-    dispatch(setNavigationDesktop("existing"));
+    // setActiveButton("esti");
+    // dispatch(setNavigationDesktop("existing"));
+    navigate('/estimates');
   };
   const handleSwitchLocation = (location) => {
     if (location?.company?._id !== activeLocation?.company?._id) {
@@ -219,7 +219,7 @@ function MobileBar() {
                 paddingY: "10px",
                 textTransform: "capitalize",
                 backgroundColor:
-                  activeButton === "esti" ? "#8477da" : "transprent",
+                location.pathname.includes("/estimates") || location.pathname === '/' ? "#8477da" : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
@@ -248,7 +248,7 @@ function MobileBar() {
                 textTransform: "capitalize",
                 fontSize: "16px",
                 backgroundColor:
-                  activeButton === "customr" ? "#8477da" : "transprent",
+                location.pathname === "/customers" ? "#8477da" : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },

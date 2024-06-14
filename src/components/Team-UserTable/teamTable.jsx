@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./teamTable.scss";
-import { teamColumns } from "../../customerTableSource";
+import { teamColumns } from "@/utilities/DataGridColumns";
 import ModeIcon from "@mui/icons-material/Mode";
 import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";

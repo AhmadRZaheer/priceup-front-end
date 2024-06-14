@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./customerTable.scss";
-import { CustomerColumns } from "../../customerTableSource";
+import { CustomerColumns } from "@/utilities/DataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
@@ -9,15 +9,15 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useFetchDataCustomer } from "../../utilities/ApiHooks/customer";
+import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
 import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
-import CustomerQoute from "../Estimates_dep/customerQuotTable";
-import EyeIcon from "../../Assets/eye-icon.svg";
-import CustomIconButton from "../ui-components/CustomButton";
+import CustomerEstimates from "@/components/Estimates/customerEstimatesTable";
+import EyeIcon from "@/Assets/eye-icon.svg";
+import CustomIconButton from "@/components/ui-components/CustomButton";
 // import { getDataRefetch } from "../../redux/staff";
 // import { useSelector } from "react-redux";
 import ModeIcon from "@mui/icons-material/Mode";
-import EditCustomer from "../Modal/editCustomer";
+import EditCustomer from "@/components/Modal/editCustomer";
 
 const CustomerTable = () => {
   const { data: customerData, refetch: customersRefetch } = useFetchDataCustomer();
@@ -68,7 +68,7 @@ const CustomerTable = () => {
               buttonText="View Quotes"
             />
             <Box
-              sx={{marginLeft:'10px'}}
+              sx={{ marginLeft: '10px' }}
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
@@ -291,7 +291,7 @@ const CustomerTable = () => {
           </div>
         </Box>
 
-        <CustomerQoute
+        <CustomerEstimates
           open={openQuotesModal}
           close={handleCloseQuotes}
           quoteId={selectedRowData ? selectedRowData : null}

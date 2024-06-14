@@ -21,7 +21,6 @@ import Admin from "@/pages/Admin/admin";
 import { useMemo } from "react";
 import LandingPage from "@/pages/LandingPage/landingPage";
 import AdminTeam from "@/pages/TeamAdmin/adminTeam";
-import Staff from "@/pages/Staff/staff";
 import AdminUser from "@/pages/UserSuperAdmin/userAdmin";
 import Super_SuperAdmin from "@/pages/Super_Super-Admin/superAdmins";
 
@@ -86,7 +85,6 @@ const AppRoutes = () => {
             <Route path="layouts" element={<EstimateLayouts />} />
             <Route path="dimensions" element={<EstimateDimensions />} />
             <Route path="review" element={<EstimateReview />} />
-            {/* <Route path="steps" element={<Estimates />} /> */}
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
           <Route path="/customers/">
@@ -124,9 +122,17 @@ const AppRoutes = () => {
         </Route>
       ) : isStaff(decodedToken) && decodedToken?.company_id.length ? (
         <Route path="/">
-          <Route index element={<Staff />} />
-          <Route path="/estimates" element={<Staff />} />
-          <Route path="*" element={<Staff />} />
+          <Route index element={<Estimates />} />
+          <Route path="/customers" element={<Customers />} />
+          <Route path="/estimates/">
+            <Route index element={<Estimates />} />
+            <Route path="category" element={<EstimateCategory />} />
+            <Route path="layouts" element={<EstimateLayouts />} />
+            <Route path="dimensions" element={<EstimateDimensions />} />
+            <Route path="review" element={<EstimateReview />} />
+            <Route path=":id/pdf-preview" element={<PDFPreview />} />
+          </Route>
+          <Route path="*" element={<Estimates />} />
         </Route>
       ) : isSuperAdmin(decodedToken) ? (
         <Route path="/">
