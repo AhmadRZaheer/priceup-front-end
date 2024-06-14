@@ -2,18 +2,15 @@ import { useEffect, useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import Modal from "@mui/material/Modal";
 import { DataGrid } from "@mui/x-data-grid";
-import { CustomerQuoteColumns } from "../../customerTableSource";
+import { CustomerQuoteColumns } from "@/utilities/DataGridColumns";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { calculateAreaAndPerimeter } from "../../utilities/common";
+import { calculateAreaAndPerimeter } from "@/utilities/common";
 import {
-  // useDeleteEstimates,
   useFetchDataEstimate,
-  // useGetEstimates,
-} from "../../utilities/ApiHooks/estimate";
+} from "@/utilities/ApiHooks/estimate";
 import {
   addSelectedItem,
-  // initializeStateForEditQuote,
   resetState,
   setDoorWeight,
   setDoorWidth,
@@ -24,13 +21,12 @@ import {
   setReturnWeight,
   setisCustomizedDoorWidth,
   updateMeasurements,
-} from "../../redux/estimateCalculations";
+} from "@/redux/estimateCalculations";
 import { Link } from "react-router-dom";
 import { Close, Edit } from "@mui/icons-material";
-import CustomIconButton from "../ui-components/CustomButton";
-// import { getDataRefetch } from "../../redux/staff";
-import { useFetchDataCustomerEstimates } from "../../utilities/ApiHooks/customer";
-import Pagination from "../Pagination";
+import CustomIconButton from "@/components/ui-components/CustomButton";
+import { useFetchDataCustomerEstimates } from "@/utilities/ApiHooks/customer";
+import Pagination from "@/components/Pagination";
 
 const style = {
   position: "absolute",

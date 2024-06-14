@@ -72,6 +72,7 @@ export const SimpleLayoutDimensions = () => {
     }, {});
 
     const noOfSidesOFCurrentLayout = selectedData?.settings?.measurementSides;
+    console.log(noOfSidesOFCurrentLayout,'side',measurementSides)
     const [debouncedValue, setDebouncedValue] = useState(0);
     const [editDebouncedValue, setEditDebouncedValue] =
         useState(doorWidthFromredux);

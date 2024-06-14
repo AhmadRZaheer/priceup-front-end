@@ -7,8 +7,12 @@ import { useGetEstimatesStats } from "@/utilities/ApiHooks/estimate";
 
 import ExistingTable from "./existingTable";
 import { useEffect } from "react";
+import { getDecryptedToken } from "@/utilities/common";
+import { userRoles } from "@/utilities/constants";
 
 export default function Estimates() {
+    const decodedToken = getDecryptedToken();
+
     const {
         data: estimatesStats,
         // isLoading: estimatesStatsFetching,
@@ -43,7 +47,7 @@ export default function Estimates() {
                     gap: 5,
                 }}
             >
-                <Box
+                {decodedToken?.role !== userRoles.STAFF ? <Box
                     sx={{
                         display: "flex",
                         width: "98%",
@@ -162,7 +166,7 @@ export default function Estimates() {
                             <Typography sx={{ fontSize: 18 }}>Invoice Total</Typography>
                         </Box>
                     </Box>
-                </Box>
+                </Box> : ''}
                 <Box
                     sx={{
                         width: "98%",
