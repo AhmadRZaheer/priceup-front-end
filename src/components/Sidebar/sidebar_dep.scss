@@ -10,8 +10,15 @@
       margin-top: 10px;
     }
   }
+  .line {
+    height: 0;
+    border: 1px solid #475467;
+    width: 85%;
+    padding: 0 !important;
+    margin: 0px auto;
+  }
   .center {
-    height: 80% !important;
+    height: 68vh !important;
     overflow: auto;
 
     ul {
@@ -79,7 +86,10 @@
       text-align: center;
     }
   }
-
+  .link {
+    text-decoration: none;
+    color: inherit;
+  }
   .active {
     font-weight: 800;
   }
@@ -89,10 +99,8 @@
   }
 }
 .center {
-  height: 50%;
-  overflow: auto;
-  margin-top: 10px;
-  margin-bottom: 10px; /* Keep the scrollbar visible */
+  height: 68vh;
+  overflow: auto; /* Keep the scrollbar visible */
 }
 
 .center::-webkit-scrollbar {
@@ -102,55 +110,12 @@
 .center::-webkit-scrollbar-thumb {
   background-color: #475467; /* Set the color of the scrollbar thumb */
 }
-
-.line {
-  height: 0;
-  border: 1px solid #475467;
-  width: 85%;
-  padding: 0 !important;
-  margin: 0px auto;
-}
-.main-container-sidebar {
+.main-container-sidebar{
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 92%;
-}
-.link {
-  text-decoration: none;
-  color: inherit;
-}
-.button-item {
-  height: 20px;
-  color: white;
-  font-size: 16px;
-  border-radius: 6px;
-  text-align: left;
-  display: flex;
-  gap: 10px;
-  padding: 12px;
-  cursor: pointer;
-  align-items: center;
-  //   background-color: #8477da;
-  .active {
-    background-color: #8477da;
-    border-radius: 6px;
-  }
-}
-.button-item:hover {
-  background-color: #8477da;
 }
 .active {
   background-color: #8477da;
   border-radius: 6px;
-}
-.subtitles {
-  color: white;
-  font-size: 20px !important;
-  font-weight: bold !important;
-}
-@media screen and (max-width: 1600px) {
-  .main-container-sidebar {
-    height: 90%;
-  }
 }

@@ -1,19 +1,29 @@
 import React, { useEffect, useState } from "react";
 import "./sidebar.scss";
-import Logo from "../../Assets/purplelogo.svg";
-import logout from "../../Assets/logout.svg";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { logoutHandler } from "../../redux/userAuth";
+import Logo from "@/Assets/purplelogo.svg";
+import logout from "@/Assets/logout.svg";
+import { NavLink, useLocation } from "react-router-dom";
+import { logoutHandler } from "@/redux/userAuth";
 import { useDispatch } from "react-redux";
-import LagoutModal from "../Modal/logOut";
-import EstimsteIcon from "../../Assets/bar.svg";
-import CustomerIcon from "../../Assets/Customer-icon.svg";
-import TeamIcon from "../../Assets/users.svg";
-import HardWairIcon from "../../Assets/box.svg";
-import DefaultIcon from "../../Assets/columns.svg";
-import SettingsIcon from "../../Assets/settings.svg";
+import LagoutModal from "@/components/Modal/logOut";
+import EstimsteIcon from "@/Assets/bar.svg";
+import CustomerIcon from "@/Assets/Customer-icon.svg";
+import TeamIcon from "@/Assets/users.svg";
+import HardWairIcon from "@/Assets/box.svg";
+import DefaultIcon from "@/Assets/columns.svg";
+import SettingsIcon from "@/Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
-import { Box, IconButton, Tooltip, Drawer, Accordion, AccordionSummary, AccordionDetails, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Tooltip,
+  Drawer,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+  Button,
+} from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { AttachMoney, PinDrop, UnfoldMore } from "@mui/icons-material";
 import {
@@ -30,11 +40,11 @@ import Toolbar from "@mui/material/Toolbar";
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import { userRoles } from "../../utilities/constants";
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const drawerWidth = 320;
 
-const Sidebar = () => {
+const NewSidebar = () => {
   const { data: AdminData, refetch } = useFetchDataAdmin();
   const { mutate: haveAccessSet, data: haveAccessData } =
     useFetchCustomAdminHaveAccessTo();
@@ -125,10 +135,25 @@ const Sidebar = () => {
   };
   useEffect(() => {
     refetch();
-    if (['/mirrors/glass-types', '/mirrors/edge-works', '/mirrors/glass-addons', '/mirrors/hardwares'].includes(location.pathname)) {
+    if (
+      [
+        "/mirrors/glass-types",
+        "/mirrors/edge-works",
+        "/mirrors/glass-addons",
+        "/mirrors/hardwares",
+      ].includes(location.pathname)
+    ) {
       setExpandMirrorAccordian(true);
     }
-    if (['/layouts', '/glass-addons', '/glass-types', '/finishes', '/hardware'].includes(location.pathname)) {
+    if (
+      [
+        "/layouts",
+        "/glass-addons",
+        "/glass-types",
+        "/finishes",
+        "/hardware",
+      ].includes(location.pathname)
+    ) {
       setExpandShowerAccordian(true);
     }
   }, []);
@@ -195,506 +220,436 @@ const Sidebar = () => {
   const drawer = (
     <Box
       sx={{
-        // position: { xs: "absolute", md: "static" },
-        top: "0px",
-        zIndex: 10,
+        width: "319px",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "space-between",
+        height: "100vh",
+        justifyContent: "space-between",
+        background: "#100d24",
       }}
     >
-      <div className="sidebar">
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "space-between",
-            height: "100vh",
-            justifyContent: "space-between",
-          }}
-        >
-          <Box sx={{ marginTop: 2 }}>
-            <NavLink to="/">
-              <div className="top">
-                <span className="logo">
-                  <img src={Logo} alt="price up logo" />
-                </span>
-                {/* <div style={{ paddingLeft: 20 }}>
+      {/* top section */}
+      <Box height={"80%"}>
+        {/* Top Options */}
+        <Box sx={{ width: "100%", height: "24%" }}>
+          <NavLink to="/">
+            <div className="top">
+              <span className="logo">
+                <img src={Logo} alt="price up logo" />
+              </span>
+            </div>
+          </NavLink>
+          {userReference && (
+            <Tooltip title="Switch Location">
+              <IconButton
+                onClick={handleSeeLocationsClick}
+                sx={{
+                  // mx: 2,
+                  color: "#8477DA",
+                  padding: "4px 20px",
+                  display: "flex",
+                  width: "100%",
+                  borderRadius: 0,
+                  ":hover": {
+                    background: "none",
+                    backgroundColor: "transparent",
+                  },
+                }}
+              >
+                <Box>
                   <DefaultImage
                     image={activeLocation?.company?.image}
                     name={activeLocation?.company?.name}
                   />
-                </div> */}
-              </div>
-            </NavLink>
-            <div className="main-container-sidebar">
-            
-                {userReference && (
-                  // <li
-                  //   style={{ marginBottom: 0,  }}
-                  //   // className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                  //   onClick={handleSeeLocationsClick}
-                  // >
-                    <Tooltip title="Switch Location">
-                      <IconButton
-                      onClick={handleSeeLocationsClick}
-                        sx={{
-                          // mx: 2,
-                          color: "#8477DA",
-                          padding: "4px 20px",
-                          display: "flex",
-                          width: "100%",
-                          borderRadius: 0,
-                          ":hover": {
-                            background: "none",
-                            backgroundColor: "transparent"
-                          }
-                        }}
-                      >
-                        <Box>
-                            <DefaultImage
-                            image={activeLocation?.company?.image}
-                             name={activeLocation?.company?.name}
-                               />
-                               </Box>
-                        <span
-                          style={{
-                            flexGrow: 1,
-                            paddingLeft: "10px",
-                            paddingRight: "10px",
-                            whiteSpace: "nowrap",
-                            display: "block",
-                            textOverflow: "ellipsis",
-                            overflow: "hidden",
-                            textTransform: "capitalize"
-                          }}
-                        >
-                          {" "}
-                          {activeLocation?.company?.name}
-                        </span>
-                        <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
-                      </IconButton>
-                    </Tooltip>
-                  // </li>
-                )}
+                </Box>
+                <span
+                  style={{
+                    flexGrow: 1,
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                    whiteSpace: "nowrap",
+                    display: "block",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    textTransform: "capitalize",
+                  }}
+                >
+                  {" "}
+                  {activeLocation?.company?.name}
+                </span>
+                <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
+              </IconButton>
+            </Tooltip>
+          )}
 
-                {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
-                  // <li
-                  //   style={{ padding: 10, marginBottom: 0 }}
-                  //   // className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                  //   onClick={handleSeeLocationsClick}
-                  // >
-                    <IconButton
-                    onClick={handleSeeLocationsClick}
-                      sx={{
-                        color: "#8477DA",
-                        padding: "4px 20px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        borderRadius: 0,
-                        ":hover": {
-                          background: "none",
-                          backgroundColor: "transparent"
-                        }
-                      }}
-                    >
-                   <Box>
-                   <DefaultImage
-                            image={activeLocation?.company?.image}
-                             name={activeLocation?.company?.name}
-                               />
-                               </Box>
-                      <span
-                        style={{
-                          flexGrow: 1,
-                          paddingLeft: "10px",
-                            paddingRight: "10px",
-                          whiteSpace: "nowrap",
-                          display: "block",
-                          textOverflow: "ellipsis",
-                          overflow: "hidden",
-                          textTransform: "capitalize"
-                        }}
-                      >
-                        {CustomActiveUser}
-                      </span>
-                      <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
-                    </IconButton>
-                  
-                ) : (
-                  ""
-                )}
-                
-                <ul style={{listStyleType: "none", paddingLeft: "17px", paddingRight: "17px"}}>
-                <NavLink to="/" className="link">
-                  <li
-                    style={{ padding: 10, marginTop: 10,  }}
-                    className={`estimates ${location.pathname === "/" ? "active" : ""
-                      }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0, fontSize: "16px" }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={EstimsteIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Dashboard</span>
-                    </IconButton>
-                  </li>
-                  
-                </NavLink>
-                </ul>
-                <div className="center">
-                <ul>
-                
-                <Typography sx={{mt: 4, color: "white", fontWeight: "bold", ml: 2, fontSize: "20px"}}> Management </Typography>
-                <NavLink to="/estimates" className="link">
-                  <li
-                    className={` ${location.pathname.includes("/estimates") ? "active" : ""
-                      }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <AttachMoney />
-
-                      <span>Estimates</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <NavLink to="/customers" className="link">
-                  <li
-                    className={` ${location.pathname === "/customers" ? "active" : ""
-                      }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={CustomerIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Customers</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <NavLink to="/team" className="link">
-                  <li
-                    className={` ${location.pathname === "/team" ? "active" : ""
-                      }`}
-                  >
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={TeamIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Users</span>
-                    </IconButton>
-                  </li>
-                </NavLink>
-                <Typography sx={{mt: 3, color: "white", fontWeight: "bold", ml: 2, fontSize: "20px"}}> Categories </Typography>
-                <Accordion
-                  expanded={expandShowerAccordian} onChange={() => { setExpandShowerAccordian(!expandShowerAccordian) }}
-                  sx={{
-                    margin: '12px 10px !important', border: 'none', background: 'none',
-                     "&.MuiAccordionSummary-expandIconWrapper": {
-                      color: 'white !important'
-                    }
-                  }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{
-                      background: ' rgba(132, 119, 218, 0.3)',
-                      color: 'white',
-                      "&.Mui-expanded": {
-                        minHeight: "40px"
-                      },
-                      "&.MuiAccordionSummary-content": {
-                        marginTop: "12px !important",
-                      }
-                    }}
-                  >
-                    <img src={DefaultIcon} alt="showers icon" />
-                    <Typography sx={{pl: 1}}>Showers</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails style={{ padding: '10px' }}>
-                    <NavLink to="/hardware" className="link">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/hardware" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={HardWairIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Hardwares</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/finishes" className="link">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/finishes" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <FormatColorFillIcon
-                            sx={{
-                              fontSize: 30,
-                              marginLeft: -0.2,
-                              p: 0,
-                              marginRight: 0.8,
-                            }}
-                          />
-
-                          <span>Finishes</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/glass-types" className="link">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/glass-types" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={HardWairIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Glass Types</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/glass-addons" className="link">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/glass-addons" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={HardWairIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Glass Addons</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/layouts" className="link">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/layouts" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={DefaultIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Layouts</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: 'none', background: 'none' }}>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{
-                      background: ' rgba(132, 119, 218, 0.3)',
-                      color: 'white',
-                      "&.Mui-expanded": {
-                        minHeight: "40px"
-                      },
-                      "&.MuiAccordionSummary-content": {
-                        marginTop: "12px !important",
-                      }
-                    }}
-                  >
-                    <img src={DefaultIcon} alt="showers icon" />
-                    <Typography sx={{pl: 1}}>Mirrors</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails style={{ padding: '10px' }}>
-                  <NavLink to="/mirrors/hardwares">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/mirrors/hardwares" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={SettingsIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Hardwares</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                  <NavLink to="/mirrors/glass-addons">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/mirrors/glass-addons" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={SettingsIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Glass Addons</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/mirrors/edge-works">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/mirrors/edge-works" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={SettingsIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Edge Works</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                    <NavLink to="/mirrors/glass-types">
-                      <li style={{ margin: '8px 0px' }}
-                        className={` ${location.pathname === "/mirrors/glass-types" ? "active" : ""
-                          }`}
-                      >
-                        <IconButton
-                          sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
-                        >
-                          <img
-                            style={{ paddingRight: 10 }}
-                            src={SettingsIcon}
-                            alt="image of customer"
-                          />
-
-                          <span>Glass Types</span>
-                        </IconButton>
-                      </li>
-                    </NavLink>
-                  </AccordionDetails>
-                </Accordion>
-                </ul>
-                </div>
-                <div className="line"></div>
-                <NavLink to="/settings" className="link" style={{
-                     borderRadius: "6px",
-                     margin: 10,
-                     marginLeft: 25,
-                     marginRight: 20
-                }}>
-                
-                    <IconButton
-                      sx={{ color: "white", padding: 0.2, 
-                         background: location.pathname === "/settings" ? "#8477DA" : "transparent", height: "40px",
-                         borderRadius: "6px",
-                         pl: 2,
-                         fontSize: "16px"
-                      }}
-                    >
-                      <img
-                        style={{ paddingRight: 10 }}
-                        src={SettingsIcon}
-                        alt="image of customer"
-                      />
-
-                      <span>Settings</span>
-            </IconButton>
-                </NavLink>
-          
-            </div>
-          </Box>
-          <Box>
-            <div className="line"></div>
-            <Box
+          {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
+            // <li
+            //   style={{ padding: 10, marginBottom: 0 }}
+            //   // className={` ${Boolean(anchorEl) ? "active" : ""}`}
+            //   onClick={handleSeeLocationsClick}
+            // >
+            <IconButton
+              onClick={handleSeeLocationsClick}
               sx={{
+                color: "#8477DA",
+                padding: "4px 20px",
                 display: "flex",
-                alignItems: "center",
-                paddingX: 2,
-                p: 1,
+                justifyContent: "space-between",
+                borderRadius: 0,
+                ":hover": {
+                  background: "none",
+                  backgroundColor: "transparent",
+                },
               }}
             >
-              <Box sx={{ marginLeft: 1, mr: 1.2 }}>
+              <Box>
                 <DefaultImage
-                  image={decodedToken?.image}
-                  name={decodedToken?.name}
+                  image={activeLocation?.company?.image}
+                  name={activeLocation?.company?.name}
                 />
               </Box>
-              <Box sx={{ fontSize: 18 }}>
-                {decodedToken?.name}
-                <Box
-                  sx={{
-                    fontSize: 16,
-                    color: "white",
-                    whiteSpace: "nowrap",
-                    width: 160,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap", // Added this line to ensure text doesn't wrap
-                  }}
-                >
-                  {decodedToken?.email}
-                </Box>
+              <span
+                style={{
+                  flexGrow: 1,
+                  paddingLeft: "10px",
+                  paddingRight: "10px",
+                  whiteSpace: "nowrap",
+                  display: "block",
+                  textOverflow: "ellipsis",
+                  overflow: "hidden",
+                  textTransform: "capitalize",
+                }}
+              >
+                {CustomActiveUser}
+              </span>
+              <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
+            </IconButton>
+          ) : (
+            ""
+          )}
+          <Box sx={{ width: "80%", mx: "auto", mt: 2 }}>
+            <NavLink to="/" className="link">
+              <Box
+                className={`button-item ${location.pathname === "/" ? "active" : ""
+                  }`}
+              >
+                <img
+                  style={{ paddingRight: 10 }}
+                  src={EstimsteIcon}
+                  alt="image of customer"
+                />
+
+                <span>Dashboard</span>
               </Box>
-              <Tooltip title="Logout" placement="top-start" arrow>
-                <Box
-                  sx={{
-                    fontSize: 16,
-                    marginLeft: 2,
-                    width: 50,
-                    height: 30,
-                    textAlign: "center",
-                  }}
-                  onClick={() => setOpen(!open)}
-                >
-                  <img src={logout} alt="image" />
-                </Box>
-              </Tooltip>
-            </Box>
+            </NavLink>
           </Box>
         </Box>
-      </div>
+        {/* Container Options */}
+        <Box
+          sx={{
+            width: "86%",
+            mx: "auto",
+            mt: 3,
+            height: "70%",
+            overflow: "auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 1,
+          }}
+        >
+          <Typography className="subtitles"> Management </Typography>
+          <NavLink to="/estimates" className="link">
+            <Box
+              className={`button-item ${location.pathname.includes("/estimates") ? "active" : ""
+                }`}
+            >
+              <AttachMoney />
+
+              <span>Estimates</span>
+            </Box>
+          </NavLink>
+          <NavLink to="/customers" className="link">
+            <Box
+              className={`button-item ${location.pathname === "/customers" ? "active" : ""
+                }`}
+            >
+              <img src={CustomerIcon} alt="image of customer" />
+
+              <span>Customers</span>
+            </Box>
+          </NavLink>
+          <NavLink to="/team" className="link">
+            <Box
+              className={`button-item ${location.pathname === "/team" ? "active" : ""
+                }`}
+            >
+              <img src={TeamIcon} alt="image of customer" />
+
+              <span>Users</span>
+            </Box>
+          </NavLink>
+          <Typography className="subtitles" sx={{ mt: 1 }}>
+            {" "}
+            Categories{" "}
+          </Typography>
+          <Box>
+            <Accordion
+              expanded={expandShowerAccordian}
+              onChange={() => {
+                setExpandShowerAccordian(!expandShowerAccordian);
+              }}
+              sx={{
+                margin: "12px 0px !important",
+                border: "none",
+                background: "none",
+                "&.MuiAccordionSummary-expandIconWrapper": {
+                  color: "white !important",
+                },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                sx={{
+                  background: " rgba(132, 119, 218, 0.3)",
+                  color: "white",
+                  "&.Mui-expanded": {
+                    minHeight: "40px",
+                  },
+                  "&.MuiAccordionSummary-content": {
+                    marginTop: "12px !important",
+                  },
+                }}
+              >
+                <img src={DefaultIcon} alt="showers icon" />
+                <Typography sx={{ pl: 1 }}>Showers</Typography>
+              </AccordionSummary>
+              <AccordionDetails
+                style={{
+                  padding: "0px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 2,
+                }}
+              >
+                <NavLink to="/hardware" className="link">
+                  <Box
+                    className={`button-item  ${location.pathname === "/hardware" ? "active" : ""
+                      }`}
+                    sx={{ mt: 1 }}
+                  >
+                    <img src={HardWairIcon} alt="image of customer" />
+
+                    <span>Hardwares</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/finishes" className="link">
+                  <Box
+                    className={`button-item ${location.pathname === "/finishes" ? "active" : ""
+                      }`}
+                  >
+                    <FormatColorFillIcon />
+
+                    <span>Finishes</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/glass-types" className="link">
+                  <Box
+                    className={`button-item ${location.pathname === "/glass-types" ? "active" : ""
+                      }`}
+                  >
+                    <img src={HardWairIcon} alt="image of customer" />
+
+                    <span>Glass Types</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/glass-addons" className="link">
+                  <Box
+                    className={`button-item ${location.pathname === "/glass-addons" ? "active" : ""
+                      }`}
+                  >
+                    <img src={HardWairIcon} alt="image of customer" />
+
+                    <span>Glass Addons</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/layouts" className="link">
+                  <Box
+                    className={`button-item ${location.pathname === "/layouts" ? "active" : ""
+                      }`}
+                  >
+                    <img src={DefaultIcon} alt="image of customer" />
+
+                    <span>Layouts</span>
+                  </Box>
+                </NavLink>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion
+              expanded={expandMirrorAccordian}
+              onChange={() => {
+                setExpandMirrorAccordian(!expandMirrorAccordian);
+              }}
+              sx={{
+                margin: "12px 0px !important",
+                border: "none",
+                background: "none",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+                sx={{
+                  background: " rgba(132, 119, 218, 0.3)",
+                  color: "white",
+                  "&.Mui-expanded": {
+                    minHeight: "40px",
+                  },
+                  "&.MuiAccordionSummary-content": {
+                    marginTop: "12px !important",
+                  },
+                }}
+              >
+                <img src={DefaultIcon} alt="showers icon" />
+                <Typography sx={{ pl: 1 }}>Mirrors</Typography>
+              </AccordionSummary>
+              <AccordionDetails style={{ padding: "10px 0px" }}>
+                <NavLink to="/mirrors/hardwares">
+                  <Box
+                    className={`button-item ${location.pathname === "/mirrors/hardwares" ? "active" : ""
+                      }`}
+                  >
+                    <img src={SettingsIcon} alt="image of customer" />
+
+                    <span>Hardwares</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/mirrors/glass-addons">
+                  <Box
+                    className={`button-item ${location.pathname === "/mirrors/glass-addons"
+                        ? "active"
+                        : ""
+                      }`}
+                  >
+                    <img src={SettingsIcon} alt="image of customer" />
+
+                    <span>Glass Addons</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/mirrors/edge-works">
+                  <Box
+                    className={`button-item ${location.pathname === "/mirrors/edge-works"
+                        ? "active"
+                        : ""
+                      }`}
+                  >
+                    <img
+                      style={{ paddingRight: 10 }}
+                      src={SettingsIcon}
+                      alt="image of customer"
+                    />
+
+                    <span>Edge Works</span>
+                  </Box>
+                </NavLink>
+                <NavLink to="/mirrors/glass-types">
+                  <Box
+                    className={`button-item ${location.pathname === "/mirrors/glass-types"
+                        ? "active"
+                        : ""
+                      }`}
+                  >
+                    <img
+                      style={{ paddingRight: 10 }}
+                      src={SettingsIcon}
+                      alt="image of customer"
+                    />
+
+                    <span>Glass Types</span>
+                  </Box>
+                </NavLink>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        </Box>
+      </Box>
+
+      {/* footer  */}
+      <Box sx={{ width: "100%" }}>
+        <div className="line"></div>
+        <NavLink
+          to="/settings"
+          className="link"
+          style={{
+            borderRadius: "6px",
+            margin: 0,
+            height: "fit-content",
+          }}
+        >
+          <Box
+            className={`button-item ${location.pathname === "/settings" ? "active" : ""
+              }`}
+            sx={{ m: 2 }}
+          >
+            <img
+              style={{ paddingRight: 10 }}
+              src={SettingsIcon}
+              alt="image of customer"
+            />
+
+            <span>Settings</span>
+          </Box>
+        </NavLink>
+        <div className="line"></div>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            paddingX: 2,
+            p: 1,
+          }}
+        >
+          <Box sx={{ marginLeft: 1, mr: 1.2 }}>
+            <DefaultImage
+              image={decodedToken?.image}
+              name={decodedToken?.name}
+            />
+          </Box>
+          <Box sx={{ fontSize: 18, color: "white" }}>
+            {decodedToken?.name}
+            <Box
+              sx={{
+                fontSize: 16,
+                color: "white",
+                whiteSpace: "nowrap",
+                width: 160,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap", // Added this line to ensure text doesn't wrap
+              }}
+            >
+              {decodedToken?.email}
+            </Box>
+          </Box>
+          <Tooltip title="Logout" placement="top-start" arrow>
+            <Box
+              sx={{
+                fontSize: 16,
+                marginLeft: 2,
+                width: 50,
+                height: 30,
+                textAlign: "center",
+              }}
+              onClick={() => setOpen(!open)}
+            >
+              <img src={logout} alt="image" />
+            </Box>
+          </Tooltip>
+        </Box>
+      </Box>
     </Box>
   );
 
@@ -789,4 +744,4 @@ const Sidebar = () => {
     </>
   );
 };
-export default Sidebar;
+export default NewSidebar;
