@@ -331,7 +331,7 @@ const NewSidebar = () => {
           <Box sx={{ width: "80%", mx: "auto", mt: 2 }}>
             <NavLink to="/" className="link">
               <Box
-                className={`button-item ${location.pathname === "/" ? "active" : ""
+                className={`button-item ${location.pathname === "/" ? "active-item" : ""
                   }`}
               >
                 <img
@@ -361,7 +361,7 @@ const NewSidebar = () => {
           <Typography className="subtitles"> Management </Typography>
           <NavLink to="/estimates" className="link">
             <Box
-              className={`button-item ${location.pathname.includes("/estimates") ? "active" : ""
+              className={`button-item ${location.pathname.includes("/estimates") ? "active-item" : ""
                 }`}
             >
               <AttachMoney />
@@ -371,7 +371,7 @@ const NewSidebar = () => {
           </NavLink>
           <NavLink to="/customers" className="link">
             <Box
-              className={`button-item ${location.pathname === "/customers" ? "active" : ""
+              className={`button-item ${location.pathname === "/customers" ? "active-item" : ""
                 }`}
             >
               <img src={CustomerIcon} alt="image of customer" />
@@ -381,7 +381,7 @@ const NewSidebar = () => {
           </NavLink>
           <NavLink to="/team" className="link">
             <Box
-              className={`button-item ${location.pathname === "/team" ? "active" : ""
+              className={`button-item ${location.pathname === "/team" ? "active-item" : ""
                 }`}
             >
               <img src={TeamIcon} alt="image of customer" />
@@ -436,7 +436,7 @@ const NewSidebar = () => {
               >
                 <NavLink to="/hardware" className="link">
                   <Box
-                    className={`button-item  ${location.pathname === "/hardware" ? "active" : ""
+                    className={`button-item  ${location.pathname === "/hardware" ? "active-item" : ""
                       }`}
                     sx={{ mt: 1 }}
                   >
@@ -447,7 +447,7 @@ const NewSidebar = () => {
                 </NavLink>
                 <NavLink to="/finishes" className="link">
                   <Box
-                    className={`button-item ${location.pathname === "/finishes" ? "active" : ""
+                    className={`button-item ${location.pathname === "/finishes" ? "active-item" : ""
                       }`}
                   >
                     <FormatColorFillIcon />
@@ -457,7 +457,7 @@ const NewSidebar = () => {
                 </NavLink>
                 <NavLink to="/glass-types" className="link">
                   <Box
-                    className={`button-item ${location.pathname === "/glass-types" ? "active" : ""
+                    className={`button-item ${location.pathname === "/glass-types" ? "active-item" : ""
                       }`}
                   >
                     <img src={HardWairIcon} alt="image of customer" />
@@ -467,7 +467,7 @@ const NewSidebar = () => {
                 </NavLink>
                 <NavLink to="/glass-addons" className="link">
                   <Box
-                    className={`button-item ${location.pathname === "/glass-addons" ? "active" : ""
+                    className={`button-item ${location.pathname === "/glass-addons" ? "active-item" : ""
                       }`}
                   >
                     <img src={HardWairIcon} alt="image of customer" />
@@ -477,7 +477,7 @@ const NewSidebar = () => {
                 </NavLink>
                 <NavLink to="/layouts" className="link">
                   <Box
-                    className={`button-item ${location.pathname === "/layouts" ? "active" : ""
+                    className={`button-item ${location.pathname === "/layouts" ? "active-item" : ""
                       }`}
                   >
                     <img src={DefaultIcon} alt="image of customer" />
@@ -519,7 +519,7 @@ const NewSidebar = () => {
               <AccordionDetails style={{ padding: "10px 0px" }}>
                 <NavLink to="/mirrors/hardwares">
                   <Box
-                    className={`button-item ${location.pathname === "/mirrors/hardwares" ? "active" : ""
+                    className={`button-item ${location.pathname === "/mirrors/hardwares" ? "active-item" : ""
                       }`}
                   >
                     <img src={SettingsIcon} alt="image of customer" />
@@ -530,7 +530,7 @@ const NewSidebar = () => {
                 <NavLink to="/mirrors/glass-addons">
                   <Box
                     className={`button-item ${location.pathname === "/mirrors/glass-addons"
-                        ? "active"
+                        ? "active-item"
                         : ""
                       }`}
                   >
@@ -542,7 +542,7 @@ const NewSidebar = () => {
                 <NavLink to="/mirrors/edge-works">
                   <Box
                     className={`button-item ${location.pathname === "/mirrors/edge-works"
-                        ? "active"
+                        ? "active-item"
                         : ""
                       }`}
                   >
@@ -558,7 +558,7 @@ const NewSidebar = () => {
                 <NavLink to="/mirrors/glass-types">
                   <Box
                     className={`button-item ${location.pathname === "/mirrors/glass-types"
-                        ? "active"
+                        ? "active-item"
                         : ""
                       }`}
                   >
@@ -590,7 +590,7 @@ const NewSidebar = () => {
           }}
         >
           <Box
-            className={`button-item ${location.pathname === "/settings" ? "active" : ""
+            className={`button-item ${location.pathname === "/settings" ? "active-item" : ""
               }`}
             sx={{ m: 2 }}
           >
