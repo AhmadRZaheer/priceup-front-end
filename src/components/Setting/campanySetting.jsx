@@ -283,7 +283,7 @@ const CampanySetting = () => {
                 type="text"
                 name="name"
                 value={formik.values?.name}
-                placeholder={"Add location"}
+                placeholder={"Enter Name"}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.name && Boolean(formik.errors.name)}
@@ -306,7 +306,7 @@ const CampanySetting = () => {
                 type="text"
                 name="address"
                 value={formik.values?.address}
-                placeholder={"change name"}
+                placeholder={"Enter Address"}
                 onChange={formik.handleChange}
               />
             </Box>

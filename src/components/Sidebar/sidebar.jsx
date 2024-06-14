@@ -125,7 +125,7 @@ const Sidebar = () => {
   };
   useEffect(() => {
     refetch();
-    if (['/mirrors/glass-types', '/mirrors/edge-works'].includes(location.pathname)) {
+    if (['/mirrors/glass-types', '/mirrors/edge-works', '/mirrors/glass-addons', '/mirrors/hardwares'].includes(location.pathname)) {
       setExpandMirrorAccordian(true);
     }
     if (['/layouts', '/glass-addons', '/glass-types', '/finishes', '/hardware'].includes(location.pathname)) {
@@ -216,35 +216,49 @@ const Sidebar = () => {
                 <span className="logo">
                   <img src={Logo} alt="price up logo" />
                 </span>
-                <div style={{ paddingLeft: 20 }}>
+                {/* <div style={{ paddingLeft: 20 }}>
                   <DefaultImage
                     image={activeLocation?.company?.image}
                     name={activeLocation?.company?.name}
                   />
-                </div>
+                </div> */}
               </div>
             </NavLink>
-            <div className="center">
-              <ul>
+            <div className="main-container-sidebar">
+            
                 {userReference && (
-                  <li
-                    style={{ marginBottom: 0 }}
-                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                    onClick={handleSeeLocationsClick}
-                  >
+                  // <li
+                  //   style={{ marginBottom: 0,  }}
+                  //   // className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                  //   onClick={handleSeeLocationsClick}
+                  // >
                     <Tooltip title="Switch Location">
                       <IconButton
+                      onClick={handleSeeLocationsClick}
                         sx={{
-                          color: "white",
-                          padding: 0.2,
+                          // mx: 2,
+                          color: "#8477DA",
+                          padding: "4px 20px",
                           display: "flex",
                           width: "100%",
+                          borderRadius: 0,
+                          ":hover": {
+                            background: "none",
+                            backgroundColor: "transparent"
+                          }
                         }}
                       >
-                        <PinDrop sx={{ color: "white" }} />
+                        <Box>
+                            <DefaultImage
+                            image={activeLocation?.company?.image}
+                             name={activeLocation?.company?.name}
+                               />
+                               </Box>
                         <span
                           style={{
                             flexGrow: 1,
+                            paddingLeft: "10px",
+                            paddingRight: "10px",
                             whiteSpace: "nowrap",
                             display: "block",
                             textOverflow: "ellipsis",
@@ -255,32 +269,43 @@ const Sidebar = () => {
                           {" "}
                           {activeLocation?.company?.name}
                         </span>
-                        <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                        <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
                       </IconButton>
                     </Tooltip>
-                  </li>
+                  // </li>
                 )}
 
                 {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
-                  <li
-                    style={{ padding: 10, marginBottom: 0 }}
-                    className={` ${Boolean(anchorEl) ? "active" : ""}`}
-                    onClick={handleSeeLocationsClick}
-                  >
+                  // <li
+                  //   style={{ padding: 10, marginBottom: 0 }}
+                  //   // className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                  //   onClick={handleSeeLocationsClick}
+                  // >
                     <IconButton
+                    onClick={handleSeeLocationsClick}
                       sx={{
-                        color: "white",
-                        padding: 0.2,
+                        color: "#8477DA",
+                        padding: "4px 20px",
                         display: "flex",
                         justifyContent: "space-between",
-                        width: "100%",
                         borderRadius: 0,
+                        ":hover": {
+                          background: "none",
+                          backgroundColor: "transparent"
+                        }
                       }}
                     >
-                      <PinDrop sx={{ color: "white" }} />
+                   <Box>
+                   <DefaultImage
+                            image={activeLocation?.company?.image}
+                             name={activeLocation?.company?.name}
+                               />
+                               </Box>
                       <span
                         style={{
                           flexGrow: 1,
+                          paddingLeft: "10px",
+                            paddingRight: "10px",
                           whiteSpace: "nowrap",
                           display: "block",
                           textOverflow: "ellipsis",
@@ -290,20 +315,22 @@ const Sidebar = () => {
                       >
                         {CustomActiveUser}
                       </span>
-                      <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                      <UnfoldMore sx={{ color: "#8477DA", mr: 1 }} />
                     </IconButton>
-                  </li>
+                  
                 ) : (
                   ""
                 )}
+                
+                <ul style={{listStyleType: "none", paddingLeft: "17px", paddingRight: "17px"}}>
                 <NavLink to="/" className="link">
                   <li
-                    style={{ padding: 10, marginTop: 10 }}
+                    style={{ padding: 10, marginTop: 10,  }}
                     className={`estimates ${location.pathname === "/" ? "active" : ""
                       }`}
                   >
                     <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                      sx={{ color: "white", padding: 0.2, borderRadius: 0, fontSize: "16px" }}
                     >
                       <img
                         style={{ paddingRight: 10 }}
@@ -314,7 +341,13 @@ const Sidebar = () => {
                       <span>Dashboard</span>
                     </IconButton>
                   </li>
+                  
                 </NavLink>
+                </ul>
+                <div className="center">
+                <ul>
+                
+                <Typography sx={{mt: 4, color: "white", fontWeight: "bold", ml: 2, fontSize: "20px"}}> Management </Typography>
                 <NavLink to="/estimates" className="link">
                   <li
                     className={` ${location.pathname.includes("/estimates") ? "active" : ""
@@ -365,29 +398,32 @@ const Sidebar = () => {
                     </IconButton>
                   </li>
                 </NavLink>
+                <Typography sx={{mt: 3, color: "white", fontWeight: "bold", ml: 2, fontSize: "20px"}}> Categories </Typography>
                 <Accordion
                   expanded={expandShowerAccordian} onChange={() => { setExpandShowerAccordian(!expandShowerAccordian) }}
                   sx={{
-                    margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none', "&.MuiAccordionSummary-expandIconWrapper": {
+                    margin: '12px 10px !important', border: 'none', background: 'none',
+                     "&.MuiAccordionSummary-expandIconWrapper": {
                       color: 'white !important'
                     }
                   }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
                     aria-controls="panel1-content"
                     id="panel1-header"
                     sx={{
-                      background: '#8477DA',
+                      background: ' rgba(132, 119, 218, 0.3)',
                       color: 'white',
                       "&.Mui-expanded": {
-                        minHeight: "48px"
+                        minHeight: "40px"
                       },
                       "&.MuiAccordionSummary-content": {
                         marginTop: "12px !important",
                       }
                     }}
                   >
-                    <Typography>Showers</Typography>
+                    <img src={DefaultIcon} alt="showers icon" />
+                    <Typography sx={{pl: 1}}>Showers</Typography>
                   </AccordionSummary>
                   <AccordionDetails style={{ padding: '10px' }}>
                     <NavLink to="/hardware" className="link">
@@ -485,23 +521,24 @@ const Sidebar = () => {
                     </NavLink>
                   </AccordionDetails>
                 </Accordion>
-                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: '2px solid #8477DA', background: 'none' }}>
+                <Accordion expanded={expandMirrorAccordian} onChange={() => { setExpandMirrorAccordian(!expandMirrorAccordian) }} sx={{ margin: '12px 10px !important', border: 'none', background: 'none' }}>
                   <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMoreIcon sx={{color: "white"}} />}
                     aria-controls="panel1-content"
                     id="panel1-header"
                     sx={{
-                      background: '#8477DA',
+                      background: ' rgba(132, 119, 218, 0.3)',
                       color: 'white',
                       "&.Mui-expanded": {
-                        minHeight: "48px"
+                        minHeight: "40px"
                       },
                       "&.MuiAccordionSummary-content": {
                         marginTop: "12px !important",
                       }
                     }}
                   >
-                    <Typography>Mirrors</Typography>
+                    <img src={DefaultIcon} alt="showers icon" />
+                    <Typography sx={{pl: 1}}>Mirrors</Typography>
                   </AccordionSummary>
                   <AccordionDetails style={{ padding: '10px' }}>
                   <NavLink to="/mirrors/hardwares">
@@ -578,13 +615,23 @@ const Sidebar = () => {
                     </NavLink>
                   </AccordionDetails>
                 </Accordion>
-                <NavLink to="/settings" className="link">
-                  <li
-                    className={` ${location.pathname === "/settings" ? "active" : ""
-                      }`}
-                  >
+                </ul>
+                </div>
+                <div className="line"></div>
+                <NavLink to="/settings" className="link" style={{
+                     borderRadius: "6px",
+                     margin: 10,
+                     marginLeft: 25,
+                     marginRight: 20
+                }}>
+                
                     <IconButton
-                      sx={{ color: "white", padding: 0.2, borderRadius: 0 }}
+                      sx={{ color: "white", padding: 0.2, 
+                         background: location.pathname === "/settings" ? "#8477DA" : "transparent", height: "40px",
+                         borderRadius: "6px",
+                         pl: 2,
+                         fontSize: "16px"
+                      }}
                     >
                       <img
                         style={{ paddingRight: 10 }}
@@ -593,10 +640,9 @@ const Sidebar = () => {
                       />
 
                       <span>Settings</span>
-                    </IconButton>
-                  </li>
+            </IconButton>
                 </NavLink>
-              </ul>
+          
             </div>
           </Box>
           <Box>

@@ -18,7 +18,7 @@
     margin: 0px auto;
   }
   .center {
-    height: 72vh !important;
+    height: 68vh !important;
     overflow: auto;
 
     ul {
@@ -41,7 +41,7 @@
         border-radius: 5px;
 
         &:hover {
-          background-color: #8477da;
+          background-color: transparent;
         }
         &.active {
           background-color: #8477da;
@@ -99,7 +99,7 @@
   }
 }
 .center {
-  height: 74vh;
+  height: 68vh;
   overflow: auto; /* Keep the scrollbar visible */
 }
 
@@ -109,4 +109,13 @@
 
 .center::-webkit-scrollbar-thumb {
   background-color: #475467; /* Set the color of the scrollbar thumb */
+}
+.main-container-sidebar{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.active {
+  background-color: #8477da;
+  border-radius: 6px;
 }
