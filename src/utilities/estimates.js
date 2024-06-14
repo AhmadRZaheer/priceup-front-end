@@ -1,10 +1,24 @@
+import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import {
+  EstimateCategory,
   layoutVariants,
   notificationsVariant,
   panelOverWeightAmount,
   quoteState,
   thicknessTypes,
 } from "./constants";
+import {
+  addSelectedItem,
+  resetState,
+  setDoorWeight,
+  setDoorWidth,
+  setPanelWeight,
+  setQuoteState,
+  setReturnWeight,
+  setisCustomizedDoorWidth,
+  updateMeasurements,
+} from "@/redux/estimateCalculations";
+import { calculateAreaAndPerimeter } from "./common";
 
 export const generateNotificationsForCurrentItem = (
   estimateState,
@@ -386,7 +400,11 @@ const getSwitchHingeNotification = (
   }
 };
 
-export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPricing) => {
+export const generateObjectForPDFPreview = (
+  listData,
+  estimateData,
+  showerMiscPricing
+) => {
   let estimateInfoObject;
   let hardwareFinishes = null;
   hardwareFinishes = listData?.hardwareFinishes?.find(
@@ -444,18 +462,22 @@ export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPr
       layoutVariants.DOUBLEBARN,
     ].includes(estimateData?.layoutData?.variant)
   ) {
-    wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map((row) => {
-      const record = listData?.wallClamp?.find(
-        (clamp) => clamp._id === row?.type
-      );
-      return { item: record, count: row.count };
-    });
-    sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map((row) => {
-      const record = listData?.sleeveOver?.find(
-        (clamp) => clamp._id === row?.type
-      );
-      return { item: record, count: row.count };
-    });
+    wallClampArray = estimateData?.config?.mountingClamps?.wallClamp?.map(
+      (row) => {
+        const record = listData?.wallClamp?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
+    sleeveOverArray = estimateData?.config?.mountingClamps?.sleeveOver?.map(
+      (row) => {
+        const record = listData?.sleeveOver?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
     glassToGlassArray = estimateData?.config?.mountingClamps?.glassToGlass?.map(
       (row) => {
         const record = listData?.glassToGlass?.find(
@@ -465,12 +487,14 @@ export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPr
       }
     );
 
-    cornerWallClampArray = estimateData?.config?.cornerClamps?.wallClamp?.map((row) => {
-      const record = listData?.cornerWallClamp?.find(
-        (clamp) => clamp._id === row?.type
-      );
-      return { item: record, count: row.count };
-    });
+    cornerWallClampArray = estimateData?.config?.cornerClamps?.wallClamp?.map(
+      (row) => {
+        const record = listData?.cornerWallClamp?.find(
+          (clamp) => clamp._id === row?.type
+        );
+        return { item: record, count: row.count };
+      }
+    );
 
     cornerSleeveOverArray = estimateData?.config?.cornerClamps?.sleeveOver?.map(
       (row) => {
@@ -481,14 +505,13 @@ export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPr
       }
     );
 
-    cornerGlassToGlassArray = estimateData?.config?.cornerClamps?.glassToGlass?.map(
-      (row) => {
+    cornerGlassToGlassArray =
+      estimateData?.config?.cornerClamps?.glassToGlass?.map((row) => {
         const record = listData?.cornerGlassToGlass?.find(
           (clamp) => clamp._id === row?.type
         );
         return { item: record, count: row.count };
-      }
-    );
+      });
 
     channelItem = listData?.mountingChannel?.find(
       (item) => item._id === estimateData?.config?.mountingChannel
@@ -509,18 +532,18 @@ export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPr
   // );
 
   estimateInfoObject = {
-    name:estimateData?.name,
-    category:estimateData?.category,
-    cost:estimateData?.cost,
-    creatorData:estimateData?.creatorData,
-    creator_type:estimateData?.creator_type,
-    customerData:estimateData?.customerData,
-    settings:estimateData?.settings,
-    status:estimateData?.status,
-    updatedAt:estimateData?.updatedAt,
-    doorWidth:estimateData?.config?.doorWidth,
-    isCustomizedDoorWidth:estimateData?.config?.isCustomizedDoorWidth,
-    additionalFields:estimateData?.config?.additionalFields,
+    name: estimateData?.name,
+    category: estimateData?.category,
+    cost: estimateData?.cost,
+    creatorData: estimateData?.creatorData,
+    creator_type: estimateData?.creator_type,
+    customerData: estimateData?.customerData,
+    settings: estimateData?.settings,
+    status: estimateData?.status,
+    updatedAt: estimateData?.updatedAt,
+    doorWidth: estimateData?.config?.doorWidth,
+    isCustomizedDoorWidth: estimateData?.config?.isCustomizedDoorWidth,
+    additionalFields: estimateData?.config?.additionalFields,
     hardwareFinishes: hardwareFinishes,
     handles: {
       item: handleType,
@@ -578,8 +601,8 @@ export const generateObjectForPDFPreview = (listData, estimateData, showerMiscPr
     sqftArea: estimateData?.config?.sqftArea,
     userProfitPercentage: estimateData?.config?.userProfitPercentage,
     label: estimateData?.config?.label,
-    layout_id:estimateData?.config?.layout_id,
-    measurements:estimateData?.config?.measurements,
+    layout_id: estimateData?.config?.layout_id,
+    measurements: estimateData?.config?.measurements,
     pricingFactor: showerMiscPricing?.pricingFactorStatus
       ? showerMiscPricing?.pricingFactor
       : 1,
@@ -615,4 +638,36 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
     // });
   }
   return result;
+};
+
+export const setStateForShowerEstimate = (item, dispatch, navigate) => {
+  // if (item?.category === EstimateCategory.SHOWERS) {
+  dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+  dispatch(setEstimateState(quoteState.EDIT));
+  dispatch(resetState());
+  dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
+  dispatch(updateMeasurements(item.config.measurements));
+  dispatch(addSelectedItem(item));
+  dispatch(setQuoteState("edit"));
+  const result = calculateAreaAndPerimeter(
+    item.config.measurements,
+    item?.settings?.variant,
+    item.config.glassType.thickness
+  );
+  if (result?.doorWidth && item.config.isCustomizedDoorWidth === false) {
+    dispatch(setDoorWidth(result?.doorWidth));
+  } else {
+    dispatch(setDoorWidth(item?.doorWidth));
+  }
+  if (result?.doorWeight) {
+    dispatch(setDoorWeight(result?.doorWeight));
+  }
+  if (result?.panelWeight) {
+    dispatch(setPanelWeight(result?.panelWeight));
+  }
+  if (result?.returnWeight) {
+    dispatch(setReturnWeight(result?.returnWeight));
+  }
+  navigate("/estimates/dimensions");
+  // }
 };

@@ -15,7 +15,7 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
 import Pagination from "../Pagination/index";
-import { Super_SuperColumns } from "../../customerTableSource";
+import { Super_SuperColumns } from "@/utilities/DataGridColumns";
 import "./super_superAdmins.scss";
 import CustomToggle from "../ui-components/Toggle";
 import TableRow from "../SuperAdmin/tableRow";

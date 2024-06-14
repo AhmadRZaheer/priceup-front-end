@@ -23,7 +23,7 @@ import {
   // DeleteOutlineOutlined,
   // EditOutlined,
 } from "@mui/icons-material";
-import { AdminColumns } from "../../customerTableSource";
+import { AdminColumns } from "@/utilities/DataGridColumns";
 // import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
 import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";

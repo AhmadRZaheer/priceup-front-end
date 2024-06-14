@@ -32,11 +32,12 @@ import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { getEstimatesListRefetch } from "@/redux/refetch";
-import { generateObjectForPDFPreview, renderMeasurementSides } from "@/utilities/estimates";
+import { generateObjectForPDFPreview, renderMeasurementSides, setStateForShowerEstimate } from "@/utilities/estimates";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { resetMirrorEstimateState, setEstimateMeasurements, setSelectedItem } from "@/redux/mirrorsEstimateSlice";
+import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 
 export default function ExistingTable() {
   const navigate = useNavigate();
@@ -92,48 +93,10 @@ export default function ExistingTable() {
 
   const handleIconButtonClick = (item) => {
     if (item?.category === EstimateCategory.SHOWERS) {
-      dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-      dispatch(setEstimateState(quoteState.EDIT));
-      dispatch(resetState());
-      dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
-      dispatch(updateMeasurements(item.config.measurements));
-      dispatch(addSelectedItem(item));
-      dispatch(setQuoteState("edit"));
-      const result = calculateAreaAndPerimeter(
-        item.config.measurements,
-        item?.settings?.variant,
-        item.config.glassType.thickness
-      );
-      if (result?.doorWidth && item.config.isCustomizedDoorWidth === false) {
-        dispatch(setDoorWidth(result?.doorWidth));
-      } else {
-        dispatch(setDoorWidth(item?.doorWidth));
-      }
-      if (result?.doorWeight) {
-        dispatch(setDoorWeight(result?.doorWeight));
-      }
-      if (result?.panelWeight) {
-        dispatch(setPanelWeight(result?.panelWeight));
-      }
-      if (result?.returnWeight) {
-        dispatch(setReturnWeight(result?.returnWeight));
-      }
-      navigate('/estimates/dimensions');
+      setStateForShowerEstimate(item, dispatch, navigate);
+    } else if (item?.category === EstimateCategory.MIRRORS) {
+      setStateForMirrorEstimate(item, dispatch, navigate);
     }
-    else if (item?.category === EstimateCategory.MIRRORS) {
-      dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-      dispatch(setEstimateState(quoteState.EDIT));
-      dispatch(resetMirrorEstimateState());
-      dispatch(setSelectedItem(item));
-      dispatch(setEstimateMeasurements(item.config.measurements));
-      console.log('mirror edit', item);
-      navigate('/estimates/dimensions');
-    }
-    // if (item?.config?.layout_id) {  // default layout edit
-    //   dispatch(setNavigationDesktop("measurements"));
-    // } else { // custom layout edit
-    //   dispatch(setNavigationDesktop("custom"));
-    // }
   };
 
   const handleCreateQuote = () => {
@@ -143,11 +106,11 @@ export default function ExistingTable() {
   };
   useEffect(() => {
     refetchEstimatesList();
-  }, [refetchEstimatesCounter]);
+  }, [refetchEstimatesCounter, page]);
 
-  useEffect(() => {
-    refetchEstimatesList();
-  }, [page])
+  // useEffect(() => {
+  //   refetchEstimatesList();
+  // }, [page])
 
   return (
     <>
