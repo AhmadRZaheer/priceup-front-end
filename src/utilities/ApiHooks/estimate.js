@@ -81,6 +81,7 @@ export const useCreateEstimates = () => {
             status: "pending",
             category: props.category,
             name: `${current_date} ${current_time}`,
+            label: props.label ?? '',
           },
         },
         {
