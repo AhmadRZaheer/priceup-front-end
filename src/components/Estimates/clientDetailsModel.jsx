@@ -62,8 +62,8 @@ export const ClientDetailsModel = ({ open, handleCancel, estimateConfig, estimat
         estimateData: {
           ...estimateConfig,
           layout_id: estimatesLayout?._id || null,
-          label: values.label,
         },
+        label: values.label,
         category: estimateCategory,
         cost: Number(estimatesTotal)
       });
