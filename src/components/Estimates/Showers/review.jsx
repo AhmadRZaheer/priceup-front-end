@@ -1367,7 +1367,7 @@ export const ShowerReview = () => {
                 open={hardwareMissingAlert}
                 handleClose={() => setHardwareMissingAlert(false)}
             />
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} />
+            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} />
         </>
     );
 };

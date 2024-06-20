@@ -30,21 +30,19 @@ const validationSchema = yup.object({
   phone: yup.string().matches(/^[0-9]+$/, "Phone must be numeric"),
 });
 
-export const ClientDetailsModel = ({ open, handleCancel, estimateConfig, estimateCategory }) => {
+export const ClientDetailsModel = ({ open, handleCancel, estimateConfig, estimateCategory, estimatesTotal }) => {
   const {
     mutate,
     isError: ErrorForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateEstimates();
 
-  const estimatesTotal = useSelector(getTotal);
   const estimatesLayout = useSelector(selectedItem);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { data: customerData, refetch, isLoading } = useFetchDataCustomer();
   const [selectedUser, setSelectedUser] = useState();
   const [Tabs, setTabs] = useState("create");
-  const pricing = useSelector(getPricing);
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -67,7 +65,7 @@ export const ClientDetailsModel = ({ open, handleCancel, estimateConfig, estimat
           label: values.label,
         },
         category: estimateCategory,
-        cost: Number(pricing.total)
+        cost: Number(estimatesTotal)
       });
 
     },
@@ -120,7 +118,7 @@ export const ClientDetailsModel = ({ open, handleCancel, estimateConfig, estimat
         layout_id: estimatesLayout?._id || null,
       },
       category: estimateCategory,
-      cost: Number(pricing.total)
+      cost: Number(estimatesTotal)
     });
   };
   useEffect(() => {
