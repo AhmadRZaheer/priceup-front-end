@@ -253,10 +253,11 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   let additionalFieldPrice = 0;
   selectedContent?.additionalFields?.forEach((item) => {
     additionalFieldPrice += Number(
-      item.cost *
-        (estimatesData?.miscPricing?.pricingFactorStatus
-          ? estimatesData?.miscPricing?.pricingFactor
-          : 1)
+      item.cost 
+      // *
+      //   (estimatesData?.miscPricing?.pricingFactorStatus
+      //     ? estimatesData?.miscPricing?.pricingFactor
+      //     : 1)
     );
   });
   let total =

@@ -290,9 +290,11 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost} * {(mirrorLocationSettings.pricingFactorStatus
+                            <Typography>{item.cost}
+                             {/* * {(mirrorLocationSettings.pricingFactorStatus
                               ? mirrorLocationSettings.pricingFactor
-                              : 1)}</Typography>
+                              : 1)} */}
+                              </Typography>
                           </Box>
                         )
                     )}
