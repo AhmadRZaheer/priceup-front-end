@@ -5,7 +5,7 @@ import { getDataRefetch } from "@/redux/staff";
 import { getEstimatesListRefetch } from "@/redux/refetch";
 import { useFetchDataEstimate, useGetEstimates } from "@/utilities/ApiHooks/estimate";
 import { useEffect, useState } from "react";
-import { initializeStateForEditQuote, setListData, setNavigationDesktop, setQuoteState } from "@/redux/estimateCalculations";
+import { initializeStateForEditQuote, resetState, setListData, setNavigationDesktop, setQuoteState } from "@/redux/estimateCalculations";
 import ModeIcon from "@mui/icons-material/Mode";
 import { makeStyles } from "@material-ui/core";
 import Pagination from "@/components/Pagination";
@@ -54,6 +54,7 @@ export default function ExistingListMobile() {
     const handleCreateQuote = () => {
         dispatch(resetMirrorEstimateState());
         dispatch(resetEstimateState());
+        dispatch(resetState());
         navigate("/estimates/category");
     };
     const useStyles = makeStyles({

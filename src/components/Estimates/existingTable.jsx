@@ -102,6 +102,7 @@ export default function ExistingTable() {
   const handleCreateQuote = () => {
     dispatch(resetMirrorEstimateState());
     dispatch(resetEstimateState());
+    dispatch(resetState());
     navigate("/estimates/category");
   };
   useEffect(() => {
