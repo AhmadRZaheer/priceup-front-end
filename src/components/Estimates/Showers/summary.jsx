@@ -612,9 +612,11 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost} * {(listData?.miscPricing?.pricingFactorStatus
+                            <Typography>{item.cost} 
+                            {/* * {(listData?.miscPricing?.pricingFactorStatus
                               ? listData?.miscPricing?.pricingFactor
-                              : 1)}</Typography>
+                              : 1)} */}
+                              </Typography>
                           </Box>
                         )
                     )}

@@ -217,10 +217,11 @@ export const calculateTotal = (
   let additionalFieldPrice = 0;
   selectedContent?.additionalFields?.forEach((item) => {
     additionalFieldPrice += Number(
-      item.cost *
-        (mirrorLocationSettings.pricingFactorStatus
-          ? mirrorLocationSettings.pricingFactor
-          : 1)
+      item.cost 
+      // *
+      //   (mirrorLocationSettings.pricingFactorStatus
+      //     ? mirrorLocationSettings.pricingFactor
+      //     : 1)
     );
   });
 
