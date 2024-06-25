@@ -1,4 +1,4 @@
-import { mirrorHardwareTypes } from "@/utilities/constants";
+import { mirrorHardwareTypes, notificationsVariant } from "@/utilities/constants";
 import { createSlice } from "@reduxjs/toolkit";
 export const getEstimateMeasurements = (state) =>
   state.mirrorsEstimate.measurements;
@@ -13,6 +13,8 @@ export const getAdditionalFields = (state) =>
   state.mirrorsEstimate.content.additionalFields;
 export const getModifiedProfitPercentage = (state) =>
   state.mirrorsEstimate.content.modifiedProfitPercentage;
+export const getNotifications = (state) =>
+  state.mirrorsEstimate.notifications;
 
 const initialState = {
   estimateId: "",
@@ -29,6 +31,20 @@ const initialState = {
     profitPercentage: 0,
     cost: 0,
     total: 0,
+  },
+  notifications: {
+    glassTypeNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    edgeWorkNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
+    glassAddonsNotAvailable: [],
+    hardwaresNotAvailable: [],
   },
   content: {
     modifiedProfitPercentage: 0,
@@ -65,6 +81,13 @@ const mirrorsEstimateSlice = createSlice({
   name: "mirrorsEstimate",
   initialState,
   reducers: {
+    setMultipleNotifications: (state, action) => {
+      const notifications = action.payload;
+      state.notifications = notifications;
+    },
+    resetNotifications: (state) => {
+      state.notifications = initialState.notifications;
+    },
     resetMirrorEstimateState: (state) => {
       return {
         ...initialState,
@@ -249,6 +272,8 @@ export const {
   setSelectedItem,
   initializeStateForEditQuote,
   setModifiedProfitPercentage,
+  setMultipleNotifications,
+  resetNotifications
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;

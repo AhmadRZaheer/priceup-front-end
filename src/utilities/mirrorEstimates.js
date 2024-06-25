@@ -1,5 +1,5 @@
 import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import { EstimateCategory, quoteState } from "./constants";
+import { EstimateCategory, mirrorHardwareTypes, notificationsVariant, quoteState } from "./constants";
 import {
   resetMirrorEstimateState,
   setEstimateMeasurements,
@@ -272,3 +272,181 @@ export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
   // console.log("mirror edit", item);
   navigate("/estimates/dimensions");
 };
+
+
+export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
+  switch(type){
+     case mirrorHardwareTypes.HARDWARES:
+       return selectedItem?.options?.[0]?.status;
+     case mirrorHardwareTypes.GLASSADDONS:
+       return selectedItem?.options?.[0]?.status;
+     case mirrorHardwareTypes.GLASSTYPE:
+       return selectedItem?.options?.find((item)=>item.thickness===activeFinishOrThickness)?.status;
+     case mirrorHardwareTypes.EDGEWORK:
+       return selectedItem?.options?.find((item)=>item.thickness===activeFinishOrThickness)?.status;
+     default:
+       return true;
+  }
+ }
+
+ export const getEstimateErrorStatus = (selectedContent) => {
+  if (selectedContent.glassType?.item) {
+    if(!getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE)){
+     return false;
+    }
+  }
+  if (selectedContent.edgeWork?.item) {
+    if(!getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK)){
+     return false;
+    }
+  }
+  if (selectedContent.glassAddons.length) {
+    let noSelectedDisableFound = true;
+    selectedContent.glassAddons.forEach(element => {
+      if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
+        noSelectedDisableFound = false;
+        return;
+      }
+    });
+    if(!noSelectedDisableFound){
+     return false;
+    }
+   }
+   if (selectedContent.hardwares.length) {
+    let noSelectedDisableFound = true;
+    selectedContent.hardwares.forEach(element => {
+      if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
+        noSelectedDisableFound = false;
+        return;
+      }
+    });
+    if(!noSelectedDisableFound){
+     return false;
+    }
+   }
+  return true;
+}
+
+export const getSelectedContentErrorMsgs = (selectedContent) => {
+  let errors = null;
+  if (selectedContent.glassType?.item) {
+    const status = getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE);
+     if(status === false){
+      errors = {
+        ...errors,
+        glassType:{
+          status:false,
+          message:`"${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`
+        }
+      }
+     } 
+  }
+  if (selectedContent.edgeWork?.item) {
+    const status = getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK);
+     if(status === false){
+      errors = {
+        ...errors,
+        edgeWork:{
+          status:false,
+          message:`"${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`
+        }
+      }
+     } 
+  }
+  if(selectedContent.glassAddons.length){
+    let selectedDisableNames = '';
+  selectedContent.glassAddons.forEach(element => {
+    if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
+      selectedDisableNames += `${element.name}, `;
+    }
+  });
+  if(selectedDisableNames.length){
+    errors = {
+      ...errors,
+      glassAddons:{
+        status:false,
+        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available.`
+      }
+    }
+  }
+  }
+  if(selectedContent.hardwares.length){
+    let selectedDisableNames = '';
+  selectedContent.hardwares.forEach(element => {
+    if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
+      selectedDisableNames += `${element.name}, `;
+    }
+  });
+  if(selectedDisableNames.length){
+    errors = {
+      ...errors,
+      hardwares:{
+        status:false,
+        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available.`
+      }
+    }
+  }
+  }
+return errors;
+}
+
+export const generateNotificationsForCurrentEstimate = (
+  selectedContentFromRedux,
+  notificationsFromRedux
+) => {
+  
+  let selectedContent = { ...selectedContentFromRedux };
+  let notifications = { ...notificationsFromRedux };
+
+    if (selectedContent.glassType?.item) {
+      // generate glass type not available notification in current thickness
+      const status = getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE);
+      if (!status)
+        notifications.glassTypeNotAvailable = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Glass Type "${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`,
+        };
+    }
+    if (selectedContent.edgeWork?.item) {
+      // generate glass type not available notification in current thickness
+      const status = getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK);
+      if (!status)
+        notifications.edgeWorkNotAvailable = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Edge Work "${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`,
+        };
+    }
+    if(selectedContent.glassAddons.length){
+      let glassAddonsNotAvailable = [];
+      selectedContent.glassAddons.forEach(element => {
+        if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
+          glassAddonsNotAvailable.push({
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Glass Addon "${element.name}" is not available.`,
+          });
+        }
+      });
+      if(glassAddonsNotAvailable.length){
+        notifications.glassAddonsNotAvailable = glassAddonsNotAvailable;
+      }
+    }
+    if(selectedContent.hardwares.length){
+      let hardwaresNotAvailable = [];
+      selectedContent.hardwares.forEach(element => {
+        if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
+          hardwaresNotAvailable.push({
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Hardware "${element.name}" is not available.`,
+          });
+        }
+      });
+      if(hardwaresNotAvailable.length){
+        notifications.hardwaresNotAvailable = hardwaresNotAvailable;
+      }
+    }
+ return notifications;
+}

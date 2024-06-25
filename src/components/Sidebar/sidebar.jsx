@@ -547,7 +547,7 @@ const NewSidebar = () => {
                       }`}
                   >
                     <img
-                      style={{ paddingRight: 10 }}
+                      // style={{ paddingRight: 10 }}
                       src={SettingsIcon}
                       alt="image of customer"
                     />
@@ -563,7 +563,7 @@ const NewSidebar = () => {
                       }`}
                   >
                     <img
-                      style={{ paddingRight: 10 }}
+                      // style={{ paddingRight: 10 }}
                       src={SettingsIcon}
                       alt="image of customer"
                     />

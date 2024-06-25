@@ -1,22 +1,16 @@
-import { Delete } from "@mui/icons-material";
+// import { Delete } from "@mui/icons-material";
 import {
     Box,
-    CircularProgress,
+    // CircularProgress,
     FormControl,
-    FormControlLabel,
-    IconButton,
-    Switch,
-    TextField,
+    // FormControlLabel,
+    // IconButton,
+    // Switch,
+    // TextField,
     Typography,
 } from "@mui/material";
-// import { useFormik } from "formik";
-// import * as Yup from "yup";
 import { useEffect, useState } from "react";
-// import {
-//   useDeleteGlassType,
-//   useEditGlassType,
-// } from "../../utilities/ApiHooks/glassType";
-import DeleteIcon from "@/Assets/Delete-Icon.svg";
+// import DeleteIcon from "@/Assets/Delete-Icon.svg";
 import CustomToggle from "@/components/ui-components/Toggle";
 import CustomInputField from "@/components/ui-components/CustomInput";
 // import DeleteModal from "../Modal/deleteModal";
@@ -25,50 +19,10 @@ const HardwareOption = ({
     index,
     option,
     handleUpdateOption,
-    handleDeleteOption,
+    // handleDeleteOption,
 }) => {
-    const LoadingForDelete = false;
+    // const LoadingForDelete = false;
     const [optionState, setOptionState] = useState(option);
-    //   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    //   const handleOpenDeleteModal = (event) => {
-    //     event.preventDefault();
-    //     setDeleteModalOpen(true);
-    //   }
-    //   const {
-    //     mutate: deleteGlassType,
-    //     isLoading: LoadingForDelete,
-    //     isSuccess: SuccessForDelete,
-    //   } = useDeleteGlassType();
-    //   const {
-    //     mutate: editFinish,
-    //     isLoading: LoadingForEdit,
-    //     isSuccess: SuccessForEdit,
-    //   } = useEditGlassType();
-    //   const validationSchema = Yup.object().shape({
-    //     // partNumber: Yup.string().required("Hardware Part Number is required"),
-    //     cost: Yup.number().required("Cost is required"),
-    //     status: Yup.boolean().required("Status is required"),
-    //   });
-    //   const formik = useFormik({
-    //     initialValues: {
-    //       partNumber: data.partNumber,
-    //       cost: data.cost,
-    //       status: data.status,
-    //     },
-    //     validationSchema,
-    // onSubmit: async (values, resetForm) => {
-    //     const glassType = {
-    //         [index]: {
-    //             partNumber: values.partNumber,
-    //             cost: values.cost,
-    //             status: values.status,
-    //         },
-    //     };
-    //     // editFinish({ optionsData: glassType, id: glassTypeId });
-    //     // localStorage.setItem("scrollToIndex", glassTypeId);
-    //     // resetForm();
-    // },
-    //   });
 
     useEffect(() => {
         const scrollToIndex = localStorage.getItem("scrollToIndex");
@@ -81,26 +35,6 @@ const HardwareOption = ({
         }
     }, []);
 
-    //   useEffect(() => {
-    //     if (SuccessForEdit || SuccessForDelete) {
-    //       refetch();
-    //     }
-    //   }, [SuccessForEdit, SuccessForDelete]);
-
-    //   const handlePartChange = (event) => {
-    //     formik.handleChange(event);
-    //     const value = event.target.value;
-    //     if (value.length > 0) {
-    //       const originalArray = [...UpdateValue];
-    //       originalArray[index] = {
-    //         ...data,
-    //         partNumber: value,
-    //         cost: formik.values.cost,
-    //         status: formik.values.status,
-    //       };
-    //       SetUpdateValue(originalArray);
-    //     }
-    //   };
     const handleStatusChange = (event) => {
         const value = event.target.checked;
         setOptionState({ ...optionState, status: value });
@@ -186,7 +120,7 @@ const HardwareOption = ({
                             name="status"
                         />
                     </Box>
-                    <Box sx={{ display: "flex" }}>
+                    {/* <Box sx={{ display: "flex" }}>
                         {LoadingForDelete ? (
                             <CircularProgress size={24} color="warning" />
                         ) : (
@@ -199,7 +133,7 @@ const HardwareOption = ({
                             </IconButton>
                         )}
 
-                    </Box>
+                    </Box> */}
                 </Box>
             </Box>
         </Box>

@@ -12,8 +12,8 @@ import { quoteState } from "@/utilities/constants";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getEstimateState } from "@/redux/estimateSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { getEstimateMeasurements, getSelectedItem, initializeStateForEditQuote, setEstimateMeasurements, setSandBlasting, setSqftArea } from "@/redux/mirrorsEstimateSlice";
-import { getAreaSqft, getSandBlasting } from "@/utilities/mirrorEstimates";
+import { getEstimateMeasurements, getNotifications, getSelectedContent, getSelectedItem, initializeStateForEditQuote, setEstimateMeasurements, setMultipleNotifications, setSandBlasting, setSqftArea } from "@/redux/mirrorsEstimateSlice";
+import { generateNotificationsForCurrentEstimate, getAreaSqft, getSandBlasting } from "@/utilities/mirrorEstimates";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 
@@ -34,6 +34,8 @@ export const MirrorDimensions = () => {
     const measurements = useSelector(getEstimateMeasurements);
     const currentEstimateState = useSelector(getEstimateState);
     const selectedItem = useSelector(getSelectedItem);
+    const selectedContent = useSelector(getSelectedContent);
+    const notifications = useSelector(getNotifications);
     const mirrorsHardware = useSelector(getMirrorsHardware);
     console.log(measurements,'measurements');
     const customInitalValues = {
@@ -82,8 +84,8 @@ export const MirrorDimensions = () => {
         dispatch(setEstimateMeasurements(values));
         const sqft = getAreaSqft(values);
         dispatch(setSqftArea(sqft.areaSqft));
-        // const sandBlasting = getSandBlasting(values, mirrorLocationSettings.sandBlastingMultiplier);
-        // dispatch(setSandBlasting(sandBlasting));
+        const notificationsResult = generateNotificationsForCurrentEstimate(selectedContent,notifications);
+        dispatch(setMultipleNotifications(notificationsResult));
         navigate('/estimates/review');
     };
 

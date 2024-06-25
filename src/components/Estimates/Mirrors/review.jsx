@@ -6,16 +6,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary";
 import { Link, useNavigate } from "react-router-dom";
-import { mirrorHardwareTypes, quoteState } from "@/utilities/constants";
+import { EstimateCategory, mirrorHardwareTypes, quoteState } from "@/utilities/constants";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { ClientDetailsModel } from "../clientDetailsModel";
 import { getEstimateState } from "@/redux/estimateSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getPricing, getSelectedContent, getSqftArea, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
+import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getNotifications, getPricing, getSelectedContent, getSqftArea, resetNotifications, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
-import { calculateTotal, getSandBlasting } from "@/utilities/mirrorEstimates";
+import { calculateTotal, getEstimateErrorStatus, getSandBlasting } from "@/utilities/mirrorEstimates";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
+import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
+import { enqueueSnackbar } from "notistack";
 
 const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -95,6 +97,7 @@ export const MirrorReview = () => {
         isSuccess: CreatedSuccessfullyEdit,
     } = useEditEstimates();
     const [ClientDetailModelOpen, setClientDetailModelOpen] = useState(false);
+    const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
     const [estimateConfig, setEstimateConfig] = useState(null);
     const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
     const hardwaresList = useSelector(getMirrorsHardware);
@@ -102,6 +105,7 @@ export const MirrorReview = () => {
     const estimateId = useSelector(getEstimateId);
     const sqftArea = useSelector(getSqftArea);
     const currentEstimateState = useSelector(getEstimateState);
+    const notifications = useSelector(getNotifications);
     const selectedContent = useSelector(getSelectedContent);
     const pricing = useSelector(getPricing);
     const addedFields = useSelector(getAdditionalFields);
@@ -144,6 +148,8 @@ export const MirrorReview = () => {
     };
 
     const handleEstimateSubmit = () => {
+        const allGoodStatus = getEstimateErrorStatus(selectedContent);
+        if (allGoodStatus) {
         if (currentEstimateState === quoteState.CREATE) {
             const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
             setEstimateConfig(estimateConfig);
@@ -151,6 +157,10 @@ export const MirrorReview = () => {
         } else {
             handleEditEstimate();
             showSnackbar("Estimate Edit successfully", "success");
+        }
+        }
+        else {
+            setHardwareMissingAlert(true);
         }
     }
 
@@ -191,9 +201,42 @@ export const MirrorReview = () => {
         };
     }, []);
 
-    // const floatingSize = useMemo(() => {
-    //     return floatingSizes.find((item) => item.name === selectedContent.floatingSize);
-    // }, [selectedContent.floatingSize])
+    useEffect(() => {
+        console.log("mount");
+        const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
+        let delay = 0;
+        Object.entries(notifications).forEach(([key, value]) => {
+            if (
+                ["glassAddonsNotAvailable", "hardwaresNotAvailable"].includes(key)
+            ) {
+                value?.forEach((item) => {
+                    if (item.status) {
+                        setTimeout(() => {
+                            enqueueSnackbar(item.message, {
+                                variant: item.variant,
+                                // autoHideDuration: 5000, // Set a custom duration for each snackbar
+                            });
+                        }, delay);
+                        delay += delayBetweenSnackbars;
+                    }
+                });
+            } else {
+                if (value.status) {
+                    setTimeout(() => {
+                        enqueueSnackbar(value.message, {
+                            variant: value.variant,
+                            // autoHideDuration: 5000, // Set a custom duration for each snackbar
+                        });
+                    }, delay);
+                    delay += delayBetweenSnackbars;
+                }
+            }
+        });
+        return () => {
+            console.log("unmount");
+            dispatch(resetNotifications());
+        };
+    }, []);
 
     return (
         <>
@@ -1425,7 +1468,12 @@ export const MirrorReview = () => {
                     )}
                 </Box>
             </Box>
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} />
+            <HardwareMissingAlert
+                open={hardwareMissingAlert}
+                handleClose={() => setHardwareMissingAlert(false)}
+                estimateCategory={EstimateCategory.MIRRORS}
+            />
+            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={EstimateCategory.MIRRORS} estimatesTotal={pricing.total} />
         </>
     );
 };
