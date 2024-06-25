@@ -37,7 +37,7 @@ import Summary from "./summary";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "@/utilities/common";
 import { Link, useNavigate } from "react-router-dom";
-import { layoutVariants, quoteState } from "@/utilities/constants";
+import { EstimateCategory, layoutVariants, quoteState } from "@/utilities/constants";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { useSnackbar } from "notistack";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
@@ -1366,8 +1366,9 @@ export const ShowerReview = () => {
             <HardwareMissingAlert
                 open={hardwareMissingAlert}
                 handleClose={() => setHardwareMissingAlert(false)}
+                estimateCategory={EstimateCategory.SHOWERS}
             />
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} />
+            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={EstimateCategory.SHOWERS} estimatesTotal={estimatesTotal} />
         </>
     );
 };

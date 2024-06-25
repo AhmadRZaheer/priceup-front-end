@@ -234,7 +234,7 @@ const GlassTypeItem = ({
               />
             </Box>
             <Box sx={{ display: "flex" }}>
-              {LoadingForDelete ? (
+              {/* {LoadingForDelete ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <IconButton
@@ -244,7 +244,7 @@ const GlassTypeItem = ({
                 >
                   <img src={DeleteIcon} alt="delete icon" />
                 </IconButton>
-              )}
+              )} */}
               {/* {LoadingForEdit ? (
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
