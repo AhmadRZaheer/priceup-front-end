@@ -45,6 +45,7 @@ import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { ClientDetailsModel } from "../clientDetailsModel";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
+import { CustomerSelectModal } from "../CustomerSelectModal";
 
 export const generateEstimatePayload = (estimateState, measurements, selectedContent, layout_id, isCustomizedDoorWidth, doorWidthredux, perimeter, sqftArea) => {
     let measurementsArray = measurements;
@@ -1367,7 +1368,8 @@ export const ShowerReview = () => {
                 open={hardwareMissingAlert}
                 handleClose={() => setHardwareMissingAlert(false)}
             />
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} />
+            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} />
+            {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} /> */}
         </>
     );
 };

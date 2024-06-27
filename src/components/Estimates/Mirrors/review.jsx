@@ -16,6 +16,7 @@ import CustomToggle from "@/components/ui-components/Toggle";
 import { calculateTotal, getSandBlasting } from "@/utilities/mirrorEstimates";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
+import { CustomerSelectModal } from "../CustomerSelectModal";
 
 const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -1425,7 +1426,8 @@ export const MirrorReview = () => {
                     )}
                 </Box>
             </Box>
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} />
+            {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> */}
+            <CustomerSelectModal  open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> 
         </>
     );
 };
