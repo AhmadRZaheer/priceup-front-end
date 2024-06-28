@@ -19,8 +19,11 @@ import CustomIconButton from "@/components/ui-components/CustomButton";
 import ModeIcon from "@mui/icons-material/Mode";
 import EditCustomer from "@/components/Modal/editCustomer";
 
+const itemsPerPage = 10;
+const MAX_PAGES_DISPLAYED = 3;
 const CustomerTable = () => {
-  const { data: customerData, refetch: customersRefetch } = useFetchDataCustomer();
+  const { data: customerData, refetch: customersRefetch } =
+    useFetchDataCustomer();
   // const refetchData = useSelector(getDataRefetch);
   const [search, setSearch] = useState("");
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
@@ -44,7 +47,7 @@ const CustomerTable = () => {
   const handleOpenEdit = (item) => {
     setSelectedRowData(item);
     setOpenEditModal(true);
-  }
+  };
   const actionColumn = [
     {
       field: "Actions",
@@ -68,7 +71,7 @@ const CustomerTable = () => {
               buttonText="View Quotes"
             />
             <Box
-              sx={{ marginLeft: '10px' }}
+              sx={{ marginLeft: "10px" }}
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
@@ -87,10 +90,10 @@ const CustomerTable = () => {
   ];
 
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
 
   const getPageNumbersToShow = () => {
     if (totalPages <= MAX_PAGES_DISPLAYED) {
@@ -126,10 +129,40 @@ const CustomerTable = () => {
 
   const handlePreviousPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
+    setIsShowInput(false);
   };
 
   const handleNextPage = () => {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    setIsShowInput(false);
+  };
+
+  const handleInputChange = (event) => {
+    setInputPage(event.target.value);
+  };
+  const HandleShowInput = () => {
+    setIsShowInput(true);
+  };
+  const HandleShowRemoveInput = () => {
+    setIsShowInput(false);
+  };
+  const handleInputKeyPress = (event) => {
+    if (event.key === "Enter") {
+      const pageNumber = parseInt(inputPage, 10);
+      if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+        setPage(pageNumber);
+        setInputPage("");
+        setIsShowInput(false);
+      }
+    }
+  };
+
+  const handleInputBlur = () => {
+    setInputPage("");
+  };
+
+  const handleEllipsisClick = () => {
+    setInputPage(page.toString());
   };
 
   return (
@@ -193,16 +226,13 @@ const CustomerTable = () => {
             {filteredData.length >= 1 ? (
               <>
                 <DataGrid
-                  style={{
-                    border: "none",
-                  }}
+                  style={{ border: "none" }}
                   getRowId={(row) => row._id}
                   rows={filteredData.slice(
                     (page - 1) * itemsPerPage,
                     page * itemsPerPage
                   )}
                   columns={CustomerColumns.concat(actionColumn)}
-                  page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
                   sx={{ width: "100%" }}
@@ -230,7 +260,7 @@ const CustomerTable = () => {
                     }}
                     variant="outlined"
                     onClick={handlePreviousPage}
-                    disabled={page === 0}
+                    disabled={page === 1}
                   >
                     <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
                     Previous
@@ -239,7 +269,12 @@ const CustomerTable = () => {
                     {pageNumbersToShow.map((pagenumber, index) => (
                       <Box
                         key={index}
-                        onClick={() => setPage(pagenumber)}
+                        onClick={() => {
+                          if (typeof pagenumber === "number") {
+                            setPage(pagenumber);
+                            HandleShowRemoveInput();
+                          }
+                        }}
                         sx={{
                           backgroundColor:
                             page === pagenumber
@@ -252,10 +287,39 @@ const CustomerTable = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          cursor: "pointer",
+                          cursor:
+                            typeof pagenumber === "number"
+                              ? "pointer"
+                              : "default",
                         }}
                       >
-                        {pagenumber}
+                        {isShowInput && pagenumber === "..." ? (
+                          <TextField
+                            size="small"
+                            variant="outlined"
+                            type="text"
+                            value={inputPage}
+                            onChange={handleInputChange}
+                            onKeyPress={handleInputKeyPress}
+                            onBlur={handleInputBlur}
+                            inputProps={{
+                              min: 1,
+                              max: totalPages,
+                              inputMode: "numeric",
+                              pattern: "[0-9]*",
+                            }}
+                            sx={{ width: 60 }}
+                          />
+                        ) : pagenumber === "..." ? (
+                          <div
+                            onClick={HandleShowInput}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {pagenumber}{" "}
+                          </div>
+                        ) : (
+                          pagenumber
+                        )}
                       </Box>
                     ))}
                   </Box>
@@ -272,7 +336,7 @@ const CustomerTable = () => {
                       },
                     }}
                     onClick={handleNextPage}
-                    disabled={filteredData.length === 0}
+                    disabled={page === totalPages}
                   >
                     Next
                     <ArrowForward
