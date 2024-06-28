@@ -18,6 +18,7 @@ import { showSnackbar } from "@/redux/snackBarSlice";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { enqueueSnackbar } from "notistack";
+import { CustomerSelectModal } from "../CustomerSelectModal";
 
 const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -1473,7 +1474,8 @@ export const MirrorReview = () => {
                 handleClose={() => setHardwareMissingAlert(false)}
                 estimateCategory={EstimateCategory.MIRRORS}
             />
-            <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={EstimateCategory.MIRRORS} estimatesTotal={pricing.total} />
+            {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> */}
+            <CustomerSelectModal  open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> 
         </>
     );
 };

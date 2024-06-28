@@ -101,7 +101,7 @@ export const useCreateEstimates = () => {
         dispatch(
           showSnackbar({
             message: "An error occurred while creating the data",
-            severity: "success",
+            severity: "error",
           })
         );
         throw Error("An error occurred while creating the data.");
@@ -110,7 +110,7 @@ export const useCreateEstimates = () => {
       dispatch(
         showSnackbar({
           message: `${error.response?.data?.message}`,
-          severity: "success",
+          severity: "error",
         })
       );
       throw new Error("An error occurred while creating the data.");
