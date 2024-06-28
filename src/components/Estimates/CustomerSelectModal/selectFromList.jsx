@@ -18,8 +18,8 @@ const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleSte
         } else {
             const filteredData = customerList.filter(
                 (customer) =>
-                    customer.name.toLowerCase().includes(value.toLowerCase()) ||
-                    customer.email.toLowerCase().includes(value.toLowerCase())
+                    customer.name?.toLowerCase().includes(value.toLowerCase()) ||
+                    customer.email?.toLowerCase().includes(value.toLowerCase())
             );
             setFilteredCustomer(filteredData);
         }
