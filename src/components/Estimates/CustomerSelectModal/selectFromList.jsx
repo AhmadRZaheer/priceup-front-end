@@ -6,7 +6,7 @@ import { Box, Button, TextField, InputAdornment, CircularProgress, Typography } 
 import { useEffect, useState } from "react";
 
 const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleStepChange }) => {
-    const { data: customerList, refetch, isLoading } = useFetchDataCustomer();
+    const { data: customerList, refetch, isFetching } = useFetchDataCustomer();
     const [searchQuery, setSearchQuery] = useState("");
     const [filteredCustomer, setFilteredCustomer] = useState([]);
     const handleSearchChange = (event) => {
@@ -28,9 +28,7 @@ const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleSte
         setSelectedUser(selectedOption);
     };
     useEffect(() => {
-        if(customerList){
         setFilteredCustomer(customerList);
-        }
         refetch();
     }, [customerList]);
     return (<Box>
@@ -98,7 +96,7 @@ const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleSte
                     boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
                 }}
             >
-                {isLoading ? (
+                {isFetching ? (
                     <CircularProgress size={28} color="primary" sx={{justifySelf:'center',alignSelf:'center'}} />
                 ) : customerList?.length === 0 || !customerList ? (
                     <Typography
