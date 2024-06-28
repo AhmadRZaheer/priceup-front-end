@@ -56,7 +56,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
                     <TextField
                         id="firstName"
                         name="firstName"
-                        placeholder="First Name"
+                        placeholder="Enter First Name"
                         size="small"
                         variant="outlined"
                         InputProps={{
@@ -103,7 +103,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
                     <TextField
                         id="lastName"
                         name="lastName"
-                        placeholder="Last Name"
+                        placeholder="Enter Last Name"
                         size="small"
                         variant="outlined"
                         value={formik.values.lastName}
@@ -151,7 +151,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
                 <TextField
                     id="email"
                     name="email"
-                    placeholder="Client Email address"
+                    placeholder="Enter Email address"
                     size="small"
                     variant="outlined"
                     value={formik.values.email}
@@ -194,7 +194,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
                 <TextField
                     id="phone"
                     name="phone"
-                    placeholder="Client Email address"
+                    placeholder="Enter Phone Number"
                     size="small"
                     variant="outlined"
                     value={formik.values.phone}
@@ -237,7 +237,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
                 <TextField
                     id="address"
                     name="address"
-                    placeholder="Client address"
+                    placeholder="Enter Address"
                     size="small"
                     variant="outlined"
                     value={formik.values.address}
