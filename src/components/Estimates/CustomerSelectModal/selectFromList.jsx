@@ -28,7 +28,9 @@ const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleSte
         setSelectedUser(selectedOption);
     };
     useEffect(() => {
+        if(customerList){
         setFilteredCustomer(customerList);
+        }
         refetch();
     }, [customerList]);
     return (<Box>
@@ -97,8 +99,8 @@ const SelectFromList = ({ handleCancel, selectedUser, setSelectedUser, handleSte
                 }}
             >
                 {isLoading ? (
-                    <CircularProgress size={24} color="#8477da" />
-                ) : customerList?.length === 0 ? (
+                    <CircularProgress size={28} color="primary" sx={{justifySelf:'center',alignSelf:'center'}} />
+                ) : customerList?.length === 0 || !customerList ? (
                     <Typography
                         sx={{ color: "gray", textAlign: "center", p: 1 }}
                     >

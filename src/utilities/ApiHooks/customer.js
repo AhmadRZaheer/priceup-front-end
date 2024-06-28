@@ -25,7 +25,7 @@ export const useFetchDataCustomer = () => {
     queryKey: ["customerData"],
     queryFn: fetchData,
     enabled: false,
-    placeholderData: [],
+    // placeholderData: [],
   });
 };
 export const useGetQuote = () => {

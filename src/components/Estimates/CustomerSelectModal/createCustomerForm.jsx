@@ -6,6 +6,7 @@ const CreateCustomerForm = ({ setSelectedUser, handleStepChange }) => {
     const validationSchema = yup.object({
         firstName: yup.string().required("First Name is required"),
         lastName: yup.string().required("Last Name is required"),
+        email: yup.string().email('Email must be valid'),
         phone: yup.string().matches(/^[0-9]+$/, "Phone must be numeric"),
     });
     const formik = useFormik({
