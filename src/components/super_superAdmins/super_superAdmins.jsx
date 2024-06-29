@@ -24,28 +24,36 @@ import EditIcon from "../../Assets/d.svg";
 import Create_Edit_SuperSuperAdmin from "../Modal/editSuper_SuperAdmin";
 import CustomIconButton from "../ui-components/CustomButton";
 import DeleteModal from "../Modal/deleteModal";
+import NewPagination from "../Pagination/new_index";
 
 const Super_SuperAdminsTable = () => {
   const { data: SuperData, isLoading, refetch } = useFetchSuperSuperAdmin();
-  const { mutate: DeleteSuper_SuperAdmin, isSuccess: DeletedSuccessfully, isLoading: loaderForDelete } =
-    useDeleteSuper_SuperAdmin();
+  const {
+    mutate: DeleteSuper_SuperAdmin,
+    isSuccess: DeletedSuccessfully,
+    isLoading: loaderForDelete,
+  } = useDeleteSuper_SuperAdmin();
   const [Super_SuperData, setSuper_SuperData] = useState([]);
   const [Super_ModalOpen, setSuper_ModalOpen] = useState(false);
   const [Super_isEdit, setSuper_isEdit] = useState(false);
   const [Super_SelectedData, setSuper_SelectedData] = useState(null);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord,setDeleteRecord] = useState(null);
+  const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
-  }
-  const filteredData = Super_SuperData?.filter((item) =>
-    item?.name.toLowerCase().includes(search.toLowerCase())
-  ) ?? [];
+  };
+  const filteredData =
+    Super_SuperData?.filter((item) =>
+      item?.name.toLowerCase().includes(search.toLowerCase())
+    ) ?? [];
   const itemsPerPage = 10;
-  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
+  const superSuperAdminsList =
+    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
   // const token = localStorage.getItem("token");
   // const decodedToken = parseJwt(token);
 
@@ -77,7 +85,7 @@ const Super_SuperAdminsTable = () => {
     const filterLoginUser = async () => {
       let filterUsers = await SuperData?.filter(
         (item) => !superSuperAdminsList.includes(item?.email)
-          // item?.email !== decodedToken?.email
+        // item?.email !== decodedToken?.email
       );
       setSuper_SuperData(filterUsers);
     };
@@ -234,9 +242,18 @@ const Super_SuperAdminsTable = () => {
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-                <Pagination
+                {/* <Pagination
                   totalRecords={filteredData ? filteredData?.length : 0}
                   itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                /> */}
+                <NewPagination
+                  totalRecords={filteredData ? filteredData?.length : 0}
+                  setIsShowInput={setIsShowInput}
+                  isShowInput={isShowInput}
+                  setInputPage={setInputPage}
+                  inputPage={inputPage}
                   page={page}
                   setPage={setPage}
                 />
@@ -247,7 +264,9 @@ const Super_SuperAdminsTable = () => {
       </Box>
       <DeleteModal
         open={deleteModalOpen}
-        close={()=>{setDeleteModalOpen(false)}}
+        close={() => {
+          setDeleteModalOpen(false);
+        }}
         isLoading={loaderForDelete}
         handleDelete={handleDeleteAdmin}
       />

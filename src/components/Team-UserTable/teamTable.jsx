@@ -29,6 +29,7 @@ import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import DeleteModal from "../Modal/deleteModal";
+import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -45,7 +46,7 @@ const TeamTable = () => {
     team.name.toLowerCase().includes(search.toLowerCase())
   );
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord,setDeleteRecord] = useState(null);
+  const [deleteRecord, setDeleteRecord] = useState(null);
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
     setOpen(true);
@@ -60,7 +61,7 @@ const TeamTable = () => {
   const handleOpenDeleteModal = (teamdata) => {
     setDeleteRecord(teamdata);
     setDeleteModalOpen(true);
-  }
+  };
   const handleTeamMemberDelete = async () => {
     if (deleteRecord?.company_id !== decodedToken.company_id) {
       const haveAccessss = deleteRecord.haveAccessTo.filter(
@@ -75,7 +76,7 @@ const TeamTable = () => {
       console.log("delete finish");
       await deleteTeamMember(deleteRecord._id);
       setMatchingId(deleteRecord._id);
-      // teamMemberRefetch(); 
+      // teamMemberRefetch();
     }
     setDeleteModalOpen(false);
   };
@@ -156,10 +157,10 @@ const TeamTable = () => {
   ];
 
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
 
   const getPageNumbersToShow = () => {
     if (totalPages <= MAX_PAGES_DISPLAYED) {
@@ -195,10 +196,36 @@ const TeamTable = () => {
 
   const handlePreviousPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
+    setIsShowInput(false);
   };
 
   const handleNextPage = () => {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    setIsShowInput(false);
+  };
+
+  const handleInputChange = (event) => {
+    setInputPage(event.target.value);
+  };
+  const HandleShowInput = () => {
+    setIsShowInput(true);
+  };
+  const HandleShowRemoveInput = () => {
+    setIsShowInput(false);
+  };
+  const handleInputKeyPress = (event) => {
+    if (event.key === "Enter") {
+      const pageNumber = parseInt(inputPage, 10);
+      if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+        setPage(pageNumber);
+        setInputPage("");
+        setIsShowInput(false);
+      }
+    }
+  };
+
+  const handleInputBlur = () => {
+    setInputPage("");
   };
 
   return (
@@ -283,7 +310,7 @@ const TeamTable = () => {
                   page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
-                  pageSizeOptions={[1, , 25]}
+                  // pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
                 />
@@ -293,6 +320,7 @@ const TeamTable = () => {
                     justifyContent: "space-between",
                     padding: "10px",
                     borderTop: "1px solid #EAECF0",
+                    width: "96%",
                   }}
                 >
                   <Button
@@ -309,7 +337,7 @@ const TeamTable = () => {
                     }}
                     variant="outlined"
                     onClick={handlePreviousPage}
-                    disabled={page === 0}
+                    disabled={page === 1}
                   >
                     <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
                     Previous
@@ -318,23 +346,56 @@ const TeamTable = () => {
                     {pageNumbersToShow.map((pagenumber, index) => (
                       <Box
                         key={index}
-                        onClick={() => setPage(pagenumber)}
+                        onClick={() => {
+                          if (typeof pagenumber === "number") {
+                            setPage(pagenumber);
+                            HandleShowRemoveInput();
+                          }
+                        }}
                         sx={{
                           backgroundColor:
-                            page === pagenumber
-                              ? "rgba(144, 136, 192, 0.2)"
-                              : "white",
-                          color: page === pagenumber ? "#353050" : "#667085",
+                            page === pagenumber ? "#8477DA" : "white",
+                          color: page === pagenumber ? "white" : "#8477DA",
                           width: "40px",
                           height: "40px",
                           borderRadius: "8px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          cursor: "pointer",
+                          border: "1px solid #8477DA",
+                          cursor:
+                            typeof pagenumber === "number"
+                              ? "pointer"
+                              : "default",
                         }}
                       >
-                        {pagenumber}
+                        {isShowInput && pagenumber === "..." ? (
+                          <TextField
+                            size="small"
+                            variant="outlined"
+                            type="text"
+                            value={inputPage}
+                            onChange={handleInputChange}
+                            onKeyPress={handleInputKeyPress}
+                            onBlur={handleInputBlur}
+                            inputProps={{
+                              min: 1,
+                              max: totalPages,
+                              inputMode: "numeric",
+                              pattern: "[0-9]*",
+                            }}
+                            sx={{ width: 60 }}
+                          />
+                        ) : pagenumber === "..." ? (
+                          <div
+                            onClick={HandleShowInput}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {pagenumber}{" "}
+                          </div>
+                        ) : (
+                          pagenumber
+                        )}
                       </Box>
                     ))}
                   </Box>
@@ -351,7 +412,7 @@ const TeamTable = () => {
                       },
                     }}
                     onClick={handleNextPage}
-                    disabled={filteredData.length === 0}
+                    disabled={page === totalPages}
                   >
                     Next
                     <ArrowForward
@@ -375,11 +436,13 @@ const TeamTable = () => {
           </div>
         </Box>
         <DeleteModal
-        open={deleteModalOpen}
-        close={()=>{setDeleteModalOpen(false)}}
-        isLoading={loaderForDelete}
-        handleDelete={handleTeamMemberDelete}
-      />
+          open={deleteModalOpen}
+          close={() => {
+            setDeleteModalOpen(false);
+          }}
+          isLoading={loaderForDelete}
+          handleDelete={handleTeamMemberDelete}
+        />
         <AddTeamMembers
           open={open}
           close={handleClose}
