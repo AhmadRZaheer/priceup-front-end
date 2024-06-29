@@ -277,16 +277,15 @@ const CustomerTable = () => {
                         }}
                         sx={{
                           backgroundColor:
-                            page === pagenumber
-                              ? "rgba(144, 136, 192, 0.2)"
-                              : "white",
-                          color: page === pagenumber ? "#353050" : "#667085",
+                            page === pagenumber ? "#8477DA" : "white",
+                          color: page === pagenumber ? "white" : "#8477DA",
                           width: "40px",
                           height: "40px",
                           borderRadius: "8px",
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
+                          border: "1px solid #8477DA",
                           cursor:
                             typeof pagenumber === "number"
                               ? "pointer"

@@ -195,12 +195,13 @@ export default function AddEditFinish({ open, close, quoteId }) {
                 sx={{ width: "100%" }}
                 hideFooter
               />
-              <Pagination
+              {/* <Pagination
                 totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
                 itemsPerPage={itemsPerPage}
                 page={page}
                 setPage={setPage}
-              />
+              /> */}
+              
 
             </Box>
           ) : (

@@ -33,6 +33,7 @@ import EditIcon from "../../Assets/d.svg";
 // import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
+import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
 
 const SuperAdminTeam = () => {
   const {
@@ -178,10 +179,10 @@ const SuperAdminTeam = () => {
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
 
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
 
   const getPageNumbersToShow = () => {
     if (totalPages <= MAX_PAGES_DISPLAYED) {
@@ -217,12 +218,37 @@ const SuperAdminTeam = () => {
 
   const handlePreviousPage = () => {
     setPage((prevPage) => Math.max(prevPage - 1, 1));
+    setIsShowInput(false);
   };
 
   const handleNextPage = () => {
     setPage((prevPage) => Math.min(prevPage + 1, totalPages));
+    setIsShowInput(false);
   };
 
+  const handleInputChange = (event) => {
+    setInputPage(event.target.value);
+  };
+  const HandleShowInput = () => {
+    setIsShowInput(true);
+  };
+  const HandleShowRemoveInput = () => {
+    setIsShowInput(false);
+  };
+  const handleInputKeyPress = (event) => {
+    if (event.key === "Enter") {
+      const pageNumber = parseInt(inputPage, 10);
+      if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+        setPage(pageNumber);
+        setInputPage("");
+        setIsShowInput(false);
+      }
+    }
+  };
+
+  const handleInputBlur = () => {
+    setInputPage("");
+  };
   return (
     <>
       <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
@@ -307,7 +333,7 @@ const SuperAdminTeam = () => {
                       justifyContent: "space-between",
                       padding: "10px",
                       borderTop: "1px solid #EAECF0",
-                      width: "98%",
+                      width: "96%",
                     }}
                   >
                     <Button
@@ -324,35 +350,67 @@ const SuperAdminTeam = () => {
                       }}
                       variant="outlined"
                       onClick={handlePreviousPage}
-                      disabled={page === 0}
+                      disabled={page === 1}
                     >
                       <ArrowBack
                         sx={{ color: "#344054", fontSize: 20, mr: 1 }}
                       />
                       Previous
                     </Button>
-
                     <Box sx={{ display: "flex", gap: 2 }}>
                       {pageNumbersToShow.map((pagenumber, index) => (
                         <Box
                           key={index}
-                          onClick={() => setPage(pagenumber)}
+                          onClick={() => {
+                            if (typeof pagenumber === "number") {
+                              setPage(pagenumber);
+                              HandleShowRemoveInput();
+                            }
+                          }}
                           sx={{
                             backgroundColor:
-                              page === pagenumber
-                                ? "rgba(144, 136, 192, 0.2)"
-                                : "white",
-                            color: page === pagenumber ? "#353050" : "#667085",
+                              page === pagenumber ? "#8477DA" : "white",
+                            color: page === pagenumber ? "white" : "#8477DA",
                             width: "40px",
                             height: "40px",
                             borderRadius: "8px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            cursor: "pointer",
+                            border: "1px solid #8477DA",
+                            cursor:
+                              typeof pagenumber === "number"
+                                ? "pointer"
+                                : "default",
                           }}
                         >
-                          {pagenumber}
+                          {isShowInput && pagenumber === "..." ? (
+                            <TextField
+                              size="small"
+                              variant="outlined"
+                              type="text"
+                              value={inputPage}
+                              onChange={handleInputChange}
+                              onKeyPress={handleInputKeyPress}
+                              onBlur={handleInputBlur}
+                              inputProps={{
+                                min: 1,
+                                max: totalPages,
+                                inputMode: "numeric",
+                                pattern: "[0-9]*",
+                              }}
+                              sx={{ width: 60 }}
+                            />
+                          ) : pagenumber === "..." ? (
+                            <div
+                              onClick={HandleShowInput}
+                              style={{ cursor: "pointer" }}
+                            >
+                              {pagenumber}{" "}
+                            </div>
+                          ) : (
+                            pagenumber
+                          )}
                         </Box>
                       ))}
                     </Box>
@@ -369,7 +427,7 @@ const SuperAdminTeam = () => {
                         },
                       }}
                       onClick={handleNextPage}
-                      disabled={filteredData.length === 0}
+                      disabled={page === totalPages}
                     >
                       Next
                       <ArrowForward
@@ -379,9 +437,7 @@ const SuperAdminTeam = () => {
                   </Box>
                 </>
               ) : (
-                <Box
-                  sx={{ color: "#667085", p: 2, textAlign: "center"}}
-                >
+                <Box sx={{ color: "#667085", p: 2, textAlign: "center" }}>
                   No Users Found
                 </Box>
               )}
