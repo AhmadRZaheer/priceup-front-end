@@ -31,8 +31,8 @@ export default function Customers() {
   const [selectedRowData, setSelectedRowData] = React.useState(null);
   const filteredData = customerData?.filter(
     (customer) =>
-      customer.name.toLowerCase().includes(search.toLowerCase()) ||
-      customer.email.toLowerCase().includes(search.toLowerCase())
+      customer?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      customer?.email?.toLowerCase().includes(search.toLowerCase())
   );
   useEffect(() => {
     refetch();
