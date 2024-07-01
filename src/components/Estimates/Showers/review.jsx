@@ -43,7 +43,6 @@ import { useSnackbar } from "notistack";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
-import { ClientDetailsModel } from "../clientDetailsModel";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { CustomerSelectModal } from "../CustomerSelectModal";
 
