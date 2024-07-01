@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   IconButton,
@@ -6,6 +6,7 @@ import {
   InputAdornment,
   TextField,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import {
@@ -56,19 +57,29 @@ import {
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import NewPagination from "../Pagination";
 
+const debounce = (func, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
+
 export default function ExistingTable() {
   const navigate = useNavigate();
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   const [search, setSearch] = useState("");
-    const [page, setPage] = useState(1);
-    const [inputPage, setInputPage] = useState("");
-    const [isShowInput, setIsShowInput] = useState(false);
+  const [page, setPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
   const {
     data: estimatesList,
     isLoading: estimatesListFetching,
     refetch: refetchEstimatesList,
-  } = useGetEstimates(page, itemsPerPage);
+  } = useGetEstimates(page, itemsPerPage, search);
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   // const {
@@ -91,9 +102,7 @@ export default function ExistingTable() {
 
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
-      return estimatesList?.estimates?.filter((item) =>
-        item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
-      );
+      return estimatesList?.estimates;
     } else {
       return [];
     }
@@ -150,6 +159,18 @@ export default function ExistingTable() {
     refetchEstimatesList();
   }, [refetchEstimatesCounter, page]);
 
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      refetchEstimatesList();
+    }, 500),
+    []
+  );
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    debouncedRefetch();
+  };
+
   // useEffect(() => {
   //   refetchEstimatesList();
   // }, [page])
@@ -164,14 +185,14 @@ console.log(estimatesList, "estimatesList")
         }}
       >
         <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
-          Estimates
+          Estimates 
         </Typography>
         {/* Search input field */}
         <TextField
           placeholder="Search by Customer Name"
           value={search}
           variant="standard"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleChange(e)}
           sx={{
             mb: 2,
             ".MuiInputBase-root:after": {
