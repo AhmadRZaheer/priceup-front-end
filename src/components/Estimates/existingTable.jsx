@@ -33,7 +33,7 @@ import { useNavigate } from "react-router-dom";
 import { calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination/index_dep";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { getEstimatesListRefetch } from "@/redux/refetch";
 import {
@@ -54,7 +54,7 @@ import {
   setSelectedItem,
 } from "@/redux/mirrorsEstimateSlice";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
-import NewPagination from "../Pagination/new_index";
+import NewPagination from "../Pagination";
 
 export default function ExistingTable() {
   const navigate = useNavigate();

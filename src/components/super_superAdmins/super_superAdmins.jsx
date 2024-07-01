@@ -14,7 +14,7 @@ import {
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import Pagination from "../Pagination/index";
+import Pagination from "../Pagination/index_dep";
 import { Super_SuperColumns } from "@/utilities/DataGridColumns";
 import "./super_superAdmins.scss";
 import CustomToggle from "../ui-components/Toggle";
@@ -24,7 +24,7 @@ import EditIcon from "../../Assets/d.svg";
 import Create_Edit_SuperSuperAdmin from "../Modal/editSuper_SuperAdmin";
 import CustomIconButton from "../ui-components/CustomButton";
 import DeleteModal from "../Modal/deleteModal";
-import NewPagination from "../Pagination/new_index";
+import NewPagination from "../Pagination";
 
 const Super_SuperAdminsTable = () => {
   const { data: SuperData, isLoading, refetch } = useFetchSuperSuperAdmin();
@@ -38,9 +38,11 @@ const Super_SuperAdminsTable = () => {
   const [Super_isEdit, setSuper_isEdit] = useState(false);
   const [Super_SelectedData, setSuper_SelectedData] = useState(null);
   const [search, setSearch] = useState("");
+  // pagination state
   const [page, setPage] = useState(1);
   const [inputPage, setInputPage] = useState("");
   const [isShowInput, setIsShowInput] = useState(false);
+  
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (id) => {

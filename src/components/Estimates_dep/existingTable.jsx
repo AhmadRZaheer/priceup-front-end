@@ -28,12 +28,12 @@ import { useNavigate } from "react-router-dom";
 import { calculateAreaAndPerimeter, calculateTotal } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
-import Pagination from "../Pagination";
+import Pagination from "../Pagination/index_dep";
 import DeleteModal from "../Modal/deleteModal";
 import { getEstimatesListRefetch } from "../../redux/refetch";
 import { generateObjectForPDFPreview, renderMeasurementSides } from "../../utilities/estimates";
 import { itemsPerPage, quoteState } from "../../utilities/constants";
-import NewPagination from "../Pagination/new_index";
+import NewPagination from "../Pagination";
 
 export default function ExistingTable() {
   const navigate = useNavigate();
