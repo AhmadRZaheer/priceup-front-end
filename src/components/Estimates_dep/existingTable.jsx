@@ -28,18 +28,20 @@ import { useNavigate } from "react-router-dom";
 import { calculateAreaAndPerimeter, calculateTotal } from "../../utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "../../utilities/DataGridColumns";
-import Pagination from "../Pagination";
+import Pagination from "../Pagination/index_dep";
 import DeleteModal from "../Modal/deleteModal";
 import { getEstimatesListRefetch } from "../../redux/refetch";
 import { generateObjectForPDFPreview, renderMeasurementSides } from "../../utilities/estimates";
-import { quoteState } from "../../utilities/constants";
+import { itemsPerPage, quoteState } from "../../utilities/constants";
+import NewPagination from "../Pagination";
 
 export default function ExistingTable() {
   const navigate = useNavigate();
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
   const { data: estimatesList,
     isLoading: estimatesListFetching,
     refetch: refetchEstimatesList,
@@ -236,9 +238,20 @@ export default function ExistingTable() {
             sx={{ width: "100%" }}
             hideFooter
           />
-          <Pagination
+          {/* <Pagination
             totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
             itemsPerPage={itemsPerPage}
+            page={page}
+            setPage={setPage}
+          /> */}
+          <NewPagination
+            totalRecords={
+              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+            }
+            setIsShowInput={setIsShowInput}
+            isShowInput={isShowInput}
+            setInputPage={setInputPage}
+            inputPage={inputPage}
             page={page}
             setPage={setPage}
           />

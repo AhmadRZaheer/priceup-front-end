@@ -93,3 +93,5 @@ export const mirrorHardwareTypes = {
   GLASSTYPE: "glassType",
   EDGEWORK: "edgeWork",
 };
+export const itemsPerPage = 10;
+export const MAX_PAGES_DISPLAYED = 3;

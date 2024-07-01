@@ -6,9 +6,7 @@ import { CustomerQuoteColumns } from "@/utilities/DataGridColumns";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { calculateAreaAndPerimeter } from "@/utilities/common";
-import {
-  useFetchDataEstimate,
-} from "@/utilities/ApiHooks/estimate";
+import { useFetchDataEstimate } from "@/utilities/ApiHooks/estimate";
 import {
   addSelectedItem,
   resetState,
@@ -26,7 +24,9 @@ import { Link } from "react-router-dom";
 import { Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "@/components/ui-components/CustomButton";
 import { useFetchDataCustomerEstimates } from "@/utilities/ApiHooks/customer";
-import Pagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination/index_dep";
+import NewPagination from "../Pagination";
+import { itemsPerPage } from "@/utilities/constants";
 
 const style = {
   position: "absolute",
@@ -49,8 +49,10 @@ const dataGridStyle = {
 
 export default function AddEditFinish({ open, close, quoteId }) {
   // const refetchData = useSelector(getDataRefetch);
+  // pagination state:
   const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
   const {
     data: allHardwaresList,
     isFetching: listFetching,
@@ -101,9 +103,11 @@ export default function AddEditFinish({ open, close, quoteId }) {
     if (result?.returnWeight) {
       dispatch(setReturnWeight(result?.returnWeight));
     }
-    if (item?.layout_id) {  // default layout edit
+    if (item?.layout_id) {
+      // default layout edit
       dispatch(setNavigationDesktop("measurements"));
-    } else { // custom layout edit
+    } else {
+      // custom layout edit
       dispatch(setNavigationDesktop("custom"));
     }
   };
@@ -133,12 +137,10 @@ export default function AddEditFinish({ open, close, quoteId }) {
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
-    }
-    else {
+    } else {
       return [];
     }
   }, [estimatesList]);
-
 
   return (
     <div>
@@ -190,18 +192,28 @@ export default function AddEditFinish({ open, close, quoteId }) {
                 page={page}
                 pageSize={itemsPerPage}
                 // rowCount={estimates?.length}
-                rowCount={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+                rowCount={
+                  estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+                }
                 // pageSizeOptions={[1, , 25]}
                 sx={{ width: "100%" }}
                 hideFooter
               />
-              <Pagination
+              {/* <Pagination
                 totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
                 itemsPerPage={itemsPerPage}
                 page={page}
                 setPage={setPage}
+              /> */}
+              <NewPagination
+                totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+                setIsShowInput={setIsShowInput}
+                isShowInput={isShowInput}
+                setInputPage={setInputPage}
+                inputPage={inputPage}
+                page={page}
+                setPage={setPage}
               />
-
             </Box>
           ) : (
             <Typography>No estimates found.</Typography>

@@ -18,14 +18,24 @@ import CustomIconButton from "@/components/ui-components/CustomButton";
 // import { useSelector } from "react-redux";
 import ModeIcon from "@mui/icons-material/Mode";
 import EditCustomer from "@/components/Modal/editCustomer";
+import NewPagination from "../Pagination";
+import { itemsPerPage } from "@/utilities/constants";
+
 
 const CustomerTable = () => {
-  const { data: customerData, refetch: customersRefetch } = useFetchDataCustomer();
+
+  const { data: customerData, refetch: customersRefetch } =
+    useFetchDataCustomer();
   // const refetchData = useSelector(getDataRefetch);
   const [search, setSearch] = useState("");
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
+  // pagination state:
+  const [page, setPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
+
   const filteredData = customerData?.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -44,7 +54,7 @@ const CustomerTable = () => {
   const handleOpenEdit = (item) => {
     setSelectedRowData(item);
     setOpenEditModal(true);
-  }
+  };
   const actionColumn = [
     {
       field: "Actions",
@@ -68,7 +78,7 @@ const CustomerTable = () => {
               buttonText="View Quotes"
             />
             <Box
-              sx={{ marginLeft: '10px' }}
+              sx={{ marginLeft: "10px" }}
               className="viewButton"
               onClick={() => handleOpenEdit(params.row)}
             >
@@ -86,51 +96,6 @@ const CustomerTable = () => {
     },
   ];
 
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
-
-  const getPageNumbersToShow = () => {
-    if (totalPages <= MAX_PAGES_DISPLAYED) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    const pagesToShow = [];
-    const startPage = Math.max(1, page - 2); // Display three on the first side
-    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
-
-    if (startPage > 1) {
-      pagesToShow.push(1);
-      if (startPage > 2) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pagesToShow.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-      pagesToShow.push(totalPages);
-    }
-
-    return pagesToShow;
-  };
-
-  const pageNumbersToShow = getPageNumbersToShow();
-
-  const handlePreviousPage = () => {
-    setPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
 
   return (
     <>
@@ -193,93 +158,28 @@ const CustomerTable = () => {
             {filteredData.length >= 1 ? (
               <>
                 <DataGrid
-                  style={{
-                    border: "none",
-                  }}
+                  style={{ border: "none" }}
                   getRowId={(row) => row._id}
                   rows={filteredData.slice(
                     (page - 1) * itemsPerPage,
                     page * itemsPerPage
                   )}
                   columns={CustomerColumns.concat(actionColumn)}
-                  page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px",
-                    borderTop: "1px solid #EAECF0",
-                  }}
-                >
-                  <Button
-                    sx={{
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                      borderRadius: "8px",
-                      textTransform: "capitalize",
-                      fontWeight: 500,
-                      ":hover": {
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                      },
-                    }}
-                    variant="outlined"
-                    onClick={handlePreviousPage}
-                    disabled={page === 0}
-                  >
-                    <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
-                    Previous
-                  </Button>
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    {pageNumbersToShow.map((pagenumber, index) => (
-                      <Box
-                        key={index}
-                        onClick={() => setPage(pagenumber)}
-                        sx={{
-                          backgroundColor:
-                            page === pagenumber
-                              ? "rgba(144, 136, 192, 0.2)"
-                              : "white",
-                          color: page === pagenumber ? "#353050" : "#667085",
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {pagenumber}
-                      </Box>
-                    ))}
-                  </Box>
-                  <Button
-                    sx={{
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                      borderRadius: "8px",
-                      textTransform: "capitalize",
-                      fontWeight: 500,
-                      ":hover": {
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                      },
-                    }}
-                    onClick={handleNextPage}
-                    disabled={filteredData.length === 0}
-                  >
-                    Next
-                    <ArrowForward
-                      sx={{ color: "#344054", fontSize: 20, ml: 1 }}
-                    />
-                  </Button>
-                </Box>
+            
+                <NewPagination
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  setIsShowInput={setIsShowInput}
+                  isShowInput={isShowInput}
+                  setInputPage={setInputPage}
+                  inputPage={inputPage}
+                  page={page}
+                  setPage={setPage}
+                />
               </>
             ) : (
               <Typography

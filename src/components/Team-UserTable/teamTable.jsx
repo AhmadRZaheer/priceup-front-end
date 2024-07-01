@@ -29,6 +29,8 @@ import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import DeleteModal from "../Modal/deleteModal";
+import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
+import NewPagination from "../Pagination";
 
 const TeamTable = () => {
   const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
@@ -45,7 +47,12 @@ const TeamTable = () => {
     team.name.toLowerCase().includes(search.toLowerCase())
   );
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord,setDeleteRecord] = useState(null);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+  // pagination state:
+  const [page, setPage] = useState(1);
+  const [inputPage, setInputPage] = useState("");
+  const [isShowInput, setIsShowInput] = useState(false);
+
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
     setOpen(true);
@@ -60,7 +67,7 @@ const TeamTable = () => {
   const handleOpenDeleteModal = (teamdata) => {
     setDeleteRecord(teamdata);
     setDeleteModalOpen(true);
-  }
+  };
   const handleTeamMemberDelete = async () => {
     if (deleteRecord?.company_id !== decodedToken.company_id) {
       const haveAccessss = deleteRecord.haveAccessTo.filter(
@@ -75,7 +82,7 @@ const TeamTable = () => {
       console.log("delete finish");
       await deleteTeamMember(deleteRecord._id);
       setMatchingId(deleteRecord._id);
-      // teamMemberRefetch(); 
+      // teamMemberRefetch();
     }
     setDeleteModalOpen(false);
   };
@@ -154,52 +161,6 @@ const TeamTable = () => {
       },
     },
   ];
-
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
-
-  const getPageNumbersToShow = () => {
-    if (totalPages <= MAX_PAGES_DISPLAYED) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    const pagesToShow = [];
-    const startPage = Math.max(1, page - 2); // Display three on the first side
-    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
-
-    if (startPage > 1) {
-      pagesToShow.push(1);
-      if (startPage > 2) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pagesToShow.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-      pagesToShow.push(totalPages);
-    }
-
-    return pagesToShow;
-  };
-
-  const pageNumbersToShow = getPageNumbersToShow();
-
-  const handlePreviousPage = () => {
-    setPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
 
   return (
     <>
@@ -283,82 +244,20 @@ const TeamTable = () => {
                   page={page}
                   pageSize={itemsPerPage}
                   rowCount={filteredData.length}
-                  pageSizeOptions={[1, , 25]}
+                  // pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    padding: "10px",
-                    borderTop: "1px solid #EAECF0",
-                  }}
-                >
-                  <Button
-                    sx={{
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                      borderRadius: "8px",
-                      textTransform: "capitalize",
-                      fontWeight: 500,
-                      ":hover": {
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                      },
-                    }}
-                    variant="outlined"
-                    onClick={handlePreviousPage}
-                    disabled={page === 0}
-                  >
-                    <ArrowBack sx={{ color: "#344054", fontSize: 20, mr: 1 }} />
-                    Previous
-                  </Button>
-                  <Box sx={{ display: "flex", gap: 2 }}>
-                    {pageNumbersToShow.map((pagenumber, index) => (
-                      <Box
-                        key={index}
-                        onClick={() => setPage(pagenumber)}
-                        sx={{
-                          backgroundColor:
-                            page === pagenumber
-                              ? "rgba(144, 136, 192, 0.2)"
-                              : "white",
-                          color: page === pagenumber ? "#353050" : "#667085",
-                          width: "40px",
-                          height: "40px",
-                          borderRadius: "8px",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {pagenumber}
-                      </Box>
-                    ))}
-                  </Box>
-                  <Button
-                    sx={{
-                      border: "1px solid #D0D5DD",
-                      color: "#344054",
-                      borderRadius: "8px",
-                      textTransform: "capitalize",
-                      fontWeight: 500,
-                      ":hover": {
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                      },
-                    }}
-                    onClick={handleNextPage}
-                    disabled={filteredData.length === 0}
-                  >
-                    Next
-                    <ArrowForward
-                      sx={{ color: "#344054", fontSize: 20, ml: 1 }}
-                    />
-                  </Button>
-                </Box>
+                
+                <NewPagination
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  setIsShowInput={setIsShowInput}
+                  isShowInput={isShowInput}
+                  setInputPage={setInputPage}
+                  inputPage={inputPage}
+                  page={page}
+                  setPage={setPage}
+                />
               </>
             ) : (
               <Typography
@@ -375,11 +274,13 @@ const TeamTable = () => {
           </div>
         </Box>
         <DeleteModal
-        open={deleteModalOpen}
-        close={()=>{setDeleteModalOpen(false)}}
-        isLoading={loaderForDelete}
-        handleDelete={handleTeamMemberDelete}
-      />
+          open={deleteModalOpen}
+          close={() => {
+            setDeleteModalOpen(false);
+          }}
+          isLoading={loaderForDelete}
+          handleDelete={handleTeamMemberDelete}
+        />
         <AddTeamMembers
           open={open}
           close={handleClose}
