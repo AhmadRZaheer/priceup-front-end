@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -30,6 +30,7 @@ import CustomUserCreateModal from "../Modal/addCustomUserAdmin";
 import { tuple } from "yup";
 import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
 import NewPagination from "../Pagination";
+import Pagination from "../Pagination";
 
 const SuperAdminUser = () => {
   const {
@@ -46,8 +47,8 @@ const SuperAdminUser = () => {
   const [isEdit, setisEdit] = useState({ type: false, data: null });
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
 
   const handleOpen = (id) => {
     setDelete_id(id);
@@ -69,11 +70,11 @@ const SuperAdminUser = () => {
     usedelete(Delete_id);
   };
   useEffect(() => {
+    teamMemberRefetch();
     if (isSuccess) {
-      teamMemberRefetch();
       handleClose();
     }
-  }, [isSuccess]);
+  }, [isSuccess,page]);
 
   const actionColumn = [
     {
@@ -117,9 +118,12 @@ const SuperAdminUser = () => {
       },
     },
   ];
-  const filteredData = customUserData?.filter((staff) =>
-    staff.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = useMemo(()=>{
+    const result = customUserData?.filter((staff) =>
+      staff.name.toLowerCase().includes(search.toLowerCase())
+    );
+    return result ? result : [];
+  },[search,customUserData]) 
 
   return (
     <>
@@ -193,13 +197,14 @@ const SuperAdminUser = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          ) : customUserData.length === 0 ? (
+          ) : customUserData?.length === 0 ? (
             <Typography sx={{ color: "#667085", textAlign: "center", p: 3 }}>
               No Admin Found
             </Typography>
           ) : filteredData.length !== 0 ? (
             <div className="CustomerTable">
               <DataGrid
+                loading={isFetching}
                 style={{
                   border: "none",
                 }}
@@ -215,8 +220,16 @@ const SuperAdminUser = () => {
                 sx={{ width: "100%" }}
                 hideFooter
               />
-             
-              <NewPagination
+              <Box sx={{width:'100%'}}>
+              <Pagination
+                totalRecords={filteredData.length ? filteredData.length : 0}
+                itemsPerPage={itemsPerPage}
+                page={page}
+                setPage={setPage}
+              />
+              </Box>
+              
+              {/* <NewPagination
                 totalRecords={filteredData.length ? filteredData.length : 0}
                 setIsShowInput={setIsShowInput}
                 isShowInput={isShowInput}
@@ -224,7 +237,7 @@ const SuperAdminUser = () => {
                 inputPage={inputPage}
                 page={page}
                 setPage={setPage}
-              />
+              /> */}
             </div>
           ) : (
             <Box sx={{ color: "#667085", textAlign: "center", p: 3 }}>

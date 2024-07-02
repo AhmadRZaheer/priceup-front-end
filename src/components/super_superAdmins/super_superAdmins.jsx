@@ -14,7 +14,7 @@ import {
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import Pagination from "../Pagination/index_dep";
+import Pagination from "../Pagination";
 import { Super_SuperColumns } from "@/utilities/DataGridColumns";
 import "./super_superAdmins.scss";
 import CustomToggle from "../ui-components/Toggle";

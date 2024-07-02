@@ -34,19 +34,21 @@ import EditIcon from "../../Assets/d.svg";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
 import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
-import NewPagination from "../Pagination";
+// import NewPagination from "../Pagination";
+import Pagination from "../Pagination";
 
 const SuperAdminTeam = () => {
   const {
     data: staffData,
     refetch: teamMemberRefetch,
     isFetching,
+    isLoading
   } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   
   const [search, setSearch] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
@@ -72,7 +74,7 @@ const SuperAdminTeam = () => {
   };
   useEffect(() => {
     teamMemberRefetch();
-  }, [isSuccess]);
+  }, [isSuccess,page]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -247,6 +249,7 @@ const SuperAdminTeam = () => {
               {filteredData.length > 0 ? (
                 <>
                   <DataGrid
+                    loading={isFetching}
                     style={{
                       border: "none",
                     }}
@@ -262,9 +265,15 @@ const SuperAdminTeam = () => {
                     sx={{ width: "100%" }}
                     hideFooter
                   />
-
-                 
-                  <NewPagination
+                  <Box sx={{width:'100%'}}>
+                   <Pagination
+                    totalRecords={filteredData.length ? filteredData.length : 0}
+                    itemsPerPage={itemsPerPage}
+                    page={page}
+                    setPage={setPage}
+                  />
+                 </Box>
+                  {/* <NewPagination
                     totalRecords={filteredData.length ? filteredData.length : 0}
                     setIsShowInput={setIsShowInput}
                     isShowInput={isShowInput}
@@ -272,7 +281,7 @@ const SuperAdminTeam = () => {
                     inputPage={inputPage}
                     page={page}
                     setPage={setPage}
-                  />
+                  /> */}
                 </>
               ) : (
                 <Box sx={{ color: "#667085", p: 2, textAlign: "center" }}>

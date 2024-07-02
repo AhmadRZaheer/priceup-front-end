@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "@/utilities/DataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
@@ -20,11 +20,13 @@ import ModeIcon from "@mui/icons-material/Mode";
 import EditCustomer from "@/components/Modal/editCustomer";
 import NewPagination from "../Pagination";
 import { itemsPerPage } from "@/utilities/constants";
+import Pagination from "../Pagination";
+import { debounce } from "@/utilities/common";
 
 
 const CustomerTable = () => {
 
-  const { data: customerData, refetch: customersRefetch } =
+  const { data: customerData, refetch: customersRefetch, isFetching } =
     useFetchDataCustomer();
   // const refetchData = useSelector(getDataRefetch);
   const [search, setSearch] = useState("");
@@ -33,8 +35,8 @@ const CustomerTable = () => {
   const [selectedRowData, setSelectedRowData] = useState(null);
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
 
   const filteredData = customerData?.filter((customer) =>
     customer.name.toLowerCase().includes(search.toLowerCase())
@@ -44,7 +46,18 @@ const CustomerTable = () => {
   // }, [refetchData]);
   useEffect(() => {
     customersRefetch();
-  }, []);
+  }, [page]);
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      customersRefetch();
+    }, 500),
+    []
+  );
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    debouncedRefetch();
+  };
   const handleCloseQuotes = () => setOpenQuotesModal(false);
   const handleCloseEdit = () => setOpenEditModal(false);
   const handleViewQuotes = (params) => {
@@ -136,7 +149,7 @@ const CustomerTable = () => {
               placeholder="Search by Name"
               value={search}
               variant="standard"
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => handleChange(e)}
               sx={{
                 mb: 2,
                 mr: 5,
@@ -158,6 +171,7 @@ const CustomerTable = () => {
             {filteredData.length >= 1 ? (
               <>
                 <DataGrid
+                  loading={isFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
                   rows={filteredData.slice(
@@ -170,8 +184,13 @@ const CustomerTable = () => {
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-            
-                <NewPagination
+            <Pagination
+            totalRecords={filteredData.length ? filteredData.length : 0}
+            itemsPerPage={itemsPerPage}
+            page={page}
+            setPage={setPage}
+          />
+                {/* <NewPagination
                   totalRecords={filteredData.length ? filteredData.length : 0}
                   setIsShowInput={setIsShowInput}
                   isShowInput={isShowInput}
@@ -179,7 +198,7 @@ const CustomerTable = () => {
                   inputPage={inputPage}
                   page={page}
                   setPage={setPage}
-                />
+                /> */}
               </>
             ) : (
               <Typography

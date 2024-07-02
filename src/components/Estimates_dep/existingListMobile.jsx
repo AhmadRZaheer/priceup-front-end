@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { initializeStateForEditQuote, setListData, setNavigationDesktop, setQuoteState } from "../../redux/estimateCalculations";
 import ModeIcon from "@mui/icons-material/Mode";
 import { makeStyles } from "@material-ui/core";
-import Pagination from "../Pagination/index_dep";
+import Pagination from "../Pagination";
 
 const ExistingListMobile = () => {
     const refetchData = useSelector(getDataRefetch); // refetch if staff switch location
