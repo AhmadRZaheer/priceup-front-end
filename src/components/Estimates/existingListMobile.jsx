@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { initializeStateForEditQuote, resetState, setListData, setNavigationDesktop, setQuoteState } from "@/redux/estimateCalculations";
 import ModeIcon from "@mui/icons-material/Mode";
 import { makeStyles } from "@material-ui/core";
-import Pagination from "@/components/Pagination/index_dep";
+import Pagination from "@/components/Pagination";
 import { useNavigate } from "react-router-dom";
 import { resetMirrorEstimateState } from "@/redux/mirrorsEstimateSlice";
 import { resetEstimateState } from "@/redux/estimateSlice";

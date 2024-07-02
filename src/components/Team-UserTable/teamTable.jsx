@@ -31,9 +31,10 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import DeleteModal from "../Modal/deleteModal";
 import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
 import NewPagination from "../Pagination";
+import Pagination from "../Pagination";
 
 const TeamTable = () => {
-  const { data: stafData, refetch: teamMemberRefetch } = useFetchDataTeam();
+  const { data: stafData, refetch: teamMemberRefetch, isFetching } = useFetchDataTeam();
   const { mutate: editTeamMembers, isSuccess } = useAddLocation();
   console.log("team", stafData);
   const [search, setSearch] = useState("");
@@ -50,8 +51,8 @@ const TeamTable = () => {
   const [deleteRecord, setDeleteRecord] = useState(null);
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
 
   const handleClose = () => setOpen(false);
   const handleOpenEdit = (data) => {
@@ -98,7 +99,7 @@ const TeamTable = () => {
   useEffect(() => {
     teamMemberRefetch();
     refetch();
-  }, []);
+  }, [page]);
   const actionColumn = [
     {
       field: "Access",
@@ -232,6 +233,7 @@ const TeamTable = () => {
             {filteredData.length >= 1 ? (
               <>
                 <DataGrid
+                  loading={isFetching}
                   style={{
                     border: "none",
                   }}
@@ -248,8 +250,13 @@ const TeamTable = () => {
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-                
-                <NewPagination
+                <Pagination
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                />
+                {/* <NewPagination
                   totalRecords={filteredData.length ? filteredData.length : 0}
                   setIsShowInput={setIsShowInput}
                   isShowInput={isShowInput}
@@ -257,7 +264,7 @@ const TeamTable = () => {
                   inputPage={inputPage}
                   page={page}
                   setPage={setPage}
-                />
+                /> */}
               </>
             ) : (
               <Typography

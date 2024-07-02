@@ -9,7 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "@/components/ui-components/CustomButton";
 import { useFetchDataCustomerEstimates } from "@/utilities/ApiHooks/customer";
-import Pagination from "@/components/Pagination/index_dep";
+import Pagination from "@/components/Pagination";
 import { EstimateCategory } from "@/utilities/constants";
 import { setStateForShowerEstimate } from "@/utilities/estimates";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";

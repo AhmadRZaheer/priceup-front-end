@@ -24,7 +24,7 @@ import { Link } from "react-router-dom";
 import { Close, Edit } from "@mui/icons-material";
 import CustomIconButton from "@/components/ui-components/CustomButton";
 import { useFetchDataCustomerEstimates } from "@/utilities/ApiHooks/customer";
-import Pagination from "@/components/Pagination/index_dep";
+import Pagination from "@/components/Pagination";
 import NewPagination from "../Pagination";
 import { itemsPerPage } from "@/utilities/constants";
 

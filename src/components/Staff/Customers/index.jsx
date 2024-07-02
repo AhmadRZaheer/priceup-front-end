@@ -18,15 +18,16 @@ import {
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
 import NewPagination from "@/components/Pagination";
+import Pagination from "@/components/Pagination";
 
 export default function Customers() {
-  const { data: customerData, refetch } = useFetchDataCustomer();
+  const { data: customerData, refetch ,isFetching } = useFetchDataCustomer();
   const [search, setSearch] = React.useState("");
   const [open, setOpen] = React.useState(false);
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   
   const [selectedRowData, setSelectedRowData] = React.useState(null);
   const filteredData = customerData?.filter(
@@ -36,7 +37,7 @@ export default function Customers() {
   );
   useEffect(() => {
     refetch();
-  }, []);
+  }, [page]);
   const handleClose = () => setOpen(false);
 
   const handleOpenEdit = (params) => {
@@ -150,6 +151,7 @@ export default function Customers() {
               {filteredData.length >= 1 ? (
                 <>
                   <DataGrid
+                    loading={isFetching}
                     style={{
                       border: "none",
                     }}
@@ -165,7 +167,14 @@ export default function Customers() {
                     sx={{ width: "100%" }}
                     hideFooter
                   />
-                  <NewPagination
+                  <Pagination 
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage} 
+                  />
+
+                  {/* <NewPagination
                     totalRecords={filteredData.length ? filteredData.length : 0}
                     setIsShowInput={setIsShowInput}
                     isShowInput={isShowInput}
@@ -173,7 +182,7 @@ export default function Customers() {
                     inputPage={inputPage}
                     page={page}
                     setPage={setPage}
-                  />
+                  /> */}
                 </>
               ) : (
                 <Typography

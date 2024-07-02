@@ -27,7 +27,8 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 import { getDataRefetch } from "../../redux/staff";
 import DeleteModal from "../Modal/deleteModal";
 import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
-import NewPagination from "../Pagination";
+// import NewPagination from "../Pagination";
+import Pagination from "../Pagination";
 
 const FinishesTable = () => {
   const refetchData = useSelector(getDataRefetch);
@@ -35,6 +36,7 @@ const FinishesTable = () => {
     data: finishesData,
     refetch: finishesRefetch,
     isFetching,
+    isLoading
   } = useFetchDataFinishes();
   const {
     mutate: deleteFinish,
@@ -50,18 +52,18 @@ const FinishesTable = () => {
   const [deleteRecord, setDeleteRecord] = useState(null);
   // pagination state:
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
   };
   useEffect(() => {
     finishesRefetch();
-  }, [refetchData]);
-  useEffect(() => {
-    finishesRefetch();
-  }, []);
+  }, [refetchData,page]);
+  // useEffect(() => {
+  //   finishesRefetch();
+  // }, []);
   const handleOpen = () => {
     setOpen(true);
     setIsEdit(false);
@@ -190,7 +192,7 @@ const FinishesTable = () => {
           </div>
 
           <Box>
-            {isFetching ? (
+            {isLoading ? (
               <Box
                 sx={{
                   display: "flex",
@@ -209,6 +211,7 @@ const FinishesTable = () => {
             ) : (
               <div className="hardwareTable">
                 <DataGrid
+                  loading={isFetching}
                   style={{
                     border: "none",
                   }}
@@ -224,8 +227,13 @@ const FinishesTable = () => {
                   sx={{ width: "100%" }}
                   hideFooter
                 />
-              
-                <NewPagination
+                <Pagination
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                />
+                {/* <NewPagination
                   totalRecords={filteredData.length ? filteredData.length : 0}
                   setIsShowInput={setIsShowInput}
                   isShowInput={isShowInput}
@@ -233,7 +241,7 @@ const FinishesTable = () => {
                   inputPage={inputPage}
                   page={page}
                   setPage={setPage}
-                />
+                /> */}
               </div>
             )}
           </Box>

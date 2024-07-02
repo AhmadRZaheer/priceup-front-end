@@ -34,7 +34,7 @@ import { useNavigate } from "react-router-dom";
 import { calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import Pagination from "@/components/Pagination/index_dep";
+import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { getEstimatesListRefetch } from "@/redux/refetch";
 import {
@@ -72,12 +72,13 @@ export default function ExistingTable() {
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
   const {
     data: estimatesList,
-    isLoading: estimatesListFetching,
+    isLoading,
+    isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
   } = useGetEstimates(page, itemsPerPage, search);
   const showersHardwareList = useSelector(getListData);
@@ -174,7 +175,7 @@ export default function ExistingTable() {
   // useEffect(() => {
   //   refetchEstimatesList();
   // }, [page])
-console.log(estimatesList, "estimatesList")
+  console.log(estimatesList, "estimatesList", estimatesListFetching)
   return (
     <>
       <Box
@@ -185,7 +186,7 @@ console.log(estimatesList, "estimatesList")
         }}
       >
         <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
-          Estimates 
+          Estimates
         </Typography>
         {/* Search input field */}
         <TextField
@@ -230,7 +231,7 @@ console.log(estimatesList, "estimatesList")
           Add
         </IconButton>
       </Box>
-      {estimatesListFetching ? (
+      {isLoading ? (
         <Box
           sx={{
             width: 40,
@@ -251,6 +252,7 @@ console.log(estimatesList, "estimatesList")
       ) : (
         <Box>
           <DataGrid
+            loading={estimatesListFetching}
             style={{
               border: "none",
             }}
@@ -273,13 +275,13 @@ console.log(estimatesList, "estimatesList")
             sx={{ width: "100%" }}
             hideFooter
           />
-          {/* <Pagination
-              totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
-              itemsPerPage={itemsPerPage}
-              page={page}
-              setPage={setPage}
-            /> */}
-          <NewPagination
+          <Pagination
+            totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+            itemsPerPage={itemsPerPage}
+            page={page}
+            setPage={setPage}
+          />
+          {/*<NewPagination
             totalRecords={
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
@@ -289,7 +291,7 @@ console.log(estimatesList, "estimatesList")
             inputPage={inputPage}
             page={page}
             setPage={setPage}
-          />
+          />*/}
           <DeleteModal
             open={deleteModalOpen}
             close={() => {
