@@ -372,6 +372,19 @@ export const getHardwareSpecificFabrication = (
     existingFabricationValues.outages -= currentHardwareFabrication.outages;
   }
 
+  /* check to avoid negative value **/
+  if(existingFabricationValues.oneInchHoles < 0)
+  existingFabricationValues.oneInchHoles = 0;
+  if(existingFabricationValues.hingeCut < 0)
+    existingFabricationValues.hingeCut = 0;
+  if(existingFabricationValues.clampCut < 0)
+    existingFabricationValues.clampCut = 0;
+  if(existingFabricationValues.notch < 0)
+    existingFabricationValues.notch = 0;
+  if(existingFabricationValues.outages < 0)
+    existingFabricationValues.outages = 0;
+  /* end **/
+
   if (newSelectedHardware) {
     let newSelectedHardwareFabrication = null;
 
