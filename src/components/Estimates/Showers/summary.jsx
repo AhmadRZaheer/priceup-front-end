@@ -168,7 +168,7 @@ const Summary = () => {
                       quoteState,
                       measurements,
                       quoteState === "edit"
-                        ? selectedData?.layout_id
+                        ? selectedData?.config?.layout_id
                         : selectedData?._id
                     )}
                   </Typography>
