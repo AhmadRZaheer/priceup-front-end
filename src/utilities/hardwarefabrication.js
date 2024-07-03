@@ -67,7 +67,7 @@ export const getHardwareFabricationQuantity = (
     // for sleeve over
     if (selectedContent.mountingClamps.sleeveOver?.length) {
       selectedContent.mountingClamps.sleeveOver.forEach((record) => {
-        const sleeveOverResult = getMountingClampFabrication(
+        const sleeveOverResult = getGenericFabrication(  // use generic fabrication method for sleeve over to avoid default clamp cut count
           record.item,
           record.count
         );
