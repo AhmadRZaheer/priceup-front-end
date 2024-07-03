@@ -477,8 +477,8 @@ export const useDataCustomUser = () => {
   return useQuery({
     queryKey: ["customUsers"],
     queryFn: fetchData,
-    enabled: false,
-    // placeholderData: [],
+    enabled: true,
+    placeholderData: [],
   });
 };
 export const useDataCustomAdmins = () => {
