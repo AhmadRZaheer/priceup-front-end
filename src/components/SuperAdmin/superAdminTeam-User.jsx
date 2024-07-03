@@ -33,15 +33,23 @@ import EditIcon from "../../Assets/d.svg";
 // import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
+import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
+// import NewPagination from "../Pagination";
+import Pagination from "../Pagination";
 
 const SuperAdminTeam = () => {
   const {
     data: staffData,
     refetch: teamMemberRefetch,
     isFetching,
+    isLoading
   } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
-
+  // pagination state:
+  const [page, setPage] = useState(1);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
+  
   const [search, setSearch] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const openModel = (row) => {
@@ -59,13 +67,14 @@ const SuperAdminTeam = () => {
     setOpen(false);
   };
 
+
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
     handleClose();
   };
   useEffect(() => {
     teamMemberRefetch();
-  }, [isSuccess]);
+  }, [isSuccess,page]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -177,51 +186,6 @@ const SuperAdminTeam = () => {
   const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
-  const [page, setPage] = useState(1);
-  const itemsPerPage = 10;
-
-  const totalPages = Math.ceil(filteredData.length / itemsPerPage);
-  const MAX_PAGES_DISPLAYED = 5;
-
-  const getPageNumbersToShow = () => {
-    if (totalPages <= MAX_PAGES_DISPLAYED) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1);
-    }
-
-    const pagesToShow = [];
-    const startPage = Math.max(1, page - 2); // Display three on the first side
-    const endPage = Math.min(totalPages, startPage + MAX_PAGES_DISPLAYED - 1);
-
-    if (startPage > 1) {
-      pagesToShow.push(1);
-      if (startPage > 2) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-    }
-
-    for (let i = startPage; i <= endPage; i++) {
-      pagesToShow.push(i);
-    }
-
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pagesToShow.push("..."); // Display ellipsis if there are skipped pages
-      }
-      pagesToShow.push(totalPages);
-    }
-
-    return pagesToShow;
-  };
-
-  const pageNumbersToShow = getPageNumbersToShow();
-
-  const handlePreviousPage = () => {
-    setPage((prevPage) => Math.max(prevPage - 1, 1));
-  };
-
-  const handleNextPage = () => {
-    setPage((prevPage) => Math.min(prevPage + 1, totalPages));
-  };
 
   return (
     <>
@@ -285,6 +249,7 @@ const SuperAdminTeam = () => {
               {filteredData.length > 0 ? (
                 <>
                   <DataGrid
+                    loading={isFetching}
                     style={{
                       border: "none",
                     }}
@@ -300,88 +265,26 @@ const SuperAdminTeam = () => {
                     sx={{ width: "100%" }}
                     hideFooter
                   />
-
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      padding: "10px",
-                      borderTop: "1px solid #EAECF0",
-                      width: "98%",
-                    }}
-                  >
-                    <Button
-                      sx={{
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                        borderRadius: "8px",
-                        textTransform: "capitalize",
-                        fontWeight: 500,
-                        ":hover": {
-                          border: "1px solid #D0D5DD",
-                          color: "#344054",
-                        },
-                      }}
-                      variant="outlined"
-                      onClick={handlePreviousPage}
-                      disabled={page === 0}
-                    >
-                      <ArrowBack
-                        sx={{ color: "#344054", fontSize: 20, mr: 1 }}
-                      />
-                      Previous
-                    </Button>
-
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      {pageNumbersToShow.map((pagenumber, index) => (
-                        <Box
-                          key={index}
-                          onClick={() => setPage(pagenumber)}
-                          sx={{
-                            backgroundColor:
-                              page === pagenumber
-                                ? "rgba(144, 136, 192, 0.2)"
-                                : "white",
-                            color: page === pagenumber ? "#353050" : "#667085",
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "8px",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            cursor: "pointer",
-                          }}
-                        >
-                          {pagenumber}
-                        </Box>
-                      ))}
-                    </Box>
-                    <Button
-                      sx={{
-                        border: "1px solid #D0D5DD",
-                        color: "#344054",
-                        borderRadius: "8px",
-                        textTransform: "capitalize",
-                        fontWeight: 500,
-                        ":hover": {
-                          border: "1px solid #D0D5DD",
-                          color: "#344054",
-                        },
-                      }}
-                      onClick={handleNextPage}
-                      disabled={filteredData.length === 0}
-                    >
-                      Next
-                      <ArrowForward
-                        sx={{ color: "#344054", fontSize: 20, ml: 1 }}
-                      />
-                    </Button>
-                  </Box>
+                  <Box sx={{width:'100%'}}>
+                   <Pagination
+                    totalRecords={filteredData.length ? filteredData.length : 0}
+                    itemsPerPage={itemsPerPage}
+                    page={page}
+                    setPage={setPage}
+                  />
+                 </Box>
+                  {/* <NewPagination
+                    totalRecords={filteredData.length ? filteredData.length : 0}
+                    setIsShowInput={setIsShowInput}
+                    isShowInput={isShowInput}
+                    setInputPage={setInputPage}
+                    inputPage={inputPage}
+                    page={page}
+                    setPage={setPage}
+                  /> */}
                 </>
               ) : (
-                <Box
-                  sx={{ color: "#667085", p: 2, textAlign: "center"}}
-                >
+                <Box sx={{ color: "#667085", p: 2, textAlign: "center" }}>
                   No Users Found
                 </Box>
               )}

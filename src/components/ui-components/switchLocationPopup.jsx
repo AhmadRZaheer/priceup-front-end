@@ -70,7 +70,7 @@ const SwitchLocationPopup = ({
           width: mobile ? "290px" : "317px",
         },
       }}
-      sx={{ left: { sm: 30, xs: 0 }, top: { sm: -72, xs: 50 } }}
+      sx={{ left: { sm: 24, xs: 0 }, top: { sm: -35, xs: 50 } }}
     >
       {decodedToken.company_id !== "" && (
         <IconButton

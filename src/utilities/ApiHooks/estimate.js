@@ -31,13 +31,13 @@ export const useFetchDataEstimate = () => {
   });
 };
 
-export const useGetEstimates = (page,limit) => {
+export const useGetEstimates = (page, limit, search) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${backendURL}/estimates`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page, limit },
+        params: { page, limit, search },
       });
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : null;
@@ -75,13 +75,13 @@ export const useCreateEstimates = () => {
           customerData: props.customerData,
           estimateData: {
             cost: props.cost,
-            config:{...props.estimateData},
+            config: { ...props.estimateData },
             creator_id: decodedToken.id,
             creator_type: decodedToken.role,
             status: "pending",
             category: props.category,
             name: `${current_date} ${current_time}`,
-            label: props.label ?? '',
+            label: props.label ?? "",
           },
         },
         {
@@ -142,7 +142,10 @@ export const useEditEstimates = () => {
             : {}),
           estimateData: {
             ...(updatedEstimate.estimateData
-              ? { config:{...updatedEstimate.estimateData},cost:updatedEstimate.cost }
+              ? {
+                  config: { ...updatedEstimate.estimateData },
+                  cost: updatedEstimate.cost,
+                }
               : {}),
             ...(updatedEstimate.status
               ? { status: updatedEstimate.status }

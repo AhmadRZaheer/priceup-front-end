@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   IconButton,
@@ -6,9 +6,14 @@ import {
   InputAdornment,
   TextField,
   CircularProgress,
+  Button,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import { useDeleteEstimates, useFetchDataEstimate, useGetEstimates } from "@/utilities/ApiHooks/estimate";
+import {
+  useDeleteEstimates,
+  useFetchDataEstimate,
+  useGetEstimates,
+} from "@/utilities/ApiHooks/estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addSelectedItem,
@@ -32,23 +37,50 @@ import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { getEstimatesListRefetch } from "@/redux/refetch";
-import { generateObjectForPDFPreview, renderMeasurementSides, setStateForShowerEstimate } from "@/utilities/estimates";
+import {
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+  setStateForShowerEstimate,
+} from "@/utilities/estimates";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
-import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import { resetMirrorEstimateState, setEstimateMeasurements, setSelectedItem } from "@/redux/mirrorsEstimateSlice";
+import {
+  resetEstimateState,
+  setEstimateCategory,
+  setEstimateState,
+} from "@/redux/estimateSlice";
+import {
+  resetMirrorEstimateState,
+  setEstimateMeasurements,
+  setSelectedItem,
+} from "@/redux/mirrorsEstimateSlice";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import NewPagination from "../Pagination";
+
+const debounce = (func, delay) => {
+  let timeout;
+  return (...args) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};
 
 export default function ExistingTable() {
   const navigate = useNavigate();
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
-  const { data: estimatesList,
-    isLoading: estimatesListFetching,
+  const {
+    data: estimatesList,
+    isLoading,
+    isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
-  } = useGetEstimates(page, itemsPerPage);
+  } = useGetEstimates(page, itemsPerPage, search);
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   // const {
@@ -56,23 +88,23 @@ export default function ExistingTable() {
   //   isLoading: listFetching,
   //   refetch: refetchHardwaresList,
   // } = useFetchDataEstimate();
-  const { mutate: deleteEstimates, isSuccess: deletedSuccessfully, isLoading: LoadingForDelete } =
-    useDeleteEstimates();
+  const {
+    mutate: deleteEstimates,
+    isSuccess: deletedSuccessfully,
+    isLoading: LoadingForDelete,
+  } = useDeleteEstimates();
   const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
-  }
+  };
 
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
-      return estimatesList?.estimates?.filter((item) =>
-        item?.customerData?.name.toLowerCase().includes(search.toLowerCase())
-      )
-    }
-    else {
+      return estimatesList?.estimates;
+    } else {
       return [];
     }
   }, [estimatesList, search]);
@@ -84,12 +116,31 @@ export default function ExistingTable() {
 
   const handlePreviewPDFClick = (item) => {
     // console.log(item,'item');
-    const formattedData = generateObjectForPDFPreview(showersHardwareList, item, showersLocationSettings?.miscPricing);
-    const pricing = calculateTotal(formattedData, formattedData?.sqftArea, showersLocationSettings);
-    const measurementString = renderMeasurementSides(quoteState.EDIT, formattedData?.measurements, formattedData?.layout_id);
-    localStorage.setItem('pdf-estimate', JSON.stringify({ ...formattedData, measurements: measurementString, pricing }));
+    const formattedData = generateObjectForPDFPreview(
+      showersHardwareList,
+      item,
+      showersLocationSettings?.miscPricing
+    );
+    const pricing = calculateTotal(
+      formattedData,
+      formattedData?.sqftArea,
+      showersLocationSettings
+    );
+    const measurementString = renderMeasurementSides(
+      quoteState.EDIT,
+      formattedData?.measurements,
+      formattedData?.layout_id
+    );
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+      })
+    );
     navigate(`/estimates/${item?._id}/pdf-preview`);
-  }
+  };
 
   const handleIconButtonClick = (item) => {
     if (item?.category === EstimateCategory.SHOWERS) {
@@ -109,10 +160,22 @@ export default function ExistingTable() {
     refetchEstimatesList();
   }, [refetchEstimatesCounter, page]);
 
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      refetchEstimatesList();
+    }, 500),
+    []
+  );
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    debouncedRefetch();
+  };
+
   // useEffect(() => {
   //   refetchEstimatesList();
   // }, [page])
-
+  console.log(estimatesList, "estimatesList", estimatesListFetching)
   return (
     <>
       <Box
@@ -130,7 +193,7 @@ export default function ExistingTable() {
           placeholder="Search by Customer Name"
           value={search}
           variant="standard"
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => handleChange(e)}
           sx={{
             mb: 2,
             ".MuiInputBase-root:after": {
@@ -168,7 +231,7 @@ export default function ExistingTable() {
           Add
         </IconButton>
       </Box>
-      {estimatesListFetching ?
+      {isLoading ? (
         <Box
           sx={{
             width: 40,
@@ -182,47 +245,63 @@ export default function ExistingTable() {
         >
           <CircularProgress sx={{ color: "#8477DA" }} />
         </Box>
-        : filteredData?.length === 0 && !estimatesListFetching ? (
-          <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-            No Estimates Found
-          </Typography>
-        ) : (
-          <Box>
-            <DataGrid
-              style={{
-                border: "none",
-              }}
-              getRowId={(row) => row._id}
-              // rows={filteredData?.slice(
-              //   (page - 1) * itemsPerPage,
-              //   page * itemsPerPage
-              // )}
-              rows={filteredData}
-              columns={EstimatesColumns(
-                handleOpenDeleteModal,
-                handleIconButtonClick,
-                handlePreviewPDFClick
-              )}
-              page={page}
-              pageSize={itemsPerPage}
-              rowCount={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
-              sx={{ width: "100%" }}
-              hideFooter
-            />
-            <Pagination
-              totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
-              itemsPerPage={itemsPerPage}
-              page={page}
-              setPage={setPage}
-            />
-            <DeleteModal
-              open={deleteModalOpen}
-              close={() => { setDeleteModalOpen(false) }}
-              isLoading={LoadingForDelete}
-              handleDelete={handleDeleteEstimate}
-            />
-          </Box>
-        )}
+      ) : filteredData?.length === 0 && !estimatesListFetching ? (
+        <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+          No Estimates Found
+        </Typography>
+      ) : (
+        <Box>
+          <DataGrid
+            loading={estimatesListFetching}
+            style={{
+              border: "none",
+            }}
+            getRowId={(row) => row._id}
+            // rows={filteredData?.slice(
+            //   (page - 1) * itemsPerPage,
+            //   page * itemsPerPage
+            // )}
+            rows={filteredData}
+            columns={EstimatesColumns(
+              handleOpenDeleteModal,
+              handleIconButtonClick,
+              handlePreviewPDFClick
+            )}
+            page={page}
+            pageSize={itemsPerPage}
+            rowCount={
+              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+            }
+            sx={{ width: "100%" }}
+            hideFooter
+          />
+          <Pagination
+            totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+            itemsPerPage={itemsPerPage}
+            page={page}
+            setPage={setPage}
+          />
+          {/*<NewPagination
+            totalRecords={
+              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+            }
+            setIsShowInput={setIsShowInput}
+            isShowInput={isShowInput}
+            setInputPage={setInputPage}
+            inputPage={inputPage}
+            page={page}
+            setPage={setPage}
+          />*/}
+          <DeleteModal
+            open={deleteModalOpen}
+            close={() => {
+              setDeleteModalOpen(false);
+            }}
+            isLoading={LoadingForDelete}
+            handleDelete={handleDeleteEstimate}
+          />
+        </Box>
+      )}
     </>
   );
 }
