@@ -5,12 +5,23 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
-export const useFetchDataCustomer = () => {
+export const useFetchDataCustomer = (page, limit, search) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
+      let params = {};
+      if(page){
+        params.page = page;
+      }
+      if(limit){
+        params.limit = limit;
+      }
+      if(search){
+        params.search = search;
+      }
       const response = await axios.get(`${backendURL}/customers`, {
         headers: { Authorization: `Bearer ${token}` },
+        params: params
       });
       if (response?.data && response?.data?.code === 200) {
         return response?.data?.data ? response?.data?.data : [];
