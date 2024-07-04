@@ -38,8 +38,8 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
   // const refetchData = useSelector(getDataRefetch);
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
-  const [inputPage, setInputPage] = useState("");
-  const [isShowInput, setIsShowInput] = useState(false);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
   //   const {
   //     data: allHardwaresList,
@@ -49,7 +49,8 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
   const {
     mutate: setQuoteId,
     data: estimatesList,
-    isLoading: estimateQuoteFetching,
+    isLoading: loading,
+    isFetching: fetching,
     error,
   } = useFetchDataCustomerEstimates(page, itemsPerPage);
   // useEffect(() => {
@@ -63,7 +64,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
     if (open && quoteId !== null && quoteId !== undefined) {
       setQuoteId({ quoteId });
     }
-  }, [open, quoteId, setQuoteId]);
+  }, [open, quoteId, setQuoteId,page]);
 
   const handleIconButtonClick = (item) => {
     console.log(item, "item");
@@ -115,7 +116,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
           <>
             {/* <Link to="/customers/steps"> */}
             <CustomIconButton
-              disable={estimateQuoteFetching}
+              disable={loading}
               handleClick={() => handleIconButtonClick(params?.row)}
               icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
             />
@@ -162,7 +163,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
               sx={{ color: "gray", fontSize: 24, cursor: "pointer" }}
             />
           </Box>
-          {estimateQuoteFetching ? (
+          {loading ? (
             <Box sx={{ width: "100%", textAlign: "center" }}>
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
@@ -173,6 +174,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
               sx={{ border: "1px solid #EAECF0", borderRadius: "8px", mb: 2 }}
             >
               <DataGrid
+                loading={fetching}
                 style={dataGridStyle}
                 getRowId={(row) => row._id}
                 // rows={estimates?.slice(
@@ -191,13 +193,13 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
                 sx={{ width: "100%" }}
                 hideFooter
               />
-              {/* <Pagination
-                                totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
-                                itemsPerPage={itemsPerPage}
-                                page={page}
-                                setPage={setPage}
-                            /> */}
-              <NewPagination
+              <Pagination
+                totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+                itemsPerPage={itemsPerPage}
+                page={page}
+                setPage={setPage}
+              />
+              {/* <NewPagination
                 totalRecords={
                   estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
                 }
@@ -207,7 +209,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
                 inputPage={inputPage}
                 page={page}
                 setPage={setPage}
-              />
+              /> */}
             </Box>
           ) : (
             <Typography>No estimates found.</Typography>
