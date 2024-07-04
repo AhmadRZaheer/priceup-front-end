@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./customerTable.scss";
 import { CustomerColumns } from "@/utilities/DataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
@@ -25,22 +25,31 @@ import { debounce } from "@/utilities/common";
 
 
 const CustomerTable = () => {
-
-  const { data: customerData, refetch: customersRefetch, isFetching } =
-    useFetchDataCustomer();
-  // const refetchData = useSelector(getDataRefetch);
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const itemsPerPage = 10;
+
+  const { data: customersList, refetch: customersRefetch, isFetching } =
+    useFetchDataCustomer(page, itemsPerPage, search);
+  // const refetchData = useSelector(getDataRefetch);
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
   // pagination state:
-  const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
 
-  const filteredData = customerData?.filter((customer) =>
-    customer.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredData = useMemo(() => {
+    if (customersList && customersList?.customers?.length) {
+      return customersList?.customers;
+    } else {
+      return [];
+    }
+  }, [customersList, search]);
+
+  // const filteredData = customerData?.filter((customer) =>
+  //   customer.name.toLowerCase().includes(search.toLowerCase())
+  // );
   // useEffect(() => {
   //   refetch();
   // }, [refetchData]);
@@ -49,9 +58,14 @@ const CustomerTable = () => {
   }, [page]);
   const debouncedRefetch = useCallback(
     debounce(() => {
-      customersRefetch();
+      if(page === 1){
+        customersRefetch();
+      }
+      else{
+        setPage(1);
+      }
     }, 500),
-    []
+    [search]
   );
 
   const handleChange = (e) => {
@@ -174,18 +188,23 @@ const CustomerTable = () => {
                   loading={isFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  rows={filteredData.slice(
-                    (page - 1) * itemsPerPage,
-                    page * itemsPerPage
-                  )}
+                  // rows={filteredData.slice(
+                  //   (page - 1) * itemsPerPage,
+                  //   page * itemsPerPage
+                  // )}
+                  rows={filteredData}
                   columns={CustomerColumns.concat(actionColumn)}
                   pageSize={itemsPerPage}
-                  rowCount={filteredData.length}
+                  rowCount={
+                    customersList?.totalRecords ? customersList?.totalRecords : 0
+                  }
+                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                 />
             <Pagination
-            totalRecords={filteredData.length ? filteredData.length : 0}
+            // totalRecords={filteredData.length ? filteredData.length : 0}
+            totalRecords={customersList?.totalRecords ? customersList?.totalRecords : 0}
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}
