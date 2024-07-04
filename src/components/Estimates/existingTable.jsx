@@ -162,9 +162,14 @@ export default function ExistingTable() {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      refetchEstimatesList();
+      if(page === 1){
+        refetchEstimatesList();
+        }
+        else{
+          setPage(1);
+        }
     }, 500),
-    []
+    [search]
   );
 
   const handleChange = (e) => {

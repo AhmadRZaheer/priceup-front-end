@@ -51,6 +51,7 @@ const Pagination = ({ totalRecords, itemsPerPage, page, setPage }) => {
     setPage(pageNumber);
    }
   }
+  console.log(pageNumbersToShow,'page',totalPages,page);
   return (
     <Box
       sx={{
@@ -121,7 +122,7 @@ const Pagination = ({ totalRecords, itemsPerPage, page, setPage }) => {
           },
         }}
         onClick={handleNextPage}
-        disabled={pageNumbersToShow?.length > page ? false : true}
+        disabled={totalPages === page ? true : false}
       >
         {isMobile ? '' : 'Next'}
         <ArrowForward sx={{ color: "#344054", fontSize: 20, ml: 1 }} />
