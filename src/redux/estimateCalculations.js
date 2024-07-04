@@ -752,6 +752,7 @@ const estimateCalcSlice = createSlice({
         // if state is create quote
         if (["channel"].includes(payload?.toLowerCase())) {
           // for channel
+          console.log('shifting to channel')
           
           /** on shifting to default channel, remove fabrication of already selected clamps */
           state.content.mountingClamps.wallClamp.forEach((record) => {
@@ -762,6 +763,7 @@ const estimateCalcSlice = createSlice({
               {item:null,count:0}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('current fabrication wall clamp',fabricationsCount)
           });
           state.content.mountingClamps.sleeveOver.forEach((record) => {
             const hardwareFabrication = getHardwareSpecificFabrication(
@@ -771,6 +773,7 @@ const estimateCalcSlice = createSlice({
               {item:null,count:0}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('current fabrication sleeve over',fabricationsCount)
           });
           state.content.mountingClamps.glassToGlass.forEach((record) => {
             const hardwareFabrication = getHardwareSpecificFabrication(
@@ -780,6 +783,7 @@ const estimateCalcSlice = createSlice({
               {item:null,count:0}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('current fabrication glass to glass',fabricationsCount)
           });
           /** end */
 
@@ -808,29 +812,36 @@ const estimateCalcSlice = createSlice({
             {item:null,count:0},
             {item:defaultItem,count:defaultItem ? 1 : 0}
           );
-          /** end */
-
+          fabricationsCount = {...hardwareFabrication};
+          // set mounting channel
           state.content = {
             ...state.content,
             mountingChannel: {
               item: defaultItem,
               count: 1,
             },
-            mountingClamps: {
-              wallClamp: [],
-              sleeveOver: [],
-              glassToGlass: [],
-            },
-            oneInchHoles:hardwareFabrication.oneInchHoles,
-            hingeCut:hardwareFabrication.hingeCut,
-            clampCut:hardwareFabrication.clampCut,
-            notch:hardwareFabrication.notch,
-            outages:hardwareFabrication.outages
-          };
+          }
+          /** end */
+           console.log('default channel selected fabrication',fabricationsCount)
+          
         }
+        // set new fabrication with remove selected mounting clamps
+        state.content = {
+          ...state.content,
+          mountingClamps: {
+            wallClamp: [],
+            sleeveOver: [],
+            glassToGlass: [],
+          },
+          oneInchHoles:fabricationsCount.oneInchHoles,
+          hingeCut:fabricationsCount.hingeCut,
+          clampCut:fabricationsCount.clampCut,
+          notch:fabricationsCount.notch,
+          outages:fabricationsCount.outages
+        };
         } else if (["clamps"].includes(payload?.toLowerCase())) {
           // for clamps
-
+          console.log('shifting to clamps')
           /** on shifting to default clamps remove fabrication of selected channel */
           const hardwareFabrication = getHardwareSpecificFabrication(
             hardwareTypes.CHANNEL,
@@ -839,6 +850,7 @@ const estimateCalcSlice = createSlice({
             {item:null,count:0}
           );
           fabricationsCount = {...hardwareFabrication};
+          console.log('current febrication',fabricationsCount)
            /** end */
 
           let wallClampItem = null;
@@ -868,6 +880,7 @@ const estimateCalcSlice = createSlice({
               {item:wallClampItem,count:state.selectedItem?.settings?.wallClamp?.count}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('wall clamp item fabrication',fabricationsCount)
            }
            if(sleeveOverItem){
             const hardwareFabrication = getHardwareSpecificFabrication(
@@ -877,6 +890,8 @@ const estimateCalcSlice = createSlice({
               {item:sleeveOverItem,count:state.selectedItem?.settings?.sleeveOver?.count}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('sleeve over item fabrication',fabricationsCount)
+
            }
            if(glassToGlassItem){
             const hardwareFabrication = getHardwareSpecificFabrication(
@@ -886,6 +901,8 @@ const estimateCalcSlice = createSlice({
               {item:glassToGlassItem,count:state.selectedItem?.settings?.glassToGlass?.count}
             );
             fabricationsCount = {...hardwareFabrication};
+            console.log('glass to glass item fabrication',fabricationsCount)
+
            }
            
            /** end */
@@ -985,7 +1002,7 @@ const estimateCalcSlice = createSlice({
           }
 
           const defaultItem = state.listData?.mountingChannel?.find(
-            (item) => item._id === state.selectedItem?.mountingChannel
+            (item) => item._id === state.selectedItem?.config?.mountingChannel
           );
 
           // perform fabrication and update only if layout default channel is according to current glass thickness
@@ -998,25 +1015,30 @@ const estimateCalcSlice = createSlice({
             {item:null,count:0},
             {item:defaultItem,count:defaultItem ? 1 : 0}
           );
-
+          fabricationsCount = {...hardwareFabrication};
+          // set moutning channel
           state.content = {
             ...state.content,
             mountingChannel: {
               item: defaultItem,
               count: 1,
-            },
-            mountingClamps: {
-              wallClamp: [],
-              sleeveOver: [],
-              glassToGlass: [],
-            },
-            oneInchHoles:hardwareFabrication.oneInchHoles,
-            hingeCut:hardwareFabrication.hingeCut,
-            clampCut:hardwareFabrication.clampCut,
-            notch:hardwareFabrication.notch,
-            outages:hardwareFabrication.outages
+            }
           };
         }
+        // set new fabrication with remove selected mounting clamps
+        state.content = {
+          ...state.content,
+          mountingClamps: {
+            wallClamp: [],
+            sleeveOver: [],
+            glassToGlass: [],
+          },
+          oneInchHoles:fabricationsCount.oneInchHoles,
+          hingeCut:fabricationsCount.hingeCut,
+          clampCut:fabricationsCount.clampCut,
+          notch:fabricationsCount.notch,
+          outages:fabricationsCount.outages
+        };
         } else if (["clamps"].includes(payload?.toLowerCase())) {
           // for clamps
 
@@ -1031,7 +1053,7 @@ const estimateCalcSlice = createSlice({
            /** end */
 
           let wallClampArray = [];
-          wallClampArray = state.selectedItem?.mountingClamps?.wallClamp?.map(
+          wallClampArray = state.selectedItem?.config?.mountingClamps?.wallClamp?.map(
             (row) => {
               const record = state.listData?.wallClamp?.find(
                 (clamp) => clamp._id === row?.type
@@ -1040,7 +1062,7 @@ const estimateCalcSlice = createSlice({
             }
           );
           let sleeveOverArray = [];
-          sleeveOverArray = state.selectedItem?.mountingClamps?.sleeveOver?.map(
+          sleeveOverArray = state.selectedItem?.config?.mountingClamps?.sleeveOver?.map(
             (row) => {
               const record = state.listData?.sleeveOver?.find(
                 (clamp) => clamp._id === row?.type
@@ -1050,7 +1072,7 @@ const estimateCalcSlice = createSlice({
           );
           let glassToGlassArray = [];
           glassToGlassArray =
-            state.selectedItem?.mountingClamps?.glassToGlass?.map((row) => {
+            state.selectedItem?.config?.mountingClamps?.glassToGlass?.map((row) => {
               const record = state.listData?.glassToGlass?.find(
                 (clamp) => clamp._id === row?.type
               );

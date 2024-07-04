@@ -67,7 +67,7 @@ export const getHardwareFabricationQuantity = (
     // for sleeve over
     if (selectedContent.mountingClamps.sleeveOver?.length) {
       selectedContent.mountingClamps.sleeveOver.forEach((record) => {
-        const sleeveOverResult = getMountingClampFabrication(
+        const sleeveOverResult = getGenericFabrication(  // use generic fabrication method for sleeve over to avoid default clamp cut count
           record.item,
           record.count
         );
@@ -371,6 +371,19 @@ export const getHardwareSpecificFabrication = (
     existingFabricationValues.notch -= currentHardwareFabrication.notch;
     existingFabricationValues.outages -= currentHardwareFabrication.outages;
   }
+
+  /* check to avoid negative value **/
+  if(existingFabricationValues.oneInchHoles < 0)
+  existingFabricationValues.oneInchHoles = 0;
+  if(existingFabricationValues.hingeCut < 0)
+    existingFabricationValues.hingeCut = 0;
+  if(existingFabricationValues.clampCut < 0)
+    existingFabricationValues.clampCut = 0;
+  if(existingFabricationValues.notch < 0)
+    existingFabricationValues.notch = 0;
+  if(existingFabricationValues.outages < 0)
+    existingFabricationValues.outages = 0;
+  /* end **/
 
   if (newSelectedHardware) {
     let newSelectedHardwareFabrication = null;
