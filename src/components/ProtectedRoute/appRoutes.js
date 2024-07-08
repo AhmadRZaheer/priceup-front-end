@@ -44,6 +44,7 @@ import EstimateCategory from "@/pages/EstimateCategory";
 import EstimateLayouts from "@/pages/EstimateLayouts";
 import EstimateDimensions from "@/pages/EstimateDimensions";
 import EstimateReview from "@/pages/EstimateReview";
+import Notification from "@/pages/Notification";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -110,6 +111,10 @@ const AppRoutes = () => {
             <Route path="glass-types" element={<MirrorsGlassType />} />
             <Route path="glass-addons" element={<MirrorsGlassAddon />} />
             <Route path="*" element={<MirrorsHardware />} />
+          </Route>
+          {/** Notification */}
+          <Route path="notification/">
+            <Route index element={<Notification />} />
           </Route>
           {/** End */}
           <Route path="*" element={<Overview />}></Route>

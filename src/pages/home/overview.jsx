@@ -15,6 +15,7 @@ const Overview = () => {
     refetch();
   }, []);
   return (
+    <>
     <div className="overview">
       <Sidebar />
 
@@ -38,6 +39,7 @@ const Overview = () => {
         <Estimates />
       </Box>
     </div>
+    </>
   );
 };
 
