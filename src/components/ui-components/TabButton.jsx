@@ -10,8 +10,10 @@ const TabButton = ({ title, selected, onClick, sx }) => {
         borderRadius: "unset",
         background: "none",
         fontWeight: selected ? 500 : 300,
+        textTransform:'none',
         fontSize: "21px !important",
         lineHeight: "26.6px !important",
+        borderBottom:selected? '4px solid #8477DA' :'none',
         ...sx,
       }}
     >

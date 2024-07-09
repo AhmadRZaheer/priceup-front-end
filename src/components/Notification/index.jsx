@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import TopBar from "../TopBar";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import TabButton from "@/components/ui-components/TabButton";
+import NotificationSection from "./NotificationDetail/NotificationSection";
+import SingleDetailSection from "./NotificationDetail/SingleDetailSection";
+import './style.scss';
+
 const tabData = [
   { id: 1, title: "Activity" },
   { id: 2, title: "Archive" },
@@ -45,7 +49,9 @@ const Notifications = () => {
             </Badge>
           </Box>
         </Stack>
-        <Box>
+        
+      </Grid>
+      <Box sx={{borderBottom:'1px solid #D9D9D9',px:4}}>
           {tabData.map((data, index) => (
             <TabButton
               key={index}
@@ -56,7 +62,14 @@ const Notifications = () => {
             />
           ))}
         </Box>
-      </Grid>
+        <Grid container >
+          <Grid item xs={6}>
+            <NotificationSection />
+          </Grid>
+          <Grid item xs={6}>
+            <SingleDetailSection/>
+          </Grid>
+        </Grid>
     </Box>
   );
 };
