@@ -11,10 +11,11 @@ const NameAcronyms = ({
   width = 40,
   height = 40,
   borderRadius = "100%",
+  type,
 }) => {
   let firstNameInitial = "";
   let lastNameInitial = "";
-
+  console.log(type, "b");
   if (name) {
     firstNameInitial = name.charAt(0);
     lastNameInitial = name.length > 1 ? name.charAt(1) : "";
@@ -22,7 +23,7 @@ const NameAcronyms = ({
   return (
     <Typography
       sx={{
-        backgroundColor: "#F9F5FF",
+        backgroundColor: type === 4 ? "#FFFFFF" : "#F9F5FF",
         width: width,
         height: height,
         borderRadius: borderRadius,
@@ -33,6 +34,7 @@ const NameAcronyms = ({
         color: "#7F56D9",
         textTransform: "uppercase",
         fontWeight: "bold",
+        boxShadow: type === 4 ? 1 : "none",
       }}
     >
       {firstNameInitial}
@@ -81,7 +83,7 @@ const DefaultImage = ({ image, name, type = 1 }) => {
             alt="logo image"
           />
         ) : (
-          <NameAcronyms name={name} />
+          <NameAcronyms name={name} type={type} />
         )}
       </Box>
       <Popover
@@ -131,6 +133,6 @@ const DefaultImage = ({ image, name, type = 1 }) => {
       </Popover>
     </>
   );
-}
+};
 
 export default DefaultImage;

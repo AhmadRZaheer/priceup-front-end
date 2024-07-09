@@ -15,8 +15,9 @@ function TopBar(props) {
   };
 
   return (
-    <Box sx={{ display: "flex",pb:'75px' }}>
+    <Box sx={{ display: "flex"}}>
       <AppBar
+      position="static"
         sx={{ background: "#100D24", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
       >
         <Box

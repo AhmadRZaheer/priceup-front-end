@@ -63,3 +63,18 @@
   line-height: 28.75px !important;
   align-items: center !important;
 }
+.drawerContainer{
+   height: 78.5vh;
+    overflow-y: auto;
+}
+.drawerContainer::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  background: none;
+  border-radius: 0px;
+}
+.drawerContainer::-webkit-scrollbar-thumb {
+  border-radius: 12px;
+  background-color: #8477DA;
+  height: 91px;
+}

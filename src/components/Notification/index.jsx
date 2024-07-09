@@ -1,11 +1,14 @@
-import { Badge, Box, Grid, Typography, Stack } from "@mui/material";
+import { Badge, Box, Grid, Typography, Stack ,Button} from "@mui/material";
 import React, { useState } from "react";
 import TopBar from "../TopBar";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import TabButton from "@/components/ui-components/TabButton";
-import NotificationSection from "./NotificationDetail/NotificationSection";
-import SingleDetailSection from "./NotificationDetail/SingleDetailSection";
-import './style.scss';
+import NotificationSection from "./NotificationDetail/Activity/NotificationSection";
+import NotificationArchiveSection from "./NotificationDetail/Archive/NotificationSection";
+import SingleDetailSection from "./NotificationDetail/Activity/SingleDetailSection";
+import SingleDetailArchiveSection from "./NotificationDetail/Archive/SingleDetailSection";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import "./style.scss";
 
 const tabData = [
   { id: 1, title: "Activity" },
@@ -20,7 +23,7 @@ const Notifications = () => {
   return (
     <Box>
       <TopBar />
-      <Grid sx={{ py: 4, background: "#FFFFFF", px: 4 }}>
+      <Grid sx={{ pt: 3, pb: 2, background: "#FFFFFF", px: 4 }}>
         <Stack direction="row" gap={1}>
           <Typography
             sx={{
@@ -49,27 +52,52 @@ const Notifications = () => {
             </Badge>
           </Box>
         </Stack>
-        
       </Grid>
-      <Box sx={{borderBottom:'1px solid #D9D9D9',px:4}}>
-          {tabData.map((data, index) => (
-            <TabButton
-              key={index}
-              title={data.title}
-              onClick={() => tabHandleClick(data.title)}
-              selected={data.title === selected ? true : false}
-              sx={{ mr: 3 }}
-            />
-          ))}
-        </Box>
-        <Grid container >
+      <Stack direction='row' sx={{ borderBottom: "1px solid #D9D9D9", px: 4 ,justifyContent:'space-between'}}>
+       <Stack direction='row'>
+        {tabData.map((data, index) => (
+          <TabButton
+            key={index}
+            title={data.title}
+            onClick={() => tabHandleClick(data.title)}
+            selected={data.title === selected ? true : false}
+            sx={{ mr: 3 }}
+          />
+        ))}
+        </Stack> 
+        <Button
+            variant="contained"
+            startIcon={<DeleteOutlineOutlinedIcon />}
+            className="estimatebtn"
+            sx={{
+              py: 1,
+              ":hover": {
+                background: "#8477DA",
+              },
+            }}
+          >
+            Delete
+          </Button>
+      </Stack>
+      {selected === "Activity" ? (
+        <Grid container>
           <Grid item xs={6}>
             <NotificationSection />
           </Grid>
           <Grid item xs={6}>
-            <SingleDetailSection/>
+            <SingleDetailSection />
           </Grid>
         </Grid>
+      ) : (
+        <Grid container>
+          <Grid item xs={6}>
+            <NotificationArchiveSection />
+          </Grid>
+          <Grid item xs={6}>
+            <SingleDetailArchiveSection />
+          </Grid>
+        </Grid>
+      )}
     </Box>
   );
 };

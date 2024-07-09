@@ -1,15 +1,14 @@
 import React from "react";
 import { Box, Divider, Stack, Typography } from "@mui/material";
-import SingleNotification from "../SingleNotification";
+import SingleNotification from "../../SingleNotification";
 
 const NotificationSection = () => {
   return (
     <Box>
       <Box
         sx={{
-          height: "100vh",
+          height: "78.5vh",
           overflowY: "auto",
-          pb: 2,
           pr: 3,
           "&::-webkit-scrollbar": {
             "-webkit-appearance": "none",

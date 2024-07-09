@@ -3,21 +3,26 @@ import { Divider, Stack, Typography, Box } from "@mui/material";
 import Tick from "../../Assets/Tick.svg";
 import PersonIcon from "../../Assets/Persons.svg";
 import "./style.scss";
+import DefaultImage from "../ui-components/defaultImage";
+import { useNavigate } from "react-router-dom";
 
-const SingleNotification = ({ data,sx }) => {
+const SingleNotification = ({ data, sx }) => {
+  const navigate = useNavigate();
   return (
     <>
       <Box
+        onClick={() => navigate("/notification")}
+        className='pointer'
         sx={{
           py: 2.2,
           px: 2,
           ":hover": {
             background: "rgba(217, 217, 217, 0.39)",
           },
-          ...sx
+          ...sx,
         }}
       >
-        <Stack direction="row" gap={1} >
+        <Stack direction="row" gap={1}>
           <img alt="not" src={PersonIcon} />
           <Typography className="estimateText">Estimates</Typography>
         </Stack>
@@ -32,8 +37,9 @@ const SingleNotification = ({ data,sx }) => {
             Estimate Updated Successfully
           </Typography>
         </Stack>
-        <Stack direction="row" gap={1}>
-          <Box className="cpWrapper">
+        <Stack direction="row">
+          <DefaultImage name="Chris Phillips" type={4} />
+          {/* <Box className="cpWrapper">
             <Typography
               sx={{
                 fontSize: "16.3px",
@@ -42,7 +48,7 @@ const SingleNotification = ({ data,sx }) => {
             >
               CP
             </Typography>
-          </Box>
+          </Box> */}
           <Stack direction="row" sx={{ alignItems: "center" }}>
             <Typography
               className="estimateText"

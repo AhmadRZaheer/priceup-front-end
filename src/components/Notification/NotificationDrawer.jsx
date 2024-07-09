@@ -3,7 +3,7 @@ import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, Stack, Typography } from "@mui/material";
+import { IconButton, Stack, Typography,Checkbox } from "@mui/material";
 import SingleNotification from "./SingleNotification";
 import "./style.scss";
 
@@ -48,25 +48,25 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               <CloseIcon className="closeIcon" />
             </IconButton>
           </Stack>
-          <Stack sx={{ pt: 2, pb: 1, px: 2 }}>
+          <Stack direction="row" sx={{ pt: 2, pb: 1, px: 2,justifyContent:'space-between' }}>
             <Typography className="todayText">Today</Typography>
+            <Stack direction="row" gap={0.5}>
+          <Checkbox
+            sx={{
+              padding: "0px !important",
+              color: "rgba(0, 0, 0, 0.49)",
+              "&.Mui-checked": {
+                color: "rgba(0, 0, 0, 0.49)",
+              },
+            }}
+          />
+          <Typography className="archText">Mark all as read</Typography>
+        </Stack>
           </Stack>
           <Box
+            className="drawerContainer"
             sx={{
-              height: "82vh",
-              overflowY: "auto",
               mb: 8,
-              "&::-webkit-scrollbar": {
-                "-webkit-appearance": "none",
-                width: "8px",
-                background: "none",
-                borderRadius: "0px",
-              },
-              "&::-webkit-scrollbar-thumb": {
-                borderRadius: "12px",
-                backgroundColor: "#8477DA",
-                height: "91px",
-              },
             }}
           >
             {Array.from({ length: 20 }).map((data, index) => (
