@@ -15,9 +15,8 @@ function TopBar(props) {
   };
 
   return (
-    <Box sx={{ display: "flex"}}>
+    <Box sx={{ display: "flex", pb: "75px" }}>
       <AppBar
-      position="static"
         sx={{ background: "#100D24", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
       >
         <Box
@@ -40,18 +39,22 @@ function TopBar(props) {
             }}
           >
             <Badge
-              variant="dot"
+              badgeContent={10}
+              color="primary"
               sx={{
                 "& .MuiBadge-badge": {
-                  minWidth: "6px",
-                  height: "6px",
+                  padding: "3px !important",
+                  color: "#FFFF",
                   background: "#FF6174",
                   top: "6px",
                   right: "7px",
+                  minWidth:'18px',
+                  height:'18px'
+                  // fontSize:'0.65rem'
                 },
               }}
             >
-              <NotificationsNoneIcon sx={{ color: "#FFFF" }} />
+              <NotificationsNoneIcon sx={{ color: "#FFFF",fontSize:'1.8rem' }} />
             </Badge>
           </IconButton>
           <Avatar

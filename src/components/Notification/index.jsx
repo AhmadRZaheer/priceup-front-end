@@ -22,7 +22,7 @@ const Notifications = () => {
   };
   return (
     <Box>
-      <TopBar />
+      {/* <TopBar /> */}
       <Grid sx={{ pt: 3, pb: 2, background: "#FFFFFF", px: 4 }}>
         <Stack direction="row" gap={1}>
           <Typography

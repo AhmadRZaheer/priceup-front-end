@@ -5,16 +5,21 @@ import { SelectCategory } from "@/components/Estimates/selectCategory";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
+import TopBar from "@/components/TopBar";
 
 const EstimateCategory = () => {
     const decodedToken = getDecryptedToken();
     return (
-        <div className="main-wrapper">
+        <>
+        <TopBar/>
+         <div className="main-wrapper">
             {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
             <div className="content-wrapper">
                 <SelectCategory />
             </div>
         </div>
+        </>
+       
     );
 };
 
