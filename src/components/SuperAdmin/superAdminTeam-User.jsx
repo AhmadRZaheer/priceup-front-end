@@ -189,8 +189,8 @@ const SuperAdminTeam = () => {
 
   return (
     <>
-      <Box sx={{ pt: 2, width: "100%", m: "auto" }}>
-        <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
+      <Box sx={{  width: "100%", m: "auto" }}>
+        <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold",p:'88px 20px 20px 20px !important' }}>
           Users
         </Typography>
         <Box

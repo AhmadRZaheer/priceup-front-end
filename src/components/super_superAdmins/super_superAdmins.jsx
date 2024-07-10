@@ -160,7 +160,7 @@ const Super_SuperAdminsTable = () => {
   ];
   return (
     <>
-      <Box sx={{ m: "auto", width: "95%", py: 2 }}>
+      <Box sx={{ m: "auto", width: "95%", pb: 2, }}>
         <Box
           sx={{
             display: "flex",
@@ -168,10 +168,11 @@ const Super_SuperAdminsTable = () => {
             width: "100%",
             m: "auto",
             alignItems: "center",
+            pt:11,
             pb: 3,
           }}
         >
-          <Typography variant="h5">Super Admins</Typography>
+          <Typography variant="h5" sx={{}}>Super Admins</Typography>
           <CustomIconButton
             buttonText="Add Super Admin"
             handleClick={handleOpenAdd}

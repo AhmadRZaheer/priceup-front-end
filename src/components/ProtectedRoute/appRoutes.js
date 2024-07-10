@@ -90,9 +90,9 @@ const AppRoutes = () => {
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
-            <Route path=":userId" element={<Single />} />
-            <Route path="new" element={<New />} />
-            <Route path="steps" element={<Estimates />} />
+            {/* <Route path=":userId" element={<Single />} />
+            <Route path="new" element={<New />} /> */}
+            {/* <Route path="steps" element={<Estimates />} /> */}
           </Route>
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />
@@ -111,10 +111,6 @@ const AppRoutes = () => {
             <Route path="glass-types" element={<MirrorsGlassType />} />
             <Route path="glass-addons" element={<MirrorsGlassAddon />} />
             <Route path="*" element={<MirrorsHardware />} />
-          </Route>
-          {/** Notification */}
-          <Route path="notification/">
-            <Route index element={<Notification />} />
           </Route>
           {/** End */}
           <Route path="*" element={<Overview />}></Route>
@@ -153,6 +149,17 @@ const AppRoutes = () => {
         <Route path="/">
           <Route index element={<CustomAdminPage />} />
           <Route path="/locations" element={<CustomAdminPage />} />
+        </Route>
+      ) : (
+        ""
+      )}
+      {/** Notification */}
+      {isAdmin(decodedToken) ||
+      isCustomAdmin(decodedToken) ||
+      isStaff(decodedToken) ||
+      isCustomAdmin(decodedToken) ? (
+        <Route path="notification/">
+          <Route index element={<Notification />} />
         </Route>
       ) : (
         ""

@@ -50,7 +50,6 @@ function TopBar(props) {
                   right: "7px",
                   minWidth:'18px',
                   height:'18px'
-                  // fontSize:'0.65rem'
                 },
               }}
             >

@@ -20,7 +20,6 @@ const Overview = () => {
     <TopBar/>
     <div className="overview">
       <Sidebar />
-
       <Box
         className="overviewContainer"
         sx={{ marginTop: { xs: "50px", sm: "0px" } }}

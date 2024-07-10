@@ -452,6 +452,7 @@ function MobileBar() {
                 boxSizing: "border-box",
                 width: drawerWidth,
                 overflowX: "hidden",
+                backgroundColor:'#100D24',
               },
             }}
             open

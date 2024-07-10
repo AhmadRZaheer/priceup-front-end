@@ -5,16 +5,21 @@ import { Review } from "@/components/Estimates/review";
 import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { getDecryptedToken } from "@/utilities/common";
+import TopBar from "@/components/TopBar";
 
 const EstimateReview = () => {
     const decodedToken = getDecryptedToken();
     return (
+        <>
+        <TopBar/>
         <div className="main-wrapper">
             {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
             <div className="content-wrapper">
                 <Review />
             </div>
         </div>
+        </>
+        
     );
 };
 
