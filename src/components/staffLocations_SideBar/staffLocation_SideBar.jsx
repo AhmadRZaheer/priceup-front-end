@@ -78,14 +78,15 @@ const StaffLocationsSidebar = () => {
             justifyContent: "space-between",
           }}
         >
-          <Box sx={{ marginTop: 2 }}>
+          <Box sx={{ marginTop: '10px' }}>
             <NavLink style={{ marginTop: 20 }} to="/">
               <div className="top">
-                <span className="logo">
+                <span className="staffLogo">
                   <img src={Logo} alt="" />
                 </span>
               </div>
             </NavLink>
+             <hr style={{border:'1px solid rgba(217, 217, 217, 0.34)'}} />
             <div className="center">
               <ul>
                 <li
@@ -142,8 +143,8 @@ const StaffLocationsSidebar = () => {
             </div>
           </Box>
           <Box>
-            <div className="line"></div>
-            <div className="bottom">
+            {/* <div className="line"></div> */}
+            <div className="bottom" style={{opacity:0}}>
               <div className="UserIcon">
                 <DefaultImage
                   image={decodedToken?.image}

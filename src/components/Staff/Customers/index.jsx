@@ -120,7 +120,7 @@ export default function Customers() {
           <Typography
             sx={{
               fontSize: 30,
-              pl: 2,
+              pl: 3,
               color: { xs: "#101828", sm: "#101828" },
             }}
           >

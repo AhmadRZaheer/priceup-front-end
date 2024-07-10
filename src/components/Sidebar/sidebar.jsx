@@ -240,6 +240,7 @@ const NewSidebar = () => {
               </span>
             </div>
           </NavLink>
+          <hr className='adminLine' />
           {userReference && (
             <Tooltip title="Switch Location">
               <IconButton
@@ -603,7 +604,7 @@ const NewSidebar = () => {
             <span>Settings</span>
           </Box>
         </NavLink>
-        <div className="line"></div>
+        {/* <div className="line"></div>
         <Box
           sx={{
             display: "flex",
@@ -648,7 +649,7 @@ const NewSidebar = () => {
               <img src={logout} alt="image" />
             </Box>
           </Tooltip>
-        </Box>
+        </Box> */}
       </Box>
     </Box>
   );
