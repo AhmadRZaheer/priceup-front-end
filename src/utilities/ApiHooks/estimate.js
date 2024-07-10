@@ -5,6 +5,8 @@ import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 import { setEstimatesListRefetch } from "../../redux/refetch";
+import { socketClient } from "../../configs/socket";
+import { socketIoChannel } from "../constants";
 // import { useSnackbar } from "notistack";
 
 export const useFetchDataEstimate = () => {
@@ -90,6 +92,7 @@ export const useCreateEstimates = () => {
       );
 
       if (response.data.code === 200) {
+        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate created.');
         dispatch(
           showSnackbar({
             message: "Estimate Created Successfully",
@@ -160,6 +163,7 @@ export const useEditEstimates = () => {
       );
 
       if (response.data.code === 200) {
+        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate updated.');
         dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({
@@ -202,6 +206,7 @@ export const useDeleteEstimates = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
+        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate deleted.');
         dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({

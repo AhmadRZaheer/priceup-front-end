@@ -95,3 +95,7 @@ export const mirrorHardwareTypes = {
 };
 export const itemsPerPage = 10;
 export const MAX_PAGES_DISPLAYED = 3;
+
+export const socketIoChannel = {
+  NOTIFICATIONS: "notifications",
+};
