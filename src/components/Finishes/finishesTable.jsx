@@ -132,11 +132,11 @@ const FinishesTable = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          height: "100vh",
+          height: "88vh",
           pl: 1,
         }}
       >
-        <div className="page-title">
+        <div className="fpage-title">
           <Typography variant="h4" sx={{ fontWeight: 500, color: "#101828" }}>
             Finishes
           </Typography>

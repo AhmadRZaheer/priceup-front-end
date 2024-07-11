@@ -6,10 +6,16 @@ import DefaultComponent from "./defaultComponent";
 const DefaultSection = () => {
   return (
     <>
-      <div className="page-title">
+    <Box
+        sx={{
+          backgroundColor: "white",
+          height: "84vh",
+        
+        }}
+      >
+      <div className="lpage-title">
         <Typography sx={{ fontSize: 30, pl: 1 }}>Layouts</Typography>
       </div>
-
       <Box
         sx={{
           border: "1px solid rgb(232, 232, 232)",
@@ -22,6 +28,7 @@ const DefaultSection = () => {
         }}
       >
         <DefaultComponent />
+      </Box>
       </Box>
     </>
   );

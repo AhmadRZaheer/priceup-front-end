@@ -1,6 +1,5 @@
 import { Badge, Box, Grid, Typography, Stack ,Button} from "@mui/material";
 import React, { useState } from "react";
-import TopBar from "../TopBar";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import TabButton from "@/components/ui-components/TabButton";
 import NotificationSection from "./NotificationDetail/Activity/NotificationSection";
@@ -22,7 +21,6 @@ const Notifications = () => {
   };
   return (
     <Box>
-      {/* <TopBar /> */}
       <Grid sx={{ pt: 3, pb: 2, background: "#FFFFFF", px: 4 }}>
         <Stack direction="row" gap={1} sx={{pt:9}}>
           <Typography

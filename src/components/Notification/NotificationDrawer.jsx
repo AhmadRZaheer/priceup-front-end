@@ -71,13 +71,13 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         >
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", px: 2, mt: {sm:5,xs:3} }}
+            sx={{ justifyContent: "space-between", px: 2, mt: {sm:2,xs:3} }}
           >
             <Stack direction="row" gap={1}>
               <Typography className="notificationText">
                 Notifications
               </Typography>
-              <Box sx={{ alignContent: "center" }}>
+              <Box sx={{ display:'flex',alignItems:'center' }}>
                 <NotificationsNoneIcon />
               </Box>
             </Stack>

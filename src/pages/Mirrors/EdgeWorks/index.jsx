@@ -9,7 +9,7 @@ export const MirrorsEdgeWork = () => {
     <TopBar/>
      <Box className="main-wrapper">
         <Sidebar />
-        <Box className="content-wrapper">
+        <Box className="edcontent-wrapper">
             <MirrorsEdgeWorkComponent />
         </Box>
     </Box>
