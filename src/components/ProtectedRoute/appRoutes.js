@@ -44,6 +44,7 @@ import EstimateCategory from "@/pages/EstimateCategory";
 import EstimateLayouts from "@/pages/EstimateLayouts";
 import EstimateDimensions from "@/pages/EstimateDimensions";
 import EstimateReview from "@/pages/EstimateReview";
+import Notification from "@/pages/Notification";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -89,9 +90,9 @@ const AppRoutes = () => {
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
-            <Route path=":userId" element={<Single />} />
-            <Route path="new" element={<New />} />
-            <Route path="steps" element={<Estimates />} />
+            {/* <Route path=":userId" element={<Single />} />
+            <Route path="new" element={<New />} /> */}
+            {/* <Route path="steps" element={<Estimates />} /> */}
           </Route>
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />
@@ -149,6 +150,15 @@ const AppRoutes = () => {
           <Route index element={<CustomAdminPage />} />
           <Route path="/locations" element={<CustomAdminPage />} />
         </Route>
+      ) : (
+        ""
+      )}
+      {/** Notification */}
+      {isAdmin(decodedToken) ||
+      isCustomAdmin(decodedToken) ||
+      isStaff(decodedToken) ||
+      isSuperAdmin(decodedToken) ? (
+        <Route path="/notification" element={<Notification />} />
       ) : (
         ""
       )}

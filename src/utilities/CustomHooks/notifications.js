@@ -1,38 +1,49 @@
 import { useEffect } from "react";
 import { socketIoChannel } from "../constants";
-import { showSnackbar } from "@/redux/snackBarSlice";
 import { useDispatch } from "react-redux";
-import { socketClient } from "../../configs/socket";
+import { socketClient } from "@/configs/socket";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { backendURL, getDecryptedToken } from "../common";
+import {
+  setNotificationsList,
+  setUnreadCount,
+} from "@/redux/notificationsSlice";
 
 export const Notifications = () => {
-  //   const [notifications, setNotifications] = useState([]);
+  const routePrefix = `${backendURL}/notifications`;
+  const decryptedToken = getDecryptedToken();
   const dispatch = useDispatch();
+  const { data, refetch: refetchNotifications } =
+    useFetchAllDocuments(routePrefix);
+  useEffect(() => {
+    if (data) {
+      dispatch(setNotificationsList(data.notifications));
+      dispatch(setUnreadCount(data.unReadCount));
+    }
+  }, [data]);
 
   useEffect(() => {
-    socketClient.on(socketIoChannel.NOTIFICATIONS, (data) => {
-      console.log("notification received", data);
-      dispatch(
-        showSnackbar({
-          message: data,
-          severity: "success",
-        })
-      );
-      //   setNotifications((prev) => [...prev, data]);
-    });
-    return () => {
-      socketClient.disconnect();
-    };
-  }, [socketClient]);
-  return null;
+    if (decryptedToken) {
+      refetchNotifications();
+    }
+  }, [decryptedToken]);
 
-  //   return (
-  //     <div>
-  //       <h1>Real-time Notifications</h1>
-  //       <ul>
-  //         {notifications.map((notification, index) => (
-  //           <li key={index}>{notification}</li>
-  //         ))}
-  //       </ul>
-  //     </div>
-  //   );
+  // Setup socket listener for notifications
+  useEffect(() => {
+    const handleNotification = (msg) => {
+      console.log("notification received", msg);
+      if (decryptedToken && msg) {
+        refetchNotifications();
+      }
+    };
+
+    socketClient.on(socketIoChannel.NOTIFICATIONS, handleNotification);
+
+    return () => {
+      socketClient.off(socketIoChannel.NOTIFICATIONS, handleNotification);
+    };
+  }, [decryptedToken, socketClient]);
+
+  console.log(data, "notifi");
+  return null;
 };

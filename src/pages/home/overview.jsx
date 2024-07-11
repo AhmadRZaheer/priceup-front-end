@@ -6,6 +6,7 @@ import { useFetchDataEstimateCard } from "@/utilities/ApiHooks/estimateDataCard"
 import Estimates from "@/components/Estimates";
 import { parseJwt } from "@/components/ProtectedRoute/authVerify";
 import { Box } from "@mui/material";
+import TopBar from "@/components/TopBar";
 
 const Overview = () => {
   const { data, refetch } = useFetchDataEstimateCard();
@@ -15,9 +16,10 @@ const Overview = () => {
     refetch();
   }, []);
   return (
+    <>
+    <TopBar/>
     <div className="overview">
       <Sidebar />
-
       <Box
         className="overviewContainer"
         sx={{ marginTop: { xs: "50px", sm: "0px" } }}
@@ -38,6 +40,7 @@ const Overview = () => {
         <Estimates />
       </Box>
     </div>
+    </>
   );
 };
 

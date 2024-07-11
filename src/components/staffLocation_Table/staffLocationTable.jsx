@@ -71,6 +71,7 @@ const StaffLocationsTable = () => {
         overflow: "auto",
         width: "100%",
         bgcolor: "white",
+       
       }}
     >
       <div className="page-title">

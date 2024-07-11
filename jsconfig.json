@@ -5,7 +5,8 @@
             "@/components/*":["./src/components/*"],
             "@/utilities/*":["./src/utilities/*"],
             "@/redux/*":["./src/redux/*"],
-            "@/Assets/*":["./src/Assets/*"]
+            "@/Assets/*":["./src/Assets/*"],
+            "@/configs/*":["./src/configs/*"]
         }
     }
 }

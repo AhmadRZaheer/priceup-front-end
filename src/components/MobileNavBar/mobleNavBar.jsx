@@ -156,6 +156,7 @@ function MobileBar() {
             <img src={Logo} alt="" />
           </span>
         </div>
+        <hr style={{border:'1px solid rgba(217, 217, 217, 0.34)',marginTop:'1px'}} />
         <Box
           sx={{
             height: "65vh",
@@ -168,7 +169,7 @@ function MobileBar() {
             <Tooltip title="Switch Location">
               <Button
                 sx={{
-                  width: 245,
+                  width: 263,
                   color: "white",
                   marginX: 2,
                   marginY: 1,
@@ -212,7 +213,7 @@ function MobileBar() {
           <Box>
             <Button
               sx={{
-                width: 245,
+                width: 263,
                 color: "white",
                 marginX: 2,
                 marginY: 1,
@@ -240,7 +241,7 @@ function MobileBar() {
           <Box>
             <Button
               sx={{
-                width: 245,
+                width: 263,
                 color: "white",
                 marginX: 2,
                 marginY: 1,
@@ -268,7 +269,7 @@ function MobileBar() {
           {/* <Box>
             <Button
               sx={{
-                width: 245,
+                width: 263,
                 color: "white",
                 marginX: 2,
                 marginY: 1,
@@ -327,7 +328,7 @@ function MobileBar() {
           </Tooltip>
         </Box>
 
-        <div className="bottom">
+        <div className="bottom" style={{opacity:0}}>
           <div className="UserIcon">
             <DefaultImage
               image={decodedToken?.image}
@@ -359,7 +360,7 @@ function MobileBar() {
               </Box>
             </Tooltip>
           </Box>
-        </div>
+        </div> 
       </Box>
     </Box>
   );
@@ -450,8 +451,9 @@ function MobileBar() {
               display: { xs: "none", sm: "block" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
-                width: drawerWidth,
+                width: '304px',
                 overflowX: "hidden",
+                backgroundColor:'#100D24',
               },
             }}
             open

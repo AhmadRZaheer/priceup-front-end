@@ -5,16 +5,21 @@ import { SetDimensions } from "@/components/Estimates/setDimensions";
 import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { getDecryptedToken } from "@/utilities/common";
+import TopBar from "@/components/TopBar";
 
 const EstimateDimensions = () => {
     const decodedToken = getDecryptedToken();
     return (
-        <div className="main-wrapper">
+        <>
+        <TopBar/>
+          <div className="main-wrapper">
             {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
             <div className="content-wrapper">
                 <SetDimensions />
             </div>
         </div>
+        </>
+      
     );
 };
 

@@ -21,3 +21,10 @@ code {
   background-color: darkgray;
   border-radius: 10px; /* Set the color of the scrollbar thumb */
 }
+.pointer {
+  cursor: pointer;
+}
+.customModel {
+  top: 74px !important;
+  left: 320px !important;
+}

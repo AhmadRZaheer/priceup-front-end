@@ -2,14 +2,16 @@
   background-color: #100d24;
   color: #f2f4f7;
   height: 100vh;
+  z-index: 1200 !important;
   .top {
     display: flex;
     align-items: center;
     justify-content: center;
 
-    .logo {
+    .staffLogo {
       padding: 0px;
-      margin-top: 10px;
+        margin-top: 6px;
+      margin-bottom: 6px;
     }
   }
   .line {

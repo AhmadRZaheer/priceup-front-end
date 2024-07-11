@@ -2,13 +2,19 @@ import { Box } from "@mui/material";
 import Sidebar from "@/components/Sidebar/sidebar";
 import './style.scss';
 import MirrorsGlassAddonComponent from '@/components/Mirrors/GlassAddons';
+import TopBar from "@/components/TopBar";
 export const MirrorsGlassAddon = () => {
-    return (<Box className="main-wrapper">
+    return (
+    <>
+    <TopBar/>
+    <Box className="main-wrapper">
         <Sidebar />
         <Box className="content-wrapper">
             <MirrorsGlassAddonComponent />
         </Box>
-    </Box>);
+    </Box>
+    </>
+    );
 }
 
 export default MirrorsGlassAddon;
