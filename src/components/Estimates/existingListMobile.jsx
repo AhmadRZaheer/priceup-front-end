@@ -86,7 +86,7 @@ export default function ExistingListMobile() {
                 sx={{
                     paddingX: 2,
                     marginTop: 2,
-                    height: "68vh",
+                    height: {sm:"68vh",xs:'58vh'},
                     overflow: "auto",
                 }}
             >

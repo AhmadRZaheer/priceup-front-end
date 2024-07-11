@@ -11,19 +11,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutHandler } from "@/redux/userAuth";
 import DefaultImage from "../ui-components/defaultImage";
 import { getDecryptedToken } from "@/utilities/common";
-import { getUnreadCount } from "@/redux/notificationsSlice";
+import NotificationButton from "../ui-components/NotificationButton";
 
 function TopBar() {
-  const [state, setState] = React.useState(false);
+  // const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const decodedToken = getDecryptedToken();
-  const unReadCount = useSelector(getUnreadCount);
   //Notification Drawer
-  const toggleDrawer = (open) => (event) => {
-    setState(open);
-  };
+  // const toggleDrawer = (open) => (event) => {
+  //   setState(open);
+  // };
   //Profile DropDown
   const openDropDown = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -40,7 +39,7 @@ function TopBar() {
   };
 
   return (
-    <Box sx={{ display: "flex", pb: "75px" }}>
+    <Box sx={{ display: {sm:"flex",xs:'none'}, pb: "75px" }}>
       <AppBar
         sx={{ background: "#100D24", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
       >
@@ -52,7 +51,8 @@ function TopBar() {
             height: "74px",
           }}
         >
-          <IconButton
+          <NotificationButton  />
+          {/* <IconButton
             aria-label="notification"
             onClick={toggleDrawer(!state)}
             sx={{
@@ -81,8 +81,8 @@ function TopBar() {
               <NotificationsNoneIcon
                 sx={{ color: "#FFFF", fontSize: "1.8rem" }}
               />
-            </Badge> 
-          </IconButton>
+            </Badge>
+          </IconButton> */}
           <IconButton
             id="basic-button"
             aria-controls={openDropDown ? "basic-menu" : undefined}
@@ -116,7 +116,7 @@ function TopBar() {
             </MenuItem>
           </Menu>
         </Box>
-        <NotificationDrawer state={state} toggleDrawer={toggleDrawer} />
+        {/* <NotificationDrawer state={state} toggleDrawer={toggleDrawer} /> */}
         <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
       </AppBar>
     </Box>

@@ -54,7 +54,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         onOpen={toggleDrawer(true)}
         sx={{
           "& .MuiDrawer-paper": {
-            top: "75px",
+            top: {sm:"75px",xs:'57px'},
           },
           "& .MuiModal-backdrop": {
             top: "74px",
@@ -62,6 +62,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
           },
         }}
       >
+        
         <Box
           className="customModel"
           sx={{ width: { sm: "496px", xs: "100%" } }}
@@ -70,7 +71,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         >
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", px: 2, mt: 5 }}
+            sx={{ justifyContent: "space-between", px: 2, mt: {sm:5,xs:3} }}
           >
             <Stack direction="row" gap={1}>
               <Typography className="notificationText">
@@ -103,7 +104,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
           <Box
             className="drawerContainer"
             sx={{
-              mb: 8,
+              mb: 2,
             }}
           >
             {list.map((data, index) => (

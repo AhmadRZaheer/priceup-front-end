@@ -44,9 +44,10 @@ const Notification = () => {
   const decodedToken = getDecryptedToken();
   return (
     <>
-      <TopBar />
+      
       <Box className="main-wrapper">
         {getSidebarAccordingToUserRole(decodedToken)}
+        <TopBar />
         <Box className="content-wrapper">
           <Notifications />
         </Box>

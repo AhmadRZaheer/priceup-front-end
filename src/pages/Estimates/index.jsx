@@ -6,7 +6,7 @@ import EstimatesListMobile from "@/components/Estimates/existingListMobile";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
-import { useMediaQuery } from "@mui/material";
+import { Box, useMediaQuery } from "@mui/material";
 import TopBar from "@/components/TopBar";
 
 const Estimates = () => {
@@ -17,9 +17,9 @@ const Estimates = () => {
     <TopBar />
     <div className="main-wrapper">
       {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
-      <div className="content-wrapper">
+      <Box className="econtent-wrapper" sx={{pl:{sm:'45px',xs:'0px'}}}>
         {isMobile && decodedToken?.role === userRoles.STAFF ? <EstimatesListMobile /> : <EstimatesList />}
-      </div>
+      </Box>
     </div>
     </>
   );

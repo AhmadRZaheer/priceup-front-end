@@ -87,3 +87,13 @@
   background-color: #8477DA;
   height: 91px;
 }
+@media (max-height: 820px) {
+    .drawerContainer{
+      height:74vh;
+    } 
+}
+@media (max-height: 700px) {
+    .drawerContainer{
+      height:72vh;
+    } 
+}
