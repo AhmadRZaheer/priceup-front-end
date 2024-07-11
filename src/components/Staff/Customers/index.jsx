@@ -120,7 +120,7 @@ export default function Customers() {
           <Typography
             sx={{
               fontSize: 30,
-              pl: 3,
+              pl: {sm:3,xs:0},
               color: { xs: "#101828", sm: "#101828" },
             }}
           >
@@ -238,7 +238,7 @@ export default function Customers() {
               sx={{
                 display: { sm: "none", xs: "block" },
                 marginTop: "10px",
-                height: "80vh",
+                height: {sm:"80vh",xs:'70vh'},
                 overflow: "auto",
               }}
             >

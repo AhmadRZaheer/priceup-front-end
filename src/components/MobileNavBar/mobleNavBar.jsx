@@ -44,6 +44,7 @@ import Toolbar from "@mui/material/Toolbar";
 import DefaultImage from "../ui-components/defaultImage";
 import SingleUser from "../ui-components/SingleUser";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
+import NotificationButton from "../ui-components/NotificationButton";
 
 const drawerWidth = 280;
 
@@ -402,16 +403,7 @@ function MobileBar() {
                 </span>
               </div>
               <div>
-                <IconButton sx={{ borderRadius: "full" }}>
-                  <SearchOutlinedIcon
-                    sx={{
-                      fontSize: 40,
-                      padding: 0.2,
-                      fontWeight: 2,
-                      color: "white",
-                    }}
-                  />
-                </IconButton>
+     <NotificationButton  />
               </div>
             </Box>
           </Toolbar>
