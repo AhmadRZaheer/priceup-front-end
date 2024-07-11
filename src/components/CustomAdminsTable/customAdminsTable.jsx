@@ -84,7 +84,7 @@ const CustomAdminsTable = () => {
       }}
     >
       <div className="page-title">
-        <Typography variant="h4" pt={1} pl={2}>
+        <Typography variant="h4">
           Locations
         </Typography>
       </div>

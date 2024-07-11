@@ -708,9 +708,11 @@ const NewSidebar = () => {
             variant="permanent"
             sx={{
               display: { xs: "none", sm: "block" },
+              
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
                 width: drawerWidth,
+                backgroundColor:'#100D24',
               },
             }}
             open
