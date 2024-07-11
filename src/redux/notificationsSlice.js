@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-export const getNotifications = (state) =>
+export const getNotificationsList = (state) =>
   state.notifications.notificationsList;
 export const getUnreadCount = (state) => state.notifications.unReadCount;
 

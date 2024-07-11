@@ -1,16 +1,17 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
-import { Avatar, Badge, IconButton, Menu, MenuItem } from "@mui/material";
-import AvatarImage from "../../Assets/HeaderAvatar.svg";
+import { Badge, IconButton, Menu, MenuItem } from "@mui/material";
+// import AvatarImage from "../../Assets/HeaderAvatar.svg";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import NotificationDrawer from "../Notification/NotificationDrawer";
 import logout from "../../Assets/logout.svg";
 import LagoutModal from "../Modal/logOut";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutHandler } from "@/redux/userAuth";
 import DefaultImage from "../ui-components/defaultImage";
 import { getDecryptedToken } from "@/utilities/common";
+import { getUnreadCount } from "@/redux/notificationsSlice";
 
 function TopBar() {
   const [state, setState] = React.useState(false);
@@ -18,6 +19,7 @@ function TopBar() {
   const [open, setOpen] = React.useState(false);
   const dispatch = useDispatch();
   const decodedToken = getDecryptedToken();
+  const unReadCount = useSelector(getUnreadCount);
   //Notification Drawer
   const toggleDrawer = (open) => (event) => {
     setState(open);
@@ -54,7 +56,7 @@ function TopBar() {
             aria-label="notification"
             onClick={toggleDrawer(!state)}
             sx={{
-              background: "#8477DA",
+              background: state ? "#8477DA" : "transparent",
               mr: 1,
               ":hover": {
                 background: "#8477DA",
@@ -62,7 +64,7 @@ function TopBar() {
             }}
           >
             <Badge
-              badgeContent={10}
+              badgeContent={unReadCount}
               color="primary"
               sx={{
                 "& .MuiBadge-badge": {
@@ -79,7 +81,7 @@ function TopBar() {
               <NotificationsNoneIcon
                 sx={{ color: "#FFFF", fontSize: "1.8rem" }}
               />
-            </Badge>
+            </Badge> 
           </IconButton>
           <IconButton
             id="basic-button"

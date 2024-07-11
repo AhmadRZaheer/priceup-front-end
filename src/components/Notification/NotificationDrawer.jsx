@@ -1,13 +1,49 @@
-import * as React from "react";
+import { useEffect, useMemo } from "react";
 import Box from "@mui/material/Box";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import CloseIcon from "@mui/icons-material/Close";
-import { IconButton, Stack, Typography,Checkbox } from "@mui/material";
+import { IconButton, Stack, Typography, Checkbox, CircularProgress } from "@mui/material";
 import SingleNotification from "./SingleNotification";
 import "./style.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { getNotificationsList, getUnreadCount, setNotificationsList, setUnreadCount } from "@/redux/notificationsSlice";
+import { useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { backendURL, getDecryptedToken } from "@/utilities/common";
 
 export default function NotificationDrawer({ state, toggleDrawer }) {
+  const routePrefix = `${backendURL}/notifications`;
+  const dispatch = useDispatch();
+  const { data, refetch: refetchNotifications } =
+    useFetchAllDocuments(routePrefix);
+  const decryptedToken = getDecryptedToken();
+  const notificationsList = useSelector(getNotificationsList);
+  const unReadCount = useSelector(getUnreadCount);
+  const { mutateAsync: markAllAsRead, isLoading: editLoading, isSuccess: editSuccess } =
+    useEditDocument();
+  console.log(notificationsList, 'list');
+  const list = useMemo(() => {
+    return notificationsList ? notificationsList : [];
+  }, [notificationsList]);
+  useEffect(() => {
+    if (data) {
+      dispatch(setNotificationsList(data.notifications));
+      dispatch(setUnreadCount(data.unReadCount));
+    }
+  }, [data]);
+
+  const handleCheckboxChange = async (event) => {
+    if (event.target.checked) {
+      console.log('checked');
+      await markAllAsRead({ data: {}, apiRoute: `${routePrefix}/mark-all-as-read` });
+      if (decryptedToken) {
+        refetchNotifications();
+      }
+    }
+    else {
+      console.log('not checked');
+    }
+  }
   return (
     <div>
       <SwipeableDrawer
@@ -48,20 +84,21 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               <CloseIcon className="closeIcon" />
             </IconButton>
           </Stack>
-          <Stack direction="row" sx={{ pt: 2, pb: 1, px: 2,justifyContent:'space-between' }}>
+          <Stack direction="row" sx={{ pt: 2, pb: 1, px: 2, justifyContent: 'space-between' }}>
             <Typography className="todayText">Today</Typography>
             <Stack direction="row" gap={0.5}>
-          <Checkbox
-            sx={{
-              padding: "0px !important",
-              color: "rgba(0, 0, 0, 0.49)",
-              "&.Mui-checked": {
-                color: "rgba(0, 0, 0, 0.49)",
-              },
-            }}
-          />
-          <Typography className="archText">Mark all as read</Typography>
-        </Stack>
+              {editLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : unReadCount > 0 ? <Checkbox
+                onChange={handleCheckboxChange}
+                sx={{
+                  padding: "0px !important",
+                  color: "rgba(0, 0, 0, 0.49)",
+                  "&.Mui-checked": {
+                    color: "rgba(0, 0, 0, 0.49)",
+                  },
+                }}
+              /> : ''}
+              <Typography className="archText">{unReadCount > 0 ? 'Mark all as read' : 'No new message'}</Typography>
+            </Stack>
           </Stack>
           <Box
             className="drawerContainer"
@@ -69,7 +106,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               mb: 8,
             }}
           >
-            {Array.from({ length: 20 }).map((data, index) => (
+            {list.map((data, index) => (
               <SingleNotification data={data} key={index} />
             ))}
           </Box>

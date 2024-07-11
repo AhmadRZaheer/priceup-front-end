@@ -67,8 +67,8 @@ const DefaultImage = ({ image, name, type = 1 }) => {
           cursor: "pointer",
           overflow: "hidden",
           borderRadius: "100%",
-          width: type === 1 || type === 3 ? 40 : 50,
-          height: type === 1 || type === 3 ? 40 : 50,
+          width: type === 1 || type === 3 || type === 4 ? 40 : 50,
+          height: type === 1 || type === 3 || type === 4 ? 40 : 50,
         }}
       >
         {!imageError ? (

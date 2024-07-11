@@ -9,16 +9,25 @@
   color: #101828 !important;
 }
 .todayText {
-  font-size: 24px !important;
+  font-size: 18px !important;
   font-weight: 600 !important;
   line-height: 26.6px !important;
   color: rgba(16, 13, 36, 0.57) !important;
+  text-transform: capitalize;
+}
+.todayTextLight{
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 26.6px !important;
+  color:#ccc !important;
+  text-transform: capitalize;
 }
 .estimateText {
   font-size: 16.3px !important;
   font-weight: 500 !important;
   line-height: 20.65px !important;
   color: #8477da !important;
+  text-transform: capitalize;
 }
 .cpWrapper {
   border: 1px solid #8477da;
