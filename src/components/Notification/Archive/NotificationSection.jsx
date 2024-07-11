@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Divider, Stack, Typography } from "@mui/material";
-import SingleNotification from "../../SingleNotification";
+import SingleNotificationItem from "../SingleNotificationItem";
 
-const NotificationSection = () => {
+const NotificationSection = ({ list, handleItemClick, selectedId }) => {
   return (
     <Box>
       <Box
@@ -23,22 +23,22 @@ const NotificationSection = () => {
           },
         }}
       >
-        <Box>
+        {/* <Box>
           <Stack sx={{ pt: 3, pb: 1, px: 4 }}>
             <Typography className="todayText">Today</Typography>
           </Stack>
           <Divider />
-          {Array.from({ length: 2 }).map((data, index) => (
-            <SingleNotification data={data} key={index} sx={{px:'32px !important'}} />
+          {list.map((data, index) => (
+            <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
           ))}
-        </Box>
+        </Box> */}
         <Box>
           <Stack sx={{ pt: 3, pb: 1, px: 4 }}>
             <Typography className="todayText">Earlier</Typography>
           </Stack>
           <Divider />
-          {Array.from({ length: 20 }).map((data, index) => (
-            <SingleNotification data={data} key={index} sx={{px:'32px !important'}} />
+          {list.map((data, index) => (
+            <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
           ))}
         </Box>
       </Box>

@@ -920,3 +920,20 @@ export const debounce = (func, delay) => {
     }, delay);
   };
 };
+
+export const getLocaleDateTimeFromMongoTimestamp = (timestamp) => {
+  const date = new Date(timestamp);
+
+  // Define options for date and time formatting
+  const options = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true // Use 12-hour clock format
+  };
+
+  // Format the date and time
+  return date.toLocaleString('en-US', options);
+}
