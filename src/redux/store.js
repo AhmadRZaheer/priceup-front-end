@@ -13,6 +13,7 @@ import locationReducer from "./locationSlice";
 import mirrorsHardwareReducer from "./mirrorsHardwareSlice";
 import estimateReducer from "./estimateSlice";
 import mirrorsEstimateReducer from "./mirrorsEstimateSlice";
+import notificationReducer from "./notificationsSlice";
 
 const store = configureStore({
   reducer: {
@@ -29,6 +30,7 @@ const store = configureStore({
     mirrorsHardware: mirrorsHardwareReducer,
     estimate: estimateReducer,
     mirrorsEstimate: mirrorsEstimateReducer,
+    notifications: notificationReducer,
   },
 });
 

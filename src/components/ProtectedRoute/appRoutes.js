@@ -157,7 +157,7 @@ const AppRoutes = () => {
       {isAdmin(decodedToken) ||
       isCustomAdmin(decodedToken) ||
       isStaff(decodedToken) ||
-      isCustomAdmin(decodedToken) ? (
+      isSuperAdmin(decodedToken) ? (
         <Route path="/notification" element={<Notification />} />
       ) : (
         ""
