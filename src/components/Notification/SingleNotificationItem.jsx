@@ -1,7 +1,8 @@
 import React from "react";
 import { Divider, Stack, Typography, Box } from "@mui/material";
 import Tick from "@/Assets/Tick.svg";
-import PersonIcon from "@/Assets/Persons.svg";
+// import PersonIcon from "@/Assets/Persons.svg";
+import CategoryIcon from '@mui/icons-material/Category';
 import "./style.scss";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { getLocaleDateTimeFromMongoTimestamp } from "@/utilities/common";
@@ -26,17 +27,17 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           ...sx,
         }}
       >
-        <Stack direction="row" gap={2}>
         <Stack direction="row" gap={1}>
-          <img alt="not" src={PersonIcon} />
-          <Typography className="estimateText">{data.category}</Typography>
+          <Stack direction="row" gap={0.2}>
+            <CategoryIcon sx={{ color: "#8477DA" }} />
+            <Typography className="estimateText">{data.category}</Typography>
+          </Stack>
+          <Stack direction="row" gap={0.2}>
+            <LocationOnIcon sx={{ color: "#8477DA" }} />
+            <Typography className="estimateText">{data?.company_name}</Typography>
+          </Stack>
         </Stack>
-        <Stack direction="row" gap={1}>
-          <LocationOnIcon sx={{color:"#8477DA"}}/>
-          <Typography className="estimateText">{data?.company_name}</Typography>
-        </Stack>
-        </Stack>
-        
+
         <Stack direction="row" gap={1} sx={{ py: 1, alignItems: "center" }}>
           <img alt="not" src={Tick} width={15} height={15} />
           <Typography
