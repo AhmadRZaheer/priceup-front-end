@@ -109,7 +109,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                             <img alt="not" src={Tick} />
                         </Stack>
                         <Box sx={{ my: 1, p: 3, background: '#cccc', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
-                            <img src={layoutImage} style={{ width: "200px", height: "150px" }} />
+                            <img src={layoutImage} style={{ width: "200px", height: "200px" }} />
                             {/* <CardMedia
                                 component="img"
                                 image={DetailNotification}
