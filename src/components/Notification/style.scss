@@ -73,7 +73,7 @@
   align-items: center !important;
 }
 .drawerContainer{
-   height: 78.5vh;
+   height: 79.5vh;
     overflow-y: auto;
 }
 .drawerContainer::-webkit-scrollbar {
@@ -91,9 +91,15 @@
     .drawerContainer{
       height:74vh;
     } 
+    .notification{
+      height:73vh !important;
+    }
 }
 @media (max-height: 700px) {
     .drawerContainer{
       height:72vh;
     } 
+    .notification{
+      height:68vh !important;
+    }
 }

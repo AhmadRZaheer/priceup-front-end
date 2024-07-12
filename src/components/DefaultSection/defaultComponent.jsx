@@ -178,7 +178,7 @@ const DefaultComponent = () => {
           sx={{
             display: "flex",
             marginTop: 1,
-            maxHeight: "66vh",
+            maxHeight: "59vh",
             overflow: "scroll",
             width: "100%",
           }}

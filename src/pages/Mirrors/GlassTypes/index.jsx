@@ -9,7 +9,7 @@ export const MirrorsGlassType = () => {
     <TopBar/>
      <Box className="main-wrapper">
         <Sidebar />
-        <Box className="content-wrapper">
+        <Box className="gtcontent-wrapper">
             <MirrorsGlassTypeComponent />
         </Box>
     </Box>

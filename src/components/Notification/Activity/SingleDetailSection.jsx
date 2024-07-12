@@ -15,6 +15,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import { backendURL, getLocaleDateTimeFromMongoTimestamp } from "@/utilities/common";
+import '../style.scss';
 
 const SummaryData = [
   { id: 1, title: "Finish", desc: "Polished Chrome" },
@@ -44,7 +45,7 @@ const SingleDetailSection = ({ selectedId, handleMoveToArchive, editLoading }) =
   const formattedDate = getLocaleDateTimeFromMongoTimestamp(record?.createdAt);
   console.log(record, 'record', formattedDate, selectedId);
   return (
-    <Box sx={{ height: "78.5vh", overflowY: "auto" }}>
+    <Box  className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
       {getLoading ? <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <CircularProgress size={32} sx={{ color: "#8477DA" }} />
       </Box> : !getLoading && record ?

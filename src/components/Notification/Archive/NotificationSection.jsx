@@ -6,10 +6,11 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
   return (
     <Box>
       <Box
+       className='notification'
         sx={{
           height: "78.5vh",
           overflowY: "auto",
-          pr: 3,
+          px: 1.5,
           "&::-webkit-scrollbar": {
             "-webkit-appearance": "none",
             width: "12px",
@@ -33,7 +34,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
           ))}
         </Box> */}
         <Box>
-          <Stack sx={{ pt: 3, pb: 1, px: 4 }}>
+          <Stack sx={{ pt: 3, pb: 1, px: 2.5  }}>
             <Typography className="todayText">Earlier</Typography>
           </Stack>
           <Divider />

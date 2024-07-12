@@ -168,7 +168,7 @@ const GlassAddonGrid = ({ type }) => {
             display: "flex",
             flexDirection: "column",
             gap: 1,
-            height: miniTab ? "69vh" : "76vh",
+            height: miniTab ? "58vh" : "67vh",
             overflowY: "scroll",
           }}
         >

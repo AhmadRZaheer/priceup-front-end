@@ -38,7 +38,7 @@ const HardwareTable = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          height: "98.2vh",
+          height: "89.2vh",
         }}
       >
         <div className="h-page-title">

@@ -33,7 +33,7 @@ export const ActivitySection = ({ data }) => {
         }
     }
     return (<Grid container>
-        <Grid item xs={6}>
+        <Grid item xs={6} sx={{borderRight:'0.5px solid #F1F1F1'}}>
             <NotificationSection list={data} handleItemClick={handleItemClick} selectedId={selectedId}/>
         </Grid>
         <Grid item xs={6}>

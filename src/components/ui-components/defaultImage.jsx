@@ -15,7 +15,6 @@ const NameAcronyms = ({
 }) => {
   let firstNameInitial = "";
   let lastNameInitial = "";
-  console.log(type, "b");
   if (name) {
     firstNameInitial = name.charAt(0);
     lastNameInitial = name.length > 1 ? name.charAt(1) : "";

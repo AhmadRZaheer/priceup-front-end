@@ -33,7 +33,7 @@ const GlassAddonComponent = () => {
       <Box
         sx={{
           backgroundColor: "white",
-          height: "96vh",
+          height: "90vh",
           paddingTop: 2,
         }}
       >
@@ -41,7 +41,7 @@ const GlassAddonComponent = () => {
           sx={{
             border: "1px solid rgb(232, 232, 232)",
             margin: 2,
-            height: "90vh",
+            height: "84vh",
           }}
         >
           <GlassAddonGrid type={"Glass Addons"} />
