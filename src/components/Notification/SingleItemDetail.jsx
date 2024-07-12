@@ -23,14 +23,6 @@ import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { useNavigate } from "react-router-dom";
 import { EstimateSummary } from "./Categories/Estimate";
 
-// const SummaryData = [
-//     { id: 1, title: "Finish", desc: "Polished Chrome" },
-//     { id: 2, title: "Handles", desc: "8 by 8 D-Pull" },
-//     { id: 3, title: "Hinges", desc: "STD Bevel" },
-//     { id: 4, title: "Finish", desc: "Polished Chrome" },
-//     { id: 5, title: "Handles", desc: "8 by 8 D-Pull" },
-//     { id: 6, title: "Hinges", desc: "STD Bevel" },
-// ];
 const CustomTypo = ({ title, sx }) => {
     return (
         <Typography
@@ -41,8 +33,6 @@ const CustomTypo = ({ title, sx }) => {
         </Typography>
     );
 };
-
-
 
 const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
     const routePrefix = `${backendURL}/notifications`;
@@ -75,7 +65,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
     };
     console.log(record, 'record', formattedDate, selectedId);
     return (
-        <Box sx={{ height: "78.5vh", overflowY: "auto" }}>
+        <Box  className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
             {getFetching ? <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <CircularProgress size={32} sx={{ color: "#8477DA" }} />
             </Box> : !getFetching && record ?

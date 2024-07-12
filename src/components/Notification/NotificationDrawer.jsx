@@ -12,13 +12,41 @@ import { useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/comm
 import { backendURL, getDecryptedToken } from "@/utilities/common";
 import { setNotificationsRefetch } from "@/redux/refetch";
 import { useNavigate } from "react-router-dom";
+import { isAdmin, isCustomAdmin, isStaff, isSuperAdmin } from '@/utilities/authentications';
+
+const getSidebarWidthAccordingToUserRole = (decodedToken) => {
+  if (!decodedToken) {
+    return '0px';
+  }
+  const { company_id } = decodedToken;
+  if (isAdmin(decodedToken) || (isCustomAdmin(decodedToken) && company_id?.length)) {
+    return '320px'; // for admin and custom admin where company id exists
+  }
+  if (isStaff(decodedToken)) {
+    if (company_id === "") {
+      return '371px'; // staff sidebar where company id is empty
+    }
+    if (company_id?.length) {
+      return '304px'; // staff sidebar where company id exists
+    }
+  }
+  if (isCustomAdmin(decodedToken) && company_id === "") {
+    return '374px'; // custom admin sidebar where company id is empty
+  }
+  if (isSuperAdmin(decodedToken)) {
+    return '304px'; // super admin sidebar
+  }
+  return '0px';
+};
 
 export default function NotificationDrawer({ state, toggleDrawer }) {
   const routePrefix = `${backendURL}/notifications`;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const decodedToken = getDecryptedToken();
   const notificationsList = useSelector(getNotificationsList);
   const unReadCount = useSelector(getUnreadCount);
+  const sideBarWidth= getSidebarWidthAccordingToUserRole(decodedToken);
   const { mutateAsync: markAllAsRead, isLoading: editLoading, isSuccess: editSuccess } =
     useEditDocument();
   console.log(notificationsList, 'list');
@@ -53,7 +81,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
           },
           "& .MuiModal-backdrop": {
             top: "74px",
-            left: "304px",
+            left: sideBarWidth,
           },
         }}
       >

@@ -6,6 +6,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
   return (
     <Box>
       <Box
+       className='notification'
         sx={{
           height: "78.5vh",
           overflowY: "auto",

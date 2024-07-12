@@ -11,6 +11,7 @@ import Tick from "@/Assets/Tick.svg";
 import DetailNotification from "@/Assets/SingleDetailNotification.svg";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DefaultImage from "@/components/ui-components/defaultImage";
+import '../style.scss';
 
 const SummaryData = [
   { id: 1, title: "Finish", desc: "Polished Chrome" },
@@ -33,7 +34,7 @@ const CustomTypo = ({ title, sx }) => {
 
 const SingleDetailSection = () => {
   return (
-    <Box sx={{ height: "78.5vh", overflowY: "auto" }}>
+    <Box  className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
       <Box sx={{ pt: 5, px: 12 }}>
         <CustomTypo title="26/04/2024 12:48 AM" sx={{ py: 1.3 }} />
 
