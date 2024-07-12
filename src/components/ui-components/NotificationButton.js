@@ -18,7 +18,7 @@ const NotificationButton = () => {
         aria-label="notification"
         onClick={toggleDrawer(!state)}
         sx={{
-          background: "#8477DA",
+          background: state ? "#8477DA" : "transparent",
           mr: 1,
           ":hover": {
             background: "#8477DA",

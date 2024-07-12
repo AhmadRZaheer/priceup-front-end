@@ -99,3 +99,7 @@ export const MAX_PAGES_DISPLAYED = 3;
 export const socketIoChannel = {
   NOTIFICATIONS: "notifications",
 };
+
+export const notificationCategories = {
+  ESTIMATES: "estimates",
+};

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { socketIoChannel } from "../constants";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { socketClient } from "@/configs/socket";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { backendURL, getDecryptedToken } from "../common";
@@ -8,10 +8,12 @@ import {
   setNotificationsList,
   setUnreadCount,
 } from "@/redux/notificationsSlice";
+import { getNotificationsRefetch } from "@/redux/refetch";
 
 export const Notifications = () => {
   const routePrefix = `${backendURL}/notifications`;
   const decryptedToken = getDecryptedToken();
+  const refetchNotificationsCount = useSelector(getNotificationsRefetch);
   const dispatch = useDispatch();
   const { data, refetch: refetchNotifications } =
     useFetchAllDocuments(routePrefix);
@@ -26,7 +28,7 @@ export const Notifications = () => {
     if (decryptedToken) {
       refetchNotifications();
     }
-  }, [decryptedToken]);
+  }, [decryptedToken, refetchNotificationsCount]);
 
   // Setup socket listener for notifications
   useEffect(() => {

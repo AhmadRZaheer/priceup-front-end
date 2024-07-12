@@ -4,12 +4,11 @@ import {
   Box,
   CardMedia,
   Divider,
-  Checkbox,
   Button,
 } from "@mui/material";
 import React from "react";
-import Tick from "../../../../Assets/Tick.svg";
-import DetailNotification from "../../../../Assets/SingleDetailNotification.svg";
+import Tick from "@/Assets/Tick.svg";
+import DetailNotification from "@/Assets/SingleDetailNotification.svg";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DefaultImage from "@/components/ui-components/defaultImage";
 
@@ -36,18 +35,6 @@ const SingleDetailSection = () => {
   return (
     <Box sx={{ height: "78.5vh", overflowY: "auto" }}>
       <Box sx={{ pt: 5, px: 12 }}>
-<Stack direction="row" gap={0.5}>
-          <Checkbox
-            sx={{
-              padding: "0px !important",
-              color: "rgba(0, 0, 0, 0.49)",
-              "&.Mui-checked": {
-                color: "rgba(0, 0, 0, 0.49)",
-              },
-            }}
-          />
-          <Typography className="archText">Archive</Typography>
-        </Stack>
         <CustomTypo title="26/04/2024 12:48 AM" sx={{ py: 1.3 }} />
 
         <Stack direction="row">
@@ -74,8 +61,8 @@ const SingleDetailSection = () => {
             <CustomTypo title="Customer Name:" sx={{ pb: 4.5 }} />
             <CustomTypo title="Date Quoted:" />
           </Box>
-          <Stack direction="row" gap={2.5}>
-           <DefaultImage name='Chris Phillips' />
+          <Stack direction="row" >
+            <DefaultImage name='Chris Phillips' />
             <Box>
               <Box sx={{ pb: 2 }}>
                 <CustomTypo title="Chris Phillips" />

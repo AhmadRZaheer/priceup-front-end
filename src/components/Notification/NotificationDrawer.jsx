@@ -4,19 +4,19 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import CloseIcon from "@mui/icons-material/Close";
 import { IconButton, Stack, Typography, Checkbox, CircularProgress } from "@mui/material";
-import SingleNotification from "./SingleNotification";
+import SingleNotificationItem from "./SingleNotificationItem";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { getNotificationsList, getUnreadCount, setNotificationsList, setUnreadCount } from "@/redux/notificationsSlice";
 import { useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { setNotificationsRefetch } from "@/redux/refetch";
+import { useNavigate } from "react-router-dom";
 
 export default function NotificationDrawer({ state, toggleDrawer }) {
   const routePrefix = `${backendURL}/notifications`;
   const dispatch = useDispatch();
-  const { data, refetch: refetchNotifications } =
-    useFetchAllDocuments(routePrefix);
-  const decryptedToken = getDecryptedToken();
+  const navigate = useNavigate();
   const notificationsList = useSelector(getNotificationsList);
   const unReadCount = useSelector(getUnreadCount);
   const { mutateAsync: markAllAsRead, isLoading: editLoading, isSuccess: editSuccess } =
@@ -25,24 +25,19 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
   const list = useMemo(() => {
     return notificationsList ? notificationsList : [];
   }, [notificationsList]);
-  useEffect(() => {
-    if (data) {
-      dispatch(setNotificationsList(data.notifications));
-      dispatch(setUnreadCount(data.unReadCount));
-    }
-  }, [data]);
 
   const handleCheckboxChange = async (event) => {
     if (event.target.checked) {
       console.log('checked');
       await markAllAsRead({ data: {}, apiRoute: `${routePrefix}/mark-all-as-read` });
-      if (decryptedToken) {
-        refetchNotifications();
-      }
+      dispatch(setNotificationsRefetch);
     }
     else {
       console.log('not checked');
     }
+  }
+  const handleItemClick = (activeTab = 'Activity', id) => {
+    navigate(`/notification?tab=${activeTab}&id=${id}`);
   }
   return (
     <div>
@@ -54,7 +49,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         onOpen={toggleDrawer(true)}
         sx={{
           "& .MuiDrawer-paper": {
-            top: {sm:"75px",xs:'57px'},
+            top: { sm: "75px", xs: '57px' },
           },
           "& .MuiModal-backdrop": {
             top: "74px",
@@ -62,7 +57,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
           },
         }}
       >
-        
+
         <Box
           className="customModel"
           sx={{ width: { sm: "496px", xs: "100%" } }}
@@ -71,7 +66,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         >
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", px: 2, mt: {sm:5,xs:3} }}
+            sx={{ justifyContent: "space-between", px: 2, mt: { sm: 5, xs: 3 } }}
           >
             <Stack direction="row" gap={1}>
               <Typography className="notificationText">
@@ -86,7 +81,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
             </IconButton>
           </Stack>
           <Stack direction="row" sx={{ pt: 2, pb: 1, px: 2, justifyContent: 'space-between' }}>
-            <Typography className="todayText">Today</Typography>
+            <Typography className="todayText">Earlier</Typography>
             <Stack direction="row" gap={0.5}>
               {editLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : unReadCount > 0 ? <Checkbox
                 onChange={handleCheckboxChange}
@@ -108,7 +103,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
             }}
           >
             {list.map((data, index) => (
-              <SingleNotification data={data} key={index} />
+              <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
             ))}
           </Box>
         </Box>
