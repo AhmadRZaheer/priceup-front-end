@@ -39,7 +39,7 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
     const sqftArea = data.config?.sqftArea;
 
     return (
-        <Box sx={{ py: 4, pl: 14, pr: 3 }}>
+        <Box sx={{ py: 4, pl: 14, pr: '60px' }}>
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                 <Stack direction="column">
                     <Typography className="twTxt">{measurementSides}</Typography>

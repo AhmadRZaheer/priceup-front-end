@@ -87,7 +87,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                         </Stack> : ''}
                         <CustomTypo title={formattedDate} sx={{ py: 1.3 }} />
 
-                        <Stack direction="row">
+                        <Stack direction="row" gap={1.5}>
                             <Typography
                                 className="todayText"
                                 sx={{
@@ -119,14 +119,14 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                                         <CustomTypo title={record.performer_name} />
                                         <CustomTypo
                                             title="chrisp@gcs.glass"
-                                            sx={{ fontSize: "12.3px" }}
+                                            sx={{ fontSize: "12.3px !important" }}
                                         />
                                     </Box>
                                     <Box sx={{ pb: 2 }}>
                                         <CustomTypo title={record.resourceInfo?.customerData?.name} />
                                         <CustomTypo
                                             title={record.resourceInfo?.customerData?.email}
-                                            sx={{ fontSize: "12.3px" }}
+                                            sx={{ fontSize: "12.3px !important" }}
                                         />
                                     </Box>
                                     <Box sx={{ pb: 2 }}>
