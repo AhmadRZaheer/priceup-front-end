@@ -47,7 +47,7 @@ export const useFetchSingleDocument = (apiRoute) => {
     queryKey: [`key-${apiRoute}`],
     queryFn: fetch,
     enabled: false,
-    placeholderData: {},
+    // placeholderData: {},
   });
 };
 

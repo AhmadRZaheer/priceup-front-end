@@ -5,7 +5,7 @@ import PersonIcon from "@/Assets/Persons.svg";
 import "./style.scss";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { getLocaleDateTimeFromMongoTimestamp } from "@/utilities/common";
-
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
   const formattedDate = getLocaleDateTimeFromMongoTimestamp(data.createdAt);
   const activeViewForThisRecord = data.archived ? 'Archive' : 'Activity';
@@ -26,10 +26,17 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           ...sx,
         }}
       >
+        <Stack direction="row" gap={2}>
         <Stack direction="row" gap={1}>
           <img alt="not" src={PersonIcon} />
           <Typography className="estimateText">{data.category}</Typography>
         </Stack>
+        <Stack direction="row" gap={1}>
+          <LocationOnIcon sx={{color:"#8477DA"}}/>
+          <Typography className="estimateText">{data?.company_name}</Typography>
+        </Stack>
+        </Stack>
+        
         <Stack direction="row" gap={1} sx={{ py: 1, alignItems: "center" }}>
           <img alt="not" src={Tick} width={15} height={15} />
           <Typography
