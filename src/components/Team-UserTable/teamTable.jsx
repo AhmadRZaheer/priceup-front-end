@@ -171,7 +171,7 @@ const TeamTable = () => {
           height: "98.2vh",
         }}
       >
-        <div className="page-title">
+        <div className="upage-title">
           <Typography sx={{ fontSize: 30, pl: 2, color: "#101828" }}>
             Users
           </Typography>
