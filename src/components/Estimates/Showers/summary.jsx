@@ -65,7 +65,18 @@ const Summary = () => {
         : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
-
+  const handleSetUserProfit = (event) => {
+    if(Number(event.target.value) < 100){
+    dispatch(
+      setUserProfitPercentage(
+        Number(event.target.value)
+      )
+    );
+  }
+  }
+  const resetUserProfit = () => {
+    dispatch(setUserProfitPercentage(0));
+  }
   return (
     <>
       <Box
@@ -172,6 +183,8 @@ const Summary = () => {
                         : selectedData?._id
                     )}
                   </Typography>
+                  <Typography><span style={{ fontWeight: "bold" }}>Layout: </span>
+                  {selectedData?.settings?.name ?? 'Custom'}</Typography>
                   {doorWidth ? (
                     <Typography>
                       <span style={{ fontWeight: "bold" }}>Door Width: </span>
@@ -855,7 +868,7 @@ const Summary = () => {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 2,
+                          gap: 1,
                           width: "120px",
                           padddingY: 4,
                         }}
@@ -885,21 +898,26 @@ const Summary = () => {
                           value={
                             userProfitPercentage > 0 ? userProfitPercentage : ""
                           }
-                          onChange={(event) => {
-                            if (
-                              Number(event.target.value) < 100 &&
-                              Number(event.target.value) > 0
-                            ) {
-                              dispatch(
-                                setUserProfitPercentage(
-                                  Number(event.target.value)
-                                )
-                              );
-                            }
-                          }}
-                        />{" "}
+                          onChange={(event) => handleSetUserProfit(event)}
+                        />
                         %
                       </Box>
+                      <Button
+                          disabled={userProfitPercentage === 0 || userProfitPercentage === ""}
+                          variant="contained"
+                          onClick={resetUserProfit}
+                          sx={{
+                              backgroundColor: "#8477da",
+                              "&:hover": {
+                                  backgroundColor: "#8477da",
+                              },
+                              ":disabled": {
+                                  bgcolor: "#c2c2c2",
+                              },
+                          }}
+                      >
+                        Reset
+                      </Button>
                       {/* <Box sx={{ width: "100px" }}>
                         <Button
                           fullWidth

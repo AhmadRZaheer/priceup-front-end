@@ -240,8 +240,22 @@ export const calculateTotal = (
       (mirrorLocationSettings.pricingFactorStatus
         ? mirrorLocationSettings.pricingFactor
         : 1) +
-    laborPrice +
-    additionalFieldPrice;
+    laborPrice;
+    // + additionalFieldPrice;
+    // additonal fields sum
+  if (selectedContent.additionalFields.length > 0) {
+    totalPrice += selectedContent.additionalFields.reduce(
+      (acc, item) =>
+        acc +
+        Number(
+          item.cost *
+            (mirrorLocationSettings?.pricingFactorStatus
+              ? mirrorLocationSettings?.pricingFactor
+              : 1)
+        ),
+      0
+    );
+  }
 
   if (
     selectedContent.modifiedProfitPercentage > 0 &&

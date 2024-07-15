@@ -1,4 +1,4 @@
-import { Box, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import CustomImage from "@/Assets/customlayoutimage.svg";
@@ -19,7 +19,18 @@ const Summary = () => {
   const measurements = useSelector(getEstimateMeasurements);
   const sqftArea = useSelector(getSqftArea);
   const layoutImage = CustomImage;
-
+  const handleSetUserProfit = (event) => {
+    if(Number(event.target.value) < 100){
+    dispatch(
+      setModifiedProfitPercentage(
+        Number(event.target.value)
+      )
+    );
+  }
+  }
+  const resetUserProfit = () => {
+    dispatch(setModifiedProfitPercentage(0));
+  }
   return (
     <>
       <Box
@@ -122,7 +133,8 @@ const Summary = () => {
                       measurements
                     )}
                   </Typography>
-
+                  <Typography><span style={{ fontWeight: "bold" }}>Layout: </span>
+                  Custom</Typography>
                   <Typography>
                     <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
                     {sqftArea}
@@ -500,7 +512,7 @@ const Summary = () => {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 2,
+                          gap: 1,
                           width: "120px",
                           padddingY: 4,
                         }}
@@ -530,21 +542,26 @@ const Summary = () => {
                           value={
                             modifiedProfitPercentage > 0 ? modifiedProfitPercentage : ""
                           }
-                          onChange={(event) => {
-                            if (
-                              Number(event.target.value) < 100 &&
-                              Number(event.target.value) > 0
-                            ) {
-                              dispatch(
-                                setModifiedProfitPercentage(
-                                  Number(event.target.value)
-                                )
-                              );
-                            }
-                          }}
-                        />{" "}
+                          onChange={(event) => handleSetUserProfit(event)}
+                        />
                         %
                       </Box>
+                      <Button
+                          disabled={modifiedProfitPercentage === 0 || modifiedProfitPercentage === ""}
+                          variant="contained"
+                          onClick={resetUserProfit}
+                          sx={{
+                              backgroundColor: "#8477da",
+                              "&:hover": {
+                                  backgroundColor: "#8477da",
+                              },
+                              ":disabled": {
+                                  bgcolor: "#c2c2c2",
+                              },
+                          }}
+                      >
+                        Reset
+                      </Button>
                       {/* <Box sx={{ width: "100px" }}>
                         <Button
                           fullWidth
