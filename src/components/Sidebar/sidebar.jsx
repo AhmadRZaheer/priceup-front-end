@@ -25,7 +25,7 @@ import {
   Button,
 } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { AttachMoney, PinDrop, UnfoldMore } from "@mui/icons-material";
+import { AttachMoney, Description, PinDrop, UnfoldMore } from "@mui/icons-material";
 import {
   useBackToCustomAdminLocations,
   useBackToSuperAdmin,
@@ -366,7 +366,7 @@ const NewSidebar = () => {
               className={`button-item ${location.pathname.includes("/estimates") ? "active-item" : ""
                 }`}
             >
-              <AttachMoney />
+              <Description />
 
               <span>Estimates</span>
             </Box>

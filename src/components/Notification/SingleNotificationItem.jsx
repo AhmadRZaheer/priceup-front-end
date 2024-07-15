@@ -7,6 +7,7 @@ import "./style.scss";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { getLocaleDateTimeFromMongoTimestamp } from "@/utilities/common";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { Description } from "@mui/icons-material";
 const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
   const formattedDate = getLocaleDateTimeFromMongoTimestamp(data.createdAt);
   const activeViewForThisRecord = data.archived ? 'Archive' : 'Activity';
@@ -29,11 +30,11 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
       >
         <Stack direction="row" gap={1}>
           <Stack direction="row" gap={0.2}>
-            <CategoryIcon sx={{ color: "#8477DA" }} />
+            <Description sx={{ color: "#8477DA", width: '18px', height: '18px' }} />
             <Typography className="estimateText">{data.category}</Typography>
           </Stack>
-          <Stack direction="row" gap={0.2}>
-            <LocationOnIcon sx={{ color: "#8477DA" }} />
+          <Stack direction="row" gap={0.1}>
+            <LocationOnIcon sx={{ color: "#8477DA", width: '20px', height: '20px' }} />
             <Typography className="estimateText">{data?.company_name}</Typography>
           </Stack>
         </Stack>
