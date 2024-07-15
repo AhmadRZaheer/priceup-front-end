@@ -269,22 +269,22 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       (estimatesData?.miscPricing?.pricingFactorStatus
         ? estimatesData?.miscPricing?.pricingFactor
         : 1) +
-    laborPrice + 
-    additionalFieldPrice;
+    laborPrice;
+    // + additionalFieldPrice;
   // additonal fields sum
-  // if (selectedContent.additionalFields.length > 0) {
-  //   total += selectedContent.additionalFields.reduce(
-  //     (acc, item) =>
-  //       acc +
-  //       Number(
-  //         item.cost *
-  //           (estimatesData?.miscPricing?.pricingFactorStatus
-  //             ? estimatesData?.miscPricing?.pricingFactor
-  //             : 1)
-  //       ),
-  //     0
-  //   );
-  // }
+  if (selectedContent.additionalFields.length > 0) {
+    total += selectedContent.additionalFields.reduce(
+      (acc, item) =>
+        acc +
+        Number(
+          item.cost *
+            (estimatesData?.miscPricing?.pricingFactorStatus
+              ? estimatesData?.miscPricing?.pricingFactor
+              : 1)
+        ),
+      0
+    );
+  }
   const cost =
     hardwareTotals +
     fabricationPrice +

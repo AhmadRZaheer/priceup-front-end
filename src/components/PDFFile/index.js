@@ -360,7 +360,7 @@ const PDFFile = ({controls,data}) => {
               item.label !== "" && (
                 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                   <Text style={{fontSize:'14px'}}>{item.label}:</Text>
-                  <Text style={{fontSize:'12px'}}>{item.cost} * {data?.quote?.pricingFactor}</Text>
+                  <Text style={{fontSize:'12px'}}>{item.cost}</Text>
                 </View>
               )
           )}
