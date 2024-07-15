@@ -184,7 +184,7 @@ const Summary = () => {
                     )}
                   </Typography>
                   <Typography><span style={{ fontWeight: "bold" }}>Layout: </span>
-                  {selectedData?.settings?.name ?? 'Custom'}</Typography>
+                  {(selectedData?.settings?.name || selectedData?.name) ?? 'Custom'}</Typography>
                   {doorWidth ? (
                     <Typography>
                       <span style={{ fontWeight: "bold" }}>Door Width: </span>
