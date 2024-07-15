@@ -75,27 +75,48 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
                         {data.resourceInfoWithFullObjects?.wallClamp?.length ? <Typography className="summaryData">WallClamps : {data.resourceInfoWithFullObjects?.wallClamp?.map(
                             (row) => (
                                 <span >
-                                    {row.item.name} ({row.count}){" "}
+                                    {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                         )}</Typography> : ''}
                         {data.resourceInfoWithFullObjects?.sleeveOver?.length ? <Typography className="summaryData">Sleeve Over : {data.resourceInfoWithFullObjects?.sleeveOver?.map(
                             (row) => (
                                 <span >
-                                    {row.item.name} ({row.count}){" "}
+                                    {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                         )}</Typography> : ''}
                         {data.resourceInfoWithFullObjects?.glassToGlass?.length ? <Typography className="summaryData">Glass To Glass : {data.resourceInfoWithFullObjects?.glassToGlass?.map(
                             (row) => (
                                 <span >
-                                    {row.item.name} ({row.count}){" "}
+                                    {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                         )}</Typography> : ''}
 
                     </>
                 }
+                {data.resourceInfoWithFullObjects?.cornerWallClamp?.length ? <Typography className="summaryData">Corner Wall Clamp : {data.resourceInfoWithFullObjects?.cornerWallClamp?.map(
+                            (row) => (
+                                <span >
+                                    {row.item.name} ({row.count}),{" "}
+                                </span>
+                            )
+                )}</Typography> : ''}
+                {data.resourceInfoWithFullObjects?.cornerSleeveOver?.length ? <Typography className="summaryData">Corner Sleeve Over : {data.resourceInfoWithFullObjects?.cornerSleeveOver?.map(
+                            (row) => (
+                                <span >
+                                    {row.item.name} ({row.count}),{" "}
+                                </span>
+                            )
+                )}</Typography> : ''}
+                {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.length ? <Typography className="summaryData">Corner Glass To Glass : {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.map(
+                            (row) => (
+                                <span >
+                                    {row.item.name} ({row.count}),{" "}
+                                </span>
+                            )
+                )}</Typography> : ''}
                 {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item && <Typography className="summaryData">Sliding Door System : {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item?.name} (
                     {data.resourceInfoWithFullObjects?.slidingDoorSystem?.count})</Typography>}
                 {data.resourceInfoWithFullObjects?.header?.item && <Typography className="summaryData">Header : {data.resourceInfoWithFullObjects?.header?.item?.name} (
@@ -108,6 +129,13 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
                             {row.name}{", "}
                         </span>
                     )
+                )}</Typography> : ''}
+                {data.resourceInfoWithFullObjects?.hardwareAddons?.length ? <Typography className="summaryData">Hardware Addons : {data.resourceInfoWithFullObjects?.hardwareAddons?.map(
+                            (row) => (
+                                <span >
+                                    {row.item.name} ({row.count}),{" "}
+                                </span>
+                            )
                 )}</Typography> : ''}
                 <Typography className="summaryData">People : {data.config?.people}</Typography>
                 <Typography className="summaryData">Hours : {data.config?.hours}</Typography>

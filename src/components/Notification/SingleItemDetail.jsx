@@ -35,10 +35,11 @@ const CustomTypo = ({ title, sx }) => {
 };
 
 const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
+    console.log(selectedId,'id');
     const routePrefix = `${backendURL}/notifications`;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { data: record, refetch: refetchRecord, isFetching: getFetching } =
+    const { data: record, refetch: refetchRecord, isFetching: getFetching} =
         useFetchSingleDocument(`${backendURL}/notifications/${selectedId}`);
     const { mutateAsync: markThisAsRead } = useEditDocument();
     useEffect(() => {
@@ -65,10 +66,10 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
     };
     console.log(record, 'record', formattedDate, selectedId);
     return (
-        <Box  className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
+        <Box className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
             {getFetching ? <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                 <CircularProgress size={32} sx={{ color: "#8477DA" }} />
-            </Box> : !getFetching && record ?
+            </Box> : !getFetching && record?.resourceInfo ?
                 <Box>
                     <Box sx={{ pt: 5, px: 12 }}>
                         {!record?.archived ? <Stack direction="row" gap={0.5}>
@@ -141,42 +142,6 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                     </Box>
                     <Divider sx={{ ml: 3 }} />
                     {record.category === notificationCategories.ESTIMATES ? <EstimateSummary data={record.resourceInfo} handleEditEstimate={handleEditEstimate} /> : <></>}
-                    {/* <Box sx={{ py: 4, pl: 14, pr: 3 }}>
-                        <Stack direction="row" sx={{ justifyContent: "space-between" }}>
-                            <Typography className="twTxt">{measurementSides}</Typography>
-                            {decryptedToken?.role !== userRoles.SUPER_ADMIN ? <Button
-                                onClick={handleEditEstimate}
-                                variant="contained"
-                                startIcon={<EditOutlinedIcon />}
-                                className="estimatebtn"
-                                sx={{
-                                    py: 1,
-                                    ":hover": {
-                                        background: "#8477DA",
-                                    },
-                                }}
-                            >
-                                Edit Estimate
-                            </Button> : ''}
-                        </Stack>
-                        <Box>
-                            <Typography
-                                className="summaryTxt"
-                                sx={{
-                                    py: 2,
-                                }}
-                            >
-                                Summary
-                            </Typography>
-                            <Stack direction="row" sx={{ flexDirection: "column", gap: "7px" }}>
-                                {SummaryData.map((data, index) => (
-                                    <Typography className="summaryData">
-                                        {data.title} : {data.desc}
-                                    </Typography>
-                                ))}
-                            </Stack>
-                        </Box>
-                    </Box> */}
                 </Box> : <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography >No preview found.</Typography>
                 </Box>}

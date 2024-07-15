@@ -1,7 +1,7 @@
 import { Box, Grid, Typography } from "@mui/material";
 import NotificationSection from "./NotificationSection";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEditDocument } from "@/utilities/ApiHooks/common";
 import { setNotificationsRefetch } from "@/redux/refetch";
 import { backendURL } from "@/utilities/common";
@@ -15,9 +15,10 @@ function useQuery() {
 export const ActivitySection = ({ data }) => {
     const routePrefix = `${backendURL}/notifications`;
     const query = useQuery();
+    const idParam = query.get('id');
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [selectedId, setSelectedId] = useState(query.get('id') ?? "");
+    const [selectedId, setSelectedId] = useState("");
     const { mutateAsync: moveToArchive, isLoading: editLoading, isSuccess: editSuccess } =
         useEditDocument();
     const handleItemClick = (activeTab = 'Activity', id) => {
@@ -32,6 +33,12 @@ export const ActivitySection = ({ data }) => {
             navigate('/notification?tab=Activity')
         }
     }
+    useEffect(()=>{
+        if(idParam){
+            setSelectedId(idParam);
+        }
+    },[idParam]);
+    console.log(selectedId,'sel id',idParam,'param id');
     return (<Grid container>
         <Grid item xs={6} sx={{borderRight:'0.5px solid #F1F1F1'}}>
             <NotificationSection list={data} handleItemClick={handleItemClick} selectedId={selectedId}/>
