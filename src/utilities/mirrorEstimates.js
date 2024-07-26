@@ -3,6 +3,7 @@ import { EstimateCategory, mirrorHardwareTypes, notificationsVariant, quoteState
 import {
   resetMirrorEstimateState,
   setEstimateMeasurements,
+  setMirrorProjectId,
   setSelectedItem,
 } from "@/redux/mirrorsEstimateSlice";
 
@@ -282,6 +283,7 @@ export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
   dispatch(setEstimateState(quoteState.EDIT));
   dispatch(resetMirrorEstimateState());
   dispatch(setSelectedItem(item));
+  dispatch(setMirrorProjectId(item?.project_id));
   dispatch(setEstimateMeasurements(item.config.measurements));
   // console.log("mirror edit", item);
   navigate("/estimates/dimensions");

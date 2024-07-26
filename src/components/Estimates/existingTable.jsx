@@ -215,7 +215,7 @@ export default function ExistingTable() {
         />
         <IconButton
           onClick={handleCreateQuote}
-          disabled={estimatesListFetching}
+          disabled={true}
           sx={{
             backgroundColor: "#8477DA",
             color: "white",
@@ -262,10 +262,6 @@ export default function ExistingTable() {
               border: "none",
             }}
             getRowId={(row) => row._id}
-            // rows={filteredData?.slice(
-            //   (page - 1) * itemsPerPage,
-            //   page * itemsPerPage
-            // )}
             rows={filteredData}
             columns={EstimatesColumns(
               handleOpenDeleteModal,
@@ -286,17 +282,6 @@ export default function ExistingTable() {
             page={page}
             setPage={setPage}
           />
-          {/*<NewPagination
-            totalRecords={
-              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-            }
-            setIsShowInput={setIsShowInput}
-            isShowInput={isShowInput}
-            setInputPage={setInputPage}
-            inputPage={inputPage}
-            page={page}
-            setPage={setPage}
-          />*/}
           <DeleteModal
             open={deleteModalOpen}
             close={() => {

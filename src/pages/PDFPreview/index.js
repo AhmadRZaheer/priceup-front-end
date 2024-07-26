@@ -25,8 +25,12 @@ const PDFPreview = () => {
   const navigate = useNavigate();
   const [quote, setQuote] = useState(null);
   const handleClose = () => {
-    localStorage.removeItem('pdf-estimate')
+    localStorage.removeItem('pdf-estimate');
+    if(quote?.projectId){
+      navigate(`/projects/${quote?.projectId}`);
+    }else{
     navigate('/estimates');
+    }
   }
   useEffect(() => {
     const item = localStorage.getItem("pdf-estimate");
@@ -34,7 +38,7 @@ const PDFPreview = () => {
     //   navigate(-1);
     // }
     setQuote(JSON.parse(item));
-  }, [navigate]);
+  }, []);
   console.log(quote, "quote", new Date(quote?.updatedAt)?.toLocaleDateString(),quote?.glassType?.item?.name);
   return (
     <Box

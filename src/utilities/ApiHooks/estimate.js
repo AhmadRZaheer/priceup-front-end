@@ -152,6 +152,7 @@ export const useEditEstimates = () => {
               ? {
                   config: { ...updatedEstimate.estimateData },
                   cost: updatedEstimate.cost,
+                  project_id:updatedEstimate.projectId
                 }
               : {}),
             ...(updatedEstimate.status

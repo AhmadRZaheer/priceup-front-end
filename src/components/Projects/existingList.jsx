@@ -159,8 +159,8 @@ export default function ExistingList() {
     ]
     return (
         <Box sx={{
-            position: 'fixed', top: 50, bottom: 10,
-            left: 5, right: 5
+            // position: 'fixed', top: 50, bottom: 10,
+            // left: 5, right: 5
         }}>
             <Box
                 sx={{

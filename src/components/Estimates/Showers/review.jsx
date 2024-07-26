@@ -215,6 +215,7 @@ export const ShowerReview = () => {
     const handleEditEstimate = () => {
         const estimateConfig = generateEstimatePayload(currentQuoteState, measurements, selectedContent, selectedData?.config?.layout_id, isCustomizedDoorWidth, doorWidthredux, perimeter, sqftArea);
         mutateEdit({
+            projectId: projectId,
             cost: Number(estimatesTotal),
             customerData: {},
             estimateData: estimateConfig,
@@ -1342,7 +1343,7 @@ export const ShowerReview = () => {
 
                                 <Button
                                     fullWidth
-                                    disabled={selectedContent?.hardwareFinishes === null}
+                                    disabled={selectedContent?.hardwareFinishes === null || projectId === null}
                                     variant="contained"
                                     onClick={handleEstimateSubmit}
                                     sx={{

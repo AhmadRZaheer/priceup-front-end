@@ -15,6 +15,7 @@ import {
   setPanelWeight,
   setQuoteState,
   setReturnWeight,
+  setShowerProjectId,
   setisCustomizedDoorWidth,
   updateMeasurements,
 } from "@/redux/estimateCalculations";
@@ -533,6 +534,7 @@ export const generateObjectForPDFPreview = (
 
   estimateInfoObject = {
     name: estimateData?.name,
+    projectId: estimateData?.project_id,
     category: estimateData?.category,
     cost: estimateData?.cost,
     creatorData: estimateData?.creatorData,
@@ -648,6 +650,7 @@ export const setStateForShowerEstimate = (item, dispatch, navigate) => {
   dispatch(setisCustomizedDoorWidth(item.config.isCustomizedDoorWidth));
   dispatch(updateMeasurements(item.config.measurements));
   dispatch(addSelectedItem(item));
+  dispatch(setShowerProjectId(item?.project_id));
   dispatch(setQuoteState("edit"));
   const result = calculateAreaAndPerimeter(
     item.config.measurements,

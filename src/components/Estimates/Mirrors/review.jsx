@@ -121,6 +121,7 @@ export const MirrorReview = () => {
     const handleEditEstimate = () => {
         const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
         mutateEdit({
+            projectId: projectId,
             cost: Number(pricing.total),
             customerData: {},
             estimateData: estimateConfig,
@@ -1448,6 +1449,7 @@ export const MirrorReview = () => {
                                 <Button
                                     fullWidth
                                     // disabled={selectedContent?.hardwareFinishes === null}
+                                    disabled={projectId === null}
                                     variant="contained"
                                     onClick={handleEstimateSubmit}
                                     sx={{
