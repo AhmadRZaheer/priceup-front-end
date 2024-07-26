@@ -361,6 +361,16 @@ const NewSidebar = () => {
           }}
         >
           <Typography className="subtitles"> Management </Typography>
+          <NavLink to="/projects" className="link">
+            <Box
+              className={`button-item ${location.pathname.includes("/projects") ? "active-item" : ""
+                }`}
+            >
+              <Description />
+
+              <span>Projects</span>
+            </Box>
+          </NavLink>
           <NavLink to="/estimates" className="link">
             <Box
               className={`button-item ${location.pathname.includes("/estimates") ? "active-item" : ""
@@ -368,7 +378,7 @@ const NewSidebar = () => {
             >
               <Description />
 
-              <span>Estimates</span>
+              <span>Old Estimates</span>
             </Box>
           </NavLink>
           <NavLink to="/customers" className="link">

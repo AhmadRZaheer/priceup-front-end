@@ -105,6 +105,9 @@ function MobileBar() {
     // dispatch(setNavigationDesktop("existing"));
     navigate('/estimates');
   };
+  const handleProjectClick = () => {
+    navigate("/projects");
+  }
   const handleSwitchLocation = (location) => {
     if (location?.company?._id !== activeLocation?.company?._id) {
       setActiveLocation(location);
@@ -221,7 +224,35 @@ function MobileBar() {
                 paddingY: "10px",
                 textTransform: "capitalize",
                 backgroundColor:
-                location.pathname.includes("/estimates") || location.pathname === '/' ? "#8477da" : "transprent",
+                location.pathname.includes("/projects") || location.pathname === '/' ? "#8477da" : "transprent",
+                ":hover": {
+                  backgroundColor: "#8477da",
+                },
+                display: "flex",
+                justifyContent: "start",
+                fontSize: "16px",
+              }}
+              onClick={() => handleProjectClick()}
+            >
+              <img
+                style={{ paddingRight: 10 }}
+                src={EstimsteIcon}
+                alt="image of customer"
+              />{" "}
+              Projects
+            </Button>
+          </Box>
+          <Box>
+            <Button
+              sx={{
+                width: 263,
+                color: "white",
+                marginX: 2,
+                marginY: 1,
+                paddingY: "10px",
+                textTransform: "capitalize",
+                backgroundColor:
+                location.pathname.includes("/estimates") ? "#8477da" : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
@@ -236,7 +267,7 @@ function MobileBar() {
                 src={EstimsteIcon}
                 alt="image of customer"
               />{" "}
-              Estimates
+              Old Estimates
             </Button>
           </Box>
           <Box>

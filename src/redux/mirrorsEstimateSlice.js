@@ -8,6 +8,7 @@ export const getSqftArea = (state) => state.mirrorsEstimate.sqftArea;
 export const getItemQuantity = (state) => state.mirrorsEstimate.itemQuantity;
 export const getSelectedContent = (state) => state.mirrorsEstimate.content;
 export const getPricing = (state) => state.mirrorsEstimate.pricing;
+export const getProjectId = (state) => state.mirrorsEstimate.projectId;
 export const getSelectedItem = (state) => state.mirrorsEstimate.selectedItem;
 export const getAdditionalFields = (state) =>
   state.mirrorsEstimate.content.additionalFields;
@@ -22,6 +23,7 @@ const initialState = {
   estimateState: "", // 'create' || 'edit'
   sqftArea: 0,
   selectedItem: null,
+  projectId:null,
   pricing: {
     labor: 0,
     glass: 0,
@@ -185,6 +187,10 @@ const mirrorsEstimateSlice = createSlice({
       const { payload } = actions;
       state.content.sandBlasting = payload;
     },
+    setMirrorProjectId: (state, actions) => {
+      const { payload } = actions;
+      state.projectId = payload;
+    },
     setPricing: (state, actions) => {
       const { payload } = actions;
       state.pricing = payload;
@@ -273,7 +279,8 @@ export const {
   initializeStateForEditQuote,
   setModifiedProfitPercentage,
   setMultipleNotifications,
-  resetNotifications
+  resetNotifications,
+  setMirrorProjectId
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;

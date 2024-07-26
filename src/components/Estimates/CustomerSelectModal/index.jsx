@@ -28,7 +28,7 @@ import EnterEstimateLabel from "./enterEstimateLabel";
 
 
 
-export const CustomerSelectModal = ({ open, handleCancel, estimateConfig, estimateCategory, estimatesTotal }) => {
+export const CustomerSelectModal = ({ open, handleCancel, estimateConfig, estimateCategory, estimatesTotal, projectId }) => {
     const {
         mutateAsync,
         isError: ErrorForAdd,
@@ -85,7 +85,8 @@ export const CustomerSelectModal = ({ open, handleCancel, estimateConfig, estima
             },
             label: label,
             category: estimateCategory,
-            cost: Number(estimatesTotal)
+            cost: Number(estimatesTotal),
+            projectId: projectId
         });
     }
 

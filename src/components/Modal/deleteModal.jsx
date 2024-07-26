@@ -4,15 +4,17 @@ import {
   CircularProgress,
   Modal,
   Typography,
+  useMediaQuery,
 } from "@mui/material";
 
 function DeleteModal({ open, close, handleDelete, isLoading }) {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: isMobile ? 200 : 400,
     bgcolor: "background.paper",
     border: "2px solid white",
     boxShadow: 24,

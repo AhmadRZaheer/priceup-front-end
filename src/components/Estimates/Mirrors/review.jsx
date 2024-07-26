@@ -11,7 +11,7 @@ import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { ClientDetailsModel } from "../clientDetailsModel";
 import { getEstimateState } from "@/redux/estimateSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getNotifications, getPricing, getSelectedContent, getSqftArea, resetNotifications, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
+import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getNotifications, getPricing, getProjectId, getSelectedContent, getSqftArea, resetNotifications, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
 import { calculateTotal, getEstimateErrorStatus, getSandBlasting } from "@/utilities/mirrorEstimates";
 import { showSnackbar } from "@/redux/snackBarSlice";
@@ -104,6 +104,7 @@ export const MirrorReview = () => {
     const hardwaresList = useSelector(getMirrorsHardware);
     const measurements = useSelector(getEstimateMeasurements);
     const estimateId = useSelector(getEstimateId);
+    const projectId = useSelector(getProjectId);
     const sqftArea = useSelector(getSqftArea);
     const currentEstimateState = useSelector(getEstimateState);
     const notifications = useSelector(getNotifications);
@@ -151,14 +152,14 @@ export const MirrorReview = () => {
     const handleEstimateSubmit = () => {
         const allGoodStatus = getEstimateErrorStatus(selectedContent);
         if (allGoodStatus) {
-        if (currentEstimateState === quoteState.CREATE) {
-            const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
-            setEstimateConfig(estimateConfig);
-            setClientDetailModelOpen(true);
-        } else {
-            handleEditEstimate();
-            showSnackbar("Estimate Edit successfully", "success");
-        }
+            if (currentEstimateState === quoteState.CREATE) {
+                const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
+                setEstimateConfig(estimateConfig);
+                setClientDetailModelOpen(true);
+            } else {
+                handleEditEstimate();
+                showSnackbar("Estimate Edit successfully", "success");
+            }
         }
         else {
             setHardwareMissingAlert(true);
@@ -1475,7 +1476,7 @@ export const MirrorReview = () => {
                 estimateCategory={EstimateCategory.MIRRORS}
             />
             {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> */}
-            <CustomerSelectModal  open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> 
+            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} projectId={projectId} />
         </>
     );
 };

@@ -45,6 +45,9 @@ import EstimateLayouts from "@/pages/EstimateLayouts";
 import EstimateDimensions from "@/pages/EstimateDimensions";
 import EstimateReview from "@/pages/EstimateReview";
 import Notification from "@/pages/Notification";
+import Projects from "@/pages/Projects";
+import ProjectCreate from "@/pages/Projects/Create";
+import ProjectDetail from "@/pages/Projects/Detail";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -80,6 +83,11 @@ const AppRoutes = () => {
       (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
+          <Route path="projects/">
+            <Route index element={<Projects />} />
+            <Route path="create" element={<ProjectCreate />} />
+            <Route path=":id" element={<ProjectDetail />} />
+            </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
             <Route path="category" element={<EstimateCategory />} />
@@ -123,7 +131,12 @@ const AppRoutes = () => {
         </Route>
       ) : isStaff(decodedToken) && decodedToken?.company_id.length ? (
         <Route path="/">
-          <Route index element={<Estimates />} />
+          <Route index element={<Projects />} />
+          <Route path="projects/">
+            <Route index element={<Projects />} />
+            <Route path="create" element={<ProjectCreate />} />
+            <Route path=":id" element={<ProjectDetail />} />
+            </Route>
           <Route path="/customers" element={<Customers />} />
           <Route path="/estimates/">
             <Route index element={<Estimates />} />

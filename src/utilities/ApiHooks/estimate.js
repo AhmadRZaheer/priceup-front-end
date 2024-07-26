@@ -84,6 +84,7 @@ export const useCreateEstimates = () => {
             category: props.category,
             name: `${current_date} ${current_time}`,
             label: props.label ?? "",
+            project_id: props.projectId,
           },
         },
         {
@@ -92,7 +93,10 @@ export const useCreateEstimates = () => {
       );
 
       if (response.data.code === 200) {
-        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate created.');
+        socketClient.emit(
+          socketIoChannel.NOTIFICATIONS,
+          "An estimate created."
+        );
         dispatch(
           showSnackbar({
             message: "Estimate Created Successfully",
@@ -163,7 +167,10 @@ export const useEditEstimates = () => {
       );
 
       if (response.data.code === 200) {
-        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate updated.');
+        socketClient.emit(
+          socketIoChannel.NOTIFICATIONS,
+          "An estimate updated."
+        );
         dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({
@@ -206,7 +213,10 @@ export const useDeleteEstimates = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.code === 200) {
-        socketClient.emit(socketIoChannel.NOTIFICATIONS,'An estimate deleted.');
+        socketClient.emit(
+          socketIoChannel.NOTIFICATIONS,
+          "An estimate deleted."
+        );
         dispatch(setEstimatesListRefetch());
         dispatch(
           showSnackbar({

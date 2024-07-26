@@ -31,6 +31,7 @@ import {
     getDoorWidth,
     getisCustomizedDoorWidth,
     setAdditionalFieldsPrice,
+    getProjectId,
 } from "@/redux/estimateCalculations";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary";
@@ -193,6 +194,7 @@ export const ShowerReview = () => {
     const showerLocationSettings = useSelector(getLocationShowerSettings);
     const listData = useSelector(getListData);
     const estimatesTotal = useSelector(getTotal);
+    const projectId = useSelector(getProjectId);
     const measurements = useSelector(getMeasurementSide);
     const perimeter = useSelector(getLayoutPerimeter);
     const doorWidthredux = useSelector(getDoorWidth);
@@ -1199,7 +1201,7 @@ export const ShowerReview = () => {
                                         Additonal Fields
                                     </Typography>
                                     {addedFields &&
-                                        addedFields.map((item, index) => 
+                                        addedFields.map((item, index) =>
                                             <SingleField item={item} index={index} estimateState={currentQuoteState} addedFields={addedFields} handleModify={handleAdditionalFieldModify} />
                                         )}
                                     <Button
@@ -1368,7 +1370,7 @@ export const ShowerReview = () => {
                 handleClose={() => setHardwareMissingAlert(false)}
                 estimateCategory={EstimateCategory.SHOWERS}
             />
-            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} />
+            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} projectId={projectId} />
             {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} /> */}
         </>
     );

@@ -5,6 +5,7 @@ import EstimateActionsDropdown from "@/components/EstimateActionsDropdown";
 import userImg from "@/Assets/username1.svg";
 import wheel from "@/Assets/wheel.svg";
 import "@/components/table/table.scss";
+import ActionsDropdown from "@/components/common/ActionsDropdown";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
@@ -107,7 +108,7 @@ export const EstimatesColumns = (
             <Typography
               sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
             >
-              {params?.row?.settings?.name ?? 'Custom'}
+              {params?.row?.settings?.name ?? "Custom"}
             </Typography>
           </>
         );
@@ -170,6 +171,161 @@ export const EstimatesColumns = (
             handlePDFPreviewClick={handlePDFPreviewClick}
           />
         );
+      },
+    },
+  ];
+};
+
+export const ProjectsColumns = (dropdownActions) => {
+  return [
+    {
+      field: "Project Name",
+      headerClassName: "customHeaderClass",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ py: 1, color: "#667085" }}>
+              {params?.row?.name}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Creator",
+      headerClassName: "customHeaderClass",
+      flex: 1.5,
+      renderCell: (params) => {
+        return (
+          <>
+            <Box sx={{ display: "flex", gap: 1 }}>
+              <Box
+                sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: "100%",
+                  overflow: "hidden",
+                }}
+              >
+                <DefaultImage
+                  image={params?.row?.creatorData?.image}
+                  name={params?.row?.creatorData?.name}
+                />
+              </Box>
+              <Box>
+                <Typography>{params?.row?.creatorData?.name}</Typography>
+                <Typography
+                  sx={{
+                    fontSize: 13,
+                    p: 0,
+                    mt: -0.4,
+                    color: "#667085",
+                  }}
+                >
+                  {params?.row?.creatorData?.email}
+                </Typography>
+              </Box>
+            </Box>
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer Name",
+      headerClassName: "customHeaderClass",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ py: 1, color: "#667085" }}>
+              {params?.row?.customerData?.name}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer Email",
+      headerClassName: "customHeaderClass",
+      flex: 1.5,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ py: 1, color: "#667085" }}>
+              {params?.row?.customerData?.email}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
+      field: "Location",
+      headerClassName: "customHeaderClass",
+      flex: 1.5,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography
+              sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+            >
+              {params?.row?.location}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
+      field: "Date Created",
+      headerClassName: "customHeaderClass",
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
+              {new Date(params?.row?.createdAt).toDateString()}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Amount Quoted",
+      headerClassName: "customHeaderClass",
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+              ${params?.row?.totalAmountQuoted?.toFixed(2) || 0}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Status",
+      headerClassName: "customHeaderClass",
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <SelectMenu_Status
+              status={params?.row?.status}
+              quoteId={params?.row?._id}
+            />
+          </>
+        );
+      },
+    },
+    {
+      field: "Action",
+      headerClassName: "customHeaderClass",
+      flex: 1,
+      renderCell: (params) => {
+        return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
       },
     },
   ];
