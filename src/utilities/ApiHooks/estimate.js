@@ -7,7 +7,6 @@ import { showSnackbar } from "../../redux/snackBarSlice";
 import { setEstimatesListRefetch } from "../../redux/refetch";
 import { socketClient } from "../../configs/socket";
 import { socketIoChannel } from "../constants";
-// import { useSnackbar } from "notistack";
 
 export const useFetchDataEstimate = () => {
   async function fetchData() {
@@ -74,7 +73,7 @@ export const useCreateEstimates = () => {
       const response = await axios.post(
         `${backendURL}/estimates/save`,
         {
-          customerData: props.customerData,
+          // customerData: props.customerData,
           estimateData: {
             cost: props.cost,
             config: { ...props.estimateData },
@@ -144,9 +143,9 @@ export const useEditEstimates = () => {
       const response = await axios.put(
         `${backendURL}/estimates/${updatedEstimate?.id}`,
         {
-          ...(updatedEstimate.customerData
-            ? { customerData: updatedEstimate.customerData }
-            : {}),
+          // ...(updatedEstimate.customerData
+          //   ? { customerData: updatedEstimate.customerData }
+          //   : {}),
           estimateData: {
             ...(updatedEstimate.estimateData
               ? {

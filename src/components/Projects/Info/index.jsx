@@ -490,7 +490,7 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
 
                             </Box>
                         </Box>
-                    </Box> : <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: 1 }}>
+                    </Box> : <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: { sm: 1, xs: 0 } }}>
                         <Box sx={{ display: 'flex', gap: 2 }}>
                             <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Name :</Typography>
                             <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.name}</Typography>

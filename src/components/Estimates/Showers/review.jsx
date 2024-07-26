@@ -46,6 +46,7 @@ import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { CustomerSelectModal } from "../CustomerSelectModal";
+import EnterLabelModal from "../enterLabelModal";
 
 export const generateEstimatePayload = (estimateState, measurements, selectedContent, layout_id, isCustomizedDoorWidth, doorWidthredux, perimeter, sqftArea) => {
     let measurementsArray = measurements;
@@ -188,7 +189,7 @@ export const ShowerReview = () => {
         isError: ErrorForAddEidt,
         isSuccess: CreatedSuccessfullyEdit,
     } = useEditEstimates();
-    const [ClientDetailModelOpen, setClientDetailModelOpen] = useState(false);
+    const [labelModalOpen, setLabelModalOpen] = useState(false);
     const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
     const [estimateConfig, setEstimateConfig] = useState(null);
     const showerLocationSettings = useSelector(getLocationShowerSettings);
@@ -251,7 +252,7 @@ export const ShowerReview = () => {
             if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
                 const estimateConfig = generateEstimatePayload(currentQuoteState, measurements, selectedContent, selectedData?.config?.layout_id, isCustomizedDoorWidth, doorWidthredux, perimeter, sqftArea);
                 setEstimateConfig(estimateConfig);
-                setClientDetailModelOpen(true);
+                setLabelModalOpen(true);
             } else {
                 handleEditEstimate();
                 showSnackbar("Estimate Edit successfully", "success");
@@ -1371,8 +1372,7 @@ export const ShowerReview = () => {
                 handleClose={() => setHardwareMissingAlert(false)}
                 estimateCategory={EstimateCategory.SHOWERS}
             />
-            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} projectId={projectId} />
-            {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} /> */}
+            <EnterLabelModal open={labelModalOpen} handleClose={() => { setLabelModalOpen(false) }} key={'label-modal'} estimateConfig={estimateConfig} estimateCategory={"showers"} estimatesTotal={estimatesTotal} projectId={projectId} />
         </>
     );
 };

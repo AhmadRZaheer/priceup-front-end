@@ -8,7 +8,6 @@ import Summary from "./summary";
 import { Link, useNavigate } from "react-router-dom";
 import { EstimateCategory, mirrorHardwareTypes, quoteState } from "@/utilities/constants";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
-import { ClientDetailsModel } from "../clientDetailsModel";
 import { getEstimateState } from "@/redux/estimateSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getNotifications, getPricing, getProjectId, getSelectedContent, getSqftArea, resetNotifications, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
@@ -1477,7 +1476,6 @@ export const MirrorReview = () => {
                 handleClose={() => setHardwareMissingAlert(false)}
                 estimateCategory={EstimateCategory.MIRRORS}
             />
-            {/* <ClientDetailsModel open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} /> */}
             <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} projectId={projectId} />
         </>
     );
