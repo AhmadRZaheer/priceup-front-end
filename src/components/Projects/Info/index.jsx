@@ -2,7 +2,7 @@ import { Box, Button, CircularProgress, FormControl, InputAdornment, InputLabel,
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomerSelect from "./CustomerSelect";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useCreateDocument, useEditDocument } from "@/utilities/ApiHooks/common";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate } from "react-router-dom";
@@ -22,9 +22,17 @@ const routePrefix = `${backendURL}/projects`;
 
 const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) => {
     const decryptedToken = getDecryptedToken();
-    const creatorName = projectState === 'create' ? decryptedToken?.name : projectData?.creatorDetails?.name;
-    const todaysDate = new Date();
-    const createdDate = projectState === 'create' ? todaysDate?.toDateString() : projectData?.createdAt;
+    const creatorName = projectState === 'create' ? decryptedToken?.name : projectData?.creatorData?.name;
+    const createdDate = useMemo(() => {
+        const todaysDate = new Date();
+        if (projectState === 'create') {
+            return todaysDate?.toDateString();
+        }
+        else {
+            const current = new Date(projectData?.createdAt);
+            return current?.toDateString();
+        }
+    }, [projectState, projectData])
     const { mutateAsync: createProject, isLoading: createLoading } = useCreateDocument();
     const { mutateAsync: updateProject, isLoading: updateLoading } = useEditDocument();
     const [selectedCustomer, setSelectedCustomer] = useState(projectData?.customerData || null);
@@ -276,7 +284,7 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
                                     }}
                                 >
                                     <TextareaAutosize
-                                        style={{ padding: '10px',borderColor:'#cccc',borderRadius:'5px' }}
+                                        style={{ padding: '10px', borderColor: '#cccc', borderRadius: '5px' }}
                                         color="neutral"
                                         // cols={isMobile ? 38 : 50}
                                         minRows={5}
