@@ -1,6 +1,8 @@
-import DefaultImage from "@/components/ui-components/defaultImage";
+// import DefaultImage from "@/components/ui-components/defaultImage";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
-import { Close } from "@mui/icons-material";
+import { backendURL } from "@/utilities/common";
+import { Close, LocationOn } from "@mui/icons-material";
 import {
     Box,
     Button,
@@ -8,45 +10,46 @@ import {
     InputAdornment,
     CircularProgress,
     Typography,
-    // Divider,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 
 const SelectFromList = ({
-    // handleCancel,
-    selectedCustomer,
-    setSelectedCustomer,
+    selectedAddress,
+    setSelectedAddress,
     handleStepChange,
+    selectedCustomer
 }) => {
-    const { data: customerList, refetch, isFetching } = useFetchDataCustomer();
+    const routePrefix = `${backendURL}/addresses`;
+
+    const { data: addressList, refetch, isFetching } = useFetchAllDocuments(`${routePrefix}/by-customer/${selectedCustomer?._id}`);
     const [searchQuery, setSearchQuery] = useState("");
-    const [filteredCustomer, setFilteredCustomer] = useState([]);
-    const [user, setUser] = useState(selectedCustomer || null);
+    const [filteredAddress, setFilteredAddress] = useState([]);
+    const [address, setAddress] = useState(selectedAddress || null);
     const handleSearchChange = (event) => {
         const { value } = event.target;
         setSearchQuery(value);
 
         if (value === "") {
-            setFilteredCustomer(customerList ?? []);
+            setFilteredAddress(addressList ?? []);
         } else {
-            const filteredData = customerList?.filter(
-                (customer) =>
-                    customer.name?.toLowerCase().includes(value.toLowerCase()) ||
-                    customer.email?.toLowerCase().includes(value.toLowerCase())
+            const filteredData = addressList?.filter(
+                (address) =>
+                    address.name?.toLowerCase().includes(value.toLowerCase())
             );
-            setFilteredCustomer(filteredData ?? []);
+            setFilteredAddress(filteredData ?? []);
         }
     };
     const handleSelect = () => {
-        setSelectedCustomer(user);
-        // handleStepChange(2);
+        setSelectedAddress(address);
     };
     useEffect(() => {
-        if (customerList && customerList?.length) {
-            setFilteredCustomer(customerList);
+        if (addressList && addressList?.length) {
+            setFilteredAddress(addressList);
         }
-        refetch();
-    }, [customerList]);
+        if (selectedCustomer?._id) {
+            refetch();
+        }
+    }, [addressList, selectedCustomer?._id]);
     return (
         <Box>
             <Box sx={{ p: 1 }}>
@@ -60,9 +63,6 @@ const SelectFromList = ({
                     }}
 
                 >
-                    {/* <Box sx={{ display: { sm: "block", xs: "none" } }}>
-              <label htmlFor="search by name">Search by name</label>
-            </Box> */}
                     <TextField
                         size="small"
                         InputProps={{
@@ -92,8 +92,7 @@ const SelectFromList = ({
                         }}
                         value={searchQuery}
                         onChange={handleSearchChange}
-                        // placeholder="Search by name"
-                        label="Search by name"
+                        label="Search by reference"
                         variant="outlined"
                         fullWidth
                     />
@@ -110,7 +109,6 @@ const SelectFromList = ({
                         flexDirection: "column",
                         gap: 1,
                         overflowY: "auto",
-                        // boxShadow: "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
                     }}
                 >
                     {isFetching ? (
@@ -119,29 +117,29 @@ const SelectFromList = ({
                             color="primary"
                             sx={{ justifySelf: "center", alignSelf: "center" }}
                         />
-                    ) : customerList?.length === 0 || !customerList ? (
+                    ) : addressList?.length === 0 || !addressList ? (
                         <Typography sx={{ color: "gray", textAlign: "center", p: 1 }}>
-                            No existing customer found.
+                            No existing address found.
                         </Typography>
-                    ) : customerList?.length > 0 && filteredCustomer?.length === 0 ? (
+                    ) : addressList?.length > 0 && filteredAddress?.length === 0 ? (
                         <Box>
                             <Typography sx={{ color: "gray", textAlign: "center", p: 1 }}>
                                 No result found. Try adjusting your search.
                             </Typography>
                         </Box>
                     ) : (
-                        filteredCustomer?.map((option) => (
+                        filteredAddress?.map((option) => (
                             <Box
-                                onClick={() => setUser(option)}
+                                onClick={() => setAddress(option)}
                                 sx={{
                                     display: "flex",
                                     backgroundColor:
-                                        user?._id === option?._id ? "#8477da" : "white",
+                                        address?._id === option?._id ? "#8477da" : "white",
                                     "&:hover": {
                                         boxShadow: "rgba(100, 100, 111, 0.2) 0px 7px 29px 0px",
                                     },
 
-                                    color: user?._id === option?._id ? "white" : "black",
+                                    color: address?._id === option?._id ? "white" : "black",
                                     p: 0.5,
                                     width: "96%",
                                     borderRadius: 2,
@@ -156,11 +154,11 @@ const SelectFromList = ({
                                         overflow: "hidden",
                                     }}
                                 >
-                                    <DefaultImage name={option.name} image={option.image} />
+                                    <LocationOn sx={{color:"#FF3333",fontSize:'27px'}} />
                                 </Box>
                                 <Box>
-                                    <Typography>{option.name}</Typography>
-                                    <Typography> {option.email}</Typography>
+                                    <Typography sx={{ fontWeight: 600, fontSize: '17px' }}>{option.name}</Typography>
+                                    <Typography sx={{ fontWeight: '16px' }}> {option.street}</Typography>
                                 </Box>
                             </Box>
                         ))
@@ -189,12 +187,12 @@ const SelectFromList = ({
                             },
                         }}
                         variant="contained"
-                        disabled={user ? false : true}
+                        disabled={address ? false : true}
                     >
-                        Select Customer
+                        Select Address
                     </Button>
                 </Box>
-                {/* create new User */}
+                {/* create new Address */}
                 <Box
                     sx={{
                         display: "flex",
@@ -221,7 +219,7 @@ const SelectFromList = ({
                     }}
                     variant="contained"
                 >
-                    Create new Customer{" "}
+                    Create new Address{" "}
                 </Button>
             </Box>
         </Box>

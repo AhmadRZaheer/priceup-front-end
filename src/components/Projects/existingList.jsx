@@ -233,7 +233,7 @@ export default function ExistingList() {
             ) : (
                 <Box>
                     {isMobile ?
-                        (dummyArray?.map((item) => <Box
+                        (filteredData?.map((item) => <Box
                             key={item._id}
                             sx={{
                                 display: "flex",

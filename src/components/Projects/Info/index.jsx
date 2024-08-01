@@ -1,52 +1,49 @@
-import { Box, Button, CircularProgress, Divider, Tab, Tabs, TextareaAutosize, TextField, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, FormControl, InputAdornment, InputLabel, MenuItem, Select, Tab, Tabs, TextareaAutosize, TextField, Typography } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomerSelect from "./CustomerSelect";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useCreateDocument, useEditDocument } from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
+import { backendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate } from "react-router-dom";
-import { Edit } from "@mui/icons-material";
+import { Close } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
+import { projectStatus } from "@/utilities/constants";
+import AddressSelect from "./AddressSelect";
 
 
 const validationSchema = yup.object({
     name: yup.string().required("Project Name is required"),
-    location: yup.string().required("Project Location is required"),
-    city: yup.string().required("City Name is required"),
-    state: yup.string().required("State Name is required"),
-    street: yup.string().required("Street Number is required"),
-    // phone: yup.string().matches(/^[0-9]+$/, "Phone must be numeric"),
+    status: yup.string().required("Project Status is required"),
 });
 const routePrefix = `${backendURL}/projects`;
 
 const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) => {
+    const decryptedToken = getDecryptedToken();
+    const creatorName = projectState === 'create' ? decryptedToken?.name : projectData?.creatorDetails?.name;
+    const todaysDate = new Date();
+    const createdDate = projectState === 'create' ? todaysDate?.toDateString() : projectData?.createdAt;
     const { mutateAsync: createProject, isLoading: createLoading } = useCreateDocument();
     const { mutateAsync: updateProject, isLoading: updateLoading } = useEditDocument();
     const [selectedCustomer, setSelectedCustomer] = useState(projectData?.customerData || null);
-    const [editProjectInfo, setEditProjectInfo] = useState(false);
-    const [steps, setSteps] = useState(projectState === 'edit' ? 2 : 0);   // 0 for list, 1 for create, 2 for selected customer show
-    const [customerInfoModified, setCustomerInfoModified] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(projectData?.addressData || null);
+    const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
+    const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
     const [activeTabNumber, setActiveTabNumber] = useState(0); // 0 for showers, 1 for mirrors
     const navigate = useNavigate();
 
     const handleChange = (event, newValue) => {
         setActiveTabNumber(newValue);
     };
-    const projectInfoModified = useMemo(() => {
-        return projectState === 'edit' && editProjectInfo;
-    }, [editProjectInfo]);
+
     const formik = useFormik({
         initialValues: {
             name: projectData?.name || "",
-            location: projectData?.location || "",
-            city: projectData?.address?.city || "",
-            state: projectData?.address?.state || "",
-            street: projectData?.address?.street || "",
-            postalCode: projectData?.address?.postalCode || "",
-            country: projectData?.address?.country || "America",
+            status: projectData?.status || projectStatus.PENDING,
+            customer: selectedCustomer?.name || "",
+            address: selectedAddress?.name || "",
             notes: projectData?.notes || ""
         },
         validationSchema,
@@ -55,14 +52,8 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
             const data = {
                 name: values.name,
                 notes: values.notes,
-                location: values.location,
-                address: {
-                    street: values.street,
-                    city: values.city,
-                    state: values.state,
-                    postalCode: values.postalCode,
-                    country: values.country,
-                },
+                status: values.status,
+                address_id: selectedAddress?._id,
                 customer_id: selectedCustomer?._id,
             }
             try {
@@ -72,9 +63,6 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
                 }
                 else {
                     await updateProject({ data: data, apiRoute: `${routePrefix}/${projectData?._id}` });
-                    setSteps(2);
-                    setEditProjectInfo(false);
-                    setCustomerInfoModified(false);
                 }
             } catch (err) {
                 console.error(err, 'error');
@@ -82,41 +70,241 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
             console.log(data, 'data');
         }
     })
-    const handleStepChange = (step) => {
-        setSteps(step);
+    const handleCustomerSelect = () => {
+        setOpenCustomerSelectModal(true);
+    }
+    const handleCustomerUnSelect = (event) => {
+        event.stopPropagation();
+        setSelectedCustomer(null);
+        formik.setFieldValue('customer', '');
+        setSelectedAddress(null);
+        formik.setFieldValue('address', '');
     }
     const handleCustomerChange = (customer) => {
         setSelectedCustomer(customer);
-        if (projectState === 'edit') {
-            setCustomerInfoModified(true);
-        }
+        setSelectedAddress(null);
+        formik.setFieldValue('address', '');
+        setOpenCustomerSelectModal(false);
     }
+    const handleAddressSelect = () => {
+        setOpenAddressSelectModal(true);
+    }
+    const handleAddressUnSelect = (event) => {
+        event.stopPropagation();
+        setSelectedAddress(null);
+        formik.setFieldValue('address', '');
+    }
+    const handleAddressChange = (address) => {
+        setSelectedAddress(address);
+        setOpenAddressSelectModal(false);
+    }
+    return <Box sx={{ background: 'transparent', padding: { sm: 1.5, xs: '60px 8px 8px 8px' }, width: { sm: '98%', xs: 'auto', margin: '0px auto' } }}>
+        <Typography sx={{ fontSize: '22px', fontWeight: 800, marginBottom: 1.5 }}>Project</Typography>
 
-    return <Box sx={{ background: 'transparent', padding: { sm: 2, xs: '60px 16px 16px 16px' }, width: { sm: '90%', xs: 'auto', margin: '0px auto' } }}>
-        <form onSubmit={formik.handleSubmit}>
-            {/** Section 1 */}
-            <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2, justifyContent: 'space-evenly', aligItems: 'baseline' }}>
-                {/** Project Info Block */}
-                <Box sx={{ width: { sm: "480px", xs: "100%" } }}>
-                    <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Project Info</Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%', }}>
-                        {projectState === 'edit' && !editProjectInfo && <Button sx={{
-                            width: "fit-content",
-                            textTransform: "initial",
-                            backgroundColor: "#8477da",
-                            "&:hover": {
-                                backgroundColor: "#8477da",
-                            },
-                            borderRadius: 1,
-                            padding: 1,
-                            fontSize: 16,
-                            height: 35,
-                        }}
-                            variant="contained" onClick={() => setEditProjectInfo(true)}><Edit sx={{ fontSize: '18px', marginRight: '5px' }} /> Edit</Button>}
+        <Box sx={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '5px', padding: { md: 2, xs: 1 } }}>
+            <form onSubmit={formik.handleSubmit}>
+                {/** Section 1 */}
+                <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', gap: 2, aligItems: 'baseline' }}>
+                    {/** Project Detail Block */}
+                    <Box sx={{ width: { md: "auto", xs: "100%" } }}>
+                        <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Detail</Typography>
+                        <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: 1 }}>
+                            <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        paddingY: { sm: 0, xs: 2 },
+                                    }}
+                                >
+                                    <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                        <label htmlFor="name">Creater</label><span style={{ color: 'red' }}>*</span>
+                                    </Box>
+                                    <TextField
+                                        disabled="true"
+                                        id="creator"
+                                        name="creator"
+                                        label="Enter Creator Name"
+                                        size="small"
+                                        variant="outlined"
+                                        InputProps={{
+                                            style: {
+                                                color: "black",
+                                                borderRadius: 4,
+                                                backgroundColor: "white",
+                                            },
+                                        }}
 
+                                        sx={{
+                                            color: { sm: "black", xs: "white" },
+                                            width: "100%",
+                                        }}
+                                        value={creatorName}
+                                    />
+                                </Box>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        paddingY: { sm: 0, xs: 2 },
+                                        flexGrow: 1
+                                    }}
+                                >
+                                    <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                        <label htmlFor="status">Status</label><span style={{ color: 'red' }}>*</span>
+                                    </Box>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="status-label">Status</InputLabel>
+                                        <Select
+                                            sx={{ textTransform: 'capitalize' }}
+                                            size="small"
+                                            labelId="status-label"
+                                            id="status"
+                                            name="status"
+                                            value={formik.values.status}
+                                            label="Status"
+                                            onChange={formik.handleChange}
+                                        >
+                                            <MenuItem value={projectStatus.PENDING} sx={{ textTransform: 'capitalize' }}>{projectStatus.PENDING}</MenuItem>
+                                            <MenuItem value={projectStatus.VOIDED} sx={{ textTransform: 'capitalize' }}>{projectStatus.VOIDED}</MenuItem>
+                                            <MenuItem value={projectStatus.APPROVED} sx={{ textTransform: 'capitalize' }}>{projectStatus.APPROVED}</MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                </Box>
+                            </Box>
+                            <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        paddingY: { sm: 0, xs: 2 },
+                                    }}
+                                >
+                                    <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                        <label htmlFor="name">Date</label><span style={{ color: 'red' }}>*</span>
+                                    </Box>
+                                    <TextField
+                                        disabled="true"
+                                        id="date"
+                                        name="creator"
+                                        label="Enter Create Date"
+                                        size="small"
+                                        variant="outlined"
+                                        InputProps={{
+                                            style: {
+                                                color: "black",
+                                                borderRadius: 4,
+                                                backgroundColor: "white",
+                                            },
+                                        }}
+
+                                        sx={{
+                                            color: { sm: "black", xs: "white" },
+                                            width: "100%",
+                                        }}
+                                        value={createdDate}
+                                    />
+                                </Box>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        paddingY: { sm: 0, xs: 2 },
+                                        flexGrow: 1
+                                    }}
+                                >
+                                    <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                        <label htmlFor="status">Name</label><span style={{ color: 'red' }}>*</span>
+                                    </Box>
+                                    <TextField
+                                        id="name"
+                                        name="name"
+                                        label="Enter Project Name"
+                                        size="small"
+                                        variant="outlined"
+                                        InputProps={{
+                                            endAdornment: formik.values.name ? (
+                                                <InputAdornment
+                                                    position="end"
+                                                    sx={{ cursor: "pointer" }}
+                                                    onClick={() => {
+
+                                                    }}
+                                                >
+                                                    <Close sx={{}} />
+                                                </InputAdornment>
+                                            ) : (
+                                                ""
+                                            ),
+                                            style: {
+                                                color: "black",
+                                                borderRadius: 4,
+                                                backgroundColor: "white",
+                                            },
+                                            inputProps: { min: 0, max: 50 },
+                                        }}
+
+                                        sx={{
+                                            color: { sm: "black", xs: "white" },
+                                            width: "100%",
+                                        }}
+                                        value={formik.values.name}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={
+                                            formik.touched.name && formik.errors.name
+                                        }
+                                        helperText={
+                                            formik.touched.name && formik.errors.name
+                                        }
+                                    />
+                                </Box>
+                            </Box>
+                            <Typography sx={{ fontSize: '17px', fontWeight: 600 }}>Additional Notes</Typography>
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: 1,
+                                        paddingY: { sm: 0, xs: 1 },
+                                        width: '100%'
+                                    }}
+                                >
+                                    <TextareaAutosize
+                                        style={{ padding: '10px',borderColor:'#cccc',borderRadius:'5px' }}
+                                        color="neutral"
+                                        // cols={isMobile ? 38 : 50}
+                                        minRows={5}
+                                        id="notes"
+                                        name="notes"
+                                        placeholder="Enter Additional Notes"
+                                        size="large"
+                                        variant="outlined"
+                                        sx={{ padding: '10px', resize: "vertical", }}
+                                        value={formik.values.notes}
+                                        onChange={formik.handleChange}
+                                        onBlur={formik.handleBlur}
+                                        error={
+                                            formik.touched.notes && formik.errors.notes
+                                        }
+                                        helperText={
+                                            formik.touched.notes && formik.errors.notes
+                                        }
+                                    />
+
+                                </Box>
+                            </Box>
+                        </Box>
                     </Box>
-                    {projectState === 'create' || editProjectInfo ? <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: 1 }}>
-                        <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
+                    {/** Customer Select Block */}
+                    <Box sx={{ width: { md: "auto", xs: "100%" } }}>
+                        <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Customer</Typography>
+                        <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: 1 }}>
                             <Box
                                 sx={{
                                     display: "flex",
@@ -125,45 +313,53 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
                                     paddingY: { sm: 0, xs: 2 },
                                 }}
                             >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="name">Name</label><span style={{ color: 'red' }}>*</span>
+                                <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                    <label htmlFor="name">Customer</label><span style={{ color: 'red' }}>*</span>
                                 </Box>
-
                                 <TextField
-                                    id="name"
-                                    name="name"
-                                    placeholder="Enter Project Name"
+                                    id="customer"
+                                    name="customer"
+                                    label="Select a Customer"
                                     size="small"
                                     variant="outlined"
+                                    onClick={handleCustomerSelect}
                                     InputProps={{
+                                        endAdornment: selectedCustomer ? (
+                                            <InputAdornment
+                                                position="end"
+                                                sx={{ cursor: "pointer" }}
+                                                onClick={(event) => { handleCustomerUnSelect(event) }}
+                                            >
+                                                <Close sx={{}} />
+                                            </InputAdornment>
+                                        ) : (
+                                            ""
+                                        ),
+                                        readOnly: true,
                                         style: {
                                             color: "black",
                                             borderRadius: 4,
-                                            border: "1px solid #cccccc",
                                             backgroundColor: "white",
                                         },
-                                        inputProps: { min: 0, max: 50 },
                                     }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
+
                                     sx={{
                                         color: { sm: "black", xs: "white" },
                                         width: "100%",
                                     }}
-                                    value={formik.values.name}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.name && formik.errors.name
-                                    }
-                                    helperText={
-                                        formik.touched.name && formik.errors.name
-                                    }
+                                    value={formik.values.customer}
+                                    onChange={() => { }}
                                 />
                             </Box>
+                            <Box sx={{ display: 'flex', paddingX: 0.5, gap: 0.6, }}><Typography >{selectedCustomer?.email}</Typography></Box>
+                            <Box sx={{ display: 'flex', paddingX: 0.5, gap: 0.6, flexWrap: 'wrap' }}><Typography>{selectedCustomer?.address}</Typography></Box>
+
+                        </Box>
+                    </Box>
+                    {/** Address Select Block */}
+                    <Box sx={{ width: { md: "auto", xs: "100%" } }}>
+                        <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Address</Typography>
+                        <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: 1 }}>
                             <Box
                                 sx={{
                                     display: "flex",
@@ -172,403 +368,79 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
                                     paddingY: { sm: 0, xs: 2 },
                                 }}
                             >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="location">Location</label><span style={{ color: 'red' }}>*</span>
+                                <Box sx={{ display: { sm: "block", xs: "none" }, marginBottom: 1 }}>
+                                    <label htmlFor="name">Project Location</label><span style={{ color: 'red' }}>*</span>
                                 </Box>
-
                                 <TextField
-                                    id="location"
-                                    name="location"
-                                    placeholder="Enter Project Location"
+                                    disabled={!selectedCustomer}
+                                    id="address"
+                                    name="address"
+                                    label="Select an Address"
                                     size="small"
                                     variant="outlined"
+                                    onClick={handleAddressSelect}
                                     InputProps={{
+                                        endAdornment: selectedAddress ? (
+                                            <InputAdornment
+                                                position="end"
+                                                sx={{ cursor: "pointer" }}
+                                                onClick={(event) => { handleAddressUnSelect(event) }}
+                                            >
+                                                <Close sx={{}} />
+                                            </InputAdornment>
+                                        ) : (
+                                            ""
+                                        ),
+                                        readOnly: true,
                                         style: {
                                             color: "black",
                                             borderRadius: 4,
-                                            border: "1px solid #cccccc",
                                             backgroundColor: "white",
                                         },
-                                        inputProps: { min: 0, max: 50 },
                                     }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
+
                                     sx={{
                                         color: { sm: "black", xs: "white" },
                                         width: "100%",
                                     }}
-                                    value={formik.values.location}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.location && formik.errors.location
-                                    }
-                                    helperText={
-                                        formik.touched.location && formik.errors.location
-                                    }
+                                    value={formik.values.address}
                                 />
                             </Box>
-                        </Box>
-                        <Typography sx={{ fontSize: '17px', fontWeight: 600 }}>Address</Typography>
-                        <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 2 },
-                                }}
-                            >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="name">City</label><span style={{ color: 'red' }}>*</span>
-                                </Box>
-
-                                <TextField
-                                    id="city"
-                                    name="city"
-                                    placeholder="Enter City Name"
-                                    size="small"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: {
-                                            color: "black",
-                                            borderRadius: 4,
-                                            border: "1px solid #cccccc",
-                                            backgroundColor: "white",
-                                        },
-                                        inputProps: { min: 0, max: 50 },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
-                                    sx={{
-                                        color: { sm: "black", xs: "white" },
-                                        width: "100%",
-                                    }}
-                                    value={formik.values.city}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.city && formik.errors.city
-                                    }
-                                    helperText={
-                                        formik.touched.city && formik.errors.city
-                                    }
-                                />
+                            <Box sx={{ display: 'flex', paddingX: 0.5, gap: 0.5 }} ><Typography sx={{ fontSize: '16px' }}>{selectedAddress?.street}</Typography></Box>
+                            <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'baseline', paddingX: 0.5 }}>
+                                <Typography sx={{ fontSize: '16px' }}>{selectedAddress?.state},</Typography>
+                                <Typography sx={{ fontSize: '16px' }}>{selectedAddress?.city}</Typography>
+                                <Typography sx={{ fontSize: '16px' }}>{selectedAddress?.postalCode}</Typography>
                             </Box>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 2 },
-                                }}
-                            >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="location">State</label><span style={{ color: 'red' }}>*</span>
-                                </Box>
-
-                                <TextField
-                                    id="state"
-                                    name="state"
-                                    placeholder="Enter State Name"
-                                    size="small"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: {
-                                            color: "black",
-                                            borderRadius: 4,
-                                            border: "1px solid #cccccc",
-                                            backgroundColor: "white",
-                                        },
-                                        inputProps: { min: 0, max: 50 },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
-                                    sx={{
-                                        color: { sm: "black", xs: "white" },
-                                        width: "100%",
-                                    }}
-                                    value={formik.values.state}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.state && formik.errors.state
-                                    }
-                                    helperText={
-                                        formik.touched.state && formik.errors.state
-                                    }
-                                />
-                            </Box>
+                            <Box sx={{ display: 'flex', paddingX: 0.5, gap: 0.5 }} ><Typography sx={{ fontSize: '16px' }}>{selectedAddress?.country}</Typography></Box>
                         </Box>
-                        <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 2 },
-                                }}
-                            >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="name">Street</label><span style={{ color: 'red' }}>*</span>
-                                </Box>
-
-                                <TextField
-                                    id="street"
-                                    name="street"
-                                    placeholder="Enter Street Number"
-                                    size="small"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: {
-                                            color: "black",
-                                            borderRadius: 4,
-                                            border: "1px solid #cccccc",
-                                            backgroundColor: "white",
-                                        },
-                                        inputProps: { min: 0, max: 50 },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
-                                    sx={{
-                                        color: { sm: "black", xs: "white" },
-                                        width: "100%",
-                                    }}
-                                    value={formik.values.street}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.street && formik.errors.street
-                                    }
-                                    helperText={
-                                        formik.touched.street && formik.errors.street
-                                    }
-                                />
-                            </Box>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 2 },
-                                }}
-                            >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="location">Postal Code</label>
-                                </Box>
-
-                                <TextField
-                                    id="postalCode"
-                                    name="postalCode"
-                                    placeholder="Enter Postal Code"
-                                    size="small"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: {
-                                            color: "black",
-                                            borderRadius: 4,
-                                            border: "1px solid #cccccc",
-                                            backgroundColor: "white",
-                                        },
-                                        inputProps: { min: 0, max: 50 },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
-                                    sx={{
-                                        color: { sm: "black", xs: "white" },
-                                        width: "100%",
-                                    }}
-                                    value={formik.values.postalCode}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.postalCode && formik.errors.postalCode
-                                    }
-                                    helperText={
-                                        formik.touched.postalCode && formik.errors.postalCode
-                                    }
-                                />
-                            </Box>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 1, flexDirection: { sm: "row", xs: "column" } }}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 2 },
-                                }}
-                            >
-                                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                                    <label htmlFor="name">Country</label>
-                                </Box>
-
-                                <TextField
-                                    disabled={true}
-                                    id="country"
-                                    name="country"
-                                    placeholder="Enter Country Name"
-                                    size="small"
-                                    variant="outlined"
-                                    InputProps={{
-                                        style: {
-                                            color: "black",
-                                            borderRadius: 4,
-                                            border: "1px solid #cccccc",
-                                            backgroundColor: "white",
-                                        },
-                                        inputProps: { min: 0, max: 50 },
-                                    }}
-                                    InputLabelProps={{
-                                        style: {
-                                            color: "rgba(255, 255, 255, 0.5)",
-                                        },
-                                    }}
-                                    sx={{
-                                        color: { sm: "black", xs: "white" },
-                                        width: "100%",
-                                    }}
-                                    value={formik.values.country}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.country && formik.errors.country
-                                    }
-                                    helperText={
-                                        formik.touched.country && formik.errors.country
-                                    }
-                                />
-                            </Box>
-                        </Box>
-                        <Typography sx={{ fontSize: '17px', fontWeight: 600 }}>Additional Notes</Typography>
-                        <Box sx={{ display: 'flex', gap: 1 }}>
-                            <Box
-                                sx={{
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    gap: 1,
-                                    paddingY: { sm: 0, xs: 1 },
-                                    width: '100%'
-                                }}
-                            >
-                                <TextareaAutosize
-
-                                    color="neutral"
-                                    // cols={isMobile ? 38 : 50}
-                                    minRows={5}
-                                    id="notes"
-                                    name="notes"
-                                    placeholder="Enter Additional Notes"
-                                    size="large"
-                                    variant="outlined"
-                                    sx={{ padding: '10px', resize: "vertical", }}
-                                    value={formik.values.notes}
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    error={
-                                        formik.touched.notes && formik.errors.notes
-                                    }
-                                    helperText={
-                                        formik.touched.notes && formik.errors.notes
-                                    }
-                                />
-
-                            </Box>
-                        </Box>
-                    </Box> : <Box sx={{ display: "flex", flexDirection: 'column', gap: 1, padding: { sm: 1, xs: 0 } }}>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Name :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.name}</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Location :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.location}</Typography>
-                        </Box>
-                        <Typography sx={{ fonSize: '19px', fontWeight: 800 }}>Address</Typography>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>City :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.city}</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>State :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.state}</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Street Number :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.street}</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Postal Code :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.postalCode}</Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', gap: 2 }}>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 700 }}>Country :</Typography>
-                            <Typography sx={{ fontSize: '18px', fontWeight: 500 }}>{formik.values.country}</Typography>
-                        </Box>
-                        <Typography sx={{ fonSize: '19px', fontWeight: 800 }}>Additional Notes:</Typography>
-                        <Typography>{formik.values.notes}</Typography>
-                    </Box>}
+                    </Box>
                 </Box>
-                {/** Customer Info Block */}
-                <Box sx={{ width: { sm: "480px", xs: "100%" } }}>
-                    <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Customer Info</Typography>
-                    <CustomerSelect selectedCustomer={selectedCustomer} setSelectedCustomer={handleCustomerChange} steps={steps} handleStepChange={handleStepChange} />
-                </Box>
-            </Box>
-            <Divider sx={{ width: "100%", margin: '10px auto', color: 'black', border: '1px solid #ccc' }} variant="middle" />
-            {/** Section 2 */}
-            {projectState === 'create' && <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, alignItems: 'baseline', }}>
-                <Box>
-                    <Typography sx={{ fontSize: '20px', fontWeight: 900 }}>How to create?</Typography>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>1. First provide project info.</Typography>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>2. Second select or create a customer.</Typography>
-                    <Typography sx={{ fontSize: '16px', fontWeight: 500 }}>3. Please fill in all fields marked with * sign.</Typography>
-                </Box>
-                <Box>
-                    <Button type="submit"
-                        sx={{
-                            width: "150px",
-                            textTransform: "initial",
-                            backgroundColor: "#8477da",
-                            "&:hover": {
+                {/** Section 2 */}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2, alignItems: 'baseline' }}>
+                    <Box>
+                        <Typography sx={{ fontSize: { sm: '17px', xs: '15px' }, fontWeight: 600 }}>Please fill in all fields marked with * sign.</Typography>
+                    </Box>
+                    <Box>
+                        <Button type="submit"
+                            sx={{
+                                width: "150px",
+                                textTransform: "initial",
                                 backgroundColor: "#8477da",
-                            },
-                        }}
-                        disabled={selectedCustomer ? false : true}
-                        variant="contained">{createLoading ? <CircularProgress sx={{ color: selectedCustomer ? "white" : "#8477da" }} size={24} /> : "Save Project"}</Button>
+                                "&:hover": {
+                                    backgroundColor: "#8477da",
+                                },
+                            }}
+                            disabled={!selectedCustomer || !selectedAddress}
+                            variant="contained">{updateLoading || createLoading ? <CircularProgress sx={{ color: updateLoading || createLoading ? "white" : "#8477da" }} size={24} /> : projectState === 'create' ? "Save Project" : "Save Changes"}</Button>
+                    </Box>
                 </Box>
-            </Box>}
-            {projectState === 'edit' && <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between', gap: 2, alignItems: 'baseline' }}>
-                <Typography sx={{ fontSize: '20px', fontWeight: 800 }}>Project Estimates</Typography>
-                <Button type="submit"
-                    sx={{
-                        width: "150px",
-                        textTransform: "initial",
-                        backgroundColor: "#8477da",
-                        "&:hover": {
-                            backgroundColor: "#8477da",
-                        },
-                    }}
-                    disabled={projectInfoModified || customerInfoModified ? false : true}
-                    variant="contained">{updateLoading ? <CircularProgress sx={{ color: projectInfoModified || customerInfoModified ? "white" : "#8477da" }} size={24} /> : "Save Changes"}</Button>
-            </Box>}
-            {/** Section 3 */}
-            {projectState === 'edit' && <Box>
+            </form>
+        </Box>
+        {/** Section 3 */}
+        {projectState === 'edit' && <Box>
+            <Typography sx={{ fontSize: '22px', fontWeight: 800, marginY: 1 }}>Estimates</Typography>
+            <Box sx={{ boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px', borderRadius: '5px', padding: { md: 2, xs: 1 } }}>
                 {/** Tabs Switch */}
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={activeTabNumber} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -594,8 +466,10 @@ const ProjectInfoComponent = ({ projectState = 'create', projectData = null }) =
                 <CustomTabPanel value={activeTabNumber} index={1}>
                     <MirrorEstimatesList projectId={projectData?._id} />
                 </CustomTabPanel>
-            </Box>}
-        </form>
+            </Box>
+        </Box>}
+        <CustomerSelect open={openCustomerSelectModal} handleClose={() => setOpenCustomerSelectModal(false)} selectedCustomer={selectedCustomer} setSelectedCustomer={handleCustomerChange} />
+        <AddressSelect open={openAddressSelectModal} handleClose={() => setOpenAddressSelectModal(false)} selectedAddress={selectedAddress} setSelectedAddress={handleAddressChange} selectedCustomer={selectedCustomer} />
     </Box>;
 }
 export default ProjectInfoComponent;

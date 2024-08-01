@@ -48,16 +48,16 @@ function SelectMenu_Status({ status, quoteId }) {
               width: "fit-content",
               bgcolor:
                 selectedStatus === "pending"
-                  ? "#daf4e9"
-                  : selectedStatus === "approved"
                   ? "#dfeeff"
+                  : selectedStatus === "approved"
+                  ? "#daf4e9"
                   : "#f6d8d9",
               borderRadius: "16px",
               color:
                 selectedStatus === "pending"
-                  ? "#3ac688"
-                  : selectedStatus === "approved"
                   ? "#1d85ff"
+                  : selectedStatus === "approved"
+                  ? "#3ac688"
                   : "#d22b2d",
               pl: 1.8,
               pt: 0.3,
@@ -74,9 +74,9 @@ function SelectMenu_Status({ status, quoteId }) {
                 height: "6px",
                 bgcolor:
                   selectedStatus === "pending"
-                    ? "#3ac688"
-                    : selectedStatus === "approved"
                     ? "#1d85ff"
+                    : selectedStatus === "approved"
+                    ? "#3ac688"
                     : "#d22b2d",
                 borderRadius: "100%",
                 mt: 0.2,
@@ -89,9 +89,9 @@ function SelectMenu_Status({ status, quoteId }) {
               transform: open ? "rotate(180deg)" : "rotate(0deg)",
               color:
                 selectedStatus === "pending"
-                  ? "#3ac688"
-                  : selectedStatus === "approved"
                   ? "#1d85ff"
+                  : selectedStatus === "approved"
+                  ? "#3ac688"
                   : "#d22b2d",
             }}
           />
@@ -125,16 +125,16 @@ function SelectMenu_Status({ status, quoteId }) {
                 width: "fit-content",
                 bgcolor:
                   statusItem.value === "pending"
-                    ? "#daf4e9"
-                    : statusItem.value === "approved"
                     ? "#dfeeff"
+                    : statusItem.value === "approved"
+                    ? "#daf4e9"
                     : "#f6d8d9",
                 borderRadius: "16px",
                 color:
                   statusItem.value === "pending"
-                    ? "#3ac688"
-                    : statusItem.value === "approved"
                     ? "#1d85ff"
+                    : statusItem.value === "approved"
+                    ? "#3ac688"
                     : "#d22b2d",
                 pl: 1.8,
                 pt: 0.3,
@@ -151,9 +151,9 @@ function SelectMenu_Status({ status, quoteId }) {
                   height: "6px",
                   bgcolor:
                     statusItem.value === "pending"
-                      ? "#3ac688"
-                      : statusItem.value === "approved"
                       ? "#1d85ff"
+                      : statusItem.value === "approved"
+                      ? "#3ac688"
                       : "#d22b2d",
                   borderRadius: "100%",
                   mt: 0.2,

@@ -6,6 +6,7 @@ import userImg from "@/Assets/username1.svg";
 import wheel from "@/Assets/wheel.svg";
 import "@/components/table/table.scss";
 import ActionsDropdown from "@/components/common/ActionsDropdown";
+import StatusChip from "@/components/common/StatusChip";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
@@ -270,7 +271,7 @@ export const ProjectsColumns = (dropdownActions) => {
             <Typography
               sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
             >
-              {params?.row?.location}
+              {params?.row?.addressData?.name}
             </Typography>
           </>
         );
@@ -311,12 +312,7 @@ export const ProjectsColumns = (dropdownActions) => {
       flex: 0.8,
       renderCell: (params) => {
         return (
-          <>
-            <SelectMenu_Status
-              status={params?.row?.status}
-              quoteId={params?.row?._id}
-            />
-          </>
+          <StatusChip variant={params?.row?.status} />
         );
       },
     },

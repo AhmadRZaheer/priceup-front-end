@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { Box, Button, TextField, Typography } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
@@ -11,15 +11,14 @@ import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { getEstimateState } from "@/redux/estimateSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getAdditionalFields, getEstimateId, getEstimateMeasurements, getNotifications, getPricing, getProjectId, getSelectedContent, getSqftArea, resetNotifications, setInputContent, setPricing, setSelectedContent, setToggles } from "@/redux/mirrorsEstimateSlice";
-import CustomToggle from "@/components/ui-components/Toggle";
-import { calculateTotal, getEstimateErrorStatus, getSandBlasting } from "@/utilities/mirrorEstimates";
+import { calculateTotal, getEstimateErrorStatus } from "@/utilities/mirrorEstimates";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { enqueueSnackbar } from "notistack";
-import { CustomerSelectModal } from "../CustomerSelectModal";
+import EnterLabelModal from "../enterLabelModal";
 
-const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
+// const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
 export const generateEstimatePayload = (measurements, selectedContent, sqftArea) => {
     let measurementsArray = measurements;
@@ -96,7 +95,7 @@ export const MirrorReview = () => {
         isError: ErrorForAddEidt,
         isSuccess: CreatedSuccessfullyEdit,
     } = useEditEstimates();
-    const [ClientDetailModelOpen, setClientDetailModelOpen] = useState(false);
+    const [labelModalOpen, setLabelModalOpen] = useState(false);
     const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
     const [estimateConfig, setEstimateConfig] = useState(null);
     const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
@@ -155,7 +154,7 @@ export const MirrorReview = () => {
             if (currentEstimateState === quoteState.CREATE) {
                 const estimateConfig = generateEstimatePayload(measurements, selectedContent, sqftArea);
                 setEstimateConfig(estimateConfig);
-                setClientDetailModelOpen(true);
+                setLabelModalOpen(true);
             } else {
                 handleEditEstimate();
                 showSnackbar("Estimate Edit successfully", "success");
@@ -1476,7 +1475,7 @@ export const MirrorReview = () => {
                 handleClose={() => setHardwareMissingAlert(false)}
                 estimateCategory={EstimateCategory.MIRRORS}
             />
-            <CustomerSelectModal open={ClientDetailModelOpen} handleCancel={() => { setClientDetailModelOpen(false) }} key={'sdasaa'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} projectId={projectId} />
+            <EnterLabelModal open={labelModalOpen} handleClose={() => { setLabelModalOpen(false) }} key={'label-modal'} estimateConfig={estimateConfig} estimateCategory={"mirrors"} estimatesTotal={pricing.total} projectId={projectId} />
         </>
     );
 };

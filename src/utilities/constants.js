@@ -103,3 +103,15 @@ export const socketIoChannel = {
 export const notificationCategories = {
   ESTIMATES: "estimates",
 };
+
+export const projectStatus = {
+  PENDING: "pending",
+  VOIDED: "voided",
+  APPROVED: "approved",
+};
+
+export const statusTypes = {
+  PENDING: "pending",
+  VOIDED: "voided",
+  APPROVED: "approved",
+};

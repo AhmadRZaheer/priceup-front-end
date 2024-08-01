@@ -4,35 +4,31 @@ import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
 const validationSchema = yup.object({
-    firstName: yup.string().required("First Name is required"),
-    lastName: yup.string().required("Last Name is required"),
-    email: yup.string().email('Email must be valid'),
-    phone: yup.string().matches(/^[0-9]+$/, "Phone must be numeric"),
+    name: yup.string().required("Address reference is required"),
+    street: yup.string().required("Street number is required"),
+    state: yup.string().required('State name is required'),
+    city: yup.string().required('City name is required'),
+    postalCode: yup.string().matches(/^[0-9]+$/, "Postal code must be numeric"),
 });
-const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
-    const { mutateAsync: createCustomer, isLoading: createLoading } = useCreateDocument();
-    const routePrefix = `${backendURL}/customers`;
+const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCustomer }) => {
+    const { mutateAsync: createAddress, isLoading: createLoading } = useCreateDocument();
+    const routePrefix = `${backendURL}/addresses`;
 
     const formik = useFormik({
         initialValues: {
-            firstName: "",
-            lastName: "",
-            email: "",
-            phone: "",
-            address: "",
+            name: "",
+            street: "",
+            state: "",
+            city: "",
+            postalCode: "",
+            country: "America"
         },
         validationSchema,
         onSubmit: async (values) => {
-            const data = {
-                name: `${values.firstName} ${values.lastName}`,
-                email: values.email,
-                phone: values.phone,
-                address: values.address,
-            };
+
             try {
-                const resp = await createCustomer({ data: data, apiRoute: `${routePrefix}/save` });
-                setSelectedCustomer(resp);
-                // handleStepChange(2);
+                const resp = await createAddress({ data: { ...values,customer_id:selectedCustomer?._id }, apiRoute: `${routePrefix}/save` });
+                setSelectedAddress(resp);
             } catch (err) {
                 console.error(err, 'error');
             }
@@ -50,41 +46,34 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                        <label htmlFor="firstName">First Name</label><span style={{ color: 'red' }}>*</span>
+                        <label htmlFor="firstName">Reference</label><span style={{ color: 'red' }}>*</span>
                     </Box>
 
                     <TextField
-                        id="firstName"
-                        name="firstName"
-                        placeholder="Enter First Name"
+                        id="name"
+                        name="name"
+                        label="Enter Address Reference"
                         size="small"
                         variant="outlined"
                         InputProps={{
                             style: {
                                 color: "black",
                                 borderRadius: 4,
-                                border: "1px solid #cccccc",
                                 backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                color: "rgba(255, 255, 255, 0.5)",
                             },
                         }}
                         sx={{
                             color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
-                        value={formik.values.firstName}
+                        value={formik.values.name}
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                            formik.touched.firstName && formik.errors.firstName
+                            formik.touched.name && formik.errors.name
                         }
                         helperText={
-                            formik.touched.firstName && formik.errors.firstName
+                            formik.touched.name && formik.errors.name
                         }
                     />
                 </Box>
@@ -98,28 +87,21 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
                         {" "}
-                        <label htmlFor="lastName">Last Name</label><span style={{ color: 'red' }}>*</span>
+                        <label htmlFor="lastName">City</label><span style={{ color: 'red' }}>*</span>
                     </Box>
                     <TextField
-                        id="lastName"
-                        name="lastName"
-                        placeholder="Enter Last Name"
+                        id="city"
+                        name="city"
+                        label="Enter city name"
                         size="small"
                         variant="outlined"
-                        value={formik.values.lastName}
+                        value={formik.values.city}
                         onChange={formik.handleChange}
                         InputProps={{
                             style: {
                                 color: "black",
                                 borderRadius: 4,
-                                border: "1px solid #cccccc",
                                 backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                color: "rgba(255, 255, 255, 0.5)",
                             },
                         }}
                         sx={{
@@ -128,10 +110,10 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                         }}
                         onBlur={formik.handleBlur}
                         error={
-                            formik.touched.lastName && formik.errors.lastName
+                            formik.touched.city && formik.errors.city
                         }
                         helperText={
-                            formik.touched.lastName && formik.errors.lastName
+                            formik.touched.city && formik.errors.city
                         }
                     />
                 </Box>
@@ -146,27 +128,20 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                 }}
             >
                 <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                    <label htmlFor="email">Email</label>
+                    <label htmlFor="state">State</label><span style={{ color: 'red' }}>*</span>
                 </Box>
                 <TextField
-                    id="email"
-                    name="email"
-                    placeholder="Enter Email address"
+                    id="state"
+                    name="state"
+                    label="Enter state name"
                     size="small"
                     variant="outlined"
-                    value={formik.values.email}
+                    value={formik.values.state}
                     InputProps={{
                         style: {
                             color: "black",
                             borderRadius: 4,
-                            border: "1px solid #cccccc",
                             backgroundColor: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                    }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
                         },
                     }}
                     sx={{
@@ -175,8 +150,8 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     }}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.email && formik.errors.email}
-                    helperText={formik.touched.email && formik.errors.email}
+                    error={formik.touched.state && formik.errors.state}
+                    helperText={formik.touched.state && formik.errors.state}
                 />
             </Box>
 
@@ -189,84 +164,111 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                 }}
             >
                 <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                    <label htmlFor="phone">Phone Number</label>
+                    <label htmlFor="phone">Street Number</label><span style={{ color: 'red' }}>*</span>
                 </Box>
                 <TextField
-                    id="phone"
-                    name="phone"
-                    placeholder="Enter Phone Number"
+                    id="street"
+                    name="street"
+                    label="Enter street number"
                     size="small"
                     variant="outlined"
-                    value={formik.values.phone}
+                    value={formik.values.street}
                     InputProps={{
                         style: {
                             color: "black",
                             borderRadius: 4,
-                            border: "1px solid #cccccc",
                             backgroundColor: "white",
                         },
-                        inputProps: { min: 0, max: 50 },
                     }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                        },
-                    }}
+
                     sx={{
                         color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.phone && formik.errors.phone}
-                    helperText={formik.touched.phone && formik.errors.phone}
+                    error={formik.touched.street && formik.errors.street}
+                    helperText={formik.touched.street && formik.errors.street}
                 />
+            </Box>
+            <Box sx={{ display: "flex", gap: 2 }}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                    }}
+                >
+                    <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                        {" "}
+                        <label htmlFor="address">Postal Code</label>
+                    </Box>
+                    <TextField
+                        id="postalCode"
+                        name="postalCode"
+                        label="Enter postal code"
+                        size="small"
+                        variant="outlined"
+                        value={formik.values.postalCode}
+                        InputProps={{
+                            style: {
+                                color: "black",
+                                borderRadius: 4,
+                                backgroundColor: "white",
+                            },
+                        }}
+                        sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                        }}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.postalCode && formik.errors.postalCode}
+                        helperText={
+                            formik.touched.postalCode && formik.errors.postalCode
+                        }
+                    />
+                </Box>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                    }}
+                >
+                    <Box sx={{ display: { sm: "block", xs: "none" } }}>
+                        {" "}
+                        <label htmlFor="address">Country</label>
+                    </Box>
+                    <TextField
+                        disabled={true}
+                        id="country"
+                        name="country"
+                        placeholder="Enter country name"
+                        size="small"
+                        variant="outlined"
+                        value={formik.values.country}
+                        InputProps={{
+                            style: {
+                                color: "black",
+                                borderRadius: 4,
+                                backgroundColor: "white",
+                            },
+                        }}
+                        sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                        }}
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        error={formik.touched.country && formik.errors.country}
+                        helperText={
+                            formik.touched.country && formik.errors.country
+                        }
+                    />
+                </Box>
             </Box>
 
-            <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                }}
-            >
-                <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                    {" "}
-                    <label htmlFor="address">Address</label>
-                </Box>
-                <TextField
-                    id="address"
-                    name="address"
-                    placeholder="Enter Address"
-                    size="small"
-                    variant="outlined"
-                    value={formik.values.address}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            border: "1px solid #cccccc",
-                            backgroundColor: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                    }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                        },
-                    }}
-                    sx={{
-                        color: { sm: "black", xs: "white" },
-                        width: "100%",
-                    }}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.address && formik.errors.address}
-                    helperText={
-                        formik.touched.address && formik.errors.address
-                    }
-                />
-            </Box>
             <Box
                 sx={{
                     display: "flex",
@@ -290,7 +292,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     variant="contained"
                     disabled={createLoading}
                 >
-                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Customer"}
+                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Address"}
                 </Button>
             </Box>
             <Box
@@ -326,4 +328,4 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
     </Box>)
 }
 
-export default CreateCustomerForm;
+export default CreateAddressForm;
