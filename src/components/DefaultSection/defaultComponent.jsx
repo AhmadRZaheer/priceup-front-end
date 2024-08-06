@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import {
   Button,
@@ -20,6 +20,7 @@ import CustomInputField from "../ui-components/CustomInput";
 import CustomInputMenu from "../ui-components/CustomInputMenu";
 import { Fullscreen } from "@mui/icons-material";
 import { getDataRefetch } from "../../redux/staff";
+import MountingSection from "./MountingSection";
 const DefaultComponent = () => {
   const dispatch = useDispatch();
   const defaultId = useSelector(getDefaultId);
@@ -31,10 +32,25 @@ const DefaultComponent = () => {
     refetch,
   } = useFetchSingleDefault(defaultId);
   const refetchData = useSelector(getDataRefetch);
+  const [mounting, setMounting] = useState(null);
 
   useEffect(() => {
     refetch();
   }, [refetchData]);
+  useEffect(() => {
+    if (singleDefault) {
+      setMounting({
+        channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
+        mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
+        wallClamp: singleDefault?.layoutData?.settings?.wallClamp,
+        sleeveOver: singleDefault?.layoutData?.settings?.sleeveOver,
+        glassToGlass: singleDefault?.layoutData?.settings?.glassToGlass,
+        cornerWallClamp: singleDefault?.layoutData?.settings?.cornerWallClamp,
+        cornerSleeveOver: singleDefault?.layoutData?.settings?.cornerSleeveOver,
+        cornerGlassToGlass: singleDefault?.layoutData?.settings?.cornerGlassToGlass
+      })
+    }
+  }, [singleDefault])
   const formik = useFormik({
     initialValues: {
       image: singleDefault?.layoutData?.image,
@@ -128,7 +144,7 @@ const DefaultComponent = () => {
       },
     },
     enableReinitialize: true,
-    onSubmit: (values) => {},
+    onSubmit: (values) => { },
   });
   const { setFieldValue } = formik;
   const fileInputRef = useRef(null);
@@ -145,7 +161,7 @@ const DefaultComponent = () => {
   const handleEditClick = () => {
     const updatedValues = formik.values;
     const id = defaultId;
-    updateDefault({ settings: updatedValues, id: id });
+    updateDefault({ settings: { ...updatedValues, ...mounting }, id: id });
     // formik.resetForm();
   };
   useEffect(() => {
@@ -717,7 +733,7 @@ const DefaultComponent = () => {
               </Box>
             </div>
 
-            {/* Channel or Clamps */}
+            {/* Mounting */}
 
             <div
               style={{
@@ -734,498 +750,17 @@ const DefaultComponent = () => {
                   padding: 4,
                 }}
               >
-                Channel or Clamps
+                Mounting
               </div>
               <div
                 style={{
-                  width: "250px",
+                  width: "360px",
                 }}
               >
-                <Box sx={{ width: "220px" }}>
-                  <TextField
-                    select
-                    size="small"
-                    variant="outlined"
-                    name="channelOrClamps"
-                    style={{ width: "100%" }}
-                    value={formik.values.channelOrClamps}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    className={"custom-textfield"}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        height: "40px",
-                      },
-                    }}
-                  >
-                    {/* <MenuItem value="">Select Empty</MenuItem> */}
-                    {["Channel", "Clamps"].map((option) => (
-                      <MenuItem key={option} value={option}>
-                        {option}
-                      </MenuItem>
-                    ))}
-                  </TextField>
-                  {formik.touched.channelOrClamps &&
-                    formik.errors.channelOrClamps && (
-                      <div>{formik.errors.channelOrClamps}</div>
-                    )}
-                </Box>
+                <MountingSection mounting={mounting} setMounting={setMounting} list={singleDefault?.listData} activeGlassThickness={formik.values.glassType.thickness} />
               </div>
-              <div
-                style={{
-                  width: "250px",
-                  padding: 4,
-                }}
-              ></div>
-            </div>
-            {/* Mounting Channel */}
-
-            {formik.values.channelOrClamps === "Channel" && (
-              <div
-                style={{
-                  display: "flex",
-                  gap: 4,
-                  alignContent: "center",
-                  padding: "10px 10px 10px 10px",
-                }}
-              >
-                <div
-                  style={{
-                    width: "250px",
-
-                    padding: "10px 10px 10px 10px",
-                    padding: 4,
-                  }}
-                >
-                  Mounting Channel
-                </div>{" "}
-                <div
-                  style={{
-                    width: "250px",
-                  }}
-                >
-                  <Box sx={{ width: "220px" }}>
-                    <CustomInputMenu
-                      size="small"
-                      variant="outlined"
-                      name="mountingChannel"
-                      fullWidth={true}
-                      value={formik.values.mountingChannel}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      MenuData={singleDefault?.listData?.mountingChannel}
-                    />
-                  </Box>
-                </div>
-                <div
-                  style={{
-                    width: "250px",
-                    padding: 4,
-                  }}
-                ></div>{" "}
-              </div>
-            )}
-            {/* Clamps*/}
-
-            {formik.values.channelOrClamps === "Clamps" && (
-              <>
-                {/* Wall Clamps */}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    padding: "10px 10px 10px 10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "250px",
-                      padding: "10px 10px 10px 10px",
-                      padding: 4,
-                      display: "flex",
-                      justifyContent: "space-between",
-                    }}
-                  >
-                    <Typography>Mounting Clamps</Typography>
-                    <Typography variant="body2">Wall Clamps</Typography>
-                  </div>
-                  <div
-                    style={{
-                      width: "250px",
-                    }}
-                  >
-                    <Box sx={{ width: "220px" }}>
-                      <CustomInputMenu
-                        size="small"
-                        variant="outlined"
-                        name="wallClamp.wallClampType"
-                        fullWidth={true}
-                        value={formik.values.wallClamp.wallClampType || ""}
-                        onChange={(e) => {
-                          formik.handleChange(e);
-
-                          if (e.target.value === null) {
-                            formik.setFieldValue("wallClamp.count", 0);
-                          }
-                        }}
-                        onBlur={formik.handleBlur}
-                        MenuData={singleDefault?.listData?.wallClamp}
-                      />
-                    </Box>
-                  </div>
-                  <Box sx={{ width: "250px" }}>
-                    <CustomInputField
-                      type="number"
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
-                      size="small"
-                      variant="outlined"
-                      name="wallClamp.count"
-                      fullWidth={true}
-                      value={
-                        formik.values.wallClamp.count !== undefined
-                          ? formik.values.wallClamp.count
-                          : 0
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                  </Box>
-                </div>
-
-                {/* Sleeve Over */}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    padding: "10px 10px 10px 10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "250px",
-                      padding: "10px 10px 10px 10px",
-                      padding: 4,
-                      display: "flex",
-                      justifyContent: "end",
-                    }}
-                  >
-                    <Typography variant="body2">Sleeve Over</Typography>
-                  </div>
-                  <div
-                    style={{
-                      width: "250px",
-                    }}
-                  >
-                    <Box sx={{ width: "220px" }}>
-                      <CustomInputMenu
-                        size="small"
-                        variant="outlined"
-                        name="sleeveOver.sleeveOverType"
-                        fullWidth={true}
-                        value={formik.values.sleeveOver.sleeveOverType || ""}
-                        onChange={(e) => {
-                          formik.handleChange(e);
-
-                          if (e.target.value === null) {
-                            formik.setFieldValue("sleeveOver.count", 0);
-                          }
-                        }}
-                        onBlur={formik.handleBlur}
-                        MenuData={singleDefault?.listData?.sleeveOver}
-                      />
-                    </Box>
-                  </div>
-                  <Box sx={{ width: "250px" }}>
-                    <CustomInputField
-                      type="number"
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
-                      size="small"
-                      variant="outlined"
-                      name="sleeveOver.count"
-                      fullWidth={true}
-                      value={
-                        formik.values.sleeveOver.count !== undefined
-                          ? formik.values.sleeveOver.count
-                          : 0
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                  </Box>
-                </div>
-
-                {/* Glass to Glass */}
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    padding: "10px 10px 10px 10px",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: "250px",
-                      padding: "10px 10px 10px 10px",
-                      padding: 4,
-                      display: "flex",
-                      justifyContent: "end",
-                    }}
-                  >
-                    <Typography variant="body2">Glass to Glass</Typography>
-                  </div>
-                  <div
-                    style={{
-                      width: "250px",
-                    }}
-                  >
-                    <Box sx={{ width: "220px" }}>
-                      <CustomInputMenu
-                        size="small"
-                        variant="outlined"
-                        name="glassToGlass.glassToGlassType"
-                        fullWidth={true}
-                        value={
-                          formik.values.glassToGlass.glassToGlassType || ""
-                        }
-                        onChange={(e) => {
-                          formik.handleChange(e);
-
-                          if (e.target.value === null) {
-                            formik.setFieldValue("glassToGlass.count", 0);
-                          }
-                        }}
-                        onBlur={formik.handleBlur}
-                        MenuData={singleDefault?.listData?.glassToGlass}
-                      />
-                    </Box>
-                  </div>
-                  <Box sx={{ width: "250px" }}>
-                    <CustomInputField
-                      type="number"
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
-                      size="small"
-                      variant="outlined"
-                      name="glassToGlass.count"
-                      fullWidth={true}
-                      value={
-                        formik.values.glassToGlass.count !== undefined
-                          ? formik.values.glassToGlass.count
-                          : 0
-                      }
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                    />
-                  </Box>
-                </div>
-              </>
-            )}
-            {/* Corner Wall Clamps */}
-            <div
-              style={{
-                display: "flex",
-                gap: 4,
-                alignContent: "center",
-                padding: "10px 10px 10px 10px",
-              }}
-            >
-              <div
-                style={{
-                  width: "250px",
-                  padding: "10px 10px 10px 10px",
-                  padding: 4,
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <Typography>Corners</Typography>
-                <Typography variant="body2">Wall Clamps</Typography>
-              </div>
-              <div
-                style={{
-                  width: "250px",
-                }}
-              >
-                <Box sx={{ width: "220px" }}>
-                  <CustomInputMenu
-                    size="small"
-                    variant="outlined"
-                    name="cornerWallClamp.wallClampType"
-                    fullWidth={true}
-                    value={formik.values.cornerWallClamp.wallClampType || ""}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-
-                      if (e.target.value === null) {
-                        formik.setFieldValue("cornerWallClamp.count", 0);
-                      }
-                    }}
-                    onBlur={formik.handleBlur}
-                    MenuData={singleDefault?.listData?.cornerWallClamp}
-                  />
-                </Box>
-              </div>
-              <Box sx={{ width: "250px" }}>
-                <CustomInputField
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0 },
-                  }}
-                  size="small"
-                  variant="outlined"
-                  name="cornerWallClamp.count"
-                  fullWidth={true}
-                  value={
-                    formik.values.cornerWallClamp.count !== undefined
-                      ? formik.values.cornerWallClamp.count
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </Box>
             </div>
 
-            {/* Sleeve Over */}
-            <div
-              style={{
-                display: "flex",
-                gap: 4,
-                alignContent: "center",
-                padding: "10px 10px 10px 10px",
-              }}
-            >
-              <div
-                style={{
-                  width: "250px",
-                  padding: "10px 10px 10px 10px",
-                  padding: 4,
-                  display: "flex",
-                  justifyContent: "end",
-                }}
-              >
-                <Typography variant="body2">Sleeve Over</Typography>
-              </div>
-              <div
-                style={{
-                  width: "250px",
-                }}
-              >
-                <Box sx={{ width: "220px" }}>
-                  <CustomInputMenu
-                    size="small"
-                    variant="outlined"
-                    name="cornerSleeveOver.sleeveOverType"
-                    fullWidth={true}
-                    value={formik.values.cornerSleeveOver.sleeveOverType || ""}
-                    onChange={(e) => {
-                      formik.handleChange(e);
-
-                      if (e.target.value === null) {
-                        formik.setFieldValue("cornerSleeveOver.count", 0);
-                      }
-                    }}
-                    onBlur={formik.handleBlur}
-                    MenuData={singleDefault?.listData?.cornerSleeveOver}
-                  />
-                </Box>
-              </div>
-              <Box sx={{ width: "250px" }}>
-                <CustomInputField
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0 },
-                  }}
-                  size="small"
-                  variant="outlined"
-                  fullWidth={true}
-                  name="cornerSleeveOver.count"
-                  value={
-                    formik.values.cornerSleeveOver.count !== undefined
-                      ? formik.values.cornerSleeveOver.count
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </Box>
-            </div>
-
-            {/* Glass to Glass */}
-            <div
-              style={{
-                display: "flex",
-                gap: 4,
-                alignContent: "center",
-                padding: "10px 10px 10px 10px",
-              }}
-            >
-              <div
-                style={{
-                  width: "250px",
-                  padding: "10px 10px 10px 10px",
-                  padding: 4,
-                  display: "flex",
-                  justifyContent: "end",
-                }}
-              >
-                <Typography variant="body2">Glass to Glass</Typography>
-              </div>
-              <div
-                style={{
-                  width: "250px",
-                }}
-              >
-                <Box sx={{ width: "220px" }}>
-                  <CustomInputMenu
-                    select
-                    size="small"
-                    variant="outlined"
-                    name="cornerGlassToGlass.glassToGlassType"
-                    fullWidth={true}
-                    value={
-                      formik.values.cornerGlassToGlass.glassToGlassType || ""
-                    }
-                    onChange={(e) => {
-                      formik.handleChange(e);
-
-                      if (e.target.value === null) {
-                        formik.setFieldValue("cornerGlassToGlass.count", 0);
-                      }
-                    }}
-                    onBlur={formik.handleBlur}
-                    MenuData={singleDefault?.listData?.cornerGlassToGlass}
-                  />
-                </Box>
-              </div>
-              <Box sx={{ width: "250px" }}>
-                <CustomInputField
-                  type="number"
-                  InputProps={{
-                    inputProps: { min: 0 },
-                  }}
-                  size="small"
-                  variant="outlined"
-                  name="cornerGlassToGlass.count"
-                  fullWidth={true}
-                  value={
-                    formik.values.cornerGlassToGlass.count !== undefined
-                      ? formik.values.cornerGlassToGlass.count
-                      : 0
-                  }
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                />
-              </Box>
-            </div>
             <div
               style={{
                 display: "flex",
