@@ -154,7 +154,7 @@ export default function ExistingTable() {
     dispatch(resetMirrorEstimateState());
     dispatch(resetEstimateState());
     dispatch(resetState());
-    navigate("/estimates/category");
+    navigate("/estimates/layouts");
   };
   useEffect(() => {
     refetchEstimatesList();

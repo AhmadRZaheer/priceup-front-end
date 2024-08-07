@@ -55,7 +55,7 @@ export default function ExistingListMobile() {
         dispatch(resetMirrorEstimateState());
         dispatch(resetEstimateState());
         dispatch(resetState());
-        navigate("/estimates/category");
+        navigate("/estimates/layouts");
     };
     const useStyles = makeStyles({
         overflowText: {
