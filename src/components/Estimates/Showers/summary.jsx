@@ -57,36 +57,34 @@ const Summary = () => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
+  const disable_com = false;
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-        ? `${backendURL}/${selectedData?.settings?.image}`
-        : CustomImage;
+      ? `${backendURL}/${selectedData?.settings?.image}`
+      : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
-    if(Number(event.target.value) < 100){
-    dispatch(
-      setUserProfitPercentage(
-        Number(event.target.value)
-      )
-    );
-  }
-  }
+    if (Number(event.target.value) < 100) {
+      dispatch(setUserProfitPercentage(Number(event.target.value)));
+    }
+  };
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
-  }
+  };
   return (
     <>
       <Box
+      className={disable_com ? "":"box_disaled"}
         sx={{
-          width: "90%",
+          width: "100%",
           margin: "auto",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          p: { sm: 2, xs: 0 },
+          // p: { sm: 2, xs: 0 },
           gap: { sm: 4, xs: 0 },
         }}
       >
@@ -94,29 +92,41 @@ const Summary = () => {
           sx={{
             display: "flex",
             width: "100%",
-            paddingY: { sm: 4, xs: 1 },
-            paddingX: { sm: 2, xs: 0 },
             background: { sm: "white" },
             margin: { sm: 0, xs: "auto" },
             borderRadius: "8px",
             justifyContent: "space-between",
-            flexDirection: { sm: "row", xs: "column" },
+            flexDirection: { sm: "column", xs: "column" },
+            overflow: {sm:"hidden"},
+            // height: "fit-content",
+            boxShadow:
+              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+            border: { sm: "1px solid #EAECF0", xs: "none" },
             // minHeight: "50vh",
             // maxHeight: "79vh",
           }}
         >
+          <Box sx={{ background: "#D9D9D9", paddingY: 2, px: 3, display: {sm: "block", xs: "none"} }}>
+            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+              Summary
+            </Typography>
+          </Box>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               width: "100%",
               borderRadius: "8px",
+              width: "96%",
+              paddingY: { sm: 2, xs: 1 },
+              paddingX: { sm: 2, xs: 0 },
+              overflow: "hidden",
               color: { md: "#101828", xs: "white" },
             }}
           >
             <Box
               sx={{
-                display: "flex",
+                display: { sm: "none", xs: "flex" },
                 width: "87%",
                 justifyContent: "center",
                 background: "rgba(217, 217, 217, 0.3)",
@@ -136,7 +146,7 @@ const Summary = () => {
               sx={{
                 width: "100%",
                 color: { xs: "white", sm: "black" },
-                paddingTop: 2,
+                paddingTop: {sm: 0 ,xs:2},
                 margin: "auto",
               }}
             >
@@ -183,8 +193,11 @@ const Summary = () => {
                         : selectedData?._id
                     )}
                   </Typography>
-                  <Typography><span style={{ fontWeight: "bold" }}>Layout: </span>
-                  {(selectedData?.settings?.name || selectedData?.name) ?? 'Custom'}</Typography>
+                  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Layout: </span>
+                    {(selectedData?.settings?.name || selectedData?.name) ??
+                      "Custom"}
+                  </Typography>
                   {doorWidth ? (
                     <Typography>
                       <span style={{ fontWeight: "bold" }}>Door Width: </span>
@@ -209,22 +222,22 @@ const Summary = () => {
                     layoutVariants.DOUBLEBARN,
                     layoutVariants.DOUBLEDOOR,
                   ].includes(selectedData?.settings?.variant) && (
-                      <Typography>
-                        <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
-                        {panelWeight}
-                      </Typography>
-                    )}
+                    <Typography>
+                      <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
+                      {panelWeight}
+                    </Typography>
+                  )}
                   {[
                     layoutVariants.DOORNOTCHEDPANELANDRETURN,
                     layoutVariants.DOORPANELANDRETURN,
                   ].includes(selectedData?.settings?.variant) && (
-                      <Typography>
-                        <span style={{ fontWeight: "bold" }}>
-                          Return Weight:{" "}
-                        </span>{" "}
-                        {returnWeight}
-                      </Typography>
-                    )}
+                    <Typography>
+                      <span style={{ fontWeight: "bold" }}>
+                        Return Weight:{" "}
+                      </span>{" "}
+                      {returnWeight}
+                    </Typography>
+                  )}
                 </AccordionDetails>
               </Accordion>
               <Box
@@ -625,11 +638,12 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost} 
-                            {/* * {(listData?.miscPricing?.pricingFactorStatus
+                            <Typography>
+                              {item.cost}
+                              {/* * {(listData?.miscPricing?.pricingFactorStatus
                               ? listData?.miscPricing?.pricingFactor
                               : 1)} */}
-                              </Typography>
+                            </Typography>
                           </Box>
                         )
                     )}
@@ -903,18 +917,21 @@ const Summary = () => {
                         %
                       </Box>
                       <Button
-                          disabled={userProfitPercentage === 0 || userProfitPercentage === ""}
-                          variant="contained"
-                          onClick={resetUserProfit}
-                          sx={{
-                              backgroundColor: "#8477da",
-                              "&:hover": {
-                                  backgroundColor: "#8477da",
-                              },
-                              ":disabled": {
-                                  bgcolor: "#c2c2c2",
-                              },
-                          }}
+                        disabled={
+                          userProfitPercentage === 0 ||
+                          userProfitPercentage === ""
+                        }
+                        variant="contained"
+                        onClick={resetUserProfit}
+                        sx={{
+                          backgroundColor: "#8477da",
+                          "&:hover": {
+                            backgroundColor: "#8477da",
+                          },
+                          ":disabled": {
+                            bgcolor: "#c2c2c2",
+                          },
+                        }}
                       >
                         Reset
                       </Button>
