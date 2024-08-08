@@ -105,7 +105,7 @@ const ShowerEstimatesList = ({ projectId }) => {
         dispatch(setShowerProjectId(projectId));
         dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
         dispatch(setEstimateState("create"));
-        navigate("/estimates/layouts");
+        navigate("/estimates/dimensions");
     };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {

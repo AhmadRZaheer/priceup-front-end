@@ -79,7 +79,7 @@ const MirrorEstimatesList = ({ projectId }) => {
         dispatch(setMirrorProjectId(projectId));
         dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
         dispatch(setEstimateState("create"));
-        navigate("/estimates/layouts");
+        navigate("/estimates/dimensions");
     };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {

@@ -58,7 +58,7 @@ import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHe
 import { NavLink, useNavigate } from "react-router-dom";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 
-export const SimpleLayoutDimensions = () => {
+export const SimpleLayoutDimensions = ({ setStep }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const estimateState = useSelector((state) => state.estimateCalculations);
@@ -75,6 +75,7 @@ export const SimpleLayoutDimensions = () => {
   const currentQuoteState = useSelector(getQuoteState);
   const reduxAdditionalFields = useSelector(getAdditionalFields);
   const showerSettings = useSelector(getLocationShowerSettings);
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const initialValues = measurementSides.reduce((acc, item) => {
@@ -171,8 +172,10 @@ export const SimpleLayoutDimensions = () => {
         );
         dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       }
-
-      navigate("/estimates/review");
+      if (isMobile) {
+        setStep(1);
+      }
+      // navigate("/estimates/review");
       resetForm();
     },
   });
@@ -236,7 +239,7 @@ export const SimpleLayoutDimensions = () => {
         })
       );
     }
-    return () => {};
+    return () => { };
   }, []);
   return (
     <>
@@ -250,8 +253,9 @@ export const SimpleLayoutDimensions = () => {
             border: {
               sm: "1px solid #EAECF0",
               xs: "none",
-              overflow: { sm: "hidden" },
             },
+            overflow: { sm: "hidden" },
+
           }}
         >
           <Box
@@ -350,9 +354,9 @@ export const SimpleLayoutDimensions = () => {
                 >
                   <FormControl
                     fullWidth
-                    
+
                   >
-                    <div style={{marginBottom: 8, fontSize: "18px",}}>Layout</div>
+                    <div style={{ marginBottom: 8, fontSize: "18px", }}>Layout</div>
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
@@ -363,7 +367,7 @@ export const SimpleLayoutDimensions = () => {
                       style={{
                         background: "white",
                         borderRadius: "8px",
-                        
+
                       }}
                     >
                       <MenuItem value={10}>Ten</MenuItem>
@@ -503,7 +507,7 @@ export const SimpleLayoutDimensions = () => {
                     </Box>
                   </Box>
                   {doorWidthFromredux > showerSettings?.doorWidth ||
-                  doorWidthFromredux < 1 ? (
+                    doorWidthFromredux < 1 ? (
                     <Box
                       sx={{
                         display: "flex",
@@ -559,9 +563,8 @@ export const SimpleLayoutDimensions = () => {
                     <img
                       width="100%"
                       height="100%"
-                      src={`${backendURL}/${
-                        selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                      }`}
+                      src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                        }`}
                       alt="Selected"
                     />
                   </Box>
@@ -583,11 +586,9 @@ export const SimpleLayoutDimensions = () => {
             >
               <NavLink
                 to={
-                  currentQuoteState === quoteState.EDIT
-                    ? projectId
-                      ? `/projects/${projectId}`
-                      : "/estimates"
-                    : "/estimates/layouts"
+                  projectId
+                    ? `/projects/${projectId}`
+                    : "/estimates"
                 }
               >
                 <Button
@@ -601,7 +602,7 @@ export const SimpleLayoutDimensions = () => {
                   }}
                   fullWidth
                   variant="outlined"
-                  // onClick={handleBack}
+                // onClick={handleBack}
                 >
                   {" "}
                   Back
@@ -610,10 +611,11 @@ export const SimpleLayoutDimensions = () => {
               <Button
                 type="submit"
                 disabled={
-                  !dynamicFieldAllocationEqualToLayoutCount ||
-                  !allAllocatedFieldsPopulated ||
-                  doorWidthFromredux > showerSettings?.doorWidth ||
-                  doorWidthFromredux < 1
+                  false
+                  // !dynamicFieldAllocationEqualToLayoutCount ||
+                  // !allAllocatedFieldsPopulated ||
+                  // doorWidthFromredux > showerSettings?.doorWidth ||
+                  // doorWidthFromredux < 1
                 }
                 sx={{
                   width: { xs: 120, sm: 150 },

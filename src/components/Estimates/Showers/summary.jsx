@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import {
   getContent,
   getFabricationTotal,
@@ -34,7 +34,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { layoutVariants } from "@/utilities/constants";
 import { renderMeasurementSides } from "@/utilities/estimates";
 
-const Summary = () => {
+const Summary = ({ setStep }) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
   const glassAddonsPrice = useSelector(getGlassAddonsTotal);
@@ -62,8 +63,8 @@ const Summary = () => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-      ? `${backendURL}/${selectedData?.settings?.image}`
-      : CustomImage;
+        ? `${backendURL}/${selectedData?.settings?.image}`
+        : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
@@ -77,13 +78,14 @@ const Summary = () => {
   return (
     <>
       <Box
-      className={disable_com ? "":"box_disaled"}
+        className={disable_com ? "box_disaled" : ""}
         sx={{
           width: "100%",
           margin: "auto",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
+          // height: "86vh",
           // p: { sm: 2, xs: 0 },
           gap: { sm: 4, xs: 0 },
         }}
@@ -97,16 +99,17 @@ const Summary = () => {
             borderRadius: "8px",
             justifyContent: "space-between",
             flexDirection: { sm: "column", xs: "column" },
-            overflow: {sm:"hidden"},
+            overflow: { sm: "hidden" },
             // height: "fit-content",
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             border: { sm: "1px solid #EAECF0", xs: "none" },
+            // paddingBottom: "100px",
             // minHeight: "50vh",
             // maxHeight: "79vh",
           }}
         >
-          <Box sx={{ background: "#D9D9D9", paddingY: 2, px: 3, display: {sm: "block", xs: "none"} }}>
+          <Box sx={{ background: "#D9D9D9", paddingY: 2, px: 3, display: { sm: "block", xs: "none" } }}>
             <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
               Summary
             </Typography>
@@ -117,10 +120,11 @@ const Summary = () => {
               flexDirection: "column",
               width: "100%",
               borderRadius: "8px",
-              width: "96%",
+              width: {sm:"96%"},
               paddingY: { sm: 2, xs: 1 },
               paddingX: { sm: 2, xs: 0 },
-              overflow: "hidden",
+              marginBottom: "50px",
+              overflow: {sm:"hidden"},
               color: { md: "#101828", xs: "white" },
             }}
           >
@@ -129,7 +133,7 @@ const Summary = () => {
                 display: { sm: "none", xs: "flex" },
                 width: "87%",
                 justifyContent: "center",
-                background: "rgba(217, 217, 217, 0.3)",
+                // background: "rgba(217, 217, 217, 0.3)",
                 margin: { sm: 0, xs: "auto" },
                 p: 3,
                 borderRadius: 2,
@@ -146,8 +150,9 @@ const Summary = () => {
               sx={{
                 width: "100%",
                 color: { xs: "white", sm: "black" },
-                paddingTop: {sm: 0 ,xs:2},
+                paddingTop: { sm: 0, xs: 2 },
                 margin: "auto",
+                
               }}
             >
               {/** Dimensions Accordian */}
@@ -222,22 +227,22 @@ const Summary = () => {
                     layoutVariants.DOUBLEBARN,
                     layoutVariants.DOUBLEDOOR,
                   ].includes(selectedData?.settings?.variant) && (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
-                      {panelWeight}
-                    </Typography>
-                  )}
+                      <Typography>
+                        <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
+                        {panelWeight}
+                      </Typography>
+                    )}
                   {[
                     layoutVariants.DOORNOTCHEDPANELANDRETURN,
                     layoutVariants.DOORPANELANDRETURN,
                   ].includes(selectedData?.settings?.variant) && (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>
-                        Return Weight:{" "}
-                      </span>{" "}
-                      {returnWeight}
-                    </Typography>
-                  )}
+                      <Typography>
+                        <span style={{ fontWeight: "bold" }}>
+                          Return Weight:{" "}
+                        </span>{" "}
+                        {returnWeight}
+                      </Typography>
+                    )}
                 </AccordionDetails>
               </Accordion>
               <Box
@@ -955,6 +960,65 @@ const Summary = () => {
                   </AccordionDetails>
                 </Accordion>
               </Box>
+              {/* Buttons */}
+              {isMobile ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: { sm: "96%" },
+                    paddingX: 2,
+                    py: 2,
+                    // marginY: 3,
+                    position: { sm: "", xs: "fixed" },
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    gap: 5,
+                    background: "#08061B"
+                  }}
+                >
+                  <Box sx={{ width: "150px" }}>
+                    <Button
+                      fullWidth
+                      // onClick={setHandleEstimatesPages}
+                      onClick={() => setStep(1)}
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { sm: "transparent", xs: "white" },
+                      }}
+                    >
+                      {" "}
+                      Back
+                    </Button>
+                  </Box>
+                  <Box sx={{ width: "150px" }}>
+                    <Button
+                      fullWidth
+                      // disabled={selectedContent?.hardwareFinishes === null}
+                      variant="contained"
+                      onClick={() => {
+                        // setSummaryState(false);
+                        console.log('open modal');
+                      }}
+                      sx={{
+                        backgroundColor: "#8477da",
+                        "&:hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                    >
+                      {" "}
+                      Next
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                ""
+              )}
             </Box>
           </Box>
         </Box>

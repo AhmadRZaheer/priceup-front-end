@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -196,13 +196,15 @@ export const generateEstimatePayload = (
   return estimateConfig;
 };
 
-export const ShowerReview = () => {
+export const ShowerReview = ({setStep}) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  console.log(isMobile,'isMobile');
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
@@ -389,7 +391,7 @@ export const ShowerReview = () => {
   return (
     <>
       <Box
-        className={disable_com ? "" : "box_disaled"}
+        className={disable_com ? "box_disaled" : ""}
         sx={{
           width: { xs: "100%", sm: "96%" },
           margin: { sm: "auto", xs: 0 },
@@ -402,7 +404,7 @@ export const ShowerReview = () => {
           // paddingTop: { sm: "40px" },
         }}
       >
-        <Box sx={{ width: "100%" }}>
+        {/* <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "white" },
@@ -447,7 +449,7 @@ export const ShowerReview = () => {
                 : "Create New Estimate"}
             </Typography>
           </Box>
-        </Box>
+        </Box> */}
         <Box
           sx={{
             width: "100%",
@@ -482,7 +484,7 @@ export const ShowerReview = () => {
               display: "flex",
               flexDirection: "column",
               paddingTop: 2,
-              marginBottom: { sm: 4.6, xs: 0 },
+              marginBottom: { sm: 4.6, xs: 6},
             }}
           >
             <Box sx={{ width: { sm: "100%", xs: "90%" }, margin: "auto" }}>
@@ -1296,20 +1298,28 @@ export const ShowerReview = () => {
               )}
 
               {/* Buttons */}
-              {summaryState && windowWidth < 600 ? (
+              {isMobile ? (
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    width: { sm: "96%" },
+                    // width: { sm: "96%" },
                     paddingX: 2,
-                    marginY: 3,
+                    // marginY: 3,
+                    py: 2,
+                    justifyContent: "space-between",
+                    position: {sm: "", xs: "fixed"},
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: "#08061B"
                   }}
                 >
                   <Box sx={{ width: "150px" }}>
                     <Button
                       fullWidth
-                      onClick={setHandleEstimatesPages}
+                      // onClick={setHandleEstimatesPages}
+                      onClick={()=>setStep(0)}
                       sx={{
                         boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                         color: "#344054",
@@ -1328,7 +1338,8 @@ export const ShowerReview = () => {
                       disabled={selectedContent?.hardwareFinishes === null}
                       variant="contained"
                       onClick={() => {
-                        setSummaryState(false);
+                        // setSummaryState(false);
+                        setStep(2)
                       }}
                       sx={{
                         backgroundColor: "#8477da",
@@ -1346,7 +1357,7 @@ export const ShowerReview = () => {
                 ""
               )}
 
-              {!summaryState || windowWidth > 600 ? (
+              {/* {!summaryState || windowWidth > 600 ? (
                 <Box
                   sx={{
                     width: { sm: "46%" },
@@ -1357,7 +1368,7 @@ export const ShowerReview = () => {
                 </Box>
               ) : (
                 ""
-              )}
+              )} */}
             </Box>
 
             {/* Buttons */}
@@ -1370,7 +1381,7 @@ export const ShowerReview = () => {
                   paddingX: 2,
                 }}
               >
-                <Box
+                {/* <Box
                   sx={{
                     width: {
                       sm: "150px",
@@ -1401,7 +1412,7 @@ export const ShowerReview = () => {
                     {" "}
                     Back
                   </Button>
-                </Box>
+                </Box> */}
                 <Box
                   sx={{
                     width: {
@@ -1458,7 +1469,7 @@ export const ShowerReview = () => {
                     }}
                   >
                     {" "}
-                    {currentQuoteState === quoteState.EDIT ? "Update" : "Next"}
+                    {currentQuoteState === quoteState.EDIT ? "Update" : "Save"}
                   </Button>
                 </Box>
               </Box>

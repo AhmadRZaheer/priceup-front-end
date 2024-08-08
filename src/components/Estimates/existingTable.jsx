@@ -154,7 +154,9 @@ export default function ExistingTable() {
     dispatch(resetMirrorEstimateState());
     dispatch(resetEstimateState());
     dispatch(resetState());
-    navigate("/estimates/layouts");
+    dispatch(setisCustomizedDoorWidth(false));
+    dispatch(setQuoteState("create"));
+    navigate("/estimates/dimensions");
   };
   useEffect(() => {
     refetchEstimatesList();
@@ -162,12 +164,12 @@ export default function ExistingTable() {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if(page === 1){
+      if (page === 1) {
         refetchEstimatesList();
-        }
-        else{
-          setPage(1);
-        }
+      }
+      else {
+        setPage(1);
+      }
     }, 500),
     [search]
   );

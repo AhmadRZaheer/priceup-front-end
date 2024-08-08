@@ -11,24 +11,24 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { ShowerReview } from "./review";
 import Summary from "./summary";
+import { useState } from "react";
 
 export const ShowerDimensions = () => {
   const activeQuoteState = useSelector(getQuoteState);
   const item = useSelector(selectedItem);
   const projectId = useSelector(getProjectId);
-  const isMobile = useMediaQuery("(max-width: 600px)")
+  const isMobile = useMediaQuery("(max-width: 600px)");
+  const [step, setStep] = useState(0);  // 0 for dimension, 1 for review, 2 for summary
+  console.log(step, 'step');
   return (
     <Box>
       <Box
         sx={{
-          // width: "100%",
-          // display: "flex",
-          // alignItems: "center",
-          // justifyContent: "center",
-          background: "white",
-          // height: "100vh",
+          // background: "white",
           background: { sm: "white", xs: "#08061B" },
           padding: 2,
+          height: {sm: "auto",xs: "95vh"},
+          overflow: { sm: "", xs: 'auto' }
         }}
       >
         <Box style={{ paddingBottom: "10px" }}>
@@ -79,45 +79,49 @@ export const ShowerDimensions = () => {
             </Typography>
           </Box>
         </Box>
-{!isMobile ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            gap: 4,
-            padding: 3,
-            alignItems: "start"
-          }}
-        >
-          <Box sx={{ display: "flex", flexDirection: "column", width: {lg:"60%",md: "50%"}, gap: 4 }}>
-            {activeQuoteState === quoteState.CREATE ||
-            (activeQuoteState === quoteState.EDIT &&
-              item?.config?.layout_id) ? (
-              <SimpleLayoutDimensions />
-            ) : activeQuoteState === quoteState.CUSTOM ||
-              (activeQuoteState === quoteState.EDIT &&
-                !item?.config?.layout_id) ? (
-              <CustomLayoutDimensions />
-            ) : (
-              ""
+        {!isMobile ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: 4,
+              padding: 3,
+              alignItems: "start",
+            }}
+          >
+            <Box sx={{ display: "flex", flexDirection: "column", width: { lg: "60%", md: "50%" }, gap: 4 }}>
+              {(activeQuoteState === quoteState.CREATE ||
+                (activeQuoteState === quoteState.EDIT && item?.config?.layout_id)) ? (
+                <SimpleLayoutDimensions />
+              ) : (activeQuoteState === quoteState.CUSTOM ||
+                (activeQuoteState === quoteState.EDIT && !item?.config?.layout_id)) ? (
+                <CustomLayoutDimensions />
+              ) : null}
+              <Summary />
+            </Box>
+            <Box sx={{ width: { lg: "40%", md: "50%" }, minWidth: "" }}>
+              <ShowerReview />
+            </Box>
+          </Box>
+        ) : (
+          <>
+            {step === 0 && (activeQuoteState === quoteState.CREATE ||
+              (activeQuoteState === quoteState.EDIT && item?.config?.layout_id)) && (
+                <SimpleLayoutDimensions setStep={setStep} />
+              )}
+            {step === 0 && (activeQuoteState === quoteState.CUSTOM ||
+              (activeQuoteState === quoteState.EDIT && !item?.config?.layout_id)) && (
+                <CustomLayoutDimensions setStep={setStep} />
+              )}
+            {step === 1 && (
+              <ShowerReview setStep={setStep} />
             )}
-            <Summary />
-          </Box>
-          <Box sx={{width: {lg:"40%", md: "50%"}, minWidth: ""}}>
-            <ShowerReview />
-          </Box>
-        </Box>
-        ) : (    activeQuoteState === quoteState.CREATE ||
-            (activeQuoteState === quoteState.EDIT &&
-              item?.config?.layout_id) ? (
-              <SimpleLayoutDimensions />
-            ) : activeQuoteState === quoteState.CUSTOM ||
-              (activeQuoteState === quoteState.EDIT &&
-                !item?.config?.layout_id) ? (
-              <CustomLayoutDimensions />
-            ) : (
-              ""
-            ))}
+            {step === 2 && (
+              <Summary setStep={setStep} />
+            )}
+          </>
+        )}
+
       </Box>
     </Box>
   );
