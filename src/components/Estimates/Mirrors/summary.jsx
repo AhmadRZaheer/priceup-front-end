@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import CustomImage from "@/Assets/customlayoutimage.svg";
@@ -17,7 +17,8 @@ import {
 } from "@/redux/mirrorsEstimateSlice";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
 
-const Summary = () => {
+const Summary = ({ setStep }) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const dispatch = useDispatch();
   const pricing = useSelector(getPricing);
   // const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
@@ -38,7 +39,7 @@ const Summary = () => {
   return (
     <>
       <Box
-        className={disable_com ? "" : "box_disaled"}
+        className={disable_com ? "box_disaled" : ""}
         sx={{
           width: "100%",
           margin: "auto",
@@ -51,12 +52,18 @@ const Summary = () => {
       >
         <Box
           sx={{
+            display: "flex",
             width: "100%",
-            border: { sm: "1px solid #EAECF0", xs: "none" },
+            background: { sm: "white" },
+            margin: { sm: 0, xs: "auto" },
+            borderRadius: "8px",
+            justifyContent: "space-between",
+            flexDirection: { sm: "column", xs: "column" },
+            overflow: { sm: "hidden" },
+            // height: "fit-content",
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            borderRadius: "8px",
-            overflow: { sm: "hidden" },
+            border: { sm: "1px solid #EAECF0", xs: "none" },
           }}
         >
           <Box
@@ -68,20 +75,21 @@ const Summary = () => {
             }}
           >
             <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-              Modifications
+              Summary
             </Typography>
           </Box>
           <Box
             sx={{
               display: "flex",
-              // width: "100%",
-              paddingBottom: { sm: 4, xs: 1 },
+              flexDirection: "column",
+              width: "100%",
+              borderRadius: "8px",
+              width: { sm: "96%" },
+              paddingY: { sm: 2, xs: 1 },
               paddingX: { sm: 2, xs: 0 },
-              background: { sm: "white" },
-              margin: { sm: 0, xs: "auto" },
-              // borderRadius: "8px",
-              justifyContent: "space-between",
-              flexDirection: { sm: "row", xs: "column" },
+              marginBottom: "50px",
+              overflow: { sm: "hidden" },
+              color: { md: "#101828", xs: "white" },
               // border: { sm: "1px solid #EAECF0", xs: "none" },
 
               // boxShadow:
@@ -278,7 +286,7 @@ const Summary = () => {
                             <Typography>
                               {item?.name}
                               {selectedContent?.glassAddons?.length - 1 !==
-                              index
+                                index
                                 ? ", "
                                 : ""}
                             </Typography>
@@ -644,6 +652,65 @@ const Summary = () => {
                     </AccordionDetails>
                   </Accordion>
                 </Box>
+                {/* Buttons */}
+                {isMobile ? (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: { sm: "96%" },
+                      paddingX: 2,
+                      py: 2,
+                      // marginY: 3,
+                      position: { sm: "", xs: "fixed" },
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      gap: 5,
+                      background: "#08061B"
+                    }}
+                  >
+                    <Box >
+                      <Button
+                        fullWidth
+                        // onClick={setHandleEstimatesPages}
+                        onClick={() => setStep(1)}
+                        sx={{
+                          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                          color: "#344054",
+                          textTransform: "initial",
+                          border: "1px solid #D0D5DD",
+                          backgroundColor: { sm: "transparent", xs: "white" },
+                        }}
+                      >
+                        {" "}
+                        Back
+                      </Button>
+                    </Box>
+                    <Box >
+                      <Button
+                        fullWidth
+                        // disabled={selectedContent?.hardwareFinishes === null}
+                        variant="contained"
+                        onClick={() => {
+                          // setSummaryState(false);
+                          console.log('open modal');
+                        }}
+                        sx={{
+                          backgroundColor: "#8477da",
+                          "&:hover": {
+                            backgroundColor: "#8477da",
+                          },
+                        }}
+                      >
+                        {" "}
+                        Next
+                      </Button>
+                    </Box>
+                  </Box>
+                ) : (
+                  ""
+                )}
               </Box>
             </Box>
           </Box>

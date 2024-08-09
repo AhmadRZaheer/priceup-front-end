@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -109,13 +109,14 @@ export const generateEstimatePayload = (
   return estimateConfig;
 };
 
-export const MirrorReview = () => {
+export const MirrorReview = ({ setStep }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
@@ -130,7 +131,7 @@ export const MirrorReview = () => {
   const selectedContent = useSelector(getSelectedContent);
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
-const disable_com = false;
+  const disable_com = false;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
   //     dispatch(setToggles({ type, value }));
@@ -205,7 +206,11 @@ const disable_com = false;
 
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      navigate("/estimates");
+      if (projectId) {
+        navigate(`projects/${projectId}`);
+      } else {
+        navigate("/estimates");
+      }
     }
   }, [CreatedSuccessfullyEdit]);
 
@@ -268,8 +273,7 @@ const disable_com = false;
   return (
     <>
       <Box
-            className={disable_com ? "":"box_disaled"}
-
+        className={disable_com ? "box_disaled" : ""}
         sx={{
           width: { xs: "100%", sm: "100%" },
           margin: { sm: "auto", xs: 0 },
@@ -282,7 +286,7 @@ const disable_com = false;
           // paddingTop: { sm: "40px" },
         }}
       >
-        <Box sx={{ width: "100%" }}>
+        {/* <Box sx={{ width: "100%" }}>
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "white" },
@@ -304,8 +308,8 @@ const disable_com = false;
                 summaryState
                   ? setHandleEstimatesPages
                   : () => {
-                      setSummaryState(true);
-                    }
+                    setSummaryState(true);
+                  }
               }
             >
               {" "}
@@ -327,7 +331,7 @@ const disable_com = false;
                 : "Create New Estimate"}
             </Typography>
           </Box>
-        </Box>
+        </Box> */}
         <Box
           sx={{
             width: "100%",
@@ -470,7 +474,7 @@ const disable_com = false;
                           menuOptions={hardwaresList?.hardwares}
                           title={"Hardwares"}
                           type={mirrorHardwareTypes.HARDWARES}
-                          // currentItem={selectedContent.hardwares.item}
+                        // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -490,7 +494,7 @@ const disable_com = false;
                           menuOptions={hardwaresList?.glassAddons}
                           title={"Glass Addons"}
                           type={mirrorHardwareTypes.GLASSADDONS}
-                          // currentItem={selectedContent.hardwares.item}
+                        // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -1384,20 +1388,27 @@ const disable_com = false;
               )}
 
               {/* Buttons */}
-              {summaryState && windowWidth < 600 ? (
+              {isMobile ? (
                 <Box
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    width: { sm: "96%" },
+                    // width: { sm: "96%" },
                     paddingX: 2,
-                    marginY: 3,
+                    // marginY: 3,
+                    py: 2,
+                    position: { sm: "", xs: "fixed" },
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: "#08061B"
                   }}
                 >
-                  <Box sx={{ width: "150px" }}>
+                  <Box>
                     <Button
                       fullWidth
-                      onClick={setHandleEstimatesPages}
+                      // onClick={setHandleEstimatesPages}
+                      onClick={() => setStep(0)}
                       sx={{
                         boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                         color: "#344054",
@@ -1410,13 +1421,14 @@ const disable_com = false;
                       Back
                     </Button>
                   </Box>
-                  <Box sx={{ width: "150px" }}>
+                  <Box>
                     <Button
                       fullWidth
                       // disabled={selectedContent?.hardwareFinishes === null}
                       variant="contained"
                       onClick={() => {
-                        setSummaryState(false);
+                        // setSummaryState(false);
+                        setStep(2)
                       }}
                       sx={{
                         backgroundColor: "#8477da",
@@ -1434,7 +1446,7 @@ const disable_com = false;
                 ""
               )}
 
-              {!summaryState || windowWidth > 600 ? (
+              {/* {!summaryState || windowWidth > 600 ? (
                 <Box
                   sx={{
                     width: { sm: "46%" },
@@ -1445,7 +1457,7 @@ const disable_com = false;
                 </Box>
               ) : (
                 ""
-              )}
+              )} */}
             </Box>
 
             {/* Buttons */}
@@ -1458,7 +1470,7 @@ const disable_com = false;
                   paddingX: 2,
                 }}
               >
-                <Box
+                {/* <Box
                   sx={{
                     width: {
                       sm: "150px",
@@ -1489,19 +1501,20 @@ const disable_com = false;
                     {" "}
                     Back
                   </Button>
-                </Box>
+                </Box> */}
                 <Box
                   sx={{
-                    width: {
-                      sm:
-                        currentEstimateState === quoteState.EDIT
-                          ? "310px"
-                          : "150px",
-                      xs:
-                        currentEstimateState === quoteState.EDIT
-                          ? "200px"
-                          : "150px",
-                    },
+                    width: '100%',
+                    // {
+                    //   sm:
+                    //     currentEstimateState === quoteState.EDIT
+                    //       ? "310px"
+                    //       : "150px",
+                    //   xs:
+                    //     currentEstimateState === quoteState.EDIT
+                    //       ? "200px"
+                    //       : "150px",
+                    // },
                     display: "flex",
                     gap: 2,
                     // flexDirection: { sm: "row", xs: "column" },
@@ -1545,8 +1558,8 @@ const disable_com = false;
                   >
                     {" "}
                     {currentEstimateState === quoteState.EDIT
-                      ? "Update"
-                      : "Next"}
+                      ? "Update Estimate"
+                      : "Save Estimate"}
                   </Button>
                 </Box>
               </Box>

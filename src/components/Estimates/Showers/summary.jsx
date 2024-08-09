@@ -58,7 +58,19 @@ const Summary = ({ setStep }) => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
-  const disable_com = false;
+  let disable_com = false;
+  if (quoteState === 'create') {
+    disable_com = !selectedData || !measurements?.length;
+  } else if (quoteState === 'custom') {
+    let allFilled = true;
+    Object.entries(measurements).forEach?.(([key, value]) => {
+      const { count, width, height } = value;
+      if (!width || !height) {
+        allFilled = false;
+      }
+    });
+    disable_com = !allFilled;
+  }
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
@@ -978,7 +990,7 @@ const Summary = ({ setStep }) => {
                     background: "#08061B"
                   }}
                 >
-                  <Box sx={{ width: "150px" }}>
+                  <Box >
                     <Button
                       fullWidth
                       // onClick={setHandleEstimatesPages}
@@ -995,7 +1007,7 @@ const Summary = ({ setStep }) => {
                       Back
                     </Button>
                   </Box>
-                  <Box sx={{ width: "150px" }}>
+                  <Box >
                     <Button
                       fullWidth
                       // disabled={selectedContent?.hardwareFinishes === null}

@@ -38,6 +38,7 @@ import {
   getisCustomizedDoorWidth,
   setisCustomizedDoorWidth,
   getProjectId,
+  addSelectedItem,
 } from "@/redux/estimateCalculations";
 import {
   backendURL,
@@ -57,13 +58,14 @@ import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication"
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 
 export const SimpleLayoutDimensions = ({ setStep }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const estimateState = useSelector((state) => state.estimateCalculations);
   const projectId = useSelector(getProjectId);
-
+  const { data: layouts, isLoading: loading, refetch } = useFetchDataDefault();
   const setHandleEstimatesPages = (item) => {
     dispatch(setNavigationDesktop(item));
   };
@@ -92,10 +94,16 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
-  const [age, setAge] = React.useState("");
+  const [selectedLayout, setSelectedLayout] = useState(selectedData);
 
-  const handleChange = (event) => {
-    setAge(event.target.value);
+  const handleLayoutChange = (event) => {
+    const id = event.target.value;
+    const selectedItem = layouts?.find((item) => item._id === id);
+    dispatch(setisCustomizedDoorWidth(false));
+    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
+    dispatch(setDoorWidth(0));
+    setSelectedLayout(selectedItem);
+    dispatch(addSelectedItem(selectedItem));
   };
   // let debounceTimeout;
   const validationSchema = Yup.object().shape({
@@ -176,7 +184,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         setStep(1);
       }
       // navigate("/estimates/review");
-      resetForm();
+      // resetForm();
     },
   });
   const dynamicFieldAllocationEqualToLayoutCount = useMemo(() => {
@@ -239,6 +247,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         })
       );
     }
+    refetch();
     return () => { };
   }, []);
   return (
@@ -246,6 +255,8 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       <form onSubmit={formik.handleSubmit}>
         <Box
           sx={{
+            // width:'100%',
+            maxWidth:'600px',
             // height: iphoneSe ? "auto" : iphone14Pro ? 725 : 660,
             borderRadius: { sm: "12px", xs: 0 },
             boxShadow:
@@ -325,6 +336,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
             >
               <Box
                 sx={{
+                  flexGrow:0,
                   display: "flex",
                   width: { sm: "100%", xs: "92%" },
                   maxHeight: "100%",
@@ -347,7 +359,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   pb: { sm: 0, xs: 12 },
                 }}
               >
-                <Box
+                {currentQuoteState === quoteState.CREATE && <Box
                   sx={{
                     mb: { sm: 2, xs: 0 },
                   }}
@@ -360,22 +372,19 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     <Select
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
-                      value={age}
+                      value={selectedLayout?._id}
                       placeholder="Layout"
                       size="small"
-                      onChange={handleChange}
+                      onChange={handleLayoutChange}
                       style={{
                         background: "white",
                         borderRadius: "8px",
 
                       }}
-                    >
-                      <MenuItem value={10}>Ten</MenuItem>
-                      <MenuItem value={20}>Twenty</MenuItem>
-                      <MenuItem value={30}>Thirty</MenuItem>
+                    >{layouts?.map((item) => <MenuItem key={`key-${item.name}`} value={item._id}>{item.name}</MenuItem>)}
                     </Select>
                   </FormControl>
-                </Box>
+                </Box>}
                 {Array.from({
                   length: noOfSidesOFCurrentLayout,
                 }).map((_, index) => (
@@ -401,6 +410,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         borderRadius: "8px",
                         border: "1px solid #D0D5DD",
                         width: "100%",
+                        maxWidth:'250px'
                       }}
                       value={formik.values[String.fromCharCode(97 + index)]}
                       onChange={(e) => {
@@ -465,7 +475,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          width: "200px",
+                          // width: "200px",
                         }}
                       >
                         <Typography
@@ -500,6 +510,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           borderRadius: "8px",
                           border: "1px solid #D0D5DD",
                           width: "100%",
+                          maxWidth:'200px'
                         }}
                         name="door"
                         onChange={(e) => handleInputChange(e)}
@@ -585,10 +596,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               }}
             >
               <NavLink
-                to={
-                  projectId
-                    ? `/projects/${projectId}`
-                    : "/estimates"
+                to={currentQuoteState === quoteState.EDIT ? (projectId
+                  ? `/projects/${projectId}`
+                  : "/estimates") : "/estimates/layouts"
                 }
               >
                 <Button
@@ -611,11 +621,10 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               <Button
                 type="submit"
                 disabled={
-                  false
-                  // !dynamicFieldAllocationEqualToLayoutCount ||
-                  // !allAllocatedFieldsPopulated ||
-                  // doorWidthFromredux > showerSettings?.doorWidth ||
-                  // doorWidthFromredux < 1
+                  !dynamicFieldAllocationEqualToLayoutCount ||
+                  !allAllocatedFieldsPopulated ||
+                  doorWidthFromredux > showerSettings?.doorWidth ||
+                  doorWidthFromredux < 1
                 }
                 sx={{
                   width: { xs: 120, sm: 150 },
@@ -632,7 +641,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 variant="contained"
               >
                 {" "}
-                Next
+                {isMobile ? 'Next' : 'Run Quote'}
               </Button>
             </Box>
           </Box>

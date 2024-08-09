@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "@/Assets/customlayoutimage.svg";
@@ -43,7 +43,8 @@ const isThereHigherKeyAvailable = (values, iterator) => {
   return Object.keys(values).some((k) => k > iterator);
 };
 
-export const CustomLayoutDimensions = () => {
+export const CustomLayoutDimensions = ({setStep}) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const estimateState = useSelector((state) => state.estimateCalculations);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
@@ -143,7 +144,10 @@ export const CustomLayoutDimensions = () => {
       );
       dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
     }
-    navigate("/estimates/review");
+    if (isMobile) {
+      setStep(1);
+    }
+    // navigate("/estimates/review");
     // dispatch(setNavigation("review"));
     // dispatch(setNavigationDesktop("review"));
 
@@ -191,6 +195,7 @@ export const CustomLayoutDimensions = () => {
     <>
       <form>
         <Box sx={{ borderRadius: { md: "12px", xs: 0 },
+            maxWidth:'600px',
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             border: { md: "1px solid #EAECF0", xs: "none" },overflow: "hidden"}}>
@@ -659,7 +664,7 @@ export const CustomLayoutDimensions = () => {
                 variant="contained"
               >
                 {" "}
-                Next
+                {isMobile ? 'Next' : 'Run Quote'}
               </Button>
             </Box>
           </Box>

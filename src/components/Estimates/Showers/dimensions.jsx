@@ -89,7 +89,9 @@ export const ShowerDimensions = () => {
               alignItems: "start",
             }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column", width: { lg: "60%", md: "50%" }, gap: 4 }}>
+            <Box sx={{ display: "flex", flexDirection: "column", flexWrap:'wrap',
+              //  width: { lg: "60%", md: "50%" },
+                gap: 4 }}>
               {(activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT && item?.config?.layout_id)) ? (
                 <SimpleLayoutDimensions />
@@ -99,7 +101,9 @@ export const ShowerDimensions = () => {
               ) : null}
               <Summary />
             </Box>
-            <Box sx={{ width: { lg: "40%", md: "50%" }, minWidth: "" }}>
+            <Box sx={{ flexGrow:1
+              // width: { lg: "40%", md: "50%" }, minWidth: ""
+               }}>
               <ShowerReview />
             </Box>
           </Box>

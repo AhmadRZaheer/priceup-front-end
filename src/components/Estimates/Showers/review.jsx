@@ -196,7 +196,7 @@ export const generateEstimatePayload = (
   return estimateConfig;
 };
 
-export const ShowerReview = ({setStep}) => {
+export const ShowerReview = ({ setStep }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -204,7 +204,7 @@ export const ShowerReview = ({setStep}) => {
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  console.log(isMobile,'isMobile');
+  console.log(isMobile, 'isMobile');
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
@@ -227,7 +227,19 @@ export const ShowerReview = ({setStep}) => {
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
-  const disable_com = false;
+  let disable_com = false;
+  if (currentQuoteState === 'create') {
+    disable_com = !selectedData || !measurements?.length;
+  } else if (currentQuoteState === 'custom') {
+    let allFilled = true;
+    Object.entries(measurements).forEach?.(([key, value]) => {
+      const { count, width, height } = value;
+      if (!width || !height) {
+        allFilled = false;
+      }
+    });
+    disable_com = !allFilled;
+  }
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     const estimateConfig = generateEstimatePayload(
@@ -317,7 +329,11 @@ export const ShowerReview = ({setStep}) => {
 
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
-      navigate("/estimates");
+      if (projectId) {
+        navigate(`projects/${projectId}`);
+      } else {
+        navigate("/estimates");
+      }
     }
   }, [CreatedSuccessfullyEdit, ErrorForAddEidt]);
 
@@ -478,13 +494,13 @@ export const ShowerReview = ({setStep}) => {
               margin: "auto",
 
               paddingX: { sm: 2, xs: 0 },
-              paddingY: 4,
+              paddingY: 0,
               rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
               paddingTop: 2,
-              marginBottom: { sm: 4.6, xs: 6},
+              marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
             <Box sx={{ width: { sm: "100%", xs: "90%" }, margin: "auto" }}>
@@ -603,33 +619,33 @@ export const ShowerReview = ({setStep}) => {
                       layoutVariants.DOUBLEDOOR,
                       layoutVariants.DOUBLEBARN,
                     ].includes(selectedItemVariant) && (
-                      <Box
-                        sx={{
-                          alignItems: "center",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                        }}
-                      >
-                        <Box sx={{ width: "100%", display: "flex" }}>
-                          <Box
-                            sx={{
-                              width: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <ChannelTypeDesktop
-                              menuOptions={listData?.channelOrClamps}
-                              title={"Mounting"}
-                              type={"mounting"}
-                              listData={listData}
-                            />
+                        <Box
+                          sx={{
+                            alignItems: "center",
+                            borderBottom: {
+                              sm: "2px solid #D0D5DD",
+                              xs: "2px solid #423f57",
+                            },
+                          }}
+                        >
+                          <Box sx={{ width: "100%", display: "flex" }}>
+                            <Box
+                              sx={{
+                                width: "100%",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <ChannelTypeDesktop
+                                menuOptions={listData?.channelOrClamps}
+                                title={"Mounting"}
+                                type={"mounting"}
+                                listData={listData}
+                              />
+                            </Box>
                           </Box>
                         </Box>
-                      </Box>
-                    )}
+                      )}
                     <Box
                       sx={{
                         display: "flex",
@@ -709,7 +725,7 @@ export const ShowerReview = ({setStep}) => {
                           menuOptions={listData?.glassAddons}
                           title={"Glass Addons"}
                           type={"glassAddons"}
-                          // currentItem={selectedContent?.glassAddons}
+                        // currentItem={selectedContent?.glassAddons}
                         />
                       </Box>
                     </Box>
@@ -853,65 +869,65 @@ export const ShowerReview = ({setStep}) => {
                       layoutVariants.DOUBLEDOOR,
                       layoutVariants.DOUBLEBARN,
                     ].includes(selectedItemVariant) && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                          paddingLeft: 3,
-                          paddingBottom: 1,
-                          color: { sm: "#000000  ", xs: "white" },
-                        }}
-                      >
-                        <Typography>Clamp Cut Out</Typography>
                         <Box
                           sx={{
                             display: "flex",
                             alignItems: "center",
-                            gap: 2,
-                            width: "120px",
-                            padddingY: 4,
+                            justifyContent: "space-between",
+                            borderBottom: {
+                              sm: "2px solid #D0D5DD",
+                              xs: "2px solid #423f57",
+                            },
+                            paddingLeft: 3,
+                            paddingBottom: 1,
+                            color: { sm: "#000000  ", xs: "white" },
                           }}
                         >
-                          <TextField
-                            type="number"
-                            InputProps={{
-                              style: {
-                                color: "black",
-                                borderRadius: 10,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                              },
-                              inputProps: { min: 0 },
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                              },
-                            }}
+                          <Typography>Clamp Cut Out</Typography>
+                          <Box
                             sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                              width: "120px",
+                              padddingY: 4,
                             }}
-                            variant="outlined"
-                            size="small"
-                            value={selectedContent.clampCut}
-                            onChange={(event) =>
-                              dispatch(
-                                setInputContent({
-                                  type: "clampCut",
-                                  value: event.target.value,
-                                })
-                              )
-                            }
-                          />
+                          >
+                            <TextField
+                              type="number"
+                              InputProps={{
+                                style: {
+                                  color: "black",
+                                  borderRadius: 10,
+                                  border: "1px solid #cccccc",
+                                  backgroundColor: "white",
+                                },
+                                inputProps: { min: 0 },
+                              }}
+                              InputLabelProps={{
+                                style: {
+                                  color: "rgba(255, 255, 255, 0.5)",
+                                },
+                              }}
+                              sx={{
+                                color: { sm: "black", xs: "white" },
+                                width: "100%",
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={selectedContent.clampCut}
+                              onChange={(event) =>
+                                dispatch(
+                                  setInputContent({
+                                    type: "clampCut",
+                                    value: event.target.value,
+                                  })
+                                )
+                              }
+                            />
+                          </Box>
                         </Box>
-                      </Box>
-                    )}
+                      )}
                     <Box
                       sx={{
                         display: "flex",
@@ -1307,19 +1323,18 @@ export const ShowerReview = ({setStep}) => {
                     paddingX: 2,
                     // marginY: 3,
                     py: 2,
-                    justifyContent: "space-between",
-                    position: {sm: "", xs: "fixed"},
+                    position: { sm: "", xs: "fixed" },
                     left: 0,
                     right: 0,
                     bottom: 0,
                     background: "#08061B"
                   }}
                 >
-                  <Box sx={{ width: "150px" }}>
+                  <Box>
                     <Button
                       fullWidth
                       // onClick={setHandleEstimatesPages}
-                      onClick={()=>setStep(0)}
+                      onClick={() => setStep(0)}
                       sx={{
                         boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                         color: "#344054",
@@ -1332,7 +1347,7 @@ export const ShowerReview = ({setStep}) => {
                       Back
                     </Button>
                   </Box>
-                  <Box sx={{ width: "150px" }}>
+                  <Box >
                     <Button
                       fullWidth
                       disabled={selectedContent?.hardwareFinishes === null}
@@ -1415,16 +1430,17 @@ export const ShowerReview = ({setStep}) => {
                 </Box> */}
                 <Box
                   sx={{
-                    width: {
-                      sm:
-                        currentQuoteState === quoteState.EDIT
-                          ? "310px"
-                          : "150px",
-                      xs:
-                        currentQuoteState === quoteState.EDIT
-                          ? "200px"
-                          : "150px",
-                    },
+                    width: '100%',
+                    // {
+                    //   sm:
+                    //     currentQuoteState === quoteState.EDIT
+                    //       ? "310px"
+                    //       : "150px",
+                    //   xs:
+                    //     currentQuoteState === quoteState.EDIT
+                    //       ? "200px"
+                    //       : "150px",
+                    // },
                     display: "flex",
                     gap: 2,
                     // flexDirection: { sm: "row", xs: "column" },
@@ -1469,7 +1485,7 @@ export const ShowerReview = ({setStep}) => {
                     }}
                   >
                     {" "}
-                    {currentQuoteState === quoteState.EDIT ? "Update" : "Save"}
+                    {currentQuoteState === quoteState.EDIT ? "Update Estimate" : "Save Estimate"}
                   </Button>
                 </Box>
               </Box>
