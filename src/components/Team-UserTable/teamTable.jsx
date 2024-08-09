@@ -1,40 +1,43 @@
 import React, { useEffect, useState } from "react";
 import "./teamTable.scss";
 import { teamColumns } from "@/utilities/DataGridColumns";
-import ModeIcon from "@mui/icons-material/Mode";
-import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
+import { Add } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
+import icon from "../../Assets/search-icon.svg";
 import {
   Box,
   CircularProgress,
   IconButton,
   Typography,
-  Input,
   InputAdornment,
   TextField,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import {
   useAddLocation,
-  useDeleteTeamFromOne,
   useDeleteTeamMembers,
   useFetchDataTeam,
 } from "../../utilities/ApiHooks/team";
 import AddTeamMembers from "../Modal/addTeamMembers";
-import Snackbars from "../Modal/snackBar";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
-import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import DeleteModal from "../Modal/deleteModal";
-import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
-import NewPagination from "../Pagination";
+import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
+import EditIcon from "../../Assets/d.svg";
+import CustomInputField from "../ui-components/CustomInput";
 
 const TeamTable = () => {
-  const { data: stafData, refetch: teamMemberRefetch, isFetching } = useFetchDataTeam();
+  const {
+    data: stafData,
+    refetch: teamMemberRefetch,
+    isFetching,
+  } = useFetchDataTeam();
   const { mutate: editTeamMembers, isSuccess } = useAddLocation();
   console.log("team", stafData);
   const [search, setSearch] = useState("");
@@ -118,7 +121,7 @@ const TeamTable = () => {
 
         return (
           <div>
-            <Typography color={"#667085"}>
+            <Typography className="new-table-text">
               {matchingLocationNames.join(", ") || "No location member found"}
             </Typography>
           </div>
@@ -134,7 +137,10 @@ const TeamTable = () => {
         const isMatchingId = id === matchingId;
         return (
           <div className="cellAction">
-            <div
+            <IconButton onClick={() => handleOpenEdit(params.row)}>
+              <img src={EditIcon} alt="edit icon" />
+            </IconButton>
+            <IconButton
               className="deleteButton"
               onClick={() => handleOpenDeleteModal(params.row)}
             >
@@ -143,20 +149,7 @@ const TeamTable = () => {
               ) : (
                 <img src={DeleteIcon} alt="delete icon" />
               )}
-            </div>
-
-            <div
-              className="viewButton"
-              onClick={() => handleOpenEdit(params.row)}
-            >
-              <CustomIconButton
-                handleClick={() => handleOpenEdit(params.row)}
-                icon={
-                  <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} />
-                }
-                buttonText="Edit"
-              />
-            </div>
+            </IconButton>
           </div>
         );
       },
@@ -171,64 +164,105 @@ const TeamTable = () => {
           height: "98.2vh",
         }}
       >
-        <div className="upage-title">
-          <Typography sx={{ fontSize: 30, pl: 2, color: "#101828" }}>
-            Users
-          </Typography>
-        </div>
         <Box
           sx={{
-            border: "1px solid #EAECF0",
+            display: "flex",
+            justifyContent: "space-between",
+            px: 3.5,
+            py: 2,
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{ fontSize: "24px", color: "#101828", fontWeight: 600 }}
+            >
+              Users List
+            </Typography>
+            <Typography
+              sx={{ fontSize: "16px", fontWeight: 600, color: "#606366" }}
+            >
+              Add, edit and manage your Users.
+            </Typography>
+          </Box>
+          <Box>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 17,
+                padding: 1,
+                px: 2,
+              }}
+              onClick={() => (setOpen(true), setIsEdit(false))}
+            >
+              <Add color="white" sx={{ mr: 1 }} />
+              Add New User
+            </Button>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            px: 3,
+            my: 2,
+          }}
+        >
+          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+            Users
+          </Typography>
+
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <CustomInputField
+              id="input-with-icon-textfield"
+              placeholder="Search by User Name"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <img src={icon} alt="search input" />
+                  </InputAdornment>
+                ),
+              }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <FormControl
+              sx={{ width: "152px" }}
+              size="small"
+              className="custom-textfield"
+            >
+              <InputLabel id="demo-select-small-label" className="input-label">
+                Status
+              </InputLabel>
+              <Select
+                // value={age}
+                size="small"
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                label="Status"
+                sx={{ height: "40px" }}
+                // onChange={handleChange}
+              >
+                <MenuItem value={"active"}>Active</MenuItem>
+                <MenuItem value={"inActive"}>inActive</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+        </Box>
+
+        <Box
+          sx={{
+            border: "1px solid rgba(208, 213, 221, 1)",
             borderRadius: "8px",
+            overflow: "hidden",
             width: "97%",
             m: "auto",
           }}
         >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "95%",
-              p: 2,
-              alignItems: "center",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: "18px",
-                color: "#101828",
-                fontWeight: 500,
-              }}
-            >
-              Users
-            </Typography>
-            <TextField
-              placeholder="Search by Name"
-              value={search}
-              variant="standard"
-              onChange={(e) => setSearch(e.target.value)}
-              sx={{
-                mb: 2,
-                ".MuiInputBase-root:after": {
-                  border: "1px solid #8477DA",
-                },
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Search sx={{ color: "#8477DA" }} />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Box>
-              <CustomIconButton
-                handleClick={() => (setOpen(true), setIsEdit(false))}
-                buttonText="Add User"
-              />
-            </Box>
-          </Box>
-
           <div className="CustomerTable-team">
             {filteredData.length >= 1 ? (
               <>
@@ -249,6 +283,8 @@ const TeamTable = () => {
                   // pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
+                  disableColumnMenu
+                  pagination={false}
                 />
                 <Pagination
                   totalRecords={filteredData.length ? filteredData.length : 0}
@@ -291,7 +327,7 @@ const TeamTable = () => {
         <AddTeamMembers
           open={open}
           close={handleClose}
-          data={edit}
+          SelectedData={edit}
           isEdit={isEdit}
           refetch={teamMemberRefetch}
         />

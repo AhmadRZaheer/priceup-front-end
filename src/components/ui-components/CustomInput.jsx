@@ -15,10 +15,12 @@ function CustomInputField({
   helperText,
   onBlur,
   disabled,
+  id,
 }) {
   return (
     <>
       <TextField
+        id={id}
         fullWidth={fullWidth}
         variant="outlined"
         size={size || "small"}
@@ -27,7 +29,7 @@ function CustomInputField({
         value={value}
         disabled={disabled}
         error={error}
-        inputProps={{...inputProps}}
+        inputProps={inputProps}
         InputProps={InputProps}
         placeholder={placeholder}
         onChange={onChange}

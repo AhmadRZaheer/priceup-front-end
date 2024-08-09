@@ -1,8 +1,13 @@
 .custom-textfield {
+  background: #fff;
+  border-radius: 5px;
   fieldset {
     border-color: #d0d5dd !important;
+    
   }
   .Mui-focused {
+
+
     fieldset {
       border-color: #8477da !important;
     }
@@ -18,4 +23,8 @@
   fieldset {
     border-color: red !important;
   }
+}
+
+.input-label {
+  color: black  !important; /* Change color when focused */
 }
