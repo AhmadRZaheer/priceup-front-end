@@ -66,23 +66,57 @@ const DefaultImage = ({ image, name, type = 1 }) => {
           cursor: "pointer",
           overflow: "hidden",
           borderRadius: "100%",
-          width: type === 1 || type === 3 || type === 4 ? 40 : 50,
-          height: type === 1 || type === 3 || type === 4 ? 40 : 50,
+          width:
+            type === 1 || type === 3 || type === 4
+              ? 40
+              : type === 6
+              ? 70
+              : type === 7
+              ? 31
+              : 50,
+          height:
+            type === 1 || type === 3 || type === 4
+              ? 40
+              : type === 6
+              ? 70
+              : type === 7
+              ? 31
+              : 50,
+          border: type === 6 ? " 2px solid rgba(255, 255, 255, 0.4)" : "",
         }}
       >
         {!imageError ? (
           <img
             className="cellImg"
             style={{
-              width: type === 1 || type === 3 ? 40 : 50,
-              height: type === 1 || type === 3 ? 40 : 50,
+              width:
+                type === 1 || type === 3
+                  ? 40
+                  : type === 6
+                  ? 72
+                  : type === 7
+                  ? 31
+                  : 50,
+              height:
+                type === 1 || type === 3
+                  ? 40
+                  : type === 6
+                  ? 72
+                  : type === 7
+                  ? 31
+                  : 50,
             }}
             onError={() => setImageError(true)}
             src={`${backendURL}/${image}`}
             alt="logo image"
           />
         ) : (
-          <NameAcronyms name={name} type={type} />
+          <NameAcronyms
+            name={name}
+            type={type}
+            width={type === 6 && 72}
+            height={type === 6 && 72}
+          />
         )}
       </Box>
       <Popover
