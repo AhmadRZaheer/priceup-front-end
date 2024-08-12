@@ -335,13 +335,13 @@ export const teamColumns = [
     flex: 1.2,
     renderCell: (params) => {
       return (
-        <div className="cellWrapper">
+        <div className="user-cellWrap">
           <div className="customerImg">
-            <DefaultImage image={params.row.image} name={params.row.name} />
+            <DefaultImage image={params.row.image} name={params.row.name} type={5} />
           </div>
-          <div className="customerNameTable">
+          <div className="new-customerNameTable">
             {params.row.name}
-            <div className="userNameTable">{params.row.username}</div>
+            <div className="new-userNameTable">{params.row.username}</div>
           </div>
         </div>
       );
@@ -355,7 +355,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>{params.row.email}</Typography>
+          <Typography  className="new-table-text">{params.row.email}</Typography>
         </>
       );
     },
@@ -368,7 +368,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>
+          <Typography className="new-table-text">
             {new Date(params.row.createdAt).toLocaleDateString("en-US", {
               month: "short",
               day: "numeric",
@@ -387,7 +387,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>
+          <Typography className="new-table-text">
             {params.row.lastQuoted
               ? new Date(params.row.lastQuoted).toLocaleDateString("en-US", {
                   month: "short",
@@ -408,7 +408,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>
+          <Typography className="new-table-text">
             $ {params.row.totalQuoted?.toFixed(2) || 0}
           </Typography>
         </>
@@ -424,13 +424,13 @@ export const AdminColumns = [
     flex: 0.8,
     renderCell: (params) => {
       return (
-        <div className="cellWrapper">
+        <div className="user-cellWrap">
           <div className="customerImg">
-            <DefaultImage image={params.row.image} name={params.row.name} />
+            <DefaultImage image={params.row.image} name={params.row.name}  type={5}/>
           </div>
-          <div className="customerNameTable">
+          <div className="new-customerNameTable">
             {params.row.name}
-            <div className="userNameTable">{params.row.username}</div>
+            <div className="new-userNameTable">{params.row.username}</div>
           </div>
         </div>
       );
@@ -442,7 +442,7 @@ export const AdminColumns = [
     headerClassName: "customHeaderClass-admin-team",
     flex: 0.8,
     renderCell: (params) => {
-      return <div style={{ color: "#667085" }}>{params.row.email}</div>;
+      return <div className="new-table-text">{params.row.email}</div>;
     },
   },
   {
@@ -452,7 +452,7 @@ export const AdminColumns = [
     flex: 0.8,
     renderCell: (params) => {
       return (
-        <div style={{ color: "#667085" }}>
+        <div className="new-table-text">
           {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",

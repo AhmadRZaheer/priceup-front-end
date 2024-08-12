@@ -14,7 +14,7 @@ import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_superAdmins";
 
-const TableRow = ({ row, onToggleChange, type, title, refetch }) => {
+const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
@@ -54,6 +54,7 @@ const TableRow = ({ row, onToggleChange, type, title, refetch }) => {
       <div>
         <Box sx={{ height: 50 }}>
           <CustomToggle
+            text={text}
             title={title}
             checked={active}
             onClick={() => handleSwitch()}

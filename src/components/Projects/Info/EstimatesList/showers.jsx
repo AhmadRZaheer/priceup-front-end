@@ -9,7 +9,7 @@ import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { backendURL, calculateTotal } from "@/utilities/common";
 import { Add, Edit, Search } from "@mui/icons-material";
-import { resetEstimateState } from "@/redux/estimateSlice";
+import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { getListData, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -102,8 +102,10 @@ const ShowerEstimatesList = ({ projectId }) => {
     const handleCreateQuote = () => {
         dispatch(resetEstimateState());
         dispatch(resetState());
-        dispatch(setShowerProjectId(projectId))
-        navigate("/estimates/category");
+        dispatch(setShowerProjectId(projectId));
+        dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+        dispatch(setEstimateState("create"));
+        navigate("/estimates/layouts");
     };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {

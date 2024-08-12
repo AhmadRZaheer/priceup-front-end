@@ -111,7 +111,7 @@ export default function ExistingList() {
         debouncedRefetch();
     };
 
-    const dropdownActions = [{ title: 'View Detail', handleClickItem: handleViewDetail, icon: <ManageSearch /> },
+    const dropdownActions = [{ title: 'Detail', handleClickItem: handleViewDetail, icon: <ManageSearch /> },
     { title: "Delete", handleClickItem: handleOpenDeleteModal, icon: <DeleteOutline sx={{ color: "white", fontSize: 18, mr: 0.4 }} />, severity: "error" }];
     const dummyArray = [
         {

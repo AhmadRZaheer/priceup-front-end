@@ -1,4 +1,4 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
 import {
   getContent,
   getFabricationTotal,
@@ -34,7 +34,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { layoutVariants } from "@/utilities/constants";
 import { renderMeasurementSides } from "@/utilities/estimates";
 
-const Summary = () => {
+const Summary = ({ setStep }) => {
+  const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
   const glassAddonsPrice = useSelector(getGlassAddonsTotal);
@@ -57,6 +58,19 @@ const Summary = () => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
+  let disable_com = false;
+  if (quoteState === 'create') {
+    disable_com = !selectedData || !measurements?.length;
+  } else if (quoteState === 'custom') {
+    let allFilled = true;
+    Object.entries(measurements).forEach?.(([key, value]) => {
+      const { count, width, height } = value;
+      if (!width || !height) {
+        allFilled = false;
+      }
+    });
+    disable_com = !allFilled;
+  }
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
@@ -66,27 +80,25 @@ const Summary = () => {
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
-    if(Number(event.target.value) < 100){
-    dispatch(
-      setUserProfitPercentage(
-        Number(event.target.value)
-      )
-    );
-  }
-  }
+    if (Number(event.target.value) < 100) {
+      dispatch(setUserProfitPercentage(Number(event.target.value)));
+    }
+  };
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
-  }
+  };
   return (
     <>
       <Box
+        className={disable_com ? "box_disaled" : ""}
         sx={{
-          width: "90%",
+          width: "100%",
           margin: "auto",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
-          p: { sm: 2, xs: 0 },
+          // height: "86vh",
+          // p: { sm: 2, xs: 0 },
           gap: { sm: 4, xs: 0 },
         }}
       >
@@ -94,32 +106,46 @@ const Summary = () => {
           sx={{
             display: "flex",
             width: "100%",
-            paddingY: { sm: 4, xs: 1 },
-            paddingX: { sm: 2, xs: 0 },
             background: { sm: "white" },
             margin: { sm: 0, xs: "auto" },
             borderRadius: "8px",
             justifyContent: "space-between",
-            flexDirection: { sm: "row", xs: "column" },
+            flexDirection: { sm: "column", xs: "column" },
+            overflow: { sm: "hidden" },
+            // height: "fit-content",
+            boxShadow:
+              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+            border: { sm: "1px solid #EAECF0", xs: "none" },
+            // paddingBottom: "100px",
             // minHeight: "50vh",
             // maxHeight: "79vh",
           }}
         >
+          <Box sx={{ background: "#D9D9D9", paddingY: 2, px: 3, display: { sm: "block", xs: "none" } }}>
+            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+              Summary
+            </Typography>
+          </Box>
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               width: "100%",
               borderRadius: "8px",
+              width: {sm:"96%"},
+              paddingY: { sm: 2, xs: 1 },
+              paddingX: { sm: 2, xs: 0 },
+              marginBottom: "50px",
+              overflow: {sm:"hidden"},
               color: { md: "#101828", xs: "white" },
             }}
           >
             <Box
               sx={{
-                display: "flex",
+                display: { sm: "none", xs: "flex" },
                 width: "87%",
                 justifyContent: "center",
-                background: "rgba(217, 217, 217, 0.3)",
+                // background: "rgba(217, 217, 217, 0.3)",
                 margin: { sm: 0, xs: "auto" },
                 p: 3,
                 borderRadius: 2,
@@ -136,8 +162,9 @@ const Summary = () => {
               sx={{
                 width: "100%",
                 color: { xs: "white", sm: "black" },
-                paddingTop: 2,
+                paddingTop: { sm: 0, xs: 2 },
                 margin: "auto",
+                
               }}
             >
               {/** Dimensions Accordian */}
@@ -183,8 +210,11 @@ const Summary = () => {
                         : selectedData?._id
                     )}
                   </Typography>
-                  <Typography><span style={{ fontWeight: "bold" }}>Layout: </span>
-                  {(selectedData?.settings?.name || selectedData?.name) ?? 'Custom'}</Typography>
+                  <Typography>
+                    <span style={{ fontWeight: "bold" }}>Layout: </span>
+                    {(selectedData?.settings?.name || selectedData?.name) ??
+                      "Custom"}
+                  </Typography>
                   {doorWidth ? (
                     <Typography>
                       <span style={{ fontWeight: "bold" }}>Door Width: </span>
@@ -625,11 +655,12 @@ const Summary = () => {
                             <Typography sx={{ fontWeight: "bold" }}>
                               {item.label || "---"}:{" "}
                             </Typography>
-                            <Typography>{item.cost} 
-                            {/* * {(listData?.miscPricing?.pricingFactorStatus
+                            <Typography>
+                              {item.cost}
+                              {/* * {(listData?.miscPricing?.pricingFactorStatus
                               ? listData?.miscPricing?.pricingFactor
                               : 1)} */}
-                              </Typography>
+                            </Typography>
                           </Box>
                         )
                     )}
@@ -903,18 +934,21 @@ const Summary = () => {
                         %
                       </Box>
                       <Button
-                          disabled={userProfitPercentage === 0 || userProfitPercentage === ""}
-                          variant="contained"
-                          onClick={resetUserProfit}
-                          sx={{
-                              backgroundColor: "#8477da",
-                              "&:hover": {
-                                  backgroundColor: "#8477da",
-                              },
-                              ":disabled": {
-                                  bgcolor: "#c2c2c2",
-                              },
-                          }}
+                        disabled={
+                          userProfitPercentage === 0 ||
+                          userProfitPercentage === ""
+                        }
+                        variant="contained"
+                        onClick={resetUserProfit}
+                        sx={{
+                          backgroundColor: "#8477da",
+                          "&:hover": {
+                            backgroundColor: "#8477da",
+                          },
+                          ":disabled": {
+                            bgcolor: "#c2c2c2",
+                          },
+                        }}
                       >
                         Reset
                       </Button>
@@ -938,6 +972,65 @@ const Summary = () => {
                   </AccordionDetails>
                 </Accordion>
               </Box>
+              {/* Buttons */}
+              {isMobile ? (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: { sm: "96%" },
+                    paddingX: 2,
+                    py: 2,
+                    // marginY: 3,
+                    position: { sm: "", xs: "fixed" },
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    gap: 5,
+                    background: "#08061B"
+                  }}
+                >
+                  <Box >
+                    <Button
+                      fullWidth
+                      // onClick={setHandleEstimatesPages}
+                      onClick={() => setStep(1)}
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { sm: "transparent", xs: "white" },
+                      }}
+                    >
+                      {" "}
+                      Back
+                    </Button>
+                  </Box>
+                  <Box >
+                    <Button
+                      fullWidth
+                      // disabled={selectedContent?.hardwareFinishes === null}
+                      variant="contained"
+                      onClick={() => {
+                        // setSummaryState(false);
+                        console.log('open modal');
+                      }}
+                      sx={{
+                        backgroundColor: "#8477da",
+                        "&:hover": {
+                          backgroundColor: "#8477da",
+                        },
+                      }}
+                    >
+                      {" "}
+                      Next
+                    </Button>
+                  </Box>
+                </Box>
+              ) : (
+                ""
+              )}
             </Box>
           </Box>
         </Box>

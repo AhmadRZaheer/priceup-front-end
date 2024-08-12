@@ -11,7 +11,12 @@ import {
   CircularProgress,
   TextField,
   Tooltip,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
+import icon from "../../Assets/search-icon.svg";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
@@ -24,7 +29,6 @@ import {
   useSwitchLocationSuperAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
-import TableRow from "./tableRow";
 import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
@@ -39,6 +43,8 @@ import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import SingleLocation from "../ui-components/singleLocation";
+import WidgetCard from "../ui-components/widgetCard";
+import CustomInputField from "../ui-components/CustomInput";
 
 const SuperAdminTable = () => {
   const {
@@ -60,7 +66,8 @@ const SuperAdminTable = () => {
     isSuccess,
     isLoading: deleteisLoading,
   } = useDeleteUser();
-  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
+  const superSuperAdminsList =
+    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
   const [open, setOpen] = useState(false);
   const [DeleteOpen, setDeleteOpen] = useState(false);
@@ -121,7 +128,7 @@ const SuperAdminTable = () => {
   const decodedToken = parseJwt(token);
 
   const filteredData = AdminData?.filter((admin) =>
-    admin.user.name.toLowerCase().includes(search.toLowerCase())
+    admin.company.name.toLowerCase().includes(search.toLowerCase())
   );
   const handleAdminClick = (admin) => {
     switchLocationSuperAdmin({
@@ -149,12 +156,21 @@ const SuperAdminTable = () => {
             mt: 2,
           }}
         >
-          <Typography variant="h4">
-            {" "}
-            {superSuperAdminsList?.includes(decodedToken.email)
-              ? `Welcome back, ${decodedToken.name}`
-              : "Locations"}
-          </Typography>
+          <Box>
+            <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
+              {" "}
+              Location Management
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: "#606366",
+              }}
+            >
+              Add, edit and manage your locations.
+            </Typography>
+          </Box>
           <Box sx={{ width: "200px" }}>
             <Button
               fullWidth
@@ -176,7 +192,74 @@ const SuperAdminTable = () => {
           </Box>
         </Box>
       </div>
-      <div className="types-main-contianer">
+      <Grid container sx={{ gap: 2, px: 3.8 }}>
+        {[
+          { title: "Active Locations", text: activeCount, variant: "blue" },
+          {
+            title: "Non-Active Locations",
+            text: InactiveCount,
+            variant: "red",
+          },
+        ].map((item) => (
+          <WidgetCard
+            text={item.text}
+            title={item.title}
+            varient={item.variant}
+            type={2}
+          />
+        ))}
+      </Grid>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          px: 4,
+          my: 2,
+          mt: 3,
+        }}
+      >
+        <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+          All Locations
+        </Typography>
+
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <CustomInputField
+            id="input-with-icon-textfield"
+            placeholder="Search by User Name"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <img src={icon} alt="search input" />
+                </InputAdornment>
+              ),
+            }}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <FormControl
+            sx={{ width: "152px" }}
+            size="small"
+            className="custom-textfield"
+          >
+            <InputLabel id="demo-select-small-label" className="input-label">
+              Status
+            </InputLabel>
+            <Select
+              // value={age}
+              size="small"
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              label="Status"
+              sx={{ height: "40px" }}
+              // onChange={handleChange}
+            >
+              <MenuItem value={true}>Active</MenuItem>
+              <MenuItem value={false}>inActive</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+      </Box>
+      {/* <div className="types-main-contianer">
         <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
           <Box
             sx={{
@@ -239,8 +322,8 @@ const SuperAdminTable = () => {
             {staffData.length}
           </Typography>
         </Box>
-      </div>
-      <Box sx={{ mt: 4, ml: 4, mb: 2 }}>
+      </div> */}
+      {/* <Box sx={{ mt: 4, ml: 4, mb: 2 }}>
         <TextField
           placeholder="Search by Name"
           variant="standard"
@@ -262,8 +345,8 @@ const SuperAdminTable = () => {
             ),
           }}
         />
-      </Box>
-      <Grid container gap={2} p={4}>
+      </Box> */}
+      <Grid container gap={2} p={4} pt={0}>
         {/* <DataGrid
           getRowId={(row) => row._id}
           rows={filteredData}
@@ -314,7 +397,16 @@ const SuperAdminTable = () => {
             };
 
             return (
-              <SingleLocation data={item}  handleToggleChange={handleToggleChange}/>
+              <SingleLocation
+                data={item}
+                handleToggleChange={handleToggleChange}
+                nonActiveUsers={filterNonActive}
+                handleAccessLocation={handleAdminClick}
+                handleEdit={handleOpenEdit}
+                handleClone={handleOpenClone}
+                handleDelete={handleOpenDelete}
+                refetch={AdminRefetch}
+              />
               // <Box
               //   key={item?.user?._id}
               //   sx={{

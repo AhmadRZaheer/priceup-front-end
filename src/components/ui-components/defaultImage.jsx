@@ -53,6 +53,13 @@ const DefaultImage = ({ image, name, type = 1 }) => {
   const handlePopoverClose = () => {
     setAnchorEl(null);
   };
+  const containerWidthHeightbyType =
+    type === 1 || type === 3 || type === 4 ? 40 : type === 5 ? 31 : type === 6
+    ? 70 :50;
+
+  const imageWidthHeightbyType =
+    type === 1 || type === 3 ? 40 : type === 5 ? 31 :type === 6
+    ? 72: 50;
 
   const open = Boolean(anchorEl);
   return (
@@ -66,45 +73,16 @@ const DefaultImage = ({ image, name, type = 1 }) => {
           cursor: "pointer",
           overflow: "hidden",
           borderRadius: "100%",
-          width:
-            type === 1 || type === 3 || type === 4
-              ? 40
-              : type === 6
-              ? 70
-              : type === 7
-              ? 31
-              : 50,
-          height:
-            type === 1 || type === 3 || type === 4
-              ? 40
-              : type === 6
-              ? 70
-              : type === 7
-              ? 31
-              : 50,
-          border: type === 6 ? " 2px solid rgba(255, 255, 255, 0.4)" : "",
+          width: containerWidthHeightbyType,
+          height: containerWidthHeightbyType,
         }}
       >
         {!imageError ? (
           <img
             className="cellImg"
             style={{
-              width:
-                type === 1 || type === 3
-                  ? 40
-                  : type === 6
-                  ? 72
-                  : type === 7
-                  ? 31
-                  : 50,
-              height:
-                type === 1 || type === 3
-                  ? 40
-                  : type === 6
-                  ? 72
-                  : type === 7
-                  ? 31
-                  : 50,
+              width: imageWidthHeightbyType,
+              height: imageWidthHeightbyType,
             }}
             onError={() => setImageError(true)}
             src={`${backendURL}/${image}`}
