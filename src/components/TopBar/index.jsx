@@ -41,7 +41,7 @@ function TopBar() {
   return (
     <Box sx={{ display: {sm:"flex",xs:'none'}, pb: "75px" }}>
       <AppBar
-        sx={{ background: "#100D24", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
+        sx={{ background: "#FFFFFF", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
       >
         <Box
           sx={{

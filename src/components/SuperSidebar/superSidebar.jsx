@@ -18,6 +18,7 @@ import {
 import EyeIcon from "../../Assets/eye-icon.svg";
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 
 const SuperSidebar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -65,7 +66,7 @@ const SuperSidebar = () => {
   }, [switchedSuperAdmin]);
   return (
     <>
-      <div className="sidebar">
+      {/* <div className="superSidebar">
         <Box
           sx={{
             display: "flex",
@@ -74,16 +75,16 @@ const SuperSidebar = () => {
             height: "100vh",
             justifyContent: "space-between",
           }}
-        >
-          <Box sx={{ marginTop:'10px' }}>
-            <NavLink style={{ marginTop: 20 }} to="/">
+        > */}
+          {/* <Box > */}
+            {/* <NavLink style={{ marginTop: 20 }} to="/">
               <div className="top">
                 <span className="imgLogo">
                   <img src={Logo} alt="" />
                 </span>
               </div>
             </NavLink>
-            <hr style={{border:'1px solid rgba(217, 217, 217, 0.34)'}} />
+            <hr style={{border:'1px solid rgba(217, 217, 217, 0.34)'}} /> */}
             <div className="center">
               <ul>
                 <li
@@ -91,12 +92,13 @@ const SuperSidebar = () => {
                   className={` ${Boolean(anchorEl) ? "active" : ""}`}
                   onClick={handleSeeLocationsClick}
                 >
-                  <IconButton sx={{ color: "white", padding: 0.2 }}>
-                    <img
+                  <IconButton sx={{ color: "#5D6164", padding: 0.2 }}>
+                    {/* <img
                       src={EyeIcon}
                       alt="eye icon"
                       style={{ marginRight: 12 }}
-                    />
+                    /> */}
+                    <VisibilityOutlinedIcon sx={{mr:'12px'}} />
                     <span>See Locations</span>
                   </IconButton>
                 </li>
@@ -111,8 +113,8 @@ const SuperSidebar = () => {
                         : ""
                     }`}
                   >
-                    <IconButton sx={{ color: "white", padding: 0.2 }}>
-                      <FmdGoodOutlined sx={{ color: "white", mr: 1 }} />
+                    <IconButton sx={{ color: "#5D6164", padding: 0.2 }}>
+                      <FmdGoodOutlined sx={{ color: "#5D6164", mr: 1 }} />
                       <span>Locations</span>
                     </IconButton>
                   </li>
@@ -123,7 +125,7 @@ const SuperSidebar = () => {
                       location.pathname === "/team" ? "active" : ""
                     }`}
                   >
-                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                    <IconButton sx={{ color: "#5D6164", padding: 0.2 }}>
                       <img
                         style={{ paddingRight: 10 }}
                         src={TremIcon}
@@ -139,7 +141,7 @@ const SuperSidebar = () => {
                       location.pathname === "/user" ? "active" : ""
                     }`}
                   >
-                    <IconButton sx={{ color: "white", padding: 0.2 }}>
+                    <IconButton sx={{ color: "#5D6164", padding: 0.2 }}>
                       <img
                         style={{ paddingRight: 10 }}
                         src={TremIcon}
@@ -156,7 +158,7 @@ const SuperSidebar = () => {
                         location.pathname === "/superadmins" ? "active" : ""
                       }`}
                     >
-                      <IconButton sx={{ color: "white", padding: 0.2 }}>
+                      <IconButton sx={{ color: "#5D6164", padding: 0.2 }}>
                         <img
                           style={{ paddingRight: 10 }}
                           src={TremIcon}
@@ -169,10 +171,10 @@ const SuperSidebar = () => {
                 )}
               </ul>
             </div>
-          </Box>
+          {/* </Box> */}
           <Box>
             {/* <div className="line"></div> */}
-            <div className="bottom" style={{opacity:0}}>
+            <div className="bottom" style={{opacity:0,display:'none'}}>
               <div className="UserIcon">
                 <DefaultImage
                   image={decodedToken?.image}
@@ -190,8 +192,8 @@ const SuperSidebar = () => {
               </Tooltip>
             </div>
           </Box>
-        </Box>
-      </div>
+        {/* </Box>
+      </div> */}
       <SwitchLocationPopup
         anchorEl={anchorEl}
         handleClosePopup={handleClosePopup}

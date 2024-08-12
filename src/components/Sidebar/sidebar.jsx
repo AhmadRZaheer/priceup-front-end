@@ -217,6 +217,7 @@ const NewSidebar = () => {
   }, [haveAccessData, decodedToken]);
 
   const userReference = localStorage.getItem("userReference");
+  
   const drawer = (
     <Box
       sx={{
