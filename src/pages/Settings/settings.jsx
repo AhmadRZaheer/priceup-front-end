@@ -3,13 +3,15 @@ import "./settings.scss";
 import Sidebar from "../../components/Sidebar/sidebar";
 import CampanySetting from "../../components/Setting/campanySetting";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const Settings = () => {
   return (
     <>
     <TopBar/>
      <div className="settings">
-      <Sidebar />
+      {/* <Sidebar /> */}
+      <CommonSideBar/>
       <div className="settingsContainer">
         <CampanySetting />
       </div>

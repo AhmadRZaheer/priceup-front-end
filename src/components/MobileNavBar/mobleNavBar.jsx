@@ -97,17 +97,17 @@ function MobileBar() {
   const handleCustomerClick = () => {
     // setActiveButton("customr");
     // dispatch(setNavigationDesktop("customerTable"));
-    navigate('/customers');
+    navigate("/customers");
   };
-  
+
   const handleEstimateClick = () => {
     // setActiveButton("esti");
     // dispatch(setNavigationDesktop("existing"));
-    navigate('/estimates');
+    navigate("/estimates");
   };
   const handleProjectClick = () => {
     navigate("/projects");
-  }
+  };
   const handleSwitchLocation = (location) => {
     if (location?.company?._id !== activeLocation?.company?._id) {
       setActiveLocation(location);
@@ -160,7 +160,12 @@ function MobileBar() {
             <img src={Logo} alt="" />
           </span>
         </div>
-        <hr style={{border:'1px solid rgba(217, 217, 217, 0.34)',marginTop:'1px'}} />
+        <hr
+          style={{
+            border: "1px solid rgba(217, 217, 217, 0.34)",
+            marginTop: "1px",
+          }}
+        />
         <Box
           sx={{
             height: "65vh",
@@ -204,7 +209,7 @@ function MobileBar() {
                       display: "block",
                       textOverflow: "ellipsis",
                       overflow: "hidden",
-                      textTransform: "capitalize"
+                      textTransform: "capitalize",
                     }}
                   >
                     {activeLocation?.company?.name}
@@ -224,7 +229,10 @@ function MobileBar() {
                 paddingY: "10px",
                 textTransform: "capitalize",
                 backgroundColor:
-                location.pathname.includes("/projects") || location.pathname === '/' ? "#8477da" : "transprent",
+                  location.pathname.includes("/projects") ||
+                  location.pathname === "/"
+                    ? "#8477da"
+                    : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
@@ -251,8 +259,9 @@ function MobileBar() {
                 marginY: 1,
                 paddingY: "10px",
                 textTransform: "capitalize",
-                backgroundColor:
-                location.pathname.includes("/estimates") ? "#8477da" : "transprent",
+                backgroundColor: location.pathname.includes("/estimates")
+                  ? "#8477da"
+                  : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
@@ -281,7 +290,7 @@ function MobileBar() {
                 textTransform: "capitalize",
                 fontSize: "16px",
                 backgroundColor:
-                location.pathname === "/customers" ? "#8477da" : "transprent",
+                  location.pathname === "/customers" ? "#8477da" : "transprent",
                 ":hover": {
                   backgroundColor: "#8477da",
                 },
@@ -360,7 +369,7 @@ function MobileBar() {
           </Tooltip>
         </Box>
 
-        <div className="bottom" style={{opacity:0}}>
+        <div className="bottom" style={{ opacity: 0 }}>
           <div className="UserIcon">
             <DefaultImage
               image={decodedToken?.image}
@@ -392,7 +401,7 @@ function MobileBar() {
               </Box>
             </Tooltip>
           </Box>
-        </div> 
+        </div>
       </Box>
     </Box>
   );
@@ -434,7 +443,7 @@ function MobileBar() {
                 </span>
               </div>
               <div>
-     <NotificationButton  />
+                <NotificationButton />
               </div>
             </Box>
           </Toolbar>
@@ -474,9 +483,9 @@ function MobileBar() {
               display: { xs: "none", sm: "block" },
               "& .MuiDrawer-paper": {
                 boxSizing: "border-box",
-                width: '304px',
+                width: "304px",
                 overflowX: "hidden",
-                backgroundColor:'#100D24',
+                backgroundColor: "#100D24",
               },
             }}
             open
@@ -493,7 +502,6 @@ function MobileBar() {
         isSwitching={isSwitchingLocation}
         handleBack={handleBacktoStaffLocation}
       />
-
       {/* <Popover
         open={Boolean(anchorEl)}
         anchorEl={anchorEl}

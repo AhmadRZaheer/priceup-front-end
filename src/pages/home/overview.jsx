@@ -7,6 +7,7 @@ import Estimates from "@/components/Estimates";
 import { parseJwt } from "@/components/ProtectedRoute/authVerify";
 import { Box } from "@mui/material";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const Overview = () => {
   const { data, refetch } = useFetchDataEstimateCard();
@@ -19,7 +20,8 @@ const Overview = () => {
     <>
     <TopBar/>
     <div className="overview">
-      <Sidebar />
+      {/* <Sidebar /> */}
+      <CommonSideBar/>
       <Box
         className="overviewContainer"
         sx={{ marginTop: { xs: "50px", sm: "0px" } }}

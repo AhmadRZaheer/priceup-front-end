@@ -6,6 +6,7 @@ import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { Box, useMediaQuery } from "@mui/material";
 import TopBar from "@/components/TopBar";
 import ProjectInfoComponent from "@/components/Projects/Info";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const ProjectCreate = () => {
     const isMobile = useMediaQuery("(max-width:600px)");
@@ -14,7 +15,8 @@ const ProjectCreate = () => {
         <>
             <TopBar />
             <div className="main-wrapper">
-                {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
+                {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+                <CommonSideBar />
                 <Box className="econtent-wrapper" sx={{ px: { sm: 2, xs: 1 } }}>
                     <ProjectInfoComponent />
                 </Box>

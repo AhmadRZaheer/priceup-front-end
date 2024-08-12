@@ -7,6 +7,7 @@ import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const Customers = () => {
   const decodedToken = getDecryptedToken();
@@ -14,7 +15,8 @@ const Customers = () => {
     <>
     <TopBar/>
     <div className="Customers">
-      {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
+      {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+      <CommonSideBar />
       <div className="customersContainer">
         {decodedToken?.role === userRoles.STAFF ? <CustomerTableForStaffView /> : <Customertable />}
       </div>
