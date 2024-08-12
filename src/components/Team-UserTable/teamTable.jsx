@@ -247,8 +247,8 @@ const TeamTable = () => {
                 sx={{ height: "40px" }}
                 // onChange={handleChange}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={true}>Active</MenuItem>
+                <MenuItem value={false}>inActive</MenuItem>
               </Select>
             </FormControl>
           </Box>

@@ -4,22 +4,22 @@ import GreenBg from "../../Assets/widgets/Rectangle-green.png";
 import RedBg from "../../Assets/widgets/Rectangle-red.png";
 import Purple from "../../Assets/widgets/Rectangle-purple.png";
 function WidgetCard({ varient = "blue", title, text }) {
+  const imageByVarient =
+    varient === "blue"
+      ? BlueBg
+      : varient === "green"
+      ? GreenBg
+      : varient === "red"
+      ? RedBg
+      : varient === "purple"
+      ? Purple
+      : BlueBg;
   return (
     <>
       <Box
         sx={{
           height: "121px",
-          backgroundImage: `url(${
-            varient === "blue"
-              ? BlueBg
-              : varient === "green"
-              ? GreenBg
-              : varient === "red"
-              ? RedBg
-              : varient === "purple"
-              ? Purple
-              : BlueBg
-          })`,
+          backgroundImage: `url(${imageByVarient})`,
           backgroundRepeat: "no-repeat",
           color: "white",
           padding: "20px",

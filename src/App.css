@@ -87,3 +87,8 @@ input {
   font-weight: 500;
   font-size: 14px;
 }
+.box_disaled {
+  background-color: #f0f0f0;
+  pointer-events: none; /* Disables all interactions */
+  opacity: 0.5; /* Optional: Makes the box look disabled */
+}

@@ -145,7 +145,7 @@ const EnterLabelModal = ({ handleClose, open, estimateConfig, estimateCategory, 
                             }}
                             variant="contained"
                         >
-                            {estimateCreateLoading ? <CircularProgress /> : 'Save Estimate'}
+                            {estimateCreateLoading ? <CircularProgress /> : 'Submit'}
                         </Button>
                     </Box>
                 </form>
