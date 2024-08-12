@@ -36,6 +36,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuSigleItem from "./MenuSigleItem";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
+import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 
 const AdminSideBar = () => {
   const { data: AdminData, refetch } = useFetchDataAdmin();
@@ -63,25 +64,69 @@ const AdminSideBar = () => {
     data: useTokenBackSuperAdmin,
     isSuccess: switchedBackSuperAdmin,
   } = useBackToSuperAdmin();
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [expandShowerAccordian, setExpandShowerAccordian] = useState(false);
   const [expandMirrorAccordian, setExpandMirrorAccordian] = useState(false);
   const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
-  const dispatch = useDispatch();
-  const Logout = () => {
-    dispatch(logoutHandler());
-    window.location.href = "/login";
-  };
+  // const dispatch = useDispatch();
+  // const Logout = () => {
+  //   dispatch(logoutHandler());
+  //   window.location.href = "/login";
+  // };
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
 
   const handleSeeLocationsClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleClosePopup = () => {
+    setAnchorEl(null);
+  };
+
   const [activeLocation, setActiveLocation] =
     useState(null); /** Added for branch PD-28 */
+
+  const handleAdminNameClick = (admin) => {
+    setActiveLocation(admin);
+    switchLocationSuperAdmin({
+      company_id: admin?.company?._id,
+      adminId: admin?.company?.user_id,
+    });
+  };
+  const handleCustomUserClick = async (companyId) => {
+    if (!companyId || !decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (companyId !== decodedToken.company_id) {
+      await switchLocationUser(companyId);
+      console.log("user changed");
+    }
+  };
+  const handleBackCustomAdminClick = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      await backRefetch();
+      console.log("user backed");
+    }
+  };
+  const handleBackToSuperAdmin = async () => {
+    if (!decodedToken) {
+      console.error("Invalid user data or decoded token.");
+      return;
+    }
+    if (decodedToken.company_id) {
+      const superAdminReference = localStorage.getItem("userReference");
+      await backToSuperAdmin(superAdminReference);
+      console.log("user backed");
+    }
+  };
 
   useEffect(() => {
     refetch();
@@ -133,7 +178,7 @@ const AdminSideBar = () => {
       window.location.href = "/";
     }
   }, [switched, switchedBack, switchedBackSuperAdmin, switchedSuperAdmin]);
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  // const [mobileOpen, setMobileOpen] = React.useState(false);
 
   useEffect(() => {
     haveAccessSet();
@@ -192,7 +237,7 @@ const AdminSideBar = () => {
                   display: "flex",
                   borderRadius: 2,
                   background: "#000000",
-                  mt:1,
+                  mt: 1,
                   ":hover": {
                     background: "#000000",
                     backgroundColor: "#000000",
@@ -237,7 +282,7 @@ const AdminSideBar = () => {
                 display: "flex",
                 borderRadius: 2,
                 background: "#000000",
-                mt:1,
+                mt: 1,
                 ":hover": {
                   background: "#000000",
                   backgroundColor: "#000000",
@@ -373,7 +418,7 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform:'rotate(90deg)' }} />
+                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
                 <Typography sx={{ pl: 1 }}>Showers</Typography>
               </AccordionSummary>
               <AccordionDetails
@@ -387,7 +432,7 @@ const AdminSideBar = () => {
                 <div className="center">
                   <ul>
                     <MenuSigleItem link="/hardware">
-                    <DevicesFoldOutlinedIcon sx={{ mr: 1 }} />
+                      <DevicesFoldOutlinedIcon sx={{ mr: 1 }} />
                       <span>Hardwares</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/finishes">
@@ -395,15 +440,15 @@ const AdminSideBar = () => {
                       <span>Finishes</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/glass-types">
-                    <WindowOutlinedIcon sx={{ mr: 1 }} />
+                      <WindowOutlinedIcon sx={{ mr: 1 }} />
                       <span>Glass Types</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/glass-addons">
-                    <WindowOutlinedIcon sx={{ mr: 1 }} />
+                      <WindowOutlinedIcon sx={{ mr: 1 }} />
                       <span>Glass Addons</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/layouts">
-                    <WindowOutlinedIcon sx={{ mr: 1 }} />
+                      <WindowOutlinedIcon sx={{ mr: 1 }} />
                       <span>Layouts</span>
                     </MenuSigleItem>
                   </ul>
@@ -456,7 +501,7 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-               <ViewStreamOutlined sx={{ transform:'rotate(90deg)' }} />
+                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
                 <Typography sx={{ pl: 1 }}>Mirrors</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
@@ -471,11 +516,11 @@ const AdminSideBar = () => {
                       <span>Glass Addons</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/mirrors/edge-works">
-                    <WindowOutlinedIcon sx={{ mr: 1 }} />
+                      <WindowOutlinedIcon sx={{ mr: 1 }} />
                       <span>Edge Works</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/mirrors/glass-types">
-                    <WindowOutlinedIcon sx={{ mr: 1 }} />
+                      <WindowOutlinedIcon sx={{ mr: 1 }} />
                       <span>Glass Types</span>
                     </MenuSigleItem>
                   </ul>
@@ -497,6 +542,27 @@ const AdminSideBar = () => {
           </ul>
         </div>
       </Box>
+
+      {decodedToken.role === userRoles.CUSTOM_ADMIN ? (
+        <SwitchLocationPopup
+          anchorEl={anchorEl}
+          data={haveAccessData}
+          handleClosePopup={handleClosePopup}
+          handleUserClick={handleCustomUserClick}
+          isSwitching={isSwitching}
+          handleBack={handleBackCustomAdminClick}
+        />
+      ) : (
+        <SwitchLocationPopup
+          anchorEl={anchorEl}
+          handleClosePopup={handleClosePopup}
+          handleUserClick={handleAdminNameClick}
+          isSwitching={isSwitchingSuperAdmin}
+          handleBack={handleBackToSuperAdmin}
+          data={AdminData}
+        />
+      )}
+
     </Box>
   );
 };
