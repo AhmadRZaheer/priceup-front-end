@@ -4,10 +4,12 @@ import {
   Button,
   IconButton,
   Typography,
-  Input,
   InputAdornment,
   CircularProgress,
-  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
@@ -17,39 +19,29 @@ import {
   useFetchAllStaff,
 } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
-import {
-  ArrowBack,
-  ArrowForward,
-  // DeleteOutlineOutlined,
-  // EditOutlined,
-} from "@mui/icons-material";
+import icon from "../../Assets/search-icon.svg";
+import { Add } from "@mui/icons-material";
 import { AdminColumns } from "@/utilities/DataGridColumns";
-// import { useFetchDataAdmin } from "../../utilities/ApiHooks/superAdmin";
-import { Search } from "@mui/icons-material";
 import LocationModel from "../Modal/locationModel";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
-// import { useDispatch } from "react-redux";
-// import { showSnackbar } from "../../redux/snackBarSlice";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
-import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
-// import NewPagination from "../Pagination";
+import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
+import CustomInputField from "../ui-components/CustomInput";
+import WidgetCard from "../ui-components/widgetCard";
 
 const SuperAdminTeam = () => {
   const {
     data: staffData,
     refetch: teamMemberRefetch,
     isFetching,
-    isLoading
   } = useFetchAllStaff();
   const { mutate: usedelete, isSuccess } = useDeleteStaff();
   // pagination state:
   const [page, setPage] = useState(1);
-  // const [inputPage, setInputPage] = useState("");
-  // const [isShowInput, setIsShowInput] = useState(false);
-  
+
   const [search, setSearch] = useState("");
   const [selectedRow, setSelectedRow] = useState(null);
   const openModel = (row) => {
@@ -67,14 +59,13 @@ const SuperAdminTeam = () => {
     setOpen(false);
   };
 
-
   const handeleDeleteStaff = () => {
     usedelete(Delete_id);
     handleClose();
   };
   useEffect(() => {
     teamMemberRefetch();
-  }, [isSuccess,page]);
+  }, [isSuccess, page]);
 
   const [open, setOpen] = useState(false);
   const [open2, setOpen2] = useState(false);
@@ -114,7 +105,7 @@ const SuperAdminTeam = () => {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
               }}
-              color="#667085"
+              className="new-table-text"
             >
               {matchingLocationNames.join(", ") || "Not added to any location"}
             </Typography>
@@ -129,11 +120,11 @@ const SuperAdminTeam = () => {
       flex: 0.5,
       renderCell: (params) => {
         return (
-          <TableRow
-            row={params.row}
-            refetch={teamMemberRefetch}
-            type={"superAdminTeam"}
-          />
+          <div
+            className={params.row.status ? "status-active" : "status-inActive"}
+          >
+            {params.row.status ? "Active" : "inActive"}
+          </div>
         );
       },
     },
@@ -158,27 +149,33 @@ const SuperAdminTeam = () => {
 
     {
       field: "Action",
-      flex: 0.4,
+      flex: 0.8,
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
         console.log(params, "id");
         const id = params.row._id;
 
         return (
-          <>
-            <IconButton
-              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-              onClick={() => handleOpen(id)}
-            >
-              <img src={DeleteIcon} alt="delete icon" />
-            </IconButton>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <TableRow
+              row={params.row}
+              refetch={teamMemberRefetch}
+              type={"superAdminTeam"}
+            />
+
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
               onClick={() => handleOpenEdit(params.row)}
             >
               <img src={EditIcon} alt="EDIT icon" />
             </IconButton>
-          </>
+            <IconButton
+              sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
+              onClick={() => handleOpen(id)}
+            >
+              <img src={DeleteIcon} alt="delete icon" />
+            </IconButton>
+          </div>
         );
       },
     },
@@ -189,44 +186,148 @@ const SuperAdminTeam = () => {
 
   return (
     <>
-      <Box sx={{  width: "100%", m: "auto" }}>
-        <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold",p:'88px 20px 20px 20px !important' }}>
-          Users
-        </Typography>
+      <Box sx={{ width: "100%", m: "auto" }}>
         <Box
           sx={{
-            m: 3,
-            border: "1px solid #EAECF0",
-            borderRadius: "8px",
+            p: "92px 20px 20px 30px",
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>
-            <Typography sx={{ ml: 2, fontSize: 24, fontWeight: "bold" }}>
-              Users
-            </Typography>
-            <TextField
-              placeholder="Search by Name"
-              variant="standard"
-              fullWidth
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+          <Box>
+            <Typography
               sx={{
-                mb: 2,
-                width: "20%",
-                marginLeft: "30px",
-                ".MuiInputBase-root:after": {
-                  border: "1px solid #8477DA",
-                },
+                fontSize: 24,
+                fontWeight: 600,
               }}
+            >
+              User Management
+            </Typography>
+            <Typography
+              sx={{
+                color: "rgba(33, 37, 40, 1)",
+                fontSize: "16px",
+                fontWeight: 600,
+              }}
+            >
+              Add, edit and manage your Users.
+            </Typography>
+          </Box>
+          <Box>
+            <Button
+              fullWidth
+              variant="contained"
+              // onClick={() => setOpen(true)}
+              sx={{
+                backgroundColor: "#8477DA",
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 2,
+                fontSize: 17,
+                padding: 1,
+
+                px: 2,
+              }}
+            >
+              <Add color="white" sx={{ mr: 1 }} />
+              Add New User
+            </Button>
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", gap: 2, px: 3 }}>
+          {[
+            { title: "Total Users", text: "40", variant: "blue" },
+            { title: "Users", text: "34", variant: "red" },
+            { title: "Admins", text: "15", variant: "green" },
+            { title: "Super-Admins", text: "01", variant: "purple" },
+          ].map((item) => (
+            <WidgetCard
+              text={item.text}
+              title={item.title}
+              varient={item.variant}
+            />
+          ))}
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            px: 3,
+            my: 2,
+          }}
+        >
+          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+            Users
+          </Typography>
+          {/* <TextField
+            placeholder="Search by Name"
+            variant="outlined"
+            fullWidth
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            sx={{
+              mb: 2,
+              width: "20%",
+              marginLeft: "30px",
+              ".MuiInputBase-root:after": {
+                border: "1px solid #8477DA",
+              },
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">
+                  <Search sx={{ color: "#8477DA" }} />
+                </InputAdornment>
+              ),
+            }}
+          /> */}
+          <Box sx={{ display: "flex", gap: 2 }}>
+            <CustomInputField
+              id="input-with-icon-textfield"
+              placeholder="Search by User Name"
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <Search sx={{ color: "#8477DA" }} />
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <img src={icon} alt="search input" />
                   </InputAdornment>
                 ),
               }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
+            <FormControl
+              sx={{ width: "152px" }}
+              size="small"
+              className="custom-textfield"
+            >
+              <InputLabel id="demo-select-small-label" className="input-label">
+                Status
+              </InputLabel>
+              <Select
+                // value={age}
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                label="Status"
+                size="small"
+                sx={{ height: "40px" }}
+                // onChange={handleChange}
+              >
+                <MenuItem value={"active"}>Active</MenuItem>
+                <MenuItem value={"inActive"}>inActive</MenuItem>
+              </Select>
+            </FormControl>
           </Box>
+        </Box>
+        <Box
+          sx={{
+            mx: 3,
+            border: "1px solid rgba(212, 219, 223, 1)",
+            borderRadius: "8px",
+            overflow: "hidden",
+          }}
+        >
           {isFetching ? (
             <Box
               sx={{
@@ -262,17 +363,23 @@ const SuperAdminTeam = () => {
                     page={page}
                     pageSize={itemsPerPage}
                     rowCount={filteredData?.length}
-                    sx={{ width: "100%" }}
+                    sx={{
+                      width: "100%",
+                    }}
                     hideFooter
+                  disableColumnMenu
+                  pagination={false}
                   />
-                  <Box sx={{width:'100%'}}>
-                   <Pagination
-                    totalRecords={filteredData.length ? filteredData.length : 0}
-                    itemsPerPage={itemsPerPage}
-                    page={page}
-                    setPage={setPage}
-                  />
-                 </Box>
+                  <Box sx={{ width: "100%" }}>
+                    <Pagination
+                      totalRecords={
+                        filteredData.length ? filteredData.length : 0
+                      }
+                      itemsPerPage={itemsPerPage}
+                      page={page}
+                      setPage={setPage}
+                    />
+                  </Box>
                   {/* <NewPagination
                     totalRecords={filteredData.length ? filteredData.length : 0}
                     setIsShowInput={setIsShowInput}
@@ -310,7 +417,7 @@ const SuperAdminTeam = () => {
           close={() => {
             setOpen2(false);
           }}
-          data={edit2}
+          SelectedData={edit2}
           isEdit={isEdit2}
           refetch={teamMemberRefetch}
         />

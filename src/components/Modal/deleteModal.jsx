@@ -1,11 +1,14 @@
+import { CloseTwoTone } from "@mui/icons-material";
 import {
   Box,
   Button,
   CircularProgress,
+  IconButton,
   Modal,
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import DeleteIcon from "../../Assets/delete-full icon.svg";
 
 function DeleteModal({ open, close, handleDelete, isLoading }) {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -14,7 +17,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: isMobile ? 200 : 400,
+    width: isMobile ? 200 : 560,
     bgcolor: "background.paper",
     border: "2px solid white",
     boxShadow: 24,
@@ -25,31 +28,75 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
     <>
       <Modal open={open} onClose={close}>
         <Box sx={style}>
-          <Typography>Are you sure you want to perform this action?</Typography>
-          <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box>
+              <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
+                Delete
+              </Typography>
+              <Typography sx={{ color: "#646669", marginTop: 0.5 }}>
+                Edit your details.
+              </Typography>
+            </Box>
+            <Box>
+              <IconButton onClick={close}>
+                <CloseTwoTone />
+              </IconButton>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 0.4,
+              p: 2,
+              background: "#f3f5f6",
+              borderRadius: "8px",
+              mt: 3,
+            }}
+          >
+            <Box>
+              <img src={DeleteIcon} alt="delete icon" />
+            </Box>
+            <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
+              Delete user
+            </Typography>
+            <Typography
+              sx={{ fontSize: "16px", fontWeight: 600, color: "#587d9f" }}
+            >
+              Are you sure you want to delete user?{" "}
+            </Typography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              mt: 3,
+              justifyContent: "end",
+            }}
+          >
             <Button
-              onClick={close}
+              onClick={handleDelete}
               variant="outlined"
               sx={{
                 border: "1px solid #D0D5DD",
-                width: "100%",
                 color: "#344054",
                 ":hover": {
                   border: "1px solid #D0D5DD",
                 },
               }}
             >
-              Close
+              Yes, Delete it
             </Button>
             <Button
-              onClick={handleDelete}
+              onClick={close}
               variant="contained"
               sx={{
-                bgcolor: "#8477DA",
-                width: "100%",
+                bgcolor: "rgba(226, 42, 45, 1)",
                 color: "white",
                 ":hover": {
-                  bgcolor: "#8477DA",
+                  bgcolor: "rgba(226, 42, 45, 1)",
                 },
               }}
               disabled={isLoading}
@@ -63,7 +110,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
                   }}
                 />
               ) : (
-                "Delete"
+                "No, Keep it"
               )}
             </Button>
           </Box>

@@ -51,6 +51,42 @@ input {
   margin-bottom: 20px;
 }
 
+.user-cellWrap {
+  display: flex;
+  background-color: rgba(239, 242, 246, 1);
+  border-radius: 60px;
+  padding-right: 10px;
+  align-items: center;
+  gap: 10px;
+}
+.new-customerNameTable {
+  font-size: 14px;
+  font-weight: 500;
+}
+.new-userNameTable {
+  font-size: 14px;
+  font-weight: 500;
+}
+.new-table-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+.status-active {
+  color: rgba(132, 119, 218, 1);
+  background-color: #efecff;
+  border-radius: 70px;
+  padding: 6px 8px 6px 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
+.status-inActive {
+  color: rgba(93, 97, 100, 1);
+  background-color: #f3f5f6;
+  border-radius: 70px;
+  padding: 6px 8px 6px 8px;
+  font-weight: 500;
+  font-size: 14px;
+}
 .box_disaled {
   background-color: #f0f0f0;
   pointer-events: none; /* Disables all interactions */
