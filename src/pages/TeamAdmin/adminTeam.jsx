@@ -3,11 +3,13 @@ import "./team.scss";
 import SuperSidebar from "../../components/SuperSidebar/superSidebar";
 import SuperAdminTeam from "../../components/SuperAdmin/superAdminTeam-User";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 const AdminTeam = () => {
   return (
     <>
       <div className="Team">
-        <SuperSidebar />
+        {/* <SuperSidebar /> */}
+        <CommonSideBar/>
         <TopBar/>
         <div className="teamContainer">
           <SuperAdminTeam />

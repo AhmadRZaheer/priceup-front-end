@@ -7,6 +7,7 @@ import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { Box } from "@mui/material";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const Projects = () => {
   const decodedToken = getDecryptedToken();
@@ -14,7 +15,8 @@ const Projects = () => {
     <>
       <TopBar />
       <div className="main-wrapper">
-        {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
+        {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+        <CommonSideBar />
         <Box className="econtent-wrapper" sx={{ pl: { sm: '45px', xs: '0px' } }}>
           <ProjectsList />
         </Box>

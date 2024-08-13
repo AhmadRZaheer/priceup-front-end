@@ -3,12 +3,14 @@ import Sidebar from "@/components/Sidebar/sidebar";
 import './style.scss';
 import MirrorsHardwareComponent from '@/components/Mirrors/Hardwares';
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 export const MirrorsHardware = () => {
     return (
     <>
     <TopBar/>
      <Box className="main-wrapper">
-        <Sidebar />
+        {/* <Sidebar /> */}
+        <CommonSideBar/>
         <Box className="mcontent-wrapper">
             <MirrorsHardwareComponent />
         </Box>

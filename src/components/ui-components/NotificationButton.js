@@ -18,10 +18,13 @@ const NotificationButton = () => {
         aria-label="notification"
         onClick={toggleDrawer(!state)}
         sx={{
-          background: state ? "#8477DA" : "transparent",
+          // background: state ? "#8477DA" : "transparent",
           mr: 1,
           ":hover": {
-            background: "#8477DA",
+            ".notificationIcon": {
+              color: "#8477DA",
+            },
+            // background: "#8477DA",
           },
         }}
       >
@@ -40,7 +43,16 @@ const NotificationButton = () => {
             },
           }}
         >
-          <NotificationsNoneIcon sx={{ color: "#FFFF", fontSize: "1.8rem" }} />
+          <NotificationsNoneIcon
+            className="notificationIcon"
+            sx={{
+              color: state ? "#8477DA" : "#5D6164",
+              fontSize: "1.8rem",
+              // ":hover": {
+              //   color: "#8477DA",
+              // },
+            }}
+          />
         </Badge>
       </IconButton>
       <NotificationDrawer state={state} toggleDrawer={toggleDrawer} />
