@@ -270,6 +270,7 @@ const Super_SuperAdminsTable = () => {
         close={() => {
           setDeleteModalOpen(false);
         }}
+        text={"Super Admin"}
         isLoading={loaderForDelete}
         handleDelete={handleDeleteAdmin}
       />

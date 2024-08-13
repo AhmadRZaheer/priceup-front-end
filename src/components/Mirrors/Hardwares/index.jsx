@@ -227,6 +227,7 @@ const MirrorsHardwareComponent = () => {
 
             <DeleteModal
                 open={deleteModalOpen}
+                text={"Hardware"}
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteHardwareLoading}
                 handleDelete={handleHardwareDelete}

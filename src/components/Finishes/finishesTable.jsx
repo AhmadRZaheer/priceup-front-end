@@ -249,6 +249,7 @@ const FinishesTable = () => {
         <Box />
         <DeleteModal
           open={deleteModalOpen}
+          text={"Finishes"}
           close={() => {
             setDeleteModalOpen(false);
           }}

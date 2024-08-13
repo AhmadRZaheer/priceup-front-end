@@ -630,6 +630,7 @@ const SuperAdminTable = () => {
       </div>
       <DeleteModal
         open={DeleteOpen}
+        text={"locations"}
         close={handleCloseDelete}
         isLoading={deleteisLoading}
         handleDelete={handleDeleteUser}

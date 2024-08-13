@@ -16,17 +16,20 @@ import DeleteModal from "../Modal/deleteModal";
 
 const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord,setDeleteRecord] = useState(null);
+  const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
-  }
+  };
   const [open, setOpen] = React.useState(false);
   const handleClose = () => {
     setOpen(false);
   };
-  const { mutate: deleteHardware, isSuccess: deleteSuccess, isLoading: LoadingForDelete } =
-    useDeleteHardwares();
+  const {
+    mutate: deleteHardware,
+    isSuccess: deleteSuccess,
+    isLoading: LoadingForDelete,
+  } = useDeleteHardwares();
   const handleHardwareDelete = () => {
     deleteHardware(deleteRecord);
     setDeleteModalOpen(false);
@@ -47,7 +50,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
     finishesData: null,
     id: null,
   });
-  
+
   const handleOpenUpdate = (id) => {
     setIdUpdate({ finishesData: UpdateValue, id: id });
     localStorage.setItem("scrollToIndex", id);
@@ -115,8 +118,11 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
         ))}
       </Box>
       <DeleteModal
+        text={"Hardware"}
         open={deleteModalOpen}
-        close={()=>{setDeleteModalOpen(false)}}
+        close={() => {
+          setDeleteModalOpen(false);
+        }}
         isLoading={LoadingForDelete}
         handleDelete={handleHardwareDelete}
       />
