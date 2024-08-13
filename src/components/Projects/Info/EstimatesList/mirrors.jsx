@@ -109,7 +109,7 @@ const MirrorEstimatesList = ({ projectId }) => {
         debouncedRefetch();
     };
     return (<>
-        <Box
+        {/* <Box
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -120,8 +120,8 @@ const MirrorEstimatesList = ({ projectId }) => {
             <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                 Estimates
             </Typography>
-            {/* Search input field */}
-            <TextField
+            Search input field */}
+           {/*  <TextField
                 placeholder="Search by Customer Name"
                 value={search}
                 variant="standard"
@@ -157,7 +157,7 @@ const MirrorEstimatesList = ({ projectId }) => {
                 <Add sx={{ color: "white" }} />
                 Add
             </IconButton>
-        </Box>
+        </Box> */}
         {isLoading ? (
             <Box
                 sx={{

@@ -48,14 +48,14 @@ function SelectMenu_Status({ status, quoteId }) {
               width: "fit-content",
               bgcolor:
                 selectedStatus === "pending"
-                  ? "#dfeeff"
+                  ? "#FCDEC0"
                   : selectedStatus === "approved"
                   ? "#daf4e9"
                   : "#f6d8d9",
               borderRadius: "16px",
               color:
                 selectedStatus === "pending"
-                  ? "#1d85ff"
+                  ? "#503000"
                   : selectedStatus === "approved"
                   ? "#3ac688"
                   : "#d22b2d",
@@ -68,7 +68,7 @@ function SelectMenu_Status({ status, quoteId }) {
               alignItems: "center",
             }}
           >
-            <Box
+            {/* <Box
               sx={{
                 width: "6px",
                 height: "6px",
@@ -81,8 +81,8 @@ function SelectMenu_Status({ status, quoteId }) {
                 borderRadius: "100%",
                 mt: 0.2,
               }}
-            />
-            {selectedStatus}
+            /> */}
+            {selectedStatus?.charAt(0).toUpperCase() + selectedStatus?.slice(1)}
           </Box>
           <ArrowDropDown
             sx={{
@@ -125,14 +125,14 @@ function SelectMenu_Status({ status, quoteId }) {
                 width: "fit-content",
                 bgcolor:
                   statusItem.value === "pending"
-                    ? "#dfeeff"
+                    ? "#FCDEC0"
                     : statusItem.value === "approved"
                     ? "#daf4e9"
                     : "#f6d8d9",
                 borderRadius: "16px",
                 color:
                   statusItem.value === "pending"
-                    ? "#1d85ff"
+                    ? "#503000"
                     : statusItem.value === "approved"
                     ? "#3ac688"
                     : "#d22b2d",
@@ -145,7 +145,7 @@ function SelectMenu_Status({ status, quoteId }) {
                 alignItems: "center",
               }}
             >
-              <Box
+              {/* <Box
                 sx={{
                   width: "6px",
                   height: "6px",
@@ -158,7 +158,7 @@ function SelectMenu_Status({ status, quoteId }) {
                   borderRadius: "100%",
                   mt: 0.2,
                 }}
-              />
+              /> */}
               {statusItem.label}
             </Box>
           </MenuItem>

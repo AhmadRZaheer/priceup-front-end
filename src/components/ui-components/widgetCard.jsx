@@ -3,7 +3,11 @@ import BlueBg from "../../Assets/widgets/Rectangle-blue.png";
 import GreenBg from "../../Assets/widgets/Rectangle-green.png";
 import RedBg from "../../Assets/widgets/Rectangle-red.png";
 import Purple from "../../Assets/widgets/Rectangle-purple.png";
-function WidgetCard({ varient = "blue", title, text }) {
+import LargeRed from "../../Assets/widgets/LargeRed.png";
+import LargeGreen from "../../Assets/widgets/LargeGreen.png";
+import LargeBlue from "../../Assets/widgets/LargeBlue.png";
+
+function WidgetCard({type=1, varient = "blue", title, text,width='336.9px' }) {
   const imageByVarient =
     varient === "blue"
       ? BlueBg
@@ -14,17 +18,27 @@ function WidgetCard({ varient = "blue", title, text }) {
       : varient === "purple"
       ? Purple
       : BlueBg;
+
+  const largeImageByVarient =
+    varient === "blue"
+      ? LargeBlue
+      : varient === "green"
+      ? LargeGreen
+      : varient === "red"
+      ? LargeRed
+      : BlueBg;
+
   return (
     <>
       <Box
         sx={{
           height: "121px",
-          backgroundImage: `url(${imageByVarient})`,
+          backgroundImage: `url(${type === 1 ? imageByVarient : largeImageByVarient})`,
           backgroundRepeat: "no-repeat",
           color: "white",
           padding: "20px",
           backgroundSize: "contain",
-          width: "336.9px",
+          width: type === 1 ? '336.9px' : "450.54px",
           overflow: "hidden", // Ensures no content spills out of the box
           boxSizing: "border-box",
         }}

@@ -15,7 +15,7 @@ const Projects = () => {
       <TopBar />
       <div className="main-wrapper">
         {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
-        <Box className="econtent-wrapper" sx={{ pl: { sm: '25px', xs: '0px' } }}>
+        <Box className="econtent-wrapper" sx={{ pl: { sm: '45px', xs: '0px' } }}>
           <ProjectsList />
         </Box>
       </div>

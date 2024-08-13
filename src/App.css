@@ -92,3 +92,10 @@ input {
   pointer-events: none; /* Disables all interactions */
   opacity: 0.5; /* Optional: Makes the box look disabled */
 }
+.ProjectsColumnsHeaderClass{
+  background-color: #EFF2F6;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 700 !important;
+  line-height: 21px;
+}

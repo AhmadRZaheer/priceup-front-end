@@ -15,13 +15,38 @@ export const EstimatesColumns = (
 ) => {
   return [
     {
-      field: "Creator Name",
+      field: "Creator",
       headerClassName: "customHeaderClass",
-      flex: 1.5,
+      flex: 1.7,
       renderCell: (params) => {
         return (
           <>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box className="user-cellWrap" sx={{pl:1.2,pr:2,py:0.3}}>
+              <div className="customerImg">
+                <DefaultImage
+                  image={params?.row?.creatorData?.image}
+                  name={params?.row?.creatorData?.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <div className="new-userNameTable">
+                  <Typography className="new-userNameTable" sx={{color:'#000000'}}>{params?.row?.creatorData?.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      fontWeight:500,
+                      p: 0,
+                      mt: -0.4,
+                      color: "#5D6164",
+                    }}
+                  >
+                    {params?.row?.creatorData?.email}
+                  </Typography>
+                </div>
+              </div>
+            </Box>
+            {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
                 sx={{
                   width: 40,
@@ -48,44 +73,69 @@ export const EstimatesColumns = (
                   {params?.row?.creatorData?.email}
                 </Typography>
               </Box>
+            </Box> */}
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer",
+      headerClassName: "customHeaderClass",
+      flex: 1.7,
+      renderCell: (params) => {
+        return (
+          <>
+           <Box className="user-cellWrap" sx={{pl:1.2,pr:2,py:0.3}}>
+              <div className="customerImg">
+                <DefaultImage
+                  image={params?.row?.customerData?.image}
+                  name={params?.row?.customerData?.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <div className="new-userNameTable">
+                  <Typography className="new-userNameTable" sx={{color:'#000000'}}>{params?.row?.customerData?.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      fontWeight:500,
+                      p: 0,
+                      mt: -0.4,
+                      color: "#5D6164",
+                    }}
+                  >
+                    {params?.row?.customerData?.email}
+                  </Typography>
+                </div>
+              </div>
             </Box>
-          </>
-        );
-      },
-    },
-    {
-      field: "Customer Name",
-      headerClassName: "customHeaderClass",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <>
-            <Typography sx={{ py: 1, color: "#667085" }}>
+            {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
-            </Typography>
+            </Typography> */}
           </>
         );
       },
     },
-    {
-      field: "Customer Email",
-      headerClassName: "customHeaderClass",
-      flex: 1.5,
-      renderCell: (params) => {
-        return (
-          <>
-            <Typography sx={{ py: 1, color: "#667085" }}>
-              {params?.row?.customerData?.email}
-            </Typography>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: "Customer Email",
+    //   headerClassName: "customHeaderClass",
+    //   flex: 1.5,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Typography sx={{ py: 1, color: "#667085" }}>
+    //           {params?.row?.customerData?.email}
+    //         </Typography>
+    //       </>
+    //     );
+    //   },
+    // },
 
     {
       field: "Estimate Category",
       headerClassName: "customHeaderClass",
-      flex: 1.5,
+      flex: 1.2,
       renderCell: (params) => {
         return (
           <>
@@ -102,7 +152,7 @@ export const EstimatesColumns = (
     {
       field: "Layout",
       headerClassName: "customHeaderClass",
-      flex: 1.5,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -147,7 +197,7 @@ export const EstimatesColumns = (
     {
       field: "Status",
       headerClassName: "customHeaderClass",
-      flex: 0.8,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -177,11 +227,161 @@ export const EstimatesColumns = (
   ];
 };
 
-export const ProjectsColumns = (dropdownActions) => {
+// export const ProjectsColumns = (dropdownActions) => {
+//   return [
+//     {
+//       field: "Project Name",
+//       headerClassName: "customHeaderClass",
+//       flex: 1,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography sx={{ py: 1, color: "#667085" }}>
+//               {params?.row?.name}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+//     {
+//       field: "Creator",
+//       headerClassName: "customHeaderClass",
+//       flex: 1.5,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Box sx={{ display: "flex", gap: 1 }}>
+//               <Box
+//                 sx={{
+//                   width: 40,
+//                   height: 40,
+//                   borderRadius: "100%",
+//                   overflow: "hidden",
+//                 }}
+//               >
+//                 <DefaultImage
+//                   image={params?.row?.creatorData?.image}
+//                   name={params?.row?.creatorData?.name}
+//                 />
+//               </Box>
+//               <Box>
+//                 <Typography>{params?.row?.creatorData?.name}</Typography>
+//                 <Typography
+//                   sx={{
+//                     fontSize: 13,
+//                     p: 0,
+//                     mt: -0.4,
+//                     color: "#667085",
+//                   }}
+//                 >
+//                   {params?.row?.creatorData?.email}
+//                 </Typography>
+//               </Box>
+//             </Box>
+//           </>
+//         );
+//       },
+//     },
+//     {
+//       field: "Customer Name",
+//       headerClassName: "customHeaderClass",
+//       flex: 1,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography sx={{ py: 1, color: "#667085" }}>
+//               {params?.row?.customerData?.name}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+//     {
+//       field: "Customer Email",
+//       headerClassName: "customHeaderClass",
+//       flex: 1.5,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography sx={{ py: 1, color: "#667085" }}>
+//               {params?.row?.customerData?.email}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+
+//     {
+//       field: "Location",
+//       headerClassName: "customHeaderClass",
+//       flex: 1.5,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography
+//               sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+//             >
+//               {params?.row?.addressData?.name}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+
+//     {
+//       field: "Date Created",
+//       headerClassName: "customHeaderClass",
+//       flex: 1,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
+//               {new Date(params?.row?.createdAt).toDateString()}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+//     {
+//       field: "Amount Quoted",
+//       headerClassName: "customHeaderClass",
+//       flex: 0.8,
+//       renderCell: (params) => {
+//         return (
+//           <>
+//             <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+//               ${params?.row?.totalAmountQuoted?.toFixed(2) || 0}
+//             </Typography>
+//           </>
+//         );
+//       },
+//     },
+//     {
+//       field: "Status",
+//       headerClassName: "customHeaderClass",
+//       flex: 0.8,
+//       renderCell: (params) => {
+//         return (
+//           <StatusChip variant={params?.row?.status} />
+//         );
+//       },
+//     },
+//     {
+//       field: "Action",
+//       headerClassName: "customHeaderClass",
+//       flex: 1,
+//       renderCell: (params) => {
+//         return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
+//       },
+//     },
+//   ];
+// };
+
+export const ProjectsColumns  = (dropdownActions) => {
   return [
     {
       field: "Project Name",
-      headerClassName: "customHeaderClass",
+      headerClassName: "ProjectsColumnsHeaderClass",
       flex: 1,
       renderCell: (params) => {
         return (
@@ -195,12 +395,38 @@ export const ProjectsColumns = (dropdownActions) => {
     },
     {
       field: "Creator",
-      headerClassName: "customHeaderClass",
-      flex: 1.5,
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1.7,
       renderCell: (params) => {
         return (
           <>
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box className="user-cellWrap" sx={{pl:1.2,pr:2,py:0.3}}>
+              <div className="customerImg">
+                <DefaultImage
+                  image={params?.row?.creatorData?.image}
+                  name={params?.row?.creatorData?.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <div className="new-userNameTable">
+                  <Typography className="new-userNameTable" sx={{color:'#000000'}}>{params?.row?.creatorData?.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      fontWeight:500,
+                      p: 0,
+                      mt: -0.4,
+                      color: "#5D6164",
+                    }}
+                  >
+                    {params?.row?.creatorData?.email}
+                  </Typography>
+                </div>
+              </div>
+            </Box>
+
+            {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
                 sx={{
                   width: 40,
@@ -227,44 +453,69 @@ export const ProjectsColumns = (dropdownActions) => {
                   {params?.row?.creatorData?.email}
                 </Typography>
               </Box>
+            </Box> */}
+          </>
+        );
+      },
+    },
+    {
+      field: "Customer",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1.7,
+      renderCell: (params) => {
+        return (
+          <>
+           <Box className="user-cellWrap" sx={{pl:1.2,pr:2,py:0.3}}>
+              <div className="customerImg">
+                <DefaultImage
+                  image={params?.row?.customerData?.image}
+                  name={params?.row?.customerData?.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <div className="new-userNameTable">
+                  <Typography className="new-userNameTable" sx={{color:'#000000'}}>{params?.row?.customerData?.name}</Typography>
+                  <Typography
+                    sx={{
+                      fontSize: 12,
+                      fontWeight:500,
+                      p: 0,
+                      mt: -0.4,
+                      color: "#5D6164",
+                    }}
+                  >
+                    {params?.row?.customerData?.email}
+                  </Typography>
+                </div>
+              </div>
             </Box>
-          </>
-        );
-      },
-    },
-    {
-      field: "Customer Name",
-      headerClassName: "customHeaderClass",
-      flex: 1,
-      renderCell: (params) => {
-        return (
-          <>
-            <Typography sx={{ py: 1, color: "#667085" }}>
+            {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
-            </Typography>
+            </Typography> */}
           </>
         );
       },
     },
-    {
-      field: "Customer Email",
-      headerClassName: "customHeaderClass",
-      flex: 1.5,
-      renderCell: (params) => {
-        return (
-          <>
-            <Typography sx={{ py: 1, color: "#667085" }}>
-              {params?.row?.customerData?.email}
-            </Typography>
-          </>
-        );
-      },
-    },
+    // {
+    //   field: "Customer Email",
+    //   headerClassName: "customHeaderClass",
+    //   flex: 1.5,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Typography sx={{ py: 1, color: "#667085" }}>
+    //           {params?.row?.customerData?.email}
+    //         </Typography>
+    //       </>
+    //     );
+    //   },
+    // },
 
     {
       field: "Location",
-      headerClassName: "customHeaderClass",
-      flex: 1.5,
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
@@ -279,8 +530,8 @@ export const ProjectsColumns = (dropdownActions) => {
     },
 
     {
-      field: "Date Created",
-      headerClassName: "customHeaderClass",
+      field: "Created Date",
+      headerClassName: "ProjectsColumnsHeaderClass",
       flex: 1,
       renderCell: (params) => {
         return (
@@ -294,7 +545,7 @@ export const ProjectsColumns = (dropdownActions) => {
     },
     {
       field: "Amount Quoted",
-      headerClassName: "customHeaderClass",
+      headerClassName: "ProjectsColumnsHeaderClass",
       flex: 0.8,
       renderCell: (params) => {
         return (
@@ -308,17 +559,15 @@ export const ProjectsColumns = (dropdownActions) => {
     },
     {
       field: "Status",
-      headerClassName: "customHeaderClass",
+      headerClassName: "ProjectsColumnsHeaderClass",
       flex: 0.8,
       renderCell: (params) => {
-        return (
-          <StatusChip variant={params?.row?.status} />
-        );
+        return <StatusChip variant={params?.row?.status} />;
       },
     },
     {
       field: "Action",
-      headerClassName: "customHeaderClass",
+      headerClassName: "ProjectsColumnsHeaderClass",
       flex: 1,
       renderCell: (params) => {
         return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
@@ -337,7 +586,11 @@ export const teamColumns = [
       return (
         <div className="user-cellWrap">
           <div className="customerImg">
-            <DefaultImage image={params.row.image} name={params.row.name} type={5} />
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
           </div>
           <div className="new-customerNameTable">
             {params.row.name}
@@ -355,7 +608,7 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography  className="new-table-text">{params.row.email}</Typography>
+          <Typography className="new-table-text">{params.row.email}</Typography>
         </>
       );
     },
@@ -426,7 +679,11 @@ export const AdminColumns = [
       return (
         <div className="user-cellWrap">
           <div className="customerImg">
-            <DefaultImage image={params.row.image} name={params.row.name}  type={5}/>
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
           </div>
           <div className="new-customerNameTable">
             {params.row.name}

@@ -135,7 +135,7 @@ const ShowerEstimatesList = ({ projectId }) => {
         debouncedRefetch();
     };
     return (<>
-        <Box
+        {/* <Box
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -145,9 +145,9 @@ const ShowerEstimatesList = ({ projectId }) => {
         >
             <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                 Estimates
-            </Typography>
+            </Typography> */}
             {/* Search input field */}
-            <TextField
+            {/* <TextField
                 placeholder="Search by Customer Name"
                 value={search}
                 variant="standard"
@@ -183,7 +183,24 @@ const ShowerEstimatesList = ({ projectId }) => {
                 <Add sx={{ color: "white" }} />
                 Add
             </IconButton>
-        </Box>
+        </Box> */}
+        <IconButton
+                onClick={handleCreateQuote}
+                disabled={estimatesListFetching}
+                sx={{
+                    backgroundColor: "#8477DA",
+                    color: "white",
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    borderRadius: 1,
+                    padding: 1,
+                    fontSize: 16,
+                    height: 35,
+                }}
+            >
+                <Add sx={{ color: "white" }} />
+                Add
+            </IconButton>
+        
         {isLoading ? (
             <Box
                 sx={{

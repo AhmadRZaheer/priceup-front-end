@@ -173,6 +173,7 @@ export const MirrorDimensions = () => {
               fontSize: { xs: "24px", sm: "2.124rem" },
               textAlign: { xs: "start", sm: "center" },
               fontWeight: 500,
+              pl:3.5
             }}
             variant="h4"
           >

@@ -14,7 +14,7 @@ const EstimateLayouts = () => {
         <TopBar/>
           <div className="main-wrapper">
             {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
-            <div className="content-wrapper">
+            <div className="content-wrapper" style={{paddingLeft:'25px'}}>
                 <SelectLayout />
             </div>
         </div>
