@@ -10,8 +10,8 @@ import { backendURL } from "@/utilities/common";
 import { Add, Edit, Search } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
-import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+// import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
+// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
@@ -72,15 +72,15 @@ const MirrorEstimatesList = ({ projectId }) => {
     const handleIconButtonClick = (item) => {
         setStateForMirrorEstimate(item, dispatch, navigate);
     };
-    const handleCreateQuote = () => {
-        console.log('create quote');
-        dispatch(resetMirrorEstimateState());
-        dispatch(resetEstimateState());
-        dispatch(setMirrorProjectId(projectId));
-        dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-        dispatch(setEstimateState("create"));
-        navigate("/estimates/dimensions");
-    };
+    // const handleCreateQuote = () => {
+    //     console.log('create quote');
+    //     dispatch(resetMirrorEstimateState());
+    //     dispatch(resetEstimateState());
+    //     dispatch(setMirrorProjectId(projectId));
+    //     dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
+    //     dispatch(setEstimateState("create"));
+    //     navigate("/estimates/dimensions");
+    // };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {
             return estimatesList?.estimates;
@@ -109,7 +109,7 @@ const MirrorEstimatesList = ({ projectId }) => {
         debouncedRefetch();
     };
     return (<>
-        <Box
+        {/* <Box
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -120,8 +120,8 @@ const MirrorEstimatesList = ({ projectId }) => {
             <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                 Estimates
             </Typography>
-            {/* Search input field */}
-            <TextField
+            Search input field */}
+           {/*  <TextField
                 placeholder="Search by Customer Name"
                 value={search}
                 variant="standard"
@@ -157,7 +157,7 @@ const MirrorEstimatesList = ({ projectId }) => {
                 <Add sx={{ color: "white" }} />
                 Add
             </IconButton>
-        </Box>
+        </Box> */}
         {isLoading ? (
             <Box
                 sx={{

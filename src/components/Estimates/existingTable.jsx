@@ -185,7 +185,7 @@ export default function ExistingTable() {
   console.log(estimatesList, "estimatesList", estimatesListFetching)
   return (
     <>
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -194,9 +194,9 @@ export default function ExistingTable() {
       >
         <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
           Estimates
-        </Typography>
+        </Typography> */}
         {/* Search input field */}
-        <TextField
+        {/* <TextField
           placeholder="Search by Customer Name"
           value={search}
           variant="standard"
@@ -237,7 +237,8 @@ export default function ExistingTable() {
           />
           Add
         </IconButton>
-      </Box>
+      </Box> */}
+      
       {isLoading ? (
         <Box
           sx={{
@@ -276,6 +277,7 @@ export default function ExistingTable() {
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
             sx={{ width: "100%" }}
+            rowHeight={70.75}
             hideFooter
           />
           <Pagination

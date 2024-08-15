@@ -32,8 +32,7 @@ export const SelectCategory = () => {
     const selectedCategory = useSelector(getEstimateCategory);
     const handleBoxClick = (category) => {
         dispatch(setEstimateCategory(category));
-        dispatch(setEstimateState("create"));
-        
+        dispatch(setEstimateState("create"));        
     };
 
     useEffect(() => {

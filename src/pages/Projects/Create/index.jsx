@@ -17,7 +17,7 @@ const ProjectCreate = () => {
             <div className="main-wrapper">
                 {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
                 <CommonSideBar />
-                <Box className="econtent-wrapper" sx={{ px: { sm: 2, xs: 1 } }}>
+                <Box className="econtent-wrapper" sx={{  pr: { sm: 2, xs: 1 },pl:{ sm: 4, xs: 1 } }}>
                     <ProjectInfoComponent />
                 </Box>
             </div>
