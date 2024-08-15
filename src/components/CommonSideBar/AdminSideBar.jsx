@@ -345,7 +345,7 @@ const AdminSideBar = () => {
 
           <div className="center">
             <ul>
-              <MenuSigleItem link="/projects">
+              <MenuSigleItem link="/projects" >
                 <Description sx={{ mr: 1 }} />
                 <span>Projects</span>
               </MenuSigleItem>

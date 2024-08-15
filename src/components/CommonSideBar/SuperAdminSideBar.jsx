@@ -5,7 +5,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
 import { useDispatch } from "react-redux";
 import LagoutModal from "../Modal/logOut";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import TremIcon from "../../Assets/users.svg";
 import { FmdGoodOutlined } from "@mui/icons-material";
@@ -73,13 +73,14 @@ const SuperAdminSideBar = () => {
             className={` ${Boolean(anchorEl) ? "active" : ""}`}
             onClick={handleSeeLocationsClick}
           >
-            <IconButton
+            <Button
+            fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: 0.2 }}
+              sx={{ color: "#5D6164", padding: 0.2 ,justifyContent:'start',textTransform:'capitalize'}}
             >
               <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
               <span>See Locations</span>
-            </IconButton>
+            </Button>
           </li>
           <MenuSigleItem link='/admin' secondLink='/' >
           <FmdGoodOutlined sx={{ mr: "12px" }} />

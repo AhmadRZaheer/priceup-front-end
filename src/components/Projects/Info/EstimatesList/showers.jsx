@@ -9,7 +9,7 @@ import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { backendURL, calculateTotal } from "@/utilities/common";
 import { Add, Edit, Search } from "@mui/icons-material";
-import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { getListData, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -99,14 +99,14 @@ const ShowerEstimatesList = ({ projectId }) => {
     const handleIconButtonClick = (item) => {
         setStateForShowerEstimate(item, dispatch, navigate);
     };
-    const handleCreateQuote = () => {
-        dispatch(resetEstimateState());
-        dispatch(resetState());
-        dispatch(setShowerProjectId(projectId));
-        dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-        dispatch(setEstimateState("create"));
-        navigate("/estimates/layouts");
-    };
+    // const handleCreateQuote = () => {
+    //     dispatch(resetEstimateState());
+    //     dispatch(resetState());
+    //     dispatch(setShowerProjectId(projectId));
+    //     dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+    //     dispatch(setEstimateState("create"));
+    //     navigate("/estimates/layouts");
+    // };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {
             return estimatesList?.estimates;
@@ -135,7 +135,7 @@ const ShowerEstimatesList = ({ projectId }) => {
         debouncedRefetch();
     };
     return (<>
-        <Box
+        {/* <Box
             sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -145,9 +145,9 @@ const ShowerEstimatesList = ({ projectId }) => {
         >
             <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                 Estimates
-            </Typography>
+            </Typography> */}
             {/* Search input field */}
-            <TextField
+            {/* <TextField
                 placeholder="Search by Customer Name"
                 value={search}
                 variant="standard"
@@ -183,7 +183,8 @@ const ShowerEstimatesList = ({ projectId }) => {
                 <Add sx={{ color: "white" }} />
                 Add
             </IconButton>
-        </Box>
+        </Box> */}
+        
         {isLoading ? (
             <Box
                 sx={{

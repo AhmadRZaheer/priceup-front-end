@@ -6,6 +6,7 @@ import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import TopBar from "@/components/TopBar";
+import CommonSideBar from "@/components/CommonSideBar";
 
 const EstimateCategory = () => {
     const decodedToken = getDecryptedToken();
@@ -13,7 +14,8 @@ const EstimateCategory = () => {
         <>
         <TopBar/>
          <div className="main-wrapper">
-            {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
+            {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+            <CommonSideBar/>
             <div className="content-wrapper">
                 <SelectCategory />
             </div>

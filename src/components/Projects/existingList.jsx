@@ -78,9 +78,6 @@ export default function ExistingList() {
         deleteProject({ apiRoute: `${routePrefix}/${deleteRecord}` });
         setDeleteModalOpen(false);
     };
-
-
-
     const handleViewDetail = (item) => {
         console.log('view project detail', item);
         navigate(`/projects/${item?._id}`)
@@ -162,7 +159,7 @@ export default function ExistingList() {
             // position: 'fixed', top: 50, bottom: 10,
             // left: 5, right: 5
         }}>
-            <Box
+            {/* <Box
                 sx={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -172,9 +169,9 @@ export default function ExistingList() {
             >
                 <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                     Projects
-                </Typography>
+                </Typography> */}
                 {/* Search input field */}
-                <TextField
+                {/* <TextField
                     placeholder="Search by Customer / Project Name"
                     value={search}
                     variant="standard"
@@ -211,7 +208,8 @@ export default function ExistingList() {
                     <Add sx={{ width: 24 }} />
                     Add
                 </IconButton>
-            </Box>
+            </Box> */}
+
             {isLoading ? (
                 <Box
                     sx={{
@@ -231,7 +229,7 @@ export default function ExistingList() {
                     No Projects Found
                 </Typography>
             ) : (
-                <Box>
+                <Box >
                     {isMobile ?
                         (filteredData?.map((item) => <Box
                             key={item._id}
@@ -301,7 +299,7 @@ export default function ExistingList() {
                             loading={projectsListFetching}
                             style={{
                                 border: "none",
-                            }}
+                               }}
                             getRowId={(row) => row._id}
                             rows={filteredData}
                             columns={ProjectsColumns(dropdownActions)}
@@ -310,7 +308,9 @@ export default function ExistingList() {
                             rowCount={
                                 projectsList?.totalRecords ? projectsList?.totalRecords : 0
                             }
+                            rowHeight={70.75}
                             sx={{ width: "100%" }}
+                            disableColumnMenu
                             hideFooter
                         />)}
                     <Pagination
