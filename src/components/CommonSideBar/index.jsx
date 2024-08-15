@@ -166,7 +166,7 @@ const CommonSideBar = () => {
               background: "#FFFF",
             }}
           >
-            <Box sx={{ marginTop: "10px" }}>
+            <Box sx={{ marginTop: "4px" }}>
               <NavLink style={{ marginTop: 20 }} to="/">
                 <div className="logoTop">
                   <span className="logoImg">

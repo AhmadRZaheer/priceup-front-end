@@ -160,7 +160,7 @@ const TeamTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           height: "98.2vh",
         }}
       >

@@ -49,9 +49,9 @@ export const SelectCategory = () => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    background: "white",
+                    // background: "white",
                     height: "100vh",
-                    background: { sm: "white", xs: "#08061B" },
+                    background: { sm: "#F6F5FF", xs: "#08061B" },
                 }}
             >
                 <Box
@@ -62,7 +62,7 @@ export const SelectCategory = () => {
                     <Box style={{ paddingBottom: "10px" }}>
                         <Box
                             sx={{
-                                backgroundColor: { xs: "#100D24", sm: "white" },
+                                backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
                                 padding: { xs: "20px 15px", sm: "0px" },
                                 borderBottomRightRadius: { xs: "16px", sm: "0px" },
                                 borderBottomLeftRadius: { xs: "16px", sm: "0px" },

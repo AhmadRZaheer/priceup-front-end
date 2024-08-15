@@ -4,17 +4,19 @@ import './style.scss';
 import MirrorsGlassAddonComponent from '@/components/Mirrors/GlassAddons';
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 export const MirrorsGlassAddon = () => {
     return (
     <>
-    <TopBar/>
-    <Box className="main-wrapper">
+    {/* <TopBar/>
+    <Box className="main-wrapper"> */}
         {/* <Sidebar /> */}
-        <CommonSideBar />
+        {/* <CommonSideBar /> */}
+        <CommonLayout>
         <Box className="gcontent-wrapper">
             <MirrorsGlassAddonComponent />
         </Box>
-    </Box>
+       </CommonLayout>
     </>
     );
 }

@@ -230,6 +230,7 @@ const AdminSideBar = () => {
         {/* Top Options */}
         <Box sx={{ width: "100%", height: "24%", mx: "auto" }}>
           {userReference && (
+            <>
             <Tooltip title="Switch Location">
               <Button
                 onClick={handleSeeLocationsClick}
@@ -242,7 +243,7 @@ const AdminSideBar = () => {
                   display: "flex",
                   borderRadius: 2,
                   background: "#000000",
-                  mt: 1,
+                  my: 2,
                   ":hover": {
                     background: "#000000",
                     backgroundColor: "#000000",
@@ -272,13 +273,17 @@ const AdminSideBar = () => {
                   {" "}
                   {activeLocation?.company?.name || activeLocation?.name}
                 </span>
-                <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
+                <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 ,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)'   }} />
               </Button>
+              
             </Tooltip>
+            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+              </>
           )}
 
           {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
-            <Button
+          <>
+          <Button
               onClick={handleSeeLocationsClick}
               sx={{
                 mx: "auto",
@@ -289,7 +294,7 @@ const AdminSideBar = () => {
                 display: "flex",
                 borderRadius: 2,
                 background: "#000000",
-                mt: 1,
+                my: 2,
                 ":hover": {
                   background: "#000000",
                   backgroundColor: "#000000",
@@ -320,10 +325,12 @@ const AdminSideBar = () => {
               </span>
               <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
             </Button>
+             <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+             </>
           ) : (
             ""
           )}
-          <Box sx={{ mt: 2, mx: "auto" }}>
+          <Box sx={{ my: 1, mx: "auto" }}>
             <div className="center">
               <ul>
                 <MenuSigleItem link="/">
@@ -332,6 +339,7 @@ const AdminSideBar = () => {
                 </MenuSigleItem>
               </ul>
             </div>
+            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
           </Box>
         </Box>
         {/* Container Options */}
@@ -347,7 +355,7 @@ const AdminSideBar = () => {
             // gap: 1,
           }}
         >
-          <Typography className="subtitle" sx={{ color: "#777B7E", pl: 2 }}>
+          <Typography className="subtitle" sx={{ color: "#777B7E", pl: 2,pt:1 }}>
             {" "}
             Management{" "}
           </Typography>
@@ -372,9 +380,10 @@ const AdminSideBar = () => {
               </MenuSigleItem>
             </ul>
           </div>
+          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
           <Typography
             className="subtitle"
-            sx={{ mt: 1, color: "#777B7E", pl: 2 }}
+            sx={{ mt: 2, color: "#777B7E", pl: 2 }}
           >
             {" "}
             Categories{" "}
@@ -537,6 +546,7 @@ const AdminSideBar = () => {
               </AccordionDetails>
             </Accordion>
           </Box>
+          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
         </Box>
       </Box>
 

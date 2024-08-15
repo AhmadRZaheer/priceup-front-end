@@ -8,9 +8,8 @@ const DefaultSection = () => {
     <>
     <Box
         sx={{
-          backgroundColor: "white",
-          height: "84vh",
-        
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          height: "84vh",        
         }}
       >
       <div className="lpage-title">
@@ -24,6 +23,7 @@ const DefaultSection = () => {
           width: "96%",
           borderRadius: "8px",
           overflow: "hidden",
+          background:'#FFFF',
           mb: 2
         }}
       >

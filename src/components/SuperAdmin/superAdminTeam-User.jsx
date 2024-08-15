@@ -192,7 +192,7 @@ const SuperAdminTeam = () => {
       <Box sx={{ width: "100%", m: "auto" }}>
         <Box
           sx={{
-            p: "92px 20px 20px 30px",
+            p: "20px 20px 20px 30px",
             display: "flex",
             justifyContent: "space-between",
           }}
@@ -340,6 +340,7 @@ const SuperAdminTeam = () => {
                 justifyContent: "center",
                 height: "300px",
                 alignItems: "center",
+                background:'#FFFF'
               }}
             >
               <CircularProgress sx={{ color: "#8477DA" }} />

@@ -4,17 +4,20 @@ import SuperSidebar from "../../components/SuperSidebar/superSidebar";
 import SuperAdminTeam from "../../components/SuperAdmin/superAdminTeam-User";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 const AdminTeam = () => {
   return (
     <>
-      <div className="Team">
+      {/* <div className="Team"> */}
         {/* <SuperSidebar /> */}
-        <CommonSideBar/>
-        <TopBar/>
+        {/* <CommonSideBar/>
+        <TopBar/> */}
+        <CommonLayout>
         <div className="teamContainer">
           <SuperAdminTeam />
         </div>
-      </div>
+        </CommonLayout>
+      {/* </div> */}
     </>
   );
 };

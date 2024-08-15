@@ -4,17 +4,20 @@ import './style.scss';
 import MirrorsHardwareComponent from '@/components/Mirrors/Hardwares';
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 export const MirrorsHardware = () => {
     return (
     <>
-    <TopBar/>
-     <Box className="main-wrapper">
+    {/* <TopBar/>
+     <Box className="main-wrapper"> */}
         {/* <Sidebar /> */}
-        <CommonSideBar/>
+        {/* <CommonSideBar/> */}
+        <CommonLayout>
         <Box className="mcontent-wrapper">
             <MirrorsHardwareComponent />
         </Box>
-    </Box>
+        </CommonLayout>
+    {/* </Box> */}
     </>
    );
 }

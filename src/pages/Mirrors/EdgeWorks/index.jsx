@@ -4,17 +4,20 @@ import './style.scss';
 import MirrorsEdgeWorkComponent from '@/components/Mirrors/EdgeWorks';
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 export const MirrorsEdgeWork = () => {
     return (
     <>
-    <TopBar/>
-     <Box className="main-wrapper">
+    {/* <TopBar/>
+     <Box className="main-wrapper"> */}
         {/* <Sidebar /> */}
-        <CommonSideBar/>
+        {/* <CommonSideBar/> */}
+        <CommonLayout>
         <Box className="edcontent-wrapper">
             <MirrorsEdgeWorkComponent />
         </Box>
-    </Box>
+        </CommonLayout>
+    {/* </Box> */}
     </>
    );
 }
