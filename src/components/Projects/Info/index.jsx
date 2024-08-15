@@ -156,7 +156,7 @@ const ProjectInfoComponent = ({
       sx={{
         background: "transparent",
         padding: { sm: 1.5, xs: "60px 8px 8px 8px" },
-        width: { sm: "98%", xs: "auto", margin: "0px auto" },
+        width: { sm: "auto", xs: "auto", margin: "0px auto" },
       }}
     >
       <Box
@@ -169,7 +169,7 @@ const ProjectInfoComponent = ({
         <Box>
           <Typography
             sx={{
-              fontSize: 24,
+              fontSize: {lg:24,md:20},
               fontWeight: 600,
               color: "#5D6164",
               display: "flex",
@@ -178,14 +178,14 @@ const ProjectInfoComponent = ({
           >
             Glass Estimation
             
-            <Box sx={{ fontSize: "24px", fontWeight: 600, color: "#000000" }}>
+            <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
             {projectState !== "create" ? '/ Project Details' :''}  
             </Box>
           </Typography>
           <Typography
             sx={{
               color: "rgba(33, 37, 40, 1)",
-              fontSize: "16px",
+              fontSize: {lg:16,md:14},
               fontWeight: 600,
             }}
           >
@@ -203,7 +203,7 @@ const ProjectInfoComponent = ({
               color: "white",
               textTransform: "capitalize",
               borderRadius: 2,
-              fontSize: 17,
+              fontSize: {lg:17,md:15},
               padding: 1,
               px: 2,
             }}

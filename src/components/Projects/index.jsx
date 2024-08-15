@@ -1,5 +1,15 @@
-import { Box, Button, FormControl, InputAdornment, InputLabel, MenuItem, Select, Typography } from "@mui/material";
-import { useEffect,useState } from "react";
+import {
+  Box,
+  Button,
+  FormControl,
+  Grid,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
@@ -77,7 +87,7 @@ export default function Projects() {
       </Box>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
@@ -97,12 +107,10 @@ export default function Projects() {
               gap: 2.6,
             }}
           >
-            <Box
+            <Grid container 
               sx={{
-                display: "flex",
-                width: "99%",
-                gap: 0.5,
-                justifyContent: "space-between",
+                gap: 3,
+                display:'flex ',justifyContent:'space-between',pr:2
               }}
             >
               {[
@@ -117,7 +125,7 @@ export default function Projects() {
                   varient={item.variant}
                 />
               ))}
-            </Box>
+            </Grid>
             {/* <Box
               sx={{
                 width: "50%",
@@ -154,13 +162,13 @@ export default function Projects() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            width:'98%',
+            width: "98%",
             pr: 3,
             my: 1,
           }}
         >
           <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-          Projects
+            Projects
           </Typography>
           <Box sx={{ display: "flex", gap: 2 }}>
             <CustomInputField
@@ -205,7 +213,8 @@ export default function Projects() {
             width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            mr:2,
+            background:'#FFFFFF',
+            mr: 2,
             mb: 2,
           }}
         >

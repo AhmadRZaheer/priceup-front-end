@@ -277,6 +277,7 @@ export default function ExistingTable() {
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
             sx={{ width: "100%" }}
+            rowHeight={70.75}
             hideFooter
           />
           <Pagination

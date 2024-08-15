@@ -229,7 +229,7 @@ export default function ExistingList() {
                     No Projects Found
                 </Typography>
             ) : (
-                <Box>
+                <Box >
                     {isMobile ?
                         (filteredData?.map((item) => <Box
                             key={item._id}
@@ -299,7 +299,7 @@ export default function ExistingList() {
                             loading={projectsListFetching}
                             style={{
                                 border: "none",
-                            }}
+                               }}
                             getRowId={(row) => row._id}
                             rows={filteredData}
                             columns={ProjectsColumns(dropdownActions)}
@@ -308,6 +308,7 @@ export default function ExistingList() {
                             rowCount={
                                 projectsList?.totalRecords ? projectsList?.totalRecords : 0
                             }
+                            rowHeight={70.75}
                             sx={{ width: "100%" }}
                             disableColumnMenu
                             hideFooter

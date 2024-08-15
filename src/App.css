@@ -99,3 +99,12 @@ input {
   font-weight: 700 !important;
   line-height: 21px;
 }
+.MuiDataGrid-columnHeaderTitle{
+  font-weight:700 !important;
+}
+/* .MuiDataGrid-cell{
+  min-height:70px !important;
+}
+.MuiDataGrid-row{
+  min-height:70px !important;
+} */

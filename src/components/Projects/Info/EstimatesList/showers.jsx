@@ -184,22 +184,6 @@ const ShowerEstimatesList = ({ projectId }) => {
                 Add
             </IconButton>
         </Box> */}
-        <IconButton
-                onClick={handleCreateQuote}
-                disabled={estimatesListFetching}
-                sx={{
-                    backgroundColor: "#8477DA",
-                    color: "white",
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    borderRadius: 1,
-                    padding: 1,
-                    fontSize: 16,
-                    height: 35,
-                }}
-            >
-                <Add sx={{ color: "white" }} />
-                Add
-            </IconButton>
         
         {isLoading ? (
             <Box

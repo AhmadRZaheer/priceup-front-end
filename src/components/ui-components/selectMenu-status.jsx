@@ -89,7 +89,7 @@ function SelectMenu_Status({ status, quoteId }) {
               transform: open ? "rotate(180deg)" : "rotate(0deg)",
               color:
                 selectedStatus === "pending"
-                  ? "#1d85ff"
+                  ? "#FCDEC0"
                   : selectedStatus === "approved"
                   ? "#3ac688"
                   : "#d22b2d",

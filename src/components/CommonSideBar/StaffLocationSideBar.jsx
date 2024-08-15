@@ -449,7 +449,7 @@ const StaffLocationSideBar = () => {
               className={` ${Boolean(anchorEl) ? "active" : ""}`}
               onClick={handleSeeLocationsClick}
             >
-              <Button fullWidth className='iconButton' sx={{ color: "#5D6164", padding: 0.2, justifyContent: 'start' }}>
+              <Button fullWidth className='iconButton' sx={{ color: "#5D6164", padding: 0.2, justifyContent: 'start',textTransform:'capitalize' }}>
                 <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
                 <span>See Locations</span>
               </Button>

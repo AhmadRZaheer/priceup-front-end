@@ -1,6 +1,7 @@
 import {
   Box,
   FormControl,
+  Grid,
   InputAdornment,
   InputLabel,
   MenuItem,
@@ -13,7 +14,7 @@ import image3 from "@/Assets/cancel.png";
 import image4 from "@/Assets/calculator.svg";
 import { useGetEstimatesStats } from "@/utilities/ApiHooks/estimate";
 import ExistingTable from "./existingTable";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import CustomInputField from "../ui-components/CustomInput";
@@ -33,7 +34,7 @@ export default function Estimates() {
   }, []);
   return (
     <>
-      <Box sx={{ backgroundColor: "white" }}>
+      <Box sx={{ backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'} }}>
         <Typography
           sx={{
             py: 2.4,
@@ -46,7 +47,7 @@ export default function Estimates() {
       </Box>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
@@ -66,19 +67,33 @@ export default function Estimates() {
               gap: 2.6,
             }}
           >
-               <Box
+            <Grid
+              container
               sx={{
-                display: "flex",
-                width: "99%",
-                gap: 0.5,
-                justifyContent: "space-between",
+                gap: 3,
               }}
             >
               {[
-                { title: "Pending", text: estimatesStats?.pending, variant: "blue" },
-                { title: "Approved", text: estimatesStats?.approved, variant: "green" },
-                { title: "Voided", text: estimatesStats?.voided, variant: "red" },
-                { title: "Invoice Total", text: estimatesStats?.total?.toFixed(2), variant: "purple" },
+                {
+                  title: "Pending",
+                  text: estimatesStats?.pending,
+                  variant: "blue",
+                },
+                {
+                  title: "Approved",
+                  text: estimatesStats?.approved,
+                  variant: "green",
+                },
+                {
+                  title: "Voided",
+                  text: estimatesStats?.voided,
+                  variant: "red",
+                },
+                {
+                  title: "Invoice Total",
+                  text: estimatesStats?.total?.toFixed(2),
+                  variant: "purple",
+                },
               ].map((item) => (
                 <WidgetCard
                   text={item.text}
@@ -86,7 +101,7 @@ export default function Estimates() {
                   varient={item.variant}
                 />
               ))}
-            </Box>
+            </Grid>
             {/* <Box
               sx={{
                 width: "50%",
@@ -213,7 +228,7 @@ export default function Estimates() {
           }}
         >
           <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-          Estimates
+            Estimates
           </Typography>
           <Box sx={{ display: "flex", gap: 2 }}>
             <CustomInputField
@@ -258,7 +273,8 @@ export default function Estimates() {
             width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            mr:2,
+            backgroundColor:'#FFFFFF',
+            mr: 2,
             mb: 2,
           }}
         >

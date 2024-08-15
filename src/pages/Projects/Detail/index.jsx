@@ -8,6 +8,7 @@ import TopBar from "@/components/TopBar";
 import { useParams } from "react-router-dom";
 import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import ProjectInfoComponent from "@/components/Projects/Info";
+import CommonSideBar from "@/components/CommonSideBar";
 const routePrefix = `${backendURL}/projects`;
 
 const ProjectDetail = () => {
@@ -25,7 +26,8 @@ const ProjectDetail = () => {
         <>
             <TopBar />
             <div className="main-wrapper">
-                {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />}
+                {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+                <CommonSideBar/>
                 <Box className="econtent-wrapper" sx={{ pl: { sm: '25px', xs: '0px' } }}>
                     {getLoading ? <Box sx={{ width: 'fit-content', margin: '100px auto', color: '#8477da' }}><CircularProgress /> </Box> : !getLoading && getProject ?
                         <ProjectInfoComponent projectData={getProject} projectState="edit" /> : <Typography>Invalid ID. No preview found.</Typography>
