@@ -16,7 +16,7 @@ import {
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import MenuSigleItem from "./MenuSigleItem";
 
 const SuperAdminSideBar = () => {
@@ -52,8 +52,8 @@ const SuperAdminSideBar = () => {
   }, []);
   const handleAdminNameClick = (admin) => {
     switchLocationSuperAdmin({
-      company_id: admin.company._id,
-      adminId: admin.company.user_id,
+      company_id: admin._id,
+      adminId: admin.user_id,
     });
   };
   useEffect(() => {
@@ -82,23 +82,23 @@ const SuperAdminSideBar = () => {
               <span>See Locations</span>
             </Button>
           </li>
-          <MenuSigleItem link='/admin' secondLink='/' >
-          <FmdGoodOutlined sx={{ mr: "12px" }} />
-          <span>Locations</span>
+          <MenuSigleItem link="/admin" secondLink="/">
+            <FmdGoodOutlined sx={{ mr: "12px" }} />
+            <span>Locations</span>
           </MenuSigleItem>
-          <MenuSigleItem link='/team' >
-          <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
-          <span>Users</span>
+          <MenuSigleItem link="/team">
+            <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+            <span>Users</span>
           </MenuSigleItem>
-          <MenuSigleItem link='/user' >
-          <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
-                <span>Admins</span>
+          <MenuSigleItem link="/user">
+            <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+            <span>Admins</span>
           </MenuSigleItem>
           {superSuperAdminsList?.includes(decodedToken.email) && (
-             <MenuSigleItem link='/superadmins' >
-            <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
-            <span>Super Admins</span>
-             </MenuSigleItem>
+            <MenuSigleItem link="/superadmins">
+              <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+              <span>Super Admins</span>
+            </MenuSigleItem>
           )}
         </ul>
       </div>

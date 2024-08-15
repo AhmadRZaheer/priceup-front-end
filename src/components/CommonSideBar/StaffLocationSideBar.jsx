@@ -28,13 +28,16 @@ import {
   Search,
   UnfoldMore,
 } from "@mui/icons-material";
-import ExpandMoreOutlinedIcon from '@mui/icons-material/ExpandMoreOutlined';
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import EstimsteIcon from "../../Assets/bar.svg";
 import MenuSigleItem from "./MenuSigleItem";
 
 const StaffLocationSideBar = () => {
-  const { refetch: fetchLocations, data: locationsData, isFetched: haveAccessFetched } =
-    useFetchStaffHaveAccessTo();
+  const {
+    refetch: fetchLocations,
+    data: locationsData,
+    isFetched: haveAccessFetched,
+  } = useFetchStaffHaveAccessTo();
   const [activeLocation, setActiveLocation] = useState(null);
 
   // const {
@@ -80,9 +83,9 @@ const StaffLocationSideBar = () => {
   }, []);
 
   const handleSwitchLocation = (location) => {
-    if (location?.company?._id !== activeLocation?.company?._id) {
+    if (location?._id !== activeLocation?._id) {
       setActiveLocation(location);
-      switchLocation(location.company._id);
+      switchLocation(location._id);
       handleClosePopup();
     }
   };
@@ -100,9 +103,7 @@ const StaffLocationSideBar = () => {
     }
     if (haveAccessFetched) {
       setActiveLocation(
-        locationsData?.find(
-          (item) => item?.company?._id === decodedToken?.company_id
-        )
+        locationsData?.find((item) => item?._id === decodedToken?.company_id)
       );
     }
   }, [
@@ -290,19 +291,19 @@ const StaffLocationSideBar = () => {
             <Button
               sx={{
                 width: 290,
-                height: '56px',
+                height: "56px",
                 color: "white",
-                borderRadius: '6px !important',
+                borderRadius: "6px !important",
                 marginX: 2,
                 marginY: 1,
                 paddingY: "10px",
                 textTransform: "capitalize",
-                background: '#000000',
+                background: "#000000",
                 ":hover": {
                   backgroundColor: "#000000",
-                  '.setLocation': {
-                    color: '#FFFF'
-                  }
+                  ".setLocation": {
+                    color: "#FFFF",
+                  },
                 },
                 display: "flex",
                 justifyContent: "start",
@@ -311,8 +312,8 @@ const StaffLocationSideBar = () => {
             >
               <Box>
                 <DefaultImage
-                  image={activeLocation?.company?.image}
-                  name={activeLocation?.company?.name}
+                  image={activeLocation?.image}
+                  name={activeLocation?.name}
                 />
               </Box>
               <Box
@@ -324,7 +325,7 @@ const StaffLocationSideBar = () => {
                 }}
               >
                 <Typography
-                  className='setLocation'
+                  className="setLocation"
                   sx={{
                     fontSize: "16px",
                     paddingLeft: "2px",
@@ -333,13 +334,16 @@ const StaffLocationSideBar = () => {
                     textOverflow: "ellipsis",
                     overflow: "hidden",
                     textTransform: "capitalize",
-                    color: '#FFFF'
+                    color: "#FFFF",
                   }}
                 >
-                  {activeLocation?.company?.name}
+                  {activeLocation?.name}
                 </Typography>
               </Box>
-              <ExpandMoreOutlinedIcon className='setLocation' sx={{ color: "#FFFF", mr: 1 }} />
+              <ExpandMoreOutlinedIcon
+                className="setLocation"
+                sx={{ color: "#FFFF", mr: 1 }}
+              />
             </Button>
           </Tooltip>
           {/* <li
@@ -352,16 +356,16 @@ const StaffLocationSideBar = () => {
               <span>See Locations</span>
             </IconButton>
           </li> */}
-          <hr style={{ opacity: 0, marginTop: '20px' }} />
-          <MenuSigleItem link='/projects' secondLink='/'>
+          <hr style={{ opacity: 0, marginTop: "20px" }} />
+          <MenuSigleItem link="/projects" secondLink="/">
             <FmdGoodOutlined sx={{ mr: 1 }} />
             <span>Projects</span>
           </MenuSigleItem>
-          <MenuSigleItem link='/estimates' >
+          <MenuSigleItem link="/estimates">
             <FmdGoodOutlined sx={{ mr: 1 }} />
             <span>Old Estimates</span>
           </MenuSigleItem>
-          <MenuSigleItem link='/customers' >
+          <MenuSigleItem link="/customers">
             <FmdGoodOutlined sx={{ mr: 1 }} />
             <span>Customer</span>
           </MenuSigleItem>
@@ -399,7 +403,7 @@ const StaffLocationSideBar = () => {
           </Tooltip>
         </Box>
 
-        <div className="bottom" style={{ opacity: 0, display: 'none' }}>
+        <div className="bottom" style={{ opacity: 0, display: "none" }}>
           <div className="UserIcon">
             <DefaultImage
               image={decodedToken?.image}
@@ -440,47 +444,57 @@ const StaffLocationSideBar = () => {
 
   return (
     <>
-
-      {decodedToken.company_id.length ? drawer : <Box>
-        <div className="center">
-          <ul>
-            <li
-              style={{ padding: 10 }}
-              className={` ${Boolean(anchorEl) ? "active" : ""}`}
-              onClick={handleSeeLocationsClick}
-            >
-              <Button fullWidth className='iconButton' sx={{ color: "#5D6164", padding: 0.2, justifyContent: 'start',textTransform:'capitalize' }}>
-                <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
-                <span>See Locations</span>
-              </Button>
-            </li>
-            <MenuSigleItem link='/locations' secondLink='/'>
-              <FmdGoodOutlined sx={{ mr: 1 }} />
-              <span>Locations</span>
-            </MenuSigleItem>
-          </ul>
-        </div>
+      {decodedToken.company_id.length ? (
+        drawer
+      ) : (
         <Box>
-          <div className="bottom" style={{ opacity: 0, display: "none" }}>
-            <div className="UserIcon">
-              <DefaultImage
-                image={decodedToken?.image}
-                name={decodedToken?.name}
-              />
-            </div>
-            <div className="userInSidebar">
-              {decodedToken?.name}
-              <div className="emailUser">{decodedToken?.email}</div>
-            </div>
-            <Tooltip title="Logout" arrow>
-              <div className="logOutIcon" onClick={() => setOpen(!open)}>
-                <img src={logout} alt="image" />
-              </div>
-            </Tooltip>
+          <div className="center">
+            <ul>
+              <li
+                style={{ padding: 10 }}
+                className={` ${Boolean(anchorEl) ? "active" : ""}`}
+                onClick={handleSeeLocationsClick}
+              >
+                <Button
+                  fullWidth
+                  className="iconButton"
+                  sx={{
+                    color: "#5D6164",
+                    padding: 0.2,
+                    justifyContent: "start",
+                  }}
+                >
+                  <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
+                  <span>See Locations</span>
+                </Button>
+              </li>
+              <MenuSigleItem link="/locations" secondLink="/">
+                <FmdGoodOutlined sx={{ mr: 1 }} />
+                <span>Locations</span>
+              </MenuSigleItem>
+            </ul>
           </div>
+          <Box>
+            <div className="bottom" style={{ opacity: 0, display: "none" }}>
+              <div className="UserIcon">
+                <DefaultImage
+                  image={decodedToken?.image}
+                  name={decodedToken?.name}
+                />
+              </div>
+              <div className="userInSidebar">
+                {decodedToken?.name}
+                <div className="emailUser">{decodedToken?.email}</div>
+              </div>
+              <Tooltip title="Logout" arrow>
+                <div className="logOutIcon" onClick={() => setOpen(!open)}>
+                  <img src={logout} alt="image" />
+                </div>
+              </Tooltip>
+            </div>
+          </Box>
         </Box>
-
-      </Box>}
+      )}
       <SwitchLocationPopup
         anchorEl={anchorEl}
         handleClosePopup={handleClosePopup}

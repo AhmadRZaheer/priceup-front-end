@@ -35,7 +35,7 @@ function CustomToggle({
               },
               "& .MuiSwitch-thumb": {
                 backgroundColor: "white",
-                mt: 0.76,
+                mt: text === "" ? 0.7: 0.76,
                 ml: 0.6,
               },
 
@@ -49,8 +49,8 @@ function CustomToggle({
               },
             }}
           />
-          <Typography sx={{ mt: 1.4, width: text ? "100%" : 60, }}>
-            {text ? text : "Active"}
+          <Typography sx={{ mt: 1.4, width: text ? "100%" : text === "" ? "0px" : 60 }}>
+            {text ?? "Active"}
           </Typography>
         </Box>
       </Tooltip>

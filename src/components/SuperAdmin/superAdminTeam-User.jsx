@@ -10,6 +10,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
@@ -237,7 +238,7 @@ const SuperAdminTeam = () => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ display: "flex", gap: 2, px: 3 }}>
+        <Grid container sx={{ gap: 2, px: 3,}}>
           {[
             { title: "Total Users", text: "40", variant: "blue" },
             { title: "Users", text: "34", variant: "red" },
@@ -250,7 +251,7 @@ const SuperAdminTeam = () => {
               varient={item.variant}
             />
           ))}
-        </Box>
+        </Grid>
 
         <Box
           sx={{
@@ -369,8 +370,8 @@ const SuperAdminTeam = () => {
                       width: "100%",
                     }}
                     hideFooter
-                  disableColumnMenu
-                  pagination={false}
+                    disableColumnMenu
+                    pagination={false}
                   />
                   <Box sx={{ width: "100%" }}>
                     <Pagination
