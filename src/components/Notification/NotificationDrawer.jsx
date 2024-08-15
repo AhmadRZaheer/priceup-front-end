@@ -34,7 +34,7 @@ const getSidebarWidthAccordingToUserRole = (decodedToken) => {
     return '374px'; // custom admin sidebar where company id is empty
   }
   if (isSuperAdmin(decodedToken)) {
-    return '304px'; // super admin sidebar
+    return '320px'; // super admin sidebar
   }
   return '0px';
 };
@@ -78,14 +78,14 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         sx={{
           "& .MuiDrawer-paper": {
             top: { sm: "75px", xs: '57px' },
+            boxShadow:'none'
           },
           "& .MuiModal-backdrop": {
             top: "74px",
-            left: sideBarWidth,
+            left: '320px',
           },
         }}
       >
-
         <Box
           className="customModel"
           sx={{ width: { sm: "496px", xs: "100%" } }}

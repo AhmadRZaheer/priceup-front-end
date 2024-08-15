@@ -4,18 +4,21 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import GlassAddonComponent from "../../components/GlassAddon";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const GlassAddon = () => {
   return (
     <>
-      <TopBar />
-      <div className="Customers">
+      {/* <TopBar />
+      <div className="Customers"> */}
         {/* <Sidebar /> */}
-        <CommonSideBar/>
+        {/* <CommonSideBar/> */}
+        <CommonLayout>
         <div className="customersContainer">
           <GlassAddonComponent />
         </div>
-      </div>
+        </CommonLayout>
+      {/* </div> */}
     </>
   );
 };

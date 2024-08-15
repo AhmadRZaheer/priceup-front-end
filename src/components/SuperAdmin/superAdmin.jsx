@@ -138,7 +138,7 @@ const SuperAdminTable = () => {
 
   return (
     <Box sx={{ height: "97vh", overflow: "auto" }}>
-      <div className="page-title">
+      <div className="page-title-location">
         <Box
           sx={{
             display: "flex",

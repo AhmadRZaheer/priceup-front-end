@@ -4,17 +4,20 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import TeamTable from "../../components/Team-UserTable/teamTable";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 const Team = () => {
   return (
     <>
-    <TopBar/>
+      {/* <TopBar/>
       <div className="Team">
         {/* <Sidebar /> */}
-        <CommonSideBar/>
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
         <div className="teamContainer">
           <TeamTable />
         </div>
-      </div>
+      </CommonLayout>
+      {/* </div> */}
     </>
   );
 };

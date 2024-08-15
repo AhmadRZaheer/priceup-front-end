@@ -131,7 +131,7 @@ const FinishesTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           height: "88vh",
           pl: 1,
         }}
@@ -147,6 +147,7 @@ const FinishesTable = () => {
             margin: 2,
             p: 0,
             borderRadius: "8px",
+            background:'#FFFF'
           }}
         >
           <div
