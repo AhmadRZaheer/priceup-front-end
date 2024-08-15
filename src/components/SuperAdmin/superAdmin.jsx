@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./superAdmin.scss";
 import TeamIcon from "../../Assets/user-gary.svg";
 import {
@@ -26,6 +26,7 @@ import {
   useDeleteUser,
   useFetchAllStaff,
   useFetchDataAdmin,
+  useFetchDataSuperAdmin,
   useSwitchLocationSuperAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
 import AddSuperAdminModel from "../Modal/addSuperAdminModel";
@@ -34,7 +35,7 @@ import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
 import { ContentCopy, Search } from "@mui/icons-material";
-import { backendURL } from "../../utilities/common";
+import { backendURL, debounce } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
 import DeleteModal from "../Modal/deleteModal";
@@ -45,21 +46,23 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import SingleLocation from "../ui-components/singleLocation";
 import WidgetCard from "../ui-components/widgetCard";
 import CustomInputField from "../ui-components/CustomInput";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 const SuperAdminTable = () => {
+  const routePrefix = `${backendURL}/companies`;
+  const [search, setSearch] = useState("");
   const {
     data: AdminData,
     refetch: AdminRefetch,
     isFetched,
     isFetching,
-  } = useFetchDataAdmin();
+  } = useFetchAllDocuments(`${routePrefix}/by-role?search=${search}`);
   const {
     mutate: switchLocationSuperAdmin,
     data: useTokenSuperAdmin,
     isSuccess: switchedSuperAdmin,
     isLoading: isSwitchingSuperAdmin,
   } = useSwitchLocationSuperAdmin();
-  const { data: customUserData } = useDataCustomUser();
   const { data: staffData } = useFetchAllStaff();
   const {
     mutate: deleteuserdata,
@@ -90,8 +93,8 @@ const SuperAdminTable = () => {
 
   useEffect(() => {
     setActiveCount(AdminData.length);
-  }, [isFetched]);
-  const [search, setSearch] = useState("");
+  }, [AdminData]);
+
   const handleClose = () => setOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = async () => {
@@ -106,6 +109,17 @@ const SuperAdminTable = () => {
   useEffect(() => {
     AdminRefetch();
   }, []);
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      AdminRefetch();
+    }, 500),
+    [search]
+  );
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    debouncedRefetch();
+  };
 
   const handleOpenDelete = (data) => {
     setDeleteOpen(true);
@@ -127,13 +141,13 @@ const SuperAdminTable = () => {
   const token = localStorage.getItem("token");
   const decodedToken = parseJwt(token);
 
-  const filteredData = AdminData?.filter((admin) =>
-    admin.company.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredData = AdminData?.filter((admin) =>
+  //   admin.name.toLowerCase().includes(search.toLowerCase())
+  // );
   const handleAdminClick = (admin) => {
     switchLocationSuperAdmin({
-      company_id: admin.company._id,
-      adminId: admin.company.user_id,
+      company_id: admin._id,
+      adminId: admin.user._id,
     });
   };
   useEffect(() => {
@@ -234,7 +248,7 @@ const SuperAdminTable = () => {
               ),
             }}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
           />
           <FormControl
             sx={{ width: "152px" }}
@@ -367,14 +381,9 @@ const SuperAdminTable = () => {
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
-        ) : filteredData.length !== 0 ? (
-          filteredData?.map((item) => {
-            const matchingUserData = customUserData.filter((userData) =>
-              userData?.locationsAccess?.includes(item?.company?._id)
-            );
-            const filterNonActive = matchingUserData.filter(
-              (data) => data.status
-            );
+        ) : AdminData.length !== 0 ? (
+          AdminData?.map((item) => {
+            const filterNonActive = item.staffs;
             const handleToggleChange = (active) => {
               setInActiveCount((prevCount) => {
                 if (!active && prevCount > 0) {

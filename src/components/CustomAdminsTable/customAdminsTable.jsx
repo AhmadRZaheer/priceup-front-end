@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import "./admin.scss";
 import TeamIcon from "../../Assets/user-gary.svg";
 import {
@@ -26,13 +26,24 @@ import DefaultImage from "../ui-components/defaultImage";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import SingleLocation from "../ui-components/singleLocation";
 import CustomInputField from "../ui-components/CustomInput";
+import { backendURL, debounce, getDecryptedToken } from "@/utilities/common";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 const CustomAdminsTable = () => {
+  const routePrefix = `${backendURL}/customUsers`;
+  const decodedToken = getDecryptedToken();
+  const [search, setSearch] = useState("");
   const {
     data: locationsData,
-    mutate: fetchLocations,
+    refetch: fetchLocations,
+    isFetched,
     isLoading,
-  } = useFetchCustomAdminHaveAccessTo();
+  } = useFetchAllDocuments(`${routePrefix}/haveAccess/${decodedToken?.id}?search=${search}`);
+  // const {
+  //   data: locationsData,
+  //   mutate: fetchLocations,
+  //   isLoading,
+  // } = useFetchCustomAdminHaveAccessTo();
 
   const {
     mutate: switchLocationUser,
@@ -41,24 +52,31 @@ const CustomAdminsTable = () => {
     isLoading: isSwitching,
   } = useSwitchLocationUser();
 
-  const [search, setSearch] = useState("");
-  const token = localStorage.getItem("token");
-  const decodedToken = parseJwt(token);
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      fetchLocations();
+    }, 500),
+    [search]
+  );
 
-  const filteredData = useMemo(() => {
-    const result = locationsData?.filter((admin) =>
-      admin.user.name.toLowerCase().includes(search.toLowerCase())
-    );
-    return result ?? [];
-  }, [locationsData, search]);
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    debouncedRefetch();
+  };
+  // const filteredData = useMemo(() => {
+  //   const result = locationsData?.filter((admin) =>
+  //     admin.user.name.toLowerCase().includes(search.toLowerCase())
+  //   );
+  //   return result ?? [];
+  // }, [locationsData, search]);
 
-  const handleSwitchLocation = async (companyId) => {
-    if (!companyId || !decodedToken) {
+  const handleSwitchLocation = async (companyData) => {
+    if (!companyData._id || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
-    if (companyId !== decodedToken.company_id) {
-      await switchLocationUser(companyId);
+    if (companyData._id !== decodedToken.company_id) {
+      await switchLocationUser(companyData._id);
       console.log("user changed");
     }
   };
@@ -96,7 +114,6 @@ const CustomAdminsTable = () => {
           px: 4,
           my: 2,
           mt: 12,
-
         }}
       >
         <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
@@ -115,7 +132,7 @@ const CustomAdminsTable = () => {
               ),
             }}
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={handleChange}
           />
         </Box>
       </Box>
@@ -133,13 +150,13 @@ const CustomAdminsTable = () => {
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
-        ) : filteredData.length !== 0 ? (
-          filteredData?.map((item) => {
+        ) : locationsData.length !== 0 ? (
+          locationsData?.map((item) => {
             return (
               <SingleLocation
                 data={item}
                 // handleToggleChange={handleToggleChange}
-                // nonActiveUsers={filterNonActive}
+                nonActiveUsers={item.staffs}
                 handleAccessLocation={handleSwitchLocation}
                 // handleEdit={handleOpenEdit}
                 // handleClone={handleOpenClone}

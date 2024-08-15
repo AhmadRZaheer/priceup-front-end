@@ -1,7 +1,7 @@
 import React, { useEffect, Fragment, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { backendURL } from "../common";
+import { backendURL, getDecryptedToken } from "../common";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { parseJwt } from "../../components/ProtectedRoute/authVerify";
 import { useDispatch } from "react-redux";
@@ -25,6 +25,30 @@ export const useFetchDataAdmin = () => {
   }
   return useQuery({
     queryKey: ["teamData"],
+    queryFn: fetchData,
+    enabled: false,
+    placeholderData: [],
+  });
+};
+export const useFetchDataSuperAdmin = () => {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+    const decodedToken = getDecryptedToken();
+    try {
+      const response = await axios.get(`${backendURL}/companies/by-role`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (response.data && response.data.code === 200) {
+        return response.data.data ? response.data.data : [];
+      } else {
+        throw new Error("An error occurred while fetching the data.");
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching the data.");
+    }
+  }
+  return useQuery({
+    queryKey: ["companies-data"],
     queryFn: fetchData,
     enabled: false,
     placeholderData: [],

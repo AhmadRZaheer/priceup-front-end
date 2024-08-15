@@ -38,11 +38,11 @@ const SingleLocation = ({
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <DefaultImage
-              image={data.company?.image}
-              name={data.company?.name}
+              image={data?.image}
+              name={data?.name}
               type={6}
             />
-            <Tooltip title={data.company?.name} placement="top">
+            <Tooltip title={data?.name} placement="top">
               <Typography
                 sx={{
                   fontSize: 20,
@@ -53,7 +53,7 @@ const SingleLocation = ({
                   whiteSpace: "nowrap",
                 }}
               >
-                {data.company?.name}
+                {data?.name}
               </Typography>
             </Tooltip>
           </Box>
@@ -132,21 +132,21 @@ const SingleLocation = ({
           <Box>
             <Typography className="section-name-text"> Layouts</Typography>
             <Typography py={0.7} sx={{ fontWeight: 600 }}>
-              {data.layouts}
+              {data?.layouts ?? 0}
             </Typography>
           </Box>
           {/* Customers */}
           <Box>
             <Typography className="section-name-text"> Customers</Typography>
             <Typography py={0.7} sx={{ fontWeight: 600 }}>
-              {data.customers}
+              {data?.customers ?? 0}
             </Typography>
           </Box>
           {/* Layouts */}
           <Box>
             <Typography className="section-name-text"> Estimates</Typography>
             <Typography py={0.7} sx={{ fontWeight: 600 }}>
-              {data.estimates}
+              {data?.estimates ?? 0}
             </Typography>
           </Box>
         </Box>
@@ -163,7 +163,7 @@ const SingleLocation = ({
                 borderColor: "rgba(132, 119, 218, 1)",
               },
             }}
-            endIcon={<East sx={{ color: "rgba(132, 119, 218, 1)" }} />}
+            endIcon={<East />}
           >
             Access Location
           </Button>

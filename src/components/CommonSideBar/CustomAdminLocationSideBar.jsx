@@ -48,13 +48,13 @@ const CustomAdminLocationSideBar = () => {
     fetchLocations();
   }, []);
 
-  const handleSwitchLocation = async (companyId) => {
-    if (!companyId || !decodedToken) {
+  const handleSwitchLocation = async (companyData) => {
+    if (!companyData || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
-    if (companyId !== decodedToken.company_id) {
-      await switchLocationUser(companyId);
+    if (companyData?._id !== decodedToken.company_id) {
+      await switchLocationUser(companyData._id);
       console.log("user changed");
     }
   };
