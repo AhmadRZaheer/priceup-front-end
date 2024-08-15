@@ -6,8 +6,8 @@ import { logoutHandler } from "@/redux/userAuth";
 import { useDispatch } from "react-redux";
 import EstimsteIcon from "@/Assets/bar.svg";
 import CustomerIcon from "@/Assets/Customer-icon.svg";
-import DevicesFoldOutlinedIcon from '@mui/icons-material/DevicesFoldOutlined';
-import WindowOutlinedIcon from '@mui/icons-material/WindowOutlined';
+import DevicesFoldOutlinedIcon from "@mui/icons-material/DevicesFoldOutlined";
+import WindowOutlinedIcon from "@mui/icons-material/WindowOutlined";
 import SettingsIcon from "@/Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import {
@@ -21,7 +21,12 @@ import {
   Button,
 } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { Description, FmdGoodOutlined, UnfoldMore, ViewStreamOutlined } from "@mui/icons-material";
+import {
+  Description,
+  FmdGoodOutlined,
+  UnfoldMore,
+  ViewStreamOutlined,
+} from "@mui/icons-material";
 import {
   useBackToCustomAdminLocations,
   useBackToSuperAdmin,
@@ -90,19 +95,21 @@ const AdminSideBar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const handleAdminNameClick = (admin) => {
-    setActiveLocation(admin);
-    switchLocationSuperAdmin({
-      company_id: admin?.company?._id,
-      adminId: admin?.company?.user_id,
-    });
+    if (decodedToken.company_id !== admin?._id) {
+      setActiveLocation(admin);
+      switchLocationSuperAdmin({
+        company_id: admin?._id,
+        adminId: admin?.user_id,
+      });
+    }
   };
-  const handleCustomUserClick = async (companyId) => {
-    if (!companyId || !decodedToken) {
+  const handleCustomUserClick = async (companyData) => {
+    if (!companyData || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
-    if (companyId !== decodedToken.company_id) {
-      await switchLocationUser(companyId);
+    if (companyData._id !== decodedToken.company_id) {
+      await switchLocationUser(companyData._id);
       console.log("user changed");
     }
   };
@@ -202,13 +209,11 @@ const AdminSideBar = () => {
   useEffect(() => {
     if (haveAccessData) {
       const user = haveAccessData.find(
-        (item) => item?.company?._id === decodedToken?.company_id
+        (item) => item?._id === decodedToken?.company_id
       );
-
-      setCustomActiveUser(user?.company?.name);
+      setCustomActiveUser(user?.name);
     }
   }, [haveAccessData, decodedToken]);
-
   const userReference = localStorage.getItem("userReference");
   return (
     <Box
@@ -246,8 +251,10 @@ const AdminSideBar = () => {
               >
                 <Box>
                   <DefaultImage
-                    image={activeLocation?.company?.image}
-                    name={activeLocation?.company?.name}
+                    image={
+                      activeLocation?.company?.image || activeLocation?.image
+                    }
+                    name={activeLocation?.company?.name || activeLocation?.name}
                   />
                 </Box>
                 <span
@@ -263,7 +270,7 @@ const AdminSideBar = () => {
                   }}
                 >
                   {" "}
-                  {activeLocation?.company?.name}
+                  {activeLocation?.company?.name || activeLocation?.name}
                 </span>
                 <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
               </Button>
@@ -291,8 +298,10 @@ const AdminSideBar = () => {
             >
               <Box>
                 <DefaultImage
-                  image={activeLocation?.company?.image}
-                  name={activeLocation?.company?.name}
+                  image={
+                    activeLocation?.image || activeLocation?.company?.image
+                  }
+                  name={activeLocation?.name || activeLocation?.company?.name}
                 />
               </Box>
               <span
@@ -418,7 +427,7 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
+                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
                 <Typography sx={{ pl: 1 }}>Showers</Typography>
               </AccordionSummary>
               <AccordionDetails
@@ -501,7 +510,7 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
+                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
                 <Typography sx={{ pl: 1 }}>Mirrors</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
@@ -562,7 +571,6 @@ const AdminSideBar = () => {
           data={AdminData}
         />
       )}
-
     </Box>
   );
 };

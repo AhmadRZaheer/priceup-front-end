@@ -21,35 +21,28 @@ const SwitchLocationPopup = ({
   handleUserClick,
   handleBack,
 }) => {
-  const [role, setRole] = useState(false);
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => parseJwt(token), [token]);
   const [searchQuery, setSearchQuery] = useState("");
-  useEffect(() => {
-    if (
-      decodedToken.role === userRoles.CUSTOM_ADMIN ||
-      decodedToken.role === userRoles.ADMIN ||
-      decodedToken.role === userRoles.SUPER_ADMIN ||
-      decodedToken.role === userRoles.STAFF
-    ) {
-      setRole(true);
-    } else {
-      setRole(false);
-    }
-  }, [decodedToken]);
+
+  const isAdmin_SuperAdmin =
+    decodedToken.role === userRoles.ADMIN ||
+    decodedToken.role === userRoles.SUPER_ADMIN
+      ? true
+      : false;
 
   const filteredData = useMemo(() => {
     if (!data) return [];
     const lowercasedQuery = searchQuery.toLowerCase();
 
     const result = data?.filter((admin) =>
-      role
+      isAdmin_SuperAdmin
         ? admin?.company?.name.toLowerCase().includes(lowercasedQuery)
         : admin?.name?.toLowerCase().includes(lowercasedQuery)
     );
 
     return result;
-  }, [data, searchQuery, role]);
+  }, [data, searchQuery, decodedToken.role]);
   const mobile = useMediaQuery("(max-width: 600px)");
   return (
     <Popover
@@ -159,24 +152,27 @@ const SwitchLocationPopup = ({
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
         ) : (
-          filteredData.map((admin) => (
-            <SingleUser
-              key={role ? admin?.company?._id : admin?.id}
-              item={role ? admin?.company : admin}
-              active={
-                role ? admin?.company?._id === decodedToken?.company_id : false
-              }
-              handleClick={() =>
-                admin?.user?.status &&
-                handleUserClick(
-                  decodedToken.role === userRoles.CUSTOM_ADMIN
-                    ? admin?.company?._id
-                    : admin
-                )
-              }
-              disabled={role ? !admin?.user?.status : !admin.status}
-            />
-          ))
+          filteredData.map((admin) => {
+            return (
+              <SingleUser
+                key={isAdmin_SuperAdmin ? admin?.company?._id : admin?._id}
+                item={isAdmin_SuperAdmin ? admin?.company : admin}
+                active={
+                  isAdmin_SuperAdmin
+                    ? admin?.company?._id === decodedToken?.company_id
+                    : false
+                }
+                handleClick={() => {
+                  admin?.user?.status
+                    ? handleUserClick(
+                        isAdmin_SuperAdmin ? admin.company : admin
+                      )
+                    : console.log("user is not active");
+                }}
+                disabled={!admin?.user?.status ?? !admin.status}
+              />
+            );
+          })
         )}
       </div>
     </Popover>
