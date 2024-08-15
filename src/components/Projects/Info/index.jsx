@@ -33,7 +33,7 @@ import { projectStatus } from "@/utilities/constants";
 import AddressSelect from "./AddressSelect";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
-import CreateModel from "./CreateModel";
+import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project Name is required"),
@@ -147,9 +147,9 @@ const ProjectInfoComponent = ({
   const [search, setSearch] = useState("");
 
   //Craete Model
-  const [openModel, setOpenModel] = useState(false);
-  const handleOpenModel = () => setOpenModel(true);
-  const handleCloseModel = () => setOpenModel(false);
+  const [openCategoryModal, setOpenCategoryModal] = useState(false);
+  const handleOpenCategoryModal = () => setOpenCategoryModal(true);
+  const handleCloseCategoryModal = () => setOpenCategoryModal(false);
 
   return (
     <Box
@@ -169,7 +169,7 @@ const ProjectInfoComponent = ({
         <Box>
           <Typography
             sx={{
-              fontSize: {lg:24,md:20},
+              fontSize: { lg: 24, md: 20 },
               fontWeight: 600,
               color: "#5D6164",
               display: "flex",
@@ -177,42 +177,42 @@ const ProjectInfoComponent = ({
             }}
           >
             Glass Estimation
-            
-            <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
-            {projectState !== "create" ? '/ Project Details' :''}  
+
+            <Box sx={{ fontSize: { lg: 24, md: 20 }, fontWeight: 600, color: "#000000" }}>
+              {projectState !== "create" ? '/ Project Details' : ''}
             </Box>
           </Typography>
           <Typography
             sx={{
               color: "rgba(33, 37, 40, 1)",
-              fontSize: {lg:16,md:14},
+              fontSize: { lg: 16, md: 14 },
               fontWeight: 600,
             }}
           >
             Create, edit and manage your Projects.
           </Typography>
         </Box>
-        {projectState !== "create"?  <Box>
+        {projectState !== "create" ? <Box>
           <Button
             fullWidth
             variant="contained"
-            onClick={handleOpenModel}
+            onClick={handleOpenCategoryModal}
             sx={{
               backgroundColor: "#8477DA",
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
               borderRadius: 2,
-              fontSize: {lg:17,md:15},
+              fontSize: { lg: 17, md: 15 },
               padding: 1,
               px: 2,
             }}
           >
             <Add color="white" sx={{ mr: 1 }} />
-            Create New Estimates
+            Create New Estimate
           </Button>
         </Box> : ''}
-        
+
       </Box>
 
       {/* <Typography sx={{ fontSize: "22px", fontWeight: 800, marginBottom: 1.5 }}>
@@ -442,7 +442,7 @@ const ProjectInfoComponent = ({
                           <InputAdornment
                             position="end"
                             sx={{ cursor: "pointer" }}
-                            onClick={() => {}}
+                            onClick={() => { }}
                           >
                             <Close sx={{}} />
                           </InputAdornment>
@@ -569,7 +569,7 @@ const ProjectInfoComponent = ({
                       width: "100%",
                     }}
                     value={formik.values.customer}
-                    onChange={() => {}}
+                    onChange={() => { }}
                   />
                 </Box>
                 <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
@@ -779,7 +779,7 @@ const ProjectInfoComponent = ({
                   label="Status"
                   size="small"
                   sx={{ height: "40px" }}
-                  // onChange={handleChange}
+                // onChange={handleChange}
                 >
                   <MenuItem value={"active"}>Active</MenuItem>
                   <MenuItem value={"inActive"}>inActive</MenuItem>
@@ -808,7 +808,7 @@ const ProjectInfoComponent = ({
                   border: "0.5px solid #D0D5DD",
                   borderRadius: "6px",
                   background: "#D0D5DD",
-                //   p: 0.1,
+                  //   p: 0.1,
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
@@ -868,9 +868,10 @@ const ProjectInfoComponent = ({
         setSelectedAddress={handleAddressChange}
         selectedCustomer={selectedCustomer}
       />
-      <CreateModel openModel={openModel}
-        handleOpenModel={handleOpenModel}
-        handleCloseModel={handleCloseModel} />
+      <ChooseEstimateCategoryModal open={openCategoryModal}
+        handleClose={handleCloseCategoryModal}
+        projectId={projectData?._id}
+      />
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
@@ -7,12 +7,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getEstimateCategory,
+  resetEstimateState,
   setEstimateCategory,
   setEstimateState,
 } from "@/redux/estimateSlice";
 import bgCustom from "@/Assets/customlayoutimage.svg";
 import { EstimateCategory } from "@/utilities/constants";
 import { useNavigate } from "react-router-dom";
+import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
+import { resetState, setShowerProjectId } from "@/redux/estimateCalculations";
 
 const style = {
   position: "absolute",
@@ -46,31 +49,43 @@ const boxStyles = {
   cursor: "pointer",
 };
 
-export default function CreateModel({
-  openModel,
-  handleOpenModel,
-  handleCloseModel,
+export default function ChooseEstimateCategoryModal({
+  open,
+  handleClose,
+  projectId
 }) {
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(true);
   const dispatch = useDispatch();
-  const selectedCategory = useSelector(getEstimateCategory);
+  const [category, setCategory] = useState('');
   const handleBoxClick = (category) => {
-    dispatch(setEstimateCategory(category));
-    dispatch(setEstimateState("create"));
+    setCategory(category);
   };
-  React.useEffect(() => {
-    setLoading(false);
-    return () => {
-      setLoading(true);
-    };
-  }, []);
-  
+  const handleSubmit = () => {
+
+    dispatch(resetEstimateState());
+    dispatch(resetMirrorEstimateState());
+    dispatch(resetState());
+    dispatch(setEstimateState("create"));
+
+    if(category === EstimateCategory.SHOWERS){
+    // showers
+    dispatch(setShowerProjectId(projectId));
+    dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+    navigate("/estimates/layouts");
+    }
+    else{
+    // mirrors
+    dispatch(setMirrorProjectId(projectId));
+    dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
+    navigate("/estimates/dimensions");
+    }
+  }
+
   return (
     <>
       <Modal
-        open={openModel}
-        onClose={handleCloseModel}
+        open={open}
+        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
@@ -96,7 +111,7 @@ export default function CreateModel({
               >
                 Create Estimate
               </Typography>
-              <CloseIcon onClick={handleCloseModel} className="pointer" />
+              <CloseIcon onClick={handleClose} className="pointer" />
             </Box>
             <Typography
               sx={{
@@ -118,90 +133,77 @@ export default function CreateModel({
               height: "291px",
             }}
           >
-            {loading ? (
+
+            <Grid
+              container
+              gap={1}
+              sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}
+            >
               <Box
+                key={"showers-cat"}
                 sx={{
-                  width: 40,
-                  m: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: 300,
+                  ...boxStyles,
+                  backgroundColor:
+                    category !== EstimateCategory.SHOWERS
+                      ? "#D9D9D9"
+                      : "#8477DA",
+                  color:
+                    category !== EstimateCategory.SHOWERS
+                      ? "black"
+                      : "white",
+                  width: "162px",
+                  height: "192px",
                 }}
+                onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
               >
-                <CircularProgress sx={{ color: "#8477DA" }} />
+                <img
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    width: "120px",
+                    height: "140px",
+                  }}
+                  src={bgCustom}
+                  alt="Selected"
+                />
+                <Typography sx={{ font: "18px" }}>Showers</Typography>
               </Box>
-            ) : (
-              <Grid
-                container
-                gap={1}
-                sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}
+              <Box
+                key={"mirrors-cat"}
+                sx={{
+                  ...boxStyles,
+                  backgroundColor:
+                    category !== EstimateCategory.MIRRORS
+                      ? "#D9D9D9"
+                      : "#8477DA",
+                  color:
+                    category !== EstimateCategory.MIRRORS
+                      ? "black"
+                      : "white",
+                  width: "162px",
+                  height: "192px",
+                }}
+                onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
               >
-                <Box
-                  key={"showers-cat"}
-                  sx={{
-                    ...boxStyles,
-                    backgroundColor:
-                      selectedCategory !== EstimateCategory.SHOWERS
-                        ? "#D9D9D9"
-                        : "#8477DA",
-                    color:
-                      selectedCategory !== EstimateCategory.SHOWERS
-                        ? "black"
-                        : "white",
-                    width: "162px",
-                    height: "192px",
+                <img
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    width: "120px",
+                    height: "140px",
                   }}
-                  onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
-                >
-                  <img
-                    style={{
-                      position: "relative",
-                      zIndex: 1,
-                      width: "120px",
-                      height: "140px",
-                    }}
-                    src={bgCustom}
-                    alt="Selected"
-                  />
-                  <Typography sx={{ font: "18px" }}>Showers</Typography>
-                </Box>
-                <Box
-                  key={"mirrors-cat"}
-                  sx={{
-                    ...boxStyles,
-                    backgroundColor:
-                      selectedCategory !== EstimateCategory.MIRRORS
-                        ? "#D9D9D9"
-                        : "#8477DA",
-                    color:
-                      selectedCategory !== EstimateCategory.MIRRORS
-                        ? "black"
-                        : "white",
-                    width: "162px",
-                    height: "192px",
-                  }}
-                  onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
-                >
-                  <img
-                    style={{
-                      position: "relative",
-                      zIndex: 1,
-                      width: "120px",
-                      height: "140px",
-                    }}
-                    src={bgCustom}
-                    alt="Selected"
-                  />
-                  <Typography sx={{ font: "18px" }}>Mirrors</Typography>
-                </Box>
-              </Grid>
-            )}
+                  src={bgCustom}
+                  alt="Selected"
+                />
+                <Typography sx={{ font: "18px" }}>Mirrors</Typography>
+              </Box>
+            </Grid>
+
           </Box>
           <Box sx={{ display: "flex", justifyContent: "end", gap: "10px" }}>
             <Button
               variant="outlined"
-              onClick={handleCloseModel}
+              onClick={handleClose}
               sx={{
                 mr: 1,
                 backgroundColor: "#FFFFFF",
@@ -221,7 +223,8 @@ export default function CreateModel({
               Cancel
             </Button>
             <Button
-            onClick={()=>navigate('/estimates/layouts')}
+              disabled={category.length <= 0}
+              onClick={handleSubmit}
               variant="contained"
               sx={{
                 backgroundColor: "#8477DA",
