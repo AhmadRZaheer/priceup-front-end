@@ -7,14 +7,16 @@ import {
   Button,
   Chip,
   Modal,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   Typography,
 } from "@mui/material";
-import InputImageIcon from "../../Assets/imageUploader.svg";
 import CustomInputField from "../ui-components/CustomInput";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import {
+  useCreateAdminsMembers,
   useDataCustomUser,
   useEditAccessCustomUser,
   useEditCustomUser,
@@ -26,9 +28,19 @@ import PasswordModal from "./addUserPassword";
 import { backendURL } from "../../utilities/common";
 import AccordionLocationEdit from "../ui-components/AccordionLocationEdit";
 
-function EditLocationModal({ open, close, userdata, refetch, companydata }) {
+function AddEditLocationModal({
+  open,
+  close,
+  userdata,
+  refetch,
+  companydata,
+  isEdit,
+}) {
   const [sections, setSections] = useState([false, false, false]);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [alignment, setAlignment] = useState("admin");
+  const inputRef = useRef(null); // Create a ref for the file input
+
   const {
     data: customUserData,
     isSuccess: customerSuc,
@@ -39,7 +51,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: 600,
     bgcolor: "background.paper",
     border: "2px solid white",
     boxShadow: 24,
@@ -54,36 +66,40 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     });
   };
   const validationSchema = Yup.object().shape({
-    email: Yup.string()
+    locationEmail: Yup.string()
       .email("Invalid email address")
-      .required("Email is required"),
-    password: Yup.string().matches(
-      /^.{8,}$/,
-      "Password must be at least 8 characters long."
-    ),
-    phone: Yup.string().matches(
-      /^\d{6,15}$/,
-      "Invalid phone number. Phone number must contain only numbers"
-    ),
+      .required("Location Email is required"),
+    locationName: Yup.string().required("Location Name is required"),
   });
 
-  const { mutate: editFinish, isSuccess } = useEditUser();
+  const { mutate: editFinish, isSuccess, isLoading } = useEditUser();
+  const {
+    mutate: addTeamAdminsMembers,
+    isLoading: LoadingForAdd,
+    isSuccess: CreatedSuccessfully,
+  } = useCreateAdminsMembers();
   const { mutate: ResetPassword } = useResetUserPassword();
   const { mutate: updateCustomUser, isSuccess: userUpdated } =
     useEditAccessCustomUser();
   const formik = useFormik({
     initialValues: {
-      name: userdata?.name,
-      email: userdata?.email,
+      locationName: isEdit ? userdata?.name : "",
+      locationEmail: isEdit ? userdata?.email : "",
+      locationOwner: isEdit ? userdata?.locationOwner : "",
+      locationAddress: isEdit ? userdata?.locationAddress : "",
       phone: "",
       password: userdata?.password,
-      selectedImage: userdata?.image,
-      userid: userdata?._id,
+      selectedImage: isEdit ? userdata?.image : "",
+      userid: isEdit ? userdata?._id : "",
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      editFinish(values);
+      if (isEdit) {
+        editFinish(values);
+      } else {
+        addTeamAdminsMembers(values);
+      }
       close();
       refetch();
     },
@@ -112,12 +128,7 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
         //   (accessData) => accessData?.company_id === companydata?._id
         // )
       );
-      console.log(
-        matchingUserData,
-        "matching",
-        customUserData,
-        companydata?._id
-      );
+
       return matchingUserData;
     });
 
@@ -163,13 +174,32 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     await updateCustomUser(updatedUser);
     customUserRefech();
   };
+  // const handleChangeSection = (event, newAlignment) => {
+  //   if (newAlignment !== null) {
+  //     setAlignment(newAlignment);
+  //   }
+  // };
+  const handleSelectImage = () => {
+    inputRef.current.click(); // Trigger click on the file input
+  };
   const filterhaveAccessArray = haveAccessArray.filter((item) => item.status);
   const filtergiveAccessArray = giveAccessArray.filter((item) => item.status);
   return (
     <>
       <Modal open={open} onClose={close}>
         <Box sx={style}>
-          <Box sx={{ width: "100%", justifyContent: "end", display: "flex" }}>
+          <Box
+            sx={{
+              width: "100%",
+              justifyContent: "space-between",
+              display: "flex",
+            }}
+          >
+            <Typography
+              sx={{ color: "#667085", fontSize: "16px", fontWeight: "bold" }}
+            >
+              Locations Management
+            </Typography>
             <Close
               onClick={close}
               sx={{
@@ -180,259 +210,302 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
               }}
             />
           </Box>
-          <Typography
-            sx={{ color: "#667085", fontSize: "16px", fontWeight: "bold" }}
+          <form onSubmit={formik.handleSubmit}>
+            {/* <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChangeSection}
+            aria-label="Platform"
+            className="toggle-section-container"
+            size="small"
+            sx={{ mb: 2 }}
           >
-            Locations Management
-          </Typography>
+            <ToggleButton
+              className="toggle-button"
+              classes={{ selected: "selected-toggle-button" }}
+              value="admin"
+            >
+              Admin Info
+            </ToggleButton>
+            <ToggleButton
+              className="toggle-button"
+              classes={{ selected: "selected-toggle-button" }}
+              value="location"
+            >
+              Locations Info
+            </ToggleButton>
+          </ToggleButtonGroup> */}
 
-          <Box sx={{ mt: 2, mb: 10 }}>
-            <form onSubmit={formik.handleSubmit}>
-              <Accordion
-                sx={{
-                  paddingX: "6px",
-                }}
+            <Box
+              sx={{
+                mt: 2,
+                backgroundColor: "#f3f5f6",
+                borderRadius: "8px",
+                p: 2,
+              }}
+            >
+              {/* <Accordion
+              sx={{
+                paddingX: "6px",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMore />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+                onClick={() => toggleSection(0)}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMore />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  onClick={() => toggleSection(0)}
-                >
-                  {sections[0] ? (
-                    <Typography
-                      sx={{
-                        color: "#4D5463",
-                        fontSize: "15px",
-                        borderBottom: "1px solid #ccc",
-                        width: "100%",
-                        pr: 4,
-                        mr: -3,
-                        pb: 1,
-                        mb: -1,
-                      }}
-                    >
-                      Admin Info{" "}
-                    </Typography>
-                  ) : (
-                    <Typography
-                      sx={{
-                        color: "#4D5463",
-                        fontSize: "15px",
-                      }}
-                    >
-                      Admin Info{" "}
-                    </Typography>
-                  )}
-                </AccordionSummary>
+                {sections[0] ? (
+                  <Typography
+                    sx={{
+                      color: "#4D5463",
+                      fontSize: "15px",
+                      borderBottom: "1px solid #ccc",
+                      width: "100%",
+                      pr: 4,
+                      mr: -3,
+                      pb: 1,
+                      mb: -1,
+                    }}
+                  >
+                    Admin Info{" "}
+                  </Typography>
+                ) : (
+                  <Typography
+                    sx={{
+                      color: "#4D5463",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Admin Info{" "}
+                  </Typography>
+                )}
+              </AccordionSummary>
 
-                <AccordionDetails sx={{ padding: 0 }}>
-                  <Box mb={2}>
+              <AccordionDetails sx={{ padding: 0 }}> */}
+              <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "84px",
+                      height: "84px",
+                      borderRadius: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {selectedImage ? (
+                      <img
+                        width={"84px"}
+                        height={"84px"}
+                        src={URL.createObjectURL(selectedImage)}
+                        alt="Selected"
+                      />
+                    ) : userdata?.image ? (
+                      <img
+                        width={"84px"}
+                        height={"84px"}
+                        src={`${backendURL}/${userdata?.image}`}
+                        alt="Selected"
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </Box>
+                  <label htmlFor="image-input">
                     <input
                       accept="image/*"
                       id="image-input"
                       type="file"
+                      ref={inputRef}
                       onChange={handleImageChange}
                       style={{ display: "none" }}
                     />
 
+                    <Box>
+                      <Button
+                        onClick={handleSelectImage}
+                        sx={{
+                          color: "black",
+                          fontWeight: 500,
+                          borderRadius: "54px",
+                          border: "1px solid rgba(212, 219, 223, 1)",
+                        }}
+                      >
+                        Upload Profile Image
+                      </Button>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          color: "rgba(132, 119, 218, 1)",
+                          fontSize: "12px",
+                        }}
+                      >
+                        SVG, PNG, JPG or GIF (max. 800x400px)
+                      </Typography>
+                    </Box>
                     {formik.errors.image && (
                       <Typography color="error">
                         {formik.errors.image}
                       </Typography>
                     )}
-
-                    <label htmlFor="image-input">
-                      <Box
-                        sx={{
-                          border: "1px solid #EAECF0",
-                          textAlign: "center",
-                          padding: 2,
-                          borderRadius: 2,
-                        }}
-                      >
-                        <Box sx={{ height: 60 }}>
-                          <img
-                            width={60}
-                            src={InputImageIcon}
-                            alt="icon of input image"
-                          />
-                        </Box>
-                        <span
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            gap: 4,
-                          }}
-                        >
-                          <Typography sx={{ color: "#8477DA" }}>
-                            Click to Upload
-                          </Typography>
-                        </span>
-                        <Typography variant="body2" sx={{ color: "#667085" }}>
-                          SVG, PNG, JPG or GIF (max. 800x400px)
-                        </Typography>
-                      </Box>
-                    </label>
-                    <Box
+                  </label>
+                </Box>
+                <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "end",
+                        color: "#344054",
+                        fontSize: "14px",
+                        fontWeight: 500,
                       }}
                     >
-                      {selectedImage ? (
-                        <img
-                          width={"80px"}
-                          height={"80px"}
-                          style={{ margin: 10 }}
-                          src={URL.createObjectURL(selectedImage)}
-                          alt="Selected"
-                        />
-                      ) : userdata?.image ? (
-                        <img
-                          width={"80px"}
-                          height={"80px"}
-                          style={{ margin: 10 }}
-                          src={`${backendURL}/${userdata?.image}`}
-                          alt="Selected"
-                        />
-                      ) : (
-                        ""
-                      )}
-                      <Button
-                        variant="outlined"
-                        onClick={handleRestPass}
-                        sx={{
-                          height: "34px",
-                          width: "45%",
-                          color: "#8477DA",
-                          border: "1px solid #8477DA",
-                          mb: 1,
-                        }}
-                      >
-                        Reset Password
-                      </Button>
-                    </Box>
-                    <Box sx={{ width: "100%" }}>
-                      <Typography
-                        sx={{
-                          color: "#344054",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Name
-                      </Typography>
-                      <CustomInputField
-                        fullWidth={true}
-                        type="text"
-                        name="name"
-                        value={formik.values.name}
-                        onChange={formik.handleChange}
-                      />
-                    </Box>
-
-                    <Box sx={{ width: "100%", mt: 1.5 }}>
-                      <Typography
-                        sx={{
-                          color: "#344054",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Email address
-                      </Typography>
-                      <CustomInputField
-                        fullWidth={true}
-                        type="text"
-                        name="email"
-                        disabled={true}
-                        value={formik.values.email}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={
-                          formik.touched.email && Boolean(formik.errors.email)
-                        }
-                        helperText={formik.touched.email && formik.errors.email}
-                      />
-                    </Box>
-                    <Box sx={{ width: "100%", mt: 1.5 }}>
-                      <Typography
-                        sx={{
-                          color: "#344054",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Phone
-                      </Typography>
-                      <CustomInputField
-                        fullWidth={true}
-                        type="text"
-                        name="phone"
-                        value={formik.values.phone}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={
-                          formik.touched.phone && Boolean(formik.errors.phone)
-                        }
-                        helperText={formik.touched.phone && formik.errors.phone}
-                      />
-                    </Box>
-                    <Box sx={{ width: "100%", mt: 1.5 }}>
-                      {/* <Typography
-                        sx={{
-                          color: "#344054",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                        }}
-                      >
-                        Password
-                      </Typography>
-                      <CustomInputField
-                        fullWidth={true}
-                        type="password"
-                        name="password"
-                        value={formik.values.password}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        error={
-                          formik.touched.password &&
-                          Boolean(formik.errors.password)
-                        }
-                        helperText={
-                          formik.touched.password && formik.errors.password
-                        }
-                      /> */}
-                    </Box>
+                      Location Name
+                    </Typography>
+                    <CustomInputField
+                      fullWidth={true}
+                      type="text"
+                      name="locationName"
+                      placeholder={"Enter Location Name"}
+                      value={formik.values.locationName}
+                      onChange={formik.handleChange}
+                    />
                   </Box>
-                  <Box sx={{ p: 1, width: "96%" }}>
-                    <Button
-                      type="submit"
-                      variant="contained"
+
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
                       sx={{
-                        bgcolor: "#8477DA",
-                        width: "100%",
-                        color: "white",
-                        ":hover": {
-                          bgcolor: "#8477DA",
-                        },
+                        color: "#344054",
+                        fontSize: "14px",
+                        fontWeight: 500,
                       }}
                     >
-                      Save
-                    </Button>
+                      Location Email
+                    </Typography>
+                    <CustomInputField
+                      fullWidth={true}
+                      type="text"
+                      name="locationEmail"
+                      disabled={isEdit}
+                      placeholder={"Enter Location Email Address"}
+                      value={formik.values.locationEmail}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.locationEmail &&
+                        Boolean(formik.errors.locationEmail)
+                      }
+                      helperText={
+                        formik.touched.locationEmail &&
+                        formik.errors.locationEmail
+                      }
+                    />
                   </Box>
-                </AccordionDetails>
-              </Accordion>
-            </form>
-            <AccordionLocationEdit
-              companyData={companydata}
-              close={close}
-              refetch={refetch}
-            />
-            <Accordion
+                </Box>
+                <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
+                      sx={{
+                        color: "#344054",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Location Owner
+                    </Typography>
+                    <CustomInputField
+                      fullWidth={true}
+                      type="text"
+                      name="locationOwner"
+                      // disabled={true}
+                      value={formik.values.locationOwner}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder={"Enter Location Owner Name"}
+                      error={
+                        formik.touched.locationOwner &&
+                        Boolean(formik.errors.locationOwner)
+                      }
+                      helperText={
+                        formik.touched.locationOwner &&
+                        formik.errors.locationOwner
+                      }
+                    />
+                  </Box>
+                  <Box sx={{ width: "100%" }}>
+                    <Typography
+                      sx={{
+                        color: "#344054",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Location Address
+                    </Typography>
+                    <CustomInputField
+                      fullWidth={true}
+                      type="text"
+                      name="locationAddress"
+                      value={formik.values.locationAddress}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      placeholder={"Enter Location Address"}
+                      error={
+                        formik.touched.locationAddress &&
+                        Boolean(formik.errors.locationAddress)
+                      }
+                      helperText={
+                        formik.touched.locationAddress &&
+                        formik.errors.locationAddress
+                      }
+                    />
+                  </Box>
+                </Box>
+                {/* <Box sx={{ width: "100%", mt: 1.5 }}>
+                    <Typography
+                      sx={{
+                        color: "#344054",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Password
+                    </Typography>
+                    <CustomInputField
+                      fullWidth={true}
+                      type="password"
+                      name="password"
+                      value={formik.values.password}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={
+                        formik.touched.password &&
+                        Boolean(formik.errors.password)
+                      }
+                      helperText={
+                        formik.touched.password && formik.errors.password
+                      }
+                    /> 
+                  </Box> */}
+              </Box>
+
+              {/* </AccordionDetails>
+            </Accordion> */}
+
+              {/* {alignment === "location" && (
+              <AccordionLocationEdit
+                companyData={companydata}
+                close={close}
+                refetch={refetch}
+              />
+            )} */}
+              {/* <Accordion
               sx={{
                 padding: "6px",
                 mt: 1,
@@ -618,25 +691,61 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
                   </AccordionDetails>
                 </Accordion>
               </AccordionDetails>
-            </Accordion>
-          </Box>
+            </Accordion> */}
+            </Box>
 
-          <Box sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}>
-            <Button
-              onClick={close}
-              variant="outlined"
-              sx={{
-                border: "1px solid #D0D5DD",
-                width: "20%",
-                color: "#344054",
-                ":hover": {
-                  border: "1px solid #D0D5DD",
-                },
-              }}
+            <Box
+              sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}
             >
-              Close
-            </Button>
-          </Box>
+              {!isEdit ? (
+                <Box></Box>
+              ) : (
+                <Button
+                  variant="outlined"
+                  onClick={handleRestPass}
+                  sx={{
+                    height: "34px",
+                    // width: "45%",
+                    color: "#8477DA",
+                    border: "1px solid #8477DA",
+                  }}
+                >
+                  Reset Password
+                </Button>
+              )}
+              <Box sx={{ display: "flex", gap: 2, justifyContent: "end" }}>
+                <Button
+                  onClick={close}
+                  variant="outlined"
+                  sx={{
+                    border: "1px solid #D0D5DD",
+                    width: "50%",
+                    color: "#344054",
+                    ":hover": {
+                      border: "1px solid #D0D5DD",
+                    },
+                  }}
+                >
+                  Close
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{
+                    bgcolor: "#8477DA",
+                    color: "white",
+                    width: "50%",
+                    ":hover": {
+                      bgcolor: "#8477DA",
+                    },
+                  }}
+                  disabled={isLoading}
+                >
+                  Save
+                </Button>
+              </Box>
+            </Box>
+          </form>
         </Box>
       </Modal>
       <PasswordModal
@@ -649,4 +758,4 @@ function EditLocationModal({ open, close, userdata, refetch, companydata }) {
     </>
   );
 }
-export default EditLocationModal;
+export default AddEditLocationModal;

@@ -38,6 +38,7 @@ import EditLocationModal from "../Modal/editLoactionSuperAdmin";
 import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
 import { parseJwt } from "../ProtectedRoute/authVerify";
+import AddEditLocationModal from "../Modal/editLoactionSuperAdmin";
 
 const SuperAdminTable = () => {
   const {
@@ -59,11 +60,12 @@ const SuperAdminTable = () => {
     isSuccess,
     isLoading: deleteisLoading,
   } = useDeleteUser();
-  const superSuperAdminsList = JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? []; 
+  const superSuperAdminsList =
+    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
-  const [open, setOpen] = useState(false);
+  const [isEdit, setisEdit] = useState(false);
   const [DeleteOpen, setDeleteOpen] = useState(false);
-  const [EditOpen, setEditOpen] = useState(false);
+  const [AddEditOpen, setAddEditOpen] = useState(false);
   const [InactiveCount, setInActiveCount] = useState(0);
   const [activeCount, setActiveCount] = useState(0);
   // const [haveAccessUsers, sethaveAccessUsers] = useState([]);
@@ -84,7 +86,7 @@ const SuperAdminTable = () => {
     setActiveCount(AdminData.length);
   }, [isFetched]);
   const [search, setSearch] = useState("");
-  const handleClose = () => setOpen(false);
+  const handleCloseAddEdit = () => setAddEditOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = async () => {
     await deleteuserdata(isUserData?.user);
@@ -104,9 +106,10 @@ const SuperAdminTable = () => {
     setisUserData(data);
   };
 
-  const handleCloseEdit = () => setEditOpen(false);
+  // const handleCloseEdit = () => setEditOpen(false);
   const handleOpenEdit = (data) => {
-    setEditOpen(true);
+    setisEdit(true);
+    setAddEditOpen(true);
     setisUserData(data);
   };
   const handleOpenClone = (data) => {
@@ -127,6 +130,11 @@ const SuperAdminTable = () => {
       company_id: admin.company._id,
       adminId: admin.company.user_id,
     });
+  };
+
+  const handleCreateLocation = () => {
+    setisEdit(false);
+    setAddEditOpen(true);
   };
   useEffect(() => {
     if (switchedSuperAdmin) {
@@ -158,7 +166,7 @@ const SuperAdminTable = () => {
             <Button
               fullWidth
               variant="contained"
-              onClick={() => setOpen(true)}
+              onClick={() => handleCreateLocation(true)}
               sx={{
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
@@ -353,7 +361,7 @@ const SuperAdminTable = () => {
                           color: "#101828",
                           fontSize: "18px",
                           fontWeight: 500,
-                          textTransform:'capitalize'
+                          textTransform: "capitalize",
                         }}
                       >
                         {item?.company?.name}
@@ -370,7 +378,13 @@ const SuperAdminTable = () => {
 
                     <Box sx={{ mt: 1 }}>
                       <Box sx={{ mt: 1 }}>
-                        <Typography sx={{ fontSize: "14px", color: "#667085", textTransform: 'capitalize' }}>
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            color: "#667085",
+                            textTransform: "capitalize",
+                          }}
+                        >
                           {/* {item?.company?.name} */}
                           {item?.user?.name}
                         </Typography>
@@ -630,25 +644,26 @@ const SuperAdminTable = () => {
       </div>
       <DeleteModal
         open={DeleteOpen}
-        text={"locations"}
+        text={"location"}
         close={handleCloseDelete}
         isLoading={deleteisLoading}
         handleDelete={handleDeleteUser}
       />
-      <EditLocationModal
-        open={EditOpen}
-        close={handleCloseEdit}
+      <AddEditLocationModal
+        open={AddEditOpen}
+        isEdit={isEdit}
+        close={handleCloseAddEdit}
         userdata={isUserData?.user}
         companydata={isUserData?.company}
         refetch={AdminRefetch}
       />
-      <AddSuperAdminModel
+      {/* <AddSuperAdminModel
         open={open}
         close={handleClose}
         refetch={AdminRefetch}
         // data={edit}
         // isEdit={isEdit}
-      />
+      /> */}
       <CloneLocationModel
         open={OpenClone}
         close={handleCloseClone}
