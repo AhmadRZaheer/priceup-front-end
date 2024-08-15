@@ -81,6 +81,7 @@ const SuperAdminTeam = () => {
   useEffect(() => {
     refetch();
   }, []);
+
   const actionColumn = [
     {
       field: "user_name",
@@ -181,6 +182,7 @@ const SuperAdminTeam = () => {
       },
     },
   ];
+  
   const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );

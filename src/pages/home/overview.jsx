@@ -39,7 +39,9 @@ const Overview = () => {
           <Widget value={data?.staff || 0} type="team" />
           <Widget value={data?.staff || 0} type="invoice" />
         </div>
+        <Box sx={{p:'20px'}}>
         <Estimates />
+        </Box>
       </Box>
     </div>
     </>

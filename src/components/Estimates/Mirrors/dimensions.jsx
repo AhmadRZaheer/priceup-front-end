@@ -173,6 +173,7 @@ export const MirrorDimensions = () => {
               fontSize: { xs: "24px", sm: "2.124rem" },
               textAlign: { xs: "start", sm: "center" },
               fontWeight: 500,
+              pl:3.5
             }}
             variant="h4"
           >
@@ -187,9 +188,9 @@ export const MirrorDimensions = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            gap: 4,
-            padding: 3,
-            pr: 5,
+            gap: {lg:4,xs:2.2},
+            padding: {lg:3,xs:0},
+            pr: {lg:5,xs:0},
             alignItems: "start",
           }}
         >
@@ -205,7 +206,7 @@ export const MirrorDimensions = () => {
             <form>
               <Box
                 sx={{
-                  maxWidth: '600px',
+                  // maxWidth: '600px',
                   borderRadius: { sm: "12px", xs: 0 },
                   boxShadow:
                     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",

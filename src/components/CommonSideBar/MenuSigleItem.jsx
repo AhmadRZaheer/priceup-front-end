@@ -13,7 +13,7 @@ const MenuSigleItem = ({ link,secondLink, children }) => {
             <Button
              fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start' }}
+              sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start',textTransform:'capitalize' }}
             >
               {children}
             </Button>
@@ -33,7 +33,7 @@ const MenuSigleItem = ({ link,secondLink, children }) => {
             <Button
             fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start' }}
+              sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start',textTransform:'capitalize' }}
             >
               {children}
             </Button>
