@@ -55,7 +55,7 @@ export default function Estimates() {
           // width: "100%",
           height: "auto",
           overflow: "auto",
-          gap: 5,
+          gap: "5px",
           pr: 3
         }}
       >
@@ -219,7 +219,8 @@ export default function Estimates() {
             justifyContent: "space-between",
             width: "100%",
            
-            my: 1,
+            mt: 2,
+            mb: 1
           }}
         >
           <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
