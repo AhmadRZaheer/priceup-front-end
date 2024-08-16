@@ -59,13 +59,21 @@ input {
   align-items: center;
   gap: 10px;
 }
+.project-cellWrap {
+  display: flex;
+  background-color: #EFF2F6;
+  border-radius: 70px;
+  padding: 6px 16px 6px 6px;
+  align-items: center;
+  gap: 10px;
+}
 .new-customerNameTable {
   font-size: 14px;
   font-weight: 500;
 }
 .new-userNameTable {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 .new-table-text {
   font-size: 14px;
@@ -93,7 +101,7 @@ input {
   opacity: 0.5; /* Optional: Makes the box look disabled */
 }
 .ProjectsColumnsHeaderClass{
-  background-color: #EFF2F6;
+  background-color: #F3F5F6;
   color: #000000;
   font-size: 14px;
   font-weight: 700 !important;

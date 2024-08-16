@@ -42,32 +42,32 @@ export const EstimatesColumns = (
                 }
                 placement="top"
               >
-              <div className="new-customerNameTable">
-                <div className="new-userNameTable">
-                  <Typography
-                    className="new-userNameTable"
-                    sx={{ color: "#000000" }}
-                  >
-                    {params?.row?.creatorData?.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      fontWeight: 500,
-                      p: 0,
-                      mt: -0.4,
-                      color: "#5D6164",
-                      color: "#5D6164",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      width: { lg: "100%", xs: "93px" },
-                    }}
-                  >
-                    {params?.row?.creatorData?.email}
-                  </Typography>
+                <div className="new-customerNameTable">
+                  <div className="new-userNameTable">
+                    <Typography
+                      className="new-userNameTable"
+                      sx={{ color: "#000000" }}
+                    >
+                      {params?.row?.creatorData?.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 500,
+                        p: 0,
+                        mt: -0.4,
+                        color: "#5D6164",
+                        color: "#5D6164",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        width: { lg: "100%", xs: "93px" },
+                      }}
+                    >
+                      {params?.row?.creatorData?.email}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
               </Tooltip>
             </Box>
             {/* <Box sx={{ display: "flex", gap: 1 }}>
@@ -137,31 +137,31 @@ export const EstimatesColumns = (
                 }
                 placement="top"
               >
-              <div className="new-customerNameTable">
-                <div className="new-userNameTable">
-                  <Typography
-                    className="new-userNameTable"
-                    sx={{ color: "#000000" }}
-                  >
-                    {params?.row?.customerData?.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      fontWeight: 500,
-                      p: 0,
-                      mt: -0.4,
-                      color: "#5D6164",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      width: { lg: "100%", xs: "93px" },
-                    }}
-                  >
-                    {params?.row?.customerData?.email}
-                  </Typography>
+                <div className="new-customerNameTable">
+                  <div className="new-userNameTable">
+                    <Typography
+                      className="new-userNameTable"
+                      sx={{ color: "#000000" }}
+                    >
+                      {params?.row?.customerData?.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 500,
+                        p: 0,
+                        mt: -0.4,
+                        color: "#5D6164",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        width: { lg: "100%", xs: "93px" },
+                      }}
+                    >
+                      {params?.row?.customerData?.email}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
               </Tooltip>
             </Box>
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
@@ -455,8 +455,8 @@ export const ProjectsColumns = (dropdownActions) => {
         return (
           <>
             <Box
-              className="user-cellWrap"
-              sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
             >
               <div className="customerImg">
                 <DefaultImage
@@ -546,12 +546,12 @@ export const ProjectsColumns = (dropdownActions) => {
         return (
           <>
             <Box
-              className="user-cellWrap"
-              sx={{
-                pl: 1.2,
-                pr: 2,
-                py: params?.row?.customerData?.email ? 0.3 : 0.6,
-              }}
+              className="project-cellWrap"
+              sx={
+                {
+                  // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+                }
+              }
             >
               <div className="customerImg">
                 <DefaultImage
@@ -573,31 +573,31 @@ export const ProjectsColumns = (dropdownActions) => {
                 }
                 placement="top"
               >
-              <div className="new-customerNameTable">
-                <div className="new-userNameTable">
-                  <Typography
-                    className="new-userNameTable"
-                    sx={{ color: "#000000" }}
-                  >
-                    {params?.row?.customerData?.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: 12,
-                      fontWeight: 500,
-                      p: 0,
-                      mt: -0.4,
-                      color: "#5D6164",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      width: { lg: "100%", xs: "93px" },
-                    }}
-                  >
-                    {params?.row?.customerData?.email}
-                  </Typography>
+                <div className="new-customerNameTable">
+                  <div className="new-userNameTable">
+                    <Typography
+                      className="new-userNameTable"
+                      sx={{ color: "#000000" }}
+                    >
+                      {params?.row?.customerData?.name}
+                    </Typography>
+                    <Typography
+                      sx={{
+                        fontSize: 12,
+                        fontWeight: 500,
+                        p: 0,
+                        mt: -0.4,
+                        color: "#5D6164",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        width: { lg: "100%", xs: "93px" },
+                      }}
+                    >
+                      {params?.row?.customerData?.email}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
               </Tooltip>
             </Box>
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
@@ -647,7 +647,11 @@ export const ProjectsColumns = (dropdownActions) => {
         return (
           <>
             <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
-              {new Date(params?.row?.createdAt).toDateString()}
+              {new Date(params?.row?.createdAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
             </Typography>
           </>
         );

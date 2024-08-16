@@ -33,7 +33,7 @@ const StatusChip = ({ variant }) => {
       sx={{
         width: "fit-content",
         bgcolor: bgColorWrapper,
-        borderRadius: "16px",
+        borderRadius: "70px",
         color: colorWrapper,
         pl:  {lg:1.8,xs:1},
         pt: 0.8,

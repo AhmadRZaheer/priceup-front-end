@@ -176,17 +176,17 @@ const ProjectInfoComponent = ({
               gap: 1,
             }}
           >
-            Glass Estimation
+           Project Details
             
-            <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
+            {/* <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
             {projectState !== "create" ? '/ Project Details' :''}  
-            </Box>
+            </Box> */}
           </Typography>
           <Typography
             sx={{
               color: "rgba(33, 37, 40, 1)",
               fontSize: {lg:16,md:14},
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
@@ -199,16 +199,17 @@ const ProjectInfoComponent = ({
             onClick={handleOpenModel}
             sx={{
               backgroundColor: "#8477DA",
+              height:'44px',
+              width:'215px',
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: {lg:17,md:15},
-              padding: 1,
-              px: 2,
+              borderRadius: 1,
+              fontSize: {lg:16,md:15},
+              padding: '10px 13px',
             }}
           >
-            <Add color="white" sx={{ mr: 1 }} />
+            <Add  sx={{ mr: 0.2,color:'#FFFFFF' }} />
             Create New Estimates
           </Button>
         </Box> : ''}
@@ -235,14 +236,15 @@ const ProjectInfoComponent = ({
             color: "#000000",
           }}
         >
-          Glass Estimation
+          Detail
         </Typography>
       </Box>
       <Box
         sx={{
           // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-          border: "1px solid #D4DBDF",
+          // border: "1px solid #D4DBDF",
           padding: { md: 2, xs: 1 },
+          background:'#FFFF'
         }}
       >
         <form onSubmit={formik.handleSubmit}>
@@ -260,9 +262,9 @@ const ProjectInfoComponent = ({
             {/** Project Detail Block */}
 
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Detail
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -508,9 +510,9 @@ const ProjectInfoComponent = ({
             </Box>
             {/** Customer Select Block */}
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Customer
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -589,9 +591,9 @@ const ProjectInfoComponent = ({
             </Box>
             {/** Address Select Block */}
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Address
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
