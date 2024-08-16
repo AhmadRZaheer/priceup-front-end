@@ -37,7 +37,7 @@ const HardwareTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           height: "89.2vh",
         }}
       >
@@ -52,6 +52,7 @@ const HardwareTable = () => {
             width: "98%",
             borderRadius: "8px",
             margin: "auto",
+            background:'#FFFF'
           }}
         >
           <div

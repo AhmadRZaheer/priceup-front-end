@@ -25,7 +25,7 @@ export const ShowerDimensions = () => {
       <Box
         sx={{
           // background: "white",
-          background: { sm: "white", xs: "#08061B" },
+          background: { sm: "#F6F5FF", xs: "#08061B" },
           padding: 2,
           height: {sm: "auto",xs: "95vh"},
           overflow: { sm: "", xs: 'auto' }
@@ -34,7 +34,7 @@ export const ShowerDimensions = () => {
         <Box style={{ paddingBottom: "10px" }}>
           <Box
             sx={{
-              backgroundColor: { xs: "#100D24", sm: "white" },
+              backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
               padding: { xs: "10px", sm: "0px" },
               borderBottomRightRadius: { xs: "16px", sm: "0px" },
               borderBottomLeftRadius: { xs: "16px", sm: "0px" },

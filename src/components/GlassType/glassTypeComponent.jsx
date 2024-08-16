@@ -65,6 +65,7 @@ const GlassTypeComponent = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
+          background:'#FFFF'
         }}
       >
         {" "}
@@ -150,6 +151,7 @@ const GlassTypeComponent = ({ type }) => {
             padding: "20px",
             alignItems: "center",
             height: "56vh",
+            background:'#FFFF',
           }}
         >
           <CircularProgress size={24} sx={{ color: "#8477DA" }} />
@@ -159,6 +161,7 @@ const GlassTypeComponent = ({ type }) => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            background:'#FFFF',
             gap: 1,
             height: miniTab ? "58vh" : "68vh",
             overflowY: "scroll",

@@ -462,6 +462,7 @@ const StaffLocationSideBar = () => {
                     color: "#5D6164",
                     padding: 0.2,
                     justifyContent: "start",
+                    textTransform:'capitalize'
                   }}
                 >
                   <VisibilityOutlinedIcon sx={{ mr: "12px" }} />

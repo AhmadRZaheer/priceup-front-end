@@ -8,19 +8,22 @@ import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { Box } from "@mui/material";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const Projects = () => {
   const decodedToken = getDecryptedToken();
   return (
     <>
-      <TopBar />
+      {/* <TopBar />
       <div className="main-wrapper">
         {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-        <CommonSideBar />
+        {/*   <CommonSideBar /> */}
+        <CommonLayout>
         <Box className="econtent-wrapper" sx={{ pl: { lg: '45px',sm:'25px', xs: '0px' } }}>
           <ProjectsList />
         </Box>
-      </div>
+        </CommonLayout>
+      {/* </div> */}
     </>
   );
 };

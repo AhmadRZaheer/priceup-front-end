@@ -128,7 +128,7 @@ const CustomerTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           height: "98.2vh",
           pt: 1,
         }}
@@ -151,6 +151,7 @@ const CustomerTable = () => {
               justifyContent: "space-between",
               p: 2,
               alignItem: "center",
+              background:'#FFFF'
             }}
           >
             <Typography

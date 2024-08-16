@@ -8,19 +8,22 @@ import { userRoles } from "@/utilities/constants";
 import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const Customers = () => {
   const decodedToken = getDecryptedToken();
   return (
     <>
-    <TopBar/>
-    <div className="Customers">
+    {/* <TopBar/>
+    <div className="Customers"> */}
       {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-      <CommonSideBar />
+      {/* <CommonSideBar /> */}
+      <CommonLayout>
       <div className="customersContainer">
         {decodedToken?.role === userRoles.STAFF ? <CustomerTableForStaffView /> : <Customertable />}
       </div>
-    </div>
+      </CommonLayout>
+    {/* </div> */}
     </>
     
   );

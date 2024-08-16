@@ -7,19 +7,22 @@ import MobileBar from "@/components/MobileNavBar/mobleNavBar";
 import { getDecryptedToken } from "@/utilities/common";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const EstimateDimensions = () => {
     const decodedToken = getDecryptedToken();
     return (
         <>
-        <TopBar/>
-          <div className="main-wrapper">
+        {/* <TopBar/>
+          <div className="main-wrapper"> */}
             {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-            <CommonSideBar/>
+            {/* <CommonSideBar/> */}
+            <CommonLayout>
             <div className="content-wrapper">
                 <SetDimensions />
             </div>
-        </div>
+            </CommonLayout>
+        {/* </div> */}
         </>
       
     );
