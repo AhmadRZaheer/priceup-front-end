@@ -288,6 +288,7 @@ export default function ExistingTable() {
           />
           <DeleteModal
             open={deleteModalOpen}
+            text={"Estimates"}
             close={() => {
               setDeleteModalOpen(false);
             }}

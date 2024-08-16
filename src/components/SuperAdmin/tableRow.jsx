@@ -14,7 +14,7 @@ import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_superAdmins";
 
-const TableRow = ({ row, onToggleChange, type, title, refetch }) => {
+const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
   const {
     mutate: updateStatus,
     isLoading: LoadingForEdit,
@@ -26,7 +26,8 @@ const TableRow = ({ row, onToggleChange, type, title, refetch }) => {
     isLoading: LoadingForEditUser,
     isSuccess: SuccessForEditUser,
   } = useCustomUserStatus();
-  const { mutate: editTeamMembers } = useEditTeamMembers();
+  const { mutate: editTeamMembers, isSuccess: isSuccessStaffUpdated } =
+    useEditTeamMembers();
   const [active, setActive] = useState(row.status);
 
   const handleSwitch = () => {
@@ -44,16 +45,17 @@ const TableRow = ({ row, onToggleChange, type, title, refetch }) => {
     // Call the callback function to update non-active count
   };
   useEffect(() => {
-    if (SuccessForEditUser || SuccessForEdit) {
+    if (SuccessForEditUser || SuccessForEdit || isSuccessStaffUpdated) {
       refetch();
     }
-  }, [SuccessForEditUser, SuccessForEdit]);
+  }, [SuccessForEditUser, SuccessForEdit, isSuccessStaffUpdated]);
 
   return (
     <div className="cellAction">
       <div>
         <Box sx={{ height: 50 }}>
           <CustomToggle
+            text={text}
             title={title}
             checked={active}
             onClick={() => handleSwitch()}

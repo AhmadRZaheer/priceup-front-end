@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "../../Assets/delete-full icon.svg";
 
-function DeleteModal({ open, close, handleDelete, isLoading }) {
+function DeleteModal({ open, close, handleDelete, isLoading, text }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const style = {
     position: "absolute",
@@ -22,7 +22,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
     border: "2px solid white",
     boxShadow: 24,
     p: 3,
-    borderRadius: 2,
+    borderRadius: "12px",
   };
   return (
     <>
@@ -34,7 +34,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
                 Delete
               </Typography>
               <Typography sx={{ color: "#646669", marginTop: 0.5 }}>
-                Edit your details.
+                Edit your {text ?? "user"} details.
               </Typography>
             </Box>
             <Box>
@@ -52,7 +52,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
               gap: 0.4,
               p: 2,
               background: "#f3f5f6",
-              borderRadius: "8px",
+              borderRadius: "12px",
               mt: 3,
             }}
           >
@@ -60,12 +60,12 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
               <img src={DeleteIcon} alt="delete icon" />
             </Box>
             <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
-              Delete user
+              Delete {text ?? "user"}
             </Typography>
             <Typography
-              sx={{ fontSize: "16px", fontWeight: 600, color: "#587d9f" }}
+              sx={{ fontSize: "16px", fontWeight: 600, color: "#606366" }}
             >
-              Are you sure you want to delete user?{" "}
+              Are you sure you want to delete {text ?? "user"}?{" "}
             </Typography>
           </Box>
           <Box
@@ -80,19 +80,33 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
               onClick={handleDelete}
               variant="outlined"
               sx={{
+                fontWeight: 600,
                 border: "1px solid #D0D5DD",
-                color: "#344054",
+                color: "black",
                 ":hover": {
                   border: "1px solid #D0D5DD",
                 },
+                width: "164px"
               }}
+              disabled={isLoading}
             >
-              Yes, Delete it
+              {isLoading ? (
+                <CircularProgress
+                  sx={{
+                    color: "#344054",
+                    width: "24px !important",
+                    height: "24px !important",
+                  }}
+                />
+              ) : (
+                "Yes, Delete it"
+              )}
             </Button>
             <Button
               onClick={close}
               variant="contained"
               sx={{
+                fontWeight: 600,
                 bgcolor: "rgba(226, 42, 45, 1)",
                 color: "white",
                 ":hover": {
@@ -101,17 +115,7 @@ function DeleteModal({ open, close, handleDelete, isLoading }) {
               }}
               disabled={isLoading}
             >
-              {isLoading ? (
-                <CircularProgress
-                  sx={{
-                    color: "white",
-                    width: "24px !important",
-                    height: "24px !important",
-                  }}
-                />
-              ) : (
-                "No, Keep it"
-              )}
+              No, Keep it
             </Button>
           </Box>
         </Box>

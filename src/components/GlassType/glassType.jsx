@@ -32,7 +32,7 @@ const GlassTypeTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: "white",
+          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
           height: "86vh",
           // mt: 3.2,
         }}
@@ -42,8 +42,7 @@ const GlassTypeTable = () => {
           sx={{
             border: "1px solid rgb(232, 232, 232)",
             height: "81vh",
-            width: "98%",
-          
+            width: "98%",          
             m: "auto",
           }}
         >

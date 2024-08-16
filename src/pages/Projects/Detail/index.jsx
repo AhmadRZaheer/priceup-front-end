@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import ProjectInfoComponent from "@/components/Projects/Info";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 const routePrefix = `${backendURL}/projects`;
 
 const ProjectDetail = () => {
@@ -24,16 +25,18 @@ const ProjectDetail = () => {
     }, [id])
     return (
         <>
-            <TopBar />
-            <div className="main-wrapper">
+            {/* <TopBar />
+            <div className="main-wrapper"> */}
                 {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-                <CommonSideBar/>
+                {/* <CommonSideBar/> */}
+                <CommonLayout>
                 <Box className="econtent-wrapper" sx={{ pl: { sm: '25px', xs: '0px' } }}>
                     {getLoading ? <Box sx={{ width: 'fit-content', margin: '100px auto', color: '#8477da' }}><CircularProgress /> </Box> : !getLoading && getProject ?
                         <ProjectInfoComponent projectData={getProject} projectState="edit" /> : <Typography>Invalid ID. No preview found.</Typography>
                     }
                 </Box>
-            </div>
+                </CommonLayout>
+            {/* </div> */}
         </>
     );
 };

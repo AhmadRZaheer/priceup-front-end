@@ -48,7 +48,7 @@ function TopBar() {
             display: "flex",
             justifyContent: "end",
             alignItems: "center",
-            height: "74px",
+            height: "69px",
           }}
         >
           <NotificationButton  />

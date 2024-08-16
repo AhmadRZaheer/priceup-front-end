@@ -196,6 +196,7 @@ const MirrorsEdgeWorkComponent = () => {
                         padding: "20px",
                         alignItems: "center",
                         height: "56vh",
+                        background:'#FFFF'
                     }}
                 >
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
@@ -208,6 +209,7 @@ const MirrorsEdgeWorkComponent = () => {
                         gap: 1,
                         height: miniTab ? "69vh" : "76vh",
                         overflowY: "scroll",
+                        background:'#FFFF'
                     }}
                 >
                     {edgeWorksList?.length !== 0 ? (
@@ -227,6 +229,7 @@ const MirrorsEdgeWorkComponent = () => {
 
             <DeleteModal
                 open={deleteModalOpen}
+                text={"Edge Works"}
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteEdgeWorkLoading}
                 handleDelete={handleHardwareDelete}

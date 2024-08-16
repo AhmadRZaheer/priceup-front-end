@@ -5,18 +5,21 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import DefaultSection from "../../components/DefaultSection/defaultSection";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const Defaults = (Props) => {
   return (
     <>
-    <TopBar/>
-      <div className="Defaults">
+    {/* <TopBar/>
+      <div className="Defaults"> */}
         {/* <Sidebar /> */}
-        <CommonSideBar/>
+        {/* <CommonSideBar/> */}
+        <CommonLayout>
         <div className="defaultsConatiner">
           <DefaultSection />
         </div>
-      </div>
+        </CommonLayout>
+      {/* </div> */}
     </>
   );
 };

@@ -2,6 +2,7 @@ import {
   Box,
   CircularProgress,
   IconButton,
+  InputAdornment,
   Popover,
   Typography,
   useMediaQuery,
@@ -12,6 +13,7 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import BackIcon from "../../Assets/back.svg";
 import { userRoles } from "../../utilities/constants";
+import CustomInputField from "./CustomInput";
 
 const SwitchLocationPopup = ({
   isSwitching,
@@ -21,35 +23,28 @@ const SwitchLocationPopup = ({
   handleUserClick,
   handleBack,
 }) => {
-  const [role, setRole] = useState(false);
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => parseJwt(token), [token]);
   const [searchQuery, setSearchQuery] = useState("");
-  useEffect(() => {
-    if (
-      decodedToken.role === userRoles.CUSTOM_ADMIN ||
-      decodedToken.role === userRoles.ADMIN ||
-      decodedToken.role === userRoles.SUPER_ADMIN ||
-      decodedToken.role === userRoles.STAFF
-    ) {
-      setRole(true);
-    } else {
-      setRole(false);
-    }
-  }, [decodedToken]);
+
+  const isAdmin_SuperAdmin =
+    decodedToken.role === userRoles.ADMIN ||
+    decodedToken.role === userRoles.SUPER_ADMIN
+      ? true
+      : false;
 
   const filteredData = useMemo(() => {
     if (!data) return [];
     const lowercasedQuery = searchQuery.toLowerCase();
 
     const result = data?.filter((admin) =>
-      role
+      isAdmin_SuperAdmin
         ? admin?.company?.name.toLowerCase().includes(lowercasedQuery)
         : admin?.name?.toLowerCase().includes(lowercasedQuery)
     );
 
     return result;
-  }, [data, searchQuery, role]);
+  }, [data, searchQuery, decodedToken.role]);
   const mobile = useMediaQuery("(max-width: 600px)");
   return (
     <Popover
@@ -66,8 +61,9 @@ const SwitchLocationPopup = ({
       }}
       PaperProps={{
         style: {
-          borderRadius: "34px",
-          width: mobile ? "290px" : "317px",
+          borderRadius: "8px",
+          width: mobile ? "290px" : "335px",
+          border:'1px solid #D4DBDF'
         },
       }}
       sx={{ left: { sm: 24, xs: 0 }, top: { sm: -35, xs: 50 } }}
@@ -104,12 +100,26 @@ const SwitchLocationPopup = ({
         </IconButton>
       )}
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position:'relative' }}>
+      {/* <CustomInputField
+            id="input-with-icon-textfield"
+            placeholder="Search by Location Name"
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search sx={{ color: "#8477DA" }} />
+                </InputAdornment>
+              ),
+            }}
+            value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          /> */}
         <input
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: mobile ? "206px" : "230px",
+            width: mobile ? "206px" : "250px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",
@@ -159,24 +169,27 @@ const SwitchLocationPopup = ({
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
         ) : (
-          filteredData.map((admin) => (
-            <SingleUser
-              key={role ? admin?.company?._id : admin?.id}
-              item={role ? admin?.company : admin}
-              active={
-                role ? admin?.company?._id === decodedToken?.company_id : false
-              }
-              handleClick={() =>
-                admin?.user?.status &&
-                handleUserClick(
-                  decodedToken.role === userRoles.CUSTOM_ADMIN
-                    ? admin?.company?._id
-                    : admin
-                )
-              }
-              disabled={role ? !admin?.user?.status : !admin.status}
-            />
-          ))
+          filteredData.map((admin) => {
+            return (
+              <SingleUser
+                key={isAdmin_SuperAdmin ? admin?.company?._id : admin?._id}
+                item={isAdmin_SuperAdmin ? admin?.company : admin}
+                active={
+                  isAdmin_SuperAdmin
+                    ? admin?.company?._id === decodedToken?.company_id
+                    : false
+                }
+                handleClick={() => {
+                  admin?.user?.status
+                    ? handleUserClick(
+                        isAdmin_SuperAdmin ? admin.company : admin
+                      )
+                    : console.log("user is not active");
+                }}
+                disabled={!admin?.user?.status ?? !admin.status}
+              />
+            );
+          })
         )}
       </div>
     </Popover>

@@ -11,22 +11,26 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
       <Typography
         key={item?.id}
         sx={{
-          width: "83.8%",
+          width: "87.8%",
+          height:'56px',
           ml: "10px",
           marginBottom: "5px",
           textTransform: "lowercase",
           marginLeft: "20px",
           display: "flex",
-          border: "1px solid #D9D9D9",
+          // border: "1px solid #D9D9D9",
           ":hover": {
-            bgcolor: "rgba(0, 0, 0, 0.1)",
+            bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : "#8477DA",
             cursor: disabled ? "" : "pointer",
+            color: "#FFFF"
           },
           py: 0.4,
           px: 1,
-          borderRadius: "14px",
-          bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : "",
+          borderRadius: "4px",
+          bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : active ? "#8477DA":'',
+          color: active ? "#FFFF": '#101828',
           opacity: disabled ? 0.6 : 1,
+          alignItems:'center'
         }}
         onClick={handleClick}
       >
@@ -55,7 +59,7 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
           </a>
           <p style={{ fontSize: "10px", marginTop: -5 }}>{item?.address}</p>
         </div>
-        {active ? (
+        {/* {active ? (
           <Box
             sx={{
               width: "10%",
@@ -75,7 +79,7 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
           </Box>
         ) : (
           ""
-        )}
+        )} */}
       </Typography>
     </Tooltip>
   );

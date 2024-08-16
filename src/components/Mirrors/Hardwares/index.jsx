@@ -196,6 +196,7 @@ const MirrorsHardwareComponent = () => {
                         padding: "20px",
                         alignItems: "center",
                         height: "56vh",
+                        background:'#FFFF'
                     }}
                 >
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
@@ -208,6 +209,7 @@ const MirrorsHardwareComponent = () => {
                         gap: 1,
                         height: miniTab ? "69vh" : "76vh",
                         overflowY: "scroll",
+                        background:'#FFFF'
                     }}
                 >
                     {hardwaresList?.length !== 0 ? (
@@ -227,6 +229,7 @@ const MirrorsHardwareComponent = () => {
 
             <DeleteModal
                 open={deleteModalOpen}
+                text={"Hardware"}
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteHardwareLoading}
                 handleDelete={handleHardwareDelete}

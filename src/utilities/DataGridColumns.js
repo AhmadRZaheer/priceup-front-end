@@ -786,7 +786,7 @@ export const teamColumns = [
 export const AdminColumns = [
   {
     field: "Team Members",
-    headerName: "Name",
+    headerName: "User Name",
     headerClassName: "customHeaderClass-admin-team",
     flex: 0.8,
     renderCell: (params) => {
@@ -818,7 +818,7 @@ export const AdminColumns = [
   },
   {
     field: "dateAdded",
-    headerName: "Date added",
+    headerName: "Date Added",
     headerClassName: "customHeaderClass-admin-team",
     flex: 0.8,
     renderCell: (params) => {

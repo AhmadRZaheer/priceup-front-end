@@ -107,8 +107,17 @@ input {
   font-weight: 700 !important;
   line-height: 21px;
 }
-.MuiDataGrid-columnHeaderTitle{
-  font-weight:700 !important;
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: 700 !important;
+}
+.input-label-text {
+  font-size: 12px !important;
+  font-size: 600 !important;
+  line-height: 16.39px !important;
+}
+.MuiButton-root {
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
 }
 /* .MuiDataGrid-cell{
   min-height:70px !important;
@@ -116,3 +125,30 @@ input {
 .MuiDataGrid-row{
   min-height:70px !important;
 } */
+
+.toggle-section-container {
+  border: 1px solid rgba(208, 213, 221, 1);
+  background-color: #f3f5f6 !important;
+  color: black !important;
+  border-radius: 8px !important;
+}
+
+.selected-toggle-button {
+  background-color: white !important;
+  border-radius: 8px !important;
+}
+
+.toggle-button {
+  color: #000000 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  background-color: transparent;
+  text-transform: capitalize !important;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+.toggle-button:hover {
+  background-color: white !important;
+  border-radius: 8px !important;
+}

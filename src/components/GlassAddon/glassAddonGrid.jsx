@@ -72,6 +72,7 @@ const GlassAddonGrid = ({ type }) => {
           paddingBottom: 15,
           paddingLeft: "10px",
           paddingRight: "10px",
+          background:'#FFFF'
         }}
       >
         {" "}
@@ -81,6 +82,7 @@ const GlassAddonGrid = ({ type }) => {
             padding: 4,
             alignItems: "center",
             textTransform: "uppercase",
+            background:'#FFFF'
           }}
         >
           <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
@@ -156,7 +158,7 @@ const GlassAddonGrid = ({ type }) => {
             justifyContent: "center",
             padding: "20px",
             alignItems: "center",
-
+            background:'#FFFF',
             height: "56vh",
           }}
         >
@@ -170,6 +172,7 @@ const GlassAddonGrid = ({ type }) => {
             gap: 1,
             height: miniTab ? "58vh" : "67vh",
             overflowY: "scroll",
+            background:'#FFFF',
           }}
         >
           {glassAddons.length !== 0 ? (

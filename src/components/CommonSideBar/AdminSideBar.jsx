@@ -4,10 +4,9 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { NavLink, useLocation } from "react-router-dom";
 import { logoutHandler } from "@/redux/userAuth";
 import { useDispatch } from "react-redux";
-import EstimsteIcon from "@/Assets/bar.svg";
-import CustomerIcon from "@/Assets/Customer-icon.svg";
-import DevicesFoldOutlinedIcon from '@mui/icons-material/DevicesFoldOutlined';
-import WindowOutlinedIcon from '@mui/icons-material/WindowOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DevicesFoldOutlinedIcon from "@mui/icons-material/DevicesFoldOutlined";
+import WindowOutlinedIcon from "@mui/icons-material/WindowOutlined";
 import SettingsIcon from "@/Assets/settings.svg";
 import FormatColorFillIcon from "@mui/icons-material/FormatColorFill";
 import {
@@ -21,7 +20,12 @@ import {
   Button,
 } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
-import { Description, FmdGoodOutlined, UnfoldMore, ViewStreamOutlined } from "@mui/icons-material";
+import {
+  Description,
+  FmdGoodOutlined,
+  UnfoldMore,
+  ViewStreamOutlined,
+} from "@mui/icons-material";
 import {
   useBackToCustomAdminLocations,
   useBackToSuperAdmin,
@@ -90,19 +94,21 @@ const AdminSideBar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const handleAdminNameClick = (admin) => {
-    setActiveLocation(admin);
-    switchLocationSuperAdmin({
-      company_id: admin?.company?._id,
-      adminId: admin?.company?.user_id,
-    });
+    if (decodedToken.company_id !== admin?._id) {
+      setActiveLocation(admin);
+      switchLocationSuperAdmin({
+        company_id: admin?._id,
+        adminId: admin?.user_id,
+      });
+    }
   };
-  const handleCustomUserClick = async (companyId) => {
-    if (!companyId || !decodedToken) {
+  const handleCustomUserClick = async (companyData) => {
+    if (!companyData || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
-    if (companyId !== decodedToken.company_id) {
-      await switchLocationUser(companyId);
+    if (companyData._id !== decodedToken.company_id) {
+      await switchLocationUser(companyData._id);
       console.log("user changed");
     }
   };
@@ -202,13 +208,11 @@ const AdminSideBar = () => {
   useEffect(() => {
     if (haveAccessData) {
       const user = haveAccessData.find(
-        (item) => item?.company?._id === decodedToken?.company_id
+        (item) => item?._id === decodedToken?.company_id
       );
-
-      setCustomActiveUser(user?.company?.name);
+      setCustomActiveUser(user?.name);
     }
   }, [haveAccessData, decodedToken]);
-
   const userReference = localStorage.getItem("userReference");
   return (
     <Box
@@ -225,6 +229,7 @@ const AdminSideBar = () => {
         {/* Top Options */}
         <Box sx={{ width: "100%", height: "24%", mx: "auto" }}>
           {userReference && (
+            <>
             <Tooltip title="Switch Location">
               <Button
                 onClick={handleSeeLocationsClick}
@@ -235,9 +240,9 @@ const AdminSideBar = () => {
                   color: "white",
                   padding: "4px 20px",
                   display: "flex",
-                  borderRadius: 2,
+                  borderRadius: '6px',
                   background: "#000000",
-                  mt: 1,
+                  my: 2,
                   ":hover": {
                     background: "#000000",
                     backgroundColor: "#000000",
@@ -246,8 +251,10 @@ const AdminSideBar = () => {
               >
                 <Box>
                   <DefaultImage
-                    image={activeLocation?.company?.image}
-                    name={activeLocation?.company?.name}
+                    image={
+                      activeLocation?.company?.image || activeLocation?.image
+                    }
+                    name={activeLocation?.company?.name || activeLocation?.name}
                   />
                 </Box>
                 <span
@@ -263,15 +270,19 @@ const AdminSideBar = () => {
                   }}
                 >
                   {" "}
-                  {activeLocation?.company?.name}
+                  {activeLocation?.company?.name || activeLocation?.name}
                 </span>
-                <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
+                <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 ,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)'   }} />
               </Button>
+              
             </Tooltip>
+            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+              </>
           )}
 
           {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
-            <Button
+          <>
+          <Button
               onClick={handleSeeLocationsClick}
               sx={{
                 mx: "auto",
@@ -280,9 +291,9 @@ const AdminSideBar = () => {
                 color: "white",
                 padding: "4px 20px",
                 display: "flex",
-                borderRadius: 2,
+                borderRadius: '6px',
                 background: "#000000",
-                mt: 1,
+                my: 2,
                 ":hover": {
                   background: "#000000",
                   backgroundColor: "#000000",
@@ -291,8 +302,10 @@ const AdminSideBar = () => {
             >
               <Box>
                 <DefaultImage
-                  image={activeLocation?.company?.image}
-                  name={activeLocation?.company?.name}
+                  image={
+                    activeLocation?.image || activeLocation?.company?.image
+                  }
+                  name={activeLocation?.name || activeLocation?.company?.name}
                 />
               </Box>
               <span
@@ -309,12 +322,14 @@ const AdminSideBar = () => {
               >
                 {CustomActiveUser}
               </span>
-              <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
+              <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)' }} />
             </Button>
+             <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)", }} />
+             </>
           ) : (
             ""
           )}
-          <Box sx={{ mt: 2, mx: "auto" }}>
+          <Box sx={{ my: 1, mx: "auto" }}>
             <div className="center">
               <ul>
                 <MenuSigleItem link="/">
@@ -323,6 +338,7 @@ const AdminSideBar = () => {
                 </MenuSigleItem>
               </ul>
             </div>
+            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
           </Box>
         </Box>
         {/* Container Options */}
@@ -338,7 +354,7 @@ const AdminSideBar = () => {
             // gap: 1,
           }}
         >
-          <Typography className="subtitle" sx={{ color: "#777B7E", pl: 2 }}>
+          <Typography className="subtitle" sx={{ color: "#777B7E", pl: 2,pt:1 }}>
             {" "}
             Management{" "}
           </Typography>
@@ -346,11 +362,11 @@ const AdminSideBar = () => {
           <div className="center">
             <ul>
               <MenuSigleItem link="/projects" >
-                <Description sx={{ mr: 1 }} />
+                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
                 <span>Projects</span>
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
-                <Description sx={{ mr: 1 }} />
+                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
                 <span>Old Estimates</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers">
@@ -363,9 +379,10 @@ const AdminSideBar = () => {
               </MenuSigleItem>
             </ul>
           </div>
+          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
           <Typography
             className="subtitle"
-            sx={{ mt: 1, color: "#777B7E", pl: 2 }}
+            sx={{ mt: 2, color: "#777B7E", pl: 2 }}
           >
             {" "}
             Categories{" "}
@@ -401,6 +418,7 @@ const AdminSideBar = () => {
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand1": {
                       color: "#FFFF",
                     },
@@ -409,6 +427,8 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
+
                     ".expand1": {
                       color: "#FFFF",
                     },
@@ -418,8 +438,8 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
-                <Typography sx={{ pl: 1 }}>Showers</Typography>
+                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
+                <Typography sx={{ pl: 1 ,fontWeight:600 }}>Showers</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -484,6 +504,7 @@ const AdminSideBar = () => {
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand2": {
                       color: "#FFFF",
                     },
@@ -492,6 +513,7 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand2": {
                       color: "#FFFF",
                     },
@@ -501,8 +523,8 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: 'rotate(90deg)' }} />
-                <Typography sx={{ pl: 1 }}>Mirrors</Typography>
+                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
+                <Typography sx={{ pl: 1 ,fontWeight:600}}>Mirrors</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
                 <div className="center">
@@ -528,11 +550,12 @@ const AdminSideBar = () => {
               </AccordionDetails>
             </Accordion>
           </Box>
+          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
         </Box>
       </Box>
 
       {/* footer  */}
-      <Box sx={{ width: 298 }}>
+      <Box sx={{ width: 318 }}>
         <div className="center">
           <ul>
             <MenuSigleItem link="/settings">
@@ -562,7 +585,6 @@ const AdminSideBar = () => {
           data={AdminData}
         />
       )}
-
     </Box>
   );
 };

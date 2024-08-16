@@ -168,16 +168,18 @@ const MirrorEstimatesList = ({ projectId }) => {
                     alignItems: "center",
                     maxHeight: "70vh",
                     minHeight: "20vh",
+                     background:'#FFFF',
+                     pb:3
                 }}
             >
                 <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background:'#FFFF' }}>
                 No Estimates Found
             </Typography>
         ) : (
-            <Box>
+            <Box sx={{ background:'#FFFF',pb:3}}>
                 {isMobile ?
                     (filteredData?.map((item) => <Box
                         key={item._id}
@@ -186,6 +188,7 @@ const MirrorEstimatesList = ({ projectId }) => {
                             justifyContent: "space-between",
                             paddingY: 2,
                             borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                             background:'#FFFF'
                         }}
                     >
                         <Box sx={{ display: "flex", gap: 1 }}>

@@ -54,10 +54,12 @@ const DefaultImage = ({ image, name, type = 1 }) => {
     setAnchorEl(null);
   };
   const containerWidthHeightbyType =
-    type === 1 || type === 3 || type === 4 ? 40 : type === 5 ? 35 : 50;
+    type === 1 || type === 3 || type === 4 ? 40 : type === 5 ? 35 : type === 6
+    ? 70 :50;
 
   const imageWidthHeightbyType =
-    type === 1 || type === 3 ? 40 : type === 5 ? 35 : 50;
+    type === 1 || type === 3 ? 40 : type === 5 ? 35 :type === 6
+    ? 72: 50;
 
   const open = Boolean(anchorEl);
   return (
@@ -87,7 +89,12 @@ const DefaultImage = ({ image, name, type = 1 }) => {
             alt="logo image"
           />
         ) : (
-          <NameAcronyms name={name} type={type} />
+          <NameAcronyms
+            name={name}
+            type={type}
+            width={type === 6 && 72}
+            height={type === 6 && 72}
+          />
         )}
       </Box>
       <Popover

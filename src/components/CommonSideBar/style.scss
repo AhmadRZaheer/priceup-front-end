@@ -1,12 +1,14 @@
 .logoTop {
     display: flex;
     align-items: center;
-    justify-content: center;
-
+    justify-content: start;
+    margin-bottom: 11px;
     .logoImg {
+      height: 47px;
+      width: 144px;
       padding: 0px;
-      margin-top: 6px;
-      margin-bottom: 6px;
+      margin-top: 6px;      
+      margin-left:12px;
     }
   }
 
@@ -29,7 +31,12 @@
         padding: 7px;
         cursor: pointer;
         margin: 4px 15px !important;
-        border-radius: 5px;
+        border-radius: 6px;
+
+        .iconButton{
+          font-size: 16px;
+          font-weight: 600;
+        }
 
         &:hover {
           background-color: #8477da;
@@ -54,8 +61,8 @@
         }
 
         span {
-          font-size: 18px;
-          font-weight: 500;
+          font-size: 16px;
+          font-weight: 600;
         } 
 
         .iconButton{
@@ -113,8 +120,6 @@
   border-radius: 100%;
 }
 .subtitle{
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 19.12px;
-  color: #777B7E;
+  font-size: 14px !important;
+  font-weight: 600 !important;
 }

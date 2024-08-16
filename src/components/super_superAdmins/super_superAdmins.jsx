@@ -168,7 +168,7 @@ const Super_SuperAdminsTable = () => {
             width: "100%",
             m: "auto",
             alignItems: "center",
-            pt:11,
+            pt:3,
             pb: 3,
           }}
         >
@@ -178,7 +178,7 @@ const Super_SuperAdminsTable = () => {
             handleClick={handleOpenAdd}
           />
         </Box>
-        <Box sx={{ border: "1px solid #EAECF0", borderRadius: 1 }}>
+        <Box sx={{ border: "1px solid #EAECF0", borderRadius: 1,background:'#FFFF' }}>
           <Box
             sx={{
               display: "flex",
@@ -270,6 +270,7 @@ const Super_SuperAdminsTable = () => {
         close={() => {
           setDeleteModalOpen(false);
         }}
+        text={"Super Admin"}
         isLoading={loaderForDelete}
         handleDelete={handleDeleteAdmin}
       />

@@ -111,6 +111,7 @@ const AddonList = ({ entry, mainIndex, refetch, type }) => {
       </div>
       <DeleteModal
         open={deleteModalOpen}
+        text={"Glass Addons"}
         close={()=>{setDeleteModalOpen(false)}}
         isLoading={loaderForDelete}
         handleDelete={handleHardwareDelete}

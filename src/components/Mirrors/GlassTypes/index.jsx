@@ -197,6 +197,7 @@ const MirrorsGlassTypeComponent = () => {
                         padding: "20px",
                         alignItems: "center",
                         height: "56vh",
+                        background:'#FFFF'
                     }}
                 >
                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
@@ -209,6 +210,7 @@ const MirrorsGlassTypeComponent = () => {
                         gap: 1,
                         height: miniTab ? "69vh" : "76vh",
                         overflowY: "scroll",
+                        background:'#FFFF'
                     }}
                 >
                     {glassTypesList.length !== 0 ? (
@@ -231,6 +233,7 @@ const MirrorsGlassTypeComponent = () => {
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteGlassTypeLoading}
                 handleDelete={handleHardwareDelete}
+                text={"Glass Type"}
             />
             <HardwareEditModal
                 open={updateModalOpen}
