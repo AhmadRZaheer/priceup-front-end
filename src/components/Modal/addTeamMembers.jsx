@@ -42,7 +42,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: "40%",
+  width: 600,
   bgcolor: "background.paper",
   borderRadius: "12px",
   p: 2,
@@ -160,19 +160,13 @@ export default function AddTeamMembers({
 
     image: Yup.mixed(),
   });
-  console.log(token, "token");
   const formik = useFormik({
-    initialValues: isEdit
-      ? {
-          name: SelectedData?.name,
-          email: SelectedData?.email,
-          image: SelectedData?.image,
-        }
-      : {
-          name: "",
-          image: "",
-          email: "",
-        },
+    initialValues: {
+      name: isEdit ? SelectedData?.name : "",
+      email: isEdit ? SelectedData?.email : "",
+      image: isEdit ? SelectedData?.image : "",
+    },
+
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -197,6 +191,11 @@ export default function AddTeamMembers({
   const handleButtonClick = () => {
     inputRef.current.click(); // Trigger click on the file input
   };
+  React.useEffect(() => {
+    if (!isEdit) {
+      setSelectedImage(null);
+    }
+  }, [isEdit]);
   return (
     <div>
       <Modal
@@ -214,7 +213,13 @@ export default function AddTeamMembers({
               <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
                 {isEdit ? "Edit User" : "Add New User"}
               </Typography>
-              <Typography sx={{ color: "rgba(33, 37, 40, 1)", marginTop: 0.5 }}>
+              <Typography
+                sx={{
+                  color: "#646669",
+                  marginTop: 0.5,
+                  fontWeight: 600,
+                }}
+              >
                 Edit your user details.
               </Typography>
             </Box>
@@ -236,7 +241,14 @@ export default function AddTeamMembers({
               borderRadius: "12px",
             }}
           >
-            <Typography sx={{ color: "black", marginTop: 1 }}>
+            <Typography
+              sx={{
+                color: "black",
+                marginTop: 1,
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
               Profile image
             </Typography>
             <Box sx={{ display: "flex", gap: 2, p: 1, my: 2 }}>
@@ -288,6 +300,8 @@ export default function AddTeamMembers({
                       fontWeight: 500,
                       borderRadius: "54px",
                       border: "1px solid rgba(212, 219, 223, 1)",
+                      textTransform: "capitalize",
+                      px: 2,
                     }}
                     onClick={handleButtonClick}
                   >
@@ -307,7 +321,7 @@ export default function AddTeamMembers({
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={6} sx={{ width: "100%" }}>
-                <Typography>Full Name</Typography>
+                <Typography className="input-label-text">Full Name</Typography>
                 <TextField
                   placeholder="Name"
                   name="name"
@@ -322,7 +336,7 @@ export default function AddTeamMembers({
                 />
               </Grid>
               <Grid item xs={6} sx={{ width: "100%" }}>
-                <Typography>Email</Typography>
+                <Typography className="input-label-text">Email</Typography>
                 <TextField
                   placeholder="email"
                   name="email"
@@ -339,8 +353,10 @@ export default function AddTeamMembers({
               </Grid>
               {token && token.role === userRoles.SUPER_ADMIN && (
                 <Grid item xs={6} sx={{ width: "100%" }}>
-                  <Typography>Add Location</Typography>
-                  <FormControl sx={{ m: 1, width: "100%" }}>
+                  <Typography className="input-label-text">
+                    Add Location
+                  </Typography>
+                  <FormControl sx={{ width: "100%" }}>
                     <Select
                       className="custom-textfield"
                       labelId="demo-multiple-checkbox-label"
@@ -428,6 +444,7 @@ export default function AddTeamMembers({
                   sx={{
                     color: "#8477DA",
                     border: "1px solid #8477DA",
+                    borderRadius: "8px",
                   }}
                 >
                   Reset Password
@@ -443,13 +460,13 @@ export default function AddTeamMembers({
                 sx={{
                   color: "#101828",
                   border: "1px solid #D0D5DD",
-                  width: "320px",
+                  width: "fit-content",
+                  borderRadius: "8px",
                 }}
               >
                 Discard Changes
               </Button>
               <Button
-                fullWidth
                 variant="contained"
                 onClick={formik.handleSubmit}
                 disabled={LoadingForAdd || LoadingForEdit}
@@ -460,6 +477,7 @@ export default function AddTeamMembers({
                   },
                   padding: LoadingForAdd || LoadingForEdit ? 0 : "6px 16px",
                   position: "relative",
+                  borderRadius: "8px",
                 }}
               >
                 {LoadingForAdd || LoadingForEdit ? (

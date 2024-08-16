@@ -92,15 +92,24 @@ input {
   pointer-events: none; /* Disables all interactions */
   opacity: 0.5; /* Optional: Makes the box look disabled */
 }
-.ProjectsColumnsHeaderClass{
-  background-color: #EFF2F6;
+.ProjectsColumnsHeaderClass {
+  background-color: #eff2f6;
   color: #000000;
   font-size: 14px;
   font-weight: 700 !important;
   line-height: 21px;
 }
-.MuiDataGrid-columnHeaderTitle{
-  font-weight:700 !important;
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: 700 !important;
+}
+.input-label-text {
+  font-size: 12px !important;
+  font-size: 600 !important;
+  line-height: 16.39px !important;
+}
+.MuiButton-root {
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
 }
 /* .MuiDataGrid-cell{
   min-height:70px !important;

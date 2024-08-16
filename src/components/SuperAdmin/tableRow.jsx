@@ -26,7 +26,8 @@ const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
     isLoading: LoadingForEditUser,
     isSuccess: SuccessForEditUser,
   } = useCustomUserStatus();
-  const { mutate: editTeamMembers } = useEditTeamMembers();
+  const { mutate: editTeamMembers, isSuccess: isSuccessStaffUpdated } =
+    useEditTeamMembers();
   const [active, setActive] = useState(row.status);
 
   const handleSwitch = () => {
@@ -44,10 +45,10 @@ const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
     // Call the callback function to update non-active count
   };
   useEffect(() => {
-    if (SuccessForEditUser || SuccessForEdit) {
+    if (SuccessForEditUser || SuccessForEdit || isSuccessStaffUpdated) {
       refetch();
     }
-  }, [SuccessForEditUser, SuccessForEdit]);
+  }, [SuccessForEditUser, SuccessForEdit, isSuccessStaffUpdated]);
 
   return (
     <div className="cellAction">
