@@ -296,11 +296,11 @@ const ProjectInfoComponent = ({
                       <label htmlFor="name">Creater</label>
                       <span style={{ color: "red" }}>*</span>
                     </Box>
-                    <TextField
-                      disabled="true"
+                    <CustomInputField
+                      disabled={true}
                       id="creator"
                       name="creator"
-                      label="Enter Creator Name"
+                      // label="Enter Creator Name"
                       size="small"
                       variant="outlined"
                       InputProps={{

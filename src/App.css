@@ -144,3 +144,7 @@ input {
   background-color: white !important;
   border-radius: 8px !important;
 }
+.disabled-textfield {
+  color: rgba(0, 0, 0, 0.38);
+  opacity: 0.6;
+}

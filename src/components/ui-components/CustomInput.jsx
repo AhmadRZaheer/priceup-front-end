@@ -36,7 +36,7 @@ function CustomInputField({
         helperText={helperText}
         onBlur={onBlur}
         className={
-          error ? "custom-textfield-error" : disabled ? "" : "custom-textfield"
+          error ? "custom-textfield-error" : disabled ? "disabled-textfield" : "custom-textfield"
         }
       />
     </>
