@@ -258,18 +258,20 @@ const SuperAdminTeam = () => {
             </Button>
           </Box>
         </Box>
-        <Grid container sx={{ gap: 2, px: 3 }}>
+        <Grid container sx={{ px: 3 }} spacing={2}>
           {[
             { title: "Total Users", text: "40", variant: "blue" },
             { title: "Users", text: "34", variant: "red" },
             { title: "Admins", text: "15", variant: "green" },
             { title: "Super-Admins", text: "01", variant: "purple" },
           ].map((item) => (
-            <WidgetCard
-              text={item.text}
-              title={item.title}
-              varient={item.variant}
-            />
+            <Grid item lg={3} md={4} xs={6}>
+              <WidgetCard
+                text={item.text}
+                title={item.title}
+                varient={item.variant}
+              />
+            </Grid>
           ))}
         </Grid>
 
@@ -358,7 +360,7 @@ const SuperAdminTeam = () => {
                 justifyContent: "center",
                 height: "300px",
                 alignItems: "center",
-                background:'#FFFF'
+                background: "#FFFF",
               }}
             >
               <CircularProgress sx={{ color: "#8477DA" }} />

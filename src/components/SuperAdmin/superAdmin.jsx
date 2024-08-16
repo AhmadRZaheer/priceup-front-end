@@ -212,7 +212,7 @@ const SuperAdminTable = () => {
           </Box>
         </Box>
       </div>
-      <Grid container sx={{ gap: 2, px: 3.8 }}>
+      <Grid container sx={{ px: 3.8 }} spacing={2}>
         {[
           { title: "Active Locations", text: activeCount, variant: "blue" },
           {
@@ -221,12 +221,14 @@ const SuperAdminTable = () => {
             variant: "red",
           },
         ].map((item) => (
-          <WidgetCard
-            text={item.text}
-            title={item.title}
-            varient={item.variant}
-            type={2}
-          />
+          <Grid item lg={4} md={6} xs={6}>
+            <WidgetCard
+              text={item.text}
+              title={item.title}
+              varient={item.variant}
+              type={2}
+            />
+          </Grid>
         ))}
       </Grid>
       <Box
