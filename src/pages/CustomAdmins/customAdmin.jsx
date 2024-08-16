@@ -4,17 +4,20 @@ import CustomAdminsTable from "../../components/CustomAdminsTable/customAdminsTa
 import AdminSidebar from "../../components/CustomAdmin_SideBar/adminSideBar";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const CustomAdminPage = () => {
   return (
-    <Box sx={{ display: "flex", width: "100%", }}>
-      {/* <AdminSidebar /> */}
-      <CommonSideBar />
-      <TopBar/>
-      <Box sx={{width: '100%'}}>
+    // <Box sx={{ display: "flex", width: "100%", }}>
+    //   {/* <AdminSidebar /> */}
+    //   <CommonSideBar />
+    //   <TopBar/>
+    <CommonLayout>
+      <Box sx={{width: '100%',flex:6}}>
         <CustomAdminsTable />
       </Box>
-    </Box>
+      </CommonLayout>
+    // </Box>
   );
 };
 

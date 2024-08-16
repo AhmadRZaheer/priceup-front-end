@@ -1,7 +1,7 @@
 import { Box, Drawer, IconButton } from "@mui/material";
 import { useState } from "react";
 import SuperSidebar from "../SuperSidebar/superSidebar";
-import Logo from "../../Assets/purplelogo.svg";
+import Logo from "../../Assets/Logo1.svg";
 import "./style.scss";
 import { NavLink } from "react-router-dom";
 import SuperAdminSideBar from "./SuperAdminSideBar";
@@ -130,7 +130,7 @@ const CommonSideBar = () => {
               background: "#FFFF",
             }}
           >
-            <Box sx={{ marginTop: "10px" }}>
+            <Box sx={{ marginTop: "4px" }}>
               <NavLink style={{ marginTop: 20 }} to="/">
                 <div className="logoTop">
                   <span className="logoImg">

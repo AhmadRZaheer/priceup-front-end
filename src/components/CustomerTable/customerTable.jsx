@@ -151,6 +151,7 @@ const CustomerTable = () => {
               justifyContent: "space-between",
               p: 2,
               alignItem: "center",
+              background:'#FFFF'
             }}
           >
             <Typography

@@ -1,15 +1,17 @@
 import React from "react";
 import TopBar from "../TopBar";
 import CommonSideBar from "../CommonSideBar";
+import { Box } from "@mui/material";
 
 const CommonLayout = ({ children }) => {
   return (
     <>
       <TopBar />
-      <div style={{ display: "flex" }}>
+      <Box style={{ display: "flex" }}>
         <CommonSideBar />
+
         {children}
-      </div>
+      </Box>
     </>
   );
 };

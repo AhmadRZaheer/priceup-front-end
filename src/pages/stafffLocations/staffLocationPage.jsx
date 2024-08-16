@@ -4,19 +4,22 @@ import StaffLocationsTable from "../../components/staffLocation_Table/staffLocat
 import StaffLocationsSidebar from "../../components/staffLocations_SideBar/staffLocation_SideBar";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const StaffLocationPage = () => {
   return (
     <>
     
-      <div className="Customers">
+      {/* <div className="Customers">
       {/* <StaffLocationsSidebar /> */}
-      <CommonSideBar/>
-      <TopBar/>
+      {/* <CommonSideBar/>
+      <TopBar/> */}
+      <CommonLayout>
       <div className="customersContainer">
         <StaffLocationsTable />
       </div>
-    </div>
+      </CommonLayout>
+    {/* </div> */}
     </>
   
   );

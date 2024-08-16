@@ -798,10 +798,11 @@ const ProjectInfoComponent = ({
               borderRadius: "5px",
               pt: { md: 2, xs: 1 },
               width:'99.5%',
+              background:'#FFFF',
             }}
           >
             {/** Tabs Switch */}
-            <Grid sx={{ width: "202px", px: 1 }}>
+            <Grid sx={{ width: "202px", px: 1 ,pb:1}}>
               <Tabs
                 value={activeTabNumber}
                 onChange={handleChange}

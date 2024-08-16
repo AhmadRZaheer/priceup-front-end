@@ -4,8 +4,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { NavLink, useLocation } from "react-router-dom";
 import { logoutHandler } from "@/redux/userAuth";
 import { useDispatch } from "react-redux";
-import EstimsteIcon from "@/Assets/bar.svg";
-import CustomerIcon from "@/Assets/Customer-icon.svg";
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import DevicesFoldOutlinedIcon from "@mui/icons-material/DevicesFoldOutlined";
 import WindowOutlinedIcon from "@mui/icons-material/WindowOutlined";
 import SettingsIcon from "@/Assets/settings.svg";
@@ -241,7 +240,7 @@ const AdminSideBar = () => {
                   color: "white",
                   padding: "4px 20px",
                   display: "flex",
-                  borderRadius: 2,
+                  borderRadius: '6px',
                   background: "#000000",
                   my: 2,
                   ":hover": {
@@ -292,7 +291,7 @@ const AdminSideBar = () => {
                 color: "white",
                 padding: "4px 20px",
                 display: "flex",
-                borderRadius: 2,
+                borderRadius: '6px',
                 background: "#000000",
                 my: 2,
                 ":hover": {
@@ -323,9 +322,9 @@ const AdminSideBar = () => {
               >
                 {CustomActiveUser}
               </span>
-              <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 }} />
+              <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)' }} />
             </Button>
-             <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+             <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)", }} />
              </>
           ) : (
             ""
@@ -363,11 +362,11 @@ const AdminSideBar = () => {
           <div className="center">
             <ul>
               <MenuSigleItem link="/projects" >
-                <Description sx={{ mr: 1 }} />
+                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
                 <span>Projects</span>
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
-                <Description sx={{ mr: 1 }} />
+                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
                 <span>Old Estimates</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers">
@@ -419,6 +418,7 @@ const AdminSideBar = () => {
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand1": {
                       color: "#FFFF",
                     },
@@ -427,6 +427,8 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
+
                     ".expand1": {
                       color: "#FFFF",
                     },
@@ -437,7 +439,7 @@ const AdminSideBar = () => {
                 }}
               >
                 <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
-                <Typography sx={{ pl: 1 }}>Showers</Typography>
+                <Typography sx={{ pl: 1 ,fontWeight:600 }}>Showers</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -502,6 +504,7 @@ const AdminSideBar = () => {
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand2": {
                       color: "#FFFF",
                     },
@@ -510,6 +513,7 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
+                    borderRadius:'6px',
                     ".expand2": {
                       color: "#FFFF",
                     },
@@ -520,7 +524,7 @@ const AdminSideBar = () => {
                 }}
               >
                 <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
-                <Typography sx={{ pl: 1 }}>Mirrors</Typography>
+                <Typography sx={{ pl: 1 ,fontWeight:600}}>Mirrors</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
                 <div className="center">
@@ -551,7 +555,7 @@ const AdminSideBar = () => {
       </Box>
 
       {/* footer  */}
-      <Box sx={{ width: 298 }}>
+      <Box sx={{ width: 318 }}>
         <div className="center">
           <ul>
             <MenuSigleItem link="/settings">

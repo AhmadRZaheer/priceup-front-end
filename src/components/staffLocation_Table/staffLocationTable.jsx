@@ -87,7 +87,7 @@ const StaffLocationsTable = () => {
         height: "100vh",
         overflow: "auto",
         width: "100%",
-        bgcolor: "white",
+        bgcolor: {sm:"#F6F5FF",xs:'#FFFFFF'},
       }}
     >
       <Box
@@ -96,7 +96,7 @@ const StaffLocationsTable = () => {
           justifyContent: "space-between",
           px: 4,
           my: 2,
-          mt: 12,
+          // mt: 12,
         }}
       >
         <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>

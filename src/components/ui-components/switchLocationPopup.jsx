@@ -59,8 +59,9 @@ const SwitchLocationPopup = ({
       }}
       PaperProps={{
         style: {
-          borderRadius: "34px",
-          width: mobile ? "290px" : "317px",
+          borderRadius: "8px",
+          width: mobile ? "290px" : "335px",
+          border:'1px solid #D4DBDF'
         },
       }}
       sx={{ left: { sm: 24, xs: 0 }, top: { sm: -35, xs: 50 } }}
@@ -102,7 +103,7 @@ const SwitchLocationPopup = ({
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: mobile ? "206px" : "230px",
+            width: mobile ? "206px" : "250px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",

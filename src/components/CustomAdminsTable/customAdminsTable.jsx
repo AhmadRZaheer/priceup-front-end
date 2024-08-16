@@ -104,7 +104,7 @@ const CustomAdminsTable = () => {
         height: "100vh",
         overflow: "auto",
         width: "100%",
-        bgcolor: "white",
+        bgcolor: {sm:"#F6F5FF",xs:'#FFFFFF'},
       }}
     >
       <Box
@@ -146,6 +146,7 @@ const CustomAdminsTable = () => {
               justifyContent: "center",
               height: "300px",
               alignItems: "center",
+              background:'#FFFF'
             }}
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
@@ -166,7 +167,7 @@ const CustomAdminsTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
+          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 ,background:'#FFFF'}}>
             No Locations Found
           </Box>
         )}

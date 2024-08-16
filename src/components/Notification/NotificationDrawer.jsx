@@ -77,11 +77,11 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         onOpen={toggleDrawer(true)}
         sx={{
           "& .MuiDrawer-paper": {
-            top: { sm: "75px", xs: '57px' },
+            top: { sm: "69px", xs: '57px' },
             boxShadow:'none'
           },
           "& .MuiModal-backdrop": {
-            top: "74px",
+            top: "69px",
             left: '320px',
           },
         }}
