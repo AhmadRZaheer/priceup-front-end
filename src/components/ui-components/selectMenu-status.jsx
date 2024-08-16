@@ -45,27 +45,30 @@ function SelectMenu_Status({ status, quoteId }) {
           <Box
             ref={anchorRef}
             sx={{
-              width: "fit-content",
+              width: "60px",
+              height:'33px',
               bgcolor:
                 selectedStatus === "pending"
                   ? "#FCDEC0"
                   : selectedStatus === "approved"
                   ? "#daf4e9"
                   : "#f6d8d9",
-              borderRadius: "16px",
+              borderRadius: "70px",
               color:
                 selectedStatus === "pending"
                   ? "#503000"
                   : selectedStatus === "approved"
                   ? "#3ac688"
                   : "#d22b2d",
-              pl: 1.8,
-              pt: 0.3,
-              pr: 1.8,
-              pb: 0.5,
-              display: "flex",
+                  p:'6px 8px',
+              // pl: 1.8,
+              // pt: 0.3,
+              // pr: 1.8,
+              // pb: 0.5,
+              display: "grid",
               gap: 1,
               alignItems: "center",
+              textAlign:'center'
             }}
           >
             {/* <Box
@@ -82,11 +85,12 @@ function SelectMenu_Status({ status, quoteId }) {
                 mt: 0.2,
               }}
             /> */}
-            {selectedStatus?.charAt(0).toUpperCase() + selectedStatus?.slice(1)}
+           <p style={{fontSize:'14px',fontWeight:400,lineHeight:'21px'}}>{selectedStatus?.charAt(0).toUpperCase() + selectedStatus?.slice(1)}</p> 
           </Box>
           <ArrowDropDown
             sx={{
               transform: open ? "rotate(180deg)" : "rotate(0deg)",
+              alignSelf:'center',
               color:
                 selectedStatus === "pending"
                   ? "#FCDEC0"

@@ -21,7 +21,10 @@ export const EstimatesColumns = (
       renderCell: (params) => {
         return (
           <>
-            <Box className="user-cellWrap" sx={{ pl: 1.2, pr: 2, py: 0.3 }}>
+          {params?.row?.creatorData ?   <Box
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+            >
               <div className="customerImg">
                 <DefaultImage
                   image={params?.row?.creatorData?.image}
@@ -57,7 +60,6 @@ export const EstimatesColumns = (
                         p: 0,
                         mt: -0.4,
                         color: "#5D6164",
-                        color: "#5D6164",
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
                         overflow: "hidden",
@@ -69,7 +71,9 @@ export const EstimatesColumns = (
                   </div>
                 </div>
               </Tooltip>
-            </Box>
+            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box> }
+          
+
             {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
                 sx={{
@@ -109,13 +113,13 @@ export const EstimatesColumns = (
       renderCell: (params) => {
         return (
           <>
-            <Box
-              className="user-cellWrap"
-              sx={{
-                pl: 1.2,
-                pr: 2,
-                py: params?.row?.customerData?.email ? 0.3 : 0.6,
-              }}
+          {params?.row?.customerData ? <Box
+              className="project-cellWrap"
+              sx={
+                {
+                  // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+                }
+              }
             >
               <div className="customerImg">
                 <DefaultImage
@@ -163,7 +167,8 @@ export const EstimatesColumns = (
                   </div>
                 </div>
               </Tooltip>
-            </Box>
+            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
+            
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
             </Typography> */}
@@ -454,6 +459,7 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
+          {params?.row?.creatorData ? 
             <Box
               className="project-cellWrap"
               // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
@@ -504,7 +510,7 @@ export const ProjectsColumns = (dropdownActions) => {
                   </div>
                 </div>
               </Tooltip>
-            </Box>
+            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
 
             {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
@@ -545,7 +551,7 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
-            <Box
+          {params?.row?.customerData ? <Box
               className="project-cellWrap"
               sx={
                 {
@@ -599,7 +605,8 @@ export const ProjectsColumns = (dropdownActions) => {
                   </div>
                 </div>
               </Tooltip>
-            </Box>
+            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
+            
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
             </Typography> */}

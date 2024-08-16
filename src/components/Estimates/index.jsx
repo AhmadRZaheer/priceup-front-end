@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   FormControl,
   Grid,
   InputAdornment,
@@ -261,10 +262,12 @@ export default function Estimates() {
                 sx={{ height: "40px" }}
                 // onChange={handleChange}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={"pending"}>Pending</MenuItem>
+                <MenuItem value={"voided"}>Voided</MenuItem>
+                <MenuItem value={"approved"}>Approved</MenuItem>
               </Select>
             </FormControl>
+            <Button variant='text' sx={{color:'#0075FF',fontSize:'14px'}} >Clear Filters</Button>
           </Box>
         </Box>
 

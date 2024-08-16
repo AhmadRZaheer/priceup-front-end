@@ -200,16 +200,16 @@ const ProjectInfoComponent = ({
             sx={{
               backgroundColor: "#8477DA",
               height:'44px',
-              width:'215px',
+              width:'222px',
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
               borderRadius: 1,
               fontSize: {lg:16,md:15},
-              padding: '10px 13px',
+              padding: '10px 10px',
             }}
           >
-            <Add  sx={{ mr: 0.2,color:'#FFFFFF' }} />
+            <Add  sx={{ mr: 0.5,color:'#FFFFFF' }} />
             Create New Estimates
           </Button>
         </Box> : ''}
@@ -294,7 +294,7 @@ const ProjectInfoComponent = ({
                         marginBottom: 1,
                       }}
                     >
-                      <label htmlFor="name">Creater</label>
+                      <label htmlFor="name">Creator</label>
                       <span style={{ color: "red" }}>*</span>
                     </Box>
                     <TextField
@@ -783,10 +783,12 @@ const ProjectInfoComponent = ({
                   sx={{ height: "40px" }}
                 // onChange={handleChange}
                 >
-                  <MenuItem value={"active"}>Active</MenuItem>
-                  <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={"pending"}>Pending</MenuItem>
+                <MenuItem value={"voided"}>Voided</MenuItem>
+                <MenuItem value={"approved"}>Approved</MenuItem>
                 </Select>
               </FormControl>
+              <Button variant='text' sx={{color:'#0075FF',fontSize:'14px'}} >Clear Filters</Button>
             </Box>
           </Box>
 

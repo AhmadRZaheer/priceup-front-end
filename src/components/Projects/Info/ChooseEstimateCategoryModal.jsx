@@ -116,7 +116,7 @@ export default function ChooseEstimateCategoryModal({
             <Typography
               sx={{
                 fontSize: "16px",
-                fontWeight: 600,
+                fontWeight: 500,
                 lineHeight: "21.86px",
                 color: "#212528",
                 pt: 0.5,
