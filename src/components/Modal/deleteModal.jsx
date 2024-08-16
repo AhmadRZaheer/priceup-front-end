@@ -22,7 +22,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
     border: "2px solid white",
     boxShadow: 24,
     p: 3,
-    borderRadius: 2,
+    borderRadius: "12px",
   };
   return (
     <>
@@ -52,7 +52,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               gap: 0.4,
               p: 2,
               background: "#f3f5f6",
-              borderRadius: "8px",
+              borderRadius: "12px",
               mt: 3,
             }}
           >
@@ -63,7 +63,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               Delete {text ?? "user"}
             </Typography>
             <Typography
-              sx={{ fontSize: "16px", fontWeight: 600, color: "#587d9f" }}
+              sx={{ fontSize: "16px", fontWeight: 600, color: "#606366" }}
             >
               Are you sure you want to delete {text ?? "user"}?{" "}
             </Typography>
@@ -80,8 +80,9 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               onClick={handleDelete}
               variant="outlined"
               sx={{
+                fontWeight: 600,
                 border: "1px solid #D0D5DD",
-                color: "#344054",
+                color: "black",
                 ":hover": {
                   border: "1px solid #D0D5DD",
                 },
@@ -105,6 +106,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               onClick={close}
               variant="contained"
               sx={{
+                fontWeight: 600,
                 bgcolor: "rgba(226, 42, 45, 1)",
                 color: "white",
                 ":hover": {

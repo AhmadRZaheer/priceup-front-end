@@ -102,6 +102,15 @@ input {
 .MuiDataGrid-columnHeaderTitle {
   font-weight: 700 !important;
 }
+.input-label-text {
+  font-size: 12px !important;
+  font-size: 600 !important;
+  line-height: 16.39px !important;
+}
+.MuiButton-root {
+  text-transform: capitalize !important;
+  border-radius: 8px !important;
+}
 /* .MuiDataGrid-cell{
   min-height:70px !important;
 }
