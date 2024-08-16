@@ -258,7 +258,7 @@ export default function ExistingTable() {
           No Estimates Found
         </Typography>
       ) : (
-        <Box>
+        <Box sx={{width: "100%"}}>
           <DataGrid
             loading={estimatesListFetching}
             style={{

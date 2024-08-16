@@ -34,7 +34,7 @@ export default function Estimates() {
   }, []);
   return (
     <>
-      <Box sx={{ backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'} }}>
+      <Box sx={{ backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" } }}>
         <Typography
           sx={{
             py: 2.4,
@@ -47,32 +47,25 @@ export default function Estimates() {
       </Box>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
           alignItems: "center",
-          width: "100%",
+          // width: "100%",
           height: "auto",
           overflow: "auto",
           gap: 5,
+          pr: 3
         }}
       >
         {decodedToken?.role !== userRoles.STAFF ? (
           <Box
             sx={{
-              display: "flex",
               width: "100%",
-              justifyContent: "space-between",
-              gap: 2.6,
             }}
           >
-            <Grid
-              container
-              sx={{
-                gap: 3,
-              }}
-            >
+            <Grid container spacing={2}>
               {[
                 {
                   title: "Pending",
@@ -95,11 +88,13 @@ export default function Estimates() {
                   variant: "purple",
                 },
               ].map((item) => (
-                <WidgetCard
-                  text={item.text}
-                  title={item.title}
-                  varient={item.variant}
-                />
+                <Grid item lg={3} md={4} xs={6}>
+                  <WidgetCard
+                    text={item.text}
+                    title={item.title}
+                    varient={item.variant}
+                  />
+                </Grid>
               ))}
             </Grid>
             {/* <Box
@@ -222,8 +217,8 @@ export default function Estimates() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            width: "98%",
-            pr: 3,
+            width: "100%",
+           
             my: 1,
           }}
         >
@@ -270,11 +265,11 @@ export default function Estimates() {
 
         <Box
           sx={{
-            width: "98%",
+            width: "99%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            backgroundColor:'#FFFFFF',
-            mr: 2,
+            backgroundColor: "#FFFFFF",
+            // mr: 2,
             mb: 2,
           }}
         >

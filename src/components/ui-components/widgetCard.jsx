@@ -42,10 +42,12 @@ function WidgetCard({
           backgroundRepeat: "no-repeat",
           color: "white",
           padding: "20px",
-          backgroundSize: "contain",
-          width: type === 1 ? "336.9px" : "450.54px",
+          backgroundSize: "cover",
+          // width: type === 1 ? "336.9px" : "450.54px",
           overflow: "hidden", // Ensures no content spills out of the box
           boxSizing: "border-box",
+          // backgroundColor: "yellow",
+          borderRadius: "8px"
         }}
       >
         <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>

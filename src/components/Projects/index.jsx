@@ -39,7 +39,7 @@ export default function Projects() {
     <>
       <Box
         sx={{
-          p: "20px 20px 20px 8px",
+          p: "20px 22px 20px 10px",
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -87,7 +87,7 @@ export default function Projects() {
       </Box>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
@@ -101,29 +101,24 @@ export default function Projects() {
         {decodedToken?.role !== userRoles.STAFF ? (
           <Box
             sx={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
-              gap: 2.6,
+              width: "98%",
+              pr: 2,
             }}
           >
-            <Grid container 
-              sx={{
-                gap: 3,
-                display:'flex ',justifyContent:'space-between',pr:2
-              }}
-            >
+            <Grid container spacing={2} >
               {[
                 { title: "Pending", text: stats?.pending, variant: "blue" },
                 { title: "Approved", text: stats?.approved, variant: "green" },
                 { title: "Voided", text: stats?.voided, variant: "red" },
               ].map((item) => (
-                <WidgetCard
-                  type={2}
-                  text={item.text}
-                  title={item.title}
-                  varient={item.variant}
-                />
+                <Grid item lg={4} md={6} sm={6} xs={6}>
+                  <WidgetCard
+                    type={2}
+                    text={item.text}
+                    title={item.title}
+                    varient={item.variant}
+                  />
+                </Grid>
               ))}
             </Grid>
             {/* <Box
@@ -213,7 +208,7 @@ export default function Projects() {
             width: "98%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            background:'#FFFFFF',
+            background: "#FFFFFF",
             mr: 2,
             mb: 2,
           }}
