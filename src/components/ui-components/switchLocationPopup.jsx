@@ -2,6 +2,7 @@ import {
   Box,
   CircularProgress,
   IconButton,
+  InputAdornment,
   Popover,
   Typography,
   useMediaQuery,
@@ -12,6 +13,7 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import BackIcon from "../../Assets/back.svg";
 import { userRoles } from "../../utilities/constants";
+import CustomInputField from "./CustomInput";
 
 const SwitchLocationPopup = ({
   isSwitching,
@@ -98,7 +100,21 @@ const SwitchLocationPopup = ({
         </IconButton>
       )}
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position:'relative' }}>
+      {/* <CustomInputField
+            id="input-with-icon-textfield"
+            placeholder="Search by Location Name"
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search sx={{ color: "#8477DA" }} />
+                </InputAdornment>
+              ),
+            }}
+            value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          /> */}
         <input
           type="text"
           placeholder="Search Admin Names"

@@ -159,7 +159,7 @@ const SuperAdminTable = () => {
   }, [switchedSuperAdmin]);
 
   return (
-    <Box sx={{ height: "97vh", overflow: "auto" }}>
+    <Box sx={{ height: "90vh", overflow: "auto" }}>
       <div className="page-title-location">
         <Box
           sx={{
