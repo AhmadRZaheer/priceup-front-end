@@ -4,17 +4,20 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import AddOnsTable from "../../components/AddOns/addOns";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 const AddOns = () => {
   return (
     <>
-    <TopBar/>
-    <div className="Customers">
+    {/* <TopBar/>
+    <div className="Customers"> */}
       {/* <Sidebar /> */}
-      <CommonSideBar/>
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
       <div className="customersContainer">
         <AddOnsTable />
       </div>
-    </div>
+      </CommonLayout>
+    {/* </div> */}
     </>
     
   );

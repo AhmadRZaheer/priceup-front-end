@@ -2,6 +2,7 @@ import {
   Box,
   CircularProgress,
   IconButton,
+  InputAdornment,
   Popover,
   Typography,
   useMediaQuery,
@@ -12,6 +13,7 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { Search } from "@mui/icons-material";
 import BackIcon from "../../Assets/back.svg";
 import { userRoles } from "../../utilities/constants";
+import CustomInputField from "./CustomInput";
 
 const SwitchLocationPopup = ({
   isSwitching,
@@ -59,8 +61,9 @@ const SwitchLocationPopup = ({
       }}
       PaperProps={{
         style: {
-          borderRadius: "34px",
-          width: mobile ? "290px" : "317px",
+          borderRadius: "8px",
+          width: mobile ? "290px" : "335px",
+          border:'1px solid #D4DBDF'
         },
       }}
       sx={{ left: { sm: 24, xs: 0 }, top: { sm: -35, xs: 50 } }}
@@ -97,12 +100,26 @@ const SwitchLocationPopup = ({
         </IconButton>
       )}
 
-      <Box sx={{ position: "relative" }}>
+      <Box sx={{ position:'relative' }}>
+      {/* <CustomInputField
+            id="input-with-icon-textfield"
+            placeholder="Search by Location Name"
+            fullWidth
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search sx={{ color: "#8477DA" }} />
+                </InputAdornment>
+              ),
+            }}
+            value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          /> */}
         <input
           type="text"
           placeholder="Search Admin Names"
           style={{
-            width: mobile ? "206px" : "230px",
+            width: mobile ? "206px" : "250px",
             padding: "8px",
             paddingLeft: "35px",
             height: "26px",

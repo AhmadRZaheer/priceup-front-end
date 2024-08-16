@@ -4,18 +4,22 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import HardwareTable from "../../components/HardwareTable/hardwareTable";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 
 const Hardware = () => {
   return (
     <>
-    <TopBar/>
-    <div className="Customers">
+    {/* <TopBar/>
+    <div className="Customers"> */}
       {/* <Sidebar /> */}
-      <CommonSideBar/>
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
       <div className="customersContainer">
         <HardwareTable />
       </div>
-    </div>
+      </CommonLayout>
+      
+    {/* </div> */}
     </>
     
   );

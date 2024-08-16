@@ -215,6 +215,7 @@ const MirrorsGlassAddonComponent = () => {
             padding: "20px",
             alignItems: "center",
             height: "56vh",
+            background: "#FFFF",
           }}
         >
           <CircularProgress size={24} sx={{ color: "#8477DA" }} />
@@ -227,6 +228,7 @@ const MirrorsGlassAddonComponent = () => {
             gap: 1,
             height: miniTab ? "69vh" : "76vh",
             overflowY: "scroll",
+            background: "#FFFF",
           }}
         >
           {glassAddonsList?.length !== 0 ? (

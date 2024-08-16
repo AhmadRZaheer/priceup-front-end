@@ -128,8 +128,8 @@ const SuperAdminUser = () => {
   return (
     <>
       <Box sx={{  width: "100%", m: "auto" }}>
-        <Box sx={{ display: "flex", justifyContent: "space-between", p: 1 }}>
-          <Typography sx={{ ml: 2, fontSize: 26, fontWeight: "bold" ,p:'88px 20px 20px 20px !important'}}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", p: 1,pt:3 }}>
+          <Typography sx={{ ml: 2, fontSize: 26, fontWeight: "bold" ,p:'0px 20px 20px 20px !important'}}>
             Admins
           </Typography>
           <Button
@@ -155,6 +155,7 @@ const SuperAdminUser = () => {
             m: 3,
             border: "1px solid #EAECF0",
             borderRadius: "8px",
+            background:'#FFFF'
           }}
         >
           <Box sx={{ display: "flex", justifyContent: "space-between", p: 2 }}>

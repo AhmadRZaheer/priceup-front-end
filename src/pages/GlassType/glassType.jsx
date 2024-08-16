@@ -4,17 +4,20 @@ import Sidebar from "../../components/Sidebar/sidebar";
 import GlassTypeTable from "../../components/GlassType/glassType";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
+import CommonLayout from "@/components/CommonLayout";
 const GlassType = () => {
   return (
     <>
-    <TopBar/>
+    {/* <TopBar/>
       <div className="Customers">
       {/* <Sidebar /> */}
-      <CommonSideBar/>
+    {/*  <CommonSideBar/> */}
+    <CommonLayout>
       <div className="customersContainer">
         <GlassTypeTable />
       </div>
-    </div>
+      </CommonLayout>
+    {/* </div> */}
     </>
   
   );
