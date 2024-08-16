@@ -229,6 +229,7 @@ const MirrorsEdgeWorkComponent = () => {
 
             <DeleteModal
                 open={deleteModalOpen}
+                text={"Edge Works"}
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteEdgeWorkLoading}
                 handleDelete={handleHardwareDelete}

@@ -233,6 +233,7 @@ const MirrorsGlassTypeComponent = () => {
                 close={() => { setDeleteModalOpen(false) }}
                 isLoading={deleteGlassTypeLoading}
                 handleDelete={handleHardwareDelete}
+                text={"Glass Type"}
             />
             <HardwareEditModal
                 open={updateModalOpen}

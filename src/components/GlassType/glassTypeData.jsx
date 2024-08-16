@@ -109,6 +109,7 @@ const GlassTypeDataItem = ({ entry, mainIndex, GlassTypeRefetch, type }) => {
       </div>
       <DeleteModal
         open={deleteModalOpen}
+        text={"Glass Type"}
         close={()=>{setDeleteModalOpen(false)}}
         isLoading={loaderForDelete}
         handleDelete={handleHardwareDelete}

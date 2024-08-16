@@ -250,6 +250,7 @@ const SuperAdminUser = () => {
           close={handleClose}
           open={Delete_M}
           isLoading={isLoading}
+          text={"Admin"}
           handleDelete={handeleDeleteStaff}
         />
         <CustomUserCreateModal
