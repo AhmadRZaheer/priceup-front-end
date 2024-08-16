@@ -115,6 +115,36 @@ const SuperAdminTeam = () => {
         );
       },
     },
+
+    // {
+    //   field: "Access",
+    //   flex: 0.6,
+    //   headerClassName: "customHeaderClass-admin-team",
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <IconButton
+    //           sx={{ borderRadius: 0, color: "#7F56D9" }}
+    //           onClick={() => openModel(params.row)}
+    //         >
+    //           <h6>Modify Access</h6>
+    //         </IconButton>
+    //       </>
+    //     );
+    //   },
+    // },
+    {
+      field: "User Role",
+      flex: 0.6,
+      headerClassName: "customHeaderClass-admin-team",
+      renderCell: (params) => {
+        return (
+          <>
+            <p className="new-table-text">{params.row?.role ?? "role"}</p>
+          </>
+        );
+      },
+    },
     {
       field: "Status",
       paddingLeft: 3,
@@ -125,32 +155,13 @@ const SuperAdminTeam = () => {
           <div
             className={params.row.status ? "status-active" : "status-inActive"}
           >
-            {params.row.status ? "Active" : "inActive"}
+            {params.row.status ? "Active" : "Inactive"}
           </div>
         );
       },
     },
-
     {
-      field: "Access",
-      flex: 0.6,
-      headerClassName: "customHeaderClass-admin-team",
-      renderCell: (params) => {
-        return (
-          <>
-            <IconButton
-              sx={{ borderRadius: 0, color: "#7F56D9" }}
-              onClick={() => openModel(params.row)}
-            >
-              <h6>Modify Access</h6>
-            </IconButton>
-          </>
-        );
-      },
-    },
-
-    {
-      field: "Action",
+      field: "Actions",
       flex: 0.8,
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
@@ -159,11 +170,14 @@ const SuperAdminTeam = () => {
 
         return (
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-            <TableRow
-              row={params.row}
-              refetch={teamMemberRefetch}
-              type={"superAdminTeam"}
-            />
+            <div>
+              <TableRow
+                row={params.row}
+                refetch={teamMemberRefetch}
+                type={"superAdminTeam"}
+                text={""}
+              />
+            </div>
 
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
@@ -182,7 +196,13 @@ const SuperAdminTeam = () => {
       },
     },
   ];
-  
+
+  const handleCreateUser = async () => {
+    await setEdit2(null);
+    await setIsEdit2(false);
+
+    setOpen2(true);
+  };
   const filteredData = staffData?.filter((staff) =>
     staff.name.toLowerCase().includes(search.toLowerCase())
   );
@@ -208,9 +228,9 @@ const SuperAdminTeam = () => {
             </Typography>
             <Typography
               sx={{
-                color: "rgba(33, 37, 40, 1)",
+                color: "#606366",
                 fontSize: "16px",
-                fontWeight: 600,
+                fontWeight: 500,
               }}
             >
               Add, edit and manage your Users.
@@ -220,7 +240,7 @@ const SuperAdminTeam = () => {
             <Button
               fullWidth
               variant="contained"
-              // onClick={() => setOpen(true)}
+              onClick={handleCreateUser}
               sx={{
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
@@ -238,7 +258,7 @@ const SuperAdminTeam = () => {
             </Button>
           </Box>
         </Box>
-        <Grid container sx={{ gap: 2, px: 3,}}>
+        <Grid container sx={{ gap: 2, px: 3 }}>
           {[
             { title: "Total Users", text: "40", variant: "blue" },
             { title: "Users", text: "34", variant: "red" },
@@ -261,9 +281,7 @@ const SuperAdminTeam = () => {
             my: 2,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
-            Users
-          </Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>Users</Typography>
           {/* <TextField
             placeholder="Search by Name"
             variant="outlined"
@@ -318,7 +336,7 @@ const SuperAdminTeam = () => {
                 // onChange={handleChange}
               >
                 <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={"inActive"}>Inactive</MenuItem>
               </Select>
             </FormControl>
           </Box>
