@@ -60,7 +60,7 @@ const SingleLocation = ({
           <Typography
             className={data.user?.status ? "status-active" : "status-inActive"}
           >
-            {data.user?.status ? "Active" : "inActive"}
+            {data.user?.status ? "Active" : "Inactive"}
           </Typography>
         </Box>
         {/* statuses */}
@@ -118,12 +118,12 @@ const SingleLocation = ({
                     )}
                   </Box>
                   <Typography sx={{ fontSize: "15px", fontWeight: 500 }}>
-                    {nonActiveUsers?.length} Users
+                    {nonActiveUsers?.length} {nonActiveUsers?.length === 1 ? "User": "Users"}
                   </Typography>
                 </Box>
               ) : (
                 <Box sx={{ color: "#667085", py: 0.7 }}>
-                  <Typography>No Users</Typography>
+                  <Typography>No User</Typography>
                 </Box>
               )}
             </Box>
@@ -157,6 +157,7 @@ const SingleLocation = ({
             onClick={() => handleAccessLocation(data)}
             variant="outlined"
             sx={{
+              fontWeight: 600,
               color: "rgba(132, 119, 218, 1)",
               borderColor: "rgba(132, 119, 218, 1)",
               ":hover": {
