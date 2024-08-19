@@ -34,11 +34,11 @@ const debounce = (func, delay) => {
   };
 };
 
-export default function ExistingList() {
+export default function ExistingList({ searchValue, StatusValue, DateValue }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
   const routePrefix = `${backendURL}/projects`;
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const useStyles = makeStyles({
     overflowText: {
@@ -56,14 +56,14 @@ export default function ExistingList() {
     isFetching: projectsListFetching,
     refetch: refetchProjectsList,
   } = useFetchAllDocuments(
-    `${routePrefix}?page=${page}&limit=${itemsPerPage}&search=${search}`
+    `${routePrefix}?page=${page}&limit=${itemsPerPage}&search=${searchValue}&status=${StatusValue}&date=${DateValue}`
   );
   const {
     mutate: deleteProject,
     isSuccess: deletedSuccessfully,
     isLoading: LoadingForDelete,
   } = useDeleteDocument();
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (item) => {
@@ -77,7 +77,7 @@ export default function ExistingList() {
     } else {
       return [];
     }
-  }, [projectsList, search]);
+  }, [projectsList, searchValue]);
 
   const handleDeleteProject = () => {
     deleteProject({ apiRoute: `${routePrefix}/${deleteRecord}` });
@@ -89,13 +89,13 @@ export default function ExistingList() {
     navigate(`/projects/${item?._id}`);
   };
 
-  const handleCreateProject = () => {
-    console.log("create project");
-    navigate("/projects/create");
-  };
+  // const handleCreateProject = () => {
+  //   console.log("create project");
+  //   navigate("/projects/create");
+  // };
   useEffect(() => {
     refetchProjectsList();
-  }, [page, deletedSuccessfully]);
+  }, [page, deletedSuccessfully, StatusValue, DateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -105,13 +105,12 @@ export default function ExistingList() {
         setPage(1);
       }
     }, 500),
-    [search]
+    [searchValue]
   );
 
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+  useEffect(() => {
     debouncedRefetch();
-  };
+  }, [searchValue]);
 
   const dropdownActions = [
     {
@@ -179,7 +178,7 @@ export default function ExistingList() {
         }
       }
     >
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -196,7 +195,7 @@ export default function ExistingList() {
         >
           Projects
         </Typography>
-        {/* Search input field */}
+        {/* Search input field 
         <TextField
           placeholder="Search by Customer / Project Name"
           value={search}
@@ -234,7 +233,7 @@ export default function ExistingList() {
           <Add sx={{ width: 24 }} />
           Add
         </IconButton>
-      </Box>
+      </Box> */}
       {isLoading ? (
         <Box
           sx={{

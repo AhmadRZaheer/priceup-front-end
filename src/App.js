@@ -11,6 +11,9 @@ import Snackbars from "./components/Modal/snackBar";
 import { closeSnackbar, selectSnackbar } from "./redux/snackBarSlice";
 import { SnackbarProvider } from "notistack";
 import { CustomHooks } from "@/utilities/CustomHooks";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+
 
 function App() {
   const dispatch = useDispatch();
@@ -40,22 +43,23 @@ function App() {
   return (
     <div className="App">
       <QueryClientProvider client={queryClient}>
-        <SnackbarProvider
-          maxSnack={5}
-          anchorOrigin={{ vertical: "top", horizontal: "right" }}
-          autoHideDuration={10000}
-          transitionDuration={{ enter: 200, exit: 800 }}
-        >
-          <BrowserRouter>
-            <FetchId2>
-              <CustomHooks />
-              <AppRoutes />
-              <AuthVerify logOut={logOut} />
-            </FetchId2>
-          </BrowserRouter>
-        </SnackbarProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <SnackbarProvider
+            maxSnack={5}
+            anchorOrigin={{ vertical: "top", horizontal: "right" }}
+            autoHideDuration={10000}
+            transitionDuration={{ enter: 200, exit: 800 }}
+          >
+            <BrowserRouter>
+              <FetchId2>
+                <CustomHooks />
+                <AppRoutes />
+                <AuthVerify logOut={logOut} />
+              </FetchId2>
+            </BrowserRouter>
+          </SnackbarProvider>
+        </LocalizationProvider>
       </QueryClientProvider>
-
       <Snackbars
         open={snackbar.open}
         message={snackbar.message}

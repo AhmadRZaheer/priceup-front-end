@@ -34,7 +34,7 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
-import { ContentCopy, Search } from "@mui/icons-material";
+import { Add, ContentCopy, Search } from "@mui/icons-material";
 import { backendURL, debounce } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
@@ -221,9 +221,9 @@ const SuperAdminTable = () => {
                 fontSize: 17,
                 padding: 1,
               }}
+              startIcon={<Add color="white" />}
             >
-              {/* <Add color="white" /> */}
-              Add Location
+              Add New Location
             </Button>
           </Box>
         </Box>
@@ -256,7 +256,7 @@ const SuperAdminTable = () => {
           mt: 3,
         }}
       >
-        <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+        <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
           All Locations
         </Typography>
 
@@ -306,7 +306,7 @@ const SuperAdminTable = () => {
                   className=" status-inActive"
                   sx={{ padding: 0, px: 2, width: "44px" }}
                 >
-                  inActive
+                  Inactive
                 </Typography>
               </MenuItem>
             </Select>
@@ -771,7 +771,7 @@ const SuperAdminTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
+          <Box sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}>
             No Locations Found
           </Box>
         )}
