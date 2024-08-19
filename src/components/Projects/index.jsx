@@ -7,10 +7,11 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
-import { useEffect, useState } from "react";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { useCallback, useEffect, useState } from "react";
+import { backendURL, debounce, getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import ExistingList from "./existingList";
@@ -19,12 +20,21 @@ import { Add } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
+import StatusChip from "../common/StatusChip";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
 
 export default function Projects() {
   const routePrefix = `${backendURL}/projects`;
   const navigate = useNavigate();
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
+  const [Status, setStatus] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (newDate) => {
+    // Ensure the new date is a valid Date object
+    setSelectedDate(newDate);
+  };
   const handleCreateProject = () => {
     navigate("/projects/create");
   };
@@ -32,6 +42,16 @@ export default function Projects() {
   const { data: stats, refetch: refetchStats } = useFetchSingleDocument(
     `${routePrefix}/allStats`
   );
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setSelectedDate(null);
+  };
   useEffect(() => {
     refetchStats();
   }, [refetchStats]);
@@ -88,14 +108,14 @@ export default function Projects() {
       <Box
         sx={{
           backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "start",
-          alignItems: "center",
+          // display: "flex",
+          // flexDirection: "column",
+          // justifyContent: "start",
+          // alignItems: "center",
           width: "100%",
           height: "auto",
-          overflow: "auto",
-          gap: 5,
+          // overflow: "auto",
+          // gap: 5,
         }}
       >
         {decodedToken?.role !== userRoles.STAFF ? (
@@ -105,7 +125,7 @@ export default function Projects() {
               pr: 2,
             }}
           >
-            <Grid container spacing={2} >
+            <Grid container spacing={2}>
               {[
                 { title: "Pending", text: stats?.pending, variant: "blue" },
                 { title: "Approved", text: stats?.approved, variant: "green" },
@@ -157,9 +177,11 @@ export default function Projects() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            alignItems: "center",
             width: "98%",
             pr: 3,
             my: 1,
+            pt: 3,
           }}
         >
           <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
@@ -177,8 +199,34 @@ export default function Projects() {
                 ),
               }}
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleChange}
             />
+            <Box>
+              <DesktopDatePicker
+                label="Date Added"
+                inputFormat="MM/DD/YYYY"
+                className="custom-textfield"
+                // maxDate={new Date()} // Sets the maximum date to the current date
+                value={selectedDate}
+                onChange={handleDateChange}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: 40,
+                    width: 150,
+                    backgroundColor: "white", // Adjust height
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: "0.875rem", // Adjust font size
+                    padding: "8px 14px", // Adjust padding
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "0.875rem",
+                    top: "-6px", // Adjust label size
+                  },
+                }}
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
+            </Box>
             <FormControl
               sx={{ width: "152px" }}
               size="small"
@@ -188,18 +236,28 @@ export default function Projects() {
                 Status
               </InputLabel>
               <Select
-                // value={age}
+                value={Status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
                 size="small"
                 sx={{ height: "40px" }}
-                // onChange={handleChange}
+                onChange={(e) => setStatus(e.target.value)}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={"pending"}>
+                  <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                </MenuItem>
+                <MenuItem value={"voided"}>
+                  <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                </MenuItem>
+                <MenuItem value={"approved"}>
+                  <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                </MenuItem>
               </Select>
             </FormControl>
+            <Button variant="text" onClick={handleResetFilter}>
+              Clear Filter
+            </Button>
           </Box>
         </Box>
 
@@ -211,9 +269,14 @@ export default function Projects() {
             background: "#FFFFFF",
             mr: 2,
             mb: 2,
+            mt: 2,
           }}
         >
-          <ExistingList />
+          <ExistingList
+            searchValue={search}
+            StatusValue={Status}
+            DateValue={selectedDate}
+          />
         </Box>
       </Box>
     </>

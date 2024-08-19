@@ -32,13 +32,25 @@ export const useFetchDataEstimate = () => {
   });
 };
 
-export const useGetEstimates = (page, limit, search) => {
+export const useGetEstimates = (
+  page,
+  limit,
+  searchValue,
+  StatusValue,
+  DateValue
+) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
       const response = await axios.get(`${backendURL}/estimates`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: { page, limit, search },
+        params: {
+          page,
+          limit,
+          search: searchValue,
+          status: StatusValue,
+          date: DateValue,
+        },
       });
       if (response.data && response.data.code === 200) {
         return response.data.data ? response.data.data : null;
@@ -151,7 +163,7 @@ export const useEditEstimates = () => {
               ? {
                   config: { ...updatedEstimate.estimateData },
                   cost: updatedEstimate.cost,
-                  project_id:updatedEstimate.projectId
+                  project_id: updatedEstimate.projectId,
                 }
               : {}),
             ...(updatedEstimate.status

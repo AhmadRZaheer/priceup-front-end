@@ -337,8 +337,24 @@ const SuperAdminTeam = () => {
                 sx={{ height: "40px" }}
                 // onChange={handleChange}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"inActive"}>Inactive</MenuItem>
+                <MenuItem value={true}>
+                  {" "}
+                  <Typography
+                    className=" status-active"
+                    sx={{ padding: 0, px: 2, width: "44px" }}
+                  >
+                    Active
+                  </Typography>
+                </MenuItem>
+                <MenuItem value={false}>
+                  {" "}
+                  <Typography
+                    className=" status-inActive"
+                    sx={{ padding: 0, px: 2, width: "44px" }}
+                  >
+                    Inactive
+                  </Typography>
+                </MenuItem>
               </Select>
             </FormControl>
           </Box>

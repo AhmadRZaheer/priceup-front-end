@@ -52,12 +52,18 @@ import AddEditLocationModal from "../Modal/editLoactionSuperAdmin";
 const SuperAdminTable = () => {
   const routePrefix = `${backendURL}/companies`;
   const [search, setSearch] = useState("");
+  const [Status, setStatus] = useState(null);
+
   const {
     data: AdminData,
     refetch: AdminRefetch,
     isFetched,
     isFetching,
-  } = useFetchAllDocuments(`${routePrefix}/by-role?search=${search}`);
+  } = useFetchAllDocuments(
+    `${routePrefix}/by-role?search=${search} ${
+      Status !== null ? `&status=${Status}` : ""
+    }`
+  );
   const {
     mutate: switchLocationSuperAdmin,
     data: useTokenSuperAdmin,
@@ -92,23 +98,12 @@ const SuperAdminTable = () => {
   //   });
   // }, [isUserData?.company, customUserData]);
 
-  useEffect(() => {
-    setActiveCount(AdminData.length);
-  }, [isFetched]);
   const handleCloseAddEdit = () => setAddEditOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = async () => {
     await deleteuserdata(isUserData?.user);
   };
-  useEffect(() => {
-    if (isSuccess) {
-      setDeleteOpen(false);
-      AdminRefetch();
-    }
-  }, [isSuccess]);
-  useEffect(() => {
-    AdminRefetch();
-  }, []);
+
   const debouncedRefetch = useCallback(
     debounce(() => {
       AdminRefetch();
@@ -156,6 +151,27 @@ const SuperAdminTable = () => {
     setisEdit(false);
     setAddEditOpen(true);
   };
+
+  const handleClearFilter = () => {
+    setStatus(null);
+    setSearch("");
+  };
+
+  useEffect(() => {
+    setActiveCount(AdminData.length);
+  }, [isFetched]);
+  useEffect(() => {
+    if (isSuccess) {
+      setDeleteOpen(false);
+      AdminRefetch();
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    AdminRefetch();
+  }, [Status]);
+  useEffect(() => {
+    AdminRefetch();
+  }, []);
   useEffect(() => {
     if (switchedSuperAdmin) {
       localStorage.setItem("userReference", decodedToken.id);
@@ -262,23 +278,44 @@ const SuperAdminTable = () => {
             sx={{ width: "152px" }}
             size="small"
             className="custom-textfield"
+            placeholder="status"
           >
             <InputLabel id="demo-select-small-label" className="input-label">
               Status
             </InputLabel>
             <Select
-              // value={age}
+              value={Status}
               size="small"
+              placeholder="status"
               labelId="demo-select-small-label"
               id="demo-select-small"
               label="Status"
               sx={{ height: "40px" }}
-              // onChange={handleChange}
+              onChange={(e) => setStatus(e.target.value)}
             >
-              <MenuItem value={true}>Active</MenuItem>
-              <MenuItem value={false}>Inactive</MenuItem>
+              <MenuItem value={true}>
+                <Typography
+                  className=" status-active"
+                  sx={{ padding: 0, px: 2, width: "44px" }}
+                >
+                  Active
+                </Typography>
+              </MenuItem>
+              <MenuItem value={false}>
+                <Typography
+                  className=" status-inActive"
+                  sx={{ padding: 0, px: 2, width: "44px" }}
+                >
+                  Inactive
+                </Typography>
+              </MenuItem>
             </Select>
           </FormControl>
+          <Box>
+            <Button onClick={handleClearFilter} variant="text" sx={{}}>
+              Clear Filter
+            </Button>
+          </Box>
         </Box>
       </Box>
       {/* <div className="types-main-contianer">
