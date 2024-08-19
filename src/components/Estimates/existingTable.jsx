@@ -67,10 +67,10 @@ const debounce = (func, delay) => {
   };
 };
 
-export default function ExistingTable() {
+export default function ExistingTable({ searchValue, StatusValue, DateValue }) {
   const navigate = useNavigate();
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
@@ -80,7 +80,7 @@ export default function ExistingTable() {
     isLoading,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
-  } = useGetEstimates(page, itemsPerPage, search);
+  } = useGetEstimates(page, itemsPerPage, searchValue, StatusValue, DateValue);
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   // const {
@@ -107,7 +107,7 @@ export default function ExistingTable() {
     } else {
       return [];
     }
-  }, [estimatesList, search]);
+  }, [estimatesList, searchValue]);
 
   const handleDeleteEstimate = () => {
     deleteEstimates(deleteRecord);
@@ -150,39 +150,37 @@ export default function ExistingTable() {
     }
   };
 
-  const handleCreateQuote = () => {
-    dispatch(resetMirrorEstimateState());
-    dispatch(resetEstimateState());
-    dispatch(resetState());
-    dispatch(setisCustomizedDoorWidth(false));
-    dispatch(setQuoteState("create"));
-    navigate("/estimates/dimensions");
-  };
+  // const handleCreateQuote = () => {
+  //   dispatch(resetMirrorEstimateState());
+  //   dispatch(resetEstimateState());
+  //   dispatch(resetState());
+  //   dispatch(setisCustomizedDoorWidth(false));
+  //   dispatch(setQuoteState("create"));
+  //   navigate("/estimates/dimensions");
+  // };
   useEffect(() => {
     refetchEstimatesList();
-  }, [refetchEstimatesCounter, page]);
+  }, [refetchEstimatesCounter, page, StatusValue, DateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
       if (page === 1) {
         refetchEstimatesList();
-      }
-      else {
+      } else {
         setPage(1);
       }
     }, 500),
-    [search]
+    [searchValue]
   );
 
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+  useEffect(() => {
     debouncedRefetch();
-  };
+  }, [searchValue]);
 
   // useEffect(() => {
   //   refetchEstimatesList();
   // }, [page])
-  console.log(estimatesList, "estimatesList", estimatesListFetching)
+  console.log(estimatesList, "estimatesList", estimatesListFetching);
   return (
     <>
       {/* <Box
@@ -195,8 +193,8 @@ export default function ExistingTable() {
         <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
           Estimates
         </Typography> */}
-        {/* Search input field */}
-        {/* <TextField
+      {/* Search input field */}
+      {/* <TextField
           placeholder="Search by Customer Name"
           value={search}
           variant="standard"
@@ -238,7 +236,7 @@ export default function ExistingTable() {
           Add
         </IconButton>
       </Box> */}
-      
+
       {isLoading ? (
         <Box
           sx={{
@@ -258,7 +256,7 @@ export default function ExistingTable() {
           No Estimates Found
         </Typography>
       ) : (
-        <Box>
+        <Box sx={{ width: "100%" }}>
           <DataGrid
             loading={estimatesListFetching}
             style={{
@@ -281,7 +279,9 @@ export default function ExistingTable() {
             hideFooter
           />
           <Pagination
-            totalRecords={estimatesList?.totalRecords ? estimatesList?.totalRecords : 0}
+            totalRecords={
+              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+            }
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}
