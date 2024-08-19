@@ -153,7 +153,7 @@ function AccordionLocationEdit({ companyData, close, refetch }) {
                   sx={{
                     color: "black",
                     fontWeight: 500,
-                    borderRadius: "54px",
+                    borderRadius: "54px !important",
                     border: "1px solid rgba(212, 219, 223, 1)",
                   }}
                 >
