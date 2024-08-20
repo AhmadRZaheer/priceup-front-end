@@ -424,7 +424,7 @@ const NewSidebar = () => {
                 }}
               >
                 <img src={DefaultIcon} alt="showers icon" />
-                <Typography sx={{ pl: 1 }}>Showers</Typography>
+                <Typography sx={{ pl: 1 }}>Shower</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -442,7 +442,7 @@ const NewSidebar = () => {
                   >
                     <img src={HardWairIcon} alt="image of customer" />
 
-                    <span>Hardwares</span>
+                    <span>Hardware</span>
                   </Box>
                 </NavLink>
                 <NavLink to="/finishes" className="link">
@@ -514,7 +514,7 @@ const NewSidebar = () => {
                 }}
               >
                 <img src={DefaultIcon} alt="showers icon" />
-                <Typography sx={{ pl: 1 }}>Mirrors</Typography>
+                <Typography sx={{ pl: 1 }}>Mirror</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
                 <NavLink to="/mirrors/hardwares">
@@ -524,7 +524,7 @@ const NewSidebar = () => {
                   >
                     <img src={SettingsIcon} alt="image of customer" />
 
-                    <span>Hardwares</span>
+                    <span>Hardware</span>
                   </Box>
                 </NavLink>
                 <NavLink to="/mirrors/glass-addons">
