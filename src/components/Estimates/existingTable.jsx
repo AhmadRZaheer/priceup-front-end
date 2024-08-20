@@ -31,7 +31,7 @@ import {
 } from "@/redux/estimateCalculations";
 import PlusWhiteIcon from "@/Assets/plus-white.svg";
 import { useNavigate } from "react-router-dom";
-import { calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
+import { backendURL, calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import Pagination from "@/components/Pagination";
@@ -56,31 +56,44 @@ import {
 } from "@/redux/mirrorsEstimateSlice";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import NewPagination from "../Pagination";
+import { debounce } from "lodash";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
-const debounce = (func, delay) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
+// const debounce = (func, delay) => {
+//   let timeout;
+//   return (...args) => {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => {
+//       func(...args);
+//     }, delay);
+//   };
+// };
 
-export default function ExistingTable({ searchValue, StatusValue, DateValue }) {
+export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   const navigate = useNavigate();
+  const routePrefix = `${backendURL}/estimates`;
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
+  let fetchAllEstimatesUrl = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+  if (searchValue && searchValue.length) {
+    fetchAllEstimatesUrl += `&search=${searchValue}`;
+  }
+  if (statusValue) {
+    fetchAllEstimatesUrl += `&status=${statusValue}`;
+  }
+  if (dateValue) {
+    fetchAllEstimatesUrl += `&date=${dateValue}`
+  }
   const {
     data: estimatesList,
     isLoading,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
-  } = useGetEstimates(page, itemsPerPage, searchValue, StatusValue, DateValue);
+  } = useFetchAllDocuments(fetchAllEstimatesUrl);
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   // const {
@@ -160,7 +173,7 @@ export default function ExistingTable({ searchValue, StatusValue, DateValue }) {
   // };
   useEffect(() => {
     refetchEstimatesList();
-  }, [refetchEstimatesCounter, page, StatusValue, DateValue]);
+  }, [refetchEstimatesCounter, page, statusValue, dateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -169,13 +182,33 @@ export default function ExistingTable({ searchValue, StatusValue, DateValue }) {
       } else {
         setPage(1);
       }
-    }, 500),
-    [searchValue]
+    }, 700),
+    [page]
   );
-
+  
   useEffect(() => {
     debouncedRefetch();
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
   }, [searchValue]);
+
+
+  // const debouncedRefetch = useCallback(
+  //   debounce(() => {
+  //     if (page === 1) {
+  //       refetchEstimatesList();
+  //     } else {
+  //       setPage(1);
+  //     }
+  //   }, 500),
+  //   [searchValue]
+  // );
+
+  // useEffect(() => {
+  //   debouncedRefetch();
+  // }, [searchValue]);
 
   // useEffect(() => {
   //   refetchEstimatesList();

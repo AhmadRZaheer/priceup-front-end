@@ -534,7 +534,13 @@ export default function AddTeamMembers({
             <Box sx={{ display: "flex", gap: 2 }}>
               <Button
                 variant="outlined"
-                onClick={() => formik.resetForm()}
+                onClick={() => {
+                  if (isEdit) {
+                    formik.resetForm();
+                  } else {
+                    close();
+                  }
+                }}
                 sx={{
                   color: "#101828",
                   border: "1px solid #D0D5DD",
@@ -542,7 +548,7 @@ export default function AddTeamMembers({
                   borderRadius: "8px",
                 }}
               >
-                Discard Changes
+                {isEdit ? "Discard Changes" : "Cancel"}
               </Button>
               <Button
                 variant="contained"
