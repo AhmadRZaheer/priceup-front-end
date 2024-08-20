@@ -115,6 +115,7 @@ const CommonSideBar = () => {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+           
             },
           }}
 
@@ -147,10 +148,13 @@ const CommonSideBar = () => {
           variant="permanent"
           sx={{
             display: { xs: "none", sm: "block" },
+           
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+              zIndex:1000,
+              overflowX:'hidden'
             },
           }}
           open

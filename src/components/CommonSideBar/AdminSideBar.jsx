@@ -267,9 +267,11 @@ const AdminSideBar = () => {
                     textOverflow: "ellipsis",
                     overflow: "hidden",
                     textTransform: "capitalize",
+                    fontSize:'16px',
+                    fontWeight:600,
+                    lineHeight:'21.86px'
                   }}
                 >
-                  {" "}
                   {activeLocation?.company?.name || activeLocation?.name}
                 </span>
                 <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 ,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)'   }} />
@@ -453,7 +455,7 @@ const AdminSideBar = () => {
                   <ul>
                     <MenuSigleItem link="/hardware">
                       <DevicesFoldOutlinedIcon sx={{ mr: 1 }} />
-                      <span>Hardwares</span>
+                      <span>Hardware</span>
                     </MenuSigleItem>
                     <MenuSigleItem link="/finishes">
                       <FormatColorFillIcon sx={{ mr: 1 }} />

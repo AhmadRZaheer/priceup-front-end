@@ -6,6 +6,7 @@ import DefaultSection from "../../components/DefaultSection/defaultSection";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import ShowerLayout from "@/components/ShowerLayout";
 
 const Defaults = (Props) => {
   return (
@@ -16,7 +17,8 @@ const Defaults = (Props) => {
         {/* <CommonSideBar/> */}
         <CommonLayout>
         <div className="defaultsConatiner">
-          <DefaultSection />
+        <ShowerLayout/>
+        <DefaultSection />         
         </div>
         </CommonLayout>
       {/* </div> */}
