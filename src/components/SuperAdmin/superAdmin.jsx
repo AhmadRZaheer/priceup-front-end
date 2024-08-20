@@ -272,11 +272,11 @@ const SuperAdminTable = () => {
               label="Status"
               sx={{ height: "40px" }}
               // onChange={handleChange}
-            >
-              <MenuItem value={true}>Active</MenuItem>
+            >              <MenuItem value={true}>Active</MenuItem>
               <MenuItem value={false}>inActive</MenuItem>
             </Select>
           </FormControl>
+
         </Box>
       </Box>
       {/* <div className="types-main-contianer">
