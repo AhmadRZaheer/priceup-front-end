@@ -112,7 +112,7 @@ input {
 }
 .input-label-text {
   font-size: 12px !important;
-  font-size: 600 !important;
+  font-weight: 600 !important;
   line-height: 16.39px !important;
 }
 .MuiButton-root {

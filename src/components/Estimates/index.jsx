@@ -7,6 +7,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
   Typography,
 } from "@mui/material";
 import image1 from "@/Assets/test.png";
@@ -21,21 +22,40 @@ import { userRoles } from "@/utilities/constants";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import WidgetCard from "../ui-components/widgetCard";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import StatusChip from "../common/StatusChip";
+import dayjs from "dayjs";
 
 export default function Estimates() {
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
+  const [status, setStatus] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const {
     data: estimatesStats,
     // isLoading: estimatesStatsFetching,
     refetch: refetchEstimatesStats,
   } = useGetEstimatesStats();
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
+  };
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setSelectedDate(null);
+  };
   useEffect(() => {
     refetchEstimatesStats();
   }, []);
   return (
     <>
-      <Box sx={{ backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'} }}>
+      <Box sx={{ backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" } }}>
         <Typography
           sx={{
             py: 2.4,
@@ -48,32 +68,25 @@ export default function Estimates() {
       </Box>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           display: "flex",
           flexDirection: "column",
           justifyContent: "start",
           alignItems: "center",
-          width: "100%",
+          // width: "100%",
           height: "auto",
           overflow: "auto",
-          gap: 5,
+          gap: "5px",
+          pr: 3,
         }}
       >
         {decodedToken?.role !== userRoles.STAFF ? (
           <Box
             sx={{
-              display: "flex",
               width: "100%",
-              justifyContent: "space-between",
-              gap: 2.6,
             }}
           >
-            <Grid
-              container
-              sx={{
-                gap: 3,
-              }}
-            >
+            <Grid container spacing={2}>
               {[
                 {
                   title: "Pending",
@@ -96,11 +109,13 @@ export default function Estimates() {
                   variant: "purple",
                 },
               ].map((item) => (
-                <WidgetCard
-                  text={item.text}
-                  title={item.title}
-                  varient={item.variant}
-                />
+                <Grid item lg={3} md={4} xs={6}>
+                  <WidgetCard
+                    text={item.text}
+                    title={item.title}
+                    varient={item.variant}
+                  />
+                </Grid>
               ))}
             </Grid>
             {/* <Box
@@ -223,9 +238,10 @@ export default function Estimates() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            width: "98%",
-            pr: 3,
-            my: 1,
+            width: "100%",
+
+            mt: 2,
+            mb: 1,
           }}
         >
           <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
@@ -234,7 +250,7 @@ export default function Estimates() {
           <Box sx={{ display: "flex", gap: 2 }}>
             <CustomInputField
               id="input-with-icon-textfield"
-              placeholder="Search by User Name"
+              placeholder="Search by Customer Name"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -245,6 +261,30 @@ export default function Estimates() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <DesktopDatePicker
+              label="Date Added"
+              inputFormat="MM/DD/YYYY"
+              className="custom-textfield"
+              // maxDate={new Date()} // Sets the maximum date to the current date
+              value={selectedDate}
+              onChange={handleDateChange}
+              sx={{
+                "& .MuiInputBase-root": {
+                  height: 40,
+                  width: 150,
+                  backgroundColor: "white", // Adjust height
+                },
+                "& .MuiInputBase-input": {
+                  fontSize: "0.875rem", // Adjust font size
+                  padding: "8px 14px", // Adjust padding
+                },
+                "& .MuiInputLabel-root": {
+                  fontSize: "0.875rem",
+                  top: "-6px", // Adjust label size
+                },
+              }}
+              renderInput={(params) => <TextField {...params} size="small" />}
+            />
             <FormControl
               sx={{ width: "152px" }}
               size="small"
@@ -254,34 +294,46 @@ export default function Estimates() {
                 Status
               </InputLabel>
               <Select
-                // value={age}
+                value={status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
                 size="small"
                 sx={{ height: "40px" }}
-                // onChange={handleChange}
+                onChange={(e) => setStatus(e.target.value)}
               >
-                <MenuItem value={"pending"}>Pending</MenuItem>
-                <MenuItem value={"voided"}>Voided</MenuItem>
-                <MenuItem value={"approved"}>Approved</MenuItem>
+                <MenuItem value={"pending"}>
+                  <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                </MenuItem>
+                <MenuItem value={"voided"}>
+                  <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                </MenuItem>
+                <MenuItem value={"approved"}>
+                  <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                </MenuItem>
               </Select>
             </FormControl>
-            <Button variant='text' sx={{color:'#0075FF',fontSize:'14px'}} >Clear Filters</Button>
+            <Button variant="text" onClick={handleResetFilter}>
+              Clear Filter
+            </Button>
           </Box>
         </Box>
 
         <Box
           sx={{
-            width: "98%",
+            width: "99%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            backgroundColor:'#FFFFFF',
-            mr: 2,
+            backgroundColor: "#FFFFFF",
+            // mr: 2,
             mb: 2,
           }}
         >
-          <ExistingTable />
+          <ExistingTable
+            searchValue={search}
+            statusValue={status}
+            dateValue={selectedDate}
+          />
         </Box>
       </Box>
     </>

@@ -23,22 +23,22 @@ import { backendURL } from "@/utilities/common";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { makeStyles } from "@material-ui/core";
 import ActionsDropdown from "../common/ActionsDropdown";
+import { debounce } from "lodash";
 
-const debounce = (func, delay) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
+// const debounce = (func, delay) => {
+//   let timeout;
+//   return (...args) => {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => {
+//       func(...args);
+//     }, delay);
+//   };
+// };
 
-export default function ExistingList() {
+export default function ExistingList({ searchValue, statusValue, dateValue }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
   const routePrefix = `${backendURL}/projects`;
-  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const useStyles = makeStyles({
     overflowText: {
@@ -50,20 +50,27 @@ export default function ExistingList() {
   });
   const classes = useStyles();
   const itemsPerPage = 10;
+  let fetchAllProjectUrl = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+  if (searchValue && searchValue.length) {
+    fetchAllProjectUrl += `&search=${searchValue}`;
+  }
+  if (statusValue) {
+    fetchAllProjectUrl += `&status=${statusValue}`;
+  }
+  if (dateValue) {
+    fetchAllProjectUrl += `&date=${dateValue}`
+  }
   const {
     data: projectsList,
     isLoading,
     isFetching: projectsListFetching,
     refetch: refetchProjectsList,
-  } = useFetchAllDocuments(
-    `${routePrefix}?page=${page}&limit=${itemsPerPage}&search=${search}`
-  );
+  } = useFetchAllDocuments(fetchAllProjectUrl);
   const {
     mutate: deleteProject,
     isSuccess: deletedSuccessfully,
     isLoading: LoadingForDelete,
   } = useDeleteDocument();
-  const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
   const handleOpenDeleteModal = (item) => {
@@ -77,7 +84,7 @@ export default function ExistingList() {
     } else {
       return [];
     }
-  }, [projectsList, search]);
+  }, [projectsList, searchValue]);
 
   const handleDeleteProject = () => {
     deleteProject({ apiRoute: `${routePrefix}/${deleteRecord}` });
@@ -89,13 +96,13 @@ export default function ExistingList() {
     navigate(`/projects/${item?._id}`);
   };
 
-  const handleCreateProject = () => {
-    console.log("create project");
-    navigate("/projects/create");
-  };
+  // const handleCreateProject = () => {
+  //   console.log("create project");
+  //   navigate("/projects/create");
+  // };
   useEffect(() => {
     refetchProjectsList();
-  }, [page, deletedSuccessfully]);
+  }, [page, deletedSuccessfully, statusValue, dateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -104,14 +111,32 @@ export default function ExistingList() {
       } else {
         setPage(1);
       }
-    }, 500),
-    [search]
+    }, 700),
+    [page]
   );
-
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+  
+  useEffect(() => {
     debouncedRefetch();
-  };
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [searchValue]);
+
+  // const debouncedRefetch = useCallback(
+  //   debounce(() => {
+  //     if (page === 1) {
+  //       refetchProjectsList();
+  //     } else {
+  //       setPage(1);
+  //     }
+  //   }, 500),
+  //   [searchValue]
+  // );
+
+  // useEffect(() => {
+  //   debouncedRefetch();
+  // }, [searchValue]);
 
   const dropdownActions = [
     {
@@ -179,7 +204,7 @@ export default function ExistingList() {
         }
       }
     >
-      <Box
+      {/* <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
@@ -196,7 +221,7 @@ export default function ExistingList() {
         >
           Projects
         </Typography>
-        {/* Search input field */}
+        {/* Search input field 
         <TextField
           placeholder="Search by Customer / Project Name"
           value={search}
@@ -234,7 +259,7 @@ export default function ExistingList() {
           <Add sx={{ width: 24 }} />
           Add
         </IconButton>
-      </Box>
+      </Box> */}
       {isLoading ? (
         <Box
           sx={{

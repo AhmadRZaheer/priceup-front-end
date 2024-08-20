@@ -6,13 +6,7 @@ import {
 import { backendURL } from "../../utilities/common";
 import React, { useState } from "react";
 
-const NameAcronyms = ({
-  name,
-  width = 40,
-  height = 40,
-  borderRadius = "100%",
-  type,
-}) => {
+const NameAcronyms = ({ name, width, height, borderRadius = "100%", type }) => {
   let firstNameInitial = "";
   let lastNameInitial = "";
   if (name) {
@@ -23,8 +17,8 @@ const NameAcronyms = ({
     <Typography
       sx={{
         backgroundColor: type === 4 ? "#FFFFFF" : "#F9F5FF",
-        width: width,
-        height: height,
+        width: width ?? 40,
+        height: height ?? 40,
         borderRadius: borderRadius,
         textAlign: "center",
         display: "flex",
@@ -54,12 +48,16 @@ const DefaultImage = ({ image, name, type = 1 }) => {
     setAnchorEl(null);
   };
   const containerWidthHeightbyType =
-    type === 1 || type === 3 || type === 4 ? 40 : type === 5 ? 35 : type === 6
-    ? 70 :50;
+    type === 1 || type === 3 || type === 4
+      ? 40
+      : type === 5
+      ? 31
+      : type === 6
+      ? 70
+      : 50;
 
   const imageWidthHeightbyType =
-    type === 1 || type === 3 ? 40 : type === 5 ? 35 :type === 6
-    ? 72: 50;
+    type === 1 || type === 3 ? 40 : type === 5 ? 31 : type === 6 ? 72 : 50;
 
   const open = Boolean(anchorEl);
   return (
@@ -92,8 +90,8 @@ const DefaultImage = ({ image, name, type = 1 }) => {
           <NameAcronyms
             name={name}
             type={type}
-            width={type === 6 && 72}
-            height={type === 6 && 72}
+            width={type === 6 ? 72 : "100%"}
+            height={type === 6 ? 72 : "100%"}
           />
         )}
       </Box>

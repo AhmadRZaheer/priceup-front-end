@@ -34,7 +34,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
                 Delete
               </Typography>
               <Typography sx={{ color: "#646669", marginTop: 0.5 }}>
-                Edit your {text ?? "user"} details.
+                Delete your {text ?? "user"} details.
               </Typography>
             </Box>
             <Box>

@@ -1,7 +1,7 @@
 const { statusTypes } = require("@/utilities/constants");
 const { Box, Typography } = require("@mui/material");
 
-const StatusChip = ({ variant }) => {
+const StatusChip = ({ variant, sx }) => {
   // variants Pending , Voided , Approved
   let bgColorWrapper;
   let colorWrapper;
@@ -35,12 +35,13 @@ const StatusChip = ({ variant }) => {
         bgcolor: bgColorWrapper,
         borderRadius: "70px",
         color: colorWrapper,
-        pl:  {lg:1.8,xs:1},
+        pl: { lg: 1.8, xs: 1 },
         pt: 0.8,
-        pr: {lg:1.8,xs:1},
+        pr: { lg: 1.8, xs: 1 },
         pb: 1,
         display: "flex",
         gap: 1,
+        ...sx,
       }}
     >
       {/* <Box
@@ -54,12 +55,14 @@ const StatusChip = ({ variant }) => {
             }}
         /> */}
       <Typography
-        sx={{
-        //   textOverflow: "ellipsis",
-        //   whiteSpace: "nowrap",
-        //   overflow: "hidden",
-        //   width: { lg: "100%", xs: "33px" },
-        }}
+        sx={
+          {
+            //   textOverflow: "ellipsis",
+            //   whiteSpace: "nowrap",
+            //   overflow: "hidden",
+            //   width: { lg: "100%", xs: "33px" },
+          }
+        }
       >
         {variant?.charAt(0).toUpperCase() + variant?.slice(1)}
       </Typography>
