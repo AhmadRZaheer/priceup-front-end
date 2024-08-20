@@ -165,6 +165,7 @@ export default function AddTeamMembers({
       name: isEdit ? SelectedData?.name : "",
       email: isEdit ? SelectedData?.email : "",
       image: isEdit ? SelectedData?.image : "",
+      userRole: isEdit ? SelectedData?.userRole : "",
     },
 
     enableReinitialize: true,
@@ -220,7 +221,7 @@ export default function AddTeamMembers({
                   fontWeight: 600,
                 }}
               >
-                Edit your user details.
+                {isEdit ? "Edit" : "Add"} your user details.
               </Typography>
             </Box>
             <Box>
@@ -298,7 +299,7 @@ export default function AddTeamMembers({
                     sx={{
                       color: "black",
                       fontWeight: 500,
-                      borderRadius: "54px",
+                      borderRadius: "54px !important",
                       border: "1px solid rgba(212, 219, 223, 1)",
                       textTransform: "capitalize",
                       px: 2,
@@ -309,7 +310,11 @@ export default function AddTeamMembers({
                   </Button>
                   <Typography
                     variant="body2"
-                    sx={{ color: "rgba(132, 119, 218, 1)", fontSize: "12px" }}
+                    sx={{
+                      color: "rgba(132, 119, 218, 1)",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                    }}
                   >
                     SVG, PNG, JPG or GIF (max. 800x400px)
                   </Typography>
@@ -422,6 +427,79 @@ export default function AddTeamMembers({
                           </MenuItem>
                         )
                       )}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              )}
+              {token && token.role === userRoles.SUPER_ADMIN && (
+                <Grid item xs={6} sx={{ width: "100%" }}>
+                  <Typography className="input-label-text">
+                    User Role
+                  </Typography>
+                  <FormControl sx={{ width: "100%" }} disabled={isEdit}>
+                    <Select
+                      className="custom-textfield"
+                      labelId="demo-multiple-checkbox-label"
+                      id="demo-multiple-checkbox"
+                      disabled={isEdit}
+                      value={formik.values.userRole} // Correct value management
+                      onChange={(event) => {
+                        // const {
+                        //   target: { value },
+                        // } = event;
+                        // const selectedIds =
+                        //   typeof value === "string" ? value.split(",") : value;
+                        // // Update haveAccessArray based on selected items
+                        // const newHaveAccessArray = locationData.filter(
+                        //   (location) => selectedIds.includes(location.id)
+                        // );
+                        // const newGiveAccessArray = locationData.filter(
+                        //   (location) => !selectedIds.includes(location.id)
+                        // );
+                        // setHaveAccessArray(newHaveAccessArray);
+                        // setGiveAccessArray(newGiveAccessArray);
+                      }}
+                      input={<OutlinedInput />}
+                      // renderValue={(selected) =>
+                      //   selected
+                      //     .map(
+                      //       (id) =>
+                      //         locationData.find((loc) => loc.id === id)?.name
+                      //     )
+                      //     .join(", ")
+                      // }
+                      // MenuProps={MenuProps}
+                    >
+                      {/* {locationData.map((item) =>
+                        SelectedData?.company_id === item.id ? (
+                          <Tooltip
+                            key={item.id}
+                            title="Cannot Remove default"
+                            placement="top"
+                          >
+                            <Box>
+                              <MenuItem value={item.id} disabled>
+                                <Checkbox
+                                  disabled
+                                  checked={haveAccessArray.some(
+                                    (loc) => loc.id === item.id
+                                  )}
+                                />
+                                <ListItemText primary={item.name} />
+                              </MenuItem>
+                            </Box>
+                          </Tooltip>
+                        ) : (
+                          <MenuItem key={item.id} value={item.id}>
+                            <Checkbox
+                              checked={haveAccessArray.some(
+                                (loc) => loc.id === item.id
+                              )}
+                            />
+                            <ListItemText primary={item.name} />
+                          </MenuItem>
+                        )
+                      )} */}
                     </Select>
                   </FormControl>
                 </Grid>
