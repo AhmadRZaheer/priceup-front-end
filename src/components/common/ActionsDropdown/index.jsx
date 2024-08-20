@@ -4,6 +4,7 @@ import {
 import { IconButton, Menu, MenuItem } from "@mui/material";
 import CustomIconButton from "@/components/ui-components/CustomButton";
 import { useState } from "react";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const ActionsDropdown = ({
     item,
@@ -25,9 +26,10 @@ const ActionsDropdown = ({
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
-                sx={{ borderRadius: 2, fontSize: "14px", border: '1px solid #ccc', padding: { sm: '8px', xs: '0px 8px' } }}
+                sx={{ fontSize: "20px",color:'#8477DA', padding: { sm: '8px', xs: '0px 8px' } }}
             >
-                <ManageSearch /> View
+                <ArrowForwardIcon/>
+                {/* <ManageSearch /> View */}
             </IconButton>
             <Menu
                 id="basic-menu"

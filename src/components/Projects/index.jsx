@@ -83,7 +83,7 @@ export default function Projects() {
             sx={{
               color: "rgba(33, 37, 40, 1)",
               fontSize: "16px",
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
@@ -96,17 +96,17 @@ export default function Projects() {
             onClick={handleCreateProject}
             sx={{
               backgroundColor: "#8477DA",
+              height:'44px',
+              width:'214px',
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-
-              px: 2,
+              borderRadius: 1,
+              fontSize: {lg:16,md:15},
+              padding: '10px 16px',
             }}
           >
-            <Add color="white" sx={{ mr: 1 }} />
+            <Add  sx={{ mr: 1.2,color:'#FFFFFF' }} />
             Create New Project
           </Button>
         </Box>
@@ -190,7 +190,7 @@ export default function Projects() {
             pt: 3,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
             Projects
           </Typography>
           <Box sx={{ display: "flex", gap: 2 }}>

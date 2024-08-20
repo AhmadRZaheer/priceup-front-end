@@ -354,6 +354,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
               rowCount={
                 projectsList?.totalRecords ? projectsList?.totalRecords : 0
               }
+              rowHeight={70}
               sx={{ width: "100%" }}
               hideFooter
             />

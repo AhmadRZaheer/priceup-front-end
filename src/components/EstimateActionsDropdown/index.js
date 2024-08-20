@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import CustomIconButton from "../ui-components/CustomButton";
 import { useState } from "react";
 import { EstimateCategory } from "@/utilities/constants";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const EstimateActionsDropdown = ({
   params,
@@ -32,9 +33,10 @@ const EstimateActionsDropdown = ({
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{ borderRadius: 2, fontSize: "14px" }}
+        sx={{ borderRadius: 2, fontSize: "20px",color:'#8477DA', }}
       >
-        <ManageSearch /> View
+        {/* <ManageSearch /> View */}
+        <ArrowForwardIcon/>
       </IconButton>
       <Menu
         id="basic-menu"

@@ -176,17 +176,17 @@ const ProjectInfoComponent = ({
               gap: 1,
             }}
           >
-            Glass Estimation
-
-            <Box sx={{ fontSize: { lg: 24, md: 20 }, fontWeight: 600, color: "#000000" }}>
-              {projectState !== "create" ? '/ Project Details' : ''}
-            </Box>
+           Project Details
+            
+            {/* <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
+            {projectState !== "create" ? '/ Project Details' :''}  
+            </Box> */}
           </Typography>
           <Typography
             sx={{
               color: "rgba(33, 37, 40, 1)",
-              fontSize: { lg: 16, md: 14 },
-              fontWeight: 600,
+              fontSize: {lg:16,md:14},
+              fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
@@ -199,17 +199,18 @@ const ProjectInfoComponent = ({
             onClick={handleOpenCategoryModal}
             sx={{
               backgroundColor: "#8477DA",
+              height:'44px',
+              width:'222px',
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: { lg: 17, md: 15 },
-              padding: 1,
-              px: 2,
+              borderRadius: 1,
+              fontSize: {lg:16,md:15},
+              padding: '10px 10px',
             }}
           >
-            <Add color="white" sx={{ mr: 1 }} />
-            Create New Estimate
+            <Add  sx={{ mr: 0.5,color:'#FFFFFF' }} />
+            Create New Estimates
           </Button>
         </Box> : ''}
 
@@ -235,13 +236,13 @@ const ProjectInfoComponent = ({
             color: "#000000",
           }}
         >
-          Glass Estimation
+          Detail
         </Typography>
       </Box>
       <Box
         sx={{
           // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-          border: "1px solid #D4DBDF",
+          // border: "1px solid #D4DBDF",
           padding: { md: 2, xs: 1 },
           background:'#FFFF'
         }}
@@ -261,9 +262,9 @@ const ProjectInfoComponent = ({
             {/** Project Detail Block */}
 
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Detail
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -293,7 +294,7 @@ const ProjectInfoComponent = ({
                         marginBottom: 1,
                       }}
                     >
-                      <label htmlFor="name">Creater</label>
+                      <label htmlFor="name">Creator</label>
                       <span style={{ color: "red" }}>*</span>
                     </Box>
                     <TextField
@@ -509,9 +510,9 @@ const ProjectInfoComponent = ({
             </Box>
             {/** Customer Select Block */}
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Customer
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -590,9 +591,9 @@ const ProjectInfoComponent = ({
             </Box>
             {/** Address Select Block */}
             <Box sx={{ width: { md: "auto", xs: "100%" } }}>
-              <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
+              {/* <Typography sx={{ fontSize: "20px", fontWeight: 800 }}>
                 Address
-              </Typography>
+              </Typography> */}
               <Box
                 sx={{
                   display: "flex",
@@ -782,10 +783,12 @@ const ProjectInfoComponent = ({
                   sx={{ height: "40px" }}
                 // onChange={handleChange}
                 >
-                  <MenuItem value={"active"}>Active</MenuItem>
-                  <MenuItem value={"inActive"}>inActive</MenuItem>
+                <MenuItem value={"pending"}>Pending</MenuItem>
+                <MenuItem value={"voided"}>Voided</MenuItem>
+                <MenuItem value={"approved"}>Approved</MenuItem>
                 </Select>
               </FormControl>
+              <Button variant='text' sx={{color:'#0075FF',fontSize:'14px'}} >Clear Filters</Button>
             </Box>
           </Box>
 
