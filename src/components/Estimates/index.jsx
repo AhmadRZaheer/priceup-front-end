@@ -70,7 +70,7 @@ export default function Estimates() {
           height: "auto",
           overflow: "auto",
           gap: "5px",
-          pr: 3,
+          // pr: 3,
         }}
       >
         {decodedToken?.role !== userRoles.STAFF ? (

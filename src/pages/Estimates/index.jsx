@@ -21,7 +21,7 @@ const Estimates = () => {
       {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
       {/* <CommonSideBar /> */}
       <CommonLayout>
-      <Box className="econtent-wrapper" sx={{pl:{sm:'45px',xs:'0px'}}}>
+      <Box className="econtent-wrapper" sx={{px:{sm:'28px',xs:'0px'}}}>
         {isMobile && decodedToken?.role === userRoles.STAFF ? <EstimatesListMobile /> : <EstimatesList />}
       </Box>
       </CommonLayout>
