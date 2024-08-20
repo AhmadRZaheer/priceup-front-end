@@ -36,8 +36,8 @@ export const useGetEstimates = (
   page,
   limit,
   searchValue,
-  StatusValue,
-  DateValue
+  statusValue,
+  dateValue
 ) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
@@ -48,8 +48,8 @@ export const useGetEstimates = (
           page,
           limit,
           search: searchValue,
-          status: StatusValue,
-          date: DateValue,
+          status: statusValue,
+          date: dateValue,
         },
       });
       if (response.data && response.data.code === 200) {

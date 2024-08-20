@@ -22,18 +22,24 @@ import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import StatusChip from "../common/StatusChip";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 export default function Projects() {
   const routePrefix = `${backendURL}/projects`;
   const navigate = useNavigate();
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
-  const [Status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleDateChange = (newDate) => {
-    // Ensure the new date is a valid Date object
-    setSelectedDate(newDate);
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
   };
   const handleCreateProject = () => {
     navigate("/projects/create");
@@ -236,7 +242,7 @@ export default function Projects() {
                 Status
               </InputLabel>
               <Select
-                value={Status}
+                value={status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
@@ -274,8 +280,8 @@ export default function Projects() {
         >
           <ExistingList
             searchValue={search}
-            StatusValue={Status}
-            DateValue={selectedDate}
+            statusValue={status}
+            dateValue={selectedDate}
           />
         </Box>
       </Box>

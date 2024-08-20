@@ -24,19 +24,26 @@ import icon from "../../Assets/search-icon.svg";
 import WidgetCard from "../ui-components/widgetCard";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
+import dayjs from "dayjs";
 
 export default function Estimates() {
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
-  const [Status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const {
     data: estimatesStats,
     // isLoading: estimatesStatsFetching,
     refetch: refetchEstimatesStats,
   } = useGetEstimatesStats();
-  const handleDateChange = (data) => {
-    setSelectedDate(data);
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
   };
   const handleResetFilter = () => {
     setSearch("");
@@ -287,7 +294,7 @@ export default function Estimates() {
                 Status
               </InputLabel>
               <Select
-                value={Status}
+                value={status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
@@ -324,8 +331,8 @@ export default function Estimates() {
         >
           <ExistingTable
             searchValue={search}
-            StatusValue={Status}
-            DateValue={selectedDate}
+            statusValue={status}
+            dateValue={selectedDate}
           />
         </Box>
       </Box>
