@@ -34,7 +34,7 @@ import image1 from "../../Assets/Active-location.png";
 import image2 from "../../Assets/Non-Active-location.png";
 import image3 from "../../Assets/Team-Members.svg";
 import { Link } from "react-router-dom";
-import { ContentCopy, Search } from "@mui/icons-material";
+import { Add, ContentCopy, Search } from "@mui/icons-material";
 import { backendURL, debounce } from "../../utilities/common";
 import EstimsteIcon from "../../Assets/estmales-gray.svg";
 import { useDispatch } from "react-redux";
@@ -52,12 +52,18 @@ import AddEditLocationModal from "../Modal/editLoactionSuperAdmin";
 const SuperAdminTable = () => {
   const routePrefix = `${backendURL}/companies`;
   const [search, setSearch] = useState("");
+  const [Status, setStatus] = useState(null);
+
   const {
     data: AdminData,
     refetch: AdminRefetch,
     isFetched,
     isFetching,
-  } = useFetchAllDocuments(`${routePrefix}/by-role?search=${search}`);
+  } = useFetchAllDocuments(
+    `${routePrefix}/by-role?search=${search} ${
+      Status !== null ? `&status=${Status}` : ""
+    }`
+  );
   const {
     mutate: switchLocationSuperAdmin,
     data: useTokenSuperAdmin,
@@ -92,23 +98,12 @@ const SuperAdminTable = () => {
   //   });
   // }, [isUserData?.company, customUserData]);
 
-  useEffect(() => {
-    setActiveCount(AdminData.length);
-  }, [isFetched]);
   const handleCloseAddEdit = () => setAddEditOpen(false);
   const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = async () => {
     await deleteuserdata(isUserData?.user);
   };
-  useEffect(() => {
-    if (isSuccess) {
-      setDeleteOpen(false);
-      AdminRefetch();
-    }
-  }, [isSuccess]);
-  useEffect(() => {
-    AdminRefetch();
-  }, []);
+
   const debouncedRefetch = useCallback(
     debounce(() => {
       AdminRefetch();
@@ -156,6 +151,27 @@ const SuperAdminTable = () => {
     setisEdit(false);
     setAddEditOpen(true);
   };
+
+  const handleClearFilter = () => {
+    setStatus(null);
+    setSearch("");
+  };
+
+  useEffect(() => {
+    setActiveCount(AdminData.length);
+  }, [isFetched]);
+  useEffect(() => {
+    if (isSuccess) {
+      setDeleteOpen(false);
+      AdminRefetch();
+    }
+  }, [isSuccess]);
+  useEffect(() => {
+    AdminRefetch();
+  }, [Status]);
+  useEffect(() => {
+    AdminRefetch();
+  }, []);
   useEffect(() => {
     if (switchedSuperAdmin) {
       localStorage.setItem("userReference", decodedToken.id);
@@ -205,14 +221,14 @@ const SuperAdminTable = () => {
                 fontSize: 17,
                 padding: 1,
               }}
+              startIcon={<Add color="white" />}
             >
-              {/* <Add color="white" /> */}
-              Add Location
+              Add New Location
             </Button>
           </Box>
         </Box>
       </div>
-      <Grid container sx={{ gap: 2, px: 3.8 }}>
+      <Grid container sx={{ px: 3.8 }} spacing={2}>
         {[
           { title: "Active Locations", text: activeCount, variant: "blue" },
           {
@@ -221,12 +237,14 @@ const SuperAdminTable = () => {
             variant: "red",
           },
         ].map((item) => (
-          <WidgetCard
-            text={item.text}
-            title={item.title}
-            varient={item.variant}
-            type={2}
-          />
+          <Grid item lg={4} md={6} xs={6}>
+            <WidgetCard
+              text={item.text}
+              title={item.title}
+              varient={item.variant}
+              type={2}
+            />
+          </Grid>
         ))}
       </Grid>
       <Box
@@ -238,7 +256,7 @@ const SuperAdminTable = () => {
           mt: 3,
         }}
       >
-        <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+        <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
           All Locations
         </Typography>
 
@@ -260,23 +278,44 @@ const SuperAdminTable = () => {
             sx={{ width: "152px" }}
             size="small"
             className="custom-textfield"
+            placeholder="status"
           >
             <InputLabel id="demo-select-small-label" className="input-label">
               Status
             </InputLabel>
             <Select
-              // value={age}
+              value={Status}
               size="small"
+              placeholder="status"
               labelId="demo-select-small-label"
               id="demo-select-small"
               label="Status"
               sx={{ height: "40px" }}
-              // onChange={handleChange}
-            >              <MenuItem value={true}>Active</MenuItem>
-              <MenuItem value={false}>inActive</MenuItem>
+              onChange={(e) => setStatus(e.target.value)}
+            >
+              <MenuItem value={true}>
+                <Typography
+                  className=" status-active"
+                  sx={{ padding: 0, px: 2, width: "44px" }}
+                >
+                  Active
+                </Typography>
+              </MenuItem>
+              <MenuItem value={false}>
+                <Typography
+                  className=" status-inActive"
+                  sx={{ padding: 0, px: 2, width: "44px" }}
+                >
+                  Inactive
+                </Typography>
+              </MenuItem>
             </Select>
           </FormControl>
-
+          <Box>
+            <Button onClick={handleClearFilter} variant="text" sx={{}}>
+              Clear Filter
+            </Button>
+          </Box>
         </Box>
       </Box>
       {/* <div className="types-main-contianer">
@@ -732,7 +771,7 @@ const SuperAdminTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
+          <Box sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}>
             No Locations Found
           </Box>
         )}
