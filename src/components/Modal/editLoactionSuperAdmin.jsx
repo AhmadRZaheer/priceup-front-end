@@ -345,6 +345,7 @@ function AddEditLocationModal({
                         sx={{
                           color: "rgba(132, 119, 218, 1)",
                           fontSize: "12px",
+                          fontWeight: 600
                         }}
                       >
                         SVG, PNG, JPG or GIF (max. 800x400px)
