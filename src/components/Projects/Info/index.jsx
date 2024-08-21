@@ -161,7 +161,7 @@ const ProjectInfoComponent = ({
     >
       <Box
         sx={{
-          p: "20px 20px 20px 8px",
+          p: { sm: "20px 20px 20px 8px", xs: "20px 0px 20px 0px" },
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -176,8 +176,7 @@ const ProjectInfoComponent = ({
               gap: 1,
             }}
           >
-           Project Details
-            
+            Project Details
             {/* <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
             {projectState !== "create" ? '/ Project Details' :''}  
             </Box> */}
@@ -185,35 +184,38 @@ const ProjectInfoComponent = ({
           <Typography
             sx={{
               color: "rgba(33, 37, 40, 1)",
-              fontSize: {lg:16,md:14},
+              fontSize: { lg: 16, md: 14 },
               fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
           </Typography>
         </Box>
-        {projectState !== "create" ? <Box>
-          <Button
-            fullWidth
-            variant="contained"
-            onClick={handleOpenCategoryModal}
-            sx={{
-              backgroundColor: "#8477DA",
-              height:'44px',
-              width:'222px',
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 1,
-              fontSize: {lg:16,md:15},
-              padding: '10px 10px',
-            }}
-          >
-            <Add  sx={{ mr: 0.5,color:'#FFFFFF' }} />
-            Create New Estimates
-          </Button>
-        </Box> : ''}
-
+        {projectState !== "create" ? (
+          <Box>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={handleOpenCategoryModal}
+              sx={{
+                backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "222px", xs: "165px" },
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: { sm: "10px 10px", xs: "5px 5px" },
+              }}
+            >
+              <Add sx={{ mr: 0.5, color: "#FFFFFF" }} />
+              Create New Estimates
+            </Button>
+          </Box>
+        ) : (
+          ""
+        )}
       </Box>
 
       {/* <Typography sx={{ fontSize: "22px", fontWeight: 800, marginBottom: 1.5 }}>
@@ -221,7 +223,7 @@ const ProjectInfoComponent = ({
       </Typography> */}
       <Box
         sx={{
-          width: { md: "auto", xs: "100%" },
+          width: "auto",
           background: "#F3F5F6",
           border: "1px solid #D4DBDF",
           padding: { md: 2, xs: 1 },
@@ -244,7 +246,7 @@ const ProjectInfoComponent = ({
           // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
           // border: "1px solid #D4DBDF",
           padding: { md: 2, xs: 1 },
-          background:'#FFFF'
+          background: "#FFFF",
         }}
       >
         <form onSubmit={formik.handleSubmit}>
@@ -444,7 +446,7 @@ const ProjectInfoComponent = ({
                           <InputAdornment
                             position="end"
                             sx={{ cursor: "pointer" }}
-                            onClick={() => { }}
+                            onClick={() => {}}
                           >
                             <Close sx={{}} />
                           </InputAdornment>
@@ -571,7 +573,7 @@ const ProjectInfoComponent = ({
                       width: "100%",
                     }}
                     value={formik.values.customer}
-                    onChange={() => { }}
+                    onChange={() => {}}
                   />
                 </Box>
                 <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
@@ -697,7 +699,7 @@ const ProjectInfoComponent = ({
           >
             <Box>
               <Typography
-                sx={{ fontSize: { sm: "17px", xs: "15px" }, fontWeight: 600 }}
+                sx={{ fontSize: { sm: "17px", xs: "15px" }, fontWeight: 600,pl:{sm:0,xs:'11px'} }}
               >
                 Please fill in all fields marked with * sign.
               </Typography>
@@ -739,7 +741,7 @@ const ProjectInfoComponent = ({
         <Box>
           <Box
             sx={{
-              display: "flex",
+              display: { sm: "flex", xs: "block" },
               justifyContent: "space-between",
               //   width: "98%",
               //  pr: 3,
@@ -749,7 +751,7 @@ const ProjectInfoComponent = ({
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Estimates
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 2 ,pt:{sm:0,xs:1}}}>
               <CustomInputField
                 id="input-with-icon-textfield"
                 placeholder="Search by User Name"
@@ -781,14 +783,19 @@ const ProjectInfoComponent = ({
                   label="Status"
                   size="small"
                   sx={{ height: "40px" }}
-                // onChange={handleChange}
+                  // onChange={handleChange}
                 >
-                <MenuItem value={"pending"}>Pending</MenuItem>
-                <MenuItem value={"voided"}>Voided</MenuItem>
-                <MenuItem value={"approved"}>Approved</MenuItem>
+                  <MenuItem value={"pending"}>Pending</MenuItem>
+                  <MenuItem value={"voided"}>Voided</MenuItem>
+                  <MenuItem value={"approved"}>Approved</MenuItem>
                 </Select>
               </FormControl>
-              <Button variant='text' sx={{color:'#0075FF',fontSize:'14px'}} >Clear Filters</Button>
+              <Button
+                variant="text"
+                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" }}
+              >
+                Clear Filters
+              </Button>
             </Box>
           </Box>
 
@@ -798,14 +805,14 @@ const ProjectInfoComponent = ({
           <Box
             sx={{
               boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-              borderRadius: "5px",
+              borderRadius: "8px",
               pt: { md: 2, xs: 1 },
-              width:'99.5%',
-              background:'#FFFF',
+              width: "99.5%",
+              background: "#FFFF",
             }}
           >
             {/** Tabs Switch */}
-            <Grid sx={{ width: "202px", px: 1 ,pb:1}}>
+            <Grid sx={{ width: "202px", px: 1, pb: 1 }}>
               <Tabs
                 value={activeTabNumber}
                 onChange={handleChange}
@@ -874,7 +881,8 @@ const ProjectInfoComponent = ({
         setSelectedAddress={handleAddressChange}
         selectedCustomer={selectedCustomer}
       />
-      <ChooseEstimateCategoryModal open={openCategoryModal}
+      <ChooseEstimateCategoryModal
+        open={openCategoryModal}
         handleClose={handleCloseCategoryModal}
         projectId={projectData?._id}
       />

@@ -31,15 +31,17 @@ const StatusChip = ({ variant, sx }) => {
   return (
     <Box
       sx={{
-        width: "fit-content",
+        height:'21px',
+        // width: "fit-content",
         bgcolor: bgColorWrapper,
         borderRadius: "70px",
         color: colorWrapper,
-        pl: { lg: 1.8, xs: 1 },
-        pt: 0.8,
-        pr: { lg: 1.8, xs: 1 },
-        pb: 1,
-        display: "flex",
+        p:'6px 8px',
+        // pl: { lg: 1.8, xs: 1 },
+        // pt: 0.8,
+        // pr: { lg: 1.8, xs: 1 },
+        // pb: 1,
+        display: "grid",
         gap: 1,
         ...sx,
       }}
@@ -57,6 +59,7 @@ const StatusChip = ({ variant, sx }) => {
       <Typography
         sx={
           {
+            fontSize:'14px',fontWeight:400,lineHeight:'21px'
             //   textOverflow: "ellipsis",
             //   whiteSpace: "nowrap",
             //   overflow: "hidden",

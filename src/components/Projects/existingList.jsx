@@ -289,6 +289,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
                   justifyContent: "space-between",
                   paddingY: 2,
                   borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                  px:{sm:0,xs:0.8}
                 }}
               >
                 <Box sx={{ display: "flex", gap: 1 }}>
@@ -354,9 +355,10 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
               rowCount={
                 projectsList?.totalRecords ? projectsList?.totalRecords : 0
               }
-              rowHeight={70}
+              rowHeight={70.75}
               sx={{ width: "100%" }}
               hideFooter
+              disableColumnMenu
             />
           )}
           <Pagination

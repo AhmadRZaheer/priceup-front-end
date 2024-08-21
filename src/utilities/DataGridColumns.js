@@ -17,62 +17,79 @@ export const EstimatesColumns = (
     {
       field: "Creator",
       headerClassName: "customHeaderClass",
-      flex: 1.9,
+      flex: 2.1,
       renderCell: (params) => {
         return (
           <>
-          {params?.row?.creatorData ?   <Box
-              className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-            >
-              <div className="customerImg">
-                <DefaultImage
-                  image={params?.row?.creatorData?.image}
-                  name={params?.row?.creatorData?.name}
-                  type={5}
-                />
-              </div>
-              <Tooltip
-                title={
-                  <Grid>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.creatorData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.creatorData?.email}
-                    </Typography>
-                  </Grid>
-                }
-                placement="top"
+            {params?.row?.creatorData ? (
+              <Box
+                className="project-cellWrap"
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
-                <div className="new-customerNameTable">
-                  <div className="new-userNameTable">
-                    <Typography
-                      className="new-userNameTable"
-                      sx={{ color: "#000000" }}
-                    >
-                      {params?.row?.creatorData?.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        p: 0,
-                        mt: -0.4,
-                        color: "#5D6164",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        width: { lg: "100%", xs: "93px" },
-                      }}
-                    >
-                      {params?.row?.creatorData?.email}
-                    </Typography>
-                  </div>
+                <div className="customerImg">
+                  <DefaultImage
+                    image={params?.row?.creatorData?.image}
+                    name={params?.row?.creatorData?.name}
+                    type={5}
+                  />
                 </div>
-              </Tooltip>
-            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box> }
-          
+                <Tooltip
+                  title={
+                    <Grid>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.creatorData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.creatorData?.email}
+                      </Typography>
+                    </Grid>
+                  }
+                  placement="top"
+                >
+                  <div className="new-customerNameTable">
+                    <div className="new-userNameTable">
+                      <Typography
+                        className="new-userNameTable"
+                        sx={{
+                          color: "#000000",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.creatorData?.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 500,
+                          p: 0,
+                          mt: -0.4,
+                          color: "#5D6164",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.creatorData?.email}
+                      </Typography>
+                    </div>
+                  </div>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
 
             {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
@@ -109,66 +126,84 @@ export const EstimatesColumns = (
     {
       field: "Customer",
       headerClassName: "customHeaderClass",
-      flex: 1.7,
+      flex: 2,
       renderCell: (params) => {
         return (
           <>
-          {params?.row?.customerData ? <Box
-              className="project-cellWrap"
-              sx={
-                {
-                  // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+            {params?.row?.customerData ? (
+              <Box
+                className="project-cellWrap"
+                sx={
+                  {
+                    // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+                  }
                 }
-              }
-            >
-              <div className="customerImg">
-                <DefaultImage
-                  image={params?.row?.customerData?.image}
-                  name={params?.row?.customerData?.name}
-                  type={5}
-                />
-              </div>
-              <Tooltip
-                title={
-                  <Grid>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.customerData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.customerData?.email}
-                    </Typography>
-                  </Grid>
-                }
-                placement="top"
               >
-                <div className="new-customerNameTable">
-                  <div className="new-userNameTable">
-                    <Typography
-                      className="new-userNameTable"
-                      sx={{ color: "#000000" }}
-                    >
-                      {params?.row?.customerData?.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        p: 0,
-                        mt: -0.4,
-                        color: "#5D6164",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        width: { lg: "100%", xs: "93px" },
-                      }}
-                    >
-                      {params?.row?.customerData?.email}
-                    </Typography>
-                  </div>
+                <div className="customerImg">
+                  <DefaultImage
+                    image={params?.row?.customerData?.image}
+                    name={params?.row?.customerData?.name}
+                    type={5}
+                  />
                 </div>
-              </Tooltip>
-            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
-            
+                <Tooltip
+                  title={
+                    <Grid>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customerData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customerData?.email}
+                      </Typography>
+                    </Grid>
+                  }
+                  placement="top"
+                >
+                  <div className="new-customerNameTable">
+                    <div className="new-userNameTable">
+                      <Typography
+                        className="new-userNameTable"
+                        sx={{
+                          color: "#000000",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.customerData?.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 500,
+                          p: 0,
+                          mt: -0.4,
+                          color: "#5D6164",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.customerData?.email}
+                      </Typography>
+                    </div>
+                  </div>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
+
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
             </Typography> */}
@@ -194,7 +229,7 @@ export const EstimatesColumns = (
     {
       field: "Estimate Category",
       headerClassName: "customHeaderClass",
-      flex: 1.2,
+      flex: 1.1,
       renderCell: (params) => {
         return (
           <>
@@ -215,11 +250,13 @@ export const EstimatesColumns = (
       renderCell: (params) => {
         return (
           <>
+          <Tooltip placement="top-start" title={params?.row?.settings?.name ?? "Custom"}>         
             <Typography
               sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
             >
               {params?.row?.settings?.name ?? "Custom"}
             </Typography>
+            </Tooltip>
           </>
         );
       },
@@ -256,7 +293,7 @@ export const EstimatesColumns = (
     {
       field: "Status",
       headerClassName: "customHeaderClass",
-      flex: 1,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
@@ -271,7 +308,7 @@ export const EstimatesColumns = (
     {
       field: "Action",
       headerClassName: "customHeaderClass",
-      flex: 1,
+      flex: 0.9,
       renderCell: (params) => {
         return (
           <EstimateActionsDropdown
@@ -455,62 +492,79 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Creator",
       headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1.9,
+      flex: 2.1,
       renderCell: (params) => {
         return (
           <>
-          {params?.row?.creatorData ? 
-            <Box
-              className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-            >
-              <div className="customerImg">
-                <DefaultImage
-                  image={params?.row?.creatorData?.image}
-                  name={params?.row?.creatorData?.name}
-                  type={5}
-                />
-              </div>
-              <Tooltip
-                title={
-                  <Grid>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.creatorData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.creatorData?.email}
-                    </Typography>
-                  </Grid>
-                }
-                placement="top"
+            {params?.row?.creatorData ? (
+              <Box
+                className="project-cellWrap"
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
-                <div className="new-customerNameTable">
-                  <div className="new-userNameTable">
-                    <Typography
-                      className="new-userNameTable"
-                      sx={{ color: "#000000" }}
-                    >
-                      {params?.row?.creatorData?.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        p: 0,
-                        mt: -0.4,
-                        color: "#5D6164",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        width: { lg: "100%", xs: "93px" },
-                      }}
-                    >
-                      {params?.row?.creatorData?.email}
-                    </Typography>
-                  </div>
+                <div className="customerImg">
+                  <DefaultImage
+                    image={params?.row?.creatorData?.image}
+                    name={params?.row?.creatorData?.name}
+                    type={5}
+                  />
                 </div>
-              </Tooltip>
-            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
+                <Tooltip
+                  title={
+                    <Grid>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.creatorData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.creatorData?.email}
+                      </Typography>
+                    </Grid>
+                  }
+                  placement="top"
+                >
+                  <div className="new-customerNameTable">
+                    <div className="new-userNameTable">
+                      <Typography
+                        className="new-userNameTable"
+                        sx={{
+                          color: "#000000",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.creatorData?.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 500,
+                          p: 0,
+                          mt: -0.4,
+                          color: "#5D6164",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.creatorData?.email}
+                      </Typography>
+                    </div>
+                  </div>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
 
             {/* <Box sx={{ display: "flex", gap: 1 }}>
               <Box
@@ -547,66 +601,84 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Customer",
       headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1.7,
+      flex: 1.9,
       renderCell: (params) => {
         return (
           <>
-          {params?.row?.customerData ? <Box
-              className="project-cellWrap"
-              sx={
-                {
-                  // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+            {params?.row?.customerData ? (
+              <Box
+                className="project-cellWrap"
+                sx={
+                  {
+                    // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+                  }
                 }
-              }
-            >
-              <div className="customerImg">
-                <DefaultImage
-                  image={params?.row?.customerData?.image}
-                  name={params?.row?.customerData?.name}
-                  type={5}
-                />
-              </div>
-              <Tooltip
-                title={
-                  <Grid>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.customerData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                      {params?.row?.customerData?.email}
-                    </Typography>
-                  </Grid>
-                }
-                placement="top"
               >
-                <div className="new-customerNameTable">
-                  <div className="new-userNameTable">
-                    <Typography
-                      className="new-userNameTable"
-                      sx={{ color: "#000000" }}
-                    >
-                      {params?.row?.customerData?.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: 12,
-                        fontWeight: 500,
-                        p: 0,
-                        mt: -0.4,
-                        color: "#5D6164",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        width: { lg: "100%", xs: "93px" },
-                      }}
-                    >
-                      {params?.row?.customerData?.email}
-                    </Typography>
-                  </div>
+                <div className="customerImg">
+                  <DefaultImage
+                    image={params?.row?.customerData?.image}
+                    name={params?.row?.customerData?.name}
+                    type={5}
+                  />
                 </div>
-              </Tooltip>
-            </Box> : <Box sx={{width:'100%',display:'flex',justifyContent:'center'}}>---</Box>}
-            
+                <Tooltip
+                  title={
+                    <Grid>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customerData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customerData?.email}
+                      </Typography>
+                    </Grid>
+                  }
+                  placement="top"
+                >
+                  <div className="new-customerNameTable">
+                    <div className="new-userNameTable">
+                      <Typography
+                        className="new-userNameTable"
+                        sx={{
+                          color: "#000000",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.customerData?.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 500,
+                          p: 0,
+                          mt: -0.4,
+                          color: "#5D6164",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.customerData?.email}
+                      </Typography>
+                    </div>
+                  </div>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
+
             {/* <Typography sx={{ py: 1, color: "#667085" }}>
               {params?.row?.customerData?.name}
             </Typography> */}
@@ -632,15 +704,20 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Location",
       headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1,
+      flex: 0.9,
       renderCell: (params) => {
         return (
           <>
+            <Tooltip
+                  title={params?.row?.addressData?.name}
+                  placement="top"
+                >
             <Typography
               sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
             >
               {params?.row?.addressData?.name}
             </Typography>
+            </Tooltip>
           </>
         );
       },
@@ -649,7 +726,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Created Date",
       headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1,
+      flex: 0.9,
       renderCell: (params) => {
         return (
           <>
@@ -689,7 +766,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Action",
       headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1,
+      flex: 0.8,
       renderCell: (params) => {
         return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
       },

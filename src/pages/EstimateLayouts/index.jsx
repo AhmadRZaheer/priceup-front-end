@@ -8,6 +8,7 @@ import { getDecryptedToken } from "@/utilities/common";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 
 const EstimateLayouts = () => {
     const decodedToken = getDecryptedToken();
@@ -18,9 +19,9 @@ const EstimateLayouts = () => {
             {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
             {/* <CommonSideBar/> */}
             <CommonLayout>
-            <div className="content-wrapper" style={{paddingLeft:'25px'}}>
+            <Box className="content-wrapper" sx={{pl:{sm:'25px',xs:'0px'}}}>
                 <SelectLayout />
-            </div>
+            </Box>
             </CommonLayout>
         {/* </div> */}
         </>

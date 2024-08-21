@@ -342,7 +342,7 @@ const StaffLocationSideBar = () => {
               </Box>
               <ExpandMoreOutlinedIcon
                 className="setLocation"
-                sx={{ color: "#FFFF", mr: 1 }}
+                sx={{ color: "#FFFF", mr: 1,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)' }}
               />
             </Button>
           </Tooltip>
