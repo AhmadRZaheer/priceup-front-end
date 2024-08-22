@@ -47,7 +47,7 @@ export const EstimatesColumns = (
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <div className="new-userNameTable">
+                    <Box className="new-userNameTable" sx={{maxWidth:{xl:'100%',xs:'95%'}}}>
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -75,7 +75,7 @@ export const EstimatesColumns = (
                       >
                         {params?.row?.creatorData?.email}
                       </Typography>
-                    </div>
+                    </Box>
                   </div>
                 </Tooltip>
               </Box>
@@ -160,7 +160,7 @@ export const EstimatesColumns = (
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <div className="new-userNameTable">
+                    <Box className="new-userNameTable" sx={{maxWidth:{xl:'100%',xs:'95%'}}}>
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -188,7 +188,7 @@ export const EstimatesColumns = (
                       >
                         {params?.row?.customerData?.email}
                       </Typography>
-                    </div>
+                    </Box>
                   </div>
                 </Tooltip>
               </Box>
@@ -522,7 +522,7 @@ export const ProjectsColumns = (dropdownActions) => {
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <div className="new-userNameTable">
+                    <Box className="new-userNameTable" sx={{maxWidth:{xl:'100%',xs:'95%'}}}>
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -550,7 +550,7 @@ export const ProjectsColumns = (dropdownActions) => {
                       >
                         {params?.row?.creatorData?.email}
                       </Typography>
-                    </div>
+                    </Box>
                   </div>
                 </Tooltip>
               </Box>
@@ -635,7 +635,7 @@ export const ProjectsColumns = (dropdownActions) => {
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <div className="new-userNameTable">
+                    <Box className="new-userNameTable" sx={{maxWidth:{xl:'100%',xs:'95%'}}}>
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -663,7 +663,7 @@ export const ProjectsColumns = (dropdownActions) => {
                       >
                         {params?.row?.customerData?.email}
                       </Typography>
-                    </div>
+                    </Box>
                   </div>
                 </Tooltip>
               </Box>
