@@ -1,4 +1,17 @@
-import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  FormControl,
+  Grid,
+  MenuItem,
+  Popover,
+  Select,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import {
   getContent,
   getFabricationTotal,
@@ -33,6 +46,10 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { layoutVariants } from "@/utilities/constants";
 import { renderMeasurementSides } from "@/utilities/estimates";
+import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
+import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import { useState } from "react";
+import CustomToggle from "@/components/ui-components/Toggle";
 
 const Summary = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -59,9 +76,35 @@ const Summary = ({ setStep }) => {
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
   let disable_com = false;
-  if (quoteState === 'create') {
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [Columns, setColumns] = useState([
+    { title: "Dimensions", active: true },
+    { title: "Summary", active: true },
+    { title: "Total Price", active: true },
+    { title: "Pricing Subcategories", active: false },
+    { title: "Gross Profit Margin", active: true },
+  ]);
+
+  // Toggle handler function
+  const handleToggle = (index) => {
+    const updatedItems = [...Columns]; // Create a copy of the state array
+    updatedItems[index].active = !updatedItems[index].active; // Toggle the 'active' property
+    setColumns(updatedItems); // Update state with the modified array
+  };
+
+  const handleClickPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const alertPopoverOpen = Boolean(anchorEl);
+  const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
+  if (quoteState === "create") {
     disable_com = !selectedData || !measurements?.length;
-  } else if (quoteState === 'custom') {
+  } else if (quoteState === "custom") {
     let allFilled = true;
     Object.entries(measurements).forEach?.(([key, value]) => {
       const { count, width, height } = value;
@@ -75,8 +118,8 @@ const Summary = ({ setStep }) => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-        ? `${backendURL}/${selectedData?.settings?.image}`
-        : CustomImage;
+      ? `${backendURL}/${selectedData?.settings?.image}`
+      : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
@@ -93,806 +136,641 @@ const Summary = ({ setStep }) => {
         className={disable_com ? "box_disaled" : ""}
         sx={{
           width: "100%",
-          margin: "auto",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          // height: "86vh",
-          // p: { sm: 2, xs: 0 },
-          gap: { sm: 4, xs: 0 },
+          //   margin: { sm: "", xs: "auto" },
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            width: "100%",
-            background: { sm: "white" },
-            margin: { sm: 0, xs: "auto" },
-            borderRadius: "8px",
-            justifyContent: "space-between",
-            flexDirection: { sm: "column", xs: "column" },
-            overflow: { sm: "hidden" },
-            // height: "fit-content",
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: { sm: "1px solid #EAECF0", xs: "none" },
-            // paddingBottom: "100px",
-            // minHeight: "50vh",
-            // maxHeight: "79vh",
+            borderRadius: "12px",
+            overflow: "hidden",
+            border: "1px solid #D0D5DD",
+            backgroundColor: "white",
           }}
         >
-          <Box sx={{ background: "#D9D9D9", paddingY: 2, px: 3, display: { sm: "block", xs: "none" } }}>
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-              Summary
-            </Typography>
-          </Box>
           <Box
             sx={{
+              px: 3,
+              py: 2,
               display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              borderRadius: "8px",
-              width: {sm:"96%"},
-              paddingY: { sm: 2, xs: 1 },
-              paddingX: { sm: 2, xs: 0 },
-              marginBottom: "50px",
-              overflow: {sm:"hidden"},
-              color: { md: "#101828", xs: "white" },
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <Box
-              sx={{
-                display: { sm: "none", xs: "flex" },
-                width: "87%",
-                justifyContent: "center",
-                // background: "rgba(217, 217, 217, 0.3)",
-                margin: { sm: 0, xs: "auto" },
-                p: 3,
-                borderRadius: 2,
-              }}
+            <Typography
+              sx={{ fontSize: "14px", fontWeight: 700, lineHeight: "16px" }}
             >
-              <img
-                width={"300px"}
-                height={"310px"}
-                src={layoutImage}
-                alt="Selected"
-              />
-            </Box>
-            <Box
-              sx={{
-                width: "100%",
-                color: { xs: "white", sm: "black" },
-                paddingTop: { sm: 0, xs: 2 },
-                margin: "auto",
-                
-              }}
-            >
-              {/** Dimensions Accordian */}
-              <Accordion
+              Estimate Details
+            </Typography>
+            <Box sx={{ width: "175px" }}>
+              <Button
+                size="small"
+                startIcon={
+                  <img
+                    width={20}
+                    height={20}
+                    style={{ marginRight: 5 }}
+                    src={GrayEyeIcon}
+                    alt="eye icon"
+                  />
+                }
+                endIcon={<KeyboardArrowDownOutlined />}
+                variant="outlined"
                 sx={{
-                  paddingX: "6px",
-                  border: "none",
-                  boxShadow: "none !important",
-                  ".MuiPaper-elevation": {
-                    border: " none !important",
-                    boxShadow: "none !important",
+                  padding: "5px 8px 5px 8px !important",
+                  border: "1px solid #D0D5DD",
+                  color: "black",
+                  borderRadius: "4px !important",
+                  width: "fit-content",
+                  ":hover": {
+                    border: "1px solid #D0D5DD",
                   },
                 }}
+                aria-describedby={alertPopoverid}
+                onClick={handleClickPopover}
               >
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls="panel1a-content"
-                  id="panel1a-header"
-                  sx={{
-                    padding: 0,
-                    margin: 0,
-                    borderBottom: "none",
-                    height: "30px",
-                  }}
-                >
-                  <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                    Dimensions
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails
-                  sx={{
-                    padding: 0,
-                    borderTop: "2px solid #D0D5DD",
-                    paddingY: 1,
-                  }}
-                >
-                  <Typography>
-                    {renderMeasurementSides(
-                      quoteState,
-                      measurements,
-                      quoteState === "edit"
-                        ? selectedData?.config?.layout_id
-                        : selectedData?._id
-                    )}
-                  </Typography>
-                  <Typography>
-                    <span style={{ fontWeight: "bold" }}>Layout: </span>
-                    {(selectedData?.settings?.name || selectedData?.name) ??
-                      "Custom"}
-                  </Typography>
-                  {doorWidth ? (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Door Width: </span>
-                      {doorWidth}
-                    </Typography>
-                  ) : (
-                    ""
-                  )}
-                  <Typography>
-                    <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
-                    {sqftArea}
-                  </Typography>
-                  {/** undefined is used for custom layout  */}
-                  {![undefined].includes(selectedData?.settings?.variant) && (
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Door Weight: </span>{" "}
-                      {doorWeight}
-                    </Typography>
-                  )}
-                  {![
-                    layoutVariants.DOOR,
-                    layoutVariants.DOUBLEBARN,
-                    layoutVariants.DOUBLEDOOR,
-                  ].includes(selectedData?.settings?.variant) && (
-                      <Typography>
-                        <span style={{ fontWeight: "bold" }}>Panel Weight: </span>{" "}
-                        {panelWeight}
-                      </Typography>
-                    )}
-                  {[
-                    layoutVariants.DOORNOTCHEDPANELANDRETURN,
-                    layoutVariants.DOORPANELANDRETURN,
-                  ].includes(selectedData?.settings?.variant) && (
-                      <Typography>
-                        <span style={{ fontWeight: "bold" }}>
-                          Return Weight:{" "}
-                        </span>{" "}
-                        {returnWeight}
-                      </Typography>
-                    )}
-                </AccordionDetails>
-              </Accordion>
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderTop: "2px solid #D0D5DD",
-                  paddingY: 1,
-                  paddingX: "6px",
+                View Columns
+              </Button>
+              <Popover
+                id={alertPopoverid}
+                open={alertPopoverOpen}
+                anchorEl={anchorEl}
+                onClose={handleClosePopover}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
                 }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                sx={{ borderRadius: "8px" }}
               >
-                <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
-                  Total Price
-                </Typography>
-                <Typography variant="h6">
-                  ${totalPrice?.toFixed(2) || 0}
-                </Typography>
-              </Box>{" "}
-              {/* Summary  */}
-              <Box sx={{ borderTop: "2px solid #D0D5DD" }}>
-                {/** Selected Content Accordian */}
-                <Accordion
-                  sx={{
-                    paddingX: "6px",
-                    border: "none",
-                    boxShadow: "none !important",
-                    ".MuiPaper-elevation": {
-                      border: " none !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    sx={{
-                      padding: 0,
-                      margin: 0,
-                      borderBottom: "none",
-                      height: "30px",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                      Summary{" "}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{ padding: 0 }}>
+                {" "}
+                <Box sx={{ p: "8px" }}>
+                  {Columns.map((item, index) => (
                     <Box
                       sx={{
+                        width: "256px",
+                        height: "46px",
                         display: "flex",
-                        alignItems: "center",
                         justifyContent: "space-between",
-                        borderTop: "2px solid #D0D5DD",
-                        paddingY: 1,
+                        alignItems: "center",
+                        px: 3,
                       }}
-                    ></Box>{" "}
-                    {selectedContent?.hardwareFinishes && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Finish:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.hardwareFinishes?.name}
-                        </Typography>
+                    >
+                      <Typography sx={{ color: "#5D6164", fontSize: "16px" }}>
+                        {item.title}
+                      </Typography>
+                      <Box>
+                        <CustomToggle
+                          text={""}
+                          checked={item.active}
+                          onChange={() => handleToggle(index)} // Pass index to identify which item to toggle
+                        />
                       </Box>
-                    )}
-                    {selectedContent?.handles?.item && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
+                    </Box>
+                  ))}
+                </Box>{" "}
+              </Popover>
+            </Box>
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ backgroundColor: "#F3F5F6", px: 3, py: 2 }}>
+            <Grid container>
+              {Columns[0].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Dimensions
+                </Grid>
+              )}
+              {Columns[1].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Summary
+                </Grid>
+              )}
+              {Columns[3].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Pricing Subcategories
+                </Grid>
+              )}
+              {Columns[4].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Gross Profit Margin
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+            {Columns[0].active === false &&
+            Columns[1].active === false &&
+            Columns[2].active === false &&
+            Columns[3].active === false &&
+            Columns[4].active === false ? (
+              <Typography>no Esimate Details</Typography>
+            ) : (
+              <Grid container spacing={2}>
+                {Columns[0].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
                       >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Handles:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.handles?.item?.name} (
-                          {selectedContent?.handles?.count})
-                        </Typography>
-                      </Box>
-                    )}
-                    {selectedContent?.hinges?.item && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Hinges:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.hinges?.item?.name} (
-                          {selectedContent?.hinges?.count})
-                        </Typography>
-                      </Box>
-                    )}
-                    {["channel"].includes(selectedContent?.mountingState) ? (
-                      <>
-                        {selectedContent?.mountingChannel?.item && (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              textAlign: "baseline",
-                              gap: 0.6,
-                            }}
-                          >
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              Channel:
-                            </Typography>
-                            <Typography>
-                              {selectedContent?.mountingChannel?.item?.name}
-                            </Typography>
-                          </Box>
-                        )}{" "}
-                      </>
-                    ) : (
-                      <>
+                        Dimensions
+                      </Typography>
+                      <Typography className="text-xs-ragular">
                         {" "}
-                        {selectedContent?.mountingClamps?.wallClamp?.length ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              textAlign: "baseline",
-                              gap: 0.6,
-                            }}
-                          >
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              WallClamps:{" "}
-                            </Typography>
-                            {selectedContent?.mountingClamps?.wallClamp?.map(
-                              (row) => (
-                                <Typography>
-                                  {row.item.name} ({row.count}){" "}
-                                </Typography>
-                              )
-                            )}
-                          </Box>
-                        ) : (
-                          ""
-                        )}
-                        {selectedContent?.mountingClamps?.sleeveOver?.length ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              textAlign: "baseline",
-                              gap: 0.6,
-                            }}
-                          >
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              Sleeve Over:{" "}
-                            </Typography>
-                            {selectedContent?.mountingClamps?.sleeveOver?.map(
-                              (row) => (
-                                <Typography>
-                                  {row.item.name} ({row.count}){" "}
-                                </Typography>
-                              )
-                            )}
-                          </Box>
-                        ) : (
-                          ""
-                        )}
-                        {selectedContent?.mountingClamps?.glassToGlass
-                          ?.length ? (
-                          <Box
-                            sx={{
-                              display: "flex",
-                              textAlign: "baseline",
-                              gap: 0.6,
-                            }}
-                          >
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              Glass To Glass:{" "}
-                            </Typography>
-                            {selectedContent?.mountingClamps?.glassToGlass?.map(
-                              (row) => (
-                                <Typography>
-                                  {row.item.name} ({row.count}){" "}
-                                </Typography>
-                              )
-                            )}
-                          </Box>
-                        ) : (
-                          ""
+                        {renderMeasurementSides(
+                          quoteState,
+                          measurements,
+                          quoteState === "edit"
+                            ? selectedData?.config?.layout_id
+                            : selectedData?._id
                         )}{" "}
-                      </>
-                    )}
-                    {selectedContent?.cornerClamps?.cornerWallClamp?.length ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Corner WallClamp:{" "}
-                        </Typography>
-                        {selectedContent?.cornerClamps?.cornerWallClamp?.map(
-                          (row) => (
-                            <Typography>
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                        )}
-                      </Box>
-                    ) : (
-                      ""
-                    )}
-                    {selectedContent?.cornerClamps?.cornerSleeveOver?.length ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Corner Sleeve Over:{" "}
-                        </Typography>
-                        {selectedContent?.cornerClamps?.cornerSleeveOver?.map(
-                          (row) => (
-                            <Typography>
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                        )}
-                      </Box>
-                    ) : (
-                      ""
-                    )}
-                    {selectedContent?.cornerClamps?.cornerGlassToGlass
-                      ?.length ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Corner Glass To Glass:{" "}
-                        </Typography>
-                        {selectedContent?.cornerClamps?.cornerGlassToGlass?.map(
-                          (row) => (
-                            <Typography>
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                        )}
-                      </Box>
-                    ) : (
-                      ""
-                    )}
-                    {selectedContent?.glassType?.item && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Type:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.glassType?.item?.name} (
-                          {selectedContent?.glassType?.thickness})
-                        </Typography>
-                      </Box>
-                    )}
-                    {selectedContent?.slidingDoorSystem?.item && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Sliding Door System:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.slidingDoorSystem?.item?.name} (
-                          {selectedContent?.slidingDoorSystem?.count})
-                        </Typography>
-                      </Box>
-                    )}
-                    {selectedContent?.transom && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Transom:{" "}
-                        </Typography>
-                        <Typography></Typography>
-                      </Box>
-                    )}
-                    {selectedContent?.header?.item && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Header:
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.header?.item?.name} (
-                          {selectedContent?.header?.count})
-                        </Typography>
-                      </Box>
-                    )}
-                    {selectedContent?.glassAddons?.length ? (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Addons:
-                        </Typography>
-                        {selectedContent?.glassAddons?.map((item) => (
-                          <Typography>{`${item?.name} `}</Typography>
-                        ))}
-                      </Box>
-                    ) : (
-                      ""
-                    )}
-                    {selectedContent?.hardwareAddons?.length > 0 && (
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Add ons:{" "}
-                        </Typography>
-                        <Typography>
-                          {selectedContent?.hardwareAddons?.map(
-                            (row) => ` ${row?.item?.name} (${row?.count})`
-                          )}{" "}
-                        </Typography>
-                      </Box>
-                    )}
-                    <Box
-                      sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        People:{" "}
                       </Typography>
-                      <Typography>{selectedContent?.people}</Typography>
-                    </Box>
-                    <Box
-                      sx={{ display: "flex", textAlign: "baseline", gap: 0.6 }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Hours:{" "}
-                      </Typography>
-                      <Typography>{selectedContent?.hours}</Typography>
-                    </Box>
-                    <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-                      Additional Fields
-                    </Typography>
-                    {selectedContent.additionalFields.map(
-                      (item) =>
-                        item.label !== "" && (
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Layout:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {(selectedData?.settings?.name ||
+                            selectedData?.name) ??
+                            "Custom"}
+                        </Typography>
+                      </Box>
+                      {doorWidth && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Door Width:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {doorWidth}
+                          </Typography>
+                        </Box>
+                      )}
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Square Foot:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {sqftArea}
+                        </Typography>
+                      </Box>
+                      {![undefined].includes(
+                        selectedData?.settings?.variant
+                      ) && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Door Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {doorWeight}
+                          </Typography>
+                        </Box>
+                      )}
+                      {![
+                        layoutVariants.DOOR,
+                        layoutVariants.DOUBLEBARN,
+                        layoutVariants.DOUBLEDOOR,
+                      ].includes(selectedData?.settings?.variant) && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Panel Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {panelWeight}
+                          </Typography>
+                        </Box>
+                      )}
+                      {[
+                        layoutVariants.DOORNOTCHEDPANELANDRETURN,
+                        layoutVariants.DOORPANELANDRETURN,
+                      ].includes(selectedData?.settings?.variant) && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Return Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {returnWeight}
+                          </Typography>
+                        </Box>
+                      )}
+                      {Columns[2].active && (
+                        <Box sx={{ width: "60%" }}>
+                          <Divider sx={{ borderColor: "#D4DBDF" }} />
                           <Box
-                            key={item.label}
                             sx={{
-                              display: "flex",
-                              textAlign: "baseline",
-                              gap: 0.6,
+                              mt: 1,
                             }}
                           >
-                            <Typography sx={{ fontWeight: "bold" }}>
-                              {item.label || "---"}:{" "}
+                            <Typography className="text-xs-ragular-bold">
+                              Total Price:
                             </Typography>
-                            <Typography>
-                              {item.cost}
-                              {/* * {(listData?.miscPricing?.pricingFactorStatus
+                            <Typography className="text-xs-ragular">
+                              ${totalPrice?.toFixed(2) || 0}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[1].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
+                        Summary
+                      </Typography>
+                      {selectedContent?.hardwareFinishes && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Finish:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.hardwareFinishes?.name}
+                          </Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.handles?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Handles:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.handles?.item?.name} (
+                            {selectedContent?.handles?.count})
+                          </Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.hinges?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Hinges:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.hinges?.item?.name} (
+                            {selectedContent?.hinges?.count})
+                          </Typography>
+                        </Box>
+                      )}
+                      {["channel"].includes(selectedContent?.mountingState) ? (
+                        <>
+                          {selectedContent?.mountingChannel?.item && (
+                            <Box>
+                              <Typography className="text-xs-ragular-bold">
+                                Channel:
+                              </Typography>
+                              <Typography className="text-xs-ragular">
+                                {selectedContent?.mountingChannel?.item?.name}
+                              </Typography>
+                            </Box>
+                          )}{" "}
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          {selectedContent?.mountingClamps?.wallClamp
+                            ?.length ? (
+                            <Box>
+                              <Typography className="text-xs-ragular-bold">
+                                WallClamps:{" "}
+                              </Typography>
+                              {selectedContent?.mountingClamps?.wallClamp?.map(
+                                (row) => (
+                                  <Typography className="text-xs-ragular">
+                                    {row.item.name} ({row.count}){" "}
+                                  </Typography>
+                                )
+                              )}
+                            </Box>
+                          ) : (
+                            ""
+                          )}
+                          {selectedContent?.mountingClamps?.sleeveOver
+                            ?.length ? (
+                            <Box>
+                              <Typography className="text-xs-ragular-bold">
+                                Sleeve Over:{" "}
+                              </Typography>
+                              {selectedContent?.mountingClamps?.sleeveOver?.map(
+                                (row) => (
+                                  <Typography className="text-xs-ragular">
+                                    {row.item.name} ({row.count}){" "}
+                                  </Typography>
+                                )
+                              )}
+                            </Box>
+                          ) : (
+                            ""
+                          )}
+                          {selectedContent?.mountingClamps?.glassToGlass
+                            ?.length ? (
+                            <Box>
+                              <Typography className="text-xs-ragular-bold">
+                                Glass To Glass:{" "}
+                              </Typography>
+                              {selectedContent?.mountingClamps?.glassToGlass?.map(
+                                (row) => (
+                                  <Typography className="text-xs-ragular">
+                                    {row.item.name} ({row.count}){" "}
+                                  </Typography>
+                                )
+                              )}
+                            </Box>
+                          ) : (
+                            ""
+                          )}{" "}
+                        </>
+                      )}
+                      {selectedContent?.cornerClamps?.cornerWallClamp
+                        ?.length ? (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Corner WallClamp:{" "}
+                          </Typography>
+                          {selectedContent?.cornerClamps?.cornerWallClamp?.map(
+                            (row) => (
+                              <Typography className="text-xs-ragular">
+                                {row.item.name} ({row.count}){" "}
+                              </Typography>
+                            )
+                          )}
+                        </Box>
+                      ) : (
+                        ""
+                      )}
+                      {selectedContent?.cornerClamps?.cornerSleeveOver
+                        ?.length ? (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Corner Sleeve Over:{" "}
+                          </Typography>
+                          {selectedContent?.cornerClamps?.cornerSleeveOver?.map(
+                            (row) => (
+                              <Typography className="text-xs-ragular">
+                                {row.item.name} ({row.count}){" "}
+                              </Typography>
+                            )
+                          )}
+                        </Box>
+                      ) : (
+                        ""
+                      )}
+                      {selectedContent?.cornerClamps?.cornerGlassToGlass
+                        ?.length ? (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Corner Glass To Glass:{" "}
+                          </Typography>
+                          {selectedContent?.cornerClamps?.cornerGlassToGlass?.map(
+                            (row) => (
+                              <Typography className="text-xs-ragular">
+                                {row.item.name} ({row.count}){" "}
+                              </Typography>
+                            )
+                          )}
+                        </Box>
+                      ) : (
+                        ""
+                      )}
+                      {selectedContent?.glassType?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Glass Type:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.glassType?.item?.name} (
+                            {selectedContent?.glassType?.thickness})
+                          </Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.slidingDoorSystem?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Sliding Door System:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.slidingDoorSystem?.item?.name} (
+                            {selectedContent?.slidingDoorSystem?.count})
+                          </Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.transom && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Transom:{" "}
+                          </Typography>
+                          <Typography className="text-xs-ragular"></Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.header?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Header:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.header?.item?.name} (
+                            {selectedContent?.header?.count})
+                          </Typography>
+                        </Box>
+                      )}
+                      {selectedContent?.glassAddons?.length ? (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Glass Addons:
+                          </Typography>
+                          {selectedContent?.glassAddons?.map((item) => (
+                            <Typography className="text-xs-ragular">{`${item?.name} `}</Typography>
+                          ))}
+                        </Box>
+                      ) : (
+                        ""
+                      )}
+                      {selectedContent?.hardwareAddons?.length > 0 && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Add ons:{" "}
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.hardwareAddons?.map(
+                              (row) => ` ${row?.item?.name} (${row?.count})`
+                            )}{" "}
+                          </Typography>
+                        </Box>
+                      )}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography className="text-xs-ragular-bold">
+                          People:{" "}
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {selectedContent?.people}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography className="text-xs-ragular-bold">
+                          Hours:{" "}
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {selectedContent?.hours}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold" mb={1}>
+                          Additional Fields
+                        </Typography>
+                        {selectedContent.additionalFields.map(
+                          (item) =>
+                            item.label !== "" && (
+                              <Box
+                                key={item.label}
+                                sx={{
+                                  display: "flex",
+                                  textAlign: "baseline",
+                                  gap: 0.6,
+                                }}
+                              >
+                                <Typography className="text-xs-ragular-bold">
+                                  {item.label || "---"}:{" "}
+                                </Typography>
+                                <Typography className="text-xs-ragular">
+                                  {item.cost}
+                                  {/* * {(listData?.miscPricing?.pricingFactorStatus
                               ? listData?.miscPricing?.pricingFactor
                               : 1)} */}
-                            </Typography>
-                          </Box>
-                        )
-                    )}
-                  </AccordionDetails>
-                </Accordion>
-
-                {/* Price category Accordian */}
-                <Accordion
-                  sx={{
-                    paddingX: "6px",
-                    border: "none",
-                    boxShadow: "none !important",
-                    ".MuiPaper-elevation": {
-                      border: " none !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header"
-                    sx={{
-                      padding: 0,
-                      margin: 0,
-                      height: "30px",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                      Pricing Sub Categories{" "}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{ padding: 0 }}>
-                    <Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-                          paddingY: 1,
-                        }}
+                                </Typography>
+                              </Box>
+                            )
+                        )}
+                      </Box>
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[3].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
                       >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Hardware Price
+                        Pricing Subcategories
+                      </Typography>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Hardware Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${hardwarePrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Hardware Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
+                          ${hardwarePrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Glass Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
                           ${glassPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Glass Addons Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Glass Addons Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${glassAddonsPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Fabrication Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Fabrication Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${fabricationPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Hardware Addons Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Hardware Addons Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${hardwareAddonsPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Labor Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Labor Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${laborPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-
-                          paddingY: 1,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Additional Fields Price
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Additional Fields Price:
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography className="text-xs-ragular">
                           ${additionalFieldsPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
-                {/** Gross Profit Accordian */}
-                <Accordion
-                  sx={{
-                    paddingX: "6px",
-                    border: "none",
-                    boxShadow: "none !important",
-                    ".MuiPaper-elevation": {
-                      border: " none !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    sx={{
-                      padding: 0,
-                      margin: 0,
-                      borderBottom: "none",
-                      height: "30px",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                      Gross Profit Margin
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails
-                    sx={{
-                      padding: 0,
-                      borderTop: "2px solid #D0D5DD",
-                      paddingY: 1,
-                    }}
-                  >
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Gross Total:
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[4].active && (
+                  <Grid item md={3} className="text-xs-samibold">
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
+                        Gross Profit Margin
                       </Typography>
-                      <Typography>${totalPrice?.toFixed(2) || 0}</Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Actual Cost:
-                      </Typography>
-                      <Typography>${actualCost?.toFixed(2) || 0}</Typography>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        textAlign: "baseline",
-                        gap: 0.6,
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
-                        Gross Profit:
-                      </Typography>
-                      <Typography>{grossProfit?.toFixed(2) || 0} %</Typography>
-                    </Box>
+                      <Box>
+                        <Typography className="text-xs-samibold">
+                          Gross Total:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${totalPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-samibold">
+                          Actual Cost:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${actualCost?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-samibold">
+                          Gross Profit:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {grossProfit?.toFixed(2) || 0} %
+                        </Typography>
+                      </Box>
 
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        paddingTop: "0px",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold" }}>
+                      <Typography className="text-xs-samibold">
                         Adjust Profit:
                       </Typography>
                       <Box
@@ -905,24 +783,14 @@ const Summary = ({ setStep }) => {
                         }}
                       >
                         <TextField
+                          className="custom-textfield-purple"
                           type="number"
                           InputProps={{
                             style: {
                               color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
                             },
                             inputProps: { min: 0, max: 100 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
+                            endAdornment: <> %</>,
                           }}
                           variant="outlined"
                           size="small"
@@ -931,7 +799,6 @@ const Summary = ({ setStep }) => {
                           }
                           onChange={(event) => handleSetUserProfit(event)}
                         />
-                        %
                       </Box>
                       <Button
                         disabled={
@@ -941,6 +808,7 @@ const Summary = ({ setStep }) => {
                         variant="contained"
                         onClick={resetUserProfit}
                         sx={{
+                          width: "77px",
                           backgroundColor: "#8477da",
                           "&:hover": {
                             backgroundColor: "#8477da",
@@ -952,88 +820,71 @@ const Summary = ({ setStep }) => {
                       >
                         Reset
                       </Button>
-                      {/* <Box sx={{ width: "100px" }}>
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={handleProfitPercentage}
-                          sx={{
-                            backgroundColor: "#8477da",
-                            "&:hover": {
-                              backgroundColor: "#8477da",
-                            },
-                          }}
-                        >
-                          {" "}
-                          Submit
-                        </Button>
-                      </Box> */}
-                    </Box>
-                  </AccordionDetails>
-                </Accordion>
-              </Box>
-              {/* Buttons */}
-              {isMobile ? (
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: { sm: "96%" },
-                    paddingX: 2,
-                    py: 2,
-                    // marginY: 3,
-                    position: { sm: "", xs: "fixed" },
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    gap: 5,
-                    background: "#08061B"
-                  }}
-                >
-                  <Box >
-                    <Button
-                      fullWidth
-                      // onClick={setHandleEstimatesPages}
-                      onClick={() => setStep(1)}
-                      sx={{
-                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                        color: "#344054",
-                        textTransform: "initial",
-                        border: "1px solid #D0D5DD",
-                        backgroundColor: { sm: "transparent", xs: "white" },
-                      }}
-                    >
-                      {" "}
-                      Back
-                    </Button>
-                  </Box>
-                  <Box >
-                    <Button
-                      fullWidth
-                      // disabled={selectedContent?.hardwareFinishes === null}
-                      variant="contained"
-                      onClick={() => {
-                        // setSummaryState(false);
-                        console.log('open modal');
-                      }}
-                      sx={{
-                        backgroundColor: "#8477da",
-                        "&:hover": {
-                          backgroundColor: "#8477da",
-                        },
-                      }}
-                    >
-                      {" "}
-                      Next
-                    </Button>
-                  </Box>
-                </Box>
-              ) : (
-                ""
-              )}
-            </Box>
+                    </Stack>
+                  </Grid>
+                )}
+              </Grid>
+            )}
           </Box>
         </Box>
+        {isMobile ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              width: { sm: "96%" },
+              paddingX: 2,
+              py: 2,
+              // marginY: 3,
+              position: { sm: "", xs: "fixed" },
+              bottom: 0,
+              left: 0,
+              right: 0,
+              gap: 5,
+              background: "#08061B",
+            }}
+          >
+            <Box>
+              <Button
+                fullWidth
+                // onClick={setHandleEstimatesPages}
+                onClick={() => setStep(1)}
+                sx={{
+                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                  color: "#344054",
+                  textTransform: "initial",
+                  border: "1px solid #D0D5DD",
+                  backgroundColor: { sm: "transparent", xs: "white" },
+                }}
+              >
+                {" "}
+                Back
+              </Button>
+            </Box>
+            <Box>
+              <Button
+                fullWidth
+                // disabled={selectedContent?.hardwareFinishes === null}
+                variant="contained"
+                onClick={() => {
+                  // setSummaryState(false);
+                  console.log("open modal");
+                }}
+                sx={{
+                  backgroundColor: "#8477da",
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
+                }}
+              >
+                {" "}
+                Next
+              </Button>
+            </Box>
+          </Box>
+        ) : (
+          ""
+        )}
       </Box>
     </>
   );

@@ -16,11 +16,15 @@ function CustomInputField({
   onBlur,
   disabled,
   id,
+  onClick,
+  select,
 }) {
   return (
     <>
       <TextField
+        onClick={onClick}
         id={id}
+        select={select}
         fullWidth={fullWidth}
         variant="outlined"
         size={size || "small"}
@@ -36,7 +40,11 @@ function CustomInputField({
         helperText={helperText}
         onBlur={onBlur}
         className={
-          error ? "custom-textfield-error" : disabled ? "disabled-textfield" : "custom-textfield"
+          error
+            ? "custom-textfield-error"
+            : disabled
+            ? "disabled-textfield"
+            : "custom-textfield"
         }
       />
     </>

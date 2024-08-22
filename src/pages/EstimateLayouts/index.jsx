@@ -8,24 +8,32 @@ import { getDecryptedToken } from "@/utilities/common";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 
 const EstimateLayouts = () => {
-    const decodedToken = getDecryptedToken();
-    return (
-        <>
-        {/* <TopBar/>
+  const decodedToken = getDecryptedToken();
+  return (
+    <>
+      {/* <TopBar/>
           <div className="main-wrapper"> */}
-            {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-            {/* <CommonSideBar/> */}
-            <CommonLayout>
-            <div className="content-wrapper" style={{paddingLeft:'25px'}}>
-                <SelectLayout />
-            </div>
-            </CommonLayout>
-        {/* </div> */}
-        </>
-      
-    );
+      {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
+        <Box
+          //   className="content-wrapper"
+          sx={{
+            paddingLeft: "25px",
+            paddingRight: "25px",
+            paddingTop: { sm: 2, xs: 0 },
+            backgroundColor: { sm: "#F6F5FF", xs: "#08061B" },
+          }}
+        >
+          <SelectLayout />
+        </Box>
+      </CommonLayout>
+      {/* </div> */}
+    </>
+  );
 };
 
 export default EstimateLayouts;

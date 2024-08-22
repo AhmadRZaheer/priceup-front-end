@@ -1,7 +1,12 @@
 import { useMemo, useState } from "react";
 import Logo from "@/Assets/bar-chart-2.svg";
 import { ChevronRight } from "@mui/icons-material";
-import { Box, Typography, MenuItem as MuiMenuItem, Button } from "@mui/material";
+import {
+  Box,
+  Typography,
+  MenuItem as MuiMenuItem,
+  Button,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getContent,
@@ -25,7 +30,9 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
       active = listData?.mountingChannel?.find(
         (item) => item.slug === "u-channel-1-2"
       );
-    } else if (selectedContent?.glassType?.thickness === thicknessTypes.THREEBYEIGHT) {
+    } else if (
+      selectedContent?.glassType?.thickness === thicknessTypes.THREEBYEIGHT
+    ) {
       active = listData?.mountingChannel?.find(
         (item) => item.slug === "u-channel-3-8"
       );
@@ -70,13 +77,20 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
         sx={{
           display: "flex",
           width: "50%",
-          pb: 1,
+          // pb: 1,
         }}
       >
         <Button
           onClick={opneClose}
           id="basic-button"
-          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
+          sx={{
+            color: {
+              sm: anchorEl ? "#8477DA" : "#000000 !important ",
+              xs: "white",
+            },
+            pl: "0px !important",
+            paddingY: "16px !important",
+          }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -84,13 +98,16 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
                 display: "flex",
                 alignItems: "center",
                 transform: "rotate(90deg)",
-                color: "#98A2B3 !important",
+                color: anchorEl ? "#8477DA" : "#98A2B3 !important",
+                mr: 2,
               }}
             />
           ) : (
-            <ChevronRight sx={{ color: "#98A2B3" }} />
+            <ChevronRight sx={{ color: "#98A2B3", mr: 2 }} />
           )}
-          <Typography>{title}</Typography>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+            {title}
+          </Typography>
         </Button>
       </Box>
       {anchorEl ? (
@@ -186,13 +203,15 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
               </>
             )}
             {selectedContent.mountingState === "channel" && (
-              <MenuItem
-                type={'channel'}
-                item={activeChannel}
-                selectedItem={selectedContent.mountingChannel.item}
-                handleItemSelect={handleChannelSelect}
-                selectedContent={selectedContent}
-              />
+              <Box py={1}>
+                <MenuItem
+                  type={"channel"}
+                  item={activeChannel}
+                  selectedItem={selectedContent.mountingChannel.item}
+                  handleItemSelect={handleChannelSelect}
+                  selectedContent={selectedContent}
+                />
+              </Box>
               // <MuiMenuItem
               //   key={activeChannel?.id}
               //   onClick={() => handleChannelSelect(activeChannel)}
@@ -245,8 +264,8 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
                   borderRadius: "12px",
                   background:
                     selectedContent?.cornerClamps?.cornerWallClamp?.length ||
-                      selectedContent?.cornerClamps?.cornerSleeveOver?.length ||
-                      selectedContent?.cornerClamps?.cornerGlassToGlass?.length
+                    selectedContent?.cornerClamps?.cornerSleeveOver?.length ||
+                    selectedContent?.cornerClamps?.cornerGlassToGlass?.length
                       ? "#8477DA"
                       : "#cccc",
                   // color:

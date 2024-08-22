@@ -3,9 +3,11 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  Grid,
   IconButton,
   InputLabel,
   MenuItem,
+  Popover,
   Select,
   TextField,
   Tooltip,
@@ -59,6 +61,8 @@ import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHe
 import { NavLink, useNavigate } from "react-router-dom";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
+import AlertIcon from "@/Assets/alert-circle.svg";
+import AlertMessage from "@/components/ui-components/AlertMessage";
 
 export const SimpleLayoutDimensions = ({ setStep }) => {
   const navigate = useNavigate();
@@ -95,6 +99,18 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   const [selectedLayout, setSelectedLayout] = useState(selectedData);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClickPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const alertPopoverOpen = Boolean(anchorEl);
+  const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
 
   const handleLayoutChange = (event) => {
     const id = event.target.value;
@@ -248,7 +264,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       );
     }
     refetch();
-    return () => { };
+    return () => {};
   }, []);
   return (
     <>
@@ -256,30 +272,111 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         <Box
           sx={{
             // width:'100%',
-            maxWidth:'600px',
+            // maxWidth:'600px',
             // height: iphoneSe ? "auto" : iphone14Pro ? 725 : 660,
             borderRadius: { sm: "12px", xs: 0 },
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             border: {
-              sm: "1px solid #EAECF0",
+              sm: " 1px solid rgba(212, 219, 223, 1)",
               xs: "none",
             },
             overflow: { sm: "hidden" },
-
           }}
         >
           <Box
             sx={{
-              background: "#D9D9D9",
+              background: " rgba(243, 245, 246, 1)",
               paddingY: 2,
               px: 3,
-              display: { sm: "block", xs: "none" },
+              display: { sm: "flex", xs: "none" },
+              borderBottom: "1px solid rgba(212, 219, 223, 1)",
+              justifyContent: "space-between",
             }}
           >
             <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
               Layout & Measurement
             </Typography>
+            <Button
+              variant="outlined"
+              sx={{
+                border: "1px solid rgba(93, 97, 100, 1)",
+                p: "5px 8px 5px 8px !important",
+                display: "flex",
+                gap: 0.5,
+                borderRadius: "84px !important",
+                alignItems: "center",
+                color: "black",
+                ":hover": {
+                  border: "1px solid rgba(93, 97, 100, 1)",
+                },
+              }}
+              aria-describedby={alertPopoverid}
+              onClick={handleClickPopover}
+            >
+              <img
+                width={20}
+                height={20}
+                src={AlertIcon}
+                alt="alert yellow logo"
+              />
+              <Typography sx={{ fontSize: "12px", lineHeight: "14.06px" }}>
+                View Alerts
+              </Typography>
+            </Button>
+            <Popover
+              id={alertPopoverid}
+              open={alertPopoverOpen}
+              anchorEl={anchorEl}
+              onClose={handleClosePopover}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              sx={{ borderRadius: "8px" }}
+            >
+              <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto" }}>
+                {[
+                  {
+                    title: "Alert Name",
+                    alertMessage: "Alert Message will be here!",
+                    varient: "error",
+                  },
+                  {
+                    title: "Alert Name",
+                    alertMessage: "Alert Message will be here!",
+                    varient: "info",
+                  },
+                  {
+                    title: "Alert Name",
+                    alertMessage: "Alert Message will be here!",
+                    varient: "success",
+                  },
+                  {
+                    title: "Alert Name",
+                    alertMessage: "Alert Message will be here!",
+                    varient: "success",
+                  },
+                  {
+                    title: "Alert Name",
+                    alertMessage: "Alert Message will be here!",
+                    varient: "success",
+                  },
+                ].map((item, index) => (
+                  <Box pt={index === 0 ? 0 : "4px"}>
+                    <AlertMessage
+                      title={item.title}
+                      alertMessage={item.alertMessage}
+                      varient={item.varient}
+                    />
+                  </Box>
+                ))}
+              </Box>
+            </Popover>
           </Box>
           <Box
             sx={{
@@ -301,6 +398,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               sx={{
                 paddingLeft: { sm: 0, xs: 3 },
                 paddingTop: 2,
+                display: { sm: "none", xs: "block" },
               }}
             >
               <Typography
@@ -308,7 +406,6 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   fontSize: { sm: "18px", xs: "18px" },
                   color: { sm: "#101828", xs: "white" },
                   paddingBottom: 1,
-                  display: { sm: "none", xs: "block" },
                 }}
               >
                 Enter Measurements
@@ -336,7 +433,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
             >
               <Box
                 sx={{
-                  flexGrow:0,
+                  flexGrow: 0,
                   display: "flex",
                   width: { sm: "100%", xs: "92%" },
                   maxHeight: "100%",
@@ -359,71 +456,99 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   pb: { sm: 0, xs: 12 },
                 }}
               >
-                {currentQuoteState === quoteState.CREATE && <Box
-                  sx={{
-                    mb: { sm: 2, xs: 0 },
-                  }}
-                >
-                  <FormControl
-                    fullWidth
-
-                  >
-                    <div style={{ marginBottom: 8, fontSize: "18px", }}>Layout</div>
-                    <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={selectedLayout?._id}
-                      placeholder="Layout"
-                      size="small"
-                      onChange={handleLayoutChange}
-                      style={{
-                        background: "white",
-                        borderRadius: "8px",
-
-                      }}
-                    >{layouts?.map((item) => <MenuItem key={`key-${item.name}`} value={item._id}>{item.name}</MenuItem>)}
-                    </Select>
-                  </FormControl>
-                </Box>}
-                {Array.from({
-                  length: noOfSidesOFCurrentLayout,
-                }).map((_, index) => (
+                {currentQuoteState === quoteState.CREATE && (
                   <Box
-                    key={index}
                     sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
+                      mb: { sm: 2, xs: 0 },
+                      width: { md: "48.6%", xs: "100%" },
                     }}
                   >
-                    <Typography sx={{ mr: 2 }}>
-                      {String.fromCharCode(97 + index)}
-                    </Typography>
-                    <TextField
-                      type="number"
-                      size="small"
-                      variant="outlined"
-                      name={String.fromCharCode(97 + index)}
-                      placeholder={String.fromCharCode(97 + index)}
-                      style={{
-                        background: "white",
-                        borderRadius: "8px",
-                        border: "1px solid #D0D5DD",
-                        width: "100%",
-                        maxWidth:'250px'
-                      }}
-                      value={formik.values[String.fromCharCode(97 + index)]}
-                      onChange={(e) => {
-                        formik.handleChange(e);
-                        // doorandPanel(e);
-                      }}
-                      onBlur={formik.handleBlur}
-                      InputProps={{
-                        inputProps: { min: 0 },
-                      }}
-                    />
+                    <FormControl fullWidth>
+                      <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        value={selectedLayout?._id}
+                        placeholder="Layout"
+                        size="small"
+                        className="custom-textfield-purple"
+                        onChange={handleLayoutChange}
+                        style={{
+                          background: "#F6F5FF",
+                          borderRadius: "4px",
+                        }}
+                      >
+                        {layouts?.map((item) => (
+                          <MenuItem key={`key-${item.name}`} value={item._id}>
+                            {item.name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </Box>
-                ))}
+                )}
+                <Grid container spacing={2}>
+                  {Array.from({
+                    length: noOfSidesOFCurrentLayout,
+                  }).map((_, index) => (
+                    <Grid item md={6} xs={12}>
+                      <Box
+                        key={index}
+                        sx={{
+                          display: "flex",
+                          alignItems: { sm: "start", xs: "center" },
+                          flexDirection: { sm: "column", xs: "row" },
+                          gap: { sm: 0.5, xs: 1 },
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            fontSize: "16px",
+                            fontWeight: 600,
+                            lineHeight: "21.86px",
+                          }}
+                        >
+                          <Typography sx={{ mr: 0.5 }}>
+                            {String.fromCharCode(97 + index)}
+                          </Typography>
+                          <Tooltip title={""}>
+                            <InfoOutlinedIcon
+                              sx={{
+                                width: "13px",
+                                height: "13px",
+                                color: "#959EA3",
+                              }}
+                            />
+                          </Tooltip>
+                        </Box>
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={String.fromCharCode(97 + index)}
+                          placeholder={String.fromCharCode(97 + index)}
+                          className="custom-textfield-purple"
+                          style={{
+                            borderRadius: "8px",
+                            border: "1px solid #D0D5DD",
+                            width: "100%",
+                            maxWidth: "250px",
+                          }}
+                          value={formik.values[String.fromCharCode(97 + index)]}
+                          onChange={(e) => {
+                            formik.handleChange(e);
+                            // doorandPanel(e);
+                          }}
+                          onBlur={formik.handleBlur}
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                        />
+                      </Box>
+                    </Grid>
+                  ))}
+                </Grid>
 
                 <>
                   <Typography>
@@ -467,8 +592,10 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     <Box
                       sx={{
                         display: "flex",
-                        width: "100%",
-                        alignItems: "center",
+                        // width: "100%",
+                        alignItems: { sm: "start", xs: "center" },
+                        flexDirection: { sm: "column", xs: "row" },
+                        width: { md: "48.6%", xs: "100%" },
                       }}
                     >
                       <Box
@@ -476,9 +603,11 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           display: "flex",
                           alignItems: "center",
                           // width: "200px",
+                          gap: 1,
                         }}
                       >
                         <Typography
+                          className="text-sm-samibold"
                           sx={{
                             color: !isCustomizedDoorWidthRedux ? "gray" : "",
                           }}
@@ -490,27 +619,34 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                             "If you want to modify the door width, check the above checkbox"
                           }
                         >
-                          <IconButton>
-                            <InfoOutlinedIcon />
-                          </IconButton>
+                          <InfoOutlinedIcon
+                            sx={{
+                              width: "13px",
+                              height: "13px",
+                              color: "#959EA3",
+                            }}
+                          />
                         </Tooltip>
                       </Box>
                       <TextField
+                        fullWidth
                         InputProps={{
                           inputProps: { min: 1 },
                         }}
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorWidthFromredux}
                         type="number"
+                        className={`custom-textfield-purple${
+                          !isCustomizedDoorWidthRedux ? "-disabled" : ""
+                        }`}
                         size="small"
                         variant="outlined"
                         value={doorWidthFromredux}
                         style={{
-                          background: "white",
                           borderRadius: "8px",
                           border: "1px solid #D0D5DD",
                           width: "100%",
-                          maxWidth:'200px'
+                          // maxWidth: {},
                         }}
                         name="door"
                         onChange={(e) => handleInputChange(e)}
@@ -518,7 +654,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     </Box>
                   </Box>
                   {doorWidthFromredux > showerSettings?.doorWidth ||
-                    doorWidthFromredux < 1 ? (
+                  doorWidthFromredux < 1 ? (
                     <Box
                       sx={{
                         display: "flex",
@@ -566,16 +702,15 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 ) : (
                   <Box
                     sx={{
-                      width: { xs: "134px", sm: "200px", lg: "300px" },
-                      height: { xs: "188px", sm: "240px", lg: "300px" },
                       padding: { xs: "10px", sm: "0px" },
                     }}
                   >
                     <img
-                      width="100%"
-                      height="100%"
-                      src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                        }`}
+                      width={isMobile ? "134px" : "240px"}
+                      height={isMobile ? "188px" : "300px"}
+                      src={`${backendURL}/${
+                        selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                      }`}
                       alt="Selected"
                     />
                   </Box>
@@ -595,29 +730,34 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 bgcolor: { sm: "white", xs: "#08061B" },
               }}
             >
-              <NavLink
-                to={currentQuoteState === quoteState.EDIT ? (projectId
-                  ? `/projects/${projectId}`
-                  : "/estimates") : "/estimates/layouts"
-                }
-              >
-                <Button
-                  sx={{
-                    width: { xs: 120, sm: 150 },
-                    color: "black",
-                    border: "1px solid black",
-                    fontSize: 18,
-                    // ml: 2,
-                    backgroundColor: "white",
-                  }}
-                  fullWidth
-                  variant="outlined"
-                // onClick={handleBack}
+              <Box sx={{ display: { sm: "none", xs: "block" } }}>
+                <NavLink
+                  to={
+                    currentQuoteState === quoteState.EDIT
+                      ? projectId
+                        ? `/projects/${projectId}`
+                        : "/estimates"
+                      : "/estimates/layouts"
+                  }
                 >
-                  {" "}
-                  Back
-                </Button>
-              </NavLink>
+                  <Button
+                    sx={{
+                      width: { xs: 120, sm: 150 },
+                      color: "black",
+                      border: "1px solid black",
+                      fontSize: 18,
+                      // ml: 2,
+                      backgroundColor: "white",
+                    }}
+                    fullWidth
+                    variant="outlined"
+                    // onClick={handleBack}
+                  >
+                    {" "}
+                    Back
+                  </Button>
+                </NavLink>
+              </Box>
               <Button
                 type="submit"
                 disabled={
@@ -641,7 +781,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 variant="contained"
               >
                 {" "}
-                {isMobile ? 'Next' : 'Run Quote'}
+                {isMobile ? "Next" : "Run Quote"}
               </Button>
             </Box>
           </Box>

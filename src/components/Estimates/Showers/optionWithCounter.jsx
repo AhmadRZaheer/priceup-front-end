@@ -28,14 +28,14 @@ const OptionWithCounter = ({ counter = 0, type, item }) => {
             onClick={(event) =>
                 handleCountSet(count + 1, event)
             }
-            sx={{ color: "#98A2B3" }}
+            sx={{ color: "#5D6164" }}
         />
         <Typography>{count}</Typography>
         <RemoveCircleOutline
             onClick={(event) =>
                 handleCountSet(count - 1, event)
             }
-            sx={{ color: "#98A2B3" }}
+            sx={{ color: "#5D6164" }}
         />
     </Box>)
 }
