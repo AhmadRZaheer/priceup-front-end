@@ -25,19 +25,56 @@
         margin-top: 0px;
       }
 
+      .ineerlink{
+        background-color: rgba(132, 119, 218, 0.3);
+        color:#8477DA;
+        li{
+          display: flex;
+          align-items: baseline;
+          padding: 12px;
+          cursor: pointer;
+          margin: 4px 0px 4px 34px !important;
+          border-radius: 6px; 
+          &:hover {
+            background-color: rgba(132, 119, 218, 0.3);
+            color:#8477DA;  
+            .innerItem{
+              background: none;
+              color:#8477DA;  
+            }        
+          }
+          .innerItem{
+            font-size: 16px;
+            font-weight: 600;
+            &:hover {
+              background: none;
+              color:#8477DA;
+            }           
+          }
+          &.innerActive {
+            background-color: rgba(132, 119, 218, 0.3);
+            color:#8477DA;
+            .innerItem{
+              // background-color: rgba(132, 119, 218, 0.3);
+              color:#8477DA;  
+            } 
+          }
+        }        
+      }
+
       li {
         display: flex;
         align-items: baseline;
-        padding: 7px;
+        padding: 12px;
         cursor: pointer;
-        margin: 4px 15px !important;
-        border-radius: 6px;
+        margin: 4px 16px !important;
+        border-radius: 6px;     
 
         .iconButton{
           font-size: 16px;
           font-weight: 600;
         }
-
+         
         &:hover {
           background-color: #8477da;
           color:#FFFF;
@@ -45,6 +82,7 @@
             background-color: #8477da;
             color:#FFFF;
         }
+        
         }
         &.active {
           background-color: #8477da;
@@ -53,7 +91,11 @@
             background-color: #8477da;
             color:#FFFF;
         }
-        }
+        // .innerItem{
+        //   background-color: red;
+        //   color:#FFFF;
+        // }
+        }      
 
         .icon {
           font-size: 16px;
@@ -63,7 +105,9 @@
         span {
           font-size: 16px;
           font-weight: 600;
-        } 
+          line-height: 21.86px;
+          align-self: center;
+        }        
 
         .iconButton{
             &:hover {
