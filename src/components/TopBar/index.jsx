@@ -45,7 +45,7 @@ function TopBar() {
         sx={{
           background: "#FFFFFF",
           boxShadow: "none",
-          px: 3,
+          px: 2,
           zIndex: 1100,
           borderBottom: "1px solid #D1D4DB",
         }}

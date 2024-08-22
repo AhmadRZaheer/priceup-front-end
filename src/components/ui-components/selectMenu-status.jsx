@@ -45,8 +45,7 @@ function SelectMenu_Status({ status, quoteId }) {
           <Box
             ref={anchorRef}
             sx={{
-              width: "60px",
-              height:'33px',
+              height:'21px',
               bgcolor:
                 selectedStatus === "pending"
                   ? "#FCDEC0"
@@ -67,8 +66,6 @@ function SelectMenu_Status({ status, quoteId }) {
               // pb: 0.5,
               display: "grid",
               gap: 1,
-              alignItems: "center",
-              textAlign:'center'
             }}
           >
             {/* <Box

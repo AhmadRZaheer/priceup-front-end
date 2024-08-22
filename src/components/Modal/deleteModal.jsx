@@ -17,11 +17,11 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: isMobile ? 200 : 560,
+    width: isMobile ? 292 : 560,
     bgcolor: "background.paper",
     border: "2px solid white",
     boxShadow: 24,
-    p: 3,
+    p: {sm:3,xs:2},
     borderRadius: "12px",
   };
   return (

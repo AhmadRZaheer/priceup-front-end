@@ -7,7 +7,10 @@ import {
   TextField,
   CircularProgress,
   Button,
+  useMediaQuery,
+  
 } from "@mui/material";
+import { makeStyles } from "@material-ui/core";
 import { Search } from "@mui/icons-material";
 import {
   useDeleteEstimates,
@@ -58,6 +61,15 @@ import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import NewPagination from "../Pagination";
 import { debounce } from "lodash";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import DefaultImage from "../ui-components/defaultImage";
+import ActionsDropdown from "../common/ActionsDropdown";
+
+import {
+  DeleteOutline,
+  Edit,
+  ManageSearch,
+  RemoveRedEyeOutlined,
+} from "@mui/icons-material";
 
 // const debounce = (func, delay) => {
 //   let timeout;
@@ -70,11 +82,21 @@ import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 // };
 
 export default function ExistingTable({ searchValue, statusValue, dateValue }) {
+  const isMobile = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
   const routePrefix = `${backendURL}/estimates`;
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const useStyles = makeStyles({
+    overflowText: {
+      maxWidth: "115px",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    },
+  });
+  const classes = useStyles();
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
@@ -194,6 +216,24 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     };
   }, [searchValue]);
 
+  const dropdownActions = [
+    {
+      title: "Edit",
+      handleClickItem: handleIconButtonClick,
+      icon: <Edit />,
+    },
+    {
+      title: "PDF",
+      handleClickItem: handlePreviewPDFClick,
+      icon: <RemoveRedEyeOutlined />,
+    },
+    {
+      title: "Delete",
+      handleClickItem: handleOpenDeleteModal,
+      icon: <DeleteOutline sx={{ color: "white", fontSize: 18, mr: 0.4 }} />,
+      severity: "error",
+    },
+  ];
 
   // const debouncedRefetch = useCallback(
   //   debounce(() => {
@@ -215,7 +255,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   // }, [page])
   console.log(estimatesList, "estimatesList", estimatesListFetching);
   return (
-    <>
+    <Box>
       {/* <Box
         sx={{
           display: "flex",
@@ -289,8 +329,70 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
           No Estimates Found
         </Typography>
       ) : (
-        <Box sx={{ width: "100%" }}>
-          <DataGrid
+        <Box>
+        {isMobile ? (
+          filteredData?.map((item) => (
+            <Box
+              key={item._id}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                paddingY: 2,
+                borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                px:{sm:0,xs:0.8}
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1 }}>
+                <Box
+                  sx={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  <DefaultImage
+                    image={item?.creatorData?.image}
+                    name={item?.creatorData?.name}
+                  />
+                </Box>
+
+                <Box>
+                  <Box sx={{ display: "flex", gap: 0.6 }}>
+                    <Typography className={classes.overflowText}>
+                      {item?.creatorData?.name}
+                    </Typography>
+                    <Typography sx={{ fontSize: 16, fontWeight: "Medium" }}>
+                      {" "}
+                      - Creator
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 0.6 }}>
+                    <Typography sx={{ fontSize: 14 }}>
+                      {item?.customerData?.name}
+                    </Typography>
+                    <Typography sx={{ fontSize: 14 }}> - Customer</Typography>
+                  </Box>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  textAlign: "center",
+                  width: 100,
+                  alignItems: "center",
+                }}
+              >
+                <ActionsDropdown item={item} actions={dropdownActions} />
+                <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
+                  {new Date(item?.updatedAt).toDateString()}
+                </Typography>
+              </Box>
+            </Box>
+          ))
+        ) : (
+         <DataGrid
             loading={estimatesListFetching}
             style={{
               border: "none",
@@ -310,8 +412,10 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
             sx={{ width: "100%" }}
             rowHeight={70.75}
             hideFooter
+            disableColumnMenu
           />
-          <Pagination
+        )}
+         <Pagination
             totalRecords={
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
@@ -319,7 +423,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
             page={page}
             setPage={setPage}
           />
-          <DeleteModal
+         <DeleteModal
             open={deleteModalOpen}
             text={"Estimates"}
             close={() => {
@@ -328,8 +432,53 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
             isLoading={LoadingForDelete}
             handleDelete={handleDeleteEstimate}
           />
-        </Box>
+      </Box>
+
+        
+
+        
+        // <Box >
+          // <DataGrid
+          //   loading={estimatesListFetching}
+          //   style={{
+          //     border: "none",
+          //   }}
+          //   getRowId={(row) => row._id}
+          //   rows={filteredData}
+          //   columns={EstimatesColumns(
+          //     handleOpenDeleteModal,
+          //     handleIconButtonClick,
+          //     handlePreviewPDFClick
+          //   )}
+          //   page={page}
+          //   pageSize={itemsPerPage}
+          //   rowCount={
+          //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+          //   }
+          //   sx={{ width: "100%" }}
+          //   rowHeight={70.75}
+          //   hideFooter
+          //   disableColumnMenu
+          // />
+          // <Pagination
+          //   totalRecords={
+          //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+          //   }
+          //   itemsPerPage={itemsPerPage}
+          //   page={page}
+          //   setPage={setPage}
+          // />
+          // <DeleteModal
+          //   open={deleteModalOpen}
+          //   text={"Estimates"}
+          //   close={() => {
+          //     setDeleteModalOpen(false);
+          //   }}
+          //   isLoading={LoadingForDelete}
+          //   handleDelete={handleDeleteEstimate}
+          // />
+        // </Box>
       )}
-    </>
+    </Box>
   );
 }

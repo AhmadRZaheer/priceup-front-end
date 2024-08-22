@@ -53,8 +53,8 @@ function WidgetCard({
         <Typography sx={{ fontSize: "16px", fontWeight: 500 }}>
           {title ?? "name"}
         </Typography>
-        <Typography sx={{ fontSize: "40px", fontWeight: 500 }}>
-          {text ?? "00"}
+        <Typography sx={{ fontSize: {sm:"40px",xs:'25px'}, fontWeight: 500 }}>
+          {text ?? "0"}
         </Typography>
       </Box>
     </>
