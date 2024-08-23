@@ -866,6 +866,21 @@ export const teamColumns = [
       );
     },
   },
+  {
+    field: "Status",
+    headerName: "Status",
+    headerClassName: "customHeaderClass-team",
+    flex: 0.8,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography  className={params.row.status ? "status-active" : "status-inActive"}>
+             {params.row.status ? "Active" : "Inactive"}
+          </Typography>
+        </>
+      );
+    },
+  },
 ];
 export const AdminColumns = [
   {
@@ -908,7 +923,7 @@ export const AdminColumns = [
     renderCell: (params) => {
       return (
         <div className="new-table-text">
-          {new Date(params.row.updatedAt).toLocaleDateString(undefined, {
+          {new Date(params.row.createdAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
             month: "long",
