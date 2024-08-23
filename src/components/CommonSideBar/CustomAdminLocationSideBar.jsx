@@ -73,14 +73,24 @@ const CustomAdminLocationSideBar = () => {
             className={` ${Boolean(anchorEl) ? "active" : ""}`}
             onClick={handleSeeLocationsClick}
           >
-            <Button fullWidth className='iconButton' sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start' ,textTransform:'capitalize'}}>
-              <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
+            <Button
+              fullWidth
+              className="iconButton"
+              sx={{
+                color: "#5D6164",
+                padding: 0.2,
+                justifyContent: "start",
+                textTransform: "capitalize",
+                gap:'12px'
+              }}
+            >
+              <VisibilityOutlinedIcon sx={{}} />
               <span>See Locations</span>
             </Button>
           </li>
-          <MenuSigleItem link='/locations' secondLink='/'>
-          <FmdGoodOutlined  sx={{  mr: 1 }} />
-          <span>Locations</span>
+          <MenuSigleItem link="/locations" secondLink="/">
+            <FmdGoodOutlined sx={{}} />
+            <span>Locations</span>
           </MenuSigleItem>
         </ul>
       </div>

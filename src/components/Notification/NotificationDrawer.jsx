@@ -82,7 +82,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
           },
           "& .MuiModal-backdrop": {
             top: {sm:"69px",xs:'57px'},
-            left: {sm:'320px',xs:'0px'},
+            left: {sm:'296px',xs:'0px'},
           },
         }}
       >

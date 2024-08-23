@@ -54,14 +54,15 @@ function TopBar() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
             height: "69px",
           }}
         >
-          <span className="logoImg">
-            <img src={Logo} alt="" />
-          </span>
-          <Box sx={{display:'flex'}}>
+          <Box className="logoImg" sx={{minWidth:'279px', borderRight:'1px solid #EBECF0',  display: "flex",
+            alignItems: "center",
+            }}>
+            <img src={Logo} alt=""  style={{height:'47px',width:'144px'}} />
+          </Box>
+          <Box sx={{display:'flex',alignSelf:'center'}}>
           <NotificationButton />
           {/* <IconButton
             aria-label="notification"

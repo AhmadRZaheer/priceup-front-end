@@ -7,7 +7,7 @@ const TabButton = ({ title, selected, onClick, sx }) => {
       onClick={onClick}
       sx={{
         color: selected ? '#000000' :'rgba(16, 13, 36, 0.57)',
-        borderRadius: "unset",
+        borderRadius: "0px !important",
         background: "none",
         fontWeight: selected ? 500 : 300,
         textTransform:'none',
