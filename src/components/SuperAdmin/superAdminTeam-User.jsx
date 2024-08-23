@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
   Button,
@@ -11,75 +11,164 @@ import {
   Select,
   MenuItem,
   Grid,
+  TextField,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import "./superAdmin.scss";
-import {
-  useFetchAdminLocation,
-  useDeleteStaff,
-  useFetchAllStaff,
-} from "../../utilities/ApiHooks/superAdmin";
+// import {
+//   useFetchAdminLocation,
+//   useDeleteStaff,
+//   useFetchAllStaff,
+// } from "../../utilities/ApiHooks/superAdmin";
 import TableRow from "./tableRow";
 import icon from "../../Assets/search-icon.svg";
 import { Add } from "@mui/icons-material";
 import { AdminColumns } from "@/utilities/DataGridColumns";
-import LocationModel from "../Modal/locationModel";
+// import LocationModel from "../Modal/locationModel";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 import DeleteModal from "../Modal/deleteModal";
 import AddTeamMembers from "../Modal/addTeamMembers";
-import { itemsPerPage } from "@/utilities/constants";
+import { userRoles } from "@/utilities/constants";
 import Pagination from "../Pagination";
 import CustomInputField from "../ui-components/CustomInput";
 import WidgetCard from "../ui-components/widgetCard";
+import { useDeleteDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import dayjs from "dayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { debounce } from "lodash";
+import { backendURL } from "@/utilities/common";
+import { getAssignedLocationName } from "@/utilities/users";
+
+const getUserRoleText = (role) => {
+  switch (role) {
+    case userRoles.SUPER_ADMIN:
+      return 'Super Admin';
+    case userRoles.STAFF:
+      return 'Staff';
+    case userRoles.CUSTOM_ADMIN:
+      return 'Admin';
+    default:
+      return '---';
+  }
+}
+
+const routePrefix = `${backendURL}/admins`;
 
 const SuperAdminTeam = () => {
-  const {
-    data: staffData,
-    refetch: teamMemberRefetch,
-    isFetching,
-  } = useFetchAllStaff();
-  const { mutate: usedelete, isSuccess } = useDeleteStaff();
-  // pagination state:
   const [page, setPage] = useState(1);
-
   const [search, setSearch] = useState("");
-  const [selectedRow, setSelectedRow] = useState(null);
-  const openModel = (row) => {
-    setSelectedRow(row);
-    setOpen(true);
-  };
-  const closeModel = () => {
-    setOpen(false);
-  };
-  const [Delete_id, setDelete_id] = useState();
-  const [Delete_M, setDelete_M] = useState(false);
-  const handleOpen = (id) => (setDelete_id(id), setDelete_M(true));
-  const handleClose = () => {
-    setDelete_M(false);
-    setOpen(false);
+  const [status, setStatus] = useState(null);
+  const [role, setRole] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [recordToModify, setRecordToModify] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openModifyModal, setOpenModifyModal] = useState(false);
+  const itemsPerPage = 10;
+  const fetchAllUsersUrl = useMemo(() => {
+    let url = `${routePrefix}/all-users?page=${page}&limit=${itemsPerPage}`;
+    if (search && search.length) {
+      url += `&search=${search}`;
+    }
+    if (status) {
+      url += `&status=${status}`;
+    }
+    if (role) {
+      url += `&role=${role}`;
+    }
+    if (selectedDate) {
+      url += `&date=${selectedDate}`
+    }
+    return url;
+  }, [page, itemsPerPage, search, status, role, selectedDate])
+
+  const {
+    data: usersList,
+    refetch: refetchUsersList,
+    isFetching: usersListFetching,
+    isLoading
+  } = useFetchAllDocuments(fetchAllUsersUrl);
+  const { mutateAsync: deleteUser, isSuccess: deletedSuccessfully } = useDeleteDocument();
+  const { data: locations, refetch: refetchLocationsList } = useFetchAllDocuments(`${backendURL}/companies`);
+  const locationsList = useMemo(() => {
+    return locations ? locations : [];
+  }, [locations])
+
+  const filteredData = useMemo(() => {
+    if (usersList && usersList?.users?.length) {
+      return usersList?.users;
+    } else {
+      return [];
+    }
+  }, [usersList, search]);
+
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
   };
 
-  const handeleDeleteStaff = () => {
-    usedelete(Delete_id);
-    handleClose();
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setRole(null);
+    setSelectedDate(null);
   };
-  useEffect(() => {
-    teamMemberRefetch();
-  }, [isSuccess, page]);
 
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [edit2, setEdit2] = useState(null);
-  const [isEdit2, setIsEdit2] = useState(false);
-  const handleOpenEdit = (data) => {
-    setOpen2(true);
-    setEdit2(data);
-    setIsEdit2(true);
+  const handleOpenDeleteModal = (record) => (setRecordToModify(record), setOpenDeleteModal(true));
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
   };
-  const { data: locationData, refetch } = useFetchAdminLocation();
+
+  const handleDeleteUser = async () => {
+    try {
+      await deleteUser({ apiRoute: `${routePrefix}/user/${recordToModify?._id}` });
+      handleCloseDeleteModal();
+    }
+    catch (err) {
+      console.log(err, 'error while deleting');
+    }
+  };
+
+  const handleOpenModifyModal = (record) => (setRecordToModify(record), setOpenModifyModal(true));
+  const handleCloseModifyModal = () => {
+    setOpenModifyModal(false);
+  };
+
+  const handleCreateUser = async () => {
+    setRecordToModify(null);
+    setOpenModifyModal(true);
+  };
+
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      if (page === 1) {
+        refetchUsersList();
+      } else {
+        setPage(1);
+      }
+    }, 700),
+    [page]
+  );
+
   useEffect(() => {
-    refetch();
+    refetchUsersList();
+  }, [page, deletedSuccessfully, status, selectedDate, role]);
+
+  useEffect(() => {
+    debouncedRefetch();
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [search]);
+
+  useEffect(() => {
+    refetchLocationsList();
   }, []);
 
   const actionColumn = [
@@ -89,15 +178,6 @@ const SuperAdminTeam = () => {
       headerClassName: "customHeaderClass-admin-team",
       flex: 0.8,
       renderCell: (params) => {
-        const { haveAccessTo } = params.row;
-
-        const matchingLocationNames = haveAccessTo
-          .map((accessToID) =>
-            locationData.find((location) => location.id === accessToID)
-          )
-          .filter((match) => match)
-          .map((match) => match.name);
-
         return (
           <div>
             <Typography
@@ -109,30 +189,13 @@ const SuperAdminTeam = () => {
               }}
               className="new-table-text"
             >
-              {matchingLocationNames.join(", ") || "Not added to any location"}
+              {[userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(params.row?.role) ? getAssignedLocationName(params.row, locationsList) : '---'}
             </Typography>
           </div>
         );
       },
     },
 
-    // {
-    //   field: "Access",
-    //   flex: 0.6,
-    //   headerClassName: "customHeaderClass-admin-team",
-    //   renderCell: (params) => {
-    //     return (
-    //       <>
-    //         <IconButton
-    //           sx={{ borderRadius: 0, color: "#7F56D9" }}
-    //           onClick={() => openModel(params.row)}
-    //         >
-    //           <h6>Modify Access</h6>
-    //         </IconButton>
-    //       </>
-    //     );
-    //   },
-    // },
     {
       field: "User Role",
       flex: 0.6,
@@ -140,7 +203,7 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <p className="new-table-text">{params.row?.role ?? "role"}</p>
+            <p className="new-table-text">{getUserRoleText(params.row?.role)}</p>
           </>
         );
       },
@@ -165,15 +228,15 @@ const SuperAdminTeam = () => {
       flex: 0.8,
       headerClassName: "customHeaderClass-admin-team",
       renderCell: (params) => {
-        console.log(params, "id");
-        const id = params.row._id;
+        // console.log(params, "id");
+        // const id = params.row._id;
 
         return (
           <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
             <div>
               <TableRow
                 row={params.row}
-                refetch={teamMemberRefetch}
+                refetch={refetchUsersList}
                 type={"superAdminTeam"}
                 text={""}
               />
@@ -181,13 +244,13 @@ const SuperAdminTeam = () => {
 
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-              onClick={() => handleOpenEdit(params.row)}
+              onClick={() => handleOpenModifyModal(params.row)}
             >
               <img src={EditIcon} alt="EDIT icon" />
             </IconButton>
             <IconButton
               sx={{ p: 0, borderRadius: "100%", width: 28, height: 28 }}
-              onClick={() => handleOpen(id)}
+              onClick={() => handleOpenDeleteModal(params.row)}
             >
               <img src={DeleteIcon} alt="delete icon" />
             </IconButton>
@@ -196,16 +259,6 @@ const SuperAdminTeam = () => {
       },
     },
   ];
-
-  const handleCreateUser = async () => {
-    await setEdit2(null);
-    await setIsEdit2(false);
-
-    setOpen2(true);
-  };
-  const filteredData = staffData?.filter((staff) =>
-    staff.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <>
@@ -260,10 +313,10 @@ const SuperAdminTeam = () => {
         </Box>
         <Grid container sx={{ px: 3 }} spacing={2}>
           {[
-            { title: "Total Users", text: "40", variant: "blue" },
-            { title: "Users", text: "34", variant: "red" },
-            { title: "Admins", text: "15", variant: "green" },
-            { title: "Super-Admins", text: "01", variant: "purple" },
+            { title: "Total Users", text: usersList?.totalUserCount ?? 0, variant: "blue" },
+            { title: "Users", text: usersList?.staffCount ?? 0, variant: "red" },
+            { title: "Admins", text: usersList?.customUserCount ?? 0, variant: "green" },
+            { title: "Super-Admins", text: usersList?.adminCount ?? 0, variant: "purple" },
           ].map((item) => (
             <Grid item lg={3} md={4} xs={6}>
               <WidgetCard
@@ -320,6 +373,79 @@ const SuperAdminTeam = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <Box>
+              <DesktopDatePicker
+                label="Date Added"
+                inputFormat="MM/DD/YYYY"
+                className="custom-textfield"
+                // maxDate={new Date()} // Sets the maximum date to the current date
+                value={selectedDate}
+                onChange={handleDateChange}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: 40,
+                    width: 150,
+                    backgroundColor: "white", // Adjust height
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: "0.875rem", // Adjust font size
+                    padding: "8px 14px", // Adjust padding
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "0.875rem",
+                    top: "-6px", // Adjust label size
+                  },
+                }}
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
+            </Box>
+            <FormControl
+              sx={{ width: "152px" }}
+              size="small"
+              className="custom-textfield"
+            >
+              <InputLabel id="demo-select-small-label" className="input-label">
+                Role
+              </InputLabel>
+              <Select
+                placeholder="Role"
+                value={role}
+                labelId="demo-select-small-label"
+                id="demo-select-small"
+                label="Status"
+                size="small"
+                sx={{ height: "40px" }}
+                onChange={(event) => setRole(event.target.value)}
+              >
+                <MenuItem value={userRoles.SUPER_ADMIN}>
+                  {" "}
+                  <Typography
+                    className=" status-active"
+                    sx={{ padding: 0, px: 2, width: "auto" }}
+                  >
+                    Super Admin
+                  </Typography>
+                </MenuItem>
+                <MenuItem value={userRoles.CUSTOM_ADMIN}>
+                  {" "}
+                  <Typography
+                    className=" status-active"
+                    sx={{ padding: 0, px: 2, width: "auto" }}
+                  >
+                    Admin
+                  </Typography>
+                </MenuItem>
+                <MenuItem value={userRoles.STAFF}>
+                  {" "}
+                  <Typography
+                    className=" status-active"
+                    sx={{ padding: 0, px: 2, width: "auto" }}
+                  >
+                    Staff
+                  </Typography>
+                </MenuItem>
+              </Select>
+            </FormControl>
             <FormControl
               sx={{ width: "152px" }}
               size="small"
@@ -329,15 +455,16 @@ const SuperAdminTeam = () => {
                 Status
               </InputLabel>
               <Select
-                // value={age}
+                placeholder="Status"
+                value={status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
                 size="small"
                 sx={{ height: "40px" }}
-                // onChange={handleChange}
+                onChange={(event) => setStatus(event.target.value)}
               >
-                <MenuItem value={true}>
+                <MenuItem value={'active'}>
                   {" "}
                   <Typography
                     className=" status-active"
@@ -346,7 +473,7 @@ const SuperAdminTeam = () => {
                     Active
                   </Typography>
                 </MenuItem>
-                <MenuItem value={false}>
+                <MenuItem value={'inactive'}>
                   {" "}
                   <Typography
                     className=" status-inActive"
@@ -357,6 +484,9 @@ const SuperAdminTeam = () => {
                 </MenuItem>
               </Select>
             </FormControl>
+            <Button variant="text" onClick={handleResetFilter}>
+              Clear Filter
+            </Button>
           </Box>
         </Box>
         <Box
@@ -367,7 +497,7 @@ const SuperAdminTeam = () => {
             overflow: "hidden",
           }}
         >
-          {isFetching ? (
+          {isLoading ? (
             <Box
               sx={{
                 width: "100%",
@@ -381,85 +511,64 @@ const SuperAdminTeam = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          ) : filteredData.length === 0 ? (
+          ) : filteredData?.length === 0 && !usersListFetching ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
               No Users Found
             </Typography>
           ) : (
             <div className="CustomerTable">
-              {filteredData.length > 0 ? (
-                <>
-                  <DataGrid
-                    loading={isFetching}
-                    style={{
-                      border: "none",
-                    }}
-                    getRowId={(row) => row._id}
-                    rows={filteredData?.slice(
-                      (page - 1) * itemsPerPage,
-                      page * itemsPerPage
-                    )}
-                    columns={AdminColumns?.concat(actionColumn)}
-                    page={page}
-                    pageSize={itemsPerPage}
-                    rowCount={filteredData?.length}
-                    sx={{
-                      width: "100%",
-                    }}
-                    hideFooter
-                    disableColumnMenu
-                    pagination={false}
-                  />
-                  <Box sx={{ width: "100%" }}>
-                    <Pagination
-                      totalRecords={
-                        filteredData.length ? filteredData.length : 0
-                      }
-                      itemsPerPage={itemsPerPage}
-                      page={page}
-                      setPage={setPage}
-                    />
-                  </Box>
-                  {/* <NewPagination
-                    totalRecords={filteredData.length ? filteredData.length : 0}
-                    setIsShowInput={setIsShowInput}
-                    isShowInput={isShowInput}
-                    setInputPage={setInputPage}
-                    inputPage={inputPage}
-                    page={page}
-                    setPage={setPage}
-                  /> */}
-                </>
-              ) : (
-                <Box sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                  No Users Found
-                </Box>
-              )}
+              <DataGrid
+                loading={usersListFetching}
+                style={{
+                  border: "none",
+                }}
+                getRowId={(row) => row._id}
+                rows={filteredData}
+                columns={AdminColumns?.concat(actionColumn)}
+                page={page}
+                pageSize={itemsPerPage}
+                rowCount={usersList?.totalRecords ? usersList?.totalRecords : 0}
+                sx={{
+                  width: "100%",
+                }}
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
+              <Box sx={{ width: "100%" }}>
+                <Pagination
+                  totalRecords={
+                    usersList?.totalRecords ? usersList?.totalRecords : 0
+                  }
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                />
+              </Box>
+
             </div>
           )}
         </Box>
         <DeleteModal
-          close={handleClose}
-          open={Delete_M}
-          handleDelete={handeleDeleteStaff}
+          close={handleCloseDeleteModal}
+          open={openDeleteModal}
+          handleDelete={handleDeleteUser}
         />
-        <LocationModel
+        {/* <LocationModel
           open={open}
           onClose={closeModel}
           selectedRow={selectedRow}
-          staffRefetch={teamMemberRefetch}
-          // filteredAdminData={filteredAdminData}
-          // notAdded={notAdded}
-          // AdminData={AdminData}
-        />
+          staffRefetch={refetchUsersList}
+        // filteredAdminData={filteredAdminData}
+        // notAdded={notAdded}
+        // AdminData={AdminData}
+        /> */}
         <AddTeamMembers
-          open={open2}
-          close={() => {
-            setOpen2(false);
-          }}
-          SelectedData={edit2}
-          isEdit={isEdit2}
-          refetch={teamMemberRefetch}
+          open={openModifyModal}
+          close={handleCloseModifyModal}
+          recordToModify={recordToModify}
+          refetchUsers={refetchUsersList}
+          locationsList={locationsList}
         />
       </Box>
     </>
