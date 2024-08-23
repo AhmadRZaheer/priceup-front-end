@@ -12,6 +12,7 @@ import { logoutHandler } from "@/redux/userAuth";
 import DefaultImage from "../ui-components/defaultImage";
 import { getDecryptedToken } from "@/utilities/common";
 import NotificationButton from "../ui-components/NotificationButton";
+import Logo from "../../Assets/Logo1.svg";
 
 function TopBar() {
   // const [state, setState] = React.useState(false);
@@ -39,19 +40,29 @@ function TopBar() {
   };
 
   return (
-    <Box sx={{ display: {sm:"flex",xs:'none'}, pb: "75px" }}>
+    <Box sx={{ display: { sm: "flex", xs: "none" }, pb: "75px" }}>
       <AppBar
-        sx={{ background: "#FFFFFF", boxShadow: "rgba(0, 0, 0, 0.18)", px: 4 }}
+        sx={{
+          background: "#FFFFFF",
+          boxShadow: "none",
+          px: 2,
+          zIndex: 1100,
+          borderBottom: "1px solid #D1D4DB",
+        }}
       >
         <Box
           sx={{
             display: "flex",
-            justifyContent: "end",
+            justifyContent: "space-between",
             alignItems: "center",
             height: "69px",
           }}
         >
-          <NotificationButton  />
+          <span className="logoImg">
+            <img src={Logo} alt="" />
+          </span>
+          <Box sx={{display:'flex'}}>
+          <NotificationButton />
           {/* <IconButton
             aria-label="notification"
             onClick={toggleDrawer(!state)}
@@ -101,6 +112,7 @@ function TopBar() {
               type={3}
             />
           </IconButton>
+          </Box>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}

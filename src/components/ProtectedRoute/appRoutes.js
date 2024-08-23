@@ -48,6 +48,7 @@ import Notification from "@/pages/Notification";
 import Projects from "@/pages/Projects";
 import ProjectCreate from "@/pages/Projects/Create";
 import ProjectDetail from "@/pages/Projects/Detail";
+import EditLayout from "../ShowerLayout/EditLayout";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -105,8 +106,12 @@ const AppRoutes = () => {
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />
           <Route path="finishes" element={<Finishes />} />
-
-          <Route path="layouts" element={<Defaults />} />
+            
+          <Route path="/layouts/">
+            <Route index element={<Defaults />} />
+            <Route path="edit" element={<EditLayout />} />
+          </Route>
+          {/* <Route path="layouts" element={<Defaults />} /> */}
           <Route path="settings" element={<Settings />} />
           <Route path="hardware-addons" element={<AddOns />} />
           <Route path="glass-types" element={<GlassType />} />

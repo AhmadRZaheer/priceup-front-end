@@ -81,8 +81,8 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
             boxShadow:'none'
           },
           "& .MuiModal-backdrop": {
-            top: "69px",
-            left: '320px',
+            top: {sm:"69px",xs:'57px'},
+            left: {sm:'320px',xs:'0px'},
           },
         }}
       >

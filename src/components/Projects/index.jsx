@@ -35,7 +35,11 @@ export default function Projects() {
   const handleDateChange = (newDate) => {
     if (newDate) {
       // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);
@@ -65,7 +69,7 @@ export default function Projects() {
     <>
       <Box
         sx={{
-          p: "20px 22px 20px 10px",
+          p: { sm: "20px 22px 20px 0px", xs: "70px 0px 20px 10px" },
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -83,7 +87,7 @@ export default function Projects() {
             sx={{
               color: "rgba(33, 37, 40, 1)",
               fontSize: "16px",
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
@@ -96,24 +100,24 @@ export default function Projects() {
             onClick={handleCreateProject}
             sx={{
               backgroundColor: "#8477DA",
+              height: "44px",
+              width: { sm: "214px", xs: "182px" },
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
-              borderRadius: 2,
-              fontSize: 17,
-              padding: 1,
-
-              px: 2,
+              borderRadius: 1,
+              fontSize: { lg: 16, md: 15 },
+              padding: { sm: "10px 16px", xs: "5px 8px" },
             }}
           >
-            <Add color="white" sx={{ mr: 1 }} />
+            <Add sx={{ mr: { sm: 1.2, xs: 0.8 }, color: "#FFFFFF" }} />
             Create New Project
           </Button>
         </Box>
       </Box>
       <Box
         sx={{
-          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
+          backgroundColor: "#F6F5FF",
           // display: "flex",
           // flexDirection: "column",
           // justifyContent: "start",
@@ -124,11 +128,12 @@ export default function Projects() {
           // gap: 5,
         }}
       >
-        {decodedToken?.role !== userRoles.STAFF ? (
+        {/* {decodedToken?.role !== userRoles.STAFF ? ( */}
           <Box
             sx={{
-              width: "98%",
-              pr: 2,
+              width: { sm: "98%", xs: "99%" },
+              // pr: 2,
+              px: { sm: 0, xs: 1 },
             }}
           >
             <Grid container spacing={2}>
@@ -175,95 +180,105 @@ export default function Projects() {
               </Box>
             </Box> */}
           </Box>
-        ) : (
+        {/* ) : (
           ""
-        )}
+        )} */}
 
         <Box
           sx={{
-            display: "flex",
+            display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
             width: "98%",
-            pr: 3,
+            pr: { sm: 3, xs: 1 },
+            pl: { sm: 0, xs: 1 },
             my: 1,
             pt: 3,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
             Projects
           </Typography>
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <CustomInputField
-              id="input-with-icon-textfield"
-              placeholder="Search by User Name"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <img src={icon} alt="search input" />
-                  </InputAdornment>
-                ),
-              }}
-              value={search}
-              onChange={handleChange}
-            />
-            <Box>
-              <DesktopDatePicker
-                label="Date Added"
-                inputFormat="MM/DD/YYYY"
-                className="custom-textfield"
-                // maxDate={new Date()} // Sets the maximum date to the current date
-                value={selectedDate}
-                onChange={handleDateChange}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: 40,
-                    width: 150,
-                    backgroundColor: "white", // Adjust height
-                  },
-                  "& .MuiInputBase-input": {
-                    fontSize: "0.875rem", // Adjust font size
-                    padding: "8px 14px", // Adjust padding
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: "0.875rem",
-                    top: "-6px", // Adjust label size
-                  },
+          <Box sx={{ display: {sm:"flex",xs:'block'}, gap: 2, pt: { sm: 0, xs: 1 } }}>
+            <Box sx={{ display: "flex",gap: 2 }}>
+              <CustomInputField
+                id="input-with-icon-textfield"
+                placeholder="Search by User Name"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <img src={icon} alt="search input" />
+                    </InputAdornment>
+                  ),
                 }}
-                renderInput={(params) => <TextField {...params} size="small" />}
+                value={search}
+                onChange={handleChange}
               />
+              <Box>
+                <DesktopDatePicker
+                  label="Date Added"
+                  inputFormat="MM/DD/YYYY"
+                  className="custom-textfield"
+                  // maxDate={new Date()} // Sets the maximum date to the current date
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      height: 40,
+                      width: 150,
+                      backgroundColor: "white", // Adjust height
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: "0.875rem", // Adjust font size
+                      padding: "8px 14px", // Adjust padding
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "0.875rem",
+                      top: "-6px", // Adjust label size
+                    },
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small" />
+                  )}
+                />
+              </Box>
             </Box>
-            <FormControl
-              sx={{ width: "152px" }}
-              size="small"
-              className="custom-textfield"
-            >
-              <InputLabel id="demo-select-small-label" className="input-label">
-                Status
-              </InputLabel>
-              <Select
-                value={status}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                label="Status"
+            <Box sx={{ display: "flex",gap: 2, pt: { sm: 0, xs: 1 } }}>
+              <FormControl
+                sx={{ width: "152px" }}
                 size="small"
-                sx={{ height: "40px" }}
-                onChange={(e) => setStatus(e.target.value)}
+                className="custom-textfield"
               >
-                <MenuItem value={"pending"}>
-                  <StatusChip variant={"pending"} sx={{ padding: 0 }} />
-                </MenuItem>
-                <MenuItem value={"voided"}>
-                  <StatusChip variant={"voided"} sx={{ padding: 0 }} />
-                </MenuItem>
-                <MenuItem value={"approved"}>
-                  <StatusChip variant={"approved"} sx={{ padding: 0 }} />
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <Button variant="text" onClick={handleResetFilter}>
-              Clear Filter
-            </Button>
+                <InputLabel
+                  id="demo-select-small-label"
+                  className="input-label"
+                >
+                  Status
+                </InputLabel>
+                <Select
+                  value={status}
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  label="Status"
+                  size="small"
+                  sx={{ height: "40px" }}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <MenuItem value={"pending"}>
+                    <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                  <MenuItem value={"voided"}>
+                    <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                  <MenuItem value={"approved"}>
+                    <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <Button variant="text" onClick={handleResetFilter}>
+                Clear Filter
+              </Button>
+            </Box>
           </Box>
         </Box>
 
@@ -273,7 +288,8 @@ export default function Projects() {
             border: "1px solid #EAECF0",
             borderRadius: "8px",
             background: "#FFFFFF",
-            mr: 2,
+            mr: { sm: 2, xs: 1 },
+            ml: { sm: 0, xs: 1 },
             mb: 2,
             mt: 2,
           }}

@@ -283,6 +283,7 @@ const MirrorEstimatesList = ({ projectId }) => {
                             estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
                         }
                         sx={{ width: "100%" }}
+                        rowHeight={70}
                         hideFooter
                     />)}
                 <Pagination

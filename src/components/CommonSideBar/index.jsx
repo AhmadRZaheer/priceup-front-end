@@ -58,9 +58,12 @@ const CommonSideBar = () => {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          // width: { sm: `calc(100% - ${drawerWidth}px)` },
+          // ml: { sm: `${drawerWidth}px` },
           display: { sm: "none" },
+          background:'#FFFF',
+          pr:'0px !important'
+          
         }}
       >
         <Toolbar sx={{ backgroundColor: "#FFFF" }}>
@@ -80,7 +83,7 @@ const CommonSideBar = () => {
                 onClick={handleDrawerToggle}
                 sx={{ mr: 2, display: { sm: "none" }, color: '#5D6164' }}
               >
-                <MenuIcon />
+                <MenuIcon /> 
               </IconButton>
             </div>
             <div>
@@ -115,6 +118,7 @@ const CommonSideBar = () => {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+              overflowX:'hidden'
             },
           }}
 
@@ -146,11 +150,13 @@ const CommonSideBar = () => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "block" },           
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+              zIndex:1000,
+              overflowX:'hidden'
             },
           }}
           open

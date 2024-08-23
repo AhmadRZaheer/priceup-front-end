@@ -20,6 +20,7 @@ const NotificationButton = () => {
         sx={{
           // background: state ? "#8477DA" : "transparent",
           mr: 1,
+          p:'12px',
           ":hover": {
             ".notificationIcon": {
               color: "#8477DA",

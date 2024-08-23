@@ -161,7 +161,7 @@ const ProjectInfoComponent = ({
     >
       <Box
         sx={{
-          p: "20px 20px 20px 8px",
+          p: { sm: "20px 20px 20px 8px", xs: "20px 0px 20px 0px" },
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -176,22 +176,16 @@ const ProjectInfoComponent = ({
               gap: 1,
             }}
           >
-            Glass Estimation
-            <Box
-              sx={{
-                fontSize: { lg: 24, md: 20 },
-                fontWeight: 600,
-                color: "#000000",
-              }}
-            >
-              {projectState !== "create" ? "/ Project Details" : ""}
-            </Box>
+            Project Details
+            {/* <Box sx={{ fontSize: {lg:24,md:20}, fontWeight: 600, color: "#000000" }}>
+            {projectState !== "create" ? '/ Project Details' :''}  
+            </Box> */}
           </Typography>
           <Typography
             sx={{
               color: "#606366",
               fontSize: { lg: 16, md: 14 },
-              fontWeight: 600,
+              fontWeight: 500,
             }}
           >
             Create, edit and manage your Projects.
@@ -205,17 +199,18 @@ const ProjectInfoComponent = ({
               onClick={handleOpenCategoryModal}
               sx={{
                 backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "auto", xs: "187px" },
                 "&:hover": { backgroundColor: "#8477DA" },
                 color: "white",
                 textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: { lg: 17, md: 15 },
-                padding: 1,
-                px: 2,
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: { sm: "10px 16px  !important", xs: "5px 5px !important" },
               }}
             >
-              <Add color="white" sx={{ mr: 1 }} />
-              Create New Estimate
+              <Add sx={{ mr: 0.5, color: "#FFFFFF" }} />
+              Create New Estimates
             </Button>
           </Box>
         ) : (
@@ -770,7 +765,7 @@ const ProjectInfoComponent = ({
         <Box>
           <Box
             sx={{
-              display: "flex",
+              display: { sm: "flex", xs: "block" },
               justifyContent: "space-between",
               //   width: "98%",
               //  pr: 3,
@@ -780,7 +775,7 @@ const ProjectInfoComponent = ({
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Estimates
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 2 ,pt:{sm:0,xs:1}}}>
               <CustomInputField
                 id="input-with-icon-textfield"
                 placeholder="Search by User Name"
@@ -814,10 +809,17 @@ const ProjectInfoComponent = ({
                   sx={{ height: "40px" }}
                   // onChange={handleChange}
                 >
-                  <MenuItem value={"active"}>Active</MenuItem>
-                  <MenuItem value={"inActive"}>inActive</MenuItem>
+                  <MenuItem value={"pending"}>Pending</MenuItem>
+                  <MenuItem value={"voided"}>Voided</MenuItem>
+                  <MenuItem value={"approved"}>Approved</MenuItem>
                 </Select>
               </FormControl>
+              <Button
+                variant="text"
+                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" }}
+              >
+                Clear Filters
+              </Button>
             </Box>
           </Box>
 
@@ -827,8 +829,8 @@ const ProjectInfoComponent = ({
           <Box
             sx={{
               boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-              borderRadius: "5px",
-              pt: { md: 1, xs: 1 },
+              borderRadius: "8px",
+              pt: { md: 2, xs: 1 },
               width: "99.5%",
               background: "#FFFF",
             }}
