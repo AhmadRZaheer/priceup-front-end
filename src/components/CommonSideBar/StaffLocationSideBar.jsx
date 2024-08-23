@@ -184,7 +184,7 @@ const StaffLocationSideBar = () => {
                     {activeLocation?.company?.name}
                   </Typography>
                 </Box>
-                <UnfoldMore sx={{ color: "white", mr: 1 }} />
+                <UnfoldMore sx={{ color: "white",   }} />
               </Button>
             </Tooltip>
           </Box>
@@ -290,59 +290,52 @@ const StaffLocationSideBar = () => {
           <Tooltip title="Switch Location">
             <Button
               sx={{
-                width: 290,
+                mx: "auto",
+                width: 264,
                 height: "56px",
                 color: "white",
-                borderRadius: "6px !important",
-                marginX: 2,
-                marginY: 1,
-                paddingY: "10px",
-                textTransform: "capitalize",
+                padding: "4px 12px",
+                display: "flex",
+                borderRadius: "6px",
                 background: "#000000",
+                m: 2,
+                display: "flex",
+                justifyContent: "space-between",
                 ":hover": {
                   backgroundColor: "#000000",
-                  ".setLocation": {
-                    color: "#FFFF",
                   },
-                },
-                display: "flex",
-                justifyContent: "start",
               }}
               onClick={handleSeeLocationsClick}
             >
-              <Box>
+              <Box sx={{ display: "flex", gap: "12px" }}>
                 <DefaultImage
                   image={activeLocation?.image}
                   name={activeLocation?.name}
                 />
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                  width: "82%",
-                }}
-              >
-                <Typography
-                  className="setLocation"
-                  sx={{
-                    fontSize: "16px",
-                    paddingLeft: "2px",
+
+                <span
+                  style={{
                     whiteSpace: "nowrap",
-                    display: "block",
+                    display: "flex",
+                    alignItems: "center",
                     textOverflow: "ellipsis",
                     overflow: "hidden",
                     textTransform: "capitalize",
-                    color: "#FFFF",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    lineHeight: "21.86px",
                   }}
                 >
                   {activeLocation?.name}
-                </Typography>
+                </span>
               </Box>
               <ExpandMoreOutlinedIcon
                 className="setLocation"
-                sx={{ color: "#FFFF", mr: 1,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)' }}
+                sx={{
+                  color: "#FFFF",
+                  transform:
+                    anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+                }}
               />
             </Button>
           </Tooltip>
@@ -358,15 +351,15 @@ const StaffLocationSideBar = () => {
           </li> */}
           <hr style={{ opacity: 0, marginTop: "20px" }} />
           <MenuSigleItem link="/projects" secondLink="/">
-            <FmdGoodOutlined sx={{ mr: 1 }} />
+            <FmdGoodOutlined sx={{   }} />
             <span>Projects</span>
           </MenuSigleItem>
           <MenuSigleItem link="/estimates">
-            <FmdGoodOutlined sx={{ mr: 1 }} />
+            <FmdGoodOutlined sx={{   }} />
             <span>Old Estimates</span>
           </MenuSigleItem>
           <MenuSigleItem link="/customers">
-            <FmdGoodOutlined sx={{ mr: 1 }} />
+            <FmdGoodOutlined sx={{   }} />
             <span>Customer</span>
           </MenuSigleItem>
         </ul>
@@ -462,15 +455,16 @@ const StaffLocationSideBar = () => {
                     color: "#5D6164",
                     padding: 0.2,
                     justifyContent: "start",
-                    textTransform:'capitalize'
+                    textTransform: "capitalize",
+                    gap:'12px'
                   }}
                 >
-                  <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
+                  <VisibilityOutlinedIcon sx={{  }} />
                   <span>See Locations</span>
                 </Button>
               </li>
               <MenuSigleItem link="/locations" secondLink="/">
-                <FmdGoodOutlined sx={{ mr: 1 }} />
+                <FmdGoodOutlined sx={{   }} />
                 <span>Locations</span>
               </MenuSigleItem>
             </ul>

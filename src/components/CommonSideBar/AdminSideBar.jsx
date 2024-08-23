@@ -4,7 +4,7 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import { NavLink, useLocation } from "react-router-dom";
 import { logoutHandler } from "@/redux/userAuth";
 import { useDispatch } from "react-redux";
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import DevicesFoldOutlinedIcon from "@mui/icons-material/DevicesFoldOutlined";
 import WindowOutlinedIcon from "@mui/icons-material/WindowOutlined";
 import SettingsIcon from "@/Assets/settings.svg";
@@ -41,6 +41,7 @@ import MenuSigleItem from "./MenuSigleItem";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
+import InnerMenuItem from "./InnerMenuItem";
 
 const AdminSideBar = () => {
   const { data: AdminData, refetch } = useFetchDataAdmin();
@@ -230,104 +231,122 @@ const AdminSideBar = () => {
         <Box sx={{ width: "100%", height: "24%", mx: "auto" }}>
           {userReference && (
             <>
-            <Tooltip title="Switch Location">
+              <Tooltip title="Switch Location">
+                <Button
+                  onClick={handleSeeLocationsClick}
+                  sx={{
+                    mx: "auto",
+                    width: 264,
+                    height: "56px",
+                    color: "white",
+                    padding: "4px 12px",
+                    display: "flex",
+                    borderRadius: "6px",
+                    background: "#000000",
+                    m: 2,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    ":hover": {
+                      background: "#000000",
+                      backgroundColor: "#000000",
+                    },
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: "12px" }}>
+                    <DefaultImage
+                      image={
+                        activeLocation?.company?.image || activeLocation?.image
+                      }
+                      name={
+                        activeLocation?.company?.name || activeLocation?.name
+                      }
+                    />
+                    <span
+                      style={{
+                        whiteSpace: "nowrap",
+                        display: "flex",
+                        alignItems: "center",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden",
+                        textTransform: "capitalize",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        lineHeight: "21.86px",
+                      }}
+                    >
+                      {activeLocation?.company?.name || activeLocation?.name}
+                    </span>
+                  </Box>
+
+                  <ExpandMoreIcon
+                    sx={{
+                      color: "#FFFF",
+                      transform:
+                        anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+                    }}
+                  />
+                </Button>
+              </Tooltip>
+              <hr style={{ border: "1px solid #D1D4DB" }} />
+            </>
+          )}
+
+          {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
+            <>
               <Button
                 onClick={handleSeeLocationsClick}
                 sx={{
                   mx: "auto",
-                  width: 290,
+                  width: 264,
                   height: "56px",
                   color: "white",
-                  padding: "4px 20px",
+                  padding: "4px 12px",
                   display: "flex",
-                  borderRadius: '6px',
+                  borderRadius: "6px",
                   background: "#000000",
-                  my: 2,
+                  m: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
                   ":hover": {
                     background: "#000000",
                     backgroundColor: "#000000",
                   },
                 }}
               >
-                <Box>
+                <Box sx={{ display: "flex", gap: "12px" }}>
                   <DefaultImage
                     image={
-                      activeLocation?.company?.image || activeLocation?.image
+                      activeLocation?.image || activeLocation?.company?.image
                     }
-                    name={activeLocation?.company?.name || activeLocation?.name}
+                    name={activeLocation?.name || activeLocation?.company?.name}
                   />
+                  <span
+                    style={{
+                      whiteSpace: "nowrap",
+                      display: "flex",
+                      alignItems: "center",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      textTransform: "capitalize",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      lineHeight: "21.86px",
+                    }}
+                  >
+                    {CustomActiveUser}
+                  </span>
                 </Box>
-                <span
-                  style={{
-                    flexGrow: 1,
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                    whiteSpace: "nowrap",
-                    display: "block",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    textTransform: "capitalize",
-                    fontSize:'16px',
-                    fontWeight:600,
-                    lineHeight:'21.86px'
-                  }}
-                >
-                  {activeLocation?.company?.name || activeLocation?.name}
-                </span>
-                <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1 ,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)'   }} />
-              </Button>
-              
-            </Tooltip>
-            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
-              </>
-          )}
 
-          {decodedToken?.role === userRoles.CUSTOM_ADMIN ? (
-          <>
-          <Button
-              onClick={handleSeeLocationsClick}
-              sx={{
-                mx: "auto",
-                width: 290,
-                height: "56px",
-                color: "white",
-                padding: "4px 20px",
-                display: "flex",
-                borderRadius: '6px',
-                background: "#000000",
-                my: 2,
-                ":hover": {
-                  background: "#000000",
-                  backgroundColor: "#000000",
-                },
-              }}
-            >
-              <Box>
-                <DefaultImage
-                  image={
-                    activeLocation?.image || activeLocation?.company?.image
-                  }
-                  name={activeLocation?.name || activeLocation?.company?.name}
+                <ExpandMoreIcon
+                  sx={{
+                    color: "#FFFF",
+                    transform:
+                      anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+                  }}
                 />
-              </Box>
-              <span
-                style={{
-                  flexGrow: 1,
-                  paddingLeft: "10px",
-                  paddingRight: "10px",
-                  whiteSpace: "nowrap",
-                  display: "block",
-                  textOverflow: "ellipsis",
-                  overflow: "hidden",
-                  textTransform: "capitalize",
-                }}
-              >
-                {CustomActiveUser}
-              </span>
-              <ExpandMoreIcon sx={{ color: "#FFFF", mr: 1,transform : anchorEl !== null ? 'rotate(270deg)' : 'rotate(0deg)' }} />
-            </Button>
-             <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)", }} />
-             </>
+              </Button>
+              <hr style={{ border: "1px solid #D1D4DB" }} />
+            </>
           ) : (
             ""
           )}
@@ -335,12 +354,12 @@ const AdminSideBar = () => {
             <div className="center">
               <ul>
                 <MenuSigleItem link="/">
-                  <HomeOutlinedIcon sx={{ mr: 1 }} />
+                  <HomeOutlinedIcon sx={{   }} />
                   <span>Dashboard</span>
                 </MenuSigleItem>
               </ul>
             </div>
-            <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+            <hr style={{ border: "1px solid #D1D4DB" }} />
           </Box>
         </Box>
         {/* Container Options */}
@@ -356,32 +375,35 @@ const AdminSideBar = () => {
             // gap: 1,
           }}
         >
-          <Typography className="subtitle" sx={{ color: "#777B7E", pl: 2,pt:1 }}>
+          <Typography
+            className="subtitle"
+            sx={{ color: "#777B7E", pl: 2, pt: 1 }}
+          >
             {" "}
             Management{" "}
           </Typography>
 
           <div className="center">
             <ul>
-              <MenuSigleItem link="/projects" >
-                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
+              <MenuSigleItem link="/projects">
+                <DescriptionOutlinedIcon sx={{   }} />
                 <span>Projects</span>
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
-                <DescriptionOutlinedIcon sx={{ mr: 1 }} />
+                <DescriptionOutlinedIcon sx={{   }} />
                 <span>Old Estimates</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers">
-                <PeopleAltOutlinedIcon sx={{ mr: 1 }} />
+                <PeopleAltOutlinedIcon sx={{   }} />
                 <span>Customers</span>
               </MenuSigleItem>
               <MenuSigleItem link="/team">
-                <PeopleAltOutlinedIcon sx={{ mr: 1 }} />
+                <PeopleAltOutlinedIcon sx={{   }} />
                 <span>Users</span>
               </MenuSigleItem>
             </ul>
           </div>
-          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+          <hr style={{ border: "1px solid #D1D4DB" }} />
           <Typography
             className="subtitle"
             sx={{ mt: 2, color: "#777B7E", pl: 2 }}
@@ -389,7 +411,7 @@ const AdminSideBar = () => {
             {" "}
             Categories{" "}
           </Typography>
-          <Box sx={{ width: 290, mx: "auto" }}>
+          <Box sx={{ mx: 2 }}>
             <Accordion
               expanded={expandShowerAccordian}
               onChange={() => {
@@ -415,12 +437,13 @@ const AdminSideBar = () => {
                 aria-controls="panel1-content"
                 id="panel1-header"
                 sx={{
-                  // background: " rgba(132, 119, 218, 0.3)",
+                  p: "0px 12px",
                   color: "#5D6164",
+                
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
-                    borderRadius:'6px',
+                    borderRadius: "6px",
                     ".expand1": {
                       color: "#FFFF",
                     },
@@ -429,19 +452,25 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
-                    borderRadius:'6px',
-
+                    borderRadius: "6px",
                     ".expand1": {
                       color: "#FFFF",
                     },
                   },
-                  "&.MuiAccordionSummary-content": {
-                    marginTop: "12px !important",
+                  "& .MuiAccordionSummary-content": {
+                    margin: "12px 0px !important", // Ensure no margin in content
+                  },
+                  "& .MuiAccordionSummary-content.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin in content when expanded
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin around the expand icon
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
-                <Typography sx={{ pl: 1 ,fontWeight:600 }}>Showers</Typography>
+                 <DevicesFoldOutlinedIcon sx={{  mr:'12px' }} />
+                {/* <ViewStreamOutlined sx={{  ,transform: "rotate(90deg)" }} /> */}
+                <Typography sx={{  fontWeight: 600 }}>Showers</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -453,26 +482,21 @@ const AdminSideBar = () => {
               >
                 <div className="center">
                   <ul>
-                    <MenuSigleItem link="/hardware">
-                      <DevicesFoldOutlinedIcon sx={{ mr: 1 }} />
+                    <InnerMenuItem link="/hardware">
                       <span>Hardware</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/finishes">
-                      <FormatColorFillIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/finishes">
                       <span>Finishes</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/glass-types">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/glass-types">
                       <span>Glass Types</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/glass-addons">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/glass-addons">
                       <span>Glass Addons</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/layouts">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/layouts">
                       <span>Layouts</span>
-                    </MenuSigleItem>
+                    </InnerMenuItem>
                   </ul>
                 </div>
               </AccordionDetails>
@@ -503,10 +527,11 @@ const AdminSideBar = () => {
                 id="panel1-header"
                 sx={{
                   color: "#5D6164",
+                  p: "0px 12px",
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
-                    borderRadius:'6px',
+                    borderRadius: "6px",
                     ".expand2": {
                       color: "#FFFF",
                     },
@@ -515,53 +540,55 @@ const AdminSideBar = () => {
                     minHeight: "40px",
                     background: "#8477DA",
                     color: "#FFFF",
-                    borderRadius:'6px',
+                    borderRadius: "6px",
                     ".expand2": {
                       color: "#FFFF",
                     },
                   },
-                  "&.MuiAccordionSummary-content": {
-                    marginTop: "12px !important",
+                  "& .MuiAccordionSummary-content": {
+                    margin: "12px 0px !important", // Ensure no margin in content
+                  },
+                  "& .MuiAccordionSummary-content.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin in content when expanded
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin around the expand icon
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ transform: "rotate(90deg)" }} />
-                <Typography sx={{ pl: 1 ,fontWeight:600}}>Mirrors</Typography>
+                <ViewStreamOutlined sx={{ mr:'12px',transform: "rotate(90deg)" }} />
+                <Typography sx={{  fontWeight: 600 }}>Mirrors</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "10px 0px" }}>
                 <div className="center">
                   <ul>
-                    <MenuSigleItem link="/mirrors/hardwares">
-                      <DevicesFoldOutlinedIcon sx={{ mr: 1 }} />
+                    <InnerMenuItem link="/mirrors/hardwares">
                       <span>Hardwares</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/mirrors/glass-addons">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/mirrors/glass-addons">
                       <span>Glass Addons</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/mirrors/edge-works">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/mirrors/edge-works">
                       <span>Edge Works</span>
-                    </MenuSigleItem>
-                    <MenuSigleItem link="/mirrors/glass-types">
-                      <WindowOutlinedIcon sx={{ mr: 1 }} />
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/mirrors/glass-types">
                       <span>Glass Types</span>
-                    </MenuSigleItem>
+                    </InnerMenuItem>
                   </ul>
                 </div>
               </AccordionDetails>
             </Accordion>
           </Box>
-          <hr style={{ border: "1px solid rgba(217, 217, 217, 0.34)" }} />
+          <hr style={{ border: "1px solid #D1D4DB" }} />
         </Box>
       </Box>
 
       {/* footer  */}
-      <Box sx={{ width: 318 }}>
+      <Box>
         <div className="center">
           <ul>
             <MenuSigleItem link="/settings">
-              <SettingsOutlinedIcon sx={{ mr: 1 }} />
+              <SettingsOutlinedIcon sx={{   }} />
               <span>Settings</span>
             </MenuSigleItem>
           </ul>

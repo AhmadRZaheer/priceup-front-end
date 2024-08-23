@@ -76,27 +76,27 @@ const SuperAdminSideBar = () => {
             <Button
             fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: 0.2 ,justifyContent:'start',textTransform:'capitalize'}}
+              sx={{ color: "#5D6164", padding: 0.2 ,justifyContent:'start',textTransform:'capitalize',gap:'12px'}}
             >
-              <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
+              <VisibilityOutlinedIcon sx={{   }} />
               <span>See Locations</span>
             </Button>
           </li>
           <MenuSigleItem link="/admin" secondLink="/">
-            <FmdGoodOutlined sx={{ mr: "12px" }} />
+            <FmdGoodOutlined sx={{   }} />
             <span>Locations</span>
           </MenuSigleItem>
           <MenuSigleItem link="/team">
-            <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+            <PeopleAltOutlinedIcon sx={{   }} />
             <span>Users</span>
           </MenuSigleItem>
           <MenuSigleItem link="/user">
-            <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+            <PeopleAltOutlinedIcon sx={{   }} />
             <span>Admins</span>
           </MenuSigleItem>
           {superSuperAdminsList?.includes(decodedToken.email) && (
             <MenuSigleItem link="/superadmins">
-              <PeopleAltOutlinedIcon sx={{ mr: "12px" }} />
+              <PeopleAltOutlinedIcon sx={{   }} />
               <span>Super Admins</span>
             </MenuSigleItem>
           )}

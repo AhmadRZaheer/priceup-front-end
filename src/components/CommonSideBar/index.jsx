@@ -20,7 +20,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NotificationButton from "../ui-components/NotificationButton";
 import AdminSideBar from "./AdminSideBar";
 
-const drawerWidth = 320;
+const drawerWidth = 296;
 
 const getSidebarAccordingToUserRole = (decodedToken) => {
   if (!decodedToken) {
@@ -125,7 +125,7 @@ const CommonSideBar = () => {
         >
           <Box
             sx={{
-              width: "319px",
+              width: "296px",
               // display: "flex",
               // flexDirection: "column",
               // alignItems: "space-between",
@@ -163,7 +163,7 @@ const CommonSideBar = () => {
         >
           <Box
             sx={{
-              width: "319px",
+              width: "296px",
               // display: "flex",
               // flexDirection: "column",
               // alignItems: "space-between",
