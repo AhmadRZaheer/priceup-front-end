@@ -91,45 +91,45 @@ export default function Estimates() {
         }}
       >
         {/* {decodedToken?.role !== userRoles.STAFF ? ( */}
-          <Box
-            sx={{
-              width: { sm: "98%", xs: "99%" },
-              px: { sm: 0, xs: 1 },
-            }}
-          >
-            <Grid container spacing={2}>
-              {[
-                {
-                  title: "Pending",
-                  text: estimatesStats?.pending,
-                  variant: "blue",
-                },
-                {
-                  title: "Approved",
-                  text: estimatesStats?.approved,
-                  variant: "green",
-                },
-                {
-                  title: "Voided",
-                  text: estimatesStats?.voided,
-                  variant: "red",
-                },
-                {
-                  title: "Invoice Total",
-                  text: estimatesStats?.total?.toFixed(2),
-                  variant: "purple",
-                },
-              ].map((item) => (
-                <Grid item lg={3} md={4} xs={6}>
-                  <WidgetCard
-                    text={item.text}
-                    title={item.title}
-                    varient={item.variant}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            {/* <Box
+        <Box
+          sx={{
+            width: "99.5%",
+            px: { sm: 0, xs: 1 },
+          }}
+        >
+          <Grid container spacing={2}>
+            {[
+              {
+                title: "Pending",
+                text: estimatesStats?.pending,
+                variant: "blue",
+              },
+              {
+                title: "Approved",
+                text: estimatesStats?.approved,
+                variant: "green",
+              },
+              {
+                title: "Voided",
+                text: estimatesStats?.voided,
+                variant: "red",
+              },
+              {
+                title: "Invoice Total",
+                text: estimatesStats?.total?.toFixed(2),
+                variant: "purple",
+              },
+            ].map((item) => (
+              <Grid item lg={3} md={4} xs={6}>
+                <WidgetCard
+                  text={item.text}
+                  title={item.title}
+                  varient={item.variant}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/* <Box
               sx={{
                 width: "50%",
                 height: 90,
@@ -240,7 +240,7 @@ export default function Estimates() {
                 <Typography sx={{ fontSize: 18 }}>Invoice Total</Typography>
               </Box>
             </Box> */}
-          </Box>
+        </Box>
         {/* // ) : (
         //   ""
         // )} */}
@@ -250,8 +250,8 @@ export default function Estimates() {
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
-            width: "98%",
-            pr: { sm: 3, xs: 1 },
+            width: "99.5%",
+            pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
             my: 1,
             pt: 3,
@@ -267,7 +267,7 @@ export default function Estimates() {
               pt: { sm: 0, xs: 1 },
             }}
           >
-            <Box sx={{ display: "flex", gap: 2 ,mr:{sm:0,xs:'26px'}}}>
+            <Box sx={{ display: "flex", gap: 2, mr: { sm: 0, xs: "26px" } }}>
               <CustomInputField
                 id="input-with-icon-textfield"
                 placeholder="Search by Customer Name"
@@ -347,11 +347,11 @@ export default function Estimates() {
 
         <Box
           sx={{
-            width: "98%",
+            width: "99.5%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
             background: "#FFFFFF",
-            mr: { sm: 2, xs: 1 },
+            mr: { sm: 0, xs: 1 },
             ml: { sm: 0, xs: 1 },
             mb: 2,
             mt: 2,

@@ -7,15 +7,18 @@ const InnerMenuItem = ({ link, secondLink, children }) => {
   const location = useLocation();
   return (
     <>
-      <NavLink to={link} className="ineerlink" style={{textDecoration:'none'}}>
-        <li
-          className={`${location.pathname === link ? "innerActive" : ""}`} >
+      <NavLink
+        to={link}
+        className="ineerlink"
+        style={{ textDecoration: "none" }}
+      >
+        <li className={`${location.pathname === link ? "innerActive" : ""}`}>
           <Button
             fullWidth
             className="innerItem"
             sx={{
               color: "#5D6164",
-              padding: "0px",
+              padding: "0px !important",
               justifyContent: "start",
               textTransform: "capitalize",
             }}

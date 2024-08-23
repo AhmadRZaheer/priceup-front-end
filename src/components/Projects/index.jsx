@@ -69,9 +69,10 @@ export default function Projects() {
     <>
       <Box
         sx={{
-          p: { sm: "20px 22px 20px 0px", xs: "70px 0px 20px 10px" },
+          p: { sm: "20px 0px 20px 0px", xs: "70px 0px 20px 10px" },
           display: "flex",
           justifyContent: "space-between",
+          width: "99.5%",
         }}
       >
         <Box>
@@ -129,30 +130,30 @@ export default function Projects() {
         }}
       >
         {/* {decodedToken?.role !== userRoles.STAFF ? ( */}
-          <Box
-            sx={{
-              width: { sm: "98%", xs: "99%" },
-              // pr: 2,
-              px: { sm: 0, xs: 1 },
-            }}
-          >
-            <Grid container spacing={2}>
-              {[
-                { title: "Pending", text: stats?.pending, variant: "blue" },
-                { title: "Approved", text: stats?.approved, variant: "green" },
-                { title: "Voided", text: stats?.voided, variant: "red" },
-              ].map((item) => (
-                <Grid item lg={4} md={6} sm={6} xs={6}>
-                  <WidgetCard
-                    type={2}
-                    text={item.text}
-                    title={item.title}
-                    varient={item.variant}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            {/* <Box
+        <Box
+          sx={{
+            width: { sm: "99.5%", xs: "99%" },
+            // pr: 2,
+            px: { sm: 0, xs: 1 },
+          }}
+        >
+          <Grid container spacing={2}>
+            {[
+              { title: "Pending", text: stats?.pending, variant: "blue" },
+              { title: "Approved", text: stats?.approved, variant: "green" },
+              { title: "Voided", text: stats?.voided, variant: "red" },
+            ].map((item) => (
+              <Grid item lg={4} md={6} sm={6} xs={6}>
+                <WidgetCard
+                  type={2}
+                  text={item.text}
+                  title={item.title}
+                  varient={item.variant}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/* <Box
               sx={{
                 width: "50%",
                 height: 90,
@@ -179,7 +180,7 @@ export default function Projects() {
                 <Typography sx={{ fontSize: 18 }}>Invoice Total</Typography>
               </Box>
             </Box> */}
-          </Box>
+        </Box>
         {/* ) : (
           ""
         )} */}
@@ -189,8 +190,8 @@ export default function Projects() {
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
-            width: "98%",
-            pr: { sm: 3, xs: 1 },
+            width: "99.5%",
+            pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
             my: 1,
             pt: 3,
@@ -199,8 +200,14 @@ export default function Projects() {
           <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
             Projects
           </Typography>
-          <Box sx={{ display: {sm:"flex",xs:'block'}, gap: 2, pt: { sm: 0, xs: 1 } }}>
-            <Box sx={{ display: "flex",gap: 2 }}>
+          <Box
+            sx={{
+              display: { sm: "flex", xs: "block" },
+              gap: 2,
+              pt: { sm: 0, xs: 1 },
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 2 }}>
               <CustomInputField
                 id="input-with-icon-textfield"
                 placeholder="Search by User Name"
@@ -243,7 +250,7 @@ export default function Projects() {
                 />
               </Box>
             </Box>
-            <Box sx={{ display: "flex",gap: 2, pt: { sm: 0, xs: 1 } }}>
+            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
@@ -284,11 +291,11 @@ export default function Projects() {
 
         <Box
           sx={{
-            width: "98%",
+            width: "99.5%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
             background: "#FFFFFF",
-            mr: { sm: 2, xs: 1 },
+            mr: { sm: 0, xs: 1 },
             ml: { sm: 0, xs: 1 },
             mb: 2,
             mt: 2,
