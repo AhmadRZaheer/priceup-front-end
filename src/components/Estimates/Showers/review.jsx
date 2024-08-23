@@ -1,5 +1,12 @@
 import React, { useMemo } from "react";
-import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -34,7 +41,7 @@ import {
   getProjectId,
 } from "@/redux/estimateCalculations";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
-import Summary from "./summary";
+import Summary from "./summary_dep";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "@/utilities/common";
 import { Link, useNavigate } from "react-router-dom";
@@ -51,6 +58,8 @@ import { getLocationShowerSettings } from "@/redux/locationSlice";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { CustomerSelectModal } from "../CustomerSelectModal";
 import EnterLabelModal from "../enterLabelModal";
+import CustomInputField from "@/components/ui-components/CustomInput";
+import { Add } from "@mui/icons-material";
 
 export const generateEstimatePayload = (
   estimateState,
@@ -204,7 +213,7 @@ export const ShowerReview = ({ setStep }) => {
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  console.log(isMobile, 'isMobile');
+  console.log(isMobile, "isMobile");
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
@@ -228,9 +237,9 @@ export const ShowerReview = ({ setStep }) => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
   let disable_com = false;
-  if (currentQuoteState === 'create') {
+  if (currentQuoteState === "create") {
     disable_com = !selectedData || !measurements?.length;
-  } else if (currentQuoteState === 'custom') {
+  } else if (currentQuoteState === "custom") {
     let allFilled = true;
     Object.entries(measurements).forEach?.(([key, value]) => {
       const { count, width, height } = value;
@@ -470,24 +479,25 @@ export const ShowerReview = ({ setStep }) => {
           sx={{
             width: "100%",
             borderRadius: { sm: "12px", xs: 0 },
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+
             border: { sm: "1px solid #EAECF0", xs: "none" },
             overflow: { sm: "hidden" },
+            border: "1px solid rgba(208, 213, 221, 1)",
           }}
         >
           <Box
             sx={{
-              background: "#D9D9D9",
+              background: "rgba(243, 245, 246, 1)",
               paddingY: 2,
               px: 3,
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
               Modifications
             </Typography>
           </Box>
+          <Divider sx={{ borderColor: "rgba(208, 213, 221, 1)" }} />
           <Box
             sx={{
               //   width: "100%",
@@ -495,7 +505,7 @@ export const ShowerReview = ({ setStep }) => {
 
               paddingX: { sm: 2, xs: 0 },
               paddingY: 0,
-              rowGap: 4,
+              // rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
@@ -503,12 +513,18 @@ export const ShowerReview = ({ setStep }) => {
               marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
-            <Box sx={{ width: { sm: "100%", xs: "90%" }, margin: "auto" }}>
+            <Box
+              sx={{
+                width: { sm: "100%", xs: "90%" },
+                margin: "auto",
+                display: { sm: "none", xs: "block" },
+              }}
+            >
               <Typography
                 sx={{
                   fontSize: { sm: "18px", xs: "18px" },
                   color: { sm: "black", xs: "white" },
-                  display: { sm: "none", xs: "block" },
+
                   paddingBottom: 1,
                 }}
               >
@@ -524,8 +540,8 @@ export const ShowerReview = ({ setStep }) => {
               sx={{
                 display: "flex",
                 width: { sm: "auto", xs: "94%" },
-                paddingY: { sm: 4, xs: 0 },
-                paddingX: { sm: 2, xs: 0 },
+                paddingBottom: { sm: 4, xs: 0 },
+                // paddingX: { sm: 2, xs: 0 },
                 // background: { sm: "rgba(217, 217, 217, 0.3)" },
                 maxHeight: 1400,
                 borderRadius: "8px",
@@ -539,750 +555,778 @@ export const ShowerReview = ({ setStep }) => {
                 <Box
                   sx={{
                     display: "flex",
-                    width: { sm: "100%" },
                     flexDirection: "column",
+                    // gap: 1,
+                    width: "100%",
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "black", xs: "white" },
                     }}
                   >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.hardwareFinishes}
+                        title={"Hardware Finishes"}
+                        type={"hardwareFinishes"}
+                        listData={listData}
+                        currentItem={selectedContent?.hardwareFinishes}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.handles}
+                        title={"Handles"}
+                        type={"handles"}
+                        count={selectedContent.handles.count}
+                        currentItem={selectedContent?.handles?.item}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.hinges}
+                        title={"Hinges"}
+                        type={"hinges"}
+                        count={selectedContent.hinges.count}
+                        currentItem={selectedContent?.hinges?.item}
+                      />
+                    </Box>
+                  </Box>
+                  {![
+                    layoutVariants.DOOR,
+                    layoutVariants.DOUBLEDOOR,
+                    layoutVariants.DOUBLEBARN,
+                  ].includes(selectedItemVariant) && (
                     <Box
                       sx={{
-                        display: "flex",
                         alignItems: "center",
-                        justifyContent: "space-between",
                         borderBottom: {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        color: { sm: "black", xs: "white" },
                       }}
                     >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.hardwareFinishes}
-                          title={"Hardware Finishes"}
-                          type={"hardwareFinishes"}
-                          listData={listData}
-                          currentItem={selectedContent?.hardwareFinishes}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.handles}
-                          title={"Handles"}
-                          type={"handles"}
-                          count={selectedContent.handles.count}
-                          currentItem={selectedContent?.handles?.item}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.hinges}
-                          title={"Hinges"}
-                          type={"hinges"}
-                          count={selectedContent.hinges.count}
-                          currentItem={selectedContent?.hinges?.item}
-                        />
-                      </Box>
-                    </Box>
-                    {![
-                      layoutVariants.DOOR,
-                      layoutVariants.DOUBLEDOOR,
-                      layoutVariants.DOUBLEBARN,
-                    ].includes(selectedItemVariant) && (
+                      <Box sx={{ width: "100%", display: "flex" }}>
                         <Box
                           sx={{
-                            alignItems: "center",
-                            borderBottom: {
-                              sm: "2px solid #D0D5DD",
-                              xs: "2px solid #423f57",
-                            },
-                          }}
-                        >
-                          <Box sx={{ width: "100%", display: "flex" }}>
-                            <Box
-                              sx={{
-                                width: "100%",
-                                display: "flex",
-                                flexDirection: "column",
-                              }}
-                            >
-                              <ChannelTypeDesktop
-                                menuOptions={listData?.channelOrClamps}
-                                title={"Mounting"}
-                                type={"mounting"}
-                                listData={listData}
-                              />
-                            </Box>
-                          </Box>
-                        </Box>
-                      )}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.glassType}
-                          title={" Glass type"}
-                          type={"glassType"}
-                          thickness={selectedContent.glassType.thickness}
-                          currentItem={selectedContent?.glassType?.item}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.slidingDoorSystem}
-                          title={"Sliding Door System"}
-                          type={"slidingDoorSystem"}
-                          count={selectedContent.slidingDoorSystem.count}
-                          currentItem={selectedContent?.slidingDoorSystem?.item}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.header}
-                          title={"Header"}
-                          type={"header"}
-                          count={selectedContent.header.count}
-                          currentItem={selectedContent?.header?.item}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.glassAddons}
-                          title={"Glass Addons"}
-                          type={"glassAddons"}
-                        // currentItem={selectedContent?.glassAddons}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%" }}>
-                        <MenuList
-                          menuOptions={listData?.hardwareAddons}
-                          title={"Hardware Addons"}
-                          type={"hardwareAddons"}
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>1" Holes</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
                             width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.oneInchHoles}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "oneInchHoles",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
-                    </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Hinge Cut Out</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.hingeCut}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "hingeCut",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
-                    </Box>
-                    {![
-                      layoutVariants.DOOR,
-                      layoutVariants.DOUBLEDOOR,
-                      layoutVariants.DOUBLEBARN,
-                    ].includes(selectedItemVariant) && (
-                        <Box
-                          sx={{
                             display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderBottom: {
-                              sm: "2px solid #D0D5DD",
-                              xs: "2px solid #423f57",
-                            },
-                            paddingLeft: 3,
-                            paddingBottom: 1,
-                            color: { sm: "#000000  ", xs: "white" },
+                            flexDirection: "column",
                           }}
                         >
-                          <Typography>Clamp Cut Out</Typography>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 2,
-                              width: "120px",
-                              padddingY: 4,
-                            }}
-                          >
-                            <TextField
-                              type="number"
-                              InputProps={{
-                                style: {
-                                  color: "black",
-                                  borderRadius: 10,
-                                  border: "1px solid #cccccc",
-                                  backgroundColor: "white",
-                                },
-                                inputProps: { min: 0 },
-                              }}
-                              InputLabelProps={{
-                                style: {
-                                  color: "rgba(255, 255, 255, 0.5)",
-                                },
-                              }}
-                              sx={{
-                                color: { sm: "black", xs: "white" },
-                                width: "100%",
-                              }}
-                              variant="outlined"
-                              size="small"
-                              value={selectedContent.clampCut}
-                              onChange={(event) =>
-                                dispatch(
-                                  setInputContent({
-                                    type: "clampCut",
-                                    value: event.target.value,
-                                  })
-                                )
-                              }
-                            />
-                          </Box>
+                          <ChannelTypeDesktop
+                            menuOptions={listData?.channelOrClamps}
+                            title={"Mounting"}
+                            type={"mounting"}
+                            listData={listData}
+                          />
                         </Box>
-                      )}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Notch</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.notch}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "notch",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
                       </Box>
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Outages</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.outages}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "outages",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
+                  )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.glassType}
+                        title={" Glass type"}
+                        type={"glassType"}
+                        thickness={selectedContent.glassType.thickness}
+                        currentItem={selectedContent?.glassType?.item}
+                      />
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Mitre</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.mitre}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "mitre",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.slidingDoorSystem}
+                        title={"Sliding Door System"}
+                        type={"slidingDoorSystem"}
+                        count={selectedContent.slidingDoorSystem.count}
+                        currentItem={selectedContent?.slidingDoorSystem?.item}
+                      />
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Polish</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.polish}
-                          onChange={(event) => {
-                            dispatch(
-                              setInputContent({
-                                type: "polish",
-                                value: event.target.value,
-                              })
-                            );
-                          }}
-                        />
-                      </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.header}
+                        title={"Header"}
+                        type={"header"}
+                        count={selectedContent.header.count}
+                        currentItem={selectedContent?.header?.item}
+                      />
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>People:</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.people}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "people",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.glassAddons}
+                        title={"Glass Addons"}
+                        type={"glassAddons"}
+                        // currentItem={selectedContent?.glassAddons}
+                      />
                     </Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography>Hours:</Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.hours}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "hours",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.hardwareAddons}
+                        title={"Hardware Addons"}
+                        type={"hardwareAddons"}
+                      />
                     </Box>
-                    {/* additional Fields */}
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
                     <Typography
-                      variant="h5"
-                      sx={{ color: { md: "black", xs: "white" } }}
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
                     >
-                      Additonal Fields
+                      1" Holes
                     </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          style: {
+                            borderRadius: "4px",
+                          },
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.oneInchHoles}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "oneInchHoles",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Hinge Cut Out
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          style: {},
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.hingeCut}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "hingeCut",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  {![
+                    layoutVariants.DOOR,
+                    layoutVariants.DOUBLEDOOR,
+                    layoutVariants.DOUBLEBARN,
+                  ].includes(selectedItemVariant) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                        color: { sm: "#000000  ", xs: "white" },
+                      }}
+                    >
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        {" "}
+                        Clamp Cut Out
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
+                        }}
+                      >
+                        <TextField
+                          type="number"
+                          className="custom-textfield"
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={selectedContent.clampCut}
+                          onChange={(event) =>
+                            dispatch(
+                              setInputContent({
+                                type: "clampCut",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        />
+                      </Box>
+                    </Box>
+                  )}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Notch
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        className="custom-textfield"
+                        type="number"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.notch}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "notch",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Outages
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.outages}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "outages",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Mitre
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.mitre}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "mitre",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Polish
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.polish}
+                        onChange={(event) => {
+                          dispatch(
+                            setInputContent({
+                              type: "polish",
+                              value: event.target.value,
+                            })
+                          );
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      People:
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.people}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "people",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        padding: "16px 0px 16px 16px",
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        lineHeight: "16.41px",
+                      }}
+                    >
+                      Hours:
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.hours}
+                        onChange={(event) =>
+                          dispatch(
+                            setInputContent({
+                              type: "hours",
+                              value: event.target.value,
+                            })
+                          )
+                        }
+                      />
+                    </Box>
+                  </Box>
+                  {/* additional Fields */}
+                  {/* <Typography
+                    variant="h5"
+                    sx={{ color: { md: "black", xs: "white" } }}
+                  >
+                    Additonal Fields
+                  </Typography> */}
+                  <Box sx={{py: 2}}>
                     {addedFields &&
                       addedFields.map((item, index) => (
                         <SingleField
@@ -1298,12 +1342,15 @@ export const ShowerReview = ({ setStep }) => {
                       sx={{
                         width: "fit-content",
                         textTransform: "capitalize",
-                        backgroundColor: "#8477da",
+                        color: "#8477DA",
+                        // backgroundColor: "#8477da",
                         "&:hover": {
-                          backgroundColor: "#8477da",
+                          // backgroundColor: "#8477da",
                         },
+                        mt: 2,
                       }}
-                      variant="contained"
+                      variant="text"
+                      startIcon={<Add />}
                     >
                       Add Additional Field
                     </Button>
@@ -1327,7 +1374,7 @@ export const ShowerReview = ({ setStep }) => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    background: "#08061B"
+                    background: "#08061B",
                   }}
                 >
                   <Box>
@@ -1347,14 +1394,14 @@ export const ShowerReview = ({ setStep }) => {
                       Back
                     </Button>
                   </Box>
-                  <Box >
+                  <Box>
                     <Button
                       fullWidth
                       disabled={selectedContent?.hardwareFinishes === null}
                       variant="contained"
                       onClick={() => {
                         // setSummaryState(false);
-                        setStep(2)
+                        setStep(2);
                       }}
                       sx={{
                         backgroundColor: "#8477da",
@@ -1430,7 +1477,7 @@ export const ShowerReview = ({ setStep }) => {
                 </Box> */}
                 <Box
                   sx={{
-                    width: '100%',
+                    width: "100%",
                     // {
                     //   sm:
                     //     currentQuoteState === quoteState.EDIT
@@ -1482,10 +1529,15 @@ export const ShowerReview = ({ setStep }) => {
                       ":disabled": {
                         bgcolor: "#c2c2c2",
                       },
+                      fontSize: "16px",
+                      lineHeight: "21.86px",
+                      fontWeight: 600,
                     }}
                   >
                     {" "}
-                    {currentQuoteState === quoteState.EDIT ? "Update Estimate" : "Save Estimate"}
+                    {currentQuoteState === quoteState.EDIT
+                      ? "Update Estimate"
+                      : "Save Estimate"}
                   </Button>
                 </Box>
               </Box>

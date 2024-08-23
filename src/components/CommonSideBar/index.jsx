@@ -20,7 +20,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import NotificationButton from "../ui-components/NotificationButton";
 import AdminSideBar from "./AdminSideBar";
 
-const drawerWidth = 320;
+const drawerWidth = 296;
 
 const getSidebarAccordingToUserRole = (decodedToken) => {
   if (!decodedToken) {
@@ -58,9 +58,12 @@ const CommonSideBar = () => {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          // width: { sm: `calc(100% - ${drawerWidth}px)` },
+          // ml: { sm: `${drawerWidth}px` },
           display: { sm: "none" },
+          background:'#FFFF',
+          pr:'0px !important'
+          
         }}
       >
         <Toolbar sx={{ backgroundColor: "#FFFF" }}>
@@ -80,7 +83,7 @@ const CommonSideBar = () => {
                 onClick={handleDrawerToggle}
                 sx={{ mr: 2, display: { sm: "none" }, color: '#5D6164' }}
               >
-                <MenuIcon />
+                <MenuIcon /> 
               </IconButton>
             </div>
             <div>
@@ -115,13 +118,14 @@ const CommonSideBar = () => {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+              overflowX:'hidden'
             },
           }}
 
         >
           <Box
             sx={{
-              width: "319px",
+              width: "296px",
               // display: "flex",
               // flexDirection: "column",
               // alignItems: "space-between",
@@ -146,18 +150,20 @@ const CommonSideBar = () => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "block" },           
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
               backgroundColor: "#FFFF",
+              zIndex:1000,
+              overflowX:'hidden'
             },
           }}
           open
         >
           <Box
             sx={{
-              width: "319px",
+              width: "296px",
               // display: "flex",
               // flexDirection: "column",
               // alignItems: "space-between",

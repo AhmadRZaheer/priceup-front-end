@@ -39,7 +39,11 @@ export default function Estimates() {
   const handleDateChange = (newDate) => {
     if (newDate) {
       // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);
@@ -55,12 +59,18 @@ export default function Estimates() {
   }, []);
   return (
     <>
-      <Box sx={{ backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" } }}>
+      <Box
+        sx={{
+          backgroundColor: "#F6F5FF",
+          p: { sm: "20px 22px 20px 0px", xs: "70px 0px 20px 10px" },
+          display: "flex",
+        }}
+      >
         <Typography
           sx={{
-            py: 2.4,
-            fontWeight: "bold",
-            fontSize: 26,
+            // py: 2.4,
+            fontSize: 24,
+            fontWeight: 600,
           }}
         >
           Estimates
@@ -68,57 +78,58 @@ export default function Estimates() {
       </Box>
       <Box
         sx={{
-          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "start",
-          alignItems: "center",
-          // width: "100%",
+          backgroundColor: "#F6F5FF",
+          // display: "flex",
+          // flexDirection: "column",
+          // justifyContent: "start",
+          // alignItems: "center",
+          width: "100%",
           height: "auto",
-          overflow: "auto",
-          gap: "5px",
-          pr: 3,
+          // overflow: "auto",
+          // gap: "5px",
+          // pr: 3,
         }}
       >
-        {decodedToken?.role !== userRoles.STAFF ? (
-          <Box
-            sx={{
-              width: "100%",
-            }}
-          >
-            <Grid container spacing={2}>
-              {[
-                {
-                  title: "Pending",
-                  text: estimatesStats?.pending,
-                  variant: "blue",
-                },
-                {
-                  title: "Approved",
-                  text: estimatesStats?.approved,
-                  variant: "green",
-                },
-                {
-                  title: "Voided",
-                  text: estimatesStats?.voided,
-                  variant: "red",
-                },
-                {
-                  title: "Invoice Total",
-                  text: estimatesStats?.total?.toFixed(2),
-                  variant: "purple",
-                },
-              ].map((item) => (
-                <Grid item lg={3} md={4} xs={6}>
-                  <WidgetCard
-                    text={item.text}
-                    title={item.title}
-                    varient={item.variant}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            {/* <Box
+        {/* {decodedToken?.role !== userRoles.STAFF ? ( */}
+        <Box
+          sx={{
+            width: "99.5%",
+            px: { sm: 0, xs: 1 },
+          }}
+        >
+          <Grid container spacing={2}>
+            {[
+              {
+                title: "Pending",
+                text: estimatesStats?.pending,
+                variant: "blue",
+              },
+              {
+                title: "Approved",
+                text: estimatesStats?.approved,
+                variant: "green",
+              },
+              {
+                title: "Voided",
+                text: estimatesStats?.voided,
+                variant: "red",
+              },
+              {
+                title: "Invoice Total",
+                text: estimatesStats?.total?.toFixed(2),
+                variant: "purple",
+              },
+            ].map((item) => (
+              <Grid item lg={3} md={4} xs={6}>
+                <WidgetCard
+                  text={item.text}
+                  title={item.title}
+                  varient={item.variant}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/* <Box
               sx={{
                 width: "50%",
                 height: 90,
@@ -229,104 +240,121 @@ export default function Estimates() {
                 <Typography sx={{ fontSize: 18 }}>Invoice Total</Typography>
               </Box>
             </Box> */}
-          </Box>
-        ) : (
-          ""
-        )}
+        </Box>
+        {/* // ) : (
+        //   ""
+        // )} */}
 
         <Box
           sx={{
-            display: "flex",
+            display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
-            width: "100%",
-
-            mt: 2,
-            mb: 1,
+            alignItems: "center",
+            width: "99.5%",
+            pr: { sm: 0, xs: 1 },
+            pl: { sm: 0, xs: 1 },
+            my: 1,
+            pt: 3,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
             Estimates
           </Typography>
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <CustomInputField
-              id="input-with-icon-textfield"
-              placeholder="Search by Customer Name"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <img src={icon} alt="search input" />
-                  </InputAdornment>
-                ),
-              }}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <DesktopDatePicker
-              label="Date Added"
-              inputFormat="MM/DD/YYYY"
-              className="custom-textfield"
-              // maxDate={new Date()} // Sets the maximum date to the current date
-              value={selectedDate}
-              onChange={handleDateChange}
-              sx={{
-                "& .MuiInputBase-root": {
-                  height: 40,
-                  width: 150,
-                  backgroundColor: "white", // Adjust height
-                },
-                "& .MuiInputBase-input": {
-                  fontSize: "0.875rem", // Adjust font size
-                  padding: "8px 14px", // Adjust padding
-                },
-                "& .MuiInputLabel-root": {
-                  fontSize: "0.875rem",
-                  top: "-6px", // Adjust label size
-                },
-              }}
-              renderInput={(params) => <TextField {...params} size="small" />}
-            />
-            <FormControl
-              sx={{ width: "152px" }}
-              size="small"
-              className="custom-textfield"
-            >
-              <InputLabel id="demo-select-small-label" className="input-label">
-                Status
-              </InputLabel>
-              <Select
-                value={status}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                label="Status"
+          <Box
+            sx={{
+              display: { sm: "flex", xs: "block" },
+              gap: 2,
+              pt: { sm: 0, xs: 1 },
+            }}
+          >
+            <Box sx={{ display: "flex", gap: 2, mr: { sm: 0, xs: "26px" } }}>
+              <CustomInputField
+                id="input-with-icon-textfield"
+                placeholder="Search by Customer Name"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <img src={icon} alt="search input" />
+                    </InputAdornment>
+                  ),
+                }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <DesktopDatePicker
+                label="Date Added"
+                inputFormat="MM/DD/YYYY"
+                className="custom-textfield"
+                // maxDate={new Date()} // Sets the maximum date to the current date
+                value={selectedDate}
+                onChange={handleDateChange}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: 40,
+                    width: 150,
+                    backgroundColor: "white", // Adjust height
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: "0.875rem", // Adjust font size
+                    padding: "8px 14px", // Adjust padding
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "0.875rem",
+                    top: "-6px", // Adjust label size
+                  },
+                }}
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
+            </Box>
+            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
+              <FormControl
+                sx={{ width: "152px" }}
                 size="small"
-                sx={{ height: "40px" }}
-                onChange={(e) => setStatus(e.target.value)}
+                className="custom-textfield"
               >
-                <MenuItem value={"pending"}>
-                  <StatusChip variant={"pending"} sx={{ padding: 0 }} />
-                </MenuItem>
-                <MenuItem value={"voided"}>
-                  <StatusChip variant={"voided"} sx={{ padding: 0 }} />
-                </MenuItem>
-                <MenuItem value={"approved"}>
-                  <StatusChip variant={"approved"} sx={{ padding: 0 }} />
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <Button variant="text" onClick={handleResetFilter}>
-              Clear Filter
-            </Button>
+                <InputLabel
+                  id="demo-select-small-label"
+                  className="input-label"
+                >
+                  Status
+                </InputLabel>
+                <Select
+                  value={status}
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  label="Status"
+                  size="small"
+                  sx={{ height: "40px" }}
+                  onChange={(e) => setStatus(e.target.value)}
+                >
+                  <MenuItem value={"pending"}>
+                    <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                  <MenuItem value={"voided"}>
+                    <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                  <MenuItem value={"approved"}>
+                    <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                  </MenuItem>
+                </Select>
+              </FormControl>
+              <Button variant="text" onClick={handleResetFilter}>
+                Clear Filter
+              </Button>
+            </Box>
           </Box>
         </Box>
 
         <Box
           sx={{
-            width: "99%",
+            width: "99.5%",
             border: "1px solid #EAECF0",
             borderRadius: "8px",
-            backgroundColor: "#FFFFFF",
-            // mr: 2,
+            background: "#FFFFFF",
+            mr: { sm: 0, xs: 1 },
+            ml: { sm: 0, xs: 1 },
             mb: 2,
+            mt: 2,
           }}
         >
           <ExistingTable

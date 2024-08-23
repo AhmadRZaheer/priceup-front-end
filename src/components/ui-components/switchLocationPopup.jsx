@@ -127,7 +127,7 @@ const SwitchLocationPopup = ({
             marginLeft: "20px",
             marginRight: "20px",
             marginTop: "20px",
-            borderRadius: "14px",
+            borderRadius: "4px",
           }}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}

@@ -1,16 +1,21 @@
-import React from 'react'
+import React from "react";
 import { Box } from "@mui/material";
 import Sidebar from "@/components/Sidebar/sidebar";
-import './style.scss';
-import Notifications from '@/components/Notification';
-import TopBar from '@/components/TopBar';
-import { getDecryptedToken } from '@/utilities/common';
-import { isAdmin, isCustomAdmin, isStaff, isSuperAdmin } from '@/utilities/authentications';
-import StaffLocationsSidebar from '@/components/staffLocations_SideBar/staffLocation_SideBar';
-import MobileBar from '@/components/MobileNavBar/mobleNavBar';
-import AdminSidebar from '@/components/CustomAdmin_SideBar/adminSideBar';
-import SuperSidebar from '@/components/SuperSidebar/superSidebar';
-
+import "./style.scss";
+import Notifications from "@/components/Notification";
+import TopBar from "@/components/TopBar";
+import { getDecryptedToken } from "@/utilities/common";
+import {
+  isAdmin,
+  isCustomAdmin,
+  isStaff,
+  isSuperAdmin,
+} from "@/utilities/authentications";
+import StaffLocationsSidebar from "@/components/staffLocations_SideBar/staffLocation_SideBar";
+import MobileBar from "@/components/MobileNavBar/mobleNavBar";
+import AdminSidebar from "@/components/CustomAdmin_SideBar/adminSideBar";
+import SuperSidebar from "@/components/SuperSidebar/superSidebar";
+import CommonLayout from "@/components/CommonLayout";
 
 const getSidebarAccordingToUserRole = (decodedToken) => {
   if (!decodedToken) {
@@ -19,12 +24,15 @@ const getSidebarAccordingToUserRole = (decodedToken) => {
 
   const { company_id } = decodedToken;
 
-  if (isAdmin(decodedToken) || (isCustomAdmin(decodedToken) && company_id?.length)) {
+  if (
+    isAdmin(decodedToken) ||
+    (isCustomAdmin(decodedToken) && company_id?.length)
+  ) {
     return <Sidebar />; // for admin and custom admin where company id exists
   }
   if (isStaff(decodedToken)) {
     if (company_id === "") {
-      return <StaffLocationsSidebar />; // staff sidebar where company id is empty 
+      return <StaffLocationsSidebar />; // staff sidebar where company id is empty
     }
     if (company_id?.length) {
       return <MobileBar />; // staff sidebar where company id exists
@@ -44,17 +52,13 @@ const Notification = () => {
   const decodedToken = getDecryptedToken();
   return (
     <>
-      
-      <Box className="main-wrapper">
-        {getSidebarAccordingToUserRole(decodedToken)}
-        <TopBar />
-        <Box className="content-wrapper">
+      <CommonLayout>
+        <Box className="content-wrapper" sx={{px: { lg: '28px',sm:'20px', xs: '0px' }}}>
           <Notifications />
         </Box>
-      </Box>
-
+      </CommonLayout>
     </>
-  )
-}
+  );
+};
 
-export default Notification
+export default Notification;

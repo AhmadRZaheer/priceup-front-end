@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import "./style.scss";
 import { Button, IconButton } from "@mui/material";
 
-const MenuSigleItem = ({ link,secondLink, children }) => {
+const MenuSigleItem = ({ link, secondLink, children }) => {
   const location = useLocation();
   return (
     <>
@@ -11,9 +11,15 @@ const MenuSigleItem = ({ link,secondLink, children }) => {
         <NavLink to={link} className="link">
           <li className={` ${location.pathname === link ? "active" : ""}`}>
             <Button
-             fullWidth
+              fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: '1px',justifyContent:'start',textTransform:'capitalize' }}
+              sx={{
+                color: "#5D6164",
+                padding: "0px !important",
+                justifyContent: "start",
+                textTransform: "capitalize",
+                gap: "12px",
+              }}
             >
               {children}
             </Button>
@@ -31,9 +37,15 @@ const MenuSigleItem = ({ link,secondLink, children }) => {
             }`}
           >
             <Button
-            fullWidth
+              fullWidth
               className="iconButton"
-              sx={{ color: "#5D6164", padding: 0.2,justifyContent:'start',textTransform:'capitalize' }}
+              sx={{
+                color: "#5D6164",
+                padding: "0px !important",
+                justifyContent: "start",
+                textTransform: "capitalize",
+                gap: "12px",
+              }}
             >
               {children}
             </Button>

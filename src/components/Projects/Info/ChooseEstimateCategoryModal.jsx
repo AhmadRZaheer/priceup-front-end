@@ -14,7 +14,11 @@ import {
 import bgCustom from "@/Assets/customlayoutimage.svg";
 import { EstimateCategory } from "@/utilities/constants";
 import { useNavigate } from "react-router-dom";
-import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
+import {
+  resetMirrorEstimateState,
+  setMirrorProjectId,
+} from "@/redux/mirrorsEstimateSlice";
+import DefaultIcon from "@/Assets/columns.svg";
 import { resetState, setShowerProjectId } from "@/redux/estimateCalculations";
 
 const style = {
@@ -52,34 +56,32 @@ const boxStyles = {
 export default function ChooseEstimateCategoryModal({
   open,
   handleClose,
-  projectId
+  projectId,
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState("");
   const handleBoxClick = (category) => {
     setCategory(category);
   };
   const handleSubmit = () => {
-
     dispatch(resetEstimateState());
     dispatch(resetMirrorEstimateState());
     dispatch(resetState());
     dispatch(setEstimateState("create"));
 
-    if(category === EstimateCategory.SHOWERS){
-    // showers
-    dispatch(setShowerProjectId(projectId));
-    dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-    navigate("/estimates/layouts");
+    if (category === EstimateCategory.SHOWERS) {
+      // showers
+      dispatch(setShowerProjectId(projectId));
+      dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
+      navigate("/estimates/layouts");
+    } else {
+      // mirrors
+      dispatch(setMirrorProjectId(projectId));
+      dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
+      navigate("/estimates/dimensions");
     }
-    else{
-    // mirrors
-    dispatch(setMirrorProjectId(projectId));
-    dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-    navigate("/estimates/dimensions");
-    }
-  }
+  };
 
   return (
     <>
@@ -111,14 +113,18 @@ export default function ChooseEstimateCategoryModal({
               >
                 Create Estimate
               </Typography>
-              <CloseIcon onClick={handleClose} className="pointer" />
+              <CloseIcon
+                onClick={handleClose}
+                className="pointer"
+                sx={{ color: "rgba(93, 98, 101, 1)" }}
+              />
             </Box>
             <Typography
               sx={{
                 fontSize: "16px",
-                fontWeight: 600,
+                fontWeight: 500,
                 lineHeight: "21.86px",
-                color: "#212528",
+                color: "#646669",
                 pt: 0.5,
               }}
             >
@@ -133,26 +139,19 @@ export default function ChooseEstimateCategoryModal({
               height: "291px",
             }}
           >
-
-            <Grid
-              container
-              gap={1}
-              sx={{ minHeight: "40vh", overflow: "auto", maxHeight: "60vh" }}
-            >
+            <Grid container gap={1} sx={{ height: "100%" }}>
               <Box
                 key={"showers-cat"}
                 sx={{
                   ...boxStyles,
                   backgroundColor:
                     category !== EstimateCategory.SHOWERS
-                      ? "#D9D9D9"
+                      ? "rgba(184, 184, 185, 1)"
                       : "#8477DA",
                   color:
-                    category !== EstimateCategory.SHOWERS
-                      ? "black"
-                      : "white",
-                  width: "162px",
-                  height: "192px",
+                    category !== EstimateCategory.SHOWERS ? "black" : "white",
+                  width: "244px",
+                  height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
               >
@@ -160,13 +159,15 @@ export default function ChooseEstimateCategoryModal({
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    width: "120px",
-                    height: "140px",
+                    width: "150px",
+                    height: "170px",
                   }}
-                  src={bgCustom}
+                  src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ font: "18px" }}>Showers</Typography>
+                <Typography sx={{ font: "16px", color: "white" }}>
+                  Showers
+                </Typography>
               </Box>
               <Box
                 key={"mirrors-cat"}
@@ -174,14 +175,12 @@ export default function ChooseEstimateCategoryModal({
                   ...boxStyles,
                   backgroundColor:
                     category !== EstimateCategory.MIRRORS
-                      ? "#D9D9D9"
+                      ? "rgba(184, 184, 185, 1)"
                       : "#8477DA",
                   color:
-                    category !== EstimateCategory.MIRRORS
-                      ? "black"
-                      : "white",
-                  width: "162px",
-                  height: "192px",
+                    category !== EstimateCategory.MIRRORS ? "black" : "white",
+                  width: "244px",
+                  height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
               >
@@ -189,16 +188,17 @@ export default function ChooseEstimateCategoryModal({
                   style={{
                     position: "relative",
                     zIndex: 1,
-                    width: "120px",
-                    height: "140px",
+                    width: "150px",
+                    height: "170px",
                   }}
-                  src={bgCustom}
+                  src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ font: "18px" }}>Mirrors</Typography>
+                <Typography sx={{ font: "16px", color: "white" }}>
+                  Mirrors
+                </Typography>
               </Box>
             </Grid>
-
           </Box>
           <Box sx={{ display: "flex", justifyContent: "end", gap: "10px" }}>
             <Button
@@ -208,7 +208,10 @@ export default function ChooseEstimateCategoryModal({
                 mr: 1,
                 backgroundColor: "#FFFFFF",
                 border: "1px solid #D6DAE3",
-                "&:hover": { backgroundColor: "#FFFFFF" },
+                "&:hover": {
+                  backgroundColor: "#FFFFFF",
+                  borderColor: " #8477DA",
+                },
                 color: "#212528",
                 textTransform: "capitalize",
                 borderRadius: 1,

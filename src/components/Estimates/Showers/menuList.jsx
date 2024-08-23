@@ -24,6 +24,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import MenuItem from "./menuItem";
+import CustomInputField from "@/components/ui-components/CustomInput";
 
 const MenuList = ({
   menuOptions,
@@ -78,13 +79,20 @@ const MenuList = ({
           width: "100%",
           justifyContent: "space-between",
           alignItems: "center",
-          pb: 1,
+          // pb: 1,
         }}
       >
         <Button
           onClick={opneClose}
           id="basic-button"
-          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
+          sx={{
+            color: {
+              sm: anchorEl ? "#8477DA" : "#000000 !important ",
+              xs: "white",
+            },
+            paddingLeft: "0px !important",
+            paddingY: "16px !important",
+          }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -92,13 +100,16 @@ const MenuList = ({
                 display: "flex",
                 alignItems: "center",
                 transform: "rotate(90deg)",
-                color: "#98A2B3 !important",
+                color: anchorEl ? "#8477DA" : "#98A2B3 !important",
+                mr: 2,
               }}
             />
           ) : (
-            <ChevronRight sx={{ color: "#98A2B3" }} />
+            <ChevronRight sx={{ color: "#98A2B3", mr: 2 }} />
           )}
-          <Typography>{title}</Typography>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+            {title}
+          </Typography>
         </Button>
         {![
           "hardwareFinishes",
@@ -113,27 +124,27 @@ const MenuList = ({
           "glassType",
           "hardwareAddons",
         ].includes(type) && (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
-                color: { sm: "#000000  ", xs: "white" },
-                alignSelf: "flex-end",
-                py: 1.5,
-              }}
-            >
-              <AddCircleOutline
-                onClick={() => handleCountSet(countVal + 1)}
-                sx={{ color: "#98A2B3" }}
-              />
-              <Typography>{countVal}</Typography>
-              <RemoveCircleOutline
-                onClick={() => handleCountSet(countVal - 1)}
-                sx={{ color: "#98A2B3" }}
-              />
-            </Box>
-          )}
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 2,
+              color: { sm: "#000000  ", xs: "white" },
+              // alignSelf: "flex-end",
+              // py: 1.5,
+            }}
+          >
+            <AddCircleOutline
+              onClick={() => handleCountSet(countVal + 1)}
+              sx={{ color: "#5D6164" }}
+            />
+            <Typography>{countVal}</Typography>
+            <RemoveCircleOutline
+              onClick={() => handleCountSet(countVal - 1)}
+              sx={{ color: "#5D6164" }}
+            />
+          </Box>
+        )}
         {["glassType"].includes(type) && (
           <Box
             sx={{
@@ -148,23 +159,19 @@ const MenuList = ({
               select
               size="small"
               variant="outlined"
+              className="custom-textfield"
               InputProps={{
                 style: {
-                  color: "black",
-                  borderRadius: 10,
-                  border: "1px solid #cccccc",
-                  backgroundColor: "white",
+                  borderRadius: "4px",
+                  // paddingTop: "10.5px",
+                  // paddingBottom: " 10.5px",
+                  height: "40px",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
-              InputLabelProps={{
-                style: {
-                  color: "rgba(255, 255, 255, 0.5)",
-                },
-              }}
               sx={{
                 border: { sm: "none", xs: "2px solid #423f57" },
-                borderRadius: { sm: 0, xs: 2 },
+                // borderRadius: { sm: 0, xs: 2 },
                 color: { sm: "black", xs: "white" },
                 width: "100%",
                 mb: 1,
@@ -186,9 +193,17 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "250px",
-            minHeight: "80px",
+            // minHeight: "80px",
             overflowY: "scroll",
             color: { sm: "#000000", xs: "white" },
+            backgroundColor: "#F3F5F6",
+            border: "1px solid #D4DBDF",
+            borderRadius: "8px",
+            padding: "6px",
+            m: "6px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "6px",
           }}
         >
           {menuOptions === undefined ? (

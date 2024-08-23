@@ -4,28 +4,29 @@ import DefaultImage from "./defaultImage";
 function SingleUser({ item, active, handleClick, disabled = false }) {
   return (
     <Tooltip
-      title={disabled ? "This Location is no Active" : ""}
+      title={disabled ? "This Location is not Active" : ""}
       placement="top"
       arrow
     >
       <Typography
         key={item?.id}
         sx={{
-          width: "87.8%",
+          width: "85.8%",
           height:'56px',
           ml: "10px",
           marginBottom: "5px",
           textTransform: "lowercase",
           marginLeft: "20px",
           display: "flex",
+          p:'6px 12px',
           // border: "1px solid #D9D9D9",
           ":hover": {
             bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : "#8477DA",
             cursor: disabled ? "" : "pointer",
             color: "#FFFF"
           },
-          py: 0.4,
-          px: 1,
+          // py: 0.4,
+          // px: 1,
           borderRadius: "4px",
           bgcolor: disabled ? "rgba(0, 0, 0, 0.1)" : active ? "#8477DA":'',
           color: active ? "#FFFF": '#101828',
@@ -52,7 +53,10 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
               maxWidth: "100%",
               overflow: "hidden",
               textOverflow: "ellipsis",
-              textTransform: "capitalize"
+              textTransform: "capitalize",
+              fontSize:'16px',
+              fontWeight:'500',
+              lineHeight:'24px'
             }}
           >
             {item?.name}
