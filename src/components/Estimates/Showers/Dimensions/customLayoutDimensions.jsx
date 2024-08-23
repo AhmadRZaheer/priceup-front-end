@@ -1,5 +1,13 @@
 import { useState, useEffect } from "react";
-import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
 import CustomImage from "@/Assets/customlayoutimage.svg";
@@ -43,7 +51,7 @@ const isThereHigherKeyAvailable = (values, iterator) => {
   return Object.keys(values).some((k) => k > iterator);
 };
 
-export const CustomLayoutDimensions = ({setStep}) => {
+export const CustomLayoutDimensions = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const estimateState = useSelector((state) => state.estimateCalculations);
   const selectedContent = useSelector(getContent);
@@ -194,281 +202,95 @@ export const CustomLayoutDimensions = ({setStep}) => {
   return (
     <>
       <form>
-        <Box sx={{ borderRadius: { md: "12px", xs: 0 },
-            maxWidth:'600px',
+        <Box
+          sx={{
+            // maxWidth:'600px',
+            borderRadius: { sm: "12px", xs: 0 },
             boxShadow:
               "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: { md: "1px solid #EAECF0", xs: "none" },overflow: "hidden"}}>
-        <Box
-          sx={{
-            background: "#D9D9D9",
-            paddingY: 2,
-            px: 3,
-            display: { sm: "block", xs: "none" },
-          }}
-        >
-          <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-            Measurements
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            // height: "100%",
-           
-            paddingX: { md: 2, xs: 0 },
-            paddingBottom: { md: 4, xs: 0 },
-            rowGap: { md: 4, xs: 2 },
-            background: { md: "white", xs: "#08061B" },
-            display: "flex",
-            flexDirection: "column",
-            // minWidth: { md: 700, xs: "100%" },
-            maxWidth: { md: 1000, xs: "100%" },
-            justifyContent: { md: "", xs: "space-between" },
+            border: {
+              sm: " 1px solid rgba(212, 219, 223, 1)",
+              xs: "none",
+            },
+            overflow: { sm: "hidden" },
           }}
         >
           <Box
             sx={{
-              paddingLeft: { md: 0, xs: 3 },
-              paddingTop: { md: 2, xs: 2 },
+              background: " rgba(243, 245, 246, 1)",
+              paddingY: 2,
+              px: 3,
+              display: { sm: "flex", xs: "none" },
+              borderBottom: "1px solid rgba(212, 219, 223, 1)",
+              justifyContent: "space-between",
             }}
           >
-            <Typography
-              sx={{
-                fontSize: { md: "18px", xs: "18px" },
-                color: { md: "#101828", xs: "white" },
-                paddingBottom: 1,
-                display: {sm: "none", xs: "block"}
-              }}
-            >
-              Enter Measurements
-            </Typography>
-            <Typography
-              sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
-            >
-              Your new project has been created. Invite colleagues to
-              collaborate on this project.
+            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
+              Layout & Measurement
             </Typography>
           </Box>
-
           <Box
             sx={{
-              display: "flex",
-              flexDirection: { sm: "column-reverse", xs: "column-reverse" },
-              width: { md: "auto", xs: "100%" },
-              paddingBottom: { md: 4, xs: 0 },
+              // height: "100%",
+
               paddingX: { md: 2, xs: 0 },
-              height: "99%",
-              background: { md: "none", xs: "#08061B" },
-              gap: { md: 4, xs: 0 },
-              borderRadius: "8px",
-              overflow: "auto",
-              mb: { md: 0, xs: 0 },
-              maxHeight: { md: "100vh", xs: "90vh" },
-              position: "relative",
+              paddingBottom: { md: 4, xs: 0 },
+              rowGap: { md: 4, xs: 2 },
+              background: { md: "white", xs: "#08061B" },
+              display: "flex",
+              flexDirection: "column",
+              // minWidth: { md: 700, xs: "100%" },
+              maxWidth: { md: 1000, xs: "100%" },
+              justifyContent: { md: "", xs: "space-between" },
             }}
           >
             <Box
               sx={{
-                display: "flex",
-                width: { md: "100%", xs: "90%" },
-                minHeight: "27vh",
-                maxHeight: { md: 340, xs: "34vh" },
-                marginX: "auto",
-                flexDirection: "column",
-                overflowY: "auto",
-                gap: { md: 1, xs: 2 },
-                color: { md: "#101828", xs: "white" },
-                background: {
-                  md: "none",
-                  xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
-                },
-                borderTopLeftRadius: { md: 0, xs: 30 },
-                borderTopRightRadius: { md: 0, xs: 30 },
-                borderTop: { md: 0, xs: "1px solid #667085" },
-                paddingX: { md: 0, xs: 2 },
-                paddingY: { md: 0, xs: 2 },
+                paddingLeft: { md: 0, xs: 3 },
+                paddingTop: { md: 2, xs: 2 },
+                display: { sm: "none", xs: "block" },
               }}
             >
-              <Box sx={{ pb: { md: 0, xs: 0 }, my: 2 }}>
-                {" "}
-                {/* a */}
-                {Array.from({ length: numRows }).map((_, index) => (
-                  <Box
-                    key={index}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1.5,
-                      mb: 1,
-                    }}
-                  >
-                    <Box sx={{}}>
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: { sm: "black", xs: "white" },
-                        }}
-                      >
-                        Width
-                      </Typography>
+              <Typography
+                sx={{
+                  fontSize: { md: "18px", xs: "18px" },
+                  color: { md: "#101828", xs: "white" },
+                  paddingBottom: 1,
+                }}
+              >
+                Enter Measurements
+              </Typography>
+              <Typography
+                sx={{ color: { md: "#667085", xs: "white" }, font: "14px" }}
+              >
+                Your new project has been created. Invite colleagues to
+                collaborate on this project.
+              </Typography>
+            </Box>
 
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="outlined"
-                        name={`aWidth${index}`}
-                        InputProps={{
-                          inputProps: { min: 0 },
-                        }}
-                        placeholder="0"
-                        style={{
-                          display:
-                            typeof values[index]?.count == "undefined"
-                              ? "none"
-                              : "block",
-                          background: "white",
-                          borderRadius: "8px",
-                          border: "1px solid #D0D5DD",
-                          width: { md: "28%", xs: "20%" },
-                        }}
-                        value={
-                          (
-                            getNearestSmallerKeyWithValues(values, index) ||
-                            values[`${index}`]
-                          )?.width || ""
-                        }
-                        onChange={(e) => {
-                          setValues((vals) => ({
-                            ...vals,
-                            [index]: {
-                              ...vals[index],
-                              width: e.target.value,
-                            },
-                          }));
-                        }}
-                      />
-                    </Box>
-
-                    <Box>
-                      <Typography
-                        sx={{
-                          fontSize: 18,
-                          color: { sm: "black", xs: "white" },
-                        }}
-                      >
-                        Height
-                      </Typography>
-
-                      <TextField
-                        type="number"
-                        size="small"
-                        variant="outlined"
-                        name={`aHeight${index}`}
-                        InputProps={{
-                          inputProps: { min: 0 },
-                        }}
-                        placeholder="0"
-                        style={{
-                          display:
-                            typeof values[index]?.count == "undefined"
-                              ? "none"
-                              : "block",
-                          background: "white",
-                          borderRadius: "8px",
-                          border: "1px solid #D0D5DD",
-                          width: { md: "28%", xs: "20%" },
-                        }}
-                        value={
-                          (
-                            getNearestSmallerKeyWithValues(values, index) ||
-                            values[`${index}`]
-                          )?.height || ""
-                        }
-                        onChange={(e) => {
-                          setValues((vals) => ({
-                            ...vals,
-                            [index]: {
-                              ...vals[index],
-                              height: e.target.value,
-                            },
-                          }));
-                        }}
-                      />
-                    </Box>
-                    {typeof values[index]?.count !== "undefined" && (
-                      <>
-                        <Box>
-                          <Typography
-                            sx={{
-                              fontSize: 18,
-                              color: { sm: "black", xs: "white" },
-                            }}
-                          >
-                            Quantity
-                          </Typography>
-
-                          <TextField
-                            // disabled={isThereHigherKeyAvailable(
-                            //   values,
-                            //   index
-                            // )}
-                            type="number"
-                            size="small"
-                            variant="outlined"
-                            name={`Count${index}`}
-                            InputProps={{
-                              inputProps: { min: 1 },
-                            }}
-                            value={values[index]?.count || ""}
-                            placeholder="quantity"
-                            style={{
-                              background: "white",
-                              borderRadius: "8px",
-                              border: "1px solid #D0D5DD",
-                              width: { md: "15%", xs: "20%" },
-                            }}
-                            onChange={(e) => {
-                              setValues((vals) => ({
-                                ...vals,
-                                [index]: {
-                                  ...vals[index],
-                                  count: parseInt(e.target.value),
-                                },
-                              }));
-                            }}
-                          />
-                        </Box>
-                        {Math.max(...Object.keys(values)) === index &&
-                          index !== 0 && (
-                            <a
-                              href="#"
-                              onClick={(event) => {
-                                event.preventDefault();
-                                setValues((vals) => {
-                                  const { [index]: notWanted, ...rest } = vals;
-
-                                  return rest;
-                                });
-                              }}
-                            >
-                              <DeleteIcon
-                                sx={{
-                                  color: { md: "#101828", xs: "white" },
-                                }}
-                              />
-                            </a>
-                          )}
-                      </>
-                    )}
-                  </Box>
-                ))}
-              </Box>
-
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { sm: "column-reverse", xs: "column-reverse" },
+                width: { md: "auto", xs: "100%" },
+                paddingBottom: 0,
+                paddingX: { md: 2, xs: 0 },
+                height: "99%",
+                background: { md: "none", xs: "#08061B" },
+                gap: { md: 4, xs: 0 },
+                borderRadius: "8px",
+                overflow: "auto",
+                mb: 0,
+                maxHeight: { md: "100vh", xs: "90vh" },
+                position: "relative",
+                mt: { sm: 4, xs: 0 },
+              }}
+            >
               <Button
                 fullWidth
                 onClick={addRow}
                 sx={{
-                  display: { md: "flex", xs: "none" },
+                  display: { sm: "flex", xs: "none" },
                   boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
                   color: { md: "white", xs: "#344054" },
                   textTransform: "initial",
@@ -477,111 +299,255 @@ export const CustomLayoutDimensions = ({setStep}) => {
                   "&:hover": {
                     backgroundColor: "#8477da",
                   },
-                  height: 40,
+                  height: 42,
                   fontSize: 20,
-                  position: "absolute",
-                  marginX: "auto",
-                  width: { md: "92%", xs: "90%" },
-                  bottom: 5,
+                  // position: "absolute",
+                  // marginX: "auto",
+                  // width: { md: "92%", xs: "90%" },
+                  // bottom: 5,
                 }}
               >
                 Add Row
               </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  width: { sm: "100%", xs: "90%" },
+                  minHeight: "240px",
+                  maxHeight: { sm: 340, xs: "34vh" },
+                  marginX: "auto",
+                  flexDirection: "column",
+                  overflowY: "auto",
+                  gap: { md: 1, xs: 2 },
+                  color: { md: "#101828", xs: "white" },
+                  background: {
+                    md: "none",
+                    xs: "linear-gradient(to top right, #100d24 35%, #312969 , #100d24 82%)",
+                  },
+                  borderTopLeftRadius: { md: 0, xs: 30 },
+                  borderTopRightRadius: { md: 0, xs: 30 },
+                  borderTop: { md: 0, xs: "1px solid #667085" },
+                  paddingX: { md: 0, xs: 2 },
+                  paddingY: { sm: 2, xs: 2 },
+                }}
+              >
+                <Box sx={{ pb: 0, my: 2 }}>
+                  {" "}
+                  {/* a */}
+                  {Array.from({ length: numRows }).map((_, index) => (
+                    <Grid
+                      key={index}
+                      container
+                      sx={{
+                        // display: "flex",
+                        alignItems: "center",
+                        gap: 1.8,
+                        mb: 1,
+                      }}
+                    >
+                      <Grid item xs={3}>
+                        <Typography
+                          sx={{
+                            fontSize: 16,
+                            fontWeight: 600,
+                            color: { sm: "black", xs: "white" },
+                          }}
+                        >
+                          Width
+                        </Typography>
+
+                        <TextField
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={`aWidth${index}`}
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          className="custom-textfield-purple"
+                          placeholder="0"
+                          style={{
+                            display:
+                              typeof values[index]?.count == "undefined"
+                                ? "none"
+                                : "block",
+                          }}
+                          value={
+                            (
+                              getNearestSmallerKeyWithValues(values, index) ||
+                              values[`${index}`]
+                            )?.width || ""
+                          }
+                          onChange={(e) => {
+                            setValues((vals) => ({
+                              ...vals,
+                              [index]: {
+                                ...vals[index],
+                                width: e.target.value,
+                              },
+                            }));
+                          }}
+                        />
+                      </Grid>
+
+                      <Grid item xs={3}>
+                        <Typography
+                          sx={{
+                            fontSize: 16,
+                            fontWeight: 600,
+                            color: { sm: "black", xs: "white" },
+                          }}
+                        >
+                          Height
+                        </Typography>
+
+                        <TextField
+                          className="custom-textfield-purple"
+                          type="number"
+                          size="small"
+                          variant="outlined"
+                          name={`aHeight${index}`}
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          placeholder="0"
+                          style={{
+                            display:
+                              typeof values[index]?.count == "undefined"
+                                ? "none"
+                                : "block",
+                          }}
+                          value={
+                            (
+                              getNearestSmallerKeyWithValues(values, index) ||
+                              values[`${index}`]
+                            )?.height || ""
+                          }
+                          onChange={(e) => {
+                            setValues((vals) => ({
+                              ...vals,
+                              [index]: {
+                                ...vals[index],
+                                height: e.target.value,
+                              },
+                            }));
+                          }}
+                        />
+                      </Grid>
+                      {typeof values[index]?.count !== "undefined" && (
+                        <>
+                          <Grid item sm={4} xs={3}>
+                            <Typography
+                              sx={{
+                                fontSize: 16,
+                                fontWeight: 600,
+                                color: { sm: "black", xs: "white" },
+                              }}
+                            >
+                              Quantity
+                            </Typography>
+
+                            <TextField
+                              // disabled={isThereHigherKeyAvailable(
+                              //   values,
+                              //   index
+                              // )}
+                              className="custom-textfield-purple"
+                              type="number"
+                              size="small"
+                              variant="outlined"
+                              name={`Count${index}`}
+                              InputProps={{
+                                inputProps: { min: 1 },
+                              }}
+                              value={values[index]?.count || ""}
+                              placeholder="quantity"
+                              onChange={(e) => {
+                                setValues((vals) => ({
+                                  ...vals,
+                                  [index]: {
+                                    ...vals[index],
+                                    count: parseInt(e.target.value),
+                                  },
+                                }));
+                              }}
+                            />
+                          </Grid>
+                          {Math.max(...Object.keys(values)) === index &&
+                            index !== 0 && (
+                              <Grid item xs={1}>
+                                <IconButton
+                                  // href="#"
+                                  onClick={(event) => {
+                                    event.preventDefault();
+                                    setValues((vals) => {
+                                      const { [index]: notWanted, ...rest } =
+                                        vals;
+
+                                      return rest;
+                                    });
+                                  }}
+                                  sx={{ mt: "25px" }}
+                                >
+                                  <DeleteIcon
+                                    sx={{
+                                      color: {
+                                        md: "#101828",
+                                        xs: "white",
+                                      },
+                                      width: 21,
+                                      height: 21,
+                                    }}
+                                  />
+                                </IconButton>
+                              </Grid>
+                            )}
+                        </>
+                      )}
+                    </Grid>
+                  ))}
+                </Box>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  width: { md: "100%", xs: "100%" },
+                  justifyContent: "center",
+                  alignItems: "center",
+                  maxHeight: "fit-contant",
+                  minHeight: 100,
+                }}
+              >
+                <Box sx={{ display: { md: "flex", xs: "none" } }}>
+                  <img
+                    width="100%"
+                    height="100%"
+                    src={CustomImage}
+                    alt="Selected"
+                  />
+                </Box>
+                <Box sx={{ display: { md: "none", xs: "flex" } }}>
+                  <img
+                    width="150px"
+                    height="200px"
+                    src={CustomImage}
+                    alt="Selected"
+                  />
+                </Box>
+              </Box>
             </Box>
 
             <Box
               sx={{
-                display: "flex",
-                width: { md: "100%", xs: "100%" },
-                justifyContent: "center",
-                alignItems: "center",
-                maxHeight: "fit-contant",
-                minHeight: 100,
-              }}
-            >
-              <Box sx={{ display: { md: "flex", xs: "none" } }}>
-                <img
-                  width="100%"
-                  height="100%"
-                  src={CustomImage}
-                  alt="Selected"
-                />
-              </Box>
-              <Box sx={{ display: { md: "none", xs: "flex" } }}>
-                <img
-                  width="150px"
-                  height="200px"
-                  src={CustomImage}
-                  alt="Selected"
-                />
-              </Box>
-            </Box>
-          </Box>
-
-          <Box
-            sx={{
-              background: { md: "transparent", xs: "#08061B" },
-              pt: { sm: 2, xs: 0 },
-              pb: { sm: 2, xs: 10 },
-              display: { md: "none", xs: "flex" },
-              justifyContent: { md: "space-between", xs: "center" },
-              width: "95%",
-              gap: 2,
-              px: 1,
-            }}
-          >
-            <Button
-              fullWidth
-              onClick={handleReset}
-              sx={{
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                color: "#344054",
-                textTransform: "initial",
-                border: "1px solid #D0D5DD",
-                backgroundColor: { md: "transparent", xs: "white" },
-                height: 40,
-                fontSize: 20,
-              }}
-            >
-              Reset
-            </Button>
-            <Button
-              fullWidth
-              onClick={addRow}
-              sx={{
-                display: { md: "none", sx: "flex" },
-                boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                color: "white",
-                textTransform: "initial",
-                height: 40,
-                fontSize: 20,
-                marginX: "auto",
-                backgroundColor: "#8477da",
-                "&:hover": {
-                  backgroundColor: "#8477da",
-                },
-                width: { md: 480, xs: "92%" },
-              }}
-            >
-              Add Row
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              position: { md: "static", xs: "fixed" },
-              bottom: { md: 100, xs: 0 },
-              background: { md: "transparent", xs: "#100d24" },
-              py: 2,
-              display: "flex",
-              justifyContent: { md: "space-between", xs: "center" },
-              width: "100%",
-              borderTop: { md: "0px", xs: "1px solid white" },
-            }}
-          >
-            <Box
-              sx={{
-                width: { md: "160px", xs: "50%" },
-                display: { md: "block", xs: "none" },
+                background: { md: "transparent", xs: "#08061B" },
+                pt: { sm: 2, xs: 0 },
+                pb: { sm: 2, xs: 10 },
+                display: { md: "none", xs: "flex" },
+                justifyContent: { md: "space-between", xs: "center" },
+                width: "95%",
+                gap: 2,
+                px: 1,
               }}
             >
               <Button
@@ -599,76 +565,141 @@ export const CustomLayoutDimensions = ({setStep}) => {
               >
                 Reset
               </Button>
-            </Box>
-            {/**Buttons */}
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                position: { sm: "static", xs: "fixed" },
-                bottom: 0,
-                left: 0,
-                width: { sm: "auto", xs: "100%" },
-                p: { sm: 0, xs: 2 },
-                bgcolor: { sm: "white", xs: "#08061B" },
-                gap: 1,
-              }}
-            >
-              <NavLink
-                to={
-                  currentQuoteState === quoteState.EDIT
-                    ? projectId
-                      ? `/projects/${projectId}`
-                      : "/estimates"
-                    : "/estimates/layouts"
-                }
-              >
-                <Button
-                  sx={{
-                    width: { xs: 120, sm: "auto" },
-                    color: "black",
-                    border: "1px solid black",
-                    fontSize: 18,
-                    // ml: 2,
-                    backgroundColor: "white",
-                  }}
-                  fullWidth
-                  variant="outlined"
-                  // onClick={handleBack}
-                >
-                  {" "}
-                  Back
-                </Button>
-              </NavLink>
               <Button
-                onClick={handleSubmit}
-                type="button"
-                disabled={
-                  // !values["0"]?.width ||
-                  // !values["0"]?.height ||
-                  // !values["0"]?.count
-                  lockNext
-                }
-                sx={{
-                  width: { xs: 120, sm: "auto" },
-                  backgroundColor: "#8477DA",
-                  fontSize: 18,
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  ":disabled": {
-                    bgcolor: "#c2c2c2",
-                  },
-                  mr: { sm: 0, xs: "30px" },
-                  color: "white",
-                }}
                 fullWidth
-                variant="contained"
+                onClick={addRow}
+                sx={{
+                  display: { md: "none", sx: "flex" },
+                  boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                  color: "white",
+                  textTransform: "initial",
+                  height: 40,
+                  fontSize: 20,
+                  marginX: "auto",
+                  backgroundColor: "#8477da",
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
+                  width: { md: 480, xs: "92%" },
+                }}
               >
-                {" "}
-                {isMobile ? 'Next' : 'Run Quote'}
+                Add Row
               </Button>
             </Box>
+            <Box
+              sx={{
+                position: { md: "static", xs: "fixed" },
+                bottom: { md: 100, xs: 0 },
+                background: { md: "transparent", xs: "#100d24" },
+                // py: 2,
+                display: "flex",
+                justifyContent: { md: "space-between", xs: "center" },
+                width: "100%",
+                borderTop: { md: "0px", xs: "1px solid white" },
+              }}
+            >
+              <Box
+                sx={{
+                  width: { md: "160px", xs: "50%" },
+                  display: { md: "block", xs: "none" },
+                }}
+              >
+                <Button
+                  fullWidth
+                  onClick={handleReset}
+                  sx={{
+                    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                    color: "#344054",
+                    textTransform: "initial",
+                    border: "1px solid #D0D5DD",
+                    backgroundColor: { md: "transparent", xs: "white" },
+                    height: 42,
+                    fontSize: 16,
+                    fontWeight: 600,
+                    ":hover": {
+                      border: "1px solid #8477DA",
+                    },
+                  }}
+                >
+                  Reset
+                </Button>
+              </Box>
+              {/**Buttons */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  position: { sm: "static", xs: "fixed" },
+                  bottom: 0,
+                  left: 0,
+                  width: { sm: "auto", xs: "100%" },
+                  p: { sm: 0, xs: 2 },
+                  bgcolor: { sm: "white", xs: "#08061B" },
+                  gap: 1,
+                }}
+              >
+                <NavLink
+                  to={
+                    currentQuoteState === quoteState.EDIT
+                      ? projectId
+                        ? `/projects/${projectId}`
+                        : "/estimates"
+                      : "/estimates/layouts"
+                  }
+                >
+                  <Button
+                    sx={{
+                      width: { xs: 120, sm: "auto" },
+                      color: "black",
+                      border: "1px solid #D0D5DD",
+                      ":hover": {
+                        border: "1px solid #8477DA",
+                      },
+                      fontSize: 16,
+                      // ml: 2,
+                      backgroundColor: "white",
+                      height: 42,
+                      fontWeight: 600,
+                    }}
+                    fullWidth
+                    variant="outlined"
+                    // onClick={handleBack}
+                  >
+                    {" "}
+                    Back
+                  </Button>
+                </NavLink>
+                <Button
+                  onClick={handleSubmit}
+                  type="button"
+                  disabled={
+                    // !values["0"]?.width ||
+                    // !values["0"]?.height ||
+                    // !values["0"]?.count
+                    lockNext
+                  }
+                  sx={{
+                    width: { xs: 120, sm: "auto" },
+                    backgroundColor: "#8477DA",
+                    fontSize: 16,
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    ":disabled": {
+                      bgcolor: "#c2c2c2",
+                    },
+                    mr: { sm: 0, xs: "30px" },
+                    color: "white",
+                    height: 42,
+                    fontWeight: 600,
+                  }}
+                  fullWidth
+                  variant="contained"
+                >
+                  {" "}
+                  {isMobile ? "Next" : "Run Quote"}
+                </Button>
+              </Box>
+            </Box>
           </Box>
-        </Box>
         </Box>
       </form>
     </>

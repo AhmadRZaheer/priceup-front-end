@@ -137,6 +137,7 @@ const Summary = ({ setStep }) => {
         sx={{
           width: "100%",
           //   margin: { sm: "", xs: "auto" },
+          paddingBottom: { sm: 0, xs: "80px" },
         }}
       >
         <Box
@@ -206,27 +207,36 @@ const Summary = ({ setStep }) => {
                 sx={{ borderRadius: "8px" }}
               >
                 {" "}
-                <Box sx={{ p: "8px" }}>
+                <Box
+                  sx={{
+                    p: "8px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                  }}
+                >
                   {Columns.map((item, index) => (
-                    <Box
-                      sx={{
-                        width: "256px",
-                        height: "46px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        px: 3,
-                      }}
-                    >
-                      <Typography sx={{ color: "#5D6164", fontSize: "16px" }}>
-                        {item.title}
-                      </Typography>
-                      <Box>
-                        <CustomToggle
-                          text={""}
-                          checked={item.active}
-                          onChange={() => handleToggle(index)} // Pass index to identify which item to toggle
-                        />
+                    <Box>
+                      <Box
+                        sx={{
+                          width: "256px",
+                          height: "46px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          // alignItems: "center",
+                          px: 3,
+                        }}
+                      >
+                        <Typography sx={{ color: "#5D6164", fontSize: "16px", alignSelf: "center" }}>
+                          {item.title}
+                        </Typography>
+                        <Box sx={{ height: "46px" }}>
+                          <CustomToggle
+                            text={""}
+                            checked={item.active}
+                            onChange={() => handleToggle(index)} // Pass index to identify which item to toggle
+                          />
+                        </Box>
                       </Box>
                     </Box>
                   ))}
@@ -737,7 +747,7 @@ const Summary = ({ setStep }) => {
                   </Grid>
                 )}
                 {Columns[4].active && (
-                  <Grid item md={3} className="text-xs-samibold">
+                  <Grid item md={3}>
                     <Stack gap={2}>
                       <Typography
                         className="text-xs-samibold"
@@ -746,7 +756,7 @@ const Summary = ({ setStep }) => {
                         Gross Profit Margin
                       </Typography>
                       <Box>
-                        <Typography className="text-xs-samibold">
+                        <Typography className="text-xs-ragular-bold">
                           Gross Total:
                         </Typography>
                         <Typography className="text-xs-ragular">
@@ -754,7 +764,7 @@ const Summary = ({ setStep }) => {
                         </Typography>
                       </Box>
                       <Box>
-                        <Typography className="text-xs-samibold">
+                        <Typography className="text-xs-ragular-bold">
                           Actual Cost:
                         </Typography>
                         <Typography className="text-xs-ragular">
@@ -762,7 +772,7 @@ const Summary = ({ setStep }) => {
                         </Typography>
                       </Box>
                       <Box>
-                        <Typography className="text-xs-samibold">
+                        <Typography className="text-xs-ragular-bold">
                           Gross Profit:
                         </Typography>
                         <Typography className="text-xs-ragular">

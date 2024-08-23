@@ -540,7 +540,7 @@ export const ShowerReview = ({ setStep }) => {
               sx={{
                 display: "flex",
                 width: { sm: "auto", xs: "94%" },
-                paddingBottom: { sm: 4, xs: 0 },
+                paddingBottom: { sm: 0, xs: 0 },
                 // paddingX: { sm: 2, xs: 0 },
                 // background: { sm: "rgba(217, 217, 217, 0.3)" },
                 maxHeight: 1400,
@@ -793,9 +793,6 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          style: {
-                            borderRadius: "4px",
-                          },
                           inputProps: { min: 0 },
                         }}
                         InputLabelProps={{
@@ -856,7 +853,6 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          style: {},
                           inputProps: { min: 0 },
                         }}
                         InputLabelProps={{
@@ -958,7 +954,6 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-
                       color: { sm: "#000000  ", xs: "white" },
                     }}
                   >
@@ -1326,7 +1321,7 @@ export const ShowerReview = ({ setStep }) => {
                   >
                     Additonal Fields
                   </Typography> */}
-                  <Box sx={{py: 2}}>
+                  <Box sx={{ py: 2 }}>
                     {addedFields &&
                       addedFields.map((item, index) => (
                         <SingleField
@@ -1439,8 +1434,8 @@ export const ShowerReview = ({ setStep }) => {
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
-                  width: { sm: "96%" },
-                  paddingX: 2,
+                  width: { sm: "100%" },
+                  paddingX: { sm: 0, xs: 2 },
                 }}
               >
                 {/* <Box

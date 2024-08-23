@@ -73,6 +73,7 @@ export default function Projects() {
           display: "flex",
           justifyContent: "space-between",
           width: "99.5%",
+          gap: 1,
         }}
       >
         <Box>
@@ -102,7 +103,7 @@ export default function Projects() {
             sx={{
               backgroundColor: "#8477DA",
               height: "44px",
-              width: { sm: "214px", xs: "182px" },
+              width: { sm: "214px", xs: "194px" },
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
@@ -208,19 +209,21 @@ export default function Projects() {
             }}
           >
             <Box sx={{ display: "flex", gap: 2 }}>
-              <CustomInputField
-                id="input-with-icon-textfield"
-                placeholder="Search by User Name"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <img src={icon} alt="search input" />
-                    </InputAdornment>
-                  ),
-                }}
-                value={search}
-                onChange={handleChange}
-              />
+              <Box>
+                <CustomInputField
+                  id="input-with-icon-textfield"
+                  placeholder="Search by User Name"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <img src={icon} alt="search input" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={search}
+                  onChange={handleChange}
+                />
+              </Box>
               <Box>
                 <DesktopDatePicker
                   label="Date Added"
@@ -251,11 +254,7 @@ export default function Projects() {
               </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
-              <FormControl
-                sx={{ width: "152px" }}
-                size="small"
-                className="custom-textfield"
-              >
+              <FormControl sx={{ width: "152px" }} size="small">
                 <InputLabel
                   id="demo-select-small-label"
                   className="input-label"
@@ -267,6 +266,7 @@ export default function Projects() {
                   labelId="demo-select-small-label"
                   id="demo-select-small"
                   label="Status"
+                  className="custom-textfield"
                   size="small"
                   sx={{ height: "40px" }}
                   onChange={(e) => setStatus(e.target.value)}
@@ -282,7 +282,11 @@ export default function Projects() {
                   </MenuItem>
                 </Select>
               </FormControl>
-              <Button variant="text" onClick={handleResetFilter}>
+              <Button
+                variant="text"
+                onClick={handleResetFilter}
+                // sx={{ lineHeight: "21.86px" }}
+              >
                 Clear Filter
               </Button>
             </Box>

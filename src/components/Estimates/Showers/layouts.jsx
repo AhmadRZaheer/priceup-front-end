@@ -137,11 +137,12 @@ export const ShowerLayouts = () => {
           <Typography
             sx={{
               color: { sm: "black", xs: "white" },
-              fontSize: { xs: "24px", sm: "2.124rem" },
+              fontSize: "24px",
               textAlign: { xs: "start", sm: "center" },
               fontWeight: 600,
+              mb: {sm: 1}
             }}
-            variant="h4"
+            // variant="h4"
           >
             Create New Estimate
           </Typography>
@@ -253,7 +254,6 @@ export const ShowerLayouts = () => {
                 maxHeight: "60vh",
                 width: "100%",
                 m: "auto",
-
               }}
             >
               {filteredData.length > 0 ? (
