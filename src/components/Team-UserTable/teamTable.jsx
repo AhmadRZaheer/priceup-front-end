@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useMemo } from "react";
 import "./teamTable.scss";
 import { teamColumns } from "@/utilities/DataGridColumns";
 import { Add } from "@mui/icons-material";
@@ -17,92 +17,160 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import {
-  useAddLocation,
-  useDeleteTeamMembers,
-  useFetchDataTeam,
-} from "../../utilities/ApiHooks/team";
+// import {
+//   useAddLocation,
+//   useDeleteTeamMembers,
+//   useFetchDataTeam,
+// } from "../../utilities/ApiHooks/team";
 import AddTeamMembers from "../Modal/addTeamMembers";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
-import { parseJwt } from "../ProtectedRoute/authVerify";
+// import { useFetchAdminLocation } from "../../utilities/ApiHooks/superAdmin";
+// import { parseJwt } from "../ProtectedRoute/authVerify";
 import DeleteModal from "../Modal/deleteModal";
-import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
 import EditIcon from "../../Assets/d.svg";
 import CustomInputField from "../ui-components/CustomInput";
+import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { useDeleteDocument, useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { debounce } from "lodash";
+import dayjs from "dayjs";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+
+const routePrefix = `${backendURL}/staffs`;
+const itemsPerPage = 10;
 
 const TeamTable = () => {
-  const {
-    data: stafData,
-    refetch: teamMemberRefetch,
-    isFetching,
-  } = useFetchDataTeam();
-  const { mutate: editTeamMembers, isSuccess } = useAddLocation();
-  console.log("team", stafData);
-  const [search, setSearch] = useState("");
-  const [open, setOpen] = useState(false);
-  const [edit, setEdit] = useState(null);
-  const [isEdit, setIsEdit] = useState(false);
-  const [matchingId, setMatchingId] = useState("");
-  const token = localStorage.getItem("token");
-  const decodedToken = parseJwt(token);
-  const filteredData = stafData?.filter((team) =>
-    team.name.toLowerCase().includes(search.toLowerCase())
-  );
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteRecord, setDeleteRecord] = useState(null);
-  // pagination state:
+  // const {
+  //   data: stafData,
+  //   refetch: teamMemberRefetch,
+  //   isFetching,
+  // } = useFetchDataTeam();
+  const decryptedToken = getDecryptedToken();
   const [page, setPage] = useState(1);
-  // const [inputPage, setInputPage] = useState("");
-  // const [isShowInput, setIsShowInput] = useState(false);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [recordToModify, setRecordToModify] = useState(null);
+  const fetchAllStaffUrl = useMemo(() => {
+    let url = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+    if (search && search.length) {
+      url += `&search=${search}`;
+    }
+    if (status) {
+      url += `&status=${status}`;
+    }
+    if (selectedDate) {
+      url += `&date=${selectedDate}`
+    }
+    return url;
+  }, [page, itemsPerPage, search, status, selectedDate])
 
-  const handleClose = () => setOpen(false);
-  const handleOpenEdit = (data) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
   const {
-    mutate: deleteTeamMember,
-    isSuccess: deleteSuccess,
-    isLoading: loaderForDelete,
-  } = useDeleteTeamMembers();
-  const handleOpenDeleteModal = (teamdata) => {
-    setDeleteRecord(teamdata);
-    setDeleteModalOpen(true);
-  };
-  const handleTeamMemberDelete = async () => {
-    if (deleteRecord?.company_id !== decodedToken.company_id) {
-      const haveAccessss = deleteRecord.haveAccessTo.filter(
-        (item) => item !== decodedToken.company_id
-      );
-      await editTeamMembers({
-        data: haveAccessss,
-        locId: deleteRecord._id,
-      });
-      // teamMemberRefetch();
+    data: staffsList,
+    refetch: refetchStaffsList,
+    isFetching: staffsListFetching,
+    isLoading
+  } = useFetchAllDocuments(fetchAllStaffUrl);
+  const { mutateAsync: deleteStaff, isLoading: deleteStaffLoading, isSuccess: deletedSuccessfully } = useDeleteDocument();
+  const { mutateAsync: updateStaff, isLoading: updateStaffLoading, isSuccess: updateStaffSuccess } = useEditDocument();
+  const { data: locations, refetch: refetchLocationsList } = useFetchAllDocuments(`${backendURL}/companies`);
+  // console.log("team", staffsList);
+
+  const filteredData = useMemo(() => {
+    if (staffsList && staffsList?.staffs?.length) {
+      return staffsList?.staffs;
     } else {
-      console.log("delete finish");
-      await deleteTeamMember(deleteRecord._id);
-      setMatchingId(deleteRecord._id);
-      // teamMemberRefetch();
+      return [];
     }
-    setDeleteModalOpen(false);
+  }, [staffsList, search]);
+
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
   };
 
-  React.useEffect(() => {
-    if (deleteSuccess) {
-      teamMemberRefetch();
-    } else if (isSuccess) {
-      teamMemberRefetch();
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setSelectedDate(null);
+  };
+
+
+  const handleCloseModifyModal = () => setOpenModifyModal(false);
+  const handleOpenModifyModal = (data) => {
+    setRecordToModify(data);
+    setOpenModifyModal(true);
+  };
+
+  const handleCreateStaff = async () => {
+    setRecordToModify(null);
+    setOpenModifyModal(true);
+  };
+
+  const handleOpenDeleteModal = (data) => {
+    setRecordToModify(data);
+    setOpenDeleteModal(true);
+  };
+  const handleCloseDeleteModal = () => {
+    setOpenDeleteModal(false);
+  };
+  const handleStaffDelete = async () => {
+    try {
+
+      if (recordToModify?.company_id !== decryptedToken.company_id) {
+        const haveAccessToArray = recordToModify.haveAccessTo.filter(
+          (item) => item !== decryptedToken.company_id
+        );
+        await updateStaff({
+          apiRoute: `${routePrefix}/${recordToModify?._id}`, data: {
+            haveAccessTo: haveAccessToArray
+          }
+        });
+      } else {
+        await deleteStaff({ apiRoute: `${routePrefix}/${recordToModify?._id}` });
+      }
+      setOpenDeleteModal(false);
+      refetchStaffsList();
     }
-  }, [deleteSuccess, isSuccess]);
-  const { data: locationData, refetch } = useFetchAdminLocation();
+    catch (err) {
+      console.log(err, 'error while deleting');
+    }
+  };
+
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      if (page === 1) {
+        refetchStaffsList();
+      } else {
+        setPage(1);
+      }
+    }, 700),
+    [page]
+  );
+
   useEffect(() => {
-    teamMemberRefetch();
-    refetch();
-  }, [page]);
+    refetchStaffsList();
+  }, [page, deletedSuccessfully, status, selectedDate]);
+
+  useEffect(() => {
+    debouncedRefetch();
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [search]);
+
+  useEffect(() => {
+    refetchLocationsList();
+  }, []);
+
   const actionColumn = [
     {
       field: "Access",
@@ -113,11 +181,11 @@ const TeamTable = () => {
         const { haveAccessTo } = params.row;
 
         const matchingLocationNames = haveAccessTo
-          .map((accessToID) =>
-            locationData.find((location) => location.id === accessToID)
+          ?.map((accessToID) =>
+            locations?.find((location) => location.id === accessToID)
           )
-          .filter((match) => match)
-          .map((match) => match.name);
+          ?.filter((match) => match)
+          ?.map((match) => match.name);
 
         return (
           <div>
@@ -133,18 +201,18 @@ const TeamTable = () => {
       headerClassName: "customHeaderClass-team",
       flex: 1,
       renderCell: (params) => {
-        const id = params.row._id;
-        const isMatchingId = id === matchingId;
+        // const id = params.row._id;
+        // const isMatchingId = id === matchingId;
         return (
           <div className="cellAction">
-            <IconButton onClick={() => handleOpenEdit(params.row)}>
+            <IconButton onClick={() => handleOpenModifyModal(params.row)}>
               <img src={EditIcon} alt="edit icon" />
             </IconButton>
             <IconButton
               className="deleteButton"
               onClick={() => handleOpenDeleteModal(params.row)}
             >
-              {isMatchingId && loaderForDelete ? (
+              {deleteStaffLoading ? (
                 <CircularProgress size={24} color="warning" />
               ) : (
                 <img src={DeleteIcon} alt="delete icon" />
@@ -160,7 +228,7 @@ const TeamTable = () => {
     <>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          backgroundColor: { sm: "#F6F5FF", xs: '#FFFFFF' },
           height: "98.2vh",
         }}
       >
@@ -197,7 +265,7 @@ const TeamTable = () => {
                 padding: 1,
                 px: 2,
               }}
-              onClick={() => (setOpen(true), setIsEdit(false))}
+              onClick={handleCreateStaff}
             >
               <Add color="white" sx={{ mr: 1 }} />
               Add New User
@@ -230,6 +298,32 @@ const TeamTable = () => {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
+            <Box>
+              <DesktopDatePicker
+                label="Date Added"
+                inputFormat="MM/DD/YYYY"
+                className="custom-textfield"
+                // maxDate={new Date()} // Sets the maximum date to the current date
+                value={selectedDate}
+                onChange={handleDateChange}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: 40,
+                    width: 150,
+                    backgroundColor: "white", // Adjust height
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: "0.875rem", // Adjust font size
+                    padding: "8px 14px", // Adjust padding
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "0.875rem",
+                    top: "-6px", // Adjust label size
+                  },
+                }}
+                renderInput={(params) => <TextField {...params} size="small" />}
+              />
+            </Box>
             <FormControl
               sx={{ width: "152px" }}
               size="small"
@@ -239,18 +333,38 @@ const TeamTable = () => {
                 Status
               </InputLabel>
               <Select
-                // value={age}
-                size="small"
+                placeholder="Status"
+                value={status}
                 labelId="demo-select-small-label"
                 id="demo-select-small"
                 label="Status"
+                size="small"
                 sx={{ height: "40px" }}
-                // onChange={handleChange}
+                onChange={(event) => setStatus(event.target.value)}
               >
-                <MenuItem value={true}>Active</MenuItem>
-                <MenuItem value={false}>inActive</MenuItem>
+                <MenuItem value={'active'}>
+                  {" "}
+                  <Typography
+                    className=" status-active"
+                    sx={{ padding: 0, px: 2, width: "44px" }}
+                  >
+                    Active
+                  </Typography>
+                </MenuItem>
+                <MenuItem value={'inactive'}>
+                  {" "}
+                  <Typography
+                    className=" status-inActive"
+                    sx={{ padding: 0, px: 2, width: "44px" }}
+                  >
+                    Inactive
+                  </Typography>
+                </MenuItem>
               </Select>
             </FormControl>
+            <Button variant="text" onClick={handleResetFilter}>
+              Clear Filter
+            </Button>
           </Box>
         </Box>
 
@@ -267,19 +381,17 @@ const TeamTable = () => {
             {filteredData.length >= 1 ? (
               <>
                 <DataGrid
-                  loading={isFetching}
+                  loading={staffsListFetching}
                   style={{
                     border: "none",
                   }}
                   getRowId={(row) => row._id}
-                  rows={filteredData.slice(
-                    (page - 1) * itemsPerPage,
-                    page * itemsPerPage
-                  )}
+                  rows={filteredData}
                   columns={teamColumns.concat(actionColumn)}
                   page={page}
                   pageSize={itemsPerPage}
-                  rowCount={filteredData.length}
+                  rowCount={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
+                  // rowCount={filteredData.length}
                   // pageSizeOptions={[1, , 25]}
                   sx={{ width: "100%" }}
                   hideFooter
@@ -287,20 +399,11 @@ const TeamTable = () => {
                   pagination={false}
                 />
                 <Pagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  totalRecords={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
                   itemsPerPage={itemsPerPage}
                   page={page}
                   setPage={setPage}
                 />
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </>
             ) : (
               <Typography
@@ -317,19 +420,17 @@ const TeamTable = () => {
           </div>
         </Box>
         <DeleteModal
-          open={deleteModalOpen}
-          close={() => {
-            setDeleteModalOpen(false);
-          }}
-          isLoading={loaderForDelete}
-          handleDelete={handleTeamMemberDelete}
+          open={openDeleteModal}
+          close={handleCloseDeleteModal}
+          isLoading={deleteStaffLoading}
+          handleDelete={handleStaffDelete}
         />
         <AddTeamMembers
-          open={open}
-          close={handleClose}
-          SelectedData={edit}
-          isEdit={isEdit}
-          refetch={teamMemberRefetch}
+          open={openModifyModal}
+          close={handleCloseModifyModal}
+          recordToModify={recordToModify}
+          refetchUsers={refetchStaffsList}
+          locationsList={[]}
         />
       </Box>
     </>
