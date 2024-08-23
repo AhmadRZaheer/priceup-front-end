@@ -38,6 +38,7 @@ import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { debounce } from "lodash";
 import { backendURL } from "@/utilities/common";
+import { getAssignedLocationName } from "@/utilities/users";
 
 const getUserRoleText = (role) => {
   switch (role) {
@@ -52,40 +53,6 @@ const getUserRoleText = (role) => {
   }
 }
 
-const getAssignedLocationName = (row, locationsList) => {
-  let matchingLocationNames = [];
-
-  if (locationsList && locationsList.length > 0) {
-    switch (row?.role) {
-      case userRoles.STAFF:
-        const { haveAccessTo } = row;
-        matchingLocationNames = haveAccessTo
-          ?.map((accessToID) =>
-            locationsList?.find(
-              (location) => location._id === accessToID
-            )
-          )
-          ?.filter((match) => match)
-          ?.map((match) => match.name);
-        break;
-      case userRoles.CUSTOM_ADMIN:
-        const { locationsAccess } = row;
-        matchingLocationNames = locationsAccess
-          ?.map((accessToID) =>
-            locationsList?.find(
-              (location) => location._id === accessToID
-            )
-          )
-          ?.filter((match) => match)
-          ?.map((match) => match.name);
-        break;
-      default:
-        matchingLocationNames = [];
-        break;
-    }
-  }
-  return matchingLocationNames?.length ? matchingLocationNames.join(", ") : "Not added to any location";
-}
 const routePrefix = `${backendURL}/admins`;
 
 const SuperAdminTeam = () => {

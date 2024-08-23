@@ -35,6 +35,7 @@ import { useDeleteDocument, useEditDocument, useFetchAllDocuments } from "@/util
 import { debounce } from "lodash";
 import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { getAssignedLocationName } from "@/utilities/users";
 
 const routePrefix = `${backendURL}/staffs`;
 const itemsPerPage = 10;
@@ -178,19 +179,10 @@ const TeamTable = () => {
       headerClassName: "customHeaderClass-team",
       flex: 1,
       renderCell: (params) => {
-        const { haveAccessTo } = params.row;
-
-        const matchingLocationNames = haveAccessTo
-          ?.map((accessToID) =>
-            locations?.find((location) => location.id === accessToID)
-          )
-          ?.filter((match) => match)
-          ?.map((match) => match.name);
-
         return (
           <div>
             <Typography className="new-table-text">
-              {matchingLocationNames.join(", ") || "No location member found"}
+              {getAssignedLocationName(params.row, locations)}
             </Typography>
           </div>
         );
