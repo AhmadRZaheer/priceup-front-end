@@ -10,8 +10,9 @@ import { parseJwt } from "../ProtectedRoute/authVerify";
 import { FmdGoodOutlined } from "@mui/icons-material";
 import {
   useFetchCustomAdminHaveAccessTo,
-  useSwitchLocationUser,
+  useSwitchLocationUser,  
 } from "../../utilities/ApiHooks/superAdmin";
+import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
@@ -66,9 +67,59 @@ const CustomAdminLocationSideBar = () => {
   }, [switched]);
   return (
     <>
+    <Tooltip title="See Locations">
+            <Button
+              sx={{
+                mx: "auto",
+                width: 264,
+                height: "56px",
+                color: "white",
+                padding: "4px 12px",
+                display: "flex",
+                borderRadius: "6px",
+                background: "#000000",
+                m: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                ":hover": {
+                  backgroundColor: "#000000",
+                  },
+              }}
+              onClick={handleSeeLocationsClick}
+            >
+              <Box sx={{ display: "flex", gap: "12px" }}>
+              <VisibilityOutlinedIcon sx={{  }} />
+
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    textTransform: "capitalize",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    lineHeight: "21.86px",
+                  }}
+                >
+                  See Locations
+                </span>
+              </Box>
+              <ExpandMoreOutlinedIcon
+                className="setLocation"
+                sx={{
+                  color: "#FFFF",
+                  transform:
+                    anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+                }}
+              />
+            </Button>
+          </Tooltip>
+          <hr style={{ border: "1px solid #D1D4DB" }} />
       <div className="center">
         <ul>
-          <li
+          {/* <li
             style={{ padding: 10 }}
             className={` ${Boolean(anchorEl) ? "active" : ""}`}
             onClick={handleSeeLocationsClick}
@@ -87,7 +138,7 @@ const CustomAdminLocationSideBar = () => {
               <VisibilityOutlinedIcon sx={{}} />
               <span>See Locations</span>
             </Button>
-          </li>
+          </li> */}
           <MenuSigleItem link="/locations" secondLink="/">
             <FmdGoodOutlined sx={{}} />
             <span>Locations</span>
