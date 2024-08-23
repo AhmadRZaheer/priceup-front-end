@@ -15,7 +15,7 @@ const MenuSigleItem = ({ link, secondLink, children }) => {
               className="iconButton"
               sx={{
                 color: "#5D6164",
-                padding: "0px",
+                padding: "0px !important",
                 justifyContent: "start",
                 textTransform: "capitalize",
                 gap: "12px",
@@ -41,10 +41,10 @@ const MenuSigleItem = ({ link, secondLink, children }) => {
               className="iconButton"
               sx={{
                 color: "#5D6164",
-                padding: "0px",
+                padding: "0px !important",
                 justifyContent: "start",
                 textTransform: "capitalize",
-                gap:'12px'
+                gap: "12px",
               }}
             >
               {children}

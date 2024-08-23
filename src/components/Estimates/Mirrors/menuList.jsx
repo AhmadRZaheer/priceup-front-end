@@ -124,7 +124,7 @@ const MenuList = ({
         <Box
           sx={{
             maxHeight: "250px",
-            minHeight: "80px",
+            // minHeight: "80px",
             overflowY: "scroll",
             color: { sm: "#000000", xs: "white" },
           }}
