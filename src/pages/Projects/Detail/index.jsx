@@ -30,7 +30,7 @@ const ProjectDetail = () => {
                 {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
                 {/* <CommonSideBar/> */}
                 <CommonLayout>
-                <Box className="econtent-wrapper" sx={{ pl: { sm: '25px', xs: '0px' } }}>
+                <Box className="econtent-wrapper" sx={{ px: { sm: '25px', xs: '0px' } }}>
                     {getLoading ? <Box sx={{ width: 'fit-content', margin: '100px auto', color: '#8477da' }}><CircularProgress /> </Box> : !getLoading && getProject ?
                         <ProjectInfoComponent projectData={getProject} projectState="edit" /> : <Typography>Invalid ID. No preview found.</Typography>
                     }

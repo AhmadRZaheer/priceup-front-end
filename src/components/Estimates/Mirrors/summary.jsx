@@ -1,4 +1,14 @@
-import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Grid,
+  Popover,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 
 import { useDispatch, useSelector } from "react-redux";
 import CustomImage from "@/Assets/customlayoutimage.svg";
@@ -7,6 +17,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { renderMeasurementSides } from "@/utilities/mirrorEstimates";
+import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import {
   getEstimateMeasurements,
   getModifiedProfitPercentage,
@@ -16,6 +27,9 @@ import {
   setModifiedProfitPercentage,
 } from "@/redux/mirrorsEstimateSlice";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
+import CustomToggle from "@/components/ui-components/Toggle";
+import { KeyboardArrowDownOutlined } from "@mui/icons-material";
+import { useState } from "react";
 
 const Summary = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -28,6 +42,32 @@ const Summary = ({ setStep }) => {
   const measurements = useSelector(getEstimateMeasurements);
   const sqftArea = useSelector(getSqftArea);
   const layoutImage = CustomImage;
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [Columns, setColumns] = useState([
+    { title: "Dimensions", active: true },
+    { title: "Summary", active: true },
+    { title: "Total Price", active: true },
+    { title: "Pricing Subcategories", active: false },
+    { title: "Gross Profit Margin", active: true },
+  ]);
+
+  // Toggle handler function
+  const handleToggle = (index) => {
+    const updatedItems = [...Columns]; // Create a copy of the state array
+    updatedItems[index].active = !updatedItems[index].active; // Toggle the 'active' property
+    setColumns(updatedItems); // Update state with the modified array
+  };
+
+  const handleClickPopover = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClosePopover = () => {
+    setAnchorEl(null);
+  };
+
+  const alertPopoverOpen = Boolean(anchorEl);
+  const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
   const handleSetUserProfit = (event) => {
     if (Number(event.target.value) < 100) {
       dispatch(setModifiedProfitPercentage(Number(event.target.value)));
@@ -42,251 +82,237 @@ const Summary = ({ setStep }) => {
         className={disable_com ? "box_disaled" : ""}
         sx={{
           width: "100%",
-          margin: "auto",
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-          // p: { sm: 2, xs: 0 },
-          gap: { sm: 4, xs: 0 },
+          paddingBottom: { sm: 0, xs: "80px" },
         }}
       >
         <Box
           sx={{
-            display: "flex",
-            width: "100%",
-            background: { sm: "white" },
-            margin: { sm: 0, xs: "auto" },
-            borderRadius: "8px",
-            justifyContent: "space-between",
-            flexDirection: { sm: "column", xs: "column" },
-            overflow: { sm: "hidden" },
-            // height: "fit-content",
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-            border: { sm: "1px solid #EAECF0", xs: "none" },
+            borderRadius: "12px",
+            overflow: "hidden",
+            border: "1px solid #D0D5DD",
+            backgroundColor: "white",
           }}
         >
           <Box
             sx={{
-              background: "#D9D9D9",
-              paddingY: 2,
               px: 3,
-              display: { sm: "block", xs: "none" },
-            }}
-          >
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-              Summary
-            </Typography>
-          </Box>
-          <Box
-            sx={{
+              py: 2,
               display: "flex",
-              flexDirection: "column",
-              width: "100%",
-              borderRadius: "8px",
-              width: { sm: "96%" },
-              paddingY: { sm: 2, xs: 1 },
-              paddingX: { sm: 2, xs: 0 },
-              marginBottom: "50px",
-              overflow: { sm: "hidden" },
-              color: { md: "#101828", xs: "white" },
-              // border: { sm: "1px solid #EAECF0", xs: "none" },
-
-              // boxShadow:
-              // "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-              // minHeight: "50vh",
-              // maxHeight: "79vh",
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100%",
-                borderRadius: "8px",
-                color: { md: "#101828", xs: "white" },
-              }}
+            <Typography
+              sx={{ fontSize: "14px", fontWeight: 700, lineHeight: "16px" }}
             >
-              <Box
+              Estimate Details
+            </Typography>
+            <Box sx={{ width: "175px" }}>
+              <Button
+                size="small"
+                startIcon={
+                  <img
+                    width={20}
+                    height={20}
+                    style={{ marginRight: 5 }}
+                    src={GrayEyeIcon}
+                    alt="eye icon"
+                  />
+                }
+                endIcon={<KeyboardArrowDownOutlined />}
+                variant="outlined"
                 sx={{
-                  display: { sm: "none", xs: "flex" },
-                  width: "87%",
-                  justifyContent: "center",
-                  background: { md: "rgba(217, 217, 217, 0.3)", xs: "none" },
-                  margin: { sm: 0, xs: "auto" },
-                  p: 3,
-                  borderRadius: 2,
+                  padding: "5px 8px 5px 8px !important",
+                  border: "1px solid #D0D5DD",
+                  color: "black",
+                  borderRadius: "4px !important",
+                  width: "fit-content",
+                  ":hover": {
+                    border: "1px solid #D0D5DD",
+                  },
                 }}
+                aria-describedby={alertPopoverid}
+                onClick={handleClickPopover}
               >
-                <img
-                  width={"300px"}
-                  height={"310px"}
-                  src={layoutImage}
-                  alt="Selected"
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: "100%",
-                  color: { xs: "white", sm: "black" },
-                  paddingTop: 2,
-                  margin: "auto",
+                View Columns
+              </Button>
+              <Popover
+                id={alertPopoverid}
+                open={alertPopoverOpen}
+                anchorEl={anchorEl}
+                onClose={handleClosePopover}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
                 }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                sx={{ borderRadius: "8px" }}
               >
-                {/** Dimensions Accordian */}
-                <Accordion
-                  sx={{
-                    paddingX: "6px",
-                    border: "none",
-                    boxShadow: "none !important",
-                    ".MuiPaper-elevation": {
-                      border: " none !important",
-                      boxShadow: "none !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                    sx={{
-                      padding: 0,
-                      margin: 0,
-                      borderBottom: "none",
-                      height: "30px",
-                    }}
-                  >
-                    <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                      Dimensions
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails
-                    sx={{
-                      padding: 0,
-                      borderTop: "2px solid #D0D5DD",
-                      paddingY: 1,
-                    }}
-                  >
-                    <Typography>
-                      {renderMeasurementSides(measurements)}
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Layout: </span>
-                      Custom
-                    </Typography>
-                    <Typography>
-                      <span style={{ fontWeight: "bold" }}>Square Foot: </span>{" "}
-                      {sqftArea}
-                    </Typography>
-                  </AccordionDetails>
-                </Accordion>
+                {" "}
                 <Box
                   sx={{
+                    p: "8px",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    borderTop: "2px solid #D0D5DD",
-                    paddingY: 1,
-                    paddingX: "6px",
+                    flexDirection: "column",
+                    gap: "16px",
                   }}
                 >
-                  <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
-                    Total Price
-                  </Typography>
-                  <Typography variant="h6">
-                    ${pricing.total?.toFixed(2) || 0}
-                  </Typography>
-                </Box>{" "}
-                {/* Summary  */}
-                <Box sx={{ borderTop: "2px solid #D0D5DD" }}>
-                  {/** Selected Content Accordian */}
-                  <Accordion
-                    sx={{
-                      paddingX: "6px",
-                      border: "none",
-                      boxShadow: "none !important",
-                      ".MuiPaper-elevation": {
-                        border: " none !important",
-                        boxShadow: "none !important",
-                      },
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
+                  {Columns.map((item, index) => (
+                    <Box
                       sx={{
-                        padding: 0,
-                        margin: 0,
-                        borderBottom: "none",
-                        height: "30px",
+                        width: "256px",
+                        height: "46px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        px: 3,
                       }}
                     >
-                      <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                        Summary{" "}
+                      <Typography sx={{ color: "#5D6164", fontSize: "16px" }}>
+                        {item.title}
                       </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ padding: 0 }}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          borderTop: "2px solid #D0D5DD",
-                          paddingY: 1,
-                        }}
-                      ></Box>
-
+                      <Box sx={{ height: "46px" }}>
+                        <CustomToggle
+                          text={""}
+                          checked={item.active}
+                          onChange={() => handleToggle(index)} // Pass index to identify which item to toggle
+                        />
+                      </Box>
+                    </Box>
+                  ))}
+                </Box>{" "}
+              </Popover>
+            </Box>
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ backgroundColor: "#F3F5F6", px: 3, py: 2 }}>
+            <Grid container>
+              {Columns[0].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Dimensions
+                </Grid>
+              )}
+              {Columns[1].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Summary
+                </Grid>
+              )}
+              {Columns[3].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Pricing Subcategories
+                </Grid>
+              )}
+              {Columns[4].active && (
+                <Grid item md={3} className="text-xs-samibold">
+                  Gross Profit Margin
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+            {Columns[0].active === false &&
+            Columns[1].active === false &&
+            Columns[2].active === false &&
+            Columns[3].active === false &&
+            Columns[4].active === false ? (
+              <Typography>no Esimate Details</Typography>
+            ) : (
+              <Grid container spacing={2}>
+                {Columns[0].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
+                        Dimensions
+                      </Typography>
+                      <Typography className="text-xs-ragular">
+                        {" "}
+                        {renderMeasurementSides(measurements)}
+                      </Typography>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Layout:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          Custom
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Square Foot:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {sqftArea}
+                        </Typography>
+                      </Box>
+                      {Columns[2].active && (
+                        <Box sx={{ width: "60%" }}>
+                          <Divider sx={{ borderColor: "#D4DBDF" }} />
+                          <Box
+                            sx={{
+                              mt: 1,
+                            }}
+                          >
+                            <Typography className="text-xs-ragular-bold">
+                              Total Price:
+                            </Typography>
+                            <Typography className="text-xs-ragular">
+                              ${pricing.total?.toFixed(2) || 0}
+                            </Typography>
+                          </Box>
+                        </Box>
+                      )}
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[1].active && (
+                  <Grid item md={3}>
+                    {" "}
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
+                        Summary
+                      </Typography>{" "}
                       {selectedContent?.glassType?.item && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            textAlign: "baseline",
-                            gap: 0.6,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
                             Glass Type:
                           </Typography>
-                          <Typography>
+                          <Typography className="text-xs-ragular">
                             {selectedContent?.glassType?.item?.name} (
                             {selectedContent?.glassType?.thickness})
                           </Typography>
                         </Box>
                       )}
                       {selectedContent?.edgeWork?.item && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            textAlign: "baseline",
-                            gap: 0.6,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
                             Edge Work:
                           </Typography>
-                          <Typography>
+                          <Typography className="text-xs-ragular">
                             {selectedContent?.edgeWork?.item?.name} (
                             {selectedContent?.edgeWork?.thickness})
                           </Typography>
                         </Box>
                       )}
                       {selectedContent?.glassAddons?.length ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            textAlign: "baseline",
-                            gap: 0.6,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
                             Glass Addons:
                           </Typography>
                           {selectedContent?.glassAddons?.map((item, index) => (
-                            <Typography>
+                            <Typography className="text-xs-ragular">
                               {item?.name}
                               {selectedContent?.glassAddons?.length - 1 !==
-                                index
+                              index
                                 ? ", "
                                 : ""}
                             </Typography>
@@ -296,18 +322,12 @@ const Summary = ({ setStep }) => {
                         ""
                       )}
                       {selectedContent?.hardwares?.length ? (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            textAlign: "baseline",
-                            gap: 0.6,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
                             Hardwares:
                           </Typography>
                           {selectedContent?.hardwares?.map((item, index) => (
-                            <Typography>
+                            <Typography className="text-xs-ragular">
                               {item?.name}
                               {selectedContent?.hardwares?.length - 1 !== index
                                 ? ", "
@@ -318,401 +338,203 @@ const Summary = ({ setStep }) => {
                       ) : (
                         ""
                       )}
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
                           People:{" "}
                         </Typography>
-                        <Typography>{selectedContent?.people}</Typography>
+                        <Typography className="text-xs-ragular">
+                          {selectedContent?.people}
+                        </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
                           Hours:{" "}
                         </Typography>
-                        <Typography>{selectedContent?.hours}</Typography>
+                        <Typography className="text-xs-ragular">
+                          {selectedContent?.hours}
+                        </Typography>
                       </Box>
-                      <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
-                        Additional Fields
-                      </Typography>
-                      {selectedContent.additionalFields?.map(
-                        (item) =>
-                          item.label !== "" && (
-                            <Box
-                              key={item.label}
-                              sx={{
-                                display: "flex",
-                                textAlign: "baseline",
-                                gap: 0.6,
-                              }}
-                            >
-                              <Typography sx={{ fontWeight: "bold" }}>
-                                {item.label || "---"}:{" "}
-                              </Typography>
-                              <Typography>
-                                {item.cost}
-                                {/* * {(mirrorLocationSettings.pricingFactorStatus
+                      <Box>
+                        <Typography className="text-xs-ragular-bold" mb={1}>
+                          Additional Fields
+                        </Typography>
+                        {selectedContent.additionalFields?.map(
+                          (item) =>
+                            item.label !== "" && (
+                              <Box
+                                key={item.label}
+                                sx={{
+                                  display: "flex",
+                                  textAlign: "baseline",
+                                  gap: 0.6,
+                                }}
+                              >
+                                <Typography className="text-xs-ragular-bold">
+                                  {item.label || "---"}:{" "}
+                                </Typography>
+                                <Typography className="text-xs-ragular">
+                                  {item.cost}
+                                  {/* * {(mirrorLocationSettings.pricingFactorStatus
                               ? mirrorLocationSettings.pricingFactor
                               : 1)} */}
-                              </Typography>
-                            </Box>
-                          )
-                      )}
-                    </AccordionDetails>
-                  </Accordion>
-
-                  {/* Price category Accordian */}
-                  <Accordion
-                    sx={{
-                      paddingX: "6px",
-                      border: "none",
-                      boxShadow: "none !important",
-                      ".MuiPaper-elevation": {
-                        border: " none !important",
-                        boxShadow: "none !important",
-                      },
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel2a-content"
-                      id="panel2a-header"
-                      sx={{
-                        padding: 0,
-                        margin: 0,
-                        height: "30px",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
-                        Pricing Sub Categories{" "}
+                                </Typography>
+                              </Box>
+                            )
+                        )}
+                      </Box>
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[3].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
+                        Pricing Subcategories
                       </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails sx={{ padding: 0 }}>
-                      <Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderTop: "2px solid #D0D5DD",
-                            paddingY: 1,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
-                            Glass Price
-                          </Typography>
-                          <Typography variant="h6">
-                            ${pricing.glass?.toFixed(2) || 0}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderTop: "2px solid #D0D5DD",
-                            paddingY: 1,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
-                            Fabrication Price
-                          </Typography>
-                          <Typography variant="h6">
-                            ${pricing.fabrication?.toFixed(2) || 0}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderTop: "2px solid #D0D5DD",
-                            paddingY: 1,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
-                            Labor Price
-                          </Typography>
-                          <Typography variant="h6">
-                            ${pricing.labor?.toFixed(2) || 0}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderTop: "2px solid #D0D5DD",
-
-                            paddingY: 1,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
-                            Misc Price
-                          </Typography>
-                          <Typography variant="h6">
-                            ${pricing.misc?.toFixed(2) || 0}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            borderTop: "2px solid #D0D5DD",
-
-                            paddingY: 1,
-                          }}
-                        >
-                          <Typography sx={{ fontWeight: "bold" }}>
-                            Additional Fields Price
-                          </Typography>
-                          <Typography variant="h6">
-                            ${pricing.additionalFields?.toFixed(2) || 0}
-                          </Typography>
-                        </Box>
-                      </Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                  {/** Gross Profit Accordian */}
-                  <Accordion
-                    sx={{
-                      paddingX: "6px",
-                      border: "none",
-                      boxShadow: "none !important",
-                      ".MuiPaper-elevation": {
-                        border: " none !important",
-                        boxShadow: "none !important",
-                      },
-                    }}
-                  >
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                      sx={{
-                        padding: 0,
-                        margin: 0,
-                        borderBottom: "none",
-                        height: "30px",
-                      }}
-                    >
-                      <Typography sx={{ fontWeight: "bold", fontSize: 22 }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Glass Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {" "}
+                          ${pricing.glass?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Fabrication Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${pricing.fabrication?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Labor Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${pricing.labor?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Misc Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${pricing.misc?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                          Additional Fields Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${pricing.additionalFields?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                    </Stack>
+                  </Grid>
+                )}
+                {Columns[4].active && (
+                  <Grid item md={3}>
+                    <Stack gap={2}>
+                      <Typography
+                        className="text-xs-samibold"
+                        sx={{ display: { sm: "none", xs: "block" } }}
+                      >
                         Gross Profit Margin
                       </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails
-                      sx={{
-                        padding: 0,
-                        borderTop: "2px solid #D0D5DD",
-                        paddingY: 1,
-                      }}
-                    >
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
                           Gross Total:
                         </Typography>
-                        <Typography>
+                        <Typography className="text-xs-ragular">
                           ${pricing.total?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
                           Actual Cost:
                         </Typography>
-                        <Typography>
+                        <Typography className="text-xs-ragular">
                           ${pricing.cost?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          textAlign: "baseline",
-                          gap: 0.6,
-                        }}
-                      >
-                        <Typography sx={{ fontWeight: "bold" }}>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
                           Gross Profit:
                         </Typography>
-                        <Typography>
+                        <Typography className="text-xs-ragular">
                           {pricing.profitPercentage?.toFixed(2) || 0} %
                         </Typography>
                       </Box>
 
+                      <Typography className="text-xs-ragular-bold">
+                        Adjust Profit:
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between",
-                          paddingTop: "0px",
+                          gap: 1,
+                          width: "120px",
+                          padddingY: 4,
                         }}
                       >
-                        <Typography sx={{ fontWeight: "bold" }}>
-                          Adjust Profit:
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1,
-                            width: "120px",
-                            padddingY: 4,
+                        <TextField
+                          type="number"
+                          className="custom-textfield-purple"
+                          InputProps={{
+                            inputProps: { min: 0, max: 100 },
+                            endAdornment: <> %</>,
                           }}
-                        >
-                          <TextField
-                            type="number"
-                            InputProps={{
-                              style: {
-                                color: "black",
-                                borderRadius: 10,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                              },
-                              inputProps: { min: 0, max: 100 },
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={
-                              modifiedProfitPercentage > 0
-                                ? modifiedProfitPercentage
-                                : ""
-                            }
-                            onChange={(event) => handleSetUserProfit(event)}
-                          />
-                          %
-                        </Box>
-                        <Button
-                          disabled={
-                            modifiedProfitPercentage === 0 ||
-                            modifiedProfitPercentage === ""
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={
+                            modifiedProfitPercentage > 0
+                              ? modifiedProfitPercentage
+                              : ""
                           }
-                          variant="contained"
-                          onClick={resetUserProfit}
-                          sx={{
-                            backgroundColor: "#8477da",
-                            "&:hover": {
-                              backgroundColor: "#8477da",
-                            },
-                            ":disabled": {
-                              bgcolor: "#c2c2c2",
-                            },
-                          }}
-                        >
-                          Reset
-                        </Button>
-                        {/* <Box sx={{ width: "100px" }}>
-                        <Button
-                          fullWidth
-                          variant="contained"
-                          onClick={handleProfitPercentage}
-                          sx={{
-                            backgroundColor: "#8477da",
-                            "&:hover": {
-                              backgroundColor: "#8477da",
-                            },
-                          }}
-                        >
-                          {" "}
-                          Submit
-                        </Button>
-                      </Box> */}
+                          onChange={(event) => handleSetUserProfit(event)}
+                        />
                       </Box>
-                    </AccordionDetails>
-                  </Accordion>
-                </Box>
-                {/* Buttons */}
-                {isMobile ? (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: { sm: "96%" },
-                      paddingX: 2,
-                      py: 2,
-                      // marginY: 3,
-                      position: { sm: "", xs: "fixed" },
-                      bottom: 0,
-                      left: 0,
-                      right: 0,
-                      gap: 5,
-                      background: "#08061B"
-                    }}
-                  >
-                    <Box >
                       <Button
-                        fullWidth
-                        // onClick={setHandleEstimatesPages}
-                        onClick={() => setStep(1)}
-                        sx={{
-                          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                          color: "#344054",
-                          textTransform: "initial",
-                          border: "1px solid #D0D5DD",
-                          backgroundColor: { sm: "transparent", xs: "white" },
-                        }}
-                      >
-                        {" "}
-                        Back
-                      </Button>
-                    </Box>
-                    <Box >
-                      <Button
-                        fullWidth
-                        // disabled={selectedContent?.hardwareFinishes === null}
+                        disabled={
+                          modifiedProfitPercentage === 0 ||
+                          modifiedProfitPercentage === ""
+                        }
                         variant="contained"
-                        onClick={() => {
-                          // setSummaryState(false);
-                          console.log('open modal');
-                        }}
+                        onClick={resetUserProfit}
                         sx={{
+                          width: "77px",
                           backgroundColor: "#8477da",
                           "&:hover": {
                             backgroundColor: "#8477da",
                           },
+                          ":disabled": {
+                            bgcolor: "#c2c2c2",
+                          },
                         }}
                       >
-                        {" "}
-                        Next
+                        Reset
                       </Button>
-                    </Box>
-                  </Box>
-                ) : (
-                  ""
+                    </Stack>
+                  </Grid>
                 )}
-              </Box>
-            </Box>
+              </Grid>
+            )}
           </Box>
         </Box>
       </Box>

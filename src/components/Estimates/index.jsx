@@ -268,50 +268,52 @@ export default function Estimates() {
             }}
           >
             <Box sx={{ display: "flex", gap: 2, mr: { sm: 0, xs: "26px" } }}>
-              <CustomInputField
-                id="input-with-icon-textfield"
-                placeholder="Search by Customer Name"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <img src={icon} alt="search input" />
-                    </InputAdornment>
-                  ),
-                }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <DesktopDatePicker
-                label="Date Added"
-                inputFormat="MM/DD/YYYY"
-                className="custom-textfield"
-                // maxDate={new Date()} // Sets the maximum date to the current date
-                value={selectedDate}
-                onChange={handleDateChange}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: 40,
-                    width: 150,
-                    backgroundColor: "white", // Adjust height
-                  },
-                  "& .MuiInputBase-input": {
-                    fontSize: "0.875rem", // Adjust font size
-                    padding: "8px 14px", // Adjust padding
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: "0.875rem",
-                    top: "-6px", // Adjust label size
-                  },
-                }}
-                renderInput={(params) => <TextField {...params} size="small" />}
-              />
+              <Box>
+                <CustomInputField
+                  id="input-with-icon-textfield"
+                  placeholder="Search by Customer Name"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <img src={icon} alt="search input" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </Box>
+              <Box>
+                <DesktopDatePicker
+                  label="Date Added"
+                  inputFormat="MM/DD/YYYY"
+                  className="custom-textfield"
+                  // maxDate={new Date()} // Sets the maximum date to the current date
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      height: 40,
+                      width: 150,
+                      backgroundColor: "white", // Adjust height
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: "0.875rem", // Adjust font size
+                      padding: "8px 14px", // Adjust padding
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "0.875rem",
+                      top: "-6px", // Adjust label size
+                    },
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small" />
+                  )}
+                />
+              </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
-              <FormControl
-                sx={{ width: "152px" }}
-                size="small"
-                className="custom-textfield"
-              >
+              <FormControl sx={{ width: "152px" }} size="small">
                 <InputLabel
                   id="demo-select-small-label"
                   className="input-label"
@@ -324,6 +326,7 @@ export default function Estimates() {
                   id="demo-select-small"
                   label="Status"
                   size="small"
+                  className="custom-textfield"
                   sx={{ height: "40px" }}
                   onChange={(e) => setStatus(e.target.value)}
                 >

@@ -82,9 +82,9 @@ const MenuList = ({
           // pb: 1,
         }}
       >
-        <Button
+        <Box
           onClick={opneClose}
-          id="basic-button"
+          // id="basic-button"
           sx={{
             color: {
               sm: anchorEl ? "#8477DA" : "#000000 !important ",
@@ -92,6 +92,9 @@ const MenuList = ({
             },
             paddingLeft: "0px !important",
             paddingY: "16px !important",
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
           }}
         >
           {anchorEl ? (
@@ -110,7 +113,7 @@ const MenuList = ({
           <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
             {title}
           </Typography>
-        </Button>
+        </Box>
         {![
           "hardwareFinishes",
           "channel",

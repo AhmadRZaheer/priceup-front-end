@@ -155,13 +155,13 @@ const ProjectInfoComponent = ({
     <Box
       sx={{
         background: "transparent",
-        padding: { sm: 1.5, xs: "60px 8px 8px 8px" },
+        padding: { sm: 0, xs: "60px 8px 8px 8px" },
         width: { sm: "auto", xs: "auto", margin: "0px auto" },
       }}
     >
       <Box
         sx={{
-          p: { sm: "20px 20px 20px 8px", xs: "20px 0px 20px 0px" },
+          p: { sm: "10px 20px 20px 8px", xs: "20px 0px 20px 0px" },
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -206,7 +206,10 @@ const ProjectInfoComponent = ({
                 textTransform: "capitalize",
                 borderRadius: 1,
                 fontSize: { lg: 16, md: 15, xs: 12 },
-                padding: { sm: "10px 16px  !important", xs: "5px 5px !important" },
+                padding: {
+                  sm: "10px 16px  !important",
+                  xs: "5px 5px !important",
+                },
               }}
             >
               <Add sx={{ mr: 0.5, color: "#FFFFFF" }} />
@@ -775,7 +778,7 @@ const ProjectInfoComponent = ({
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Estimates
             </Typography>
-            <Box sx={{ display: "flex", gap: 2 ,pt:{sm:0,xs:1}}}>
+            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
               <CustomInputField
                 id="input-with-icon-textfield"
                 placeholder="Search by User Name"
@@ -792,7 +795,7 @@ const ProjectInfoComponent = ({
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
-                className="custom-textfield"
+                // className="custom-textfield"
               >
                 <InputLabel
                   id="demo-select-small-label"
@@ -802,6 +805,7 @@ const ProjectInfoComponent = ({
                 </InputLabel>
                 <Select
                   // value={age}
+                  className="custom-textfield"
                   labelId="demo-select-small-label"
                   id="demo-select-small"
                   label="Status"
