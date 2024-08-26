@@ -121,10 +121,10 @@ input {
   border-radius: 8px !important;
   padding: 10px 16px 10px 16px !important;
   font-family: "Manrope", sans-serif !important;
+  line-height: 21.86px !important;
 }
 .MuiTypography-root{
-  font-family: "Manrope", sans-serif !important;
-  line-height: 21.86px !important;
+  font-family: "Manrope", sans-serif !important; 
 }
 /* .MuiDataGrid-cell{
   min-height:70px !important;
