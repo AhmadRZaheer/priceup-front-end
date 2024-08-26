@@ -18,6 +18,7 @@ function CustomInputField({
   id,
   onClick,
   select,
+  ...sx
 }) {
   return (
     <>
@@ -38,7 +39,7 @@ function CustomInputField({
         placeholder={placeholder}
         onChange={onChange}
         helperText={helperText}
-        onBlur={onBlur}
+        onBlur={onBlur}        
         className={
           error
             ? "custom-textfield-error"
@@ -46,6 +47,7 @@ function CustomInputField({
             ? "disabled-textfield"
             : "custom-textfield"
         }
+        style={{...sx}}
       />
     </>
   );
