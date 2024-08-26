@@ -21,46 +21,46 @@ const modification = [
 
 const ShowerLayout = () => {
   return (
-    <Box sx={{ px: 3, py: 3 }}>
+    <Box sx={{ px:'34px', py: 3 }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
           pb: 5,
-          pr: 2.6,
+          pr: 3,
         }}
       >
         <Typography className="layouttitle">
-          Showers <Box sx={{ color: "#000000" }}>/ Layouts</Box>
+          Showers <Box sx={{ color: "#000000" }}>&nbsp;/ Layouts</Box>
         </Typography>
         <Box>
           <Button
+            // onClick={() => navigate("/layouts/edit")}
             variant="contained"
+            // endIcon={}
             sx={{
-              backgroundColor: "#8477DA",
-              width: "174px",
-              height: "42px",
-              color: "white",
-              textTransform: "capitalize",
-              borderRadius: 1,
+              background: "#8477DA",
+              ":hover": { background: "#8477DA" },
               fontSize: 16,
-              padding: "10px 13px",
-              display: "box",
-              "&:hover": { backgroundColor: "#8477DA" },
+              fontWeight: 600,
+              lineHeight: "21.86px",
+              letterSpacing:'0.1px',
+              gap:'10px'
             }}
           >
             Custom Layout
-            <Add color="white" sx={{ ml: 1.1 }} />
+            <Add  sx={{width:'16px',height:'16px',color:'#FFFFFF'}} />
           </Button>
+          
         </Box>
       </Box>
       <Grid
         container
         sx={{
           m: "0px !important",
-          gap: 2,
-          display: "flex",
-          justifyContent: { md: "space-between", xs: "normal" },
+          gap: '21px',
+          // display: "flex",
+          // justifyContent: { md: "space-between", xs: "normal" },
         }}
       >
         {modification.map((data, index) => (

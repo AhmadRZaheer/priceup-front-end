@@ -207,7 +207,7 @@ const SuperAdminTable = () => {
               Add, edit and manage your locations.
             </Typography>
           </Box>
-          <Box sx={{ width: "200px" }}>
+          <Box sx={{}}>
             <Button
               fullWidth
               variant="contained"
@@ -261,6 +261,7 @@ const SuperAdminTable = () => {
         </Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
+          <Box>
           <CustomInputField
             id="input-with-icon-textfield"
             placeholder="Search by User Name"
@@ -274,10 +275,12 @@ const SuperAdminTable = () => {
             value={search}
             onChange={handleChange}
           />
+          </Box>
+          
           <FormControl
             sx={{ width: "152px" }}
             size="small"
-            className="custom-textfield"
+           
             placeholder="status"
           >
             <InputLabel id="demo-select-small-label" className="input-label">
@@ -285,6 +288,7 @@ const SuperAdminTable = () => {
             </InputLabel>
             <Select
               value={Status}
+              className="custom-textfield"
               size="small"
               placeholder="status"
               labelId="demo-select-small-label"

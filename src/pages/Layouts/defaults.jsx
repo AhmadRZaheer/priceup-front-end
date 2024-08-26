@@ -18,7 +18,7 @@ const Defaults = (Props) => {
         <CommonLayout>
         <div className="defaultsConatiner">
         <ShowerLayout/>
-        <DefaultSection />         
+        {/* <DefaultSection /> */}
         </div>
         </CommonLayout>
       {/* </div> */}

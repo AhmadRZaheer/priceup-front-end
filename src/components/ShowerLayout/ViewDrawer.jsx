@@ -50,11 +50,11 @@ const ViewDrawer = ({ state, toggleDrawer }) => {
       >
         <Box
           className="cardTitleContainer"
-          sx={{ pl: 2, gap: "20px" }}
+          sx={{  pl: 2, gap: "20px" }}
           role="presentation"
           onKeyDown={toggleDrawer(false)}
         >
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex" ,gap:'10px' }}>
             <img
               src={image}
               alt="/"

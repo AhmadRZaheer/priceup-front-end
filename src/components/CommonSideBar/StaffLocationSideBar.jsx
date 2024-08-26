@@ -285,8 +285,7 @@ const StaffLocationSideBar = () => {
           </Box>
         </Box>
       </Box> */}
-      <div className="center">
-        <ul>
+      
           <Tooltip title="Switch Location">
             <Button
               sx={{
@@ -338,30 +337,24 @@ const StaffLocationSideBar = () => {
                 }}
               />
             </Button>
-          </Tooltip>
-          {/* <li
-            style={{ padding: 10 }}
-            className={` ${Boolean(anchorEl) ? "active" : ""}`}
-            onClick={handleSeeLocationsClick}
-          >
-            <IconButton className='iconButton' sx={{ color: "#5D6164", padding: 0.2 }}>
-              <VisibilityOutlinedIcon sx={{ mr: "12px" }} />
-              <span>See Locations</span>
-            </IconButton>
-          </li> */}
-          <hr style={{ opacity: 0, marginTop: "20px" }} />
+          </Tooltip>          
+          <hr style={{ border: "1px solid #D1D4DB" }} />
+          <div className="center">
+        <ul>
+          <Box>
           <MenuSigleItem link="/projects" secondLink="/">
-            <FmdGoodOutlined sx={{   }} />
+            <FmdGoodOutlined />
             <span>Projects</span>
           </MenuSigleItem>
           <MenuSigleItem link="/estimates">
-            <FmdGoodOutlined sx={{   }} />
+            <FmdGoodOutlined   />
             <span>Old Estimates</span>
           </MenuSigleItem>
           <MenuSigleItem link="/customers">
-            <FmdGoodOutlined sx={{   }} />
+            <FmdGoodOutlined   />
             <span>Customer</span>
           </MenuSigleItem>
+          </Box>         
         </ul>
       </div>
 
@@ -441,9 +434,59 @@ const StaffLocationSideBar = () => {
         drawer
       ) : (
         <Box>
+            <Tooltip title="See Locations">
+            <Button
+              sx={{
+                mx: "auto",
+                width: 264,
+                height: "56px",
+                color: "white",
+                padding: "4px 12px",
+                display: "flex",
+                borderRadius: "6px",
+                background: "#000000",
+                m: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                ":hover": {
+                  backgroundColor: "#000000",
+                  },
+              }}
+              onClick={handleSeeLocationsClick}
+            >
+              <Box sx={{ display: "flex", gap: "12px" }}>
+              <VisibilityOutlinedIcon sx={{  }} />
+
+                <span
+                  style={{
+                    whiteSpace: "nowrap",
+                    display: "flex",
+                    alignItems: "center",
+                    textOverflow: "ellipsis",
+                    overflow: "hidden",
+                    textTransform: "capitalize",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    lineHeight: "21.86px",
+                  }}
+                >
+                  See Locations
+                </span>
+              </Box>
+              <ExpandMoreOutlinedIcon
+                className="setLocation"
+                sx={{
+                  color: "#FFFF",
+                  transform:
+                    anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+                }}
+              />
+            </Button>
+          </Tooltip>          
+          <hr style={{ border: "1px solid #D1D4DB" }} />
           <div className="center">
             <ul>
-              <li
+              {/* <li
                 style={{ padding: 10 }}
                 className={` ${Boolean(anchorEl) ? "active" : ""}`}
                 onClick={handleSeeLocationsClick}
@@ -459,12 +502,12 @@ const StaffLocationSideBar = () => {
                     gap:'12px'
                   }}
                 >
-                  <VisibilityOutlinedIcon sx={{  }} />
+                  
                   <span>See Locations</span>
                 </Button>
-              </li>
+              </li> */}
               <MenuSigleItem link="/locations" secondLink="/">
-                <FmdGoodOutlined sx={{   }} />
+                <FmdGoodOutlined   />
                 <span>Locations</span>
               </MenuSigleItem>
             </ul>
