@@ -43,8 +43,8 @@ const ViewDrawer = ({ state, toggleDrawer }) => {
             p: "32px 12px",
             border: "0.5px solid #F3F5F6",
             width: { sm: "573px", xs: "100%" },
-            height: "90vh",
-            overflowY: "auto",
+            // height: "90vh"
+            // overflowY: "auto",
           },
         }}
       >
@@ -62,7 +62,11 @@ const ViewDrawer = ({ state, toggleDrawer }) => {
             />
             <p className="cardTitle">Doors</p>
           </Box>
-          <Grid container spacing={2} sx={{ py: 1 }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ py: 1, overflowY: "auto", height: "calc(100vh - 265px)" }}
+          >
             {modification.map((data, index) => (
               <Grid item xs={6} className="cardTitleContainer" sx={{ py: 1 }}>
                 <Typography className="drawerTitle">{data.name}</Typography>
@@ -78,6 +82,7 @@ const ViewDrawer = ({ state, toggleDrawer }) => {
               justifyContent: "space-between",
               // pr: 5,
               pb: 5,
+              gap: "12px",
             }}
           >
             <Button

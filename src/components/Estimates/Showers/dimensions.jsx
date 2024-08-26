@@ -69,10 +69,10 @@ export const ShowerDimensions = () => {
             <Box
               sx={{
                 color: { sm: "black", xs: "white" },
-                fontSize: { xs: "24px", sm: "2.124rem" },
+                fontSize: { xs: "24px", sm: "24px" },
                 textAlign: { xs: "start", sm: "center" },
-                fontWeight: 500,
-                pl: 3.5,
+                fontWeight: 600,
+                pl: { sm: 0, xs: 3.5 },
               }}
             >
               <NavLink
@@ -103,7 +103,7 @@ export const ShowerDimensions = () => {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              gap: 2,
+              gap: 1,
               paddingY: 3,
               // alignItems: "start",
             }}
@@ -115,7 +115,7 @@ export const ShowerDimensions = () => {
                 // flexWrap: "wrap",
                 // flexGrow: 1,
                 width: { lg: "60%", md: "50%" },
-                gap: 2
+                gap: 2,
               }}
             >
               {activeQuoteState === quoteState.CREATE ||

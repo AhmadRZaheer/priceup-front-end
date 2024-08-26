@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
-import {
-  ChevronRight,
-} from "@mui/icons-material";
+import { ChevronRight } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
@@ -13,15 +11,13 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 import MenuItem from "./menuItem";
-import { getSelectedContent, setSelectedContent, setThickness } from "@/redux/mirrorsEstimateSlice";
+import {
+  getSelectedContent,
+  setSelectedContent,
+  setThickness,
+} from "@/redux/mirrorsEstimateSlice";
 
-const MenuList = ({
-  menuOptions,
-  title,
-  type,
-  thickness,
-  currentItem,
-}) => {
+const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
   const selectedContent = useSelector(getSelectedContent);
   const [anchorEl, setAnchorEl] = useState(false);
   const [thicknessVal, setThicknessVal] = useState(thickness || "1/4");
@@ -50,13 +46,23 @@ const MenuList = ({
           width: "100%",
           justifyContent: "space-between",
           alignItems: "center",
-          pb: 1,
+          // pb: 1,
         }}
       >
-        <Button
+        <Box
           onClick={openClose}
-          id="basic-button"
-          sx={{ color: { sm: "#000000 !important ", xs: "white" } }}
+          // id="basic-button"
+          sx={{
+            color: {
+              sm: anchorEl ? "#8477DA" : "#000000 !important ",
+              xs: "white",
+            },
+            paddingLeft: "0px !important",
+            paddingY: "16px !important",
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
         >
           {anchorEl ? (
             <ChevronRight
@@ -64,14 +70,16 @@ const MenuList = ({
                 display: "flex",
                 alignItems: "center",
                 transform: "rotate(90deg)",
-                color: "#98A2B3 !important",
+                color: anchorEl ? "#8477DA" : "#98A2B3",
               }}
             />
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
-          <Typography>{title}</Typography>
-        </Button>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+            {title}
+          </Typography>
+        </Box>
         {["glassType", "edgeWork"].includes(type) && (
           <Box
             sx={{
@@ -86,12 +94,11 @@ const MenuList = ({
               select
               size="small"
               variant="outlined"
+              className="custom-textfield"
               InputProps={{
                 style: {
-                  color: "black",
-                  borderRadius: 10,
-                  border: "1px solid #cccccc",
-                  backgroundColor: "white",
+                  borderRadius: "4px",
+                  height: "40px",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
@@ -102,7 +109,7 @@ const MenuList = ({
               }}
               sx={{
                 border: { sm: "none", xs: "2px solid #423f57" },
-                borderRadius: { sm: 0, xs: 2 },
+                // borderRadius: { sm: 0, xs: 2 },
                 color: { sm: "black", xs: "white" },
                 width: "100%",
                 mb: 1,
@@ -127,6 +134,14 @@ const MenuList = ({
             // minHeight: "80px",
             overflowY: "scroll",
             color: { sm: "#000000", xs: "white" },
+            backgroundColor: "#F3F5F6",
+            border: "1px solid #D4DBDF",
+            borderRadius: "8px",
+            padding: "6px",
+            m: "6px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "6px",
           }}
         >
           {menuOptions === undefined ? (

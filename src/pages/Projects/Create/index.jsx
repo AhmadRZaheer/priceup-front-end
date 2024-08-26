@@ -10,22 +10,22 @@ import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
 
 const ProjectCreate = () => {
-    const isMobile = useMediaQuery("(max-width:600px)");
-    const decodedToken = getDecryptedToken();
-    return (
-        <>
-            {/* <TopBar />
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const decodedToken = getDecryptedToken();
+  return (
+    <>
+      {/* <TopBar />
             <div className="main-wrapper"> */}
-                {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-                {/* <CommonSideBar /> */}
-                <CommonLayout>
-                <Box className="econtent-wrapper" sx={{  pr: { sm: 2, xs: 1 },pl:{ sm: 4, xs: 1 } }}>
-                    <ProjectInfoComponent />
-                </Box>
-                </CommonLayout>
-            {/* </div> */}
-        </>
-    );
+      {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+      {/* <CommonSideBar /> */}
+      <CommonLayout>
+        <Box className="econtent-wrapper" sx={{ px: { sm: 2, xs: 1 } }}>
+          <ProjectInfoComponent />
+        </Box>
+      </CommonLayout>
+      {/* </div> */}
+    </>
+  );
 };
 
 export default ProjectCreate;

@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Button, TextField, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,6 +45,7 @@ import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import { enqueueSnackbar } from "notistack";
 import EnterLabelModal from "../enterLabelModal";
+import { Add } from "@mui/icons-material";
 
 // const floatingSizes = [{ id: 1, name: 'Small', image: "/images/others/default.png" }, { id: 2, name: 'Medium', image: "/images/others/default.png" }, { id: 3, name: 'Large', image: "/images/others/default.png" }]
 
@@ -336,45 +344,50 @@ export const MirrorReview = ({ setStep }) => {
           sx={{
             width: "100%",
             borderRadius: { sm: "12px", xs: 0 },
-            boxShadow:
-              "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
             border: { sm: "1px solid #EAECF0", xs: "none" },
             overflow: { sm: "hidden" },
+            border: "1px solid rgba(208, 213, 221, 1)",
           }}
         >
           <Box
             sx={{
-              background: "#D9D9D9",
+              background: "rgba(243, 245, 246, 1)",
               paddingY: 2,
               px: 3,
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
               Modifications
             </Typography>
           </Box>
+          <Divider sx={{ borderColor: "rgba(208, 213, 221, 1)" }} />
           <Box
             sx={{
               margin: "auto",
 
               paddingX: { sm: 2, xs: 0 },
-              paddingY: 4,
-              rowGap: 4,
+              paddingY: 0,
+              // rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
               paddingTop: 2,
-              marginBottom: 4.6,
+              marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
-            <Box sx={{ width: { sm: "100%", xs: "90%" }, margin: "auto" }}>
+            <Box
+              sx={{
+                width: { sm: "100%", xs: "90%" },
+                margin: "auto",
+                display: { sm: "none", xs: "block" },
+              }}
+            >
               <Typography
                 sx={{
                   fontSize: { sm: "18px", xs: "18px" },
                   color: { sm: "black", xs: "white" },
                   paddingBottom: 1,
-                  display: { sm: "none", xs: "block" },
                 }}
               >
                 Summary
@@ -389,8 +402,8 @@ export const MirrorReview = ({ setStep }) => {
               sx={{
                 display: "flex",
                 width: { sm: "auto", xs: "94%" },
-                paddingBottom: { sm: 4, xs: 0 },
-                paddingX: { sm: 2, xs: 0 },
+                paddingBottom: { sm: 0, xs: 0 },
+                // paddingX: { sm: 2, xs: 0 },
                 // background: { sm: "rgba(217, 217, 217, 0.3)" },
                 maxHeight: 1400,
                 borderRadius: "8px",
@@ -412,7 +425,7 @@ export const MirrorReview = ({ setStep }) => {
                     sx={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: 1,
+                      // gap: 1,
                     }}
                   >
                     <Box
@@ -474,7 +487,7 @@ export const MirrorReview = ({ setStep }) => {
                           menuOptions={hardwaresList?.hardwares}
                           title={"Hardwares"}
                           type={mirrorHardwareTypes.HARDWARES}
-                        // currentItem={selectedContent.hardwares.item}
+                          // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -494,7 +507,7 @@ export const MirrorReview = ({ setStep }) => {
                           menuOptions={hardwaresList?.glassAddons}
                           title={"Glass Addons"}
                           type={mirrorHardwareTypes.GLASSADDONS}
-                        // currentItem={selectedContent.hardwares.item}
+                          // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -602,12 +615,20 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
+
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Holes</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Holes
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -619,13 +640,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -719,12 +735,20 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
+
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Light Holes</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Light Holes
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -736,13 +760,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -778,12 +797,20 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
+
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Notch</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Notch
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -795,13 +822,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -836,12 +858,19 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Single Outlet Cutout</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Single Outlet Cutout
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -853,13 +882,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -894,12 +918,20 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
+
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Double Outlet Cutout</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Double Outlet Cutout
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -911,13 +943,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -952,12 +979,19 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Triple Outlet Cutout</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Triple Outlet Cutout
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -969,13 +1003,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -1010,12 +1039,19 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Quad Outlet Cutout</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Quad Outlet Cutout
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -1027,13 +1063,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -1242,12 +1273,20 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
+
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>People:</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        People:
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -1259,13 +1298,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -1300,12 +1334,19 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-                        paddingLeft: 3,
-                        paddingBottom: 1,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography>Hours:</Typography>
+                      <Typography
+                        sx={{
+                          padding: "16px 0px 16px 16px",
+                          fontSize: "14px",
+                          fontWeight: 500,
+                          lineHeight: "16.41px",
+                        }}
+                      >
+                        Hours:
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -1317,13 +1358,8 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         <TextField
                           type="number"
+                          className="custom-textfield"
                           InputProps={{
-                            style: {
-                              color: "black",
-                              borderRadius: 10,
-                              border: "1px solid #cccccc",
-                              backgroundColor: "white",
-                            },
                             inputProps: { min: 0 },
                           }}
                           InputLabelProps={{
@@ -1350,36 +1386,41 @@ export const MirrorReview = ({ setStep }) => {
                       </Box>
                     </Box>
                     {/* additional Fields */}
-                    <Typography
+                    {/* <Typography
                       variant="h5"
                       sx={{ color: { md: "black", xs: "white" } }}
                     >
                       Additonal Fields
-                    </Typography>
-                    {addedFields &&
-                      addedFields.map((item, index) => (
-                        <SingleField
-                          item={item}
-                          index={index}
-                          estimateState={currentEstimateState}
-                          addedFields={addedFields}
-                          handleModify={handleAdditionalFieldModify}
-                        />
-                      ))}
-                    <Button
-                      onClick={handleAddField}
-                      sx={{
-                        width: "fit-content",
-                        textTransform: "capitalize",
-                        backgroundColor: "#8477da",
-                        "&:hover": {
-                          backgroundColor: "#8477da",
-                        },
-                      }}
-                      variant="contained"
-                    >
-                      Add Additional Field
-                    </Button>
+                    </Typography> */}
+                    <Box sx={{ py: 2 }}>
+                      {addedFields &&
+                        addedFields.map((item, index) => (
+                          <SingleField
+                            item={item}
+                            index={index}
+                            estimateState={currentEstimateState}
+                            addedFields={addedFields}
+                            handleModify={handleAdditionalFieldModify}
+                          />
+                        ))}
+                      <Button
+                        onClick={handleAddField}
+                        sx={{
+                          width: "fit-content",
+                          textTransform: "capitalize",
+                          color: "#8477DA",
+                          // backgroundColor: "#8477da",
+                          "&:hover": {
+                            // backgroundColor: "#8477da",
+                          },
+                          mt: 2,
+                        }}
+                        variant="text"
+                        startIcon={<Add />}
+                      >
+                        Add Additional Field
+                      </Button>
+                    </Box>
                     {/** additional fields end */}
                   </Box>
                 </Box>
@@ -1401,7 +1442,7 @@ export const MirrorReview = ({ setStep }) => {
                     left: 0,
                     right: 0,
                     bottom: 0,
-                    background: "#08061B"
+                    background: "#08061B",
                   }}
                 >
                   <Box>
@@ -1428,7 +1469,7 @@ export const MirrorReview = ({ setStep }) => {
                       variant="contained"
                       onClick={() => {
                         // setSummaryState(false);
-                        setStep(2)
+                        setStep(2);
                       }}
                       sx={{
                         backgroundColor: "#8477da",
@@ -1466,8 +1507,8 @@ export const MirrorReview = ({ setStep }) => {
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
-                  width: { sm: "96%" },
-                  paddingX: 2,
+                  width: { sm: "100%" },
+                  paddingX: { sm: 0, xs: 2 },
                 }}
               >
                 {/* <Box
@@ -1504,7 +1545,7 @@ export const MirrorReview = ({ setStep }) => {
                 </Box> */}
                 <Box
                   sx={{
-                    width: '100%',
+                    width: "100%",
                     // {
                     //   sm:
                     //     currentEstimateState === quoteState.EDIT

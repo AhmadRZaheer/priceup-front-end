@@ -287,14 +287,15 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
           <Box
             sx={{
               background: " rgba(243, 245, 246, 1)",
-              paddingY: 2,
+              paddingY: 1.3,
               px: 3,
               display: { sm: "flex", xs: "none" },
               borderBottom: "1px solid rgba(212, 219, 223, 1)",
               justifyContent: "space-between",
+              alignItems: "center"
             }}
           >
-            <Typography sx={{ fontSize: "20px", fontWeight: "bold" }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
               Layout & Measurement
             </Typography>
             <Button
@@ -380,7 +381,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
           </Box>
           <Box
             sx={{
-              height: "auto",
+              // height: "auto",
               // borderRadius: { sm: "12px", xs: 0 },
               // boxShadow:
               //   "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
