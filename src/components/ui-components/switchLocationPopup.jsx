@@ -100,8 +100,8 @@ const SwitchLocationPopup = ({
         </IconButton>
       )}
 
-      <Box sx={{ position:'relative' }}>
-      {/* <CustomInputField
+      <Box sx={{ position:'relative',m:'20px 20px 10px 20px' }}>
+      <CustomInputField
             id="input-with-icon-textfield"
             placeholder="Search by Location Name"
             fullWidth
@@ -114,8 +114,8 @@ const SwitchLocationPopup = ({
             }}
             value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          /> */}
-        <input
+          />
+        {/* <input
           type="text"
           placeholder="Search Admin Names"
           style={{
@@ -134,7 +134,7 @@ const SwitchLocationPopup = ({
         />
         <span style={{ position: "absolute", left: "28px", top: "30px" }}>
           <Search sx={{ color: "#8477DA" }} />
-        </span>
+        </span> */}
       </Box>
       <div
         style={{
