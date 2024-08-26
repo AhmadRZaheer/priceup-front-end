@@ -103,7 +103,7 @@ export default function Projects() {
             sx={{
               backgroundColor: "#8477DA",
               height: "44px",
-              width: { sm: "214px", xs: "194px" },
+              width: { sm: "219px", xs: "197px" },
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
