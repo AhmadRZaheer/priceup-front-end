@@ -263,11 +263,11 @@ export default function Estimates() {
           <Box
             sx={{
               display: { sm: "flex", xs: "block" },
-              gap: 2,
+              gap: 1,
               pt: { sm: 0, xs: 1 },
             }}
           >
-            <Box sx={{ display: "flex", gap: 2, mr: { sm: 0, xs: "26px" } }}>
+            <Box sx={{ display: "flex", gap: 1, mr: { sm: 0, xs: "26px" } }}>
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
@@ -312,32 +312,43 @@ export default function Estimates() {
                 />
               </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
+            <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
               <FormControl sx={{ width: "152px" }} size="small">
-                <InputLabel
-                  id="demo-select-small-label"
-                  className="input-label"
-                >
-                  Status
-                </InputLabel>
                 <Select
                   value={status}
-                  labelId="demo-select-small-label"
+                  displayEmpty
                   id="demo-select-small"
-                  label="Status"
                   size="small"
                   className="custom-textfield"
                   sx={{ height: "40px" }}
                   onChange={(e) => setStatus(e.target.value)}
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <p>Status</p>;
+                    }
+
+                    return (
+                      <StatusChip
+                        variant={selected}
+                        sx={{ padding: 0, px: 2 }}
+                      />
+                    );
+                  }}
                 >
                   <MenuItem value={"pending"}>
-                    <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                    <StatusChip
+                      variant={"pending"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
                   </MenuItem>
                   <MenuItem value={"voided"}>
-                    <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
                   </MenuItem>
                   <MenuItem value={"approved"}>
-                    <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                    <StatusChip
+                      variant={"approved"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
                   </MenuItem>
                 </Select>
               </FormControl>

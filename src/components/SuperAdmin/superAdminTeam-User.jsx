@@ -33,7 +33,10 @@ import { userRoles } from "@/utilities/constants";
 import Pagination from "../Pagination";
 import CustomInputField from "../ui-components/CustomInput";
 import WidgetCard from "../ui-components/widgetCard";
-import { useDeleteDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useDeleteDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
 import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { debounce } from "lodash";
@@ -43,15 +46,15 @@ import { getAssignedLocationName } from "@/utilities/users";
 const getUserRoleText = (role) => {
   switch (role) {
     case userRoles.SUPER_ADMIN:
-      return 'Super Admin';
+      return "Super Admin";
     case userRoles.STAFF:
-      return 'Staff';
+      return "Staff";
     case userRoles.CUSTOM_ADMIN:
-      return 'Admin';
+      return "Admin";
     default:
-      return '---';
+      return "---";
   }
-}
+};
 
 const routePrefix = `${backendURL}/admins`;
 
@@ -77,22 +80,24 @@ const SuperAdminTeam = () => {
       url += `&role=${role}`;
     }
     if (selectedDate) {
-      url += `&date=${selectedDate}`
+      url += `&date=${selectedDate}`;
     }
     return url;
-  }, [page, itemsPerPage, search, status, role, selectedDate])
+  }, [page, itemsPerPage, search, status, role, selectedDate]);
 
   const {
     data: usersList,
     refetch: refetchUsersList,
     isFetching: usersListFetching,
-    isLoading
+    isLoading,
   } = useFetchAllDocuments(fetchAllUsersUrl);
-  const { mutateAsync: deleteUser, isSuccess: deletedSuccessfully } = useDeleteDocument();
-  const { data: locations, refetch: refetchLocationsList } = useFetchAllDocuments(`${backendURL}/companies`);
+  const { mutateAsync: deleteUser, isSuccess: deletedSuccessfully } =
+    useDeleteDocument();
+  const { data: locations, refetch: refetchLocationsList } =
+    useFetchAllDocuments(`${backendURL}/companies`);
   const locationsList = useMemo(() => {
     return locations ? locations : [];
-  }, [locations])
+  }, [locations]);
 
   const filteredData = useMemo(() => {
     if (usersList && usersList?.users?.length) {
@@ -105,7 +110,11 @@ const SuperAdminTeam = () => {
   const handleDateChange = (newDate) => {
     if (newDate) {
       // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);
@@ -119,22 +128,27 @@ const SuperAdminTeam = () => {
     setSelectedDate(null);
   };
 
-  const handleOpenDeleteModal = (record) => (setRecordToModify(record), setOpenDeleteModal(true));
+  const handleOpenDeleteModal = (record) => (
+    setRecordToModify(record), setOpenDeleteModal(true)
+  );
   const handleCloseDeleteModal = () => {
     setOpenDeleteModal(false);
   };
 
   const handleDeleteUser = async () => {
     try {
-      await deleteUser({ apiRoute: `${routePrefix}/user/${recordToModify?._id}` });
+      await deleteUser({
+        apiRoute: `${routePrefix}/user/${recordToModify?._id}`,
+      });
       handleCloseDeleteModal();
-    }
-    catch (err) {
-      console.log(err, 'error while deleting');
+    } catch (err) {
+      console.log(err, "error while deleting");
     }
   };
 
-  const handleOpenModifyModal = (record) => (setRecordToModify(record), setOpenModifyModal(true));
+  const handleOpenModifyModal = (record) => (
+    setRecordToModify(record), setOpenModifyModal(true)
+  );
   const handleCloseModifyModal = () => {
     setOpenModifyModal(false);
   };
@@ -189,7 +203,11 @@ const SuperAdminTeam = () => {
               }}
               className="new-table-text"
             >
-              {[userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(params.row?.role) ? getAssignedLocationName(params.row, locationsList) : '---'}
+              {[userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(
+                params.row?.role
+              )
+                ? getAssignedLocationName(params.row, locationsList)
+                : "---"}
             </Typography>
           </div>
         );
@@ -203,7 +221,9 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <p className="new-table-text">{getUserRoleText(params.row?.role)}</p>
+            <p className="new-table-text">
+              {getUserRoleText(params.row?.role)}
+            </p>
           </>
         );
       },
@@ -313,10 +333,26 @@ const SuperAdminTeam = () => {
         </Box>
         <Grid container sx={{ px: 3 }} spacing={2}>
           {[
-            { title: "Total Users", text: usersList?.totalUserCount ?? 0, variant: "blue" },
-            { title: "Users", text: usersList?.staffCount ?? 0, variant: "red" },
-            { title: "Admins", text: usersList?.customUserCount ?? 0, variant: "green" },
-            { title: "Super-Admins", text: usersList?.adminCount ?? 0, variant: "purple" },
+            {
+              title: "Total Users",
+              text: usersList?.totalUserCount ?? 0,
+              variant: "blue",
+            },
+            {
+              title: "Users",
+              text: usersList?.staffCount ?? 0,
+              variant: "red",
+            },
+            {
+              title: "Admins",
+              text: usersList?.customUserCount ?? 0,
+              variant: "green",
+            },
+            {
+              title: "Super-Admins",
+              text: usersList?.adminCount ?? 0,
+              variant: "purple",
+            },
           ].map((item) => (
             <Grid item lg={3} md={4} xs={6}>
               <WidgetCard
@@ -359,23 +395,26 @@ const SuperAdminTeam = () => {
               ),
             }}
           /> */}
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <CustomInputField
-              id="input-with-icon-textfield"
-              placeholder="Search by User Name"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <img src={icon} alt="search input" />
-                  </InputAdornment>
-                ),
-              }}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Box>
+              <CustomInputField
+                id="input-with-icon-textfield"
+                placeholder="Search by User Name"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <img src={icon} alt="search input" />
+                    </InputAdornment>
+                  ),
+                }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </Box>
             <Box>
               <DesktopDatePicker
                 label="Date Added"
+                // placeholder="Date Added"
                 inputFormat="MM/DD/YYYY"
                 className="custom-textfield"
                 // maxDate={new Date()} // Sets the maximum date to the current date
@@ -384,7 +423,7 @@ const SuperAdminTeam = () => {
                 sx={{
                   "& .MuiInputBase-root": {
                     height: 40,
-                    width: 150,
+                    width: 152,
                     backgroundColor: "white", // Adjust height
                   },
                   "& .MuiInputBase-input": {
@@ -396,94 +435,139 @@ const SuperAdminTeam = () => {
                     top: "-6px", // Adjust label size
                   },
                 }}
-                renderInput={(params) => <TextField {...params} size="small" />}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    placeholder="Date Added"
+                    InputProps={{
+                      ...params.InputProps,
+                      placeholder: "Date Added", // Add the placeholder here
+                  }}u
+                  />
+                )}
               />
             </Box>
-            <FormControl
-              sx={{ width: "152px" }}
-              size="small"
-              className="custom-textfield"
-            >
-              <InputLabel id="demo-select-small-label" className="input-label">
-                Role
-              </InputLabel>
-              <Select
-                placeholder="Role"
-                value={role}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                label="Status"
+            <Box>
+              <FormControl
+                sx={{ width: "166px" }}
                 size="small"
-                sx={{ height: "40px" }}
-                onChange={(event) => setRole(event.target.value)}
+                className="custom-textfield"
               >
-                <MenuItem value={userRoles.SUPER_ADMIN}>
-                  {" "}
-                  <Typography
-                    className=" status-active"
-                    sx={{ padding: 0, px: 2, width: "auto" }}
-                  >
-                    Super Admin
-                  </Typography>
-                </MenuItem>
-                <MenuItem value={userRoles.CUSTOM_ADMIN}>
-                  {" "}
-                  <Typography
-                    className=" status-active"
-                    sx={{ padding: 0, px: 2, width: "auto" }}
-                  >
-                    Admin
-                  </Typography>
-                </MenuItem>
-                <MenuItem value={userRoles.STAFF}>
-                  {" "}
-                  <Typography
-                    className=" status-active"
-                    sx={{ padding: 0, px: 2, width: "auto" }}
-                  >
-                    Staff
-                  </Typography>
-                </MenuItem>
-              </Select>
-            </FormControl>
-            <FormControl
-              sx={{ width: "152px" }}
-              size="small"
-              className="custom-textfield"
-            >
-              <InputLabel id="demo-select-small-label" className="input-label">
-                Status
-              </InputLabel>
-              <Select
-                placeholder="Status"
-                value={status}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                label="Status"
+                <Select
+                  placeholder="Role"
+                  value={role}
+                  displayEmpty
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <p>Role</p>;
+                    }
+                    return (
+                      <Typography
+                        className=" status-active"
+                        sx={{ padding: 0, px: 2, width: "fit-content" }}
+                      >
+                        {userRoles.SUPER_ADMIN === selected
+                          ? " Super Admin"
+                          : userRoles.CUSTOM_ADMIN === selected
+                          ? " Admin"
+                          : userRoles.STAFF === selected
+                          ? " Staff"
+                          : ""}
+                      </Typography>
+                    );
+                  }}
+                  size="small"
+                  sx={{ height: "40px" }}
+                  onChange={(event) => setRole(event.target.value)}
+                >
+                  <MenuItem value={userRoles.SUPER_ADMIN}>
+                    {" "}
+                    <Typography
+                      className=" status-active"
+                      sx={{ padding: 0, px: 2, width: "auto" }}
+                    >
+                      Super Admin
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem value={userRoles.CUSTOM_ADMIN}>
+                    {" "}
+                    <Typography
+                      className=" status-active"
+                      sx={{ padding: 0, px: 2, width: "auto" }}
+                    >
+                      Admin
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem value={userRoles.STAFF}>
+                    {" "}
+                    <Typography
+                      className=" status-active"
+                      sx={{ padding: 0, px: 2, width: "auto" }}
+                    >
+                      Staff
+                    </Typography>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box>
+              <FormControl
+                sx={{ width: "152px" }}
                 size="small"
-                sx={{ height: "40px" }}
-                onChange={(event) => setStatus(event.target.value)}
+                className="custom-textfield"
               >
-                <MenuItem value={'active'}>
-                  {" "}
-                  <Typography
-                    className=" status-active"
-                    sx={{ padding: 0, px: 2, width: "44px" }}
-                  >
-                    Active
-                  </Typography>
-                </MenuItem>
-                <MenuItem value={'inactive'}>
-                  {" "}
-                  <Typography
-                    className=" status-inActive"
-                    sx={{ padding: 0, px: 2, width: "44px" }}
-                  >
-                    Inactive
-                  </Typography>
-                </MenuItem>
-              </Select>
-            </FormControl>
+                <Select
+                  value={status}
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  size="small"
+                  displayEmpty
+                  sx={{ height: "40px" }}
+                  onChange={(event) => setStatus(event.target.value)}
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <p>Status</p>;
+                    }
+
+                    return selected ? (
+                      <Typography
+                        className="status-active"
+                        sx={{ padding: 0, px: 2, width: "fit-content" }}
+                      >
+                        Active
+                      </Typography>
+                    ) : (
+                      <Typography
+                        className="status-inActive"
+                        sx={{ padding: 0, px: 2, width: "fit-content" }}
+                      >
+                        Inactive
+                      </Typography>
+                    );
+                  }}
+                >
+                  <MenuItem value={"active"}>
+                    {" "}
+                    <Typography
+                      className=" status-active"
+                      sx={{ padding: 0, px: 2, width: "44px" }}
+                    >
+                      Active
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem value={"inactive"}>
+                    {" "}
+                    <Typography
+                      className=" status-inActive"
+                      sx={{ padding: 0, px: 2, width: "fit-content" }}
+                    >
+                      Inactive
+                    </Typography>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
             <Button variant="text" onClick={handleResetFilter}>
               Clear Filter
             </Button>
@@ -545,7 +629,6 @@ const SuperAdminTeam = () => {
                   setPage={setPage}
                 />
               </Box>
-
             </div>
           )}
         </Box>
