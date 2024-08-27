@@ -14,33 +14,8 @@ const modification = [
   // Add other modifications as necessary
 ];
 
-const ViewDrawer = ({ state, toggleDrawer }) => {
+const ViewDrawer = ({ state, toggleDrawer, data }) => {
   const navigate = useNavigate();
-  const defaultId = useSelector(getDefaultId);
-
-  const {
-    data: singleDefault,
-    isFetching: isfetchingDefaultSingle,
-    refetch,
-  } = useFetchSingleDefault(defaultId);
-
-  const LayoutData = singleDefault?.layoutData;
-
-  const ListData = useMemo(() => {
-    if (singleDefault && LayoutData) {
-      const hardwareFinish = singleDefault.listData.hardwareFinishes.find(
-        (item) => item._id === LayoutData.settings.hardwareFinishes
-      );
-
-      console.log(hardwareFinish, "hardwareFinishes");
-      return { hardwareFinishes: hardwareFinish };
-    }
-    return { hardwareFinishes: [] };
-  }, [singleDefault, LayoutData]);
-
-  useEffect(() => {
-    refetch();
-  }, []);
 
   return (
     <SwipeableDrawer
@@ -59,65 +34,214 @@ const ViewDrawer = ({ state, toggleDrawer }) => {
         },
       }}
     >
-      <Box
-        sx={{ pl: 2, gap: "20px" }}
-        role="presentation"
-        onKeyDown={toggleDrawer(false)}
-      >
-        <Box sx={{ display: "flex", gap: "10px" }}>
-          <img
-            src={
-              LayoutData?.image ? `${backendURL}/${LayoutData.image}` : image
-            }
-            alt={LayoutData?.name || "Placeholder"}
-            style={{ width: "60px", height: "79px" }}
-          />
-          <p className="cardTitle">{LayoutData?.name}</p>
-        </Box>
-
-        <Grid
-          container
-          // spacing={2}
-          gap={2}
-          sx={{ py: 1, overflowY: "auto", height: "calc(100vh - 265px)" }}
-        >
-          <Grid item xs={6} className="cardTitleContainer" sx={{ py: 1 }}>
-            <Typography className="drawerTitle">Hardware Finishes</Typography>
-            <Typography className="drawerBoldTitle">
-              {ListData.hardwareFinishes.name}
-            </Typography>
-          </Grid>
-        </Grid>
-
+      {data && (
         <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            paddingBottom: 5,
-            gap: "12px",
-          }}
+          sx={{ pl: 2, gap: "20px" }}
+          role="presentation"
+          onKeyDown={toggleDrawer(false)}
         >
-          <Button
-            onClick={toggleDrawer(false)}
-            variant="text"
-            className="drawerBtn"
-            sx={{ border: "1px solid #8477DA", color: "#8477DA" }}
-          >
-            Close
-          </Button>
-          <Button
-            onClick={() => navigate("/layouts/edit")}
-            variant="contained"
-            className="drawerBtn"
+          <Box sx={{ display: "flex", gap: "10px" }}>
+            <img
+              src={data?.image ? `${backendURL}/${data.image}` : image}
+              alt={data?.name || "Placeholder"}
+              style={{ width: "60px", height: "79px" }}
+            />
+            <p className="cardTitle">{data?.name}</p>
+          </Box>
+          {data && (
+            <Box sx={{ overflowY: "auto", height: "calc(100vh - 265px)" }}>
+              <Grid
+                container
+                // spacing={2}
+                gap={2}
+                sx={{
+                  py: 1,
+
+                  m: 0,
+                  width: "100%",
+                }}
+              >
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">
+                    Hardware Finishes
+                  </Typography>
+                  <Typography className="drawerBoldTitle">
+                    {data.settings.hardwareFinishes.name}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">Handles</Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${data.settings?.handles?.handleType?.name} (${data.settings?.handles?.count})`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">Glass Type</Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${data.settings?.glassType?.type?.name} (${data.settings?.glassType?.thickness})`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">Hinges</Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${data.settings?.hinges?.hingesType?.name ?? "------"} (${
+                      data.settings?.hinges?.count
+                    })`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">
+                    Heavy Duty Option{" "}
+                  </Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${
+                      data.settings?.heavyDutyOption?.heavyDutyType?.name ??
+                      "------"
+                    } (${data.settings?.heavyDutyOption?.height})`}
+                  </Typography>
+                </Grid>
+                {data.settings?.slidingDoorSystem?.type?.name && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">
+                      sliding Door System{" "}
+                    </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${
+                        data.settings?.slidingDoorSystem?.type?.name ?? "------"
+                      } (${data.settings?.slidingDoorSystem?.count})`}
+                    </Typography>
+                  </Grid>
+                )}
+                {data.settings?.outages && data.settings?.outages !== 0 && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">Outages </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.outages ?? "------"} `}
+                    </Typography>
+                  </Grid>
+                )}
+                {data.settings?.transom && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">
+                      Transom (if full height)
+                    </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.transom ?? "------"}`}
+                    </Typography>
+                  </Grid>
+                )}
+                {data.settings?.header?.name && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">
+                      Header (if not full height)
+                    </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.header?.name ?? "------"}`}
+                    </Typography>
+                  </Grid>
+                )}
+
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">People</Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${data.settings?.other?.people}`}
+                  </Typography>
+                </Grid>
+                <Grid
+                  item
+                  xs={5.5}
+                  className="cardTitleContainer"
+                  sx={{ py: 1, height: "fit-content" }}
+                >
+                  <Typography className="drawerTitle">Hours</Typography>
+                  <Typography className="drawerBoldTitle">
+                    {`${data.settings?.other?.hours}`}
+                  </Typography>
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+
+          <Box
             sx={{
-              background: "#8477DA",
-              ":hover": { background: "#8477DA" },
+              display: "flex",
+              justifyContent: "space-between",
+              paddingBottom: 5,
+              gap: "12px",
             }}
           >
-            Edit
-          </Button>
+            <Button
+              onClick={toggleDrawer(false)}
+              variant="text"
+              className="drawerBtn"
+              sx={{ border: "1px solid #8477DA", color: "#8477DA" }}
+            >
+              Close
+            </Button>
+            <Button
+              onClick={() => navigate("/layouts/edit")}
+              variant="contained"
+              className="drawerBtn"
+              sx={{
+                background: "#8477DA",
+                ":hover": { background: "#8477DA" },
+              }}
+            >
+              Edit
+            </Button>
+          </Box>
         </Box>
-      </Box>
+      )}
     </SwipeableDrawer>
   );
 };

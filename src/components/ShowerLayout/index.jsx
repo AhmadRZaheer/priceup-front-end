@@ -5,21 +5,6 @@ import { Add } from "@mui/icons-material";
 import SingleShowerCard from "./SingleShowerCard";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 
-const modification = [
-  { id: 1, name: "Hardware Finishes" },
-  { id: 2, name: "Handles" },
-  { id: 3, name: "Pivot Hinge Option" },
-  { id: 4, name: "Hinges" },
-  { id: 5, name: "Glass Type" },
-  { id: 6, name: "Heavy Duty Option" },
-  { id: 7, name: "Channel or Clamps" },
-  { id: 8, name: "Heavy Pivot Option" },
-  { id: 9, name: "Wall Clamps (Mounting)" },
-  { id: 10, name: "Sleeve Over (Mounting)" },
-  { id: 11, name: "Glass to Glass (Mounting)" },
-  { id: 12, name: "Wall Clamps (Corner)" },
-];
-
 const ShowerLayout = () => {
   const {
     data: ShowsLayouts,
@@ -30,7 +15,6 @@ const ShowerLayout = () => {
   useEffect(() => {
     refetch();
   }, [refetch]);
-  console.log(ShowsLayouts, "ShowsLayouts");
   return (
     <Box sx={{ px: "34px", py: 3 }}>
       <Box

@@ -4,7 +4,7 @@ import MountingItem from "./mountingItem";
 import { hardwareTypes, thicknessTypes } from "@/utilities/constants";
 import MountingList from "./mountingList";
 import { AddCircle, RemoveCircle } from "@mui/icons-material";
-const { MenuItem, Box, Typography } = require("@mui/material");
+const { MenuItem, Box, Typography, Divider } = require("@mui/material");
 
 const MountingSection = ({
   mounting,
@@ -65,105 +65,118 @@ const MountingSection = ({
     mounting?.cornerSleeveOver?.sleeveOverType ||
     mounting?.cornerGlassToGlass?.glassToGlassType;
   return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          borderRadius: 2,
-          width: "fit-content",
-          border: "2px solid #8477DA",
-          marginBottom: 1,
-        }}
-      >
-        {["Channel", "Clamps"].map((item, index) => (
-          /** Mounting Header */
-          <MenuItem
-            sx={{ p: 0.1 }}
-            key={index}
-            onClick={() => handleActiveMounting(item)}
-          >
-            <Box
-              sx={{
-                width: "200px",
-                borderTopLeftRadius: index === 0 ? "12px" : "0px",
-                borderBottomLeftRadius: index === 0 ? "12px" : "0px",
-                borderTopRightRadius: index === 0 ? "0px" : "12px",
-                borderBottomRightRadius: index === 0 ? "0px" : "12px",
-                color: item === activeMounting ? "white" : "#101828",
-                bgcolor: item === activeMounting ? "#8477DA" : "",
-                boxShadow:
-                  "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                padding: "10px",
-                display: "flex",
-                gap: 0,
-                alignItems: "center",
-                width: { md: "100%", xs: "95%" },
-                justifyContent: "space-between",
-              }}
-            >
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <img width={"25px"} height={"25px"} src={Logo} alt="Selected" />
-                <Typography>{item}</Typography>
-              </Box>
-            </Box>
-          </MenuItem>
-        ))}
-      </Box>
-      {activeMounting === "Channel" &&
-        mountingChannelsAccordingToGlassThickness?.map((item) => (
-          <MountingItem
-            item={item}
-            type={hardwareTypes.CHANNEL}
-            handleSetMounting={handleSetMounting}
-            selectedItem={mounting?.mountingChannel}
-          />
-        ))}
-      {activeMounting === "Clamps" && (
+    <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
+      <Box sx={{ width: "50%" }}>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "column",
-            gap: 1,
-            alignItems: "flex-start",
+            borderRadius: "8px",
+            width: "fit-content",
+            border: "2px solid #8477DA",
+            marginBottom: 1,
           }}
         >
-          {/** Wall Clamp */}
-          <MountingList
-            type={hardwareTypes.WALLCLAMP}
-            mounting={mounting}
-            handleSetMounting={handleSetMounting}
-            list={list}
-          />
-          {/** Sleeve Over */}
-          <MountingList
-            type={hardwareTypes.SLEEVEOVER}
-            mounting={mounting}
-            handleSetMounting={handleSetMounting}
-            list={list}
-          />
-          {/** Glass To Glass */}
-          <MountingList
-            type={hardwareTypes.GLASSTOGLASS}
-            mounting={mounting}
-            handleSetMounting={handleSetMounting}
-            list={list}
-          />
+          {["Channel", "Clamps"].map((item, index) => (
+            /** Mounting Header */
+            <MenuItem
+              sx={{ p: 0.1 }}
+              key={index}
+              onClick={() => handleActiveMounting(item)}
+            >
+              <Box
+                sx={{
+                  width: "200px",
+                  borderTopLeftRadius: index === 0 ? "8px" : "0px",
+                  borderBottomLeftRadius: index === 0 ? "8px" : "0px",
+                  borderTopRightRadius: index === 0 ? "0px" : "8px",
+                  borderBottomRightRadius: index === 0 ? "0px" : "8px",
+                  color: item === activeMounting ? "white" : "#101828",
+                  bgcolor: item === activeMounting ? "#8477DA" : "",
+                  boxShadow:
+                    "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                  padding: "10px",
+                  display: "flex",
+                  gap: 0,
+                  alignItems: "center",
+                  width: { md: "100%", xs: "95%" },
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <img
+                    width={"25px"}
+                    height={"25px"}
+                    src={Logo}
+                    alt="Selected"
+                  />
+                  <Typography>{item}</Typography>
+                </Box>
+              </Box>
+            </MenuItem>
+          ))}
         </Box>
-      )}
+        {activeMounting === "Channel" &&
+          mountingChannelsAccordingToGlassThickness?.map((item) => (
+            <MountingItem
+              item={item}
+              type={hardwareTypes.CHANNEL}
+              handleSetMounting={handleSetMounting}
+              selectedItem={mounting?.mountingChannel}
+            />
+          ))}
+        {activeMounting === "Clamps" && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 1,
+              alignItems: "flex-start",
+            }}
+          >
+            {/** Wall Clamp */}
+            <MountingList
+              type={hardwareTypes.WALLCLAMP}
+              mounting={mounting}
+              handleSetMounting={handleSetMounting}
+              list={list}
+            />
+            {/** Sleeve Over */}
+            <MountingList
+              type={hardwareTypes.SLEEVEOVER}
+              mounting={mounting}
+              handleSetMounting={handleSetMounting}
+              list={list}
+            />
+            {/** Glass To Glass */}
+            <MountingList
+              type={hardwareTypes.GLASSTOGLASS}
+              mounting={mounting}
+              handleSetMounting={handleSetMounting}
+              list={list}
+            />
+          </Box>
+        )}
+      </Box>
+      <Divider
+        orientation="vertical"
+        variant="fullWidth"
+        flexItem
+        sx={{ borderColor: "#D4DBDF" }}
+      />
       <Box
         sx={{
           display: "flex",
           flexDirection: "column",
           gap: 1,
-          alignItems: "flex-start",
+          //   alignItems: "flex-start",
+          width: "50%",
         }}
       >
         <MenuItem
           sx={{
-            borderRadius: "12px",
+            borderRadius: "8px",
             padding: "5px",
             width: "fit-content",
-            mt: 1,
           }}
           key={"corner-clamp-button"}
           onClick={() => setShowCornerClamps(!showCornerClamps)}
@@ -171,7 +184,7 @@ const MountingSection = ({
           <Box
             sx={{
               width: "fit-content",
-              borderRadius: "12px",
+              borderRadius: "8px",
               background: cornerActive ? "#8477DA" : "#cccc",
               color: cornerActive ? "white" : "black",
               boxShadow:
@@ -240,7 +253,7 @@ const MountingSection = ({
           </Box>
         )}
       </Box>
-    </>
+    </Box>
   );
 };
 
