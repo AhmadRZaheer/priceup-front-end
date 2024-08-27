@@ -30,6 +30,7 @@ import { backendURL } from "@/utilities/common";
 import { useFormik } from "formik";
 import CustomInputMenu from "@/components/ui-components/CustomInputMenu";
 import CustomInputField from "@/components/ui-components/CustomInput";
+import MountingSection from "./MountingSection";
 
 const data = [
   { id: 1, name: "Pivot Hinge Option", status: true },
@@ -64,6 +65,26 @@ const EditShowerLayout = () => {
     isFetching: isfetchingDefaultSingle,
     refetch,
   } = useFetchSingleDefault(layout ?? defaultId);
+  const [mounting, setMounting] = useState(null);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+  useEffect(() => {
+    if (singleDefault) {
+      setMounting({
+        channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
+        mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
+        wallClamp: singleDefault?.layoutData?.settings?.wallClamp,
+        sleeveOver: singleDefault?.layoutData?.settings?.sleeveOver,
+        glassToGlass: singleDefault?.layoutData?.settings?.glassToGlass,
+        cornerWallClamp: singleDefault?.layoutData?.settings?.cornerWallClamp,
+        cornerSleeveOver: singleDefault?.layoutData?.settings?.cornerSleeveOver,
+        cornerGlassToGlass:
+          singleDefault?.layoutData?.settings?.cornerGlassToGlass,
+      });
+    }
+  }, [singleDefault]);
   const handleChangeLayout = (event) => {
     setLayout(event.target.value);
     navigate(`/layouts/edit/?id=${event.target.value}`);
@@ -703,33 +724,24 @@ const EditShowerLayout = () => {
                           gap: "10px",
                         }}
                       >
-                        <TextField
-                          select
-                          size="small"
-                          variant="outlined"
-                          name="channelOrClamps"
-                          style={{ width: "100%" }}
-                          value={formik.values.channelOrClamps}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                          className={"custom-textfield-purple"}
-                          sx={{
-                            "& .MuiOutlinedInput-root": {
-                              height: "40px",
-                            },
+                        <div
+                          style={{
+                            width: "250px",
+                            padding: "10px 10px 10px 10px",
+                            padding: 4,
                           }}
                         >
-                          {/* <MenuItem value="">Select Empty</MenuItem> */}
-                          {["Channel", "Clamps"].map((option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          ))}
-                        </TextField>
-                        {formik.touched.channelOrClamps &&
-                          formik.errors.channelOrClamps && (
-                            <div>{formik.errors.channelOrClamps}</div>
-                          )}
+                          Mounting
+                        </div>
+
+                        <MountingSection
+                          mounting={mounting}
+                          setMounting={setMounting}
+                          list={singleDefault?.listData}
+                          activeGlassThickness={
+                            formik.values.glassType.thickness
+                          }
+                        />
                       </Box>
                     </Box>
                   </Grid>
