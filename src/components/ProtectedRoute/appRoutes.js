@@ -88,7 +88,7 @@ const AppRoutes = () => {
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            </Route>
+          </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
             <Route path="category" element={<EstimateCategory />} />
@@ -106,10 +106,11 @@ const AppRoutes = () => {
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />
           <Route path="finishes" element={<Finishes />} />
-            
+
           <Route path="/layouts/">
             <Route index element={<Defaults />} />
             <Route path="edit" element={<EditLayout />} />
+            <Route path="edit/?id" element={<EditLayout />} />
           </Route>
           {/* <Route path="layouts" element={<Defaults />} /> */}
           <Route path="settings" element={<Settings />} />
@@ -141,7 +142,7 @@ const AppRoutes = () => {
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            </Route>
+          </Route>
           <Route path="/customers" element={<Customers />} />
           <Route path="/estimates/">
             <Route index element={<Estimates />} />

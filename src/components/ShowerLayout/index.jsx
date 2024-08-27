@@ -1,8 +1,9 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
-import React from "react";
+import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import "./style.scss";
 import { Add } from "@mui/icons-material";
 import SingleShowerCard from "./SingleShowerCard";
+import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 
 const modification = [
   { id: 1, name: "Hardware Finishes" },
@@ -20,8 +21,18 @@ const modification = [
 ];
 
 const ShowerLayout = () => {
+  const {
+    data: ShowsLayouts,
+    refetch,
+    isLoading: isLoadingShowsLayouts,
+  } = useFetchDataDefault();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+  console.log(ShowsLayouts, "ShowsLayouts");
   return (
-    <Box sx={{ px:'34px', py: 3 }}>
+    <Box sx={{ px: "34px", py: 3 }}>
       <Box
         sx={{
           display: "flex",
@@ -44,28 +55,38 @@ const ShowerLayout = () => {
               fontSize: 16,
               fontWeight: 600,
               lineHeight: "21.86px",
-              letterSpacing:'0.1px',
-              gap:'10px'
+              letterSpacing: "0.1px",
+              gap: "10px",
             }}
           >
             Custom Layout
-            <Add  sx={{width:'16px',height:'16px',color:'#FFFFFF'}} />
+            <Add sx={{ width: "16px", height: "16px", color: "#FFFFFF" }} />
           </Button>
-          
         </Box>
       </Box>
       <Grid
         container
-        sx={{
-          m: "0px !important",
-          gap: '21px',
-          // display: "flex",
-          // justifyContent: { md: "space-between", xs: "normal" },
-        }}
+        gap={"21px"}
+        sx={
+          {
+            // m: "0px !important",
+            // gap: '21px',
+            // display: "flex",
+            // justifyContent: { md: "space-between", xs: "normal" },
+          }
+        }
       >
-        {modification.map((data, index) => (
-          <SingleShowerCard key={index} data={data} />
-        ))}
+        {isLoadingShowsLayouts ? (
+          <Box>
+            <CircularProgress sx={{ color: "#8477DA" }} />
+          </Box>
+        ) : (
+          ShowsLayouts?.map((data, index) => (
+            <Grid item>
+              <SingleShowerCard key={index} data={data} />
+            </Grid>
+          ))
+        )}
       </Grid>
     </Box>
   );

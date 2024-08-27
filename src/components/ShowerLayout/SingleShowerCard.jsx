@@ -4,13 +4,19 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 import image from "../../Assets/dummy.png";
 import ViewDrawer from "./ViewDrawer";
 import { useNavigate } from "react-router-dom";
+import { backendURL } from "@/utilities/common";
+import { useDispatch } from "react-redux";
+import { setDefaultId } from "@/redux/defaultSlice";
 
 const SingleShowerCard = ({ data }) => {
+  const dispatch = useDispatch();
   const [viewLayout, setViewLayout] = React.useState(false);
   const toggleViewDrawer = (open) => (event) => {
     setViewLayout(open);
+    dispatch(setDefaultId(data._id));
   };
   const navigate = useNavigate();
+
   return (
     <>
       <Box
@@ -29,8 +35,8 @@ const SingleShowerCard = ({ data }) => {
       >
         <Box sx={{ display: "flex", gap: "10px" }}>
           <img
-            src={image}
-            alt="/"
+            src={`${backendURL}/${data.image}`}
+            alt={data.name}
             style={{ width: "59.99px", height: "79px" }}
           />
           <p className="cardTitle">{data.name}</p>
@@ -67,20 +73,33 @@ const SingleShowerCard = ({ data }) => {
           </Box>
         </Box>
         <Divider sx={{ borderColor: "#D0D5DD" }} />
-        <Box sx={{ display: "flex", justifyContent: "space-between",gap:'12px' }}>
+        <Box
+          sx={{ display: "flex", justifyContent: "space-between", gap: "12px" }}
+        >
           <Button
             onClick={toggleViewDrawer(true)}
             variant="text"
             className="cardBtn"
-            sx={{ border: "1px solid #8477DA", color: "#8477DA",width:'100%' }}
+            sx={{
+              border: "1px solid #8477DA",
+              color: "#8477DA",
+              width: "100%",
+            }}
           >
             View
           </Button>
           <Button
-            onClick={() => navigate("/layouts/edit")}
+            onClick={() => {
+              dispatch(setDefaultId(data._id));
+              navigate(`/layouts/edit/?id=${data._id}`);
+            }}
             variant="contained"
             className="cardBtn"
-            sx={{ background: "#8477DA", ":hover": { background: "#8477DA" },width:'100%' }}
+            sx={{
+              background: "#8477DA",
+              ":hover": { background: "#8477DA" },
+              width: "100%",
+            }}
           >
             Edit
           </Button>
