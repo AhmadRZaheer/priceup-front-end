@@ -34,6 +34,7 @@ import AddressSelect from "./AddressSelect";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
 import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
+import StatusChip from "@/components/common/StatusChip";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project Name is required"),
@@ -46,10 +47,12 @@ const ProjectInfoComponent = ({
   projectData = null,
 }) => {
   const decryptedToken = getDecryptedToken();
+  const [Status, setStatus] = useState(null);
   const creatorName =
     projectState === "create"
       ? decryptedToken?.name
       : projectData?.creatorData?.name;
+
   const createdDate = useMemo(() => {
     const todaysDate = new Date();
     if (projectState === "create") {
@@ -778,44 +781,66 @@ const ProjectInfoComponent = ({
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Estimates
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
-              <CustomInputField
-                id="input-with-icon-textfield"
-                placeholder="Search by User Name"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <img src={icon} alt="search input" />
-                    </InputAdornment>
-                  ),
-                }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+            <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
+              <Box>
+                <CustomInputField
+                  id="input-with-icon-textfield"
+                  placeholder="Search by User Name"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <img src={icon} alt="search input" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </Box>
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
                 // className="custom-textfield"
               >
-                <InputLabel
-                  id="demo-select-small-label"
-                  className="input-label"
-                >
-                  Status
-                </InputLabel>
                 <Select
-                  // value={age}
+                  value={Status}
                   className="custom-textfield"
-                  labelId="demo-select-small-label"
                   id="demo-select-small"
-                  label="Status"
                   size="small"
                   sx={{ height: "40px" }}
-                  // onChange={handleChange}
+                  displayEmpty
+                  onChange={(e) => setStatus(e.target.value)}
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <p>Status</p>;
+                    }
+
+                    return (
+                      <StatusChip
+                        variant={selected}
+                        sx={{ padding: 0, px: 2 }}
+                      />
+                    );
+                  }}
                 >
-                  <MenuItem value={"pending"}>Pending</MenuItem>
-                  <MenuItem value={"voided"}>Voided</MenuItem>
-                  <MenuItem value={"approved"}>Approved</MenuItem>
+                  <MenuItem value={"pending"}>
+                    {" "}
+                    <StatusChip
+                      variant={"pending"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={"voided"}>
+                    {" "}
+                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
+                  </MenuItem>
+                  <MenuItem value={"approved"}>
+                    {" "}
+                    <StatusChip
+                      variant={"approved"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
+                  </MenuItem>
                 </Select>
               </FormControl>
               <Button
@@ -887,11 +912,17 @@ const ProjectInfoComponent = ({
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
             <CustomTabPanel value={activeTabNumber} index={0}>
-              <ShowerEstimatesList projectId={projectData?._id} />
+              <ShowerEstimatesList
+                projectId={projectData?._id}
+                Status={Status}
+              />
             </CustomTabPanel>
             {/** Mirrors tab */}
             <CustomTabPanel value={activeTabNumber} index={1}>
-              <MirrorEstimatesList projectId={projectData?._id} />
+              <MirrorEstimatesList
+                projectId={projectData?._id}
+                Status={Status}
+              />
             </CustomTabPanel>
           </Box>
         </Box>
