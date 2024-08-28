@@ -264,7 +264,7 @@ const SuperAdminTable = () => {
           <Box>
             <CustomInputField
               id="input-with-icon-textfield"
-              placeholder="Search by User Name"
+              placeholder="Search"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -326,7 +326,7 @@ const SuperAdminTable = () => {
             </Select>
           </FormControl>
           <Box>
-            <Button onClick={handleClearFilter} variant="text" sx={{}}>
+            <Button onClick={handleClearFilter} variant="text" sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}>
               Clear Filter
             </Button>
           </Box>

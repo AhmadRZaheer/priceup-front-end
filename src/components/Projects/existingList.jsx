@@ -276,7 +276,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
         </Box>
       ) : filteredData?.length === 0 && !projectsListFetching ? (
         <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-          No Projects Found
+          No Project Found
         </Typography>
       ) : (
         <Box>

@@ -42,7 +42,7 @@ const StatusChip = ({ variant, sx }) => {
         // pr: { lg: 1.8, xs: 1 },
         // pb: 1,
         display: "grid",
-        gap: 1,
+        gap: '7px',
         width: "fit-content",
         ...sx,
       }}

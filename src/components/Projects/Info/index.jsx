@@ -174,8 +174,9 @@ const ProjectInfoComponent = ({
             sx={{
               fontSize: { lg: 24, md: 20 },
               fontWeight: 600,
-              color: "#5D6164",
+              color: "#000000",
               display: "flex",
+              lineHeight:'32.78px',
               gap: 1,
             }}
           >
@@ -186,9 +187,11 @@ const ProjectInfoComponent = ({
           </Typography>
           <Typography
             sx={{
-              color: "#606366",
+              color: "#212528",
               fontSize: { lg: 16, md: 14 },
-              fontWeight: 500,
+              fontWeight: 600,
+              lineHeight:'21.86px',
+              opacity:'70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -251,7 +254,7 @@ const ProjectInfoComponent = ({
         <Box
           sx={{
             // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-            border: "1px solid #D4DBDF",
+            // border: "1px solid #D4DBDF",
             padding: { md: 2, xs: 1 },
             background: "#FFFF",
           }}
@@ -320,7 +323,7 @@ const ProjectInfoComponent = ({
                               <InputAdornment
                                 position="end"
                                 sx={{ cursor: "pointer" }}
-                                onClick={() => {}}
+                                onClick={() => { }}
                               >
                                 <Close sx={{}} />
                               </InputAdornment>
@@ -649,7 +652,7 @@ const ProjectInfoComponent = ({
                               width: "100%",
                             }}
                             value={formik.values.customer}
-                            onChange={() => {}}
+                            onChange={() => { }}
                           />
                         </Box>
                         <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
@@ -785,7 +788,7 @@ const ProjectInfoComponent = ({
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search by User Name"
+                  placeholder="Search"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -800,7 +803,7 @@ const ProjectInfoComponent = ({
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
-                // className="custom-textfield"
+              // className="custom-textfield"
               >
                 <Select
                   value={Status}
@@ -812,7 +815,14 @@ const ProjectInfoComponent = ({
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <p>Status</p>;
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
                     }
 
                     return (
@@ -845,7 +855,7 @@ const ProjectInfoComponent = ({
               </FormControl>
               <Button
                 variant="text"
-                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" }}
+                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" ,p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
               >
                 Clear Filters
               </Button>
@@ -865,20 +875,27 @@ const ProjectInfoComponent = ({
             }}
           >
             {/** Tabs Switch */}
-            <Grid sx={{ width: "202px", px: 1, pb: 1 }}>
+            <Grid sx={{ px: 1, pb: 1 }}>
               <Tabs
                 value={activeTabNumber}
                 onChange={handleChange}
                 aria-label="basic tabs example"
                 sx={{
-                  border: "0.5px solid #D0D5DD",
+                  border: "1px solid #D0D5DD",
                   borderRadius: "6px",
-                  background: "#D0D5DD",
-                  //   p: 0.1,
+                  background: "#F3F5F6",
+                  width: "151px",
+                  minHeight:'40px',
+                  height:'40px',
+                  p: '2px',
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
                     borderRadius: "4px",
+                    p:'7px 12px',
+                    minWidth:'79px',
+                    height:'40px',
+                    minHeight:'36px'
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#8477DA",
@@ -887,22 +904,23 @@ const ProjectInfoComponent = ({
                 }}
               >
                 <Tab
+                className="categoryTab"
                   label="Showers"
                   sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#000000",
-                    textTransform: "capitalize",
+                    // fontSize: "14px",
+                    // fontWeight: 600,
+                    // color: "#000000",
+                    // textTransform: "capitalize",
+                    // minWidth:'70px',
+                    // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
                 />
                 <Tab
+                className="categoryTab"
                   label="Mirrors"
                   sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#000000",
-                    textTransform: "capitalize",
+                   
                   }}
                   {...a11yProps(1)}
                 />

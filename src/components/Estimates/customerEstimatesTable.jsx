@@ -212,7 +212,7 @@ export default function CustomerEstimatesTable({ open, close, quoteId }) {
               /> */}
             </Box>
           ) : (
-            <Typography>No estimates found.</Typography>
+            <Typography>No estimate found.</Typography>
           )}
           <Box sx={{ display: "flex", justifyContent: "end", width: "100%" }}>
             <Button

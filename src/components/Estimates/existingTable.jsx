@@ -326,7 +326,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
         </Box>
       ) : filteredData?.length === 0 && !estimatesListFetching ? (
         <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-          No Estimates Found
+          No Estimate Found
         </Typography>
       ) : (
         <Box>

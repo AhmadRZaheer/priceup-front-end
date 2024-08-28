@@ -194,7 +194,7 @@ const MirrorEstimatesList = ({ projectId, Status }) => {
             background: "#FFFF",
           }}
         >
-          No Estimates Found
+          No Estimate Found
         </Typography>
       ) : (
         <Box sx={{ background: "#FFFF", pb: 3 }}>

@@ -14,31 +14,52 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const style = {
     position: "absolute",
+    display: "flex",
+    flexDirection: "column",
     top: "50%",
     left: "50%",
+    gap: '19px',
     transform: "translate(-50%, -50%)",
-    width: isMobile ? 292 : 560,
-    bgcolor: "background.paper",
-    border: "2px solid white",
-    boxShadow: 24,
-    p: {sm:3,xs:2},
+    width: isMobile ? 292 : 533,
+    bgcolor: "#FFFFFF",
+    border: "1px solid #D0D5DD",
+    // boxShadow: 24,
+    p: { sm: '24px 16px', xs: 2 },
     borderRadius: "12px",
   };
   return (
     <>
-      <Modal open={open} onClose={close}>
+      <Modal open={open} onClose={close}
+        sx={{
+          backgroundColor: "rgba(5, 0, 35, 0.1)",
+          '.MuiModal-backdrop': {
+            backgroundColor: "rgba(5, 0, 35, 0.1)",
+          }
+        }}
+      >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box>
-              <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <Typography sx={{
+                fontWeight: 700, fontSize: 18, lineHeight: '21.09px',
+                fontFamily: '"Roboto",sans-serif !important'
+              }}>
                 Delete
               </Typography>
-              <Typography sx={{ color: "#646669", marginTop: 0.5 }}>
+              <Typography sx={{
+                // color: "#646669", 
+                color: "#212528",
+                lineHeight: '21.86px',
+                fontWeight: 600,
+                // mt:'5px',
+                fontSize: 16,
+                opacity:'70%'
+              }}>
                 Delete your {text ?? "user"} details.
               </Typography>
             </Box>
             <Box>
-              <IconButton onClick={close}>
+              <IconButton onClick={close} sx={{ p: 0 }}>
                 <CloseTwoTone />
               </IconButton>
             </Box>
@@ -49,21 +70,30 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: 0.4,
+              gap: '10px',
               p: 2,
-              background: "#f3f5f6",
+              background: "#F3F5F6",
               borderRadius: "12px",
-              mt: 3,
             }}
           >
             <Box>
               <img src={DeleteIcon} alt="delete icon" />
             </Box>
-            <Typography sx={{ fontSize: "18px", fontWeight: 700 }}>
+            <Typography sx={{
+              fontSize: "18px", fontWeight: 700,
+              lineHeight: '21.09px',
+              fontFamily: '"Roboto",sans-serif !important'
+            }}>
               Delete {text ?? "user"}
             </Typography>
             <Typography
-              sx={{ fontSize: "16px", fontWeight: 600, color: "#606366" }}
+              sx={{
+                color: "#212528",
+                lineHeight: '21.86px',
+                fontWeight: 600,
+                fontSize: 16,
+                opacity:'70%'
+              }}
             >
               Are you sure you want to delete {text ?? "user"}?{" "}
             </Typography>
@@ -71,8 +101,7 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
           <Box
             sx={{
               display: "flex",
-              gap: 2,
-              mt: 3,
+              gap: '12px',
               justifyContent: "end",
             }}
           >
@@ -80,13 +109,13 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               onClick={handleDelete}
               variant="outlined"
               sx={{
+                fontSize: '16px',
                 fontWeight: 600,
-                border: "1px solid #D0D5DD",
-                color: "black",
+                border: "1px solid #D6DAE3",
+                color: "#212528",
                 ":hover": {
-                  border: "1px solid #D0D5DD",
+                  border: "1px solid #D6DAE3",
                 },
-                width: "164px"
               }}
               disabled={isLoading}
             >
@@ -106,11 +135,12 @@ function DeleteModal({ open, close, handleDelete, isLoading, text }) {
               onClick={close}
               variant="contained"
               sx={{
+                fontSize: '16px',
                 fontWeight: 600,
-                bgcolor: "rgba(226, 42, 45, 1)",
-                color: "white",
+                bgcolor: "#E22A2D",
+                color: "#FFFFFF",
                 ":hover": {
-                  bgcolor: "rgba(226, 42, 45, 1)",
+                  bgcolor: "#E22A2D",
                 },
               }}
               disabled={isLoading}
