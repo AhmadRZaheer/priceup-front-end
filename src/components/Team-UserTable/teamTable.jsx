@@ -251,7 +251,7 @@ const TeamTable = () => {
                 fontSize: "16px",
                 fontWeight: 600,
                 lineHeight: '21.86px',
-                opacity:'70%'
+                opacity: '70%'
               }}
             >
               Add, edit and manage your Users.
@@ -291,7 +291,7 @@ const TeamTable = () => {
             <Box>
               <CustomInputField
                 id="input-with-icon-textfield"
-                placeholder="Search by User Name"
+                placeholder="Search"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -322,8 +322,11 @@ const TeamTable = () => {
                     padding: "8px 14px", // Adjust padding
                   },
                   "& .MuiInputLabel-root": {
-                    fontSize: "0.875rem",
-                    top: "-6px", // Adjust label size
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    fontFamily: '"Roboto",sans-serif !important',
+                    top: "-5px", // Adjust label size
+                    color: '#000000'
                   },
                 }}
                 renderInput={(params) => <TextField {...params} size="small" />}
@@ -370,7 +373,7 @@ const TeamTable = () => {
               </FormControl>
             </Box>
 
-            <Button variant="text" onClick={handleResetFilter}>
+            <Button variant="text" onClick={handleResetFilter} sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
               Clear Filter
             </Button>
           </Box>

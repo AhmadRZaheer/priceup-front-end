@@ -246,8 +246,11 @@ export default function Projects() {
                       padding: "8px 14px", // Adjust padding
                     },
                     "& .MuiInputLabel-root": {
-                      fontSize: "0.875rem",
-                      top: "-6px", // Adjust label size
+                      fontSize: "14px",
+                      fontWeight:400,
+                      fontFamily:'"Roboto",sans-serif !important',
+                      top: "-5px", // Adjust label size
+                      color:'#000000'
                     },
                   }}
                   renderInput={(params) => (
@@ -268,7 +271,14 @@ export default function Projects() {
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <p>Status</p>;
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
                     }
 
                     return (
@@ -299,6 +309,7 @@ export default function Projects() {
               <Button
                 variant="text"
                 onClick={handleResetFilter}
+                sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
                 // sx={{ lineHeight: "21.86px" }}
               >
                 Clear Filter

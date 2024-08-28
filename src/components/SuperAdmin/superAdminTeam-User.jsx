@@ -403,7 +403,7 @@ const SuperAdminTeam = () => {
             <Box>
               <CustomInputField
                 id="input-with-icon-textfield"
-                placeholder="Search by User Name"
+                placeholder="Search"
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
@@ -435,8 +435,11 @@ const SuperAdminTeam = () => {
                     padding: "8px 14px", // Adjust padding
                   },
                   "& .MuiInputLabel-root": {
-                    fontSize: "0.875rem",
-                    top: "-6px", // Adjust label size
+                    fontSize: "14px",
+                    fontWeight:400,
+                    fontFamily:'"Roboto",sans-serif !important',
+                    top: "-5px", // Adjust label size
+                    color:'#000000'
                   },
                 }}
                 renderInput={(params) => (
@@ -447,7 +450,7 @@ const SuperAdminTeam = () => {
                     InputProps={{
                       ...params.InputProps,
                       placeholder: "Date Added", // Add the placeholder here
-                    }} u
+                    }} 
                   />
                 )}
               />
@@ -468,8 +471,9 @@ const SuperAdminTeam = () => {
                         sx={{
                           fontSize: '14px',
                           fontWeight: 400,
-                          lineHeight: '16.41px',
-                          color: '#000000'
+                          // lineHeight: '16.41px',
+                          color: '#000000',
+                          fontFamily:'"Roboto",sans-serif !important'
                         }}>Role</Typography>;
                     }
                     return (
@@ -537,7 +541,14 @@ const SuperAdminTeam = () => {
                   onChange={(event) => setStatus(event.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <p>Status</p>;
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
                     }
 
                     return selected ? (
@@ -578,7 +589,7 @@ const SuperAdminTeam = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Button variant="text" onClick={handleResetFilter}>
+            <Button variant="text" onClick={handleResetFilter} sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}>
               Clear Filter
             </Button>
           </Box>
@@ -608,7 +619,7 @@ const SuperAdminTeam = () => {
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
           ) : filteredData?.length === 0 && !usersListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center",background:'#FFFF' }}>
               No User Found
             </Typography>
           ) : (

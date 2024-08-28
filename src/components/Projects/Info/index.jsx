@@ -815,7 +815,14 @@ const ProjectInfoComponent = ({
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <p>Status</p>;
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
                     }
 
                     return (
@@ -848,7 +855,7 @@ const ProjectInfoComponent = ({
               </FormControl>
               <Button
                 variant="text"
-                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" }}
+                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" ,p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
               >
                 Clear Filters
               </Button>
