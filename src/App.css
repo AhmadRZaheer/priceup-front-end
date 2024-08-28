@@ -284,3 +284,16 @@ input {
   flex-direction: column !important;
   gap: 8px
 }
+
+.categoryTab{
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height:16.41px !important;
+  color: #000000 !important;
+  text-transform: capitalize !important;
+  font-family: "Roboto",sans-serif !important;
+  min-width:70px !important;
+  padding:7px 12px !important;
+  height:40px;
+  min-height:40px !important;
+}

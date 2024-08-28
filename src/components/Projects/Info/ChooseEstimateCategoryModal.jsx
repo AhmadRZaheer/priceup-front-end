@@ -26,7 +26,7 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 841,
+  width: 808,
   bgcolor: "#FFFFFF",
   border: "1px solid #D0D5DD",
   p: "24px 16px 24px 16px",
@@ -97,7 +97,7 @@ export default function ChooseEstimateCategoryModal({
         }}
       >
         <Box sx={style}>
-          <Stack>
+          <Stack direction='column' gap='4px'>
             <Box
               sx={{
                 display: "flex",
@@ -109,6 +109,7 @@ export default function ChooseEstimateCategoryModal({
                   fontSize: "18px",
                   fontWeight: 700,
                   lineHeight: "21.09px",
+                  fontFamily:'"Roboto",sans-serif !important'
                 }}
               >
                 Create Estimate
@@ -122,10 +123,11 @@ export default function ChooseEstimateCategoryModal({
             <Typography
               sx={{
                 fontSize: "16px",
-                fontWeight: 500,
+                fontWeight: 600,
                 lineHeight: "21.86px",
-                color: "#646669",
-                pt: 0.5,
+                color: "#212528",
+                opacity:'70%',
+                // pt: 0.5,
               }}
             >
               Select item for estimation
@@ -165,7 +167,7 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ font: "16px", color: "white" }}>
+                <Typography sx={{ fontSize: "16px", color: "#FFFFFF" ,lineHeight:'21.86px' }}>
                   Showers
                 </Typography>
               </Box>
@@ -194,7 +196,7 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ font: "16px", color: "white" }}>
+                <Typography sx={{ fontSize: "16px", color: "#FFFFFF",lineHeight:'21.86px' }}>
                   Mirrors
                 </Typography>
               </Box>
