@@ -35,7 +35,7 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import MountingSection from "../MountingSection";
 
 const data = [
-  { id: 1, name: "Pivot Hinge Option", status: true },
+  { id: 1, name: "Pivot Hinge Option", status: false },
   { id: 2, name: "Heavy Duty Option", status: true },
   { id: 3, name: "Mounting", status: false },
   { id: 4, name: "Heavy Pivot Option", status: false },
@@ -571,63 +571,6 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-
-                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "12px",
-                      }}
-                    >
-                      <Typography className="modificationTitle">
-                        Hinges
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: "10px",
-                        }}
-                      >
-                        <CustomInputMenu
-                          color={"purple"}
-                          size="small"
-                          variant="outlined"
-                          name="hinges.hingesType"
-                          fullWidth={true}
-                          value={formik.values.hinges.hingesType || ""}
-                          onChange={(e) => {
-                            formik.handleChange(e);
-
-                            if (e.target.value === null) {
-                              formik.setFieldValue("hinges.count", 0);
-                            }
-                          }}
-                          onBlur={formik.handleBlur}
-                          MenuData={singleDefault?.listData?.hinges}
-                        />
-                        <CustomInputField
-                          color={"purple"}
-                          type="number"
-                          InputProps={{
-                            inputProps: { min: 0 },
-                          }}
-                          size="small"
-                          variant="outlined"
-                          name="hinges.count"
-                          fullWidth={true}
-                          value={
-                            formik.values.hinges.count !== undefined
-                              ? formik.values.hinges.count
-                              : 0
-                          }
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                      </Box>
-                    </Box>
-                  </Grid>
                   <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                     <Box
                       sx={{
@@ -691,6 +634,63 @@ const EditShowerLayout = () => {
                       </Box>
                     </Box>
                   </Grid>
+                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                      }}
+                    >
+                      <Typography className="modificationTitle">
+                        Hinges
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "10px",
+                        }}
+                      >
+                        <CustomInputMenu
+                          color={"purple"}
+                          size="small"
+                          variant="outlined"
+                          name="hinges.hingesType"
+                          fullWidth={true}
+                          value={formik.values.hinges.hingesType || ""}
+                          onChange={(e) => {
+                            formik.handleChange(e);
+
+                            if (e.target.value === null) {
+                              formik.setFieldValue("hinges.count", 0);
+                            }
+                          }}
+                          onBlur={formik.handleBlur}
+                          MenuData={singleDefault?.listData?.hinges}
+                        />
+                        <CustomInputField
+                          color={"purple"}
+                          type="number"
+                          InputProps={{
+                            inputProps: { min: 0 },
+                          }}
+                          size="small"
+                          variant="outlined"
+                          name="hinges.count"
+                          fullWidth={true}
+                          value={
+                            formik.values.hinges.count !== undefined
+                              ? formik.values.hinges.count
+                              : 0
+                          }
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                      </Box>
+                    </Box>
+                  </Grid>
+
                   {modification[1].status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
@@ -903,7 +903,7 @@ const EditShowerLayout = () => {
                         }}
                       >
                         <Typography className="modificationTitle">
-                          sliding Door System
+                          Sliding Door System
                         </Typography>
                         <Box
                           sx={{

@@ -28,7 +28,7 @@ const ShowerLayout = () => {
         <Typography className="layouttitle">
           Showers <Box sx={{ color: "#000000" }}>&nbsp;/ Layouts</Box>
         </Typography>
-        <Box>
+        {/* <Box>
           <Button
             // onClick={() => navigate("/layouts/edit")}
             variant="contained"
@@ -46,7 +46,7 @@ const ShowerLayout = () => {
             Custom Layout
             <Add sx={{ width: "16px", height: "16px", color: "#FFFFFF" }} />
           </Button>
-        </Box>
+        </Box> */}
       </Box>
       <Grid
         container
