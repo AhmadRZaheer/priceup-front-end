@@ -48,7 +48,7 @@ const getUserRoleText = (role) => {
     case userRoles.SUPER_ADMIN:
       return "Super Admin";
     case userRoles.STAFF:
-      return "Staff";
+      return "User";
     case userRoles.CUSTOM_ADMIN:
       return "Admin";
     default:
@@ -190,6 +190,7 @@ const SuperAdminTeam = () => {
       field: "user_name",
       headerName: "Location",
       headerClassName: "customHeaderClass-admin-team",
+      sortable: false,
       flex: 0.8,
       renderCell: (params) => {
         return (
@@ -218,6 +219,7 @@ const SuperAdminTeam = () => {
       field: "User Role",
       flex: 0.6,
       headerClassName: "customHeaderClass-admin-team",
+      sortable: false,
       renderCell: (params) => {
         return (
           <>
@@ -232,6 +234,7 @@ const SuperAdminTeam = () => {
       field: "Status",
       paddingLeft: 3,
       headerClassName: "customHeaderClass-admin-team",
+      sortable: false,
       flex: 0.5,
       renderCell: (params) => {
         return (
@@ -247,6 +250,7 @@ const SuperAdminTeam = () => {
       field: "Actions",
       flex: 0.8,
       headerClassName: "customHeaderClass-admin-team",
+      sortable: false,
       renderCell: (params) => {
         // console.log(params, "id");
         // const id = params.row._id;
@@ -295,15 +299,18 @@ const SuperAdminTeam = () => {
               sx={{
                 fontSize: 24,
                 fontWeight: 600,
+                lineHeight: '32.78px'
               }}
             >
               User Management
             </Typography>
             <Typography
               sx={{
-                color: "#606366",
+                color: "#212528",
                 fontSize: "16px",
-                fontWeight: 500,
+                fontWeight: 600,
+                lineHeight: '21.86px',
+                opacity: '70%'
               }}
             >
               Add, edit and manage your Users.
@@ -318,15 +325,12 @@ const SuperAdminTeam = () => {
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
                 color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-
-                px: 2,
+                fontSize: 16,
+                fontWeight: 600,
+                gap: '10px'
               }}
             >
-              <Add color="white" sx={{ mr: 1 }} />
+              <Add color="white" />
               Add New User
             </Button>
           </Box>
@@ -443,7 +447,7 @@ const SuperAdminTeam = () => {
                     InputProps={{
                       ...params.InputProps,
                       placeholder: "Date Added", // Add the placeholder here
-                  }}u
+                    }} u
                   />
                 )}
               />
@@ -460,7 +464,13 @@ const SuperAdminTeam = () => {
                   displayEmpty
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <p>Role</p>;
+                      return <Typography
+                        sx={{
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          lineHeight: '16.41px',
+                          color: '#000000'
+                        }}>Role</Typography>;
                     }
                     return (
                       <Typography
@@ -470,10 +480,10 @@ const SuperAdminTeam = () => {
                         {userRoles.SUPER_ADMIN === selected
                           ? " Super Admin"
                           : userRoles.CUSTOM_ADMIN === selected
-                          ? " Admin"
-                          : userRoles.STAFF === selected
-                          ? " Staff"
-                          : ""}
+                            ? " Admin"
+                            : userRoles.STAFF === selected
+                              ? " Staff"
+                              : ""}
                       </Typography>
                     );
                   }}
@@ -505,7 +515,7 @@ const SuperAdminTeam = () => {
                       className=" status-active"
                       sx={{ padding: 0, px: 2, width: "auto" }}
                     >
-                      Staff
+                      User
                     </Typography>
                   </MenuItem>
                 </Select>
@@ -573,12 +583,14 @@ const SuperAdminTeam = () => {
             </Button>
           </Box>
         </Box>
+
         <Box
           sx={{
-            mx: 3,
             border: "1px solid rgba(212, 219, 223, 1)",
             borderRadius: "8px",
             overflow: "hidden",
+            width: "97%",
+            m: "auto",
           }}
         >
           {isLoading ? (
@@ -597,7 +609,7 @@ const SuperAdminTeam = () => {
             </Box>
           ) : filteredData?.length === 0 && !usersListFetching ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-              No Users Found
+              No User Found
             </Typography>
           ) : (
             <div className="CustomerTable">
@@ -614,6 +626,12 @@ const SuperAdminTeam = () => {
                 rowCount={usersList?.totalRecords ? usersList?.totalRecords : 0}
                 sx={{
                   width: "100%",
+                  '& .MuiDataGrid-columnHeader': {
+                    borderRight: 'none', // Remove the right border between header cells
+                    '&:hover': {
+                      borderRight: 'none', // Ensure no border on hover
+                    },
+                  }
                 }}
                 hideFooter
                 disableColumnMenu

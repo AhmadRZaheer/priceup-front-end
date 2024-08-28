@@ -478,11 +478,12 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Project Name",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 1,
       renderCell: (params) => {
         return (
           <Box>
-            <Typography sx={{ py: 1, color: "#667085" }}>
+            <Typography  className="projectRowTxt" sx={{ py: 1,  }}>
               {params?.row?.name}
             </Typography>
           </Box>
@@ -492,6 +493,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Creator",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 2.1,
       renderCell: (params) => {
         return (
@@ -531,6 +533,7 @@ export const ProjectsColumns = (dropdownActions) => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           width: { lg: "100%", xs: "93px" },
+                          lineHeight:'19.12px'
                         }}
                       >
                         {params?.row?.creatorData?.name}
@@ -539,6 +542,7 @@ export const ProjectsColumns = (dropdownActions) => {
                         sx={{
                           fontSize: 12,
                           fontWeight: 500,
+                          lineHeight:'16.39px',
                           p: 0,
                           mt: -0.4,
                           color: "#5D6164",
@@ -601,6 +605,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Customer",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 1.9,
       renderCell: (params) => {
         return (
@@ -644,6 +649,7 @@ export const ProjectsColumns = (dropdownActions) => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           width: { lg: "100%", xs: "93px" },
+                          lineHeight:'19.12px'
                         }}
                       >
                         {params?.row?.customerData?.name}
@@ -652,6 +658,7 @@ export const ProjectsColumns = (dropdownActions) => {
                         sx={{
                           fontSize: 12,
                           fontWeight: 500,
+                          lineHeight:'16.39px',
                           p: 0,
                           mt: -0.4,
                           color: "#5D6164",
@@ -704,6 +711,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Location",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 0.9,
       renderCell: (params) => {
         return (
@@ -713,7 +721,8 @@ export const ProjectsColumns = (dropdownActions) => {
                   placement="top"
                 >
             <Typography
-              sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+            className="projectRowTxt"
+              sx={{ py: 1, }}
             >
               {params?.row?.addressData?.name}
             </Typography>
@@ -726,11 +735,12 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Created Date",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 0.9,
       renderCell: (params) => {
         return (
           <>
-            <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
+            <Typography  className="projectRowTxt" sx={{ width: 190, py: 1,  }}>
               {new Date(params?.row?.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "short",
@@ -744,11 +754,12 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Amount Quoted",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 0.8,
       renderCell: (params) => {
         return (
           <>
-            <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+            <Typography  className="projectRowTxt" sx={{ width: 200, py: 1,  }}>
               ${params?.row?.totalAmountQuoted?.toFixed(2) || 0}
             </Typography>
           </>
@@ -758,6 +769,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Status",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 0.8,
       renderCell: (params) => {
         return <StatusChip variant={params?.row?.status} />;
@@ -766,6 +778,7 @@ export const ProjectsColumns = (dropdownActions) => {
     {
       field: "Action",
       headerClassName: "ProjectsColumnsHeaderClass",
+      sortable:false,
       flex: 0.8,
       renderCell: (params) => {
         return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
@@ -779,6 +792,7 @@ export const teamColumns = [
     field: "name",
     headerName: "Name",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 1.2,
     renderCell: (params) => {
       return (
@@ -802,6 +816,7 @@ export const teamColumns = [
     field: "email",
     headerName: "Email address",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 1.5,
     renderCell: (params) => {
       return (
@@ -815,6 +830,7 @@ export const teamColumns = [
     field: "Date added",
     headerName: "Date added",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 1,
     renderCell: (params) => {
       return (
@@ -834,6 +850,7 @@ export const teamColumns = [
     field: "Last quote",
     headerName: "Last quote",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return (
@@ -855,6 +872,7 @@ export const teamColumns = [
     field: "Total quoted",
     headerName: "Total quoted",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return (
@@ -870,6 +888,7 @@ export const teamColumns = [
     field: "Status",
     headerName: "Status",
     headerClassName: "customHeaderClass-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return (
@@ -887,6 +906,7 @@ export const AdminColumns = [
     field: "Team Members",
     headerName: "User Name",
     headerClassName: "customHeaderClass-admin-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return (
@@ -910,6 +930,7 @@ export const AdminColumns = [
     field: "email",
     headerName: "Email address",
     headerClassName: "customHeaderClass-admin-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return <div className="new-table-text">{params.row.email}</div>;
@@ -919,6 +940,7 @@ export const AdminColumns = [
     field: "dateAdded",
     headerName: "Date Added",
     headerClassName: "customHeaderClass-admin-team",
+    sortable: false,
     flex: 0.8,
     renderCell: (params) => {
       return (
@@ -934,6 +956,7 @@ export const AdminColumns = [
     },
   },
 ];
+
 export const AdminColumns2 = [
   {
     field: "Team Members",

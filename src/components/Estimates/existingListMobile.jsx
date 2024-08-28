@@ -202,7 +202,7 @@ export default function ExistingListMobile() {
           ) : (
             <Box>
               <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Estimates Found
+                No Estimate Found
               </Typography>
             </Box>
           )}

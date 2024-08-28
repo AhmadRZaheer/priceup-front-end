@@ -177,6 +177,7 @@ const TeamTable = () => {
       field: "Access",
       headerName: "Access",
       headerClassName: "customHeaderClass-team",
+      sortable: false,
       flex: 1,
       renderCell: (params) => {
         return (
@@ -189,8 +190,9 @@ const TeamTable = () => {
       },
     },
     {
-      field: " ",
+      field: "Actions",
       headerClassName: "customHeaderClass-team",
+      sortable: false,
       flex: 1,
       renderCell: (params) => {
         // const id = params.row._id;
@@ -220,6 +222,7 @@ const TeamTable = () => {
     <>
       <Box
         sx={{
+          width: "100%",
           backgroundColor: { sm: "#F6F5FF", xs: '#FFFFFF' },
           height: "98.2vh",
         }}
@@ -234,12 +237,22 @@ const TeamTable = () => {
         >
           <Box>
             <Typography
-              sx={{ fontSize: "24px", color: "#101828", fontWeight: 600 }}
+              sx={{
+                fontSize: 24,
+                fontWeight: 600,
+                lineHeight: '32.78px'
+              }}
             >
-              Users List
+              User Management
             </Typography>
             <Typography
-              sx={{ fontSize: "16px", fontWeight: 600, color: "#606366" }}
+              sx={{
+                color: "#212528",
+                fontSize: "16px",
+                fontWeight: 600,
+                lineHeight: '21.86px',
+                opacity:'70%'
+              }}
             >
               Add, edit and manage your Users.
             </Typography>
@@ -251,15 +264,13 @@ const TeamTable = () => {
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
                 color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
-                px: 2,
+                fontSize: 16,
+                fontWeight: 600,
+                gap: '10px'
               }}
               onClick={handleCreateStaff}
             >
-              <Add color="white" sx={{ mr: 1 }} />
+              <Add color="white" />
               Add New User
             </Button>
           </Box>
@@ -272,24 +283,26 @@ const TeamTable = () => {
             my: 2,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
             Users
           </Typography>
 
           <Box sx={{ display: "flex", gap: 2 }}>
-            <CustomInputField
-              id="input-with-icon-textfield"
-              placeholder="Search by User Name"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <img src={icon} alt="search input" />
-                  </InputAdornment>
-                ),
-              }}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+            <Box>
+              <CustomInputField
+                id="input-with-icon-textfield"
+                placeholder="Search by User Name"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <img src={icon} alt="search input" />
+                    </InputAdornment>
+                  ),
+                }}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </Box>
             <Box>
               <DesktopDatePicker
                 label="Date Added"
@@ -316,44 +329,47 @@ const TeamTable = () => {
                 renderInput={(params) => <TextField {...params} size="small" />}
               />
             </Box>
-            <FormControl
-              sx={{ width: "152px" }}
-              size="small"
-              className="custom-textfield"
-            >
-              <InputLabel id="demo-select-small-label" className="input-label">
-                Status
-              </InputLabel>
-              <Select
-                placeholder="Status"
-                value={status}
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                label="Status"
+            <Box>
+              <FormControl
+                sx={{ width: "152px" }}
                 size="small"
-                sx={{ height: "40px" }}
-                onChange={(event) => setStatus(event.target.value)}
+                className="custom-textfield"
               >
-                <MenuItem value={'active'}>
-                  {" "}
-                  <Typography
-                    className=" status-active"
-                    sx={{ padding: 0, px: 2, width: "44px" }}
-                  >
-                    Active
-                  </Typography>
-                </MenuItem>
-                <MenuItem value={'inactive'}>
-                  {" "}
-                  <Typography
-                    className=" status-inActive"
-                    sx={{ padding: 0, px: 2, width: "44px" }}
-                  >
-                    Inactive
-                  </Typography>
-                </MenuItem>
-              </Select>
-            </FormControl>
+                <InputLabel id="demo-select-small-label" className="input-label">
+                  Status
+                </InputLabel>
+                <Select
+                  placeholder="Status"
+                  value={status}
+                  labelId="demo-select-small-label"
+                  id="demo-select-small"
+                  label="Status"
+                  size="small"
+                  sx={{ height: "40px" }}
+                  onChange={(event) => setStatus(event.target.value)}
+                >
+                  <MenuItem value={'active'}>
+                    {" "}
+                    <Typography
+                      className=" status-active"
+                      sx={{ padding: 0, px: 2, width: "44px" }}
+                    >
+                      Active
+                    </Typography>
+                  </MenuItem>
+                  <MenuItem value={'inactive'}>
+                    {" "}
+                    <Typography
+                      className=" status-inActive"
+                      sx={{ padding: 0, px: 2, width: "44px" }}
+                    >
+                      Inactive
+                    </Typography>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+
             <Button variant="text" onClick={handleResetFilter}>
               Clear Filter
             </Button>
@@ -406,7 +422,7 @@ const TeamTable = () => {
                   py: 2,
                 }}
               >
-                No Users found
+                No User found
               </Typography>
             )}
           </div>

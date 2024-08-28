@@ -81,15 +81,18 @@ export default function Projects() {
             sx={{
               fontSize: 24,
               fontWeight: 600,
+              lineHeight:'32.78px'
             }}
           >
             Projects
           </Typography>
           <Typography
             sx={{
-              color: "rgba(33, 37, 40, 1)",
+              color: "#212528",
               fontSize: "16px",
-              fontWeight: 500,
+              fontWeight: 600,
+              lineHeight:'21.86px',
+              opacity:'70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -198,7 +201,7 @@ export default function Projects() {
             pt: 3,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600,lineHeight:'32.78px' }}>
             Projects
           </Typography>
           <Box
@@ -212,7 +215,7 @@ export default function Projects() {
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search by User Name"
+                  placeholder="Search"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">

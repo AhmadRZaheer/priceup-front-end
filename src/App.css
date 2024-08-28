@@ -54,11 +54,12 @@ input {
 .user-cellWrap {
   display: flex;
   background-color: rgba(239, 242, 246, 1);
-  border-radius: 60px;
-  padding-right: 10px;
+  border-radius: 70px;
+  padding: 3px 8px 3px 2px;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
 }
+
 .project-cellWrap {
   display: flex;
   background-color: #eff2f6;
@@ -68,18 +69,26 @@ input {
   gap: 10px;
   max-width: 95%;
 }
+
 .new-customerNameTable {
   font-size: 14px;
   font-weight: 500;
+  line-height: 21px;
+  color: #000000;
 }
+
 .new-userNameTable {
   font-size: 14px !important;
   font-weight: 500 !important;
 }
+
 .new-table-text {
   font-size: 14px;
   font-weight: 500;
+  line-height: 21px;
+  color: #000000;
 }
+
 .status-active {
   color: rgba(132, 119, 218, 1);
   background-color: #efecff;
@@ -87,7 +96,9 @@ input {
   padding: 6px 8px 6px 8px;
   font-weight: 500;
   font-size: 14px;
+  line-height: 21px;
 }
+
 .status-inActive {
   color: rgba(93, 97, 100, 1);
   background-color: #f3f5f6;
@@ -95,27 +106,43 @@ input {
   padding: 6px 8px 6px 8px;
   font-weight: 500;
   font-size: 14px;
+  line-height: 21px;
 }
+
 .box_disaled {
   background-color: #f0f0f0;
-  pointer-events: none; /* Disables all interactions */
-  opacity: 0.5; /* Optional: Makes the box look disabled */
+  pointer-events: none;
+  /* Disables all interactions */
+  opacity: 0.5;
+  /* Optional: Makes the box look disabled */
 }
+
 .ProjectsColumnsHeaderClass {
   background-color: #f3f5f6;
   color: #000000;
   font-size: 14px;
   font-weight: 700 !important;
   line-height: 21px;
+  font-family: "Roboto",sans-serif !important;
 }
+
+.projectRowTxt{
+  color:#000000 !important;
+  font-size: 14px !important;
+  font-weight: 500  !important;
+  line-height: 21px !important;
+}
+
 .MuiDataGrid-columnHeaderTitle {
   font-weight: 700 !important;
 }
+
 .input-label-text {
   font-size: 12px !important;
   font-weight: 600 !important;
   line-height: 16.39px !important;
 }
+
 .MuiButton-root {
   text-transform: capitalize !important;
   border-radius: 8px !important;
@@ -123,9 +150,11 @@ input {
   font-family: "Manrope", sans-serif !important;
   line-height: 21.86px !important;
 }
-.MuiTypography-root{
-  font-family: "Manrope", sans-serif !important; 
+
+.MuiTypography-root {
+  font-family: "Manrope", sans-serif !important;
 }
+
 /* .MuiDataGrid-cell{
   min-height:70px !important;
 }
@@ -155,10 +184,12 @@ input {
   padding-left: 20px !important;
   padding-right: 20px !important;
 }
+
 .toggle-button:hover {
   background-color: white !important;
   border-radius: 8px !important;
 }
+
 .disabled-textfield {
   color: rgba(0, 0, 0, 0.38);
   opacity: 0.6;
@@ -167,6 +198,7 @@ input {
 .disabled-text {
   color: rgba(149, 158, 163, 1);
 }
+
 .label-text {
   font-size: 12px;
   font-weight: 500;
@@ -175,9 +207,11 @@ input {
 .custom-textfield-purple {
   background: #f6f5ff;
   border-radius: 4px !important;
+
   fieldset {
     border-color: #8477da !important;
   }
+
   .Mui-focused {
     fieldset {
       border-color: #8477da !important;
@@ -190,12 +224,15 @@ input {
     }
   }
 }
+
 .custom-textfield-purple-disabled {
   background: #e5e5e5;
   border-radius: 4px !important;
+
   fieldset {
     border-color: #d1d4db !important;
   }
+
   .Mui-focused {
     fieldset {
       border-color: #d1d4db !important;
@@ -214,18 +251,36 @@ input {
   font-weight: 600 !important;
   line-height: 21.86px !important;
 }
+
 .text-xs-samibold {
   font-size: 14px !important;
   font-weight: 600 !important;
   line-height: 21.86px !important;
 }
+
 .text-xs-ragular {
   font-size: 14px !important;
   font-weight: 400 !important;
   line-height: 19.12px !important;
 }
+
 .text-xs-ragular-bold {
   font-size: 14px !important;
   font-weight: 700 !important;
   line-height: 19.12px !important;
+}
+
+/* Data grid seprator */
+.MuiDataGrid-columnSeparator {
+  display: none !important;
+}
+
+/* table boder color  */
+.MuiDataGrid-withBorderColor {
+  border-color: #D4DBDF !important;
+}
+.model-field {
+  display: flex;
+  flex-direction: column !important;
+  gap: 8px
 }

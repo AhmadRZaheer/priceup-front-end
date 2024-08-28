@@ -52,7 +52,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     <TextField
                         id="name"
                         name="name"
-                        label="Enter Address Reference"
+                        placeholder="Enter Address Reference"
                         size="small"
                         variant="outlined"
                         InputProps={{
@@ -92,7 +92,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     <TextField
                         id="city"
                         name="city"
-                        label="Enter city name"
+                        placeholder="Enter city name"
                         size="small"
                         variant="outlined"
                         value={formik.values.city}
@@ -133,7 +133,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                 <TextField
                     id="state"
                     name="state"
-                    label="Enter state name"
+                    placeholder="Enter state name"
                     size="small"
                     variant="outlined"
                     value={formik.values.state}
@@ -169,7 +169,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                 <TextField
                     id="street"
                     name="street"
-                    label="Enter street number"
+                    placeholder="Enter street number"
                     size="small"
                     variant="outlined"
                     value={formik.values.street}
@@ -206,7 +206,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     <TextField
                         id="postalCode"
                         name="postalCode"
-                        label="Enter postal code"
+                        placeholder="Enter postal code"
                         size="small"
                         variant="outlined"
                         value={formik.values.postalCode}
