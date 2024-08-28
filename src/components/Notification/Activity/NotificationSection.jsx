@@ -35,11 +35,11 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
         </Box> */}
         <Box>
           <Stack sx={{ pt: 3, pb: 1, px: 2.5 }}>
-            <Typography className="todayText">Earlier</Typography>
+            <Typography className="todayText" sx={{color:'#8477DA'}}>Earlier</Typography>
           </Stack>
           <Divider />
           {list.map((data, index) => (
-            <SingleNotificationItem data={data} key={index}  sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
+            <SingleNotificationItem data={data} key={index}  sx={{ px: '16px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
           ))}
         </Box>
       </Box>

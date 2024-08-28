@@ -89,7 +89,7 @@ const SingleDetailSection = ({ selectedId, handleMoveToArchive, editLoading }) =
               <Box>
                 <CustomTypo title="Creator Name:" sx={{ pb: 4.5 }} />
                 <CustomTypo title="Customer Name:" sx={{ pb: 4.5 }} />
-                <CustomTypo title="Date Quoted:" />
+                <CustomTypo title="Date Quoted:" sx={{ pb: 1.5 }} />
               </Box>
               <Stack direction="row" gap={2.5}>
                 <DefaultImage name={record.performer_name || "Chris Phillips"} />
@@ -118,7 +118,7 @@ const SingleDetailSection = ({ selectedId, handleMoveToArchive, editLoading }) =
               </Stack>
             </Stack>
           </Box>
-          <Divider sx={{ ml: 3 }} />
+          <Divider sx={{ ml: 3,borderColor:'#D1D4DB',borderWidth:'1px' }} />
           <Box sx={{ py: 4, pl: 14, pr: 3 }}>
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
               <Typography className="twTxt">12’’/ 12’’/ 12’’</Typography>

@@ -111,7 +111,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                             <Box>
                                 <CustomTypo title="Creator Name:" sx={{ pb: 4.5 }} />
                                 <CustomTypo title="Customer Name:" sx={{ pb: 4.5 }} />
-                                <CustomTypo title="Date Quoted:" />
+                                <CustomTypo title="Date Quoted:" sx={{ pb: 1 }} />
                             </Box>
                             <Stack direction="row" gap={2.5}>
                                 <DefaultImage name={record.performer_name || "Chris Phillips"} />
@@ -124,7 +124,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                                         />
                                     </Box>
                                     <Box sx={{ pb: 2 }}>
-                                        <CustomTypo title={record.resourceInfo?.customerData?.name} />
+                                        <CustomTypo title={record.resourceInfo?.customerData?.name !== '' ?record.resourceInfo?.customerData?.name : 'N/A'} />
                                         <CustomTypo
                                             title={record.resourceInfo?.customerData?.email}
                                             sx={{ fontSize: "12.3px !important" }}
@@ -140,7 +140,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                             </Stack>
                         </Stack>
                     </Box>
-                    <Divider sx={{ ml: 3 }} />
+                    <Divider sx={{ ml: 3 ,borderColor:'#D1D4DB',borderWidth:'1px'}} />
                     {record.category === notificationCategories.ESTIMATES ? <EstimateSummary data={record.resourceInfo} handleEditEstimate={handleEditEstimate} /> : <></>}
                 </Box> : <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
                     <Typography >No preview found.</Typography>

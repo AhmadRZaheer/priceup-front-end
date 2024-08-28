@@ -54,11 +54,11 @@ const Notifications = () => {
     <Box>
       <Grid sx={{ pt: 1, pb: 2, px: 4 }}>
         <Stack direction="row" gap={1} sx={{  }}>
-          <Typography
+          <Typography className='notificationTex'
             sx={{
-              fontSize: "30px",
-              fontWeight: 500,
-              lineHeight: "38px",
+              fontSize: "24px",
+              fontWeight: 600,
+              lineHeight: "32px",
               color: "#101828",
             }}
           >
@@ -82,7 +82,7 @@ const Notifications = () => {
           </Box>
         </Stack>
       </Grid>
-      <Stack direction='row' sx={{ borderBottom: "1px solid #D9D9D9", px: 4, justifyContent: 'space-between' }}>
+      <Stack direction='row' sx={{ borderBottom: "1px solid #D1D4DB", px: 4, justifyContent: 'space-between' }}>
         <Stack direction='row'>
           {tabData.map((data, index) => (
             <TabButton

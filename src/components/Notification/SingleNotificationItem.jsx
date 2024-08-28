@@ -21,14 +21,31 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           background: data.isRead ? "rgba(217, 217, 217, 0.39)" : "none",
           opacity: data.isRead ? 0.8 : 1,
           py: 1.6,
-          px: 1.6,
+          pr: 1.6,
+          pl: '21px',
           ":hover": {
             background: "rgba(217, 217, 217, 0.39)",
           },
           ...sx,
         }}
       >
+
         <Stack direction="row" gap={1}>
+          <Box sx={{ height: '10px', width: '10px', borderRadius: '4.94px', background: '#8477DA' , alignSelf:'center' }} />
+          <Stack direction='column' gap={1}>
+            <Typography
+              className={data.isRead ? "todayTextLight" : "todayText"}
+              sx={{
+                // color: data.isRead ? "#6e6e6e !important" : "#100D24 !important",
+              }}
+            >
+              {data.description}
+            </Typography>
+            <Typography sx={{fontSize:'11px',fontWeight:400,lineHeight:'18px',color:'#6D6D6D'}}> {data.performer_name}{" "} . {data?.company_name} . {' '} {formattedDate}</Typography>
+          </Stack>
+        </Stack>
+
+        {/* <Stack direction="row" gap={1}>
           <Stack direction="row" gap={0.2}>
             <Description sx={{ color: "#8477DA", width: '18px', height: '18px' }} />
             <Typography className="estimateText">{data.category}</Typography>
@@ -37,9 +54,9 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
             <LocationOnIcon sx={{ color: "#8477DA", width: '20px', height: '20px' }} />
             <Typography className="estimateText">{data?.company_name}</Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
 
-        <Stack direction="row" gap={1} sx={{ py: 1, alignItems: "center" }}>
+        {/* <Stack direction="row" gap={1} sx={{ py: 1, alignItems: "center" }}>
           <img alt="not" src={Tick} width={15} height={15} />
           <Typography
             className={data.isRead ? "todayTextLight" : "todayText"}
@@ -49,10 +66,10 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           >
             {data.description}
           </Typography>
-        </Stack>
-        <Stack direction="row" sx={{ gap: '8px' }}>
-          <DefaultImage name={data.performer_name || "Chris Phillips"} type={4} />
-          {/* <Box className="cpWrapper">
+        </Stack> */}
+        {/* <Stack direction="row" sx={{ gap: '8px' }}>
+          <DefaultImage name={data.performer_name || "Chris Phillips"} type={4} /> */}
+        {/* <Box className="cpWrapper">
             <Typography
               sx={{
                 fontSize: "16.3px",
@@ -62,7 +79,7 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
               CP
             </Typography>
           </Box> */}
-          <Stack direction="row" sx={{ alignItems: "center" }}>
+        {/* <Stack direction="row" sx={{ alignItems: "center" }}>
             <Typography
               className="estimateText"
               sx={{
@@ -82,9 +99,9 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
               <span className="hourText">{formattedDate}</span>
             </Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
       </Box>
-      <Divider />
+      <Divider sx={{ borderColor: 'rgba(0, 0, 0, 0.05),' }} />
     </>
   );
 };
