@@ -125,6 +125,152 @@ const ViewDrawer = ({ state, toggleDrawer, data }) => {
                     } (${data.settings?.heavyDutyOption?.height})`}
                   </Typography>
                 </Grid>
+                {data.settings?.channelOrClamps &&
+                  data.settings?.channelOrClamps !== "" && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Channel or Clamps{" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${data.settings?.channelOrClamps ?? "------"}`}
+                      </Typography>
+                    </Grid>
+                  )}
+                {data.settings?.mountingChannel?.name && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">
+                      Mounting Channel{" "}
+                    </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.mountingChannel?.name ?? "------"}`}
+                    </Typography>
+                  </Grid>
+                )}
+                {data.settings?.cornerWallClamp &&
+                  data.settings?.cornerWallClamp?.wallClampType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Wall Clamps (corner){" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.cornerWallClamp?.wallClampType?.name ??
+                          "------"
+                        } (${data.settings?.cornerWallClamp?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
+                {data.settings?.cornerSleeveOver &&
+                  data.settings?.cornerSleeveOver?.sleeveOverType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Sleeve Over (corner){" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.cornerSleeveOver?.sleeveOverType
+                            ?.name ?? "------"
+                        } (${data.settings?.cornerSleeveOver?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
+                {data.settings?.cornerGlassToGlass &&
+                  data.settings?.cornerGlassToGlass?.glassToGlassType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Glass To Glass (corner){" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.cornerGlassToGlass?.glassToGlassType
+                            ?.name ?? "------"
+                        } (${data.settings?.cornerGlassToGlass?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
+                {data.settings?.wallClamp &&
+                  data.settings?.wallClamp?.wallClampType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Wall Clamps{" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.wallClamp?.wallClampType?.name ??
+                          "------"
+                        } (${data.settings?.wallClamp?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
+
+                {data.settings?.sleeveOver &&
+                  data.settings?.sleeveOver?.sleeveOverType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Sleeve Over{" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.sleeveOver?.sleeveOverType?.name ??
+                          "------"
+                        } (${data.settings?.sleeveOver?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
+                {data.settings?.glassToGlass &&
+                  data.settings?.glassToGlass?.glassToGlassType?.name && (
+                    <Grid
+                      item
+                      xs={5.5}
+                      className="cardTitleContainer"
+                      sx={{ py: 1, height: "fit-content" }}
+                    >
+                      <Typography className="drawerTitle">
+                        Glass To Glass{" "}
+                      </Typography>
+                      <Typography className="drawerBoldTitle">
+                        {`${
+                          data.settings?.glassToGlass?.glassToGlassType?.name ??
+                          "------"
+                        } (${data.settings?.glassToGlass?.count})`}
+                      </Typography>
+                    </Grid>
+                  )}
                 {data.settings?.slidingDoorSystem?.type?.name && (
                   <Grid
                     item
@@ -185,7 +331,34 @@ const ViewDrawer = ({ state, toggleDrawer, data }) => {
                     </Typography>
                   </Grid>
                 )}
-
+                {data.settings?.glassAddon?.name && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">
+                      Glass Addon{" "}
+                    </Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.glassAddon?.name ?? "------"}`}
+                    </Typography>
+                  </Grid>
+                )}
+                {data.settings?.notch && (
+                  <Grid
+                    item
+                    xs={5.5}
+                    className="cardTitleContainer"
+                    sx={{ py: 1, height: "fit-content" }}
+                  >
+                    <Typography className="drawerTitle">Notch</Typography>
+                    <Typography className="drawerBoldTitle">
+                      {`${data.settings?.notch ?? "------"} `}
+                    </Typography>
+                  </Grid>
+                )}
                 <Grid
                   item
                   xs={5.5}
@@ -229,7 +402,7 @@ const ViewDrawer = ({ state, toggleDrawer, data }) => {
               Close
             </Button>
             <Button
-              onClick={() => navigate("/layouts/edit")}
+              onClick={() => navigate(`/layouts/edit?id=${data._id}`)}
               variant="contained"
               className="drawerBtn"
               sx={{
