@@ -118,8 +118,8 @@ const Summary = ({ setStep }) => {
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-      ? `${backendURL}/${selectedData?.settings?.image}`
-      : CustomImage;
+        ? `${backendURL}/${selectedData?.settings?.image}`
+        : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
@@ -158,7 +158,7 @@ const Summary = ({ setStep }) => {
             }}
           >
             <Typography
-              sx={{ fontSize: "14px", fontWeight: 700, lineHeight: "16px" }}
+              sx={{ fontSize: "14px", fontWeight: 700, lineHeight: "16.41px", fontFamily: '"Roboto", sans-serif !important' }}
             >
               Estimate Details
             </Typography>
@@ -180,7 +180,10 @@ const Summary = ({ setStep }) => {
                   padding: "5px 8px 5px 8px !important",
                   border: "1px solid #D0D5DD",
                   color: "black",
+                  fontSize: '12px',
+                  lineHeight: '14.06px',
                   borderRadius: "4px !important",
+                  fontFamily: '"Roboto", sans-serif !important',
                   width: "fit-content",
                   ":hover": {
                     border: "1px solid #D0D5DD",
@@ -227,7 +230,7 @@ const Summary = ({ setStep }) => {
                           px: 3,
                         }}
                       >
-                        <Typography sx={{ color: "#5D6164", fontSize: "16px", alignSelf: "center" }}>
+                        <Typography sx={{ color: "#5D6164", fontSize: "16px", alignSelf: "center", fontFamily: '"Roboto", sans-serif !important' }}>
                           {item.title}
                         </Typography>
                         <Box sx={{ height: "46px" }}>
@@ -272,10 +275,10 @@ const Summary = ({ setStep }) => {
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
             {Columns[0].active === false &&
-            Columns[1].active === false &&
-            Columns[2].active === false &&
-            Columns[3].active === false &&
-            Columns[4].active === false ? (
+              Columns[1].active === false &&
+              Columns[2].active === false &&
+              Columns[3].active === false &&
+              Columns[4].active === false ? (
               <Typography>no Esimate Details</Typography>
             ) : (
               <Grid container spacing={2}>
@@ -329,42 +332,42 @@ const Summary = ({ setStep }) => {
                       {![undefined].includes(
                         selectedData?.settings?.variant
                       ) && (
-                        <Box>
-                          <Typography className="text-xs-ragular-bold">
-                            Door Weight:
-                          </Typography>
-                          <Typography className="text-xs-ragular">
-                            {doorWeight}
-                          </Typography>
-                        </Box>
-                      )}
+                          <Box>
+                            <Typography className="text-xs-ragular-bold">
+                              Door Weight:
+                            </Typography>
+                            <Typography className="text-xs-ragular">
+                              {doorWeight}
+                            </Typography>
+                          </Box>
+                        )}
                       {![
                         layoutVariants.DOOR,
                         layoutVariants.DOUBLEBARN,
                         layoutVariants.DOUBLEDOOR,
                       ].includes(selectedData?.settings?.variant) && (
-                        <Box>
-                          <Typography className="text-xs-ragular-bold">
-                            Panel Weight:
-                          </Typography>
-                          <Typography className="text-xs-ragular">
-                            {panelWeight}
-                          </Typography>
-                        </Box>
-                      )}
+                          <Box>
+                            <Typography className="text-xs-ragular-bold">
+                              Panel Weight:
+                            </Typography>
+                            <Typography className="text-xs-ragular">
+                              {panelWeight}
+                            </Typography>
+                          </Box>
+                        )}
                       {[
                         layoutVariants.DOORNOTCHEDPANELANDRETURN,
                         layoutVariants.DOORPANELANDRETURN,
                       ].includes(selectedData?.settings?.variant) && (
-                        <Box>
-                          <Typography className="text-xs-ragular-bold">
-                            Return Weight:
-                          </Typography>
-                          <Typography className="text-xs-ragular">
-                            {returnWeight}
-                          </Typography>
-                        </Box>
-                      )}
+                          <Box>
+                            <Typography className="text-xs-ragular-bold">
+                              Return Weight:
+                            </Typography>
+                            <Typography className="text-xs-ragular">
+                              {returnWeight}
+                            </Typography>
+                          </Box>
+                        )}
                       {Columns[2].active && (
                         <Box sx={{ width: "60%" }}>
                           <Divider sx={{ borderColor: "#D4DBDF" }} />

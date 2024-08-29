@@ -365,7 +365,7 @@ const ProjectInfoComponent = ({
                           className="disabled-text "
                           sx={{ fontSize: "14px" }}
                         >
-                          {creatorName}
+                          {creatorName ?? 'N/A'}
                         </Typography>
                         {/* <TextField
                         disabled="true"
@@ -867,11 +867,12 @@ const ProjectInfoComponent = ({
           </Typography> */}
           <Box
             sx={{
-              boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+              boxShadow: "rgba(16, 24, 40, 0.05) 0px 1px 2px",
               borderRadius: "8px",
               pt: { md: 2, xs: 1 },
               width: "99.5%",
               background: "#FFFF",
+              border:'1px solid #D0D5DD'
             }}
           >
             {/** Tabs Switch */}

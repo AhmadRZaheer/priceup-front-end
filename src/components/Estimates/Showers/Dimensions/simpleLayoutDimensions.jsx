@@ -264,7 +264,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       );
     }
     refetch();
-    return () => {};
+    return () => { };
   }, []);
   return (
     <>
@@ -295,7 +295,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               alignItems: "center"
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700,fontFamily:'"Roboto", sans-serif !important' }}>
               Layout & Measurement
             </Typography>
             <Button
@@ -321,7 +321,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 src={AlertIcon}
                 alt="alert yellow logo"
               />
-              <Typography sx={{ fontSize: "12px", lineHeight: "14.06px" }}>
+              <Typography sx={{ fontSize: "12px", lineHeight: "14.06px", fontFamily: 'Roboto", sans-serif !important' }}>
                 View Alerts
               </Typography>
             </Button>
@@ -338,7 +338,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 vertical: "top",
                 horizontal: "right",
               }}
-              sx={{ borderRadius: "8px" }}
+              PaperProps={{
+                style: { borderRadius: "8px" },
+              }}
             >
               <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto" }}>
                 {[
@@ -428,7 +430,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 paddingX: { sm: 2, xs: 0 },
                 height: "100%",
                 // background: { sm: "#D9D9D9" },
-                gap: 4,
+                gap: {lg:'84px',xs:4},
                 borderRadius: "8px",
               }}
             >
@@ -498,7 +500,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           display: "flex",
                           alignItems: { sm: "start", xs: "center" },
                           flexDirection: { sm: "column", xs: "row" },
-                          gap: { sm: 0.5, xs: 1 },
+                          gap: { sm: '10px', xs: 1 },
                         }}
                       >
                         <Box
@@ -510,7 +512,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                             lineHeight: "21.86px",
                           }}
                         >
-                          <Typography sx={{ mr: 0.5 }}>
+                          <Typography sx={{ mr: 0.5,fontSize:'16px',fontWeight:600,lineHeight:'21.86px' }}>
                             {String.fromCharCode(97 + index)}
                           </Typography>
                           <Tooltip title={""}>
@@ -530,11 +532,12 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           name={String.fromCharCode(97 + index)}
                           placeholder={String.fromCharCode(97 + index)}
                           className="custom-textfield-purple"
-                          style={{
+                          sx={{
                             borderRadius: "8px",
                             border: "1px solid #D0D5DD",
                             width: "100%",
                             maxWidth: "250px",
+                            "& input": { padding: "10px" },
                           }}
                           value={formik.values[String.fromCharCode(97 + index)]}
                           onChange={(e) => {
@@ -597,6 +600,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         alignItems: { sm: "start", xs: "center" },
                         flexDirection: { sm: "column", xs: "row" },
                         width: { md: "48.6%", xs: "100%" },
+                        gap: '10px',
                       }}
                     >
                       <Box
@@ -610,7 +614,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         <Typography
                           className="text-sm-samibold"
                           sx={{
-                            color: !isCustomizedDoorWidthRedux ? "gray" : "",
+                            color: !isCustomizedDoorWidthRedux ? "#000000" : "",
                           }}
                         >
                           Door Width
@@ -637,16 +641,16 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorWidthFromredux}
                         type="number"
-                        className={`custom-textfield-purple${
-                          !isCustomizedDoorWidthRedux ? "-disabled" : ""
-                        }`}
+                        className={`custom-textfield-purple${!isCustomizedDoorWidthRedux ? "-disabled" : ""
+                          }`}
                         size="small"
                         variant="outlined"
                         value={doorWidthFromredux}
-                        style={{
+                        sx={{
                           borderRadius: "8px",
                           border: "1px solid #D0D5DD",
                           width: "100%",
+                          "& input": { padding: "10px" },
                           // maxWidth: {},
                         }}
                         name="door"
@@ -655,7 +659,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     </Box>
                   </Box>
                   {doorWidthFromredux > showerSettings?.doorWidth ||
-                  doorWidthFromredux < 1 ? (
+                    doorWidthFromredux < 1 ? (
                     <Box
                       sx={{
                         display: "flex",
@@ -709,9 +713,8 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     <img
                       width={isMobile ? "134px" : "240px"}
                       height={isMobile ? "188px" : "300px"}
-                      src={`${backendURL}/${
-                        selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                      }`}
+                      src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                        }`}
                       alt="Selected"
                     />
                   </Box>
@@ -752,7 +755,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     }}
                     fullWidth
                     variant="outlined"
-                    // onClick={handleBack}
+                  // onClick={handleBack}
                   >
                     {" "}
                     Back
@@ -768,15 +771,16 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   doorWidthFromredux < 1
                 }
                 sx={{
-                  width: { xs: 120, sm: 150 },
+                  width: { xs: 120, sm: 117 },
                   backgroundColor: "#8477DA",
-                  fontSize: 18,
+                  fontSize: 16,
+                  fontWeight:600,
                   "&:hover": { backgroundColor: "#8477DA" },
                   ":disabled": {
                     bgcolor: "#c2c2c2",
                   },
                   mr: { sm: 0, xs: "30px" },
-                  color: "white",
+                  color: "#FFFFFF",
                 }}
                 fullWidth
                 variant="contained"

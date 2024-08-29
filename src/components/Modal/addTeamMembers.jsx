@@ -377,7 +377,7 @@ export default function AddTeamMembers({
                         <Typography
                           sx={{ padding: 0, width: "auto" }}
                         >
-                          Staff
+                          User
                         </Typography>
                       </MenuItem>
                     </Select>
@@ -390,7 +390,7 @@ export default function AddTeamMembers({
                 </Grid>
               )}
               {token && token.role === userRoles.SUPER_ADMIN && [userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(formik.values.role) && (
-                <Grid item xs={6} sx={{ width: "100%" }}>
+                <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
                   <Typography className="input-label-text">
                     Locations
                   </Typography>
