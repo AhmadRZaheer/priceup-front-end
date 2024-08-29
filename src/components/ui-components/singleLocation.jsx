@@ -21,7 +21,7 @@ const SingleLocation = ({
     <>
       <Box
         sx={{
-          width: {lg:"448px", xs: "600px"},
+          width: { lg: "448px", xs: "600px" },
           borderRadius: "8px",
           border: "1px solid rgba(208, 213, 221, 1)",
           boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
@@ -37,11 +37,7 @@ const SingleLocation = ({
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <DefaultImage
-              image={data?.image}
-              name={data?.name}
-              type={6}
-            />
+            <DefaultImage image={data?.image} name={data?.name} type={6} />
             <Tooltip title={data?.name} placement="top">
               <Typography
                 sx={{
@@ -79,7 +75,7 @@ const SingleLocation = ({
             <Typography className="section-name-text">Users</Typography>
             <Box>
               {nonActiveUsers?.length !== 0 ? (
-                <Box className="user-cellWrap">
+                <Box className="user-cellWrap" sx={{height: "33px"}}>
                   <Box
                     sx={{
                       display: "flex",
@@ -118,11 +114,12 @@ const SingleLocation = ({
                     )}
                   </Box>
                   <Typography sx={{ fontSize: "15px", fontWeight: 500 }}>
-                    {nonActiveUsers?.length} {nonActiveUsers?.length === 1 ? "User": "Users"}
+                    {nonActiveUsers?.length}{" "}
+                    {nonActiveUsers?.length === 1 ? "User" : "Users"}
                   </Typography>
                 </Box>
               ) : (
-                <Box sx={{ color: "#667085", py: 0.7 }}>
+                <Box sx={{ color: "#667085", pt: 0.7 }}>
                   <Typography>No User</Typography>
                 </Box>
               )}
@@ -131,21 +128,21 @@ const SingleLocation = ({
           {/* Layouts */}
           <Box>
             <Typography className="section-name-text"> Layouts</Typography>
-            <Typography py={0.7} sx={{ fontWeight: 600 }}>
+            <Typography pt={0.7} sx={{ fontWeight: 600 }}>
               {data?.layouts ?? 0}
             </Typography>
           </Box>
           {/* Customers */}
           <Box>
             <Typography className="section-name-text"> Customers</Typography>
-            <Typography py={0.7} sx={{ fontWeight: 600 }}>
+            <Typography pt={0.7} sx={{ fontWeight: 600 }}>
               {data?.customers ?? 0}
             </Typography>
           </Box>
           {/* Layouts */}
           <Box>
             <Typography className="section-name-text"> Estimates</Typography>
-            <Typography py={0.7} sx={{ fontWeight: 600 }}>
+            <Typography pt={0.7} sx={{ fontWeight: 600 }}>
               {data?.estimates ?? 0}
             </Typography>
           </Box>
@@ -158,6 +155,7 @@ const SingleLocation = ({
             variant="outlined"
             sx={{
               fontWeight: 600,
+              height: "40px",
               color: "rgba(132, 119, 218, 1)",
               borderColor: "rgba(132, 119, 218, 1)",
               ":hover": {

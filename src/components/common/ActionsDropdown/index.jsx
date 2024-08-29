@@ -28,7 +28,7 @@ const ActionsDropdown = ({
                 onClick={handleClick}
                 sx={{ fontSize: "20px",color:'#8477DA', padding: { sm: '8px', xs: '0px 8px' } }}
             >
-                <ArrowForwardIcon/>
+                <ArrowForwardIcon sx={{fontSize:'20px'}} />
                 {/* <ManageSearch /> View */}
             </IconButton>
             <Menu

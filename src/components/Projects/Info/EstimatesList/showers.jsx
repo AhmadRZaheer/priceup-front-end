@@ -29,7 +29,7 @@ const debounce = (func, delay) => {
 };
 const routePrefix = `${backendURL}/estimates`;
 
-const ShowerEstimatesList = ({ projectId }) => {
+const ShowerEstimatesList = ({ projectId,Status }) => {
     const isMobile = useMediaQuery("(max-width:600px)");
     const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
@@ -52,7 +52,7 @@ const ShowerEstimatesList = ({ projectId }) => {
         isLoading,
         isFetching: estimatesListFetching,
         refetch: refetchEstimatesList,
-    } = useFetchAllDocuments(`${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&search=${search}&category=${EstimateCategory.SHOWERS}`);
+    } = useFetchAllDocuments(`${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&search=${search}&category=${EstimateCategory.SHOWERS}&status=${Status}`);
     const {
         mutate: deleteEstimates,
         isSuccess: deletedSuccessfully,
@@ -203,7 +203,7 @@ const ShowerEstimatesList = ({ projectId }) => {
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background:'#FFFF' }}>
-                No Estimates Found
+                No Estimate Found
             </Typography>
         ) : (                           
             <Box sx={{ background:'#FFFF',pb:3}}>

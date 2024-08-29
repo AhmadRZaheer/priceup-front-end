@@ -31,18 +31,19 @@ const StatusChip = ({ variant, sx }) => {
   return (
     <Box
       sx={{
-        height:'21px',
+        height: "21px",
         // width: "fit-content",
         bgcolor: bgColorWrapper,
         borderRadius: "70px",
         color: colorWrapper,
-        p:'6px 8px',
+        p: "6px 8px",
         // pl: { lg: 1.8, xs: 1 },
         // pt: 0.8,
         // pr: { lg: 1.8, xs: 1 },
         // pb: 1,
         display: "grid",
-        gap: 1,
+        gap: '7px',
+        width: "fit-content",
         ...sx,
       }}
     >
@@ -57,15 +58,15 @@ const StatusChip = ({ variant, sx }) => {
             }}
         /> */}
       <Typography
-        sx={
-          {
-            fontSize:'14px',fontWeight:400,lineHeight:'21px'
-            //   textOverflow: "ellipsis",
-            //   whiteSpace: "nowrap",
-            //   overflow: "hidden",
-            //   width: { lg: "100%", xs: "33px" },
-          }
-        }
+        sx={{
+          fontSize: "14px",
+          fontWeight: 400,
+          lineHeight: "21px",
+          //   textOverflow: "ellipsis",
+          //   whiteSpace: "nowrap",
+          //   overflow: "hidden",
+          //   width: { lg: "100%", xs: "33px" },
+        }}
       >
         {variant?.charAt(0).toUpperCase() + variant?.slice(1)}
       </Typography>

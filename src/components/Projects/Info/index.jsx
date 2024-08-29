@@ -34,6 +34,7 @@ import AddressSelect from "./AddressSelect";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
 import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
+import StatusChip from "@/components/common/StatusChip";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project Name is required"),
@@ -46,10 +47,12 @@ const ProjectInfoComponent = ({
   projectData = null,
 }) => {
   const decryptedToken = getDecryptedToken();
+  const [Status, setStatus] = useState(null);
   const creatorName =
     projectState === "create"
       ? decryptedToken?.name
       : projectData?.creatorData?.name;
+
   const createdDate = useMemo(() => {
     const todaysDate = new Date();
     if (projectState === "create") {
@@ -171,8 +174,9 @@ const ProjectInfoComponent = ({
             sx={{
               fontSize: { lg: 24, md: 20 },
               fontWeight: 600,
-              color: "#5D6164",
+              color: "#000000",
               display: "flex",
+              lineHeight:'32.78px',
               gap: 1,
             }}
           >
@@ -183,9 +187,11 @@ const ProjectInfoComponent = ({
           </Typography>
           <Typography
             sx={{
-              color: "#606366",
+              color: "#212528",
               fontSize: { lg: 16, md: 14 },
-              fontWeight: 500,
+              fontWeight: 600,
+              lineHeight:'21.86px',
+              opacity:'70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -248,7 +254,7 @@ const ProjectInfoComponent = ({
         <Box
           sx={{
             // boxShadow: 'rgba(0, 0, 0, 0.24) 0px 3px 8px',
-            border: "1px solid #D4DBDF",
+            // border: "1px solid #D4DBDF",
             padding: { md: 2, xs: 1 },
             background: "#FFFF",
           }}
@@ -317,7 +323,7 @@ const ProjectInfoComponent = ({
                               <InputAdornment
                                 position="end"
                                 sx={{ cursor: "pointer" }}
-                                onClick={() => {}}
+                                onClick={() => { }}
                               >
                                 <Close sx={{}} />
                               </InputAdornment>
@@ -646,7 +652,7 @@ const ProjectInfoComponent = ({
                               width: "100%",
                             }}
                             value={formik.values.customer}
-                            onChange={() => {}}
+                            onChange={() => { }}
                           />
                         </Box>
                         <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
@@ -778,49 +784,78 @@ const ProjectInfoComponent = ({
             <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
               Estimates
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
-              <CustomInputField
-                id="input-with-icon-textfield"
-                placeholder="Search by User Name"
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <img src={icon} alt="search input" />
-                    </InputAdornment>
-                  ),
-                }}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
+            <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
+              <Box>
+                <CustomInputField
+                  id="input-with-icon-textfield"
+                  placeholder="Search"
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <img src={icon} alt="search input" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </Box>
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
-                // className="custom-textfield"
+              // className="custom-textfield"
               >
-                <InputLabel
-                  id="demo-select-small-label"
-                  className="input-label"
-                >
-                  Status
-                </InputLabel>
                 <Select
-                  // value={age}
+                  value={Status}
                   className="custom-textfield"
-                  labelId="demo-select-small-label"
                   id="demo-select-small"
-                  label="Status"
                   size="small"
                   sx={{ height: "40px" }}
-                  // onChange={handleChange}
+                  displayEmpty
+                  onChange={(e) => setStatus(e.target.value)}
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
+                    }
+
+                    return (
+                      <StatusChip
+                        variant={selected}
+                        sx={{ padding: 0, px: 2 }}
+                      />
+                    );
+                  }}
                 >
-                  <MenuItem value={"pending"}>Pending</MenuItem>
-                  <MenuItem value={"voided"}>Voided</MenuItem>
-                  <MenuItem value={"approved"}>Approved</MenuItem>
+                  <MenuItem value={"pending"}>
+                    {" "}
+                    <StatusChip
+                      variant={"pending"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={"voided"}>
+                    {" "}
+                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
+                  </MenuItem>
+                  <MenuItem value={"approved"}>
+                    {" "}
+                    <StatusChip
+                      variant={"approved"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
+                  </MenuItem>
                 </Select>
               </FormControl>
               <Button
                 variant="text"
-                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" }}
+                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" ,p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
               >
                 Clear Filters
               </Button>
@@ -840,20 +875,27 @@ const ProjectInfoComponent = ({
             }}
           >
             {/** Tabs Switch */}
-            <Grid sx={{ width: "202px", px: 1, pb: 1 }}>
+            <Grid sx={{ px: 1, pb: 1 }}>
               <Tabs
                 value={activeTabNumber}
                 onChange={handleChange}
                 aria-label="basic tabs example"
                 sx={{
-                  border: "0.5px solid #D0D5DD",
+                  border: "1px solid #D0D5DD",
                   borderRadius: "6px",
-                  background: "#D0D5DD",
-                  //   p: 0.1,
+                  background: "#F3F5F6",
+                  width: "151px",
+                  minHeight:'40px',
+                  height:'40px',
+                  p: '2px',
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
                     borderRadius: "4px",
+                    p:'7px 12px',
+                    minWidth:'79px',
+                    height:'40px',
+                    minHeight:'36px'
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#8477DA",
@@ -862,22 +904,23 @@ const ProjectInfoComponent = ({
                 }}
               >
                 <Tab
+                className="categoryTab"
                   label="Showers"
                   sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#000000",
-                    textTransform: "capitalize",
+                    // fontSize: "14px",
+                    // fontWeight: 600,
+                    // color: "#000000",
+                    // textTransform: "capitalize",
+                    // minWidth:'70px',
+                    // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
                 />
                 <Tab
+                className="categoryTab"
                   label="Mirrors"
                   sx={{
-                    fontSize: "14px",
-                    fontWeight: 600,
-                    color: "#000000",
-                    textTransform: "capitalize",
+                   
                   }}
                   {...a11yProps(1)}
                 />
@@ -887,11 +930,17 @@ const ProjectInfoComponent = ({
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
             <CustomTabPanel value={activeTabNumber} index={0}>
-              <ShowerEstimatesList projectId={projectData?._id} />
+              <ShowerEstimatesList
+                projectId={projectData?._id}
+                Status={Status}
+              />
             </CustomTabPanel>
             {/** Mirrors tab */}
             <CustomTabPanel value={activeTabNumber} index={1}>
-              <MirrorEstimatesList projectId={projectData?._id} />
+              <MirrorEstimatesList
+                projectId={projectData?._id}
+                Status={Status}
+              />
             </CustomTabPanel>
           </Box>
         </Box>

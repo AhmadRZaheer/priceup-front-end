@@ -201,7 +201,7 @@ const SuperAdminTable = () => {
               sx={{
                 fontSize: "16px",
                 fontWeight: 600,
-                color: "#606366",
+                color: "#212528",
               }}
             >
               Add, edit and manage your locations.
@@ -218,8 +218,8 @@ const SuperAdminTable = () => {
                 color: "white",
                 textTransform: "capitalize",
                 borderRadius: 2,
-                fontSize: 17,
-                padding: 1,
+                fontSize: 16,
+                fontWeight: 600,
               }}
               startIcon={<Add color="white" />}
             >
@@ -260,55 +260,65 @@ const SuperAdminTable = () => {
           All Locations
         </Typography>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Box>
-          <CustomInputField
-            id="input-with-icon-textfield"
-            placeholder="Search by User Name"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <img src={icon} alt="search input" />
-                </InputAdornment>
-              ),
-            }}
-            value={search}
-            onChange={handleChange}
-          />
+            <CustomInputField
+              id="input-with-icon-textfield"
+              placeholder="Search"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <img src={icon} alt="search input" />
+                  </InputAdornment>
+                ),
+              }}
+              value={search}
+              onChange={handleChange}
+            />
           </Box>
-          
-          <FormControl
-            sx={{ width: "152px" }}
-            size="small"
-           
-            placeholder="status"
-          >
-            <InputLabel id="demo-select-small-label" className="input-label">
-              Status
-            </InputLabel>
+
+          <FormControl sx={{ width: "152px" }} size="small">
             <Select
               value={Status}
-              className="custom-textfield"
-              size="small"
-              placeholder="status"
-              labelId="demo-select-small-label"
-              id="demo-select-small"
-              label="Status"
-              sx={{ height: "40px" }}
               onChange={(e) => setStatus(e.target.value)}
+              displayEmpty
+              className="custom-textfield"
+              placeholder="Status"
+              sx={{ height: "40px" }}
+              renderValue={(selected) => {
+                if (selected === null) {
+                  return <p>Status</p>;
+                }
+
+                return selected ? (
+                  <Typography
+                    className="status-active"
+                    sx={{ padding: 0, px: 2, width: "fit-content" }}
+                  >
+                    Active
+                  </Typography>
+                ) : (
+                  <Typography
+                    className="status-inActive"
+                    sx={{ padding: 0, px: 2, width: "fit-content" }}
+                  >
+                    Inactive
+                  </Typography>
+                );
+              }}
             >
               <MenuItem value={true}>
                 <Typography
-                  className=" status-active"
-                  sx={{ padding: 0, px: 2, width: "44px" }}
+                  className="status-active"
+                  sx={{ padding: 0, px: 2, width: "fit-content" }}
                 >
                   Active
                 </Typography>
               </MenuItem>
               <MenuItem value={false}>
                 <Typography
-                  className=" status-inActive"
-                  sx={{ padding: 0, px: 2, width: "44px" }}
+                  className="status-inActive"
+                  sx={{ padding: 0, px: 2, width: "fit-content" }}
                 >
                   Inactive
                 </Typography>
@@ -316,7 +326,7 @@ const SuperAdminTable = () => {
             </Select>
           </FormControl>
           <Box>
-            <Button onClick={handleClearFilter} variant="text" sx={{}}>
+            <Button onClick={handleClearFilter} variant="text" sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}>
               Clear Filter
             </Button>
           </Box>
@@ -775,7 +785,9 @@ const SuperAdminTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}>
+          <Box
+            sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}
+          >
             No Locations Found
           </Box>
         )}

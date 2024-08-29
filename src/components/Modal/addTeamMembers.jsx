@@ -22,10 +22,10 @@ import {
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 // import {
-  // useAddLocation,
-  // useCreateTeamMembers,
-  // useEditTeamMembers,
-  // useResetPasswordTeamMembers,
+// useAddLocation,
+// useCreateTeamMembers,
+// useEditTeamMembers,
+// useResetPasswordTeamMembers,
 // } from "../../utilities/ApiHooks/team";
 import { backendURL, getDecryptedToken } from "../../utilities/common";
 // import DefaultImage from "../ui-components/defaultImage";
@@ -38,15 +38,16 @@ const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
-  gap: 2,
+  gap: '19px',
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
+  width: 809,
+  bgcolor: "#FFFFFF",
   borderRadius: "12px",
-  p: 2,
+  p: '24px 16px 24px 16px',
 };
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 
@@ -111,40 +112,40 @@ export default function AddTeamMembers({
     validationSchema: validationSchema,
     onSubmit: async (values, { resetForm }) => {
       // {
-        // console.log('onsubmit run');
-        const formData = new FormData();
-        if (typeof values.image !== 'string') {
-          formData.append("image", values.image);
-        }
-        formData.append("name", values.name);
-        formData.append("role", values.role);
-        formData.append("assignedLocations", JSON.stringify(values.assignedLocations));
-        try {
-          if (recordToModify) { // edit case
-            // console.log('edit',formData)
-            if(token?.role === userRoles.SUPER_ADMIN){ // for super admin
+      // console.log('onsubmit run');
+      const formData = new FormData();
+      if (typeof values.image !== 'string') {
+        formData.append("image", values.image);
+      }
+      formData.append("name", values.name);
+      formData.append("role", values.role);
+      formData.append("assignedLocations", JSON.stringify(values.assignedLocations));
+      try {
+        if (recordToModify) { // edit case
+          // console.log('edit',formData)
+          if (token?.role === userRoles.SUPER_ADMIN) { // for super admin
             await updateUser({ apiRoute: `${routePrefix}/user/${recordToModify?._id}?role=${values.role}`, data: formData });
-            }
-            else { // for location admin
-              await updateUser({ apiRoute: `${backendURL}/staffs/${recordToModify?._id}`, data: formData });
-            }
           }
-          else {
-            formData.append("email", values.email);
-            if(token?.role === userRoles.SUPER_ADMIN){ // for super admin
-              await createUser({ apiRoute: `${routePrefix}/user/save?role=${values.role}`, data: formData });
-            }
-            else { // for location admin
-              await createUser({ apiRoute: `${backendURL}/staffs/save`, data: formData });
-            }
+          else { // for location admin
+            await updateUser({ apiRoute: `${backendURL}/staffs/${recordToModify?._id}`, data: formData });
           }
-          resetForm();
-          refetchUsers();
-          close();
         }
-        catch (err) {
-          console.log(err, 'Error in creating user');
+        else {
+          formData.append("email", values.email);
+          if (token?.role === userRoles.SUPER_ADMIN) { // for super admin
+            await createUser({ apiRoute: `${routePrefix}/user/save?role=${values.role}`, data: formData });
+          }
+          else { // for location admin
+            await createUser({ apiRoute: `${backendURL}/staffs/save`, data: formData });
+          }
         }
+        resetForm();
+        refetchUsers();
+        close();
+      }
+      catch (err) {
+        console.log(err, 'Error in creating user');
+      }
       // }
     },
   });
@@ -162,21 +163,32 @@ export default function AddTeamMembers({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          // backdropFilter: "blur(2px)",
+          backgroundColor: "rgba(5, 0, 35, 0.1)",
+          '.MuiModal-backdrop': {
+            backgroundColor: "rgba(5, 0, 35, 0.1)",
+          }
         }}
       >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box>
-              <Typography sx={{ fontWeight: "bold", fontSize: 18 }}>
-                {recordToModify ? "Edit User" : "Add New User"}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+              <Typography sx={{
+                fontWeight: 700,
+                fontSize: 18,
+                lineHeight: '21.09px',
+                fontFamily: '"Roboto",sans-serif !important'
+              }}>
+                {recordToModify ? "Edit User" : "Add User"}
               </Typography>
               <Typography
                 sx={{
-                  color: "#646669",
-                  marginTop: 0.5,
+                  color: "#212528",
+                  lineHeight: '21.86px',
                   fontWeight: 600,
+                  // mt:'5px',
+                  fontSize: 16,
+                  opacity:'70%'
                 }}
               >
                 {recordToModify ? "Edit" : "Add"} your user details.
@@ -184,9 +196,9 @@ export default function AddTeamMembers({
             </Box>
             <Box>
               <IconButton
+                sx={{ p: 0 }}
                 onClick={() => {
                   close();
-                  // setSelectedImage(null);
                 }}
               >
                 <CloseTwoTone />
@@ -195,22 +207,22 @@ export default function AddTeamMembers({
           </Box>
           <Box
             sx={{
-              background: "#f3f5f6",
+              background: "#F3F5F6",
               padding: "16px",
               borderRadius: "12px",
             }}
           >
             <Typography
               sx={{
-                color: "black",
-                marginTop: 1,
+                color: "#000000",
+                lineHeight: '16.39px',
                 fontSize: "12px",
                 fontWeight: 600,
               }}
             >
               Profile image
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, p: 1, my: 2 }}>
+            <Box sx={{ display: "flex", gap: '19px', my: 2 }}>
               <Box>
                 {formik.values.image !== undefined && formik.values.image !== null ? (
                   <img
@@ -239,20 +251,22 @@ export default function AddTeamMembers({
                 style={{ display: "none" }}
               />
 
-              <label htmlFor="image-input">
+              <label htmlFor="image-input" style={{ alignSelf: 'center' }}>
                 <Box
                   sx={{
-                    padding: 2,
+                    // padding: 2,
                   }}
                 >
                   <Button
                     sx={{
-                      color: "black",
-                      fontWeight: 500,
+                      color: "#000000",
+                      fontWeight: 600,
                       borderRadius: "54px !important",
-                      border: "1px solid rgba(212, 219, 223, 1)",
+                      border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: 2,
+                      px: '10px 12px !important',
+                      lineHeight: '21px',
+                      fontSize: 16
                     }}
                     onClick={handleButtonClick}
                   >
@@ -261,9 +275,10 @@ export default function AddTeamMembers({
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "rgba(132, 119, 218, 1)",
+                      color: "#8477DA",
                       fontSize: "12px",
                       fontWeight: 600,
+                      lineHeight: '16.39px', mt: 0.5
                     }}
                   >
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -275,7 +290,7 @@ export default function AddTeamMembers({
               )}
             </Box>
             <Grid container spacing={2}>
-              <Grid item xs={6} sx={{ width: "100%" }}>
+              <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
                 <Typography className="input-label-text">Full Name</Typography>
                 <TextField
                   size="small"
@@ -296,7 +311,7 @@ export default function AddTeamMembers({
                   </Typography>
                 )}
               </Grid>
-              <Grid item xs={6} sx={{ width: "100%" }}>
+              <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
                 <Typography className="input-label-text">Email Address</Typography>
                 <TextField
                   size="small"
@@ -319,7 +334,7 @@ export default function AddTeamMembers({
                 )}
               </Grid>
               {token && token.role === userRoles.SUPER_ADMIN && (
-                <Grid item xs={6} sx={{ width: "100%" }}>
+                <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
                   <Typography className="input-label-text">
                     User Role
                   </Typography>
@@ -465,7 +480,7 @@ export default function AddTeamMembers({
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              marginTop: 2,
+              // marginTop: 2,
               width: "100%",
             }}
           >
@@ -477,7 +492,8 @@ export default function AddTeamMembers({
                   sx={{
                     color: "#8477DA",
                     border: "1px solid #8477DA",
-                    borderRadius: "8px",
+                    fontWeight: 600,
+                    fontSize: '16px'
                   }}
                 >
                   Reset Password
@@ -486,7 +502,7 @@ export default function AddTeamMembers({
                 ""
               )}
             </Box>
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: '12px' }}>
               <Button
                 variant="outlined"
                 onClick={() => {
@@ -497,10 +513,11 @@ export default function AddTeamMembers({
                   }
                 }}
                 sx={{
-                  color: "#101828",
-                  border: "1px solid #D0D5DD",
+                  color: "#212528",
+                  border: "1px solid #D6DAE3",
                   width: "fit-content",
-                  borderRadius: "8px",
+                  fontWeight: 600,
+                  fontSize: '16px'
                 }}
               >
                 {recordToModify ? "Discard Changes" : "Cancel"}
@@ -514,9 +531,10 @@ export default function AddTeamMembers({
                   "&:hover": {
                     backgroundColor: "#8477da",
                   },
-                  padding: createLoading || updateLoading ? 0 : "6px 16px",
+                  padding: createLoading || updateLoading ? '0px !important' : "10px 16px !important",
                   position: "relative",
-                  borderRadius: "8px",
+                  fontWeight: 600,
+                  fontSize: '16px'
                 }}
               >
                 {createLoading || updateLoading ? (
@@ -526,7 +544,7 @@ export default function AddTeamMembers({
                 ) : recordToModify ? (
                   "Save Changes"
                 ) : (
-                  "Create"
+                  "Add User"
                 )}
               </Button>
             </Box>

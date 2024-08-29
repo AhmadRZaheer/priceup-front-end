@@ -81,15 +81,18 @@ export default function Projects() {
             sx={{
               fontSize: 24,
               fontWeight: 600,
+              lineHeight:'32.78px'
             }}
           >
             Projects
           </Typography>
           <Typography
             sx={{
-              color: "rgba(33, 37, 40, 1)",
+              color: "#212528",
               fontSize: "16px",
-              fontWeight: 500,
+              fontWeight: 600,
+              lineHeight:'21.86px',
+              opacity:'70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -198,21 +201,21 @@ export default function Projects() {
             pt: 3,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
+          <Typography sx={{ fontSize: 24, fontWeight: 600,lineHeight:'32.78px' }}>
             Projects
           </Typography>
           <Box
             sx={{
               display: { sm: "flex", xs: "block" },
-              gap: 2,
+              gap: 1,
               pt: { sm: 0, xs: 1 },
             }}
           >
-            <Box sx={{ display: "flex", gap: 2 }}>
+            <Box sx={{ display: "flex", gap: 1 }}>
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search by User Name"
+                  placeholder="Search"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -243,8 +246,11 @@ export default function Projects() {
                       padding: "8px 14px", // Adjust padding
                     },
                     "& .MuiInputLabel-root": {
-                      fontSize: "0.875rem",
-                      top: "-6px", // Adjust label size
+                      fontSize: "14px",
+                      fontWeight:400,
+                      fontFamily:'"Roboto",sans-serif !important',
+                      top: "-5px", // Adjust label size
+                      color:'#000000'
                     },
                   }}
                   renderInput={(params) => (
@@ -253,38 +259,57 @@ export default function Projects() {
                 />
               </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: 2, pt: { sm: 0, xs: 1 } }}>
+            <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
               <FormControl sx={{ width: "152px" }} size="small">
-                <InputLabel
-                  id="demo-select-small-label"
-                  className="input-label"
-                >
-                  Status
-                </InputLabel>
                 <Select
                   value={status}
-                  labelId="demo-select-small-label"
                   id="demo-select-small"
-                  label="Status"
                   className="custom-textfield"
                   size="small"
+                  displayEmpty
                   sx={{ height: "40px" }}
                   onChange={(e) => setStatus(e.target.value)}
+                  renderValue={(selected) => {
+                    if (selected === null) {
+                      return <Typography
+                      sx={{
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        // lineHeight: '16.41px',
+                        color: '#000000',
+                        fontFamily:'"Roboto",sans-serif !important'
+                      }}>Status</Typography>;
+                    }
+
+                    return (
+                      <StatusChip
+                        variant={selected}
+                        sx={{ padding: 0, px: 2 }}
+                      />
+                    );
+                  }}
                 >
                   <MenuItem value={"pending"}>
-                    <StatusChip variant={"pending"} sx={{ padding: 0 }} />
+                    <StatusChip
+                      variant={"pending"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
                   </MenuItem>
                   <MenuItem value={"voided"}>
-                    <StatusChip variant={"voided"} sx={{ padding: 0 }} />
+                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
                   </MenuItem>
                   <MenuItem value={"approved"}>
-                    <StatusChip variant={"approved"} sx={{ padding: 0 }} />
+                    <StatusChip
+                      variant={"approved"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
                   </MenuItem>
                 </Select>
               </FormControl>
               <Button
                 variant="text"
                 onClick={handleResetFilter}
+                sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
                 // sx={{ lineHeight: "21.86px" }}
               >
                 Clear Filter

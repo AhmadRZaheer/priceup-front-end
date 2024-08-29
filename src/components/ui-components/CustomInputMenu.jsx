@@ -14,6 +14,7 @@ function CustomInputMenu({
   helperText,
   onBlur,
   MenuData,
+  color,
 }) {
   return (
     <>
@@ -31,10 +32,16 @@ function CustomInputMenu({
         onChange={onChange}
         helperText={helperText}
         onBlur={onBlur}
-        className={error ? "custom-textfield-error" : "custom-textfield"}
+        className={
+          error
+            ? "custom-textfield-error"
+            : color === "purple"
+            ? "custom-textfield-purple"
+            : "custom-textfield"
+        }
         sx={{
           "& .MuiOutlinedInput-root": {
-            height: "40px"
+            height: "40px",
           },
         }}
       >
