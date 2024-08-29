@@ -117,7 +117,7 @@ const CustomAdminsTable = () => {
         <Box sx={{ display: "flex", gap: 2 }}>
           <CustomInputField
             id="input-with-icon-textfield"
-            placeholder="Search by User Name"
+            placeholder="Search"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">

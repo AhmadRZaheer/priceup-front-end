@@ -203,7 +203,7 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background:'#FFFF' }}>
-                No Estimates Found
+                No Estimate Found
             </Typography>
         ) : (                           
             <Box sx={{ background:'#FFFF',pb:3}}>
