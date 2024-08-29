@@ -1,9 +1,9 @@
 import {
   Box,
-  CircularProgress,
-  FormControlLabel,
-  Switch,
-  Tooltip,
+  // CircularProgress,
+  // FormControlLabel,
+  // Switch,
+  // Tooltip,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
@@ -16,31 +16,31 @@ import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_super
 
 const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
   const {
-    mutate: updateStatus,
+    mutate: updateLocationAdminStatus,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useUserStatus();
-  const { mutate: updateSuper_SuperAdmin } = useUpdateSuper_SuperAdmins();
+  const { mutate: updateSuperAdminStatus } = useUpdateSuper_SuperAdmins();
   const {
-    mutate: updateStatusUser,
+    mutate: updateCustomAdminStatus,
     isLoading: LoadingForEditUser,
     isSuccess: SuccessForEditUser,
   } = useCustomUserStatus();
-  const { mutate: editTeamMembers, isSuccess: isSuccessStaffUpdated } =
+  const { mutate: updateLocationStaffStatus, isSuccess: isSuccessStaffUpdated } =
     useEditTeamMembers();
   const [active, setActive] = useState(row.status);
 
   const handleSwitch = () => {
     setActive(!active);
     if (type === "superAdmin") {
-      updateStatus({ status: !active, id: row?._id });
+      updateLocationAdminStatus({ status: !active, id: row?._id });
       onToggleChange(active);
     } else if (type === "superAdminTeam") {
-      editTeamMembers({ status: !active, id: row?._id });
+      updateLocationStaffStatus({ status: !active, id: row?._id });
     } else if (type === "superAdminUser") {
-      updateStatusUser({ status: !active, id: row?._id });
+      updateCustomAdminStatus({ status: !active, id: row?._id });
     } else if (type === "super_superadmin") {
-      updateSuper_SuperAdmin({ status: !active, id: row?._id });
+      updateSuperAdminStatus({ status: !active, id: row?._id });
     }
     // Call the callback function to update non-active count
   };

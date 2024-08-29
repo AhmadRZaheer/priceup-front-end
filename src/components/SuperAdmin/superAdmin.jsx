@@ -1,46 +1,46 @@
 import React, { useState, useEffect, useCallback } from "react";
 import "./superAdmin.scss";
-import TeamIcon from "../../Assets/user-gary.svg";
+// import TeamIcon from "../../Assets/user-gary.svg";
 import {
   Box,
   Button,
-  IconButton,
+  // IconButton,
   Typography,
   InputAdornment,
   Grid,
   CircularProgress,
-  TextField,
-  Tooltip,
+  // TextField,
+  // Tooltip,
   FormControl,
-  InputLabel,
+  // InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
 import icon from "../../Assets/search-icon.svg";
-import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import EditIcon from "../../Assets/d.svg";
-import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
-import DefaultIcon from "../../Assets/layout-gray.svg";
+// import DeleteIcon from "../../Assets/Delete-Icon.svg";
+// import EditIcon from "../../Assets/d.svg";
+// import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
+// import DefaultIcon from "../../Assets/layout-gray.svg";
 import {
-  useDataCustomUser,
+  // useDataCustomUser,
   useDeleteUser,
-  useFetchAllStaff,
-  useFetchDataAdmin,
-  useFetchDataSuperAdmin,
+  // useFetchAllStaff,
+  // useFetchDataAdmin,
+  // useFetchDataSuperAdmin,
   useSwitchLocationSuperAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
-import AddSuperAdminModel from "../Modal/addSuperAdminModel";
-import image1 from "../../Assets/Active-location.png";
-import image2 from "../../Assets/Non-Active-location.png";
-import image3 from "../../Assets/Team-Members.svg";
-import { Link } from "react-router-dom";
-import { Add, ContentCopy, Search } from "@mui/icons-material";
+// import AddSuperAdminModel from "../Modal/addSuperAdminModel";
+// import image1 from "../../Assets/Active-location.png";
+// import image2 from "../../Assets/Non-Active-location.png";
+// import image3 from "../../Assets/Team-Members.svg";
+// import { Link } from "react-router-dom";
+import { Add } from "@mui/icons-material";
 import { backendURL, debounce } from "../../utilities/common";
-import EstimsteIcon from "../../Assets/estmales-gray.svg";
-import { useDispatch } from "react-redux";
+// import EstimsteIcon from "../../Assets/estmales-gray.svg";
+// import { useDispatch } from "react-redux";
 import DeleteModal from "../Modal/deleteModal";
-import EditLocationModal from "../Modal/editLoactionSuperAdmin";
-import DefaultImage from "../ui-components/defaultImage";
+// import EditLocationModal from "../Modal/editLoactionSuperAdmin";
+// import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import SingleLocation from "../ui-components/singleLocation";
@@ -70,7 +70,7 @@ const SuperAdminTable = () => {
     isSuccess: switchedSuperAdmin,
     isLoading: isSwitchingSuperAdmin,
   } = useSwitchLocationSuperAdmin();
-  const { data: staffData } = useFetchAllStaff();
+  // const { data: staffData } = useFetchAllStaff();
   const {
     mutate: deleteuserdata,
     isSuccess,
