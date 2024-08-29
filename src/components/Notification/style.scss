@@ -3,6 +3,7 @@
   font-weight: 700 !important;
   line-height: 20px !important;
   color: #101828 !important;
+  align-self: center;
 }
 .closeIcon {
   align-self: center !important;
@@ -98,17 +99,17 @@
 }
 @media (max-height: 820px) {
     .drawerContainer{
-      height:74vh;
+      height:81vh;
     } 
     .notification{
-      height:73vh !important;
+      height:75vh !important;
     }
 }
 @media (max-height: 700px) {
     .drawerContainer{
-      height:72vh;
+      height:78vh;
     } 
     .notification{
-      height:68vh !important;
+      height:70vh !important;
     }
 }

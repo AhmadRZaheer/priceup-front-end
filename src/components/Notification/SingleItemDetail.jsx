@@ -64,7 +64,7 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
             setStateForMirrorEstimate(record.resourceInfo, dispatch, navigate);
         }
     };
-    console.log(record, 'record', formattedDate, selectedId);
+    // console.log(record.resourceInfo?.customerData?.email, 'record1');
     return (
         <Box className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
             {getFetching ? <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
@@ -124,9 +124,9 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
                                         />
                                     </Box>
                                     <Box sx={{ pb: 2 }}>
-                                        <CustomTypo title={record.resourceInfo?.customerData?.name !== '' ?record.resourceInfo?.customerData?.name : 'N/A'} />
+                                        <CustomTypo title={record.resourceInfo?.customerData?.name !== undefined ? record.resourceInfo?.customerData?.name : 'N/A'} />
                                         <CustomTypo
-                                            title={record.resourceInfo?.customerData?.email}
+                                            title={record.resourceInfo?.customerData?.email !== undefined ? record.resourceInfo?.customerData?.email : 'N/A'}
                                             sx={{ fontSize: "12.3px !important" }}
                                         />
                                     </Box>

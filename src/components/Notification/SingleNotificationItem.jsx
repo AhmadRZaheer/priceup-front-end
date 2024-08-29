@@ -20,7 +20,7 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           border: selectedId === data._id ? '2px solid #8477DA' : 'none',
           background: data.isRead ? "rgba(217, 217, 217, 0.39)" : "none",
           opacity: data.isRead ? 0.8 : 1,
-          py: 1.6,
+          py: '7px',
           pr: 1.6,
           pl: '21px',
           ":hover": {
@@ -32,7 +32,7 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
 
         <Stack direction="row" gap={1}>
           <Box sx={{ height: '10px', width: '10px', borderRadius: '4.94px', background: '#8477DA' , alignSelf:'center' }} />
-          <Stack direction='column' gap={1}>
+          <Stack direction='column'>
             <Typography
               className={data.isRead ? "todayTextLight" : "todayText"}
               sx={{
@@ -101,7 +101,7 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
           </Stack>
         </Stack> */}
       </Box>
-      <Divider sx={{ borderColor: 'rgba(0, 0, 0, 0.05),' }} />
+      {/* {divider && <Divider sx={{ borderColor: 'rgba(0, 0, 0, 0.05),' }} />} */}
     </>
   );
 };
