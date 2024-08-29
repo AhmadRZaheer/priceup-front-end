@@ -1,7 +1,7 @@
 import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./style.scss";
-import { Add } from "@mui/icons-material";
+// import { Add } from "@mui/icons-material";
 import SingleShowerCard from "./SingleShowerCard";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 
@@ -25,9 +25,18 @@ const ShowerLayout = () => {
           pr: 3,
         }}
       >
-        <Typography className="layouttitle">
-          Showers <Box sx={{ color: "#000000" }}>&nbsp;/ Layouts</Box>
-        </Typography>
+        <Box sx={{ display: 'flex', gap: '5px' }}>
+          <Typography className="layouttitle">
+            Shower
+          </Typography>
+          <Typography className="layouttitle">
+            /
+          </Typography>
+          <Typography className="layouttitle" sx={{ color: "#000000" }}>
+            Layouts
+          </Typography>
+        </Box>
+
         {/* <Box>
           <Button
             // onClick={() => navigate("/layouts/edit")}
@@ -61,7 +70,7 @@ const ShowerLayout = () => {
         }
       >
         {isLoadingShowsLayouts ? (
-          <Box>
+          <Box sx={{ height: "60vh", width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
         ) : (

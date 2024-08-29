@@ -1,7 +1,7 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
+  // Accordion,
+  // AccordionDetails,
+  // AccordionSummary,
   Box,
   Button,
   CircularProgress,
@@ -13,265 +13,321 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import image from "../../../Assets/DoorImg.png";
+// import image from "../../../Assets/DoorImg.png";
 import "../style.scss";
 import CheckIcon from "@mui/icons-material/Check";
-import ModificationItem from "./ModificationItem";
-import { Add } from "@mui/icons-material";
-import RemoveIcon from "@mui/icons-material/Remove";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+// import ModificationItem from "./ModificationItem";
+
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { getDefaultId } from "@/redux/defaultSlice";
+// import { useSelector } from "react-redux";
+// import { getDefaultId } from "@/redux/defaultSlice";
 import {
-  useEditDefault,
-  useFetchDataDefault,
-  useFetchSingleDefault,
+  useEditDefault
 } from "@/utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "@/utilities/common";
 import { useFormik } from "formik";
 import CustomInputMenu from "@/components/ui-components/CustomInputMenu";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import MountingSection from "../MountingSection";
+import { useFetchAllDocuments, useFetchSingleDocument } from "@/utilities/ApiHooks/common";
+import AddMoreItems from "./addMoreItems";
+import { setItemsStatusAfterFirstLoad } from "@/utilities/layouts";
 
-const data = [
-  { id: 1, name: "Pivot Hinge Option", status: false },
-  { id: 2, name: "Heavy Duty Option", status: true },
-  { id: 3, name: "Mounting", status: false },
-  { id: 4, name: "Heavy Pivot Option", status: false },
-  { id: 5, name: "sliding Door System", status: false },
-  { id: 6, name: "Outages", status: false },
-  { id: 7, name: "Transom (if full height)", status: false },
-  { id: 8, name: "Header (if not full height)", status: false },
-  { id: 9, name: "Glass Addon", status: false },
-  { id: 10, name: "Notch", status: false },
-  { id: 11, name: "People", status: false },
-  { id: 12, name: "Hours", status: false },
-];
-
-const layoutArray = [{ name: "Doors" }, { name: "Doors & Panel" }];
+const routePrefix = `${backendURL}/layouts`;
 
 const EditShowerLayout = () => {
   const [searchParams] = useSearchParams();
   const layoutId = searchParams.get("id");
-
-  const [modification, setModification] = useState(data);
-  const [layout, setLayout] = useState(layoutId);
-  const [expandAccordian, setExpandAccordian] = useState(false);
-  const defaultId = useSelector(getDefaultId);
+  const [addMoreItemsArray, setAddMoreItemsArray] = useState({});
+  const [selectedlayoutId, setSelectedLayoutId] = useState('');
+  const [pageLoading, setPageLoading] = useState(true);
   const navigate = useNavigate();
 
   const {
-    data: ShowsLayouts,
+    data: allLayouts,
     refetch: refetchAllLayouts,
-    isLoading: isLoadingShowsLayouts,
-  } = useFetchDataDefault();
+  } = useFetchAllDocuments(routePrefix);
 
   const {
-    data: singleDefault,
-    isFetching: isfetchingDefaultSingle,
-    refetch,
-  } = useFetchSingleDefault(layoutId ?? defaultId);
+    data: singleLayout,
+    isFetching: isfetchingSingleLayout,
+    refetch: refetchSingleLayout,
+  } = useFetchSingleDocument(`${routePrefix}/${selectedlayoutId}`)
+
   const { mutate: updateDefault, isSuccess: SuccessForEdit } = useEditDefault();
 
   const [mounting, setMounting] = useState(null);
 
-  useEffect(() => {
-    if (singleDefault) {
-      setMounting({
-        channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
-        mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
-        wallClamp: singleDefault?.layoutData?.settings?.wallClamp,
-        sleeveOver: singleDefault?.layoutData?.settings?.sleeveOver,
-        glassToGlass: singleDefault?.layoutData?.settings?.glassToGlass,
-        cornerWallClamp: singleDefault?.layoutData?.settings?.cornerWallClamp,
-        cornerSleeveOver: singleDefault?.layoutData?.settings?.cornerSleeveOver,
-        cornerGlassToGlass:
-          singleDefault?.layoutData?.settings?.cornerGlassToGlass,
-      });
-    }
-  }, [singleDefault]);
   const handleChangeLayout = (event) => {
-    setLayout(event.target.value);
-    navigate(`/layouts/edit/?id=${event.target.value}`);
+    setSelectedLayoutId(event.target.value);
+    navigate(`/layouts/edit?id=${event.target.value}`);
   };
-  useEffect(() => {
-    setLayout("Doors");
-  }, []);
 
   const initialValues = {
-    image: singleDefault?.layoutData?.image,
-    name: singleDefault?.layoutData?.name,
+    image: singleLayout?.layoutData?.image,
+    name: singleLayout?.layoutData?.name,
     handles: {
-      handleType: singleDefault?.layoutData?.settings?.handles.handleType,
-      count: singleDefault?.layoutData?.settings?.handles.count,
+      handleType: singleLayout?.layoutData?.settings?.handles.handleType,
+      count: singleLayout?.layoutData?.settings?.handles.count,
     },
 
-    hardwareFinishes: singleDefault?.layoutData?.settings?.hardwareFinishes,
+    hardwareFinishes: singleLayout?.layoutData?.settings?.hardwareFinishes,
 
     hinges: {
-      hingesType: singleDefault?.layoutData?.settings?.hinges?.hingesType,
-      count: singleDefault?.layoutData?.settings?.hinges?.count,
+      hingesType: singleLayout?.layoutData?.settings?.hinges?.hingesType,
+      count: singleLayout?.layoutData?.settings?.hinges?.count,
     },
     pivotHingeOption: {
       pivotHingeType:
-        singleDefault?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
-      count: singleDefault?.layoutData?.settings?.pivotHingeOption.count,
+        singleLayout?.layoutData?.settings?.pivotHingeOption.pivotHingeType,
+      count: singleLayout?.layoutData?.settings?.pivotHingeOption.count,
     },
     heavyDutyOption: {
       heavyDutyType:
-        singleDefault?.layoutData?.settings?.heavyDutyOption.heavyDutyType,
-      height: singleDefault?.layoutData?.settings?.heavyDutyOption.height,
-      threshold: singleDefault?.layoutData?.settings?.heavyDutyOption.threshold,
+        singleLayout?.layoutData?.settings?.heavyDutyOption.heavyDutyType,
+      height: singleLayout?.layoutData?.settings?.heavyDutyOption.height,
+      threshold: singleLayout?.layoutData?.settings?.heavyDutyOption.threshold,
     },
     heavyPivotOption: {
       heavyPivotType:
-        singleDefault?.layoutData?.settings?.heavyPivotOption.heavyPivotType,
-      height: singleDefault?.layoutData?.settings?.heavyPivotOption.height,
+        singleLayout?.layoutData?.settings?.heavyPivotOption.heavyPivotType,
+      height: singleLayout?.layoutData?.settings?.heavyPivotOption.height,
       threshold:
-        singleDefault?.layoutData?.settings?.heavyPivotOption.threshold,
+        singleLayout?.layoutData?.settings?.heavyPivotOption.threshold,
     },
-    channelOrClamps: singleDefault?.layoutData?.settings?.channelOrClamps,
-    mountingChannel: singleDefault?.layoutData?.settings?.mountingChannel,
+    channelOrClamps: singleLayout?.layoutData?.settings?.channelOrClamps,
+    mountingChannel: singleLayout?.layoutData?.settings?.mountingChannel,
 
     cornerGlassToGlass: {
       glassToGlassType:
-        singleDefault?.layoutData?.settings.cornerGlassToGlass
+        singleLayout?.layoutData?.settings.cornerGlassToGlass
           ?.glassToGlassType,
 
-      count: singleDefault?.layoutData?.settings.cornerGlassToGlass?.count,
+      count: singleLayout?.layoutData?.settings.cornerGlassToGlass?.count,
     },
     cornerWallClamp: {
       wallClampType:
-        singleDefault?.layoutData?.settings.cornerWallClamp?.wallClampType,
+        singleLayout?.layoutData?.settings.cornerWallClamp?.wallClampType,
 
-      count: singleDefault?.layoutData?.settings.cornerWallClamp?.count,
+      count: singleLayout?.layoutData?.settings.cornerWallClamp?.count,
     },
     cornerSleeveOver: {
       sleeveOverType:
-        singleDefault?.layoutData?.settings.cornerSleeveOver?.sleeveOverType,
-      count: singleDefault?.layoutData?.settings.cornerSleeveOver?.count,
+        singleLayout?.layoutData?.settings.cornerSleeveOver?.sleeveOverType,
+      count: singleLayout?.layoutData?.settings.cornerSleeveOver?.count,
     },
 
     glassToGlass: {
       glassToGlassType:
-        singleDefault?.layoutData?.settings.glassToGlass?.glassToGlassType,
+        singleLayout?.layoutData?.settings.glassToGlass?.glassToGlassType,
 
-      count: singleDefault?.layoutData?.settings.glassToGlass?.count,
+      count: singleLayout?.layoutData?.settings.glassToGlass?.count,
     },
     wallClamp: {
       wallClampType:
-        singleDefault?.layoutData?.settings.wallClamp?.wallClampType,
+        singleLayout?.layoutData?.settings.wallClamp?.wallClampType,
 
-      count: singleDefault?.layoutData?.settings.wallClamp?.count,
+      count: singleLayout?.layoutData?.settings.wallClamp?.count,
     },
     sleeveOver: {
       sleeveOverType:
-        singleDefault?.layoutData?.settings.sleeveOver?.sleeveOverType,
-      count: singleDefault?.layoutData?.settings.sleeveOver?.count,
+        singleLayout?.layoutData?.settings.sleeveOver?.sleeveOverType,
+      count: singleLayout?.layoutData?.settings.sleeveOver?.count,
     },
     glassType: {
-      type: singleDefault?.layoutData?.settings?.glassType?.type,
-      thickness: singleDefault?.layoutData?.settings?.glassType?.thickness,
+      type: singleLayout?.layoutData?.settings?.glassType?.type,
+      thickness: singleLayout?.layoutData?.settings?.glassType?.thickness,
     },
     slidingDoorSystem: {
-      type: singleDefault?.layoutData?.settings?.slidingDoorSystem.type,
-      count: singleDefault?.layoutData?.settings?.slidingDoorSystem.count,
+      type: singleLayout?.layoutData?.settings?.slidingDoorSystem.type,
+      count: singleLayout?.layoutData?.settings?.slidingDoorSystem.count,
     },
-    outages: singleDefault?.layoutData?.settings?.outages,
-    transom: singleDefault?.layoutData?.settings?.transom,
-    header: singleDefault?.layoutData?.settings?.header,
-    glassAddon: singleDefault?.layoutData?.settings?.glassAddon,
-    notch: singleDefault?.layoutData?.settings?.notch,
+    outages: singleLayout?.layoutData?.settings?.outages,
+    transom: singleLayout?.layoutData?.settings?.transom,
+    header: singleLayout?.layoutData?.settings?.header,
+    glassAddon: singleLayout?.layoutData?.settings?.glassAddon,
+    notch: singleLayout?.layoutData?.settings?.notch,
 
     other: {
-      people: singleDefault?.layoutData?.settings?.other?.people,
-      hours: singleDefault?.layoutData?.settings?.other?.hours,
+      people: singleLayout?.layoutData?.settings?.other?.people,
+      hours: singleLayout?.layoutData?.settings?.other?.hours,
     },
   };
 
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
-    // validationSchema: validationSchema,
     onSubmit: (values) => {
       updateDefault({ settings: { ...values, ...mounting }, id: layoutId });
     },
   });
 
-  const handleButtonClick = (id) => {
-    setModification((prevModification) =>
-      prevModification.map((item) =>
-        item.id === id ? { ...item, status: !item.status } : item
-      )
-    );
+  const handleAddMoreItemClick = (id) => {
+    switch (id) { // remove formik seelcted val
+      case 'hardwareFinishes':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('hardwareFinishes', null);
+        }
+        break;
+      case 'handles':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('handles.handleType', null);
+          formik.setFieldValue('handles.count', 0);
+        }
+        break;
+      case 'hinges':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('hinges.hingesType', null);
+          formik.setFieldValue('hinges.count', 0);
+        }
+        break;
+      case 'pivotHingeOption':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('pivotHingeOption.pivotHingeType', null);
+          formik.setFieldValue('pivotHingeOption.count', 0);
+        }
+        break;
+      case 'heavyDutyOption':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('heavyDutyOption.heavyDutyType', null);
+          formik.setFieldValue('heavyDutyOption.height', 0);
+        }
+        break;
+      case 'heavyPivotOption':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('heavyPivotOption.heavyPivotType', null);
+          formik.setFieldValue('heavyPivotOption.height', 0);
+          formik.setFieldValue('heavyPivotOption.threshold', 0);
+        }
+        break;
+      case 'glassType':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('glassType.type', null);
+          // formik.setFieldValue('glassType.thickness', '0');
+        }
+        break;
+      case 'slidingDoorSystem':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('slidingDoorSystem.type', null);
+          formik.setFieldValue('slidingDoorSystem.count', 0);
+        }
+        break;
+      case 'outages':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('outages', 0);
+        }
+        break;
+      case 'transom':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('transom', null);
+        }
+        break;
+      case 'header':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('header', null);
+        }
+        break;
+      case 'glassAddon':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('glassAddon', null);
+        }
+        break;
+      case 'notch':
+        if (addMoreItemsArray[id]?.status) {
+          formik.setFieldValue('notch', 0);
+        }
+        break;
+      case 'mounting':
+        if (addMoreItemsArray[id]?.status) {
+          setMounting({
+            channelOrClamps: 'Channel',
+            mountingChannel: null,
+            wallClamp: { wallClampType: null, count: 0 },
+            sleeveOver: { sleeveOverType: null, count: 0 },
+            glassToGlass: { glassToGlassType: null, count: 0 },
+            cornerWallClamp: { wallClampType: null, count: 0 },
+            cornerSleeveOver: { sleeveOverType: null, count: 0 },
+            cornerGlassToGlass: { glassToGlassType: null, count: 0 },
+          });
+        }
+        break;
+      default:
+        break;
+    }
+    setAddMoreItemsArray((prevVal) => ({  // update item status
+      ...prevVal,
+      [id]: {
+        ...prevVal[id],
+        status: !prevVal[id].status,
+      },
+    }));
   };
 
-  const LayoutData = singleDefault?.layoutData;
 
   useEffect(() => {
-    if (SuccessForEdit) {
-      refetch();
+    if (singleLayout) {
+      const items = setItemsStatusAfterFirstLoad(singleLayout?.layoutData)
+      setAddMoreItemsArray(items);
+
+      setMounting({
+        channelOrClamps: singleLayout?.layoutData?.settings?.channelOrClamps,
+        mountingChannel: singleLayout?.layoutData?.settings?.mountingChannel,
+        wallClamp: singleLayout?.layoutData?.settings?.wallClamp,
+        sleeveOver: singleLayout?.layoutData?.settings?.sleeveOver,
+        glassToGlass: singleLayout?.layoutData?.settings?.glassToGlass,
+        cornerWallClamp: singleLayout?.layoutData?.settings?.cornerWallClamp,
+        cornerSleeveOver: singleLayout?.layoutData?.settings?.cornerSleeveOver,
+        cornerGlassToGlass:
+          singleLayout?.layoutData?.settings?.cornerGlassToGlass,
+      });
+      setPageLoading(false);
     }
-  }, [SuccessForEdit]);
+  }, [singleLayout]);
+
   useEffect(() => {
-    // if (layout !== layoutId) {
-    refetch();
+    if (layoutId) {
+      setSelectedLayoutId(layoutId)
+    }
+  }, [layoutId]);
+
+  useEffect(() => {
     refetchAllLayouts();
-    // }
-  }, [layout]);
-  useEffect(() => {
-    refetch();
-  }, []);
+    if (selectedlayoutId) {
+      refetchSingleLayout();
+    }
+  }, [selectedlayoutId]);
+
   return (
     <Box sx={{ px: 3, py: 3 }}>
       <Box sx={{ display: "flex", gap: "12px" }}>
-        <Typography className="layouttitle">
-          Showers <Box sx={{ color: "#000000" }}>/ Layouts</Box>
-        </Typography>
+        <Box sx={{ display: 'flex', gap: '5px' }}>
+          <Typography className="layouttitle">
+            Shower
+          </Typography>
+          <Typography className="layouttitle">
+            /
+          </Typography>
+          <Typography onClick={() => navigate(`/layouts`)} className="layouttitle" sx={{ color: "#000000", cursor: 'pointer' }}>
+            Layouts
+          </Typography>
+          <Typography className="layouttitle">
+            /
+          </Typography>
+        </Box>
         <FormControl
           sx={{ width: "197px" }}
           size="small"
           className="custom-textfield"
         >
           <Select
-            value={layout}
+            value={selectedlayoutId}
             size="small"
             labelId="demo-select-small-label"
             id="demo-select-small"
-            sx={{ height: "40px", background: "#F6F5FF", width: "197px" }}
+            sx={{ height: "40px", background: "#F6F5FF", width: "262px" }}
             onChange={handleChangeLayout}
-            displayEmpty
-            renderValue={(selected) => {
-              if (!selected && layoutId) {
-                const data = ShowsLayouts?.find(
-                  (item) => item?._id === layoutId
-                );
-                return <Typography>{data?.name || "Select layout"}</Typography>;
-              }
-              const data = ShowsLayouts?.find((item) => item?._id === selected);
-              return (
-                <Typography
-                  sx={{
-                    width: "155px",
-                    whiteSpace: "nowrap",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                  }}
-                >
-                  {data?.name || "Select layout"}
-                </Typography>
-              );
-            }}
-            MenuProps={{
-              PaperProps: {
-                // style: {
-                //   width: "200px",
-                // },
-              },
-            }}
           >
-            {ShowsLayouts?.map((data, index) => (
+            {allLayouts?.map((data, index) => (
               <MenuItem key={index} value={data?._id}>
                 <Box
                   sx={{
@@ -283,7 +339,7 @@ const EditShowerLayout = () => {
                   <Typography sx={{ fontSize: "14px" }}>
                     {data?.name}
                   </Typography>
-                  {data?._id === layout ? (
+                  {data?._id === selectedlayoutId ? (
                     <CheckIcon sx={{ color: "#8477DA" }} />
                   ) : null}
                 </Box>
@@ -292,7 +348,7 @@ const EditShowerLayout = () => {
           </Select>
         </FormControl>
       </Box>
-      {isfetchingDefaultSingle ? (
+      {isfetchingSingleLayout || pageLoading ? (
         <Box
           sx={{
             height: "60vh",
@@ -322,7 +378,7 @@ const EditShowerLayout = () => {
                 color: "#000000",
               }}
             >
-              {LayoutData?.name}
+              {singleLayout?.layoutData?.name}
             </Typography>
             <Box>
               <Button
@@ -381,7 +437,7 @@ const EditShowerLayout = () => {
                 }}
               >
                 <img
-                  src={`${backendURL}/${LayoutData?.image}`}
+                  src={`${backendURL}/${singleLayout?.layoutData?.image}`}
                   alt="/"
                   style={{ width: "423px", height: "557px" }}
                 />
@@ -417,7 +473,7 @@ const EditShowerLayout = () => {
                 }}
               >
                 <Grid container spacing={2}>
-                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                  {addMoreItemsArray?.hardwareFinishes?.status && <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -445,13 +501,13 @@ const EditShowerLayout = () => {
                             value={formik.values.hardwareFinishes || null}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.hardwareFinishes}
+                            MenuData={singleLayout?.listData?.hardwareFinishes}
                           />
                         </Box>
                       </Box>
                     </Box>
-                  </Grid>
-                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                  </Grid>}
+                  {addMoreItemsArray?.handles?.status && <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -484,7 +540,7 @@ const EditShowerLayout = () => {
                             }
                           }}
                           onBlur={formik.handleBlur}
-                          MenuData={singleDefault?.listData?.handles}
+                          MenuData={singleLayout?.listData?.handles}
                         />
                         <CustomInputField
                           type="number"
@@ -506,8 +562,8 @@ const EditShowerLayout = () => {
                         />
                       </Box>
                     </Box>
-                  </Grid>
-                  {modification[0].status && (
+                  </Grid>}
+                  {addMoreItemsArray?.pivotHingeOption.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -547,7 +603,7 @@ const EditShowerLayout = () => {
                               }
                             }}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.pivotHingeOption}
+                            MenuData={singleLayout?.listData?.pivotHingeOption}
                           />
                           <CustomInputField
                             color={"purple"}
@@ -571,7 +627,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                  {addMoreItemsArray?.glassType?.status && <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -604,7 +660,7 @@ const EditShowerLayout = () => {
                             }
                           }}
                           onBlur={formik.handleBlur}
-                          MenuData={singleDefault?.listData?.glassType}
+                          MenuData={singleLayout?.listData?.glassType}
                         />
                         <TextField
                           select
@@ -633,8 +689,8 @@ const EditShowerLayout = () => {
                         </TextField>
                       </Box>
                     </Box>
-                  </Grid>
-                  <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                  </Grid>}
+                  {addMoreItemsArray?.hinges?.status && <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                     <Box
                       sx={{
                         display: "flex",
@@ -667,7 +723,7 @@ const EditShowerLayout = () => {
                             }
                           }}
                           onBlur={formik.handleBlur}
-                          MenuData={singleDefault?.listData?.hinges}
+                          MenuData={singleLayout?.listData?.hinges}
                         />
                         <CustomInputField
                           color={"purple"}
@@ -689,9 +745,9 @@ const EditShowerLayout = () => {
                         />
                       </Box>
                     </Box>
-                  </Grid>
+                  </Grid>}
 
-                  {modification[1].status && (
+                  {addMoreItemsArray?.heavyDutyOption?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -734,7 +790,7 @@ const EditShowerLayout = () => {
                               }
                             }}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.heavyDutyOption}
+                            MenuData={singleLayout?.listData?.heavyDutyOption}
                           />
 
                           <CustomInputField
@@ -760,7 +816,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {modification[2].status && (
+                  {addMoreItemsArray?.mounting?.status && (
                     <Grid xs={12} sx={{ p: 1.8, pb: 1 }}>
                       <Box
                         sx={{
@@ -770,7 +826,7 @@ const EditShowerLayout = () => {
                         }}
                       >
                         <Typography className="modificationTitle">
-                          Channel or Clamps
+                          Mounting
                         </Typography>
                         <Box
                           sx={{
@@ -779,7 +835,7 @@ const EditShowerLayout = () => {
                             gap: "10px",
                           }}
                         >
-                          <div
+                          {/* <div
                             style={{
                               width: "250px",
                               padding: "10px 10px 10px 10px",
@@ -787,12 +843,12 @@ const EditShowerLayout = () => {
                             }}
                           >
                             Mounting
-                          </div>
+                          </div> */}
 
                           <MountingSection
                             mounting={mounting}
                             setMounting={setMounting}
-                            list={singleDefault?.listData}
+                            list={singleLayout?.listData}
                             activeGlassThickness={
                               formik.values.glassType.thickness
                             }
@@ -801,7 +857,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {modification[3].status && (
+                  {addMoreItemsArray?.heavyPivotOption?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -845,7 +901,7 @@ const EditShowerLayout = () => {
                               }
                             }}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.heavyPivotOption}
+                            MenuData={singleLayout?.listData?.heavyPivotOption}
                           />
                           <Box sx={{ display: "flex", gap: 2 }}>
                             <CustomInputField
@@ -861,7 +917,7 @@ const EditShowerLayout = () => {
                               placeholder={"width"}
                               value={
                                 formik.values.heavyPivotOption.threshold !==
-                                undefined
+                                  undefined
                                   ? formik.values.heavyPivotOption.threshold
                                   : 0
                               }
@@ -881,7 +937,7 @@ const EditShowerLayout = () => {
                               placeholder={"height"}
                               value={
                                 formik.values.heavyPivotOption.height !==
-                                undefined
+                                  undefined
                                   ? formik.values.heavyPivotOption.height
                                   : 0
                               }
@@ -893,7 +949,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {modification[4].status && (
+                  {addMoreItemsArray?.slidingDoorSystem?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -930,7 +986,7 @@ const EditShowerLayout = () => {
                             }}
                             onBlur={formik.handleBlur}
                             MenuData={
-                              singleDefault?.listData?.slidingDoorSystem
+                              singleLayout?.listData?.slidingDoorSystem
                             }
                           />
 
@@ -956,7 +1012,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {modification[5].status && (
+                  {addMoreItemsArray?.outages?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -975,7 +1031,7 @@ const EditShowerLayout = () => {
                             gap: "10px",
                           }}
                         >
-                          <CustomInputMenu
+                          <CustomInputField
                             color={"purple"}
                             size="small"
                             variant="outlined"
@@ -993,7 +1049,7 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {modification[6].status && (
+                  {addMoreItemsArray?.transom?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -1021,13 +1077,13 @@ const EditShowerLayout = () => {
                             value={formik.values.transom}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.transom}
+                            MenuData={singleLayout?.listData?.transom}
                           />
                         </Box>
                       </Box>
                     </Grid>
                   )}
-                  {modification[7].status && (
+                  {addMoreItemsArray?.header?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -1055,13 +1111,13 @@ const EditShowerLayout = () => {
                             value={formik.values.header}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.header}
+                            MenuData={singleLayout?.listData?.header}
                           />
                         </Box>
                       </Box>
                     </Grid>
                   )}
-                  {modification[8].status && (
+                  {addMoreItemsArray?.glassAddon?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -1089,13 +1145,13 @@ const EditShowerLayout = () => {
                             value={formik.values.glassAddon}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            MenuData={singleDefault?.listData?.glassAddons}
+                            MenuData={singleLayout?.listData?.glassAddons}
                           />
                         </Box>
                       </Box>
                     </Grid>
                   )}
-                  {modification[9].status && (
+                  {addMoreItemsArray?.notch?.status && (
                     <Grid item md={6} xs={12} sx={{ pb: 1 }}>
                       <Box
                         sx={{
@@ -1132,161 +1188,76 @@ const EditShowerLayout = () => {
                       </Box>
                     </Grid>
                   )}
-                  {(modification[10].status === true ||
-                    modification[11].status === true) && (
-                    <Grid item xs={12} sx={{ pb: 1 }}>
+                  <Grid item xs={12} sx={{ pb: 1 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "12px",
+                        width: "100%",
+                      }}
+                    >
+                      <Typography className="modificationTitle">
+                        Labor
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
-                          flexDirection: "column",
-                          gap: "12px",
+                          gap: "16px",
                           width: "100%",
                         }}
                       >
-                        <Typography className="modificationTitle">
-                          Other
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: "16px",
-                            width: "100%",
-                          }}
-                        >
-                          {modification[10].status && (
-                            <Box sx={{ width: "50%" }}>
-                              {" "}
-                              <Typography
-                                className="modificationTitle"
-                                sx={{ fontSize: 16 }}
-                              >
-                                People
-                              </Typography>
-                              <CustomInputField
-                                color={"purple"}
-                                size="small"
-                                variant="outlined"
-                                name="other.people"
-                                type="number"
-                                InputProps={{
-                                  inputProps: { min: 0 },
-                                }}
-                                fullWidth={true}
-                                value={formik.values.other.people}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                              />
-                            </Box>
-                          )}
-                          {modification[11].status && (
-                            <Box sx={{ width: "50%" }}>
-                              {" "}
-                              <Typography
-                                className="modificationTitle"
-                                sx={{ fontSize: 16 }}
-                              >
-                                Hours
-                              </Typography>
-                              <CustomInputField
-                                color={"purple"}
-                                size="small"
-                                type="number"
-                                InputProps={{
-                                  inputProps: { min: 0 },
-                                }}
-                                variant="outlined"
-                                name="other.hours"
-                                fullWidth={true}
-                                value={formik.values.other.hours}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                              />
-                            </Box>
-                          )}
+                        <Box sx={{ width: "50%" }}>
+                          {" "}
+                          <Typography
+                            className="modificationTitle"
+                            sx={{ fontSize: 16 }}
+                          >
+                            People
+                          </Typography>
+                          <CustomInputField
+                            color={"purple"}
+                            size="small"
+                            variant="outlined"
+                            name="other.people"
+                            type="number"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            fullWidth={true}
+                            value={formik.values.other.people}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                          />
+                        </Box>
+                        <Box sx={{ width: "50%" }}>
+                          {" "}
+                          <Typography
+                            className="modificationTitle"
+                            sx={{ fontSize: 16 }}
+                          >
+                            Hours
+                          </Typography>
+                          <CustomInputField
+                            color={"purple"}
+                            size="small"
+                            type="number"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            variant="outlined"
+                            name="other.hours"
+                            fullWidth={true}
+                            value={formik.values.other.hours}
+                            onChange={formik.handleChange}
+                            onBlur={formik.handleBlur}
+                          />
                         </Box>
                       </Box>
-                    </Grid>
-                  )}
+                    </Box>
+                  </Grid>
                 </Grid>
-
-                <Accordion
-                  expanded={expandAccordian}
-                  onChange={() => {
-                    setExpandAccordian(!expandAccordian);
-                  }}
-                  sx={{
-                    border: "none",
-                    background: "none",
-                    boxShadow: "none",
-                    ":before": {
-                      backgroundColor: "white !important",
-                    },
-                  }}
-                >
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon sx={{ color: "#8477DA" }} />}
-                    aria-controls="panel1-content"
-                    id="panel1-header"
-                    sx={{
-                      color: "#5D6164",
-                      p: 0,
-                      flexGrow: `0 !important`,
-                      width: "130px",
-                      "&.Mui-expanded": {
-                        minHeight: "40px",
-                      },
-                    }}
-                  >
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "21px",
-                        color: "#9088C0",
-                      }}
-                    >
-                      Add more items
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails style={{ padding: "0px" }}>
-                    {modification.map((data, index) => (
-                      <Button
-                        onClick={() => handleButtonClick(data.id)}
-                        key={index}
-                        variant="contained"
-                        sx={{
-                          height: "36px",
-                          border: "1px solid #8477DA",
-                          background: "#F6F5FF",
-                          borderRadius: "4px !important",
-                          p: "10px",
-                          gap: "10px",
-                          mr: "10px",
-                          mb: "10px",
-                          boxShadow: "none",
-                          ":hover": {
-                            background: "#F6F5FF",
-                          },
-                        }}
-                      >
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            lineHeight: "16.14px",
-                            color: "#000000",
-                          }}
-                        >
-                          {data.name}
-                        </Typography>
-                        {!data.status ? (
-                          <Add sx={{ color: "#8477DA !important" }} />
-                        ) : (
-                          <RemoveIcon sx={{ color: "#8477DA !important" }} />
-                        )}
-                      </Button>
-                    ))}
-                  </AccordionDetails>
-                </Accordion>
+                <AddMoreItems items={addMoreItemsArray} handleItemClick={handleAddMoreItemClick} />
               </Box>
             </Grid>
           </Grid>

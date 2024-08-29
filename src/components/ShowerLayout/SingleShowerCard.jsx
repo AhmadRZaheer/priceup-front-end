@@ -1,23 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./style.scss";
 import { Box, Button, Divider, Typography } from "@mui/material";
-import image from "../../Assets/dummy.png";
+// import image from "../../Assets/dummy.png";
 import ViewDrawer from "./ViewDrawer";
 import { useNavigate } from "react-router-dom";
 import { backendURL } from "@/utilities/common";
 import { useDispatch } from "react-redux";
-import { setDefaultId } from "@/redux/defaultSlice";
+// import { setDefaultId } from "@/redux/defaultSlice";
 
 const SingleShowerCard = ({ data }) => {
   const dispatch = useDispatch();
-  const [viewLayout, setViewLayout] = React.useState(false);
-  const [selectedLayout, setSelectedLayout] = useState();
-  const toggleViewDrawer = (open) => (event) => {
-    setViewLayout(open);
-    dispatch(setDefaultId(data._id));
-    setSelectedLayout(data);
-  };
   const navigate = useNavigate();
+  const [openDrawer, setOpenDrawer] = useState(false);
+  const [selectedLayout, setSelectedLayout] = useState(null);
+  const handleOpenDrawer = () => {
+    setSelectedLayout(data);
+    setOpenDrawer(true);
+  }
+  const handleCloseDrawer = () => {
+    setSelectedLayout(null);
+    setOpenDrawer(false);
+  };
 
   return (
     <>
@@ -50,16 +53,16 @@ const SingleShowerCard = ({ data }) => {
               <Box className="cardTitleContainer">
                 <Typography className="descTitle">Hardware Finishes</Typography>
                 <Typography className="descBoldTitle">
-                  {data.settings?.hardwareFinishes?.name}
+                  {data.settings?.hardwareFinishes?.name ? data.settings?.hardwareFinishes?.name : '---'}
                 </Typography>
               </Box>
 
               <Box className="cardTitleContainer">
                 <Typography className="descTitle">Hinges</Typography>
                 <Typography className="descBoldTitle">
-                  {`${data.settings?.hinges?.hingesType?.name ?? "-----"} (${
-                    data.settings?.hinges?.count
-                  })`}
+                  {data.settings?.hinges?.hingesType?.name ? `${data.settings?.hinges?.hingesType?.name}(
+                    ${data.settings?.hinges?.count})` : '---'
+                  }
                 </Typography>
               </Box>
             </Box>
@@ -67,14 +70,17 @@ const SingleShowerCard = ({ data }) => {
             <Box className="cardTitleContainer">
               <Typography className="descTitle">Handles</Typography>
               <Typography className="descBoldTitle">
-                {`${data.settings?.handles?.handleType?.name} (${data.settings?.handles?.count})`}
+                {data.settings?.handles?.handleType?.name ? `${data.settings?.handles?.handleType?.name}(
+                  ${data.settings?.handles?.count})` : '---'
+                }
               </Typography>
             </Box>
             <Box className="cardTitleContainer">
               <Typography className="descTitle">Glass Type</Typography>
               <Typography className="descBoldTitle">
-                {" "}
-                {`${data.settings?.glassType?.type?.name} (${data.settings?.glassType?.thickness})`}
+                {data.settings?.glassType?.type?.name ? `${data.settings?.glassType?.type?.name}(
+                  ${data.settings?.glassType?.thickness})` : '---'
+                }
               </Typography>
             </Box>
           </Box>
@@ -87,7 +93,7 @@ const SingleShowerCard = ({ data }) => {
             }}
           >
             <Button
-              onClick={toggleViewDrawer(true)}
+              onClick={handleOpenDrawer}
               variant="text"
               className="cardBtn"
               sx={{
@@ -100,8 +106,8 @@ const SingleShowerCard = ({ data }) => {
             </Button>
             <Button
               onClick={() => {
-                dispatch(setDefaultId(data._id));
-                navigate(`/layouts/edit/?id=${data._id}`);
+                // dispatch(setDefaultId(data._id));
+                navigate(`/layouts/edit?id=${data._id}`);
               }}
               variant="contained"
               className="cardBtn"
@@ -117,8 +123,8 @@ const SingleShowerCard = ({ data }) => {
         </Box>
       )}
       <ViewDrawer
-        state={viewLayout}
-        toggleDrawer={toggleViewDrawer}
+        open={openDrawer}
+        handleClose={handleCloseDrawer}
         data={selectedLayout}
       />
     </>

@@ -110,7 +110,6 @@ const AppRoutes = () => {
           <Route path="/layouts/">
             <Route index element={<Defaults />} />
             <Route path="edit" element={<EditLayout />} />
-            <Route path="edit/?id" element={<EditLayout />} />
           </Route>
           {/* <Route path="layouts" element={<Defaults />} /> */}
           <Route path="settings" element={<Settings />} />
