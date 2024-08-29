@@ -893,7 +893,7 @@ const ProjectInfoComponent = ({
                     background: "#FFFF",
                     borderRadius: "4px",
                     p:'7px 12px',
-                    minWidth:'79px',
+                    // minWidth:'79px',
                     height:'40px',
                     minHeight:'36px'
                   },
@@ -911,7 +911,7 @@ const ProjectInfoComponent = ({
                     // fontWeight: 600,
                     // color: "#000000",
                     // textTransform: "capitalize",
-                    // minWidth:'70px',
+                    minWidth:'70px',
                     // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
@@ -920,7 +920,7 @@ const ProjectInfoComponent = ({
                 className="categoryTab"
                   label="Mirrors"
                   sx={{
-                   
+                    minWidth:'70px',
                   }}
                   {...a11yProps(1)}
                 />
