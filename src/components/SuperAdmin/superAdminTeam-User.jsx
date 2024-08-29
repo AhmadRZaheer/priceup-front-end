@@ -7,7 +7,7 @@ import {
   InputAdornment,
   CircularProgress,
   FormControl,
-  InputLabel,
+  // InputLabel,
   Select,
   MenuItem,
   Grid,
@@ -55,6 +55,19 @@ const getUserRoleText = (role) => {
       return "---";
   }
 };
+
+const getStatusUpdateType = (role) => {
+  switch (role) {
+    case userRoles.SUPER_ADMIN:
+      return "super_superadmin";
+    case userRoles.STAFF:
+      return "superAdminTeam";
+    case userRoles.CUSTOM_ADMIN:
+      return "superAdminUser";
+    default:
+      return "";
+  }
+}
 
 const routePrefix = `${backendURL}/admins`;
 
@@ -261,7 +274,7 @@ const SuperAdminTeam = () => {
               <TableRow
                 row={params.row}
                 refetch={refetchUsersList}
-                type={"superAdminTeam"}
+                type={getStatusUpdateType(params.row?.role)}
                 text={""}
               />
             </div>

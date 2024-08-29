@@ -97,7 +97,7 @@ export default function AddTeamMembers({
       then: (schema) => schema.min(1, "At least one location is required").required("Please select default location"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    image: Yup.mixed(),
+    // image: Yup.mixed(),
   });
   const formik = useFormik({
     initialValues: {
@@ -285,9 +285,9 @@ export default function AddTeamMembers({
                   </Typography>
                 </Box>
               </label>
-              {formik.errors.image && (
+              {/* {formik.errors.image && (
                 <Typography color="error">{formik.errors.image}</Typography>
-              )}
+              )} */}
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>

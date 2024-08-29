@@ -137,20 +137,20 @@ const SuperAdminSideBar = () => {
             <FmdGoodOutlined sx={{   }} />
             <span>Locations</span>
           </MenuSigleItem>
-          <MenuSigleItem link="/team">
+          <MenuSigleItem link="/users">
             <PeopleAltOutlinedIcon sx={{   }} />
             <span>Users</span>
           </MenuSigleItem>
-          <MenuSigleItem link="/user">
+          {/* <MenuSigleItem link="/user">
             <PeopleAltOutlinedIcon sx={{   }} />
             <span>Admins</span>
-          </MenuSigleItem>
-          {superSuperAdminsList?.includes(decodedToken.email) && (
+          </MenuSigleItem> */}
+          {/* {superSuperAdminsList?.includes(decodedToken.email) && (
             <MenuSigleItem link="/superadmins">
               <PeopleAltOutlinedIcon sx={{   }} />
               <span>Super Admins</span>
             </MenuSigleItem>
-          )}
+          )} */}
         </ul>
       </div>
       <Box>
