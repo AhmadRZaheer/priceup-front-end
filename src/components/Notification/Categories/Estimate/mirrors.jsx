@@ -36,8 +36,8 @@ export const MirrorSummarySection = ({ data, handleEditEstimate }) => {
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                 <Stack direction="column">
                     <Typography className="twTxt">{measurementSides}</Typography>
-                    <Typography className="summaryData">Square Foot : {sqftArea}</Typography>
-                    <Typography className="summaryData">Total Price : {data.cost?.toFixed(2)}</Typography>
+                    <Typography className="summaryData"><Box className='headingTxt'>Square Foot</Box>&nbsp; : {sqftArea}</Typography>
+                    <Typography className="summaryData"><Box className='headingTxt'>Total Price</Box>&nbsp; : {data.cost?.toFixed(2)}</Typography>
                 </Stack>
                 {decryptedToken?.role !== userRoles.SUPER_ADMIN ? <Button
                     onClick={handleEditEstimate}
@@ -58,18 +58,18 @@ export const MirrorSummarySection = ({ data, handleEditEstimate }) => {
                 Summary
             </Typography>
             <Stack direction="row" sx={{ flexDirection: "column", gap: "4px" }}>
-                {data.resourceInfoWithFullObjects?.glassType?.item && <Typography className="summaryData">Glass Type : {data.resourceInfoWithFullObjects?.glassType?.item?.name} (
+                {data.resourceInfoWithFullObjects?.glassType?.item && <Typography className="summaryData"><Box className='headingTxt'>Glass Type</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassType?.item?.name} (
                     {data.resourceInfoWithFullObjects?.glassType?.thickness})</Typography>}
-                {data.resourceInfoWithFullObjects?.edgeWork?.item && <Typography className="summaryData">Edge Work : {data.resourceInfoWithFullObjects?.edgeWork?.item?.name} (
+                {data.resourceInfoWithFullObjects?.edgeWork?.item && <Typography className="summaryData"><Box className='headingTxt'>Edge Work</Box>&nbsp; : {data.resourceInfoWithFullObjects?.edgeWork?.item?.name} (
                     {data.resourceInfoWithFullObjects?.edgeWork?.thickness})</Typography>}
-                {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"> Glass Addons: {data.resourceInfoWithFullObjects?.glassAddons?.map((item, index) => (
+                {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"><Box className='headingTxt'> Glass Addons</Box>&nbsp;: {data.resourceInfoWithFullObjects?.glassAddons?.map((item, index) => (
                     <Typography>{item?.name}{data.resourceInfoWithFullObjects?.glassAddons?.length - 1 !== index ? ', ' : ''}</Typography>
                 ))}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.hardwares?.length ? <Typography className="summaryData"> Hardwares: {data.resourceInfoWithFullObjects?.hardwares?.map((item, index) => (
+                {data.resourceInfoWithFullObjects?.hardwares?.length ? <Typography className="summaryData"><Box className='headingTxt'> Hardwares</Box>&nbsp;: {data.resourceInfoWithFullObjects?.hardwares?.map((item, index) => (
                     <Typography>{item?.name}{data.resourceInfoWithFullObjects?.hardwares?.length - 1 !== index ? ', ' : ''}</Typography>
                 ))}</Typography> : ''}
-                <Typography className="summaryData">People : {data.config?.people}</Typography>
-                <Typography className="summaryData">Hours : {data.config?.hours}</Typography>
+                <Typography className="summaryData"><Box className='headingTxt'>People</Box>&nbsp; : {data.config?.people}</Typography>
+                <Typography className="summaryData"><Box className='headingTxt'>Hours</Box>&nbsp; : {data.config?.hours}</Typography>
                 <Typography className="twTxt" sx={{ py: 1 }}>
                     Additional Fields
                 </Typography>

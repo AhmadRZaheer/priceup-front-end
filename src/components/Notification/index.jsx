@@ -52,14 +52,11 @@ const Notifications = () => {
   }
   return (
     <Box>
-      <Grid sx={{ pt: 1, pb: 2, px: 4 }}>
-        <Stack direction="row" gap={1} sx={{  }}>
-          <Typography
+      <Grid sx={{ pt: 1, pb: 2, px: 2 }}>
+        <Stack direction="row" gap={1} sx={{}}>
+          <Typography className='notificationText'
             sx={{
-              fontSize: "30px",
-              fontWeight: 500,
-              lineHeight: "38px",
-              color: "#101828",
+
             }}
           >
             Notifications
@@ -77,13 +74,32 @@ const Notifications = () => {
                 },
               }}
             >
-              <NotificationsNoneIcon />
+              <NotificationsNoneIcon sx={{ color: '#8477DA' }} />
             </Badge>
           </Box>
         </Stack>
       </Grid>
-      <Stack direction='row' sx={{ borderBottom: "1px solid #D9D9D9", px: 4, justifyContent: 'space-between' }}>
-        <Stack direction='row'>
+      <Stack direction='row' sx={{ borderBottom: "1px solid #D1D4DB", px: 2, justifyContent: 'space-between',py:1 }}>
+        <Stack direction='row'
+          sx={{
+            border: "1px solid #D0D5DD",
+            borderRadius: "6px",
+            background: "#F3F5F6",
+            // width: "151px",
+            minHeight: '40px',
+            height: '40px',
+            p: '2px',
+          }}>
+          {tabData.map((data, index) => (
+            <TabButton
+              key={index}
+              title={data.title}
+              onClick={() => handleTabSwitch(data.title)}
+              selected={data.title === selected ? true : false}
+            />
+          ))}
+        </Stack>
+        {/* <Stack direction='row'>
           {tabData.map((data, index) => (
             <TabButton
               key={index}
@@ -93,7 +109,7 @@ const Notifications = () => {
               sx={{ mr: 3 }}
             />
           ))}
-        </Stack>
+        </Stack> */}
         <Button
           onClick={handClearClick}
           disabled={deleteLoading || (selected === 'Activity' && !activitySectionList?.length) || (selected === 'Archive' && !archiveSectionList?.length)}
