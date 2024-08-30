@@ -7,30 +7,36 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import { CircularProgress, TextField } from "@mui/material";
+import { CircularProgress, Grid, IconButton, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import {
   useCloneLocation,
   useCreateAdminsMembers,
   useEditUser,
 } from "../../utilities/ApiHooks/superAdmin";
+import DefaultImageIcon from "../../Assets/default-image.jpg";
+import { backendURL } from "@/utilities/common";
+import { CloseTwoTone } from "@mui/icons-material";
+
 
 const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
-  gap: 2,
+  gap: '19px',
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  borderRadius: "4px",
-  p: 4,
+  width: 809,
+  bgcolor: "#FFFFFF",
+  borderRadius: "12px",
+  p: '24px 16px 24px 16px',
 };
 
 export default function CloneLocationModel({ open, close, data, refetch }) {
   const [selectedImage, setSelectedImage] = useState(null);
+  const inputRef = React.useRef(null); // Create a ref for the file input
+
   console.log(data, data?.user?._id, "data");
   const onDrop = (acceptedFiles) => {
     setSelectedImage(acceptedFiles[0]);
@@ -69,7 +75,12 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
       setSelectedImage(null);
       resetForm();
     },
+
   });
+
+  const handleButtonClick = () => {
+    inputRef.current.click(); // Trigger click on the file input
+  };
 
   React.useEffect(() => {
     if (CreatedSuccessfully) {
@@ -84,8 +95,11 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          backdropFilter: "blur(2px)",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          // backdropFilter: "blur(2px)",
+          backgroundColor: "rgba(5, 0, 35, 0.1)",
+          '.MuiModal-backdrop': {
+            backgroundColor: "rgba(5, 0, 35, 0.1)",
+          }
         }}
       >
         <Box sx={style}>
@@ -93,13 +107,27 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "baseline",
+              // alignItems: "baseline",
             }}
           >
-            <Typography>Clone Location</Typography>
+            <Typography sx={{
+              fontWeight: 700,
+              fontSize: 18,
+              lineHeight: '21.09px',
+              fontFamily: '"Roboto",sans-serif !important'
+            }}>Clone Location</Typography>
+
+            <Box>
+              <IconButton
+                sx={{ p: 0 }}
+                onClick={close}
+              >
+                <CloseTwoTone />
+              </IconButton>
+            </Box>
           </Box>
 
-          <Box>
+          {/* <Box>
             <input
               accept="image/*"
               id="image-input"
@@ -152,85 +180,195 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 alt="Selected"
               />
             )}
+          </Box> */}
+
+          <Box
+            sx={{
+              background: "#F3F5F6",
+              padding: "16px",
+              borderRadius: "12px",
+            }}
+          >
+
+            <Box sx={{ display: "flex", gap: '19px', my: 2 }}>
+              <Box>
+                {formik.values.image !== undefined && formik.values.image !== null && formik.values.image !== '' ? (
+                  <img
+                    width={"84px"}
+                    height={"84px"}
+                    style={{ overflow: "hidden", borderRadius: "100%" }}
+                    src={typeof formik.values.image === 'string' ? `${backendURL}/${formik.values.image}` : URL.createObjectURL(formik.values.image)}
+                    alt="logo team"
+                  />
+                ) : (
+                  <img
+                    width={"84px"}
+                    height={"84px"}
+                    style={{ overflow: "hidden", borderRadius: "100%" }}
+                    src={DefaultImageIcon}
+                    alt="Selected"
+                  />
+                )}
+              </Box>
+              <input
+                accept="image/*"
+                id="image-input"
+                type="file"
+                {...getInputProps()}
+                ref={inputRef} // Attach the ref to the input
+                style={{ display: "none" }}
+              />
+
+              <label htmlFor="image-input" style={{ alignSelf: 'center' }}>
+                <Box
+                  sx={{
+                    // padding: 2,
+                  }}
+                >
+                  <Button
+                    sx={{
+                      color: "#000000",
+                      fontWeight: 600,
+                      borderRadius: "54px !important",
+                      border: "1px solid #D4DBDF",
+                      textTransform: "capitalize",
+                      px: '10px 12px !important',
+                      lineHeight: '21px',
+                      fontSize: 16
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    Upload Profile Image
+                  </Button>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#8477DA",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      lineHeight: '16.39px', mt: 0.5
+                    }}
+                  >
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                  </Typography>
+                </Box>
+              </label>
+              {/* {formik.errors.image && (
+                <Typography color="error">{formik.errors.image}</Typography>
+              )} */}
+            </Box>
+
+            <Grid container spacing={2}>
+              <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
+                <Typography className="input-label-text">Location Name</Typography>
+                <TextField
+                  size="small"
+                  placeholder="location name"
+                  name="locationName"
+                  className="custom-textfield"
+                  value={formik.values.locationName}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  // error={formik.touched.locationName}
+                  // helperText={
+                  //   formik.touched.locationName && formik.errors.locationName
+                  // }
+                  variant="outlined"
+                  fullWidth
+                />
+                {formik.touched.locationName && formik.errors.locationName && (
+                  <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                    {formik.errors.locationName}
+                  </Typography>
+                )}
+              </Grid>
+              <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
+                <Typography className="input-label-text">Location Email</Typography>
+                <TextField
+                  size="small"
+                  placeholder="email"
+                  className="custom-textfield"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  // error={formik.touched.name && Boolean(formik.errors.email)}
+                  // helperText={formik.touched.name && formik.errors.email}
+                  variant="outlined"
+                  fullWidth
+                />
+                 {formik.touched.email && formik.errors.email && (
+                  <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                    {formik.errors.email}
+                  </Typography>
+                )}
+              </Grid>
+              <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
+                <Typography className="input-label-text">Owner Name</Typography>
+                <TextField
+                  size="small"
+                  placeholder="Name"
+                  className="custom-textfield"
+                  name="name"
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  // error={formik.touched.name && Boolean(formik.errors.name)}
+                  // helperText={formik.touched.name && formik.errors.name}
+                  variant="outlined"
+                  fullWidth
+                />
+                {formik.touched.name && formik.errors.name && (
+                  <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                    {formik.errors.name}
+                  </Typography>
+                )}
+              </Grid>
+            </Grid>
           </Box>
-          <Box>
-            <Typography>Location Name</Typography>
-            <TextField
-              placeholder="location name"
-              name="locationName"
-              value={formik.values.locationName}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.locationName}
-              helperText={
-                formik.touched.locationName && formik.errors.locationName
-              }
-              variant="outlined"
-              fullWidth
-            />
-          </Box>
-          <Box>
-            <Typography>Location Email</Typography>
-            <TextField
-              placeholder="email"
-              name="email"
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.email)}
-              helperText={formik.touched.name && formik.errors.email}
-              variant="outlined"
-              fullWidth
-            />
-          </Box>
-          <Box>
-            <Typography>Owner Name</Typography>
-            <TextField
-              placeholder="Name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
-              variant="outlined"
-              fullWidth
-            />
-          </Box>
-          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
-            <Button
-              variant="outlined"
-              onClick={close}
-              sx={{
-                color: "#101828",
-                border: "1px solid #D0D5DD",
-                width: "50%",
-                "&:hover": {
-                  border: "1px solid #D0D5DD",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={formik.handleSubmit}
-              disabled={LoadingForAdd}
-              sx={{
-                backgroundColor: "#8477DA",
-                width: "50%",
-                "&:hover": {
-                  backgroundColor: "#8477da",
-                },
-              }}
-            >
-              {LoadingForAdd ? (
-                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-              ) : (
-                "Clone"
-              )}
-            </Button>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              width: "100%",
+            }}
+          >
+            <Box sx={{ display: "flex", gap: '12px' }}>
+              <Button
+                variant="outlined"
+                onClick={close}
+                sx={{
+                  color: "#212528",
+                  border: "1px solid #D6DAE3",
+                  width: "fit-content",
+                  fontWeight: 600,
+                  fontSize: '16px'
+                }}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="contained"
+                onClick={formik.handleSubmit}
+                disabled={LoadingForAdd}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
+                  position: "relative",
+                  fontWeight: 600,
+                  fontSize: '16px'
+                }}
+              >
+                {LoadingForAdd ? (
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                ) : (
+                  "Clone"
+                )}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Modal>

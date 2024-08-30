@@ -319,3 +319,19 @@ input {
   line-height: 16.41px !important;
   font-family: "Roboto", sans-serif !important;
 }
+
+.locationCard {
+  width: 448px; 
+}
+
+@media (max-width: 1500px) and (min-width: 600px) {
+  .locationCard {
+    width: 330px;
+  }
+}
+
+@media (max-width: 599px) {
+  .locationCard {
+    width: 600px;
+  }
+}

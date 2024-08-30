@@ -144,15 +144,20 @@ const SuperAdminTable = () => {
           }}
         >
           <Box>
-            <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-              {" "}
+            <Typography sx={{
+              fontSize: 24,
+              fontWeight: 600,
+              lineHeight: '32.78px'
+            }}>
               Location Management
             </Typography>
             <Typography
               sx={{
+                color: "#212528",
                 fontSize: "16px",
                 fontWeight: 600,
-                color: "#212528",
+                lineHeight: '21.86px',
+                opacity: '70%'
               }}
             >
               Add, edit and manage your locations.
@@ -166,14 +171,15 @@ const SuperAdminTable = () => {
               sx={{
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
+                letterSpacing: '0px',
                 color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
                 fontSize: 16,
                 fontWeight: 600,
+                gap: '10px',
               }}
-              startIcon={<Add color="white" />}
+            // startIcon={}
             >
+              <Add color="white" />
               Add New Location
             </Button>
           </Box>
@@ -228,17 +234,23 @@ const SuperAdminTable = () => {
             />
           </Box>
 
-          <FormControl sx={{ width: "152px" }} size="small">
+          <FormControl sx={{ width: "152px" }} size="small" className="custom-textfield">
             <Select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               displayEmpty
-              className="custom-textfield"
               placeholder="Status"
               sx={{ height: "40px" }}
               renderValue={(selected) => {
                 if (selected === null) {
-                  return <p>Status</p>;
+                  return <Typography
+                    sx={{
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      // lineHeight: '16.41px',
+                      color: '#000000',
+                      fontFamily: '"Roboto",sans-serif !important'
+                    }}>Status</Typography>;
                 }
 
                 return selected ? (
@@ -276,11 +288,11 @@ const SuperAdminTable = () => {
               </MenuItem>
             </Select>
           </FormControl>
-          <Box>
-            <Button onClick={handleClearFilter} variant="text" sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
+          {/* <Box> */}
+            <Button onClick={handleClearFilter} variant="text" sx={{  p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
               Clear Filter
             </Button>
-          </Box>
+          {/* </Box> */}
         </Box>
       </Box>
       <Grid container gap={2} p={4} pt={0}>

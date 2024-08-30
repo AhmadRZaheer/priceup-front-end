@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  IconButton,
   Modal,
   Typography,
 } from "@mui/material";
@@ -17,15 +18,16 @@ import { useDropzone } from "react-dropzone";
 
 const style = {
   position: "absolute",
+  display: "flex",
+  flexDirection: "column",
+  gap: '19px',
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 600,
-  bgcolor: "background.paper",
-  border: "2px solid white",
-  boxShadow: 24,
-  p: 3,
-  borderRadius: 2,
+  width: 809,
+  bgcolor: "#FFFFFF",
+  borderRadius: "12px",
+  p: '24px 16px 24px 16px',
 };
 
 const routePrefix = `${backendURL}/users`;
@@ -99,7 +101,14 @@ const AddEditLocationModal = ({
   };
 
   return (
-    <Modal open={open} onClose={handleClose}>
+    <Modal open={open} onClose={handleClose}
+    sx={{
+      backgroundColor: "rgba(5, 0, 35, 0.1)",
+      '.MuiModal-backdrop': {
+        backgroundColor: "rgba(5, 0, 35, 0.1)",
+      }
+    }}
+    >
       <Box sx={style}>
         <Box
           sx={{
@@ -109,10 +118,23 @@ const AddEditLocationModal = ({
           }}
         >
           <Typography
-            sx={{ color: "#667085", fontSize: "16px", fontWeight: "bold" }}
+            sx={{   fontWeight: 700,
+              fontSize: 18,
+              lineHeight: '21.09px',
+              fontFamily: '"Roboto",sans-serif !important' }}
           >
             Locations Management
           </Typography>
+
+          <Box>
+              <IconButton
+                sx={{ p: 0 }}
+                onClick={handleClose}
+              >
+                <Close />
+              </IconButton>
+            </Box>
+{/* 
           <Close
             onClick={handleClose}
             sx={{
@@ -121,32 +143,36 @@ const AddEditLocationModal = ({
               mt: -1,
               mr: -1,
             }}
-          />
+          /> */}
         </Box>
         {/* <form> */}
         <Box
           sx={{
-            mt: 2,
-            backgroundColor: "#f3f5f6",
-            borderRadius: "8px",
-            p: 2,
+            background: "#F3F5F6",
+              padding: "16px",
+              borderRadius: "12px",
+            // mt: 2,
+            // backgroundColor: "#f3f5f6",
+            // borderRadius: "8px",
+            // p: 2,
           }}
         >
           <Box>
             <Box
               sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 2,
+                // display: "flex",
+                // alignItems: "center",
+                // gap: 2,
+                display: "flex", gap: '19px', my: 2
               }}
             >
               <Box
-                sx={{
-                  width: "84px",
-                  height: "84px",
-                  borderRadius: "100%",
-                  overflow: "hidden",
-                }}
+                // sx={{
+                //   width: "84px",
+                //   height: "84px",
+                //   borderRadius: "100%",
+                //   overflow: "hidden",
+                // }}
               >
                 {formik.values.locationImage !== undefined && formik.values.locationImage !== null ? (
                   <img
@@ -178,10 +204,14 @@ const AddEditLocationModal = ({
                   <Button
                     onClick={handleButtonClick}
                     sx={{
-                      color: "black",
-                      fontWeight: 500,
+                      color: "#000000",
+                      fontWeight: 600,
                       borderRadius: "54px !important",
-                      border: "1px solid rgba(212, 219, 223, 1)",
+                      border: "1px solid #D4DBDF",
+                      textTransform: "capitalize",
+                      px: '10px 12px !important',
+                      lineHeight: '21px',
+                      fontSize: 16
                     }}
                   >
                     Upload Profile Image
@@ -189,9 +219,10 @@ const AddEditLocationModal = ({
                   <Typography
                     variant="body2"
                     sx={{
-                      color: "rgba(132, 119, 218, 1)",
+                      color: "#8477DA",
                       fontSize: "12px",
-                      fontWeight: 600
+                      fontWeight: 600,
+                      lineHeight: '16.39px', mt: 0.5
                     }}
                   >
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -200,13 +231,14 @@ const AddEditLocationModal = ({
               </label>
             </Box>
             <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
-              <Box sx={{ width: "100%" }}>
+              <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                  sx={{
-                    color: "#344054",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }}
+                className='input-label-text'
+                  // sx={{
+                  //   color: "#344054",
+                  //   fontSize: "14px",
+                  //   fontWeight: 500,
+                  // }}
                 >
                   Location Name
                 </Typography>
@@ -225,13 +257,14 @@ const AddEditLocationModal = ({
                 )}
               </Box>
 
-              <Box sx={{ width: "100%" }}>
+              <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                  sx={{
-                    color: "#344054",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }}
+                className='input-label-text'
+                  // sx={{
+                  //   color: "#344054",
+                  //   fontSize: "14px",
+                  //   fontWeight: 500,
+                  // }}
                 >
                   Location Email
                 </Typography>
@@ -251,14 +284,15 @@ const AddEditLocationModal = ({
                 )}
               </Box>
             </Box>
-            <Box sx={{ display: "flex", gap: 2, mt: 1 }}>
-              <Box sx={{ width: "100%" }}>
+            <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+              <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                  sx={{
-                    color: "#344054",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }}
+                className='input-label-text'
+                  // sx={{
+                  //   color: "#344054",
+                  //   fontSize: "14px",
+                  //   fontWeight: 500,
+                  // }}
                 >
                   Location Owner
                 </Typography>
@@ -276,13 +310,14 @@ const AddEditLocationModal = ({
                   </Typography>
                 )}
               </Box>
-              <Box sx={{ width: "100%" }}>
+              <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                  sx={{
-                    color: "#344054",
-                    fontSize: "14px",
-                    fontWeight: 500,
-                  }}
+                className='input-label-text'
+                  // sx={{
+                  //   color: "#344054",
+                  //   fontSize: "14px",
+                  //   fontWeight: 500,
+                  // }}
                 >
                   Location Address
                 </Typography>
@@ -309,48 +344,53 @@ const AddEditLocationModal = ({
         </Box>
 
         <Box
-          sx={{ display: "flex", mt: 3, justifyContent: "space-between" }}
+          sx={{ display: "flex",  justifyContent: "space-between" }}
         >
-          {recordToModify &&
-            <Button
-              disabled={updateLocationLoading}
-              variant="outlined"
-              onClick={handleResetPass}
-              sx={{
-                height: "34px",
-                // width: "45%",
-                color: "#8477DA",
-                border: "1px solid #8477DA",
-              }}
-            >
-              Reset Password
-            </Button>
-          }
-          <Box sx={{ display: "flex", gap: 2, justifyContent: "end" }}>
+         <Box>
+              {recordToModify ? (
+                <Button
+                  variant="outlined"
+                  onClick={handleResetPass}
+                  sx={{
+                    color: "#8477DA",
+                    border: "1px solid #8477DA",
+                    fontWeight: 600,
+                    fontSize: '16px'
+                  }}
+                >
+                  Reset Password
+                </Button>
+              ) : (
+                ""
+              )}
+            </Box>
+
+          <Box sx={{ display: "flex", gap: '12px'}}>
             <Button
               onClick={handleClose}
               variant="outlined"
               sx={{
-                border: "1px solid #D0D5DD",
-                width: "auto",
-                color: "#344054",
-                ":hover": {
-                  border: "1px solid #D0D5DD",
-                },
+                color: "#212528",
+                border: "1px solid #D6DAE3",
+                width: "fit-content",
+                fontWeight: 600,
+                fontSize: '16px'
               }}
             >
-              Close
+              Cancel
             </Button>
             <Button
               onClick={formik.handleSubmit}
               variant="contained"
               sx={{
-                bgcolor: "#8477DA",
-                color: "white",
-                width: "auto",
-                ":hover": {
-                  bgcolor: "#8477DA",
+                backgroundColor: "#8477DA",
+                "&:hover": {
+                  backgroundColor: "#8477da",
                 },
+                padding: "10px 16px !important",
+                position: "relative",
+                fontWeight: 600,
+                fontSize: '16px'
               }}
               disabled={addLocationLoading || updateLocationLoading}
             >

@@ -337,6 +337,7 @@ const SuperAdminTeam = () => {
               sx={{
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
+                letterSpacing: '0px',
                 color: "white",
                 fontSize: 16,
                 fontWeight: 600,
@@ -429,50 +430,50 @@ const SuperAdminTeam = () => {
               />
             </Box>
             <Box>
-            <DesktopDatePicker
-  value={selectedDate}
-  onChange={handleDateChange}
-  inputFormat="MM/DD/YYYY"  // Format for the selected date
-  renderInput={(params) => (
-    <TextField
-      {...params}
-      size="small"
-      placeholder="Date Added"
-      InputProps={{
-        ...params.InputProps,
-        inputProps: {
-          ...params.inputProps,
-          placeholder: "Date Added",  // Set placeholder explicitly here
-        },
-      }}
-      InputLabelProps={{
-        shrink: true,  // Ensure the label stays above the input
-      }}
-    />
-  )}
-  sx={{
-    "& .MuiInputBase-root": {
-      height: 40,
-      width: 152,
-      backgroundColor: "white",
-    },
-    "& .MuiInputBase-input": {
-      fontSize: "0.875rem",
-      padding: "8px 14px",
-      "&::placeholder": {
-        color: "rgba(0, 0, 0, 0.6)",
-        opacity: 1,
-      },
-    },
-    "& .MuiInputLabel-root": {
-      fontSize: "14px",
-      fontWeight: 400,
-      fontFamily: '"Roboto",sans-serif !important',
-      top: "-5px",
-      color: "#000000",
-    },
-  }}
-/>
+              <DesktopDatePicker
+                value={selectedDate}
+                onChange={handleDateChange}
+                inputFormat="MM/DD/YYYY"  // Format for the selected date
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    size="small"
+                    placeholder="Date Added"
+                    InputProps={{
+                      ...params.InputProps,
+                      inputProps: {
+                        ...params.inputProps,
+                        placeholder: "Date Added",  // Set placeholder explicitly here
+                      },
+                    }}
+                    InputLabelProps={{
+                      shrink: true,  // Ensure the label stays above the input
+                    }}
+                  />
+                )}
+                sx={{
+                  "& .MuiInputBase-root": {
+                    height: 40,
+                    width: 152,
+                    backgroundColor: "white",
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: "0.875rem",
+                    padding: "8px 14px",
+                    "&::placeholder": {
+                      color: "rgba(0, 0, 0, 0.6)",
+                      opacity: 1,
+                    },
+                  },
+                  "& .MuiInputLabel-root": {
+                    fontSize: "14px",
+                    fontWeight: 400,
+                    fontFamily: '"Roboto",sans-serif !important',
+                    top: "-5px",
+                    color: "#000000",
+                  },
+                }}
+              />
 
 
             </Box>
@@ -494,7 +495,7 @@ const SuperAdminTeam = () => {
                           fontWeight: 400,
                           // lineHeight: '16.41px',
                           color: '#000000',
-                          fontFamily:'"Roboto",sans-serif !important'
+                          fontFamily: '"Roboto",sans-serif !important'
                         }}>Role</Typography>;
                     }
                     return (
@@ -563,13 +564,13 @@ const SuperAdminTeam = () => {
                   renderValue={(selected) => {
                     if (selected === null) {
                       return <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        // lineHeight: '16.41px',
-                        color: '#000000',
-                        fontFamily:'"Roboto",sans-serif !important'
-                      }}>Status</Typography>;
+                        sx={{
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          // lineHeight: '16.41px',
+                          color: '#000000',
+                          fontFamily: '"Roboto",sans-serif !important'
+                        }}>Status</Typography>;
                     }
 
                     return selected ? (
@@ -593,7 +594,7 @@ const SuperAdminTeam = () => {
                     {" "}
                     <Typography
                       className=" status-active"
-                      sx={{ padding: 0, px: 2, width: "44px" }}
+                      sx={{ padding: 0, px: 2,width: "fit-content" }}
                     >
                       Active
                     </Typography>
@@ -610,7 +611,7 @@ const SuperAdminTeam = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Button variant="text" onClick={handleResetFilter} sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}>
+            <Button variant="text" onClick={handleResetFilter} sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
               Clear Filter
             </Button>
           </Box>
@@ -640,7 +641,7 @@ const SuperAdminTeam = () => {
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
           ) : filteredData?.length === 0 && !usersListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center",background:'#FFFF' }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
               No User Found
             </Typography>
           ) : (
