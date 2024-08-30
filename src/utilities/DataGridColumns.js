@@ -25,7 +25,7 @@ export const EstimatesColumns = (
             {params?.row?.creatorData ? (
               <Box
                 className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
@@ -48,7 +48,10 @@ export const EstimatesColumns = (
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <Box className="new-userNameTable" sx={{ maxWidth: { xl: '100%', xs: '95%' } }}>
+                    <Box
+                      className="new-userNameTable"
+                      sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+                    >
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -162,7 +165,10 @@ export const EstimatesColumns = (
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <Box className="new-userNameTable" sx={{ maxWidth: { xl: '100%', xs: '95%' } }}>
+                    <Box
+                      className="new-userNameTable"
+                      sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+                    >
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -254,7 +260,10 @@ export const EstimatesColumns = (
       renderCell: (params) => {
         return (
           <>
-            <Tooltip placement="top-start" title={params?.row?.settings?.name ?? "Custom"}>
+            <Tooltip
+              placement="top-start"
+              title={params?.row?.settings?.name ?? "Custom"}
+            >
               <Typography
                 sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
               >
@@ -491,7 +500,7 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <Box>
-            <Typography className="projectRowTxt" sx={{ py: 1, }}>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
               {params?.row?.name}
             </Typography>
           </Box>
@@ -509,7 +518,7 @@ export const ProjectsColumns = (dropdownActions) => {
             {params?.row?.creatorData ? (
               <Box
                 className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
@@ -532,7 +541,10 @@ export const ProjectsColumns = (dropdownActions) => {
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <Box className="new-userNameTable" sx={{ maxWidth: { xl: '100%', xs: '95%' } }}>
+                    <Box
+                      className="new-userNameTable"
+                      sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+                    >
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -541,7 +553,7 @@ export const ProjectsColumns = (dropdownActions) => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           width: { lg: "100%", xs: "93px" },
-                          lineHeight: '19.12px'
+                          lineHeight: "19.12px",
                         }}
                       >
                         {params?.row?.creatorData?.name}
@@ -550,7 +562,7 @@ export const ProjectsColumns = (dropdownActions) => {
                         sx={{
                           fontSize: 12,
                           fontWeight: 500,
-                          lineHeight: '16.39px',
+                          lineHeight: "16.39px",
                           p: 0,
                           mt: -0.4,
                           color: "#5D6164",
@@ -648,7 +660,10 @@ export const ProjectsColumns = (dropdownActions) => {
                   placement="top"
                 >
                   <div className="new-customerNameTable">
-                    <Box className="new-userNameTable" sx={{ maxWidth: { xl: '100%', xs: '95%' } }}>
+                    <Box
+                      className="new-userNameTable"
+                      sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+                    >
                       <Typography
                         className="new-userNameTable"
                         sx={{
@@ -657,7 +672,7 @@ export const ProjectsColumns = (dropdownActions) => {
                           whiteSpace: "nowrap",
                           overflow: "hidden",
                           width: { lg: "100%", xs: "93px" },
-                          lineHeight: '19.12px'
+                          lineHeight: "19.12px",
                         }}
                       >
                         {params?.row?.customerData?.name}
@@ -666,7 +681,7 @@ export const ProjectsColumns = (dropdownActions) => {
                         sx={{
                           fontSize: 12,
                           fontWeight: 500,
-                          lineHeight: '16.39px',
+                          lineHeight: "16.39px",
                           p: 0,
                           mt: -0.4,
                           color: "#5D6164",
@@ -724,14 +739,8 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
-            <Tooltip
-              title={params?.row?.addressData?.name}
-              placement="top"
-            >
-              <Typography
-                className="projectRowTxt"
-                sx={{ py: 1, }}
-              >
+            <Tooltip title={params?.row?.addressData?.name} placement="top">
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
                 {params?.row?.addressData?.name}
               </Typography>
             </Tooltip>
@@ -748,7 +757,7 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
-            <Typography className="projectRowTxt" sx={{ width: 190, py: 1, }}>
+            <Typography className="projectRowTxt" sx={{ width: 190, py: 1 }}>
               {new Date(params?.row?.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "short",
@@ -767,7 +776,7 @@ export const ProjectsColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
-            <Typography className="projectRowTxt" sx={{ width: 200, py: 1, }}>
+            <Typography className="projectRowTxt" sx={{ width: 200, py: 1 }}>
               ${params?.row?.totalAmountQuoted?.toFixed(2) || 0}
             </Typography>
           </>
@@ -866,10 +875,10 @@ export const teamColumns = [
           <Typography className="new-table-text">
             {params.row.lastQuoted
               ? new Date(params.row.lastQuoted).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
               : "-"}
           </Typography>
         </>
@@ -901,7 +910,9 @@ export const teamColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography className={params.row.status ? "status-active" : "status-inActive"}>
+          <Typography
+            className={params.row.status ? "status-active" : "status-inActive"}
+          >
             {params.row.status ? "Active" : "Inactive"}
           </Typography>
         </>
@@ -1208,7 +1219,7 @@ export const userColumns = [
       );
     },
   },
-  { field: "Email", headerName: "Email", width: 330, sortable: false, },
+  { field: "Email", headerName: "Email", width: 330, sortable: false },
   {
     field: "Address",
     headerName: "Address",
@@ -1301,19 +1312,19 @@ export const userRows = [
 export const userColumnsHardware = [
   {
     field: "name",
-    headerName: "Name",
-    headerClassName: "customHeaderClass-finishes",
+    headerName: "Finish Type",
+    headerClassName: "customHeaderClass",
     sortable: false,
     flex: 6,
+
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
-          {params.row.image === "" ? (
-            "---"
-          ) : (
-            <DefaultImage image={params.row.image} name={params.row.name} />
-          )}
-          <div className="hardwareNameTable">{params.row.name}</div>
+          <div
+            style={{ fontSize: "14px", fontWeight: 700, paddingLeft: "16px" }}
+          >
+            {params.row.name}
+          </div>
         </div>
       );
     },
