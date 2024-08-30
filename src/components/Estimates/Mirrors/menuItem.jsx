@@ -105,7 +105,7 @@ const MenuItem = ({
               src={`${backendURL}/${item?.image}`}
               alt="Selected"
             />
-            <Typography>{item?.name}</Typography>
+            <Typography sx={{fontWeight: 500, fontSize: '14px', fontFamily: '"Roboto", sans-serif !important' }}>{item?.name}</Typography>
           </Box>
           <Box>
             {isSelected && (

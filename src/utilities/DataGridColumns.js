@@ -964,12 +964,17 @@ export const AdminColumns = [
     renderCell: (params) => {
       return (
         <div className="new-table-text">
-          {new Date(params.row.createdAt).toLocaleDateString(undefined, {
+          {/* {new Date(params.row.createdAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
             month: "long",
             year: "numeric",
-          })}
+          })} */}
+          {new Date(params.row.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
         </div>
       );
     },

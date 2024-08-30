@@ -280,7 +280,7 @@ export const useCloneLocation = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User created Successfully",
+            message: "Location cloned Successfully",
             severity: "success",
           })
         );
@@ -644,7 +644,7 @@ export const useDeleteUser = () => {
       if (response.data.code === 200) {
         dispatch(
           showSnackbar({
-            message: "User deleted successfully",
+            message: "Location deleted successfully",
             severity: "error",
           })
         );

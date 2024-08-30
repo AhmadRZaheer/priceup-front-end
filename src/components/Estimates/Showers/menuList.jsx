@@ -110,7 +110,7 @@ const MenuList = ({
           ) : (
             <ChevronRight sx={{ color: "#98A2B3", mr: 2 }} />
           )}
-          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily: '"Roboto", sans-serif !important' }}>
             {title}
           </Typography>
         </Box>
@@ -127,27 +127,27 @@ const MenuList = ({
           "glassType",
           "hardwareAddons",
         ].includes(type) && (
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 2,
-              color: { sm: "#000000  ", xs: "white" },
-              // alignSelf: "flex-end",
-              // py: 1.5,
-            }}
-          >
-            <AddCircleOutline
-              onClick={() => handleCountSet(countVal + 1)}
-              sx={{ color: "#5D6164" }}
-            />
-            <Typography>{countVal}</Typography>
-            <RemoveCircleOutline
-              onClick={() => handleCountSet(countVal - 1)}
-              sx={{ color: "#5D6164" }}
-            />
-          </Box>
-        )}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                color: { sm: "#000000  ", xs: "white" },
+                // alignSelf: "flex-end",
+                // py: 1.5,
+              }}
+            >
+              <AddCircleOutline
+                onClick={() => handleCountSet(countVal + 1)}
+                sx={{ color: "#5D6164" }}
+              />
+              <Typography sx={{ fontWeight: 500, fontSize: '14px', fontFamily: '"Roboto", sans-serif !important' }}>{countVal}</Typography>
+              <RemoveCircleOutline
+                onClick={() => handleCountSet(countVal - 1)}
+                sx={{ color: "#5D6164" }}
+              />
+            </Box>
+          )}
         {["glassType"].includes(type) && (
           <Box
             sx={{

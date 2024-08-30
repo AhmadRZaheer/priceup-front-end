@@ -6,17 +6,20 @@ import cloneIcon from "../../Assets/copy-icon.svg";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import EditIcon from "../../Assets/d.svg";
 import TableRow from "../SuperAdmin/tableRow";
+import { getDecryptedToken } from "@/utilities/common";
+import { userRoles } from "@/utilities/constants";
 
 const SingleLocation = ({
   data,
-  handleToggleChange,
-  nonActiveUsers,
+  // handleToggleChange,
+  // nonActiveUsers,
   handleAccessLocation,
   handleClone,
   handleDelete,
   handleEdit,
   refetch,
 }) => {
+  const userToken = getDecryptedToken();
   return (
     <>
       <Box
@@ -74,7 +77,7 @@ const SingleLocation = ({
           <Box>
             <Typography className="section-name-text">Users</Typography>
             <Box>
-              {nonActiveUsers?.length !== 0 ? (
+              {data?.staffs?.length !== 0 ? (
                 <Box className="user-cellWrap" sx={{height: "33px"}}>
                   <Box
                     sx={{
@@ -83,7 +86,7 @@ const SingleLocation = ({
                       position: "relative",
                     }}
                   >
-                    {nonActiveUsers?.slice(0, 3).map((user, index) => {
+                    {data?.staffs?.slice(0, 3).map((user, index) => {
                       return (
                         <Box
                           sx={{
@@ -101,7 +104,7 @@ const SingleLocation = ({
                         </Box>
                       );
                     })}
-                    {nonActiveUsers?.length > 3 && (
+                    {data?.staffs?.length > 3 && (
                       <AddCircleRounded
                         sx={{
                           position: "absolute",
@@ -114,8 +117,8 @@ const SingleLocation = ({
                     )}
                   </Box>
                   <Typography sx={{ fontSize: "15px", fontWeight: 500 }}>
-                    {nonActiveUsers?.length}{" "}
-                    {nonActiveUsers?.length === 1 ? "User" : "Users"}
+                    {data?.staffs?.length}{" "}
+                    {data?.staffs?.length === 1 ? "User" : "Users"}
                   </Typography>
                 </Box>
               ) : (
@@ -203,20 +206,18 @@ const SingleLocation = ({
                 />
               </IconButton>
             )}
-            {handleToggleChange && (
-              <Box>
+              {userToken?.role === userRoles.SUPER_ADMIN && <Box>
                 <TableRow
                   title={
                     data?.user?.status ? "" : "This Location is not Active"
                   }
                   text={""}
                   row={data?.user}
-                  onToggleChange={handleToggleChange}
+                  onToggleChange={()=>{}}
                   type={"superAdmin"}
                   refetch={refetch}
                 />
-              </Box>
-            )}
+              </Box>}
           </Box>
         </Box>
       </Box>
