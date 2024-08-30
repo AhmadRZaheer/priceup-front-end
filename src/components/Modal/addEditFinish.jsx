@@ -6,9 +6,13 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import InputImageIcon from "../../Assets/imageUploader.svg";
 import { useState } from "react";
-import { CircularProgress, FormControl, TextField } from "@mui/material";
+import {
+  CircularProgress,
+  FormControl,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import { useDropzone } from "react-dropzone";
 
 import {
@@ -16,7 +20,9 @@ import {
   useEditFinish,
 } from "../../utilities/ApiHooks/finishes";
 import { backendURL } from "../../utilities/common";
-
+import { CloseOutlined } from "@mui/icons-material";
+import DefaultImageIcon from "@/Assets/default-image.jpg";
+import CustomInputField from "../ui-components/CustomInput";
 const style = {
   position: "absolute",
   display: "flex",
@@ -25,10 +31,11 @@ const style = {
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 400,
+  width: "841px",
   bgcolor: "background.paper",
-  borderRadius: "4px",
-  p: 4,
+  borderRadius: "12px",
+  p: "24px 16px 24px 16px",
+  border: " 1px solid #D0D5DD",
 };
 
 export default function AddEditFinish({
@@ -38,10 +45,10 @@ export default function AddEditFinish({
   data,
   finishesRefetch,
 }) {
-  const [selectedImage, setSelectedImage] = useState(null);
+  // const [selectedImage, setSelectedImage] = useState(null);
 
   const onDrop = (acceptedFiles) => {
-    setSelectedImage(acceptedFiles[0]);
+    // setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
   };
 
@@ -64,7 +71,7 @@ export default function AddEditFinish({
   };
 
   const handleEditClick = async (props) => {
-    const id = data;
+    const id = data._id;
     await editFinish(props, id);
   };
 
@@ -72,12 +79,16 @@ export default function AddEditFinish({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
     thickness: Yup.string().required("Thickness is required"),
   });
-
+  const inputRef = React.useRef(null); // Create a ref for the file input
+  const handleButtonClick = () => {
+    inputRef.current.click(); // Trigger click on the file input
+  };
+  console.log(data, "data");
   const formik = useFormik({
     initialValues: isEdit
       ? {
           hardwareLabel: data?.name,
-          image: "",
+          image: data?.image,
           thickness: data?.holesNeeded,
           id: data?._id,
         }
@@ -96,24 +107,34 @@ export default function AddEditFinish({
   });
   useEffect(() => {
     if (CreatedSuccessfully) {
-      setSelectedImage(null);
+      // setSelectedImage(null);
       formik.resetForm();
       finishesRefetch();
       close();
     }
     if (SuccessForEdit) {
-      setSelectedImage(null);
+      // setSelectedImage(null);
       formik.resetForm();
       finishesRefetch();
       close();
     }
   }, [CreatedSuccessfully, SuccessForEdit]);
+  console.log(
+    typeof formik.values.image === "string"
+      ? `${backendURL}/${formik.values.image}`
+      : URL.createObjectURL(formik.values.image),
+    formik.values.image
+  );
   return (
     <div>
       <Modal
         open={open}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        onClose={() => {
+          formik.resetForm();
+          close();
+        }}
         sx={{
           backdropFilter: "blur(2px)",
           backgroundColor: "rgba(0, 0, 0, 0.5)",
@@ -124,131 +145,206 @@ export default function AddEditFinish({
             sx={{
               display: "flex",
               justifyContent: "space-between",
-              alignItems: "baseline",
+              alignItems: "center",
             }}
           >
-            <Typography>{isEdit ? "Edit Finishes" : "Add Finishes"}</Typography>
-          </Box>
-
-          <Box>
-            <input
-              accept="image/*"
-              id="image-input"
-              type="file"
-              {...getInputProps()}
-              style={{ display: "none" }}
-            />
-            <label htmlFor="image-input">
-              <Box
+            <Box>
+              <Typography
                 sx={{
-                  border: "1px solid #EAECF0",
-                  textAlign: "center",
-                  padding: 2,
+                  fontSize: "18px",
+                  fontWeight: 700,
+                  fontFamily: "sans-serif, Roboto !importants",
                 }}
               >
-                <Box sx={{ height: 60 }}>
-                  <img
-                    width={60}
-                    src={InputImageIcon}
-                    alt="icon of input image"
-                  />
-                </Box>
-                <span
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
-                  <Typography sx={{ color: "#8477DA" }}>
-                    Click to Upload
-                  </Typography>
-                </span>
-                <Typography variant="body2" sx={{ color: "#667085" }}>
-                  SVG, PNG, JPG or GIF (max. 800x400px)
-                </Typography>
-              </Box>
-            </label>
-            <aside
-              style={{
-                display: "flex",
-                flexDirection: "row",
-                flexWrap: "wrap",
-                marginTop: 16,
+                {isEdit ? "Edit Finish Type" : "Add Finish Type"}
+              </Typography>
+              <Typography
+                sx={{
+                  fontWeight: 600,
+                  fontSize: "16px",
+                  color: "#212528",
+                  opacity: "70%",
+                }}
+              >
+                {isEdit ? "Edit Finish detail" : "Add Finish detail"}
+              </Typography>
+            </Box>
+            <IconButton
+              onClick={() => {
+                formik.resetForm();
+                close();
               }}
             >
-              {selectedImage ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={URL.createObjectURL(selectedImage)}
-                  alt="Selected"
-                />
-              ) : data?.image ? (
-                <img
-                  width={"80px"}
-                  height={"80px"}
-                  src={`${backendURL}/${data?.image}`}
-                  alt="logo team"
-                />
-              ) : (
-                ""
-              )}
-            </aside>
-            {formik.errors.image && (
-              <Typography color="error">{formik.errors.image}</Typography>
-            )}
+              <CloseOutlined sx={{ width: "24px", height: "24px" }} />
+            </IconButton>
           </Box>
-          <Box>
-            <Typography>Hardware Label</Typography>
-            <TextField
-              placeholder="Hardware Label"
-              name="hardwareLabel"
-              value={formik.values.hardwareLabel}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={
-                formik.touched.hardwareLabel &&
-                Boolean(formik.errors.hardwareLabel)
-              }
-              helperText={
-                formik.touched.hardwareLabel && formik.errors.hardwareLabel
-              }
-              variant="outlined"
-              fullWidth
-            />
-          </Box>
+          <Box sx={{ borderRadius: "12px", background: "#F3F5F6", p: "16px" }}>
+            <Typography
+              sx={{
+                color: "#000000",
+                lineHeight: "16.39px",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              Hardware image
+            </Typography>
+            <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
+              <Box>
+                {formik.values.image !== undefined &&
+                formik.values.image !== null &&
+                formik.values.image !== "" ? (
+                  <img
+                    width={"84px"}
+                    height={"84px"}
+                    style={{ overflow: "hidden", borderRadius: "100%" }}
+                    src={
+                      typeof formik.values.image === "string"
+                        ? `${backendURL}/${formik.values.image}`
+                        : URL.createObjectURL(formik.values.image)
+                    }
+                    alt="logo team"
+                  />
+                ) : (
+                  <img
+                    width={"84px"}
+                    height={"84px"}
+                    style={{ overflow: "hidden", borderRadius: "100%" }}
+                    src={DefaultImageIcon}
+                    alt="Selected"
+                  />
+                )}
+              </Box>
+              <input
+                accept="image/*"
+                id="image-input"
+                type="file"
+                {...getInputProps()}
+                ref={inputRef} // Attach the ref to the input
+                style={{ display: "none" }}
+              />
 
-          <Box>
-            <Typography>Holes Nedeed</Typography>
-            <FormControl style={{ width: "100%" }} size="small">
-              <TextField
-                type="number"
-                InputProps={{
-                  inputProps: { min: 0 },
+              <label htmlFor="image-input" style={{ alignSelf: "center" }}>
+                <Box>
+                  <Button
+                    sx={{
+                      color: "#000000",
+                      fontWeight: 600,
+                      borderRadius: "54px !important",
+                      border: "1px solid #D4DBDF",
+                      textTransform: "capitalize",
+                      px: "10px 12px !important",
+                      lineHeight: "21px",
+                      fontSize: 16,
+                    }}
+                    onClick={handleButtonClick}
+                  >
+                    Upload Image
+                  </Button>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: "#8477DA",
+                      fontSize: "12px",
+                      fontWeight: 600,
+                      lineHeight: "16.39px",
+                      mt: 0.5,
+                    }}
+                  >
+                    SVG, PNG, JPG or GIF (max. 800x400px)
+                  </Typography>
+                </Box>
+              </label>
+              {/* {formik.errors.image && (
+                <Typography color="error">{formik.errors.image}</Typography>
+              )} */}
+            </Box>
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  lineHeight: "16.39px",
+                  mb: 0.5,
                 }}
-                size="small"
-                variant="outlined"
-                name="thickness"
-                style={{ width: "100%" }}
-                value={formik.values.thickness}
+              >
+                Finish Label
+              </Typography>
+              <CustomInputField
+                placeholder="Hardware Label"
+                name="hardwareLabel"
+                value={formik.values.hardwareLabel}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
                 error={
-                  formik.touched.thickness && Boolean(formik.errors.thickness)
+                  formik.touched.hardwareLabel &&
+                  Boolean(formik.errors.hardwareLabel)
                 }
-                helperText={formik.touched.thickness && formik.errors.thickness}
+                helperText={
+                  formik.touched.hardwareLabel && formik.errors.hardwareLabel
+                }
+                variant="outlined"
+                fullWidth
+                size={"small"}
               />
-            </FormControl>
+            </Box>
+
+            <Box sx={{ mt: 1 }}>
+              <Typography
+                sx={{
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  lineHeight: "16.39px",
+                  mb: 0.5,
+                }}
+              >
+                Holes Nedeed
+              </Typography>
+              <FormControl style={{ width: "100%" }} size="small">
+                <CustomInputField
+                  type="number"
+                  InputProps={{
+                    inputProps: { min: 0 },
+                  }}
+                  size="small"
+                  variant="outlined"
+                  name="thickness"
+                  style={{ width: "100%" }}
+                  value={formik.values.thickness}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.thickness && Boolean(formik.errors.thickness)
+                  }
+                  helperText={
+                    formik.touched.thickness && formik.errors.thickness
+                  }
+                />
+              </FormControl>
+            </Box>
           </Box>
-          <Box sx={{ display: "flex", gap: 2, marginTop: 2 }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              marginTop: 1,
+              justifyContent: "flex-end",
+            }}
+          >
             <Button
               variant="outlined"
-              onClick={close}
-              sx={{ color: "black", border: "1px solid #D0D5DD", width: "50%" }}
+              onClick={() => {
+                formik.resetForm();
+                // close();
+              }}
+              sx={{
+                color: "black",
+                border: "1px solid #D6DAE3",
+                width: "162px",
+                ":hover": { border: "1px solid #D6DAE3" },
+              }}
             >
-              Cancel
+              Discard Changes
             </Button>
             <Button
               fullWidth
@@ -257,7 +353,8 @@ export default function AddEditFinish({
               disabled={LoadingForAdd || LoadingForEdit}
               sx={{
                 backgroundColor: "#8477DA",
-                width: "50%",
+                // width: "50%",
+                width: "141px",
                 "&:hover": {
                   backgroundColor: "#8477da",
                 },
@@ -266,7 +363,7 @@ export default function AddEditFinish({
               {LoadingForEdit || LoadingForAdd ? (
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : isEdit ? (
-                "Update"
+                "Save changes"
               ) : (
                 "Create"
               )}
