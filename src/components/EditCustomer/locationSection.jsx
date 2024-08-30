@@ -14,7 +14,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { backendURL, debounce } from "@/utilities/common";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { ManageSearch } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import StatusChip from "../common/StatusChip";
@@ -23,19 +23,20 @@ import dayjs from "dayjs";
 import DefaultImage from "../ui-components/defaultImage";
 import ActionsDropdown from "../common/ActionsDropdown";
 import { DataGrid } from "@mui/x-data-grid";
-import { ProjectsColumns } from "@/utilities/DataGridColumns";
+import { LocationColumns, ProjectsColumns } from "@/utilities/DataGridColumns";
 import Pagination from "../Pagination";
 
 export default function LocationSection() {
-  const routePrefix = `${backendURL}/projects`;
+  const [searchParams] = useSearchParams();
+  const CustomerId = searchParams.get("id");
+  const routePrefix = `${backendURL}/addresses/by-customer`;
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const isMobile = useMediaQuery("(max-width:600px)");
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
-  let fetchAllProjectUrl = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+  let fetchAllProjectUrl = `${routePrefix}/${CustomerId}?page=${page}&limit=${itemsPerPage}`;
   if (search && search.length) {
     fetchAllProjectUrl += `&search=${search}`;
   }
@@ -46,32 +47,31 @@ export default function LocationSection() {
     fetchAllProjectUrl += `&date=${selectedDate}`;
   }
   const {
-    data: projectsList,
+    data: locationList,
     isLoading,
-    isFetching: projectsListFetching,
-    refetch: refetchProjectsList,
+    isFetching: locationListFetching,
+    refetch: refetchlocationList,
   } = useFetchAllDocuments(fetchAllProjectUrl);
 
   const filteredData = useMemo(() => {
-    if (projectsList && projectsList?.projects?.length) {
-      return projectsList?.projects;
+    if (locationList[0] && locationList[0]?.data?.length) {
+      return locationList[0]?.data;
     } else {
       return [];
     }
-  }, [projectsList, search]);
-
-  const handleViewDetail = (item) => {
-    navigate(`/projects/${item?._id}`);
-  };
+  }, [locationList, search]);
+  // const handleViewDetail = (item) => {
+  //   navigate(`/projects/${item?._id}`);
+  // };
 
   useEffect(() => {
-    refetchProjectsList();
+    refetchlocationList();
   }, [page, search, selectedDate]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
       if (page === 1) {
-        refetchProjectsList();
+        refetchlocationList();
       } else {
         setPage(1);
       }
@@ -82,14 +82,6 @@ export default function LocationSection() {
   useEffect(() => {
     debouncedRefetch();
   }, [search]);
-  const dropdownActions = [
-    {
-      title: "Detail",
-      handleClickItem: handleViewDetail,
-      icon: <ManageSearch />,
-    },
-  ];
-
   const handleDateChange = (newDate) => {
     if (newDate) {
       // Set time to noon (12:00) to avoid time zone issues
@@ -104,7 +96,7 @@ export default function LocationSection() {
     }
   };
   //   const handleCreateProject = () => {
-  //     navigate("/projects/create");
+  //     navigate("/location/create");
   //   };
 
   //   const { data: stats, refetch: refetchStats } = useFetchSingleDocument(
@@ -158,7 +150,7 @@ export default function LocationSection() {
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search"
+                  placeholder="Search by Name"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -170,101 +162,6 @@ export default function LocationSection() {
                   onChange={handleChange}
                 />
               </Box>
-              <Box>
-                <DesktopDatePicker
-                  label="Date Added"
-                  inputFormat="MM/DD/YYYY"
-                  className="custom-textfield"
-                  // maxDate={new Date()} // Sets the maximum date to the current date
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      height: 40,
-                      width: 150,
-                      backgroundColor: "white", // Adjust height
-                    },
-                    "& .MuiInputBase-input": {
-                      fontSize: "0.875rem", // Adjust font size
-                      padding: "8px 14px", // Adjust padding
-                    },
-                    "& .MuiInputLabel-root": {
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      fontFamily: '"Roboto",sans-serif !important',
-                      top: "-5px", // Adjust label size
-                      color: "#000000",
-                    },
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} size="small" />
-                  )}
-                />
-              </Box>
-            </Box>
-            <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
-              <FormControl sx={{ width: "152px" }} size="small">
-                <Select
-                  value={status}
-                  id="demo-select-small"
-                  className="custom-textfield"
-                  size="small"
-                  displayEmpty
-                  sx={{ height: "40px" }}
-                  onChange={(e) => setStatus(e.target.value)}
-                  renderValue={(selected) => {
-                    if (selected === null) {
-                      return (
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            // lineHeight: '16.41px',
-                            color: "#000000",
-                            fontFamily: '"Roboto",sans-serif !important',
-                          }}
-                        >
-                          Status
-                        </Typography>
-                      );
-                    }
-
-                    return (
-                      <StatusChip
-                        variant={selected}
-                        sx={{ padding: 0, px: 2 }}
-                      />
-                    );
-                  }}
-                >
-                  <MenuItem value={"pending"}>
-                    <StatusChip
-                      variant={"pending"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
-                  </MenuItem>
-                  <MenuItem value={"voided"}>
-                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
-                  </MenuItem>
-                  <MenuItem value={"approved"}>
-                    <StatusChip
-                      variant={"approved"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <Button
-                variant="text"
-                onClick={handleResetFilter}
-                sx={{
-                  p: "6px 8px !important",
-                  fontFamily: '"Roboto",sans-serif !important',
-                }}
-                // sx={{ lineHeight: "21.86px" }}
-              >
-                Clear Filter
-              </Button>
             </Box>
           </Box>
         </Box>
@@ -296,113 +193,35 @@ export default function LocationSection() {
               >
                 <CircularProgress sx={{ color: "#8477DA" }} />
               </Box>
-            ) : filteredData?.length === 0 && !projectsListFetching ? (
+            ) : filteredData?.length === 0 && !locationListFetching ? (
               <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Project Found
+                No Location Found
               </Typography>
             ) : (
               <Box>
-                {isMobile ? (
-                  filteredData?.map((item) => (
-                    <Box
-                      key={item._id}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        paddingY: 2,
-                        borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                        px: { sm: 0, xs: 0.8 },
-                      }}
-                    >
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        <Box
-                          sx={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "100%",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <DefaultImage
-                            image={item?.creatorData?.image}
-                            name={item?.creatorData?.name}
-                          />
-                        </Box>
+                <DataGrid
+                  loading={locationListFetching}
+                  style={{
+                    border: "none",
+                  }}
+                  getRowId={(row) => row._id}
+                  rows={filteredData}
+                  columns={LocationColumns()}
+                  page={page}
+                  pageSize={itemsPerPage}
+                  rowCount={
+                    locationList?.totalRecords ? locationList?.totalRecords : 0
+                  }
+                  rowHeight={70.75}
+                  sx={{ width: "100%" }}
+                  hideFooter
+                  disableColumnMenu
+                  disableColumnFilter
+                />
 
-                        <Box>
-                          <Box sx={{ display: "flex", gap: 0.6 }}>
-                            <Typography
-                              sx={{
-                                maxWidth: "115px",
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                              }}
-                            >
-                              {item?.creatorData?.name}
-                            </Typography>
-                            <Typography
-                              sx={{ fontSize: 16, fontWeight: "Medium" }}
-                            >
-                              {" "}
-                              - Creator
-                            </Typography>
-                          </Box>
-                          <Box sx={{ display: "flex", gap: 0.6 }}>
-                            <Typography sx={{ fontSize: 14 }}>
-                              {item?.customerData?.name}
-                            </Typography>
-                            <Typography sx={{ fontSize: 14 }}>
-                              {" "}
-                              - Customer
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          textAlign: "center",
-                          width: 100,
-                          alignItems: "center",
-                        }}
-                      >
-                        <ActionsDropdown
-                          item={item}
-                          actions={dropdownActions}
-                        />
-                        <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
-                          {new Date(item?.updatedAt).toDateString()}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  ))
-                ) : (
-                  <DataGrid
-                    loading={projectsListFetching}
-                    style={{
-                      border: "none",
-                    }}
-                    getRowId={(row) => row._id}
-                    rows={filteredData}
-                    columns={ProjectsColumns(dropdownActions)}
-                    page={page}
-                    pageSize={itemsPerPage}
-                    rowCount={
-                      projectsList?.totalRecords
-                        ? projectsList?.totalRecords
-                        : 0
-                    }
-                    rowHeight={70.75}
-                    sx={{ width: "100%" }}
-                    hideFooter
-                    disableColumnMenu
-                  />
-                )}
                 <Pagination
                   totalRecords={
-                    projectsList?.totalRecords ? projectsList?.totalRecords : 0
+                    locationList?.totalRecords ? locationList?.totalRecords : 0
                   }
                   itemsPerPage={itemsPerPage}
                   page={page}

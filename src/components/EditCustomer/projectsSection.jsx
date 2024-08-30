@@ -12,9 +12,12 @@ import {
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { backendURL, debounce } from "@/utilities/common";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import { ManageSearch } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import {
+  useDeleteDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
+import { DeleteOutline, ManageSearch } from "@mui/icons-material";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import StatusChip from "../common/StatusChip";
@@ -25,9 +28,13 @@ import ActionsDropdown from "../common/ActionsDropdown";
 import { DataGrid } from "@mui/x-data-grid";
 import { ProjectsColumns } from "@/utilities/DataGridColumns";
 import Pagination from "../Pagination";
+import DeleteModal from "../Modal/deleteModal";
 
 export default function ProjectsSection() {
-  const routePrefix = `${backendURL}/projects`;
+  const [searchParams] = useSearchParams();
+  const CustomerId = searchParams.get("id");
+  const routePrefix = `${backendURL}/projects/by-customer`;
+  const routePrefixForDelete = `${backendURL}/projects`;
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -36,7 +43,7 @@ export default function ProjectsSection() {
   const [page, setPage] = useState(1);
 
   const itemsPerPage = 10;
-  let fetchAllProjectUrl = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+  let fetchAllProjectUrl = `${routePrefix}/${CustomerId}?page=${page}&limit=${itemsPerPage}`;
   if (search && search.length) {
     fetchAllProjectUrl += `&search=${search}`;
   }
@@ -52,7 +59,17 @@ export default function ProjectsSection() {
     isFetching: projectsListFetching,
     refetch: refetchProjectsList,
   } = useFetchAllDocuments(fetchAllProjectUrl);
-
+  const {
+    mutate: deleteProject,
+    isSuccess: deletedSuccessfully,
+    isLoading: LoadingForDelete,
+  } = useDeleteDocument();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (item) => {
+    setDeleteRecord(item._id);
+    setDeleteModalOpen(true);
+  };
   const filteredData = useMemo(() => {
     if (projectsList && projectsList?.projects?.length) {
       return projectsList?.projects;
@@ -61,13 +78,17 @@ export default function ProjectsSection() {
     }
   }, [projectsList, search]);
 
+  const handleDeleteProject = () => {
+    deleteProject({ apiRoute: `${routePrefixForDelete}/${deleteRecord}` });
+    setDeleteModalOpen(false);
+  };
   const handleViewDetail = (item) => {
     navigate(`/projects/${item?._id}`);
   };
 
   useEffect(() => {
     refetchProjectsList();
-  }, [page, search, selectedDate]);
+  }, [page, search, selectedDate, status,deletedSuccessfully]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -88,6 +109,12 @@ export default function ProjectsSection() {
       title: "Detail",
       handleClickItem: handleViewDetail,
       icon: <ManageSearch />,
+    },
+    {
+      title: "Delete",
+      handleClickItem: handleOpenDeleteModal,
+      icon: <DeleteOutline sx={{ color: "white", fontSize: 18, mr: 0.4 }} />,
+      severity: "error",
     },
   ];
 
@@ -418,7 +445,15 @@ export default function ProjectsSection() {
                   page={page}
                   setPage={setPage}
                 />
-         
+                <DeleteModal
+                  text={"Project"}
+                  open={deleteModalOpen}
+                  close={() => {
+                    setDeleteModalOpen(false);
+                  }}
+                  isLoading={LoadingForDelete}
+                  handleDelete={handleDeleteProject}
+                />
               </Box>
             )}
           </Box>

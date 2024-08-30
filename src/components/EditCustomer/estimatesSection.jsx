@@ -3,80 +3,169 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  Grid,
   InputAdornment,
+  InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
+import image1 from "@/Assets/test.png";
+import image2 from "@/Assets/ok.png";
+import image3 from "@/Assets/cancel.png";
+import image4 from "@/Assets/calculator.svg";
+import {
+  useDeleteEstimates,
+  useGetEstimatesStats,
+} from "@/utilities/ApiHooks/estimate";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { backendURL, debounce } from "@/utilities/common";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import { ManageSearch } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import {
+  backendURL,
+  calculateTotal,
+  getDecryptedToken,
+} from "@/utilities/common";
+import { EstimateCategory, quoteState } from "@/utilities/constants";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
-import StatusChip from "../common/StatusChip";
+import WidgetCard from "../ui-components/widgetCard";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import StatusChip from "../common/StatusChip";
 import dayjs from "dayjs";
-import DefaultImage from "../ui-components/defaultImage";
-import ActionsDropdown from "../common/ActionsDropdown";
-import { DataGrid } from "@mui/x-data-grid";
-import { ProjectsColumns } from "@/utilities/DataGridColumns";
-import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
+import Pagination from "../Pagination";
+import { DataGrid } from "@mui/x-data-grid";
+import { EstimatesColumns } from "@/utilities/DataGridColumns";
+import ActionsDropdown from "../common/ActionsDropdown";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { getEstimatesListRefetch } from "@/redux/refetch";
+import { useDispatch, useSelector } from "react-redux";
+import { getListData } from "@/redux/estimateCalculations";
+import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { debounce } from "lodash";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { DeleteOutline, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
+import {
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+  setStateForShowerEstimate,
+} from "@/utilities/estimates";
+import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 
-export default function EstimateSection() {
-  const routePrefix = `${backendURL}/projects`;
-  const navigate = useNavigate();
+export default function Estimates() {
+  const [searchParams] = useSearchParams();
+  const CustomerId = searchParams.get("id");
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
-  const isMobile = useMediaQuery("(max-width:600px)");
+  const navigate = useNavigate();
+  const routePrefix = `${backendURL}/estimates/by-customer`;
+  const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
+  // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  // const [inputPage, setInputPage] = useState("");
+  // const [isShowInput, setIsShowInput] = useState(false);
   const itemsPerPage = 10;
-  let fetchAllProjectUrl = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
+  let fetchAllEstimatesUrl = `${routePrefix}/${CustomerId}?page=${page}&limit=${itemsPerPage}`;
   if (search && search.length) {
-    fetchAllProjectUrl += `&search=${search}`;
+    fetchAllEstimatesUrl += `&search=${search}`;
   }
   if (status) {
-    fetchAllProjectUrl += `&status=${status}`;
+    fetchAllEstimatesUrl += `&status=${status}`;
   }
   if (selectedDate) {
-    fetchAllProjectUrl += `&date=${selectedDate}`;
+    fetchAllEstimatesUrl += `&date=${selectedDate}`;
   }
   const {
-    data: projectsList,
+    data: estimatesList,
     isLoading,
-    isFetching: projectsListFetching,
-    refetch: refetchProjectsList,
-  } = useFetchAllDocuments(fetchAllProjectUrl);
+    isFetching: estimatesListFetching,
+    refetch: refetchEstimatesList,
+  } = useFetchAllDocuments(fetchAllEstimatesUrl);
+  const showersHardwareList = useSelector(getListData);
+  const showersLocationSettings = useSelector(getLocationShowerSettings);
+  // const {
+  //   data: allHardwaresList,
+  //   isLoading: listFetching,
+  //   refetch: refetchHardwaresList,
+  // } = useFetchDataEstimate();
+  const {
+    mutate: deleteEstimates,
+    isSuccess: deletedSuccessfully,
+    isLoading: LoadingForDelete,
+  } = useDeleteEstimates();
+  const dispatch = useDispatch();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  };
 
   const filteredData = useMemo(() => {
-    if (projectsList && projectsList?.projects?.length) {
-      return projectsList?.projects;
+    if (estimatesList && estimatesList?.estimates?.length) {
+      return estimatesList?.estimates;
     } else {
       return [];
     }
-  }, [projectsList, search]);
+  }, [estimatesList, search]);
 
-  const handleViewDetail = (item) => {
-    navigate(`/projects/${item?._id}`);
+  const handleDeleteEstimate = () => {
+    deleteEstimates(deleteRecord);
+    setDeleteModalOpen(false);
   };
 
-  // const handleCreateProject = () => {
-  //   console.log("create project");
-  //   navigate("/projects/create");
-  // };
+  const handlePreviewPDFClick = (item) => {
+    // console.log(item,'item');
+    const formattedData = generateObjectForPDFPreview(
+      showersHardwareList,
+      item,
+      showersLocationSettings?.miscPricing
+    );
+    const pricing = calculateTotal(
+      formattedData,
+      formattedData?.sqftArea,
+      showersLocationSettings
+    );
+    const measurementString = renderMeasurementSides(
+      quoteState.EDIT,
+      formattedData?.measurements,
+      formattedData?.layout_id
+    );
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+      })
+    );
+    navigate(`/estimates/${item?._id}/pdf-preview`);
+  };
+
+  const handleIconButtonClick = (item) => {
+    if (item?.category === EstimateCategory.SHOWERS) {
+      setStateForShowerEstimate(item, dispatch, navigate);
+    } else if (item?.category === EstimateCategory.MIRRORS) {
+      setStateForMirrorEstimate(item, dispatch, navigate);
+    }
+  };
+
   useEffect(() => {
-    refetchProjectsList();
-  }, [page, search, selectedDate]);
+    refetchEstimatesList();
+  }, [
+    refetchEstimatesCounter,
+    page,
+    status,
+    selectedDate,
+    deletedSuccessfully,
+  ]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
       if (page === 1) {
-        refetchProjectsList();
+        refetchEstimatesList();
       } else {
         setPage(1);
       }
@@ -86,14 +175,8 @@ export default function EstimateSection() {
 
   useEffect(() => {
     debouncedRefetch();
+    // Cleanup function to cancel debounce if component unmounts
   }, [search]);
-  const dropdownActions = [
-    {
-      title: "Detail",
-      handleClickItem: handleViewDetail,
-      icon: <ManageSearch />,
-    },
-  ];
 
   const handleDateChange = (newDate) => {
     if (newDate) {
@@ -108,18 +191,6 @@ export default function EstimateSection() {
       setSelectedDate(null);
     }
   };
-  //   const handleCreateProject = () => {
-  //     navigate("/projects/create");
-  //   };
-
-  //   const { data: stats, refetch: refetchStats } = useFetchSingleDocument(
-  //     `${routePrefix}/allStats`
-  //   );
-
-  const handleChange = (e) => {
-    setSearch(e.target.value);
-  };
-
   const handleResetFilter = () => {
     setSearch("");
     setStatus(null);
@@ -130,8 +201,15 @@ export default function EstimateSection() {
       <Box
         sx={{
           backgroundColor: "#F6F5FF",
+          // display: "flex",
+          // flexDirection: "column",
+          // justifyContent: "start",
+          // alignItems: "center",
           width: "100%",
           height: "auto",
+          // overflow: "auto",
+          // gap: "5px",
+          // pr: 3,
         }}
       >
         <Box
@@ -146,10 +224,8 @@ export default function EstimateSection() {
             pt: 3,
           }}
         >
-          <Typography
-            sx={{ fontSize: 24, fontWeight: 600, lineHeight: "32.78px" }}
-          >
-            Estimate
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
+            Estimates
           </Typography>
           <Box
             sx={{
@@ -158,11 +234,11 @@ export default function EstimateSection() {
               pt: { sm: 0, xs: 1 },
             }}
           >
-            <Box sx={{ display: "flex", gap: 1 }}>
+            <Box sx={{ display: "flex", gap: "10px", mr: { sm: 0, xs: "26px" } }}>
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search"
+                  placeholder="Search by Customer Name"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -171,7 +247,7 @@ export default function EstimateSection() {
                     ),
                   }}
                   value={search}
-                  onChange={handleChange}
+                  onChange={(e) => setSearch(e.target.value)}
                 />
               </Box>
               <Box>
@@ -210,10 +286,10 @@ export default function EstimateSection() {
               <FormControl sx={{ width: "152px" }} size="small">
                 <Select
                   value={status}
-                  id="demo-select-small"
-                  className="custom-textfield"
-                  size="small"
                   displayEmpty
+                  id="demo-select-small"
+                  size="small"
+                  className="custom-textfield"
                   sx={{ height: "40px" }}
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
@@ -265,7 +341,6 @@ export default function EstimateSection() {
                   p: "6px 8px !important",
                   fontFamily: '"Roboto",sans-serif !important',
                 }}
-                // sx={{ lineHeight: "21.86px" }}
               >
                 Clear Filter
               </Button>
@@ -286,6 +361,60 @@ export default function EstimateSection() {
           }}
         >
           <Box>
+            {/* <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          p: 2,
+        }}
+      >
+        <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
+          Estimates
+        </Typography> */}
+            {/* Search input field */}
+            {/* <TextField
+          placeholder="Search by Customer Name"
+          value={search}
+          variant="standard"
+          onChange={(e) => handleChange(e)}
+          sx={{
+            mb: 2,
+            ".MuiInputBase-root:after": {
+              border: "1px solid #8477DA",
+            },
+          }}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Search sx={{ color: "#8477DA" }} />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <IconButton
+          onClick={handleCreateQuote}
+          disabled={true}
+          sx={{
+            backgroundColor: "#8477DA",
+            color: "white",
+            "&:hover": { backgroundColor: "#8477DA" },
+            borderRadius: 1,
+            padding: 1,
+            textTransform: "capitalize",
+            fontSize: 16,
+            height: 35,
+          }}
+        >
+          <img
+            width={"26px"}
+            height={"20px"}
+            src={PlusWhiteIcon}
+            alt="plus icon"
+          />
+          Add
+        </IconButton>
+      </Box> */}
+
             {isLoading ? (
               <Box
                 sx={{
@@ -300,117 +429,55 @@ export default function EstimateSection() {
               >
                 <CircularProgress sx={{ color: "#8477DA" }} />
               </Box>
-            ) : filteredData?.length === 0 && !projectsListFetching ? (
+            ) : filteredData?.length === 0 && !estimatesListFetching ? (
               <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Project Found
+                No Estimate Found
               </Typography>
             ) : (
               <Box>
-                {isMobile ? (
-                  filteredData?.map((item) => (
-                    <Box
-                      key={item._id}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        paddingY: 2,
-                        borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                        px: { sm: 0, xs: 0.8 },
-                      }}
-                    >
-                      <Box sx={{ display: "flex", gap: 1 }}>
-                        <Box
-                          sx={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: "100%",
-                            overflow: "hidden",
-                          }}
-                        >
-                          <DefaultImage
-                            image={item?.creatorData?.image}
-                            name={item?.creatorData?.name}
-                          />
-                        </Box>
+                <DataGrid
+                  loading={estimatesListFetching}
+                  style={{
+                    border: "none",
+                  }}
+                  getRowId={(row) => row._id}
+                  rows={filteredData}
+                  columns={EstimatesColumns(
+                    handleOpenDeleteModal,
+                    handleIconButtonClick,
+                    handlePreviewPDFClick
+                  )}
+                  page={page}
+                  pageSize={itemsPerPage}
+                  rowCount={
+                    estimatesList?.totalRecords
+                      ? estimatesList?.totalRecords
+                      : 0
+                  }
+                  sx={{ width: "100%" }}
+                  rowHeight={70.75}
+                  hideFooter
+                  disableColumnMenu
+                />
 
-                        <Box>
-                          <Box sx={{ display: "flex", gap: 0.6 }}>
-                            <Typography
-                              sx={{
-                                maxWidth: "115px",
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                                overflow: "hidden",
-                              }}
-                            >
-                              {item?.creatorData?.name}
-                            </Typography>
-                            <Typography
-                              sx={{ fontSize: 16, fontWeight: "Medium" }}
-                            >
-                              {" "}
-                              - Creator
-                            </Typography>
-                          </Box>
-                          <Box sx={{ display: "flex", gap: 0.6 }}>
-                            <Typography sx={{ fontSize: 14 }}>
-                              {item?.customerData?.name}
-                            </Typography>
-                            <Typography sx={{ fontSize: 14 }}>
-                              {" "}
-                              - Customer
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          textAlign: "center",
-                          width: 100,
-                          alignItems: "center",
-                        }}
-                      >
-                        <ActionsDropdown
-                          item={item}
-                          actions={dropdownActions}
-                        />
-                        <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
-                          {new Date(item?.updatedAt).toDateString()}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  ))
-                ) : (
-                  <DataGrid
-                    loading={projectsListFetching}
-                    style={{
-                      border: "none",
-                    }}
-                    getRowId={(row) => row._id}
-                    rows={filteredData}
-                    columns={ProjectsColumns(dropdownActions)}
-                    page={page}
-                    pageSize={itemsPerPage}
-                    rowCount={
-                      projectsList?.totalRecords
-                        ? projectsList?.totalRecords
-                        : 0
-                    }
-                    rowHeight={70.75}
-                    sx={{ width: "100%" }}
-                    hideFooter
-                    disableColumnMenu
-                  />
-                )}
                 <Pagination
                   totalRecords={
-                    projectsList?.totalRecords ? projectsList?.totalRecords : 0
+                    estimatesList?.totalRecords
+                      ? estimatesList?.totalRecords
+                      : 0
                   }
                   itemsPerPage={itemsPerPage}
                   page={page}
                   setPage={setPage}
+                />
+                <DeleteModal
+                  open={deleteModalOpen}
+                  text={"Estimates"}
+                  close={() => {
+                    setDeleteModalOpen(false);
+                  }}
+                  isLoading={LoadingForDelete}
+                  handleDelete={handleDeleteEstimate}
                 />
               </Box>
             )}

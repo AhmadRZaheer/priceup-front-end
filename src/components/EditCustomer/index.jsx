@@ -20,18 +20,14 @@ import LocationSection from "./locationSection";
 const EditCustomer = () => {
   const [searchParams] = useSearchParams();
   const CustomerId = searchParams.get("id");
-  const inputRef = useRef(null); // Create a ref for the file input
+  const inputRef = useRef(null); 
   const [CurrentSection, setCurrentSection] = useState("projects");
 
   console.log(CustomerId, "CustomerId");
   const apiPath = `${backendURL}/customers/${CustomerId}`;
   const { data, refetch } = useFetchSingleDocument(apiPath);
 
-  // const [selectedImage, setSelectedImage] = useState(data?.image || null);
-
-  console.log(data, "data");
   const onDrop = (acceptedFiles) => {
-    // setSelectedImage(acceptedFiles[0]);
     formik.setFieldValue("image", acceptedFiles[0]);
   };
 

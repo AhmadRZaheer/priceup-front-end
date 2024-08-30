@@ -803,6 +803,113 @@ export const ProjectsColumns = (dropdownActions) => {
     },
   ];
 };
+export const LocationColumns = () => {
+  return [
+    {
+      field: "Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Street",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 2.1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.street}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "City",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1.9,
+      renderCell: (params) => {
+        return (
+          <>
+            {params?.row?.city ? (
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
+                {params?.row?.city}
+              </Typography>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      field: "Postal Code",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.9,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.postalCode}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
+      field: "Country",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.9,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params.row?.country}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "State",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.state || "----"}
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
 
 export const teamColumns = [
   {
