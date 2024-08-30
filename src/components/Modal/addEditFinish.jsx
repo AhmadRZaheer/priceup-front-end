@@ -77,7 +77,7 @@ export default function AddEditFinish({
 
   const validationSchema = Yup.object().shape({
     hardwareLabel: Yup.string().required("Hardware Label is required"),
-    thickness: Yup.string().required("Thickness is required"),
+    // thickness: Yup.string().required("Thickness is required"),
   });
   const inputRef = React.useRef(null); // Create a ref for the file input
   const handleButtonClick = () => {
@@ -89,13 +89,13 @@ export default function AddEditFinish({
       ? {
           hardwareLabel: data?.name,
           image: data?.image,
-          thickness: data?.holesNeeded,
+          // thickness: data?.holesNeeded,
           id: data?._id,
         }
       : {
           hardwareLabel: "",
           image: "",
-          thickness: "",
+          // thickness: "",
         },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -289,7 +289,7 @@ export default function AddEditFinish({
               />
             </Box>
 
-            <Box sx={{ mt: 1 }}>
+            {/* <Box sx={{ mt: 1 }}>
               <Typography
                 sx={{
                   fontSize: "12px",
@@ -321,7 +321,7 @@ export default function AddEditFinish({
                   }
                 />
               </FormControl>
-            </Box>
+            </Box> */}
           </Box>
           <Box
             sx={{

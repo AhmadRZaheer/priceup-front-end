@@ -1078,10 +1078,10 @@ export const AdminColumns = [
             year: "numeric",
           })} */}
           {new Date(params.row.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </div>
       );
     },
@@ -1434,10 +1434,15 @@ export const userColumnsHardware = [
 
     renderCell: (params) => {
       return (
-        <div className="cellWrapper">
-          <div
-            style={{ fontSize: "14px", fontWeight: 700, paddingLeft: "16px" }}
-          >
+        <div className="user-cellWrap">
+          <div className="customerImg">
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
+          </div>
+          <div className="new-customerNameTable">
             {params.row.name}
           </div>
         </div>

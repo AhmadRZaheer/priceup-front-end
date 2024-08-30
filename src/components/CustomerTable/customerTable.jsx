@@ -334,6 +334,7 @@ const CustomerTable = () => {
                   // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
+                  rowHeight={70}
                 />
                 <Pagination
                   // totalRecords={filteredData.length ? filteredData.length : 0}
