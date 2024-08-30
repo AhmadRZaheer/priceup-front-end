@@ -49,6 +49,7 @@ import Projects from "@/pages/Projects";
 import ProjectCreate from "@/pages/Projects/Create";
 import ProjectDetail from "@/pages/Projects/Detail";
 import EditLayout from "../ShowerLayout/EditLayout";
+import EidtCustomersPage from "@/pages/EditCustomer/editCustomer";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -88,7 +89,7 @@ const AppRoutes = () => {
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            </Route>
+          </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
             <Route path="category" element={<EstimateCategory />} />
@@ -99,6 +100,8 @@ const AppRoutes = () => {
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
+            <Route path="edit" element={<EidtCustomersPage />} />
+
             {/* <Route path=":userId" element={<Single />} />
             <Route path="new" element={<New />} /> */}
             {/* <Route path="steps" element={<Estimates />} /> */}
@@ -106,7 +109,7 @@ const AppRoutes = () => {
           <Route path="team" element={<Team />} />
           <Route path="hardware" element={<Hardware />} />
           <Route path="finishes" element={<Finishes />} />
-            
+
           <Route path="/layouts/">
             <Route index element={<Defaults />} />
             <Route path="edit" element={<EditLayout />} />
@@ -141,7 +144,7 @@ const AppRoutes = () => {
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            </Route>
+          </Route>
           <Route path="/customers" element={<Customers />} />
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
