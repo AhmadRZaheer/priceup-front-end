@@ -125,7 +125,10 @@ const Summary = ({ setStep }) => {
                   padding: "5px 8px 5px 8px !important",
                   border: "1px solid #D0D5DD",
                   color: "black",
+                  fontSize: '12px',
+                  lineHeight: '14.06px',
                   borderRadius: "4px !important",
+                  fontFamily: '"Roboto", sans-serif !important',
                   width: "fit-content",
                   ":hover": {
                     border: "1px solid #D0D5DD",
@@ -171,7 +174,7 @@ const Summary = ({ setStep }) => {
                         px: 3,
                       }}
                     >
-                      <Typography sx={{ color: "#5D6164", fontSize: "16px" }}>
+                      <Typography sx={{ color: "#5D6164", fontSize: "16px", fontFamily: '"Roboto", sans-serif !important' }}>
                         {item.title}
                       </Typography>
                       <Box sx={{ height: "46px" }}>
@@ -480,7 +483,7 @@ const Summary = ({ setStep }) => {
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
-                          width: "120px",
+                          width: "93px",
                           padddingY: 4,
                         }}
                       >
@@ -488,6 +491,9 @@ const Summary = ({ setStep }) => {
                           type="number"
                           className="custom-textfield-purple"
                           InputProps={{
+                            style: {
+                               paddingRight: '10px'
+                            },
                             inputProps: { min: 0, max: 100 },
                             endAdornment: <> %</>,
                           }}
@@ -499,6 +505,9 @@ const Summary = ({ setStep }) => {
                           sx={{
                             color: { sm: "black", xs: "white" },
                             width: "100%",
+                            "& input": {
+                              p: "10px 0px 10px 10px !important",
+                            }
                           }}
                           variant="outlined"
                           size="small"

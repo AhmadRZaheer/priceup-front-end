@@ -7,7 +7,7 @@ import {
   InputAdornment,
   CircularProgress,
   FormControl,
-  InputLabel,
+  // InputLabel,
   Select,
   MenuItem,
   Grid,
@@ -55,6 +55,19 @@ const getUserRoleText = (role) => {
       return "---";
   }
 };
+
+const getStatusUpdateType = (role) => {
+  switch (role) {
+    case userRoles.SUPER_ADMIN:
+      return "super_superadmin";
+    case userRoles.STAFF:
+      return "superAdminTeam";
+    case userRoles.CUSTOM_ADMIN:
+      return "superAdminUser";
+    default:
+      return "";
+  }
+}
 
 const routePrefix = `${backendURL}/admins`;
 
@@ -261,7 +274,7 @@ const SuperAdminTeam = () => {
               <TableRow
                 row={params.row}
                 refetch={refetchUsersList}
-                type={"superAdminTeam"}
+                type={getStatusUpdateType(params.row?.role)}
                 text={""}
               />
             </div>
@@ -416,44 +429,52 @@ const SuperAdminTeam = () => {
               />
             </Box>
             <Box>
-              <DesktopDatePicker
-                label="Date Added"
-                // placeholder="Date Added"
-                inputFormat="MM/DD/YYYY"
-                className="custom-textfield"
-                // maxDate={new Date()} // Sets the maximum date to the current date
-                value={selectedDate}
-                onChange={handleDateChange}
-                sx={{
-                  "& .MuiInputBase-root": {
-                    height: 40,
-                    width: 152,
-                    backgroundColor: "white", // Adjust height
-                  },
-                  "& .MuiInputBase-input": {
-                    fontSize: "0.875rem", // Adjust font size
-                    padding: "8px 14px", // Adjust padding
-                  },
-                  "& .MuiInputLabel-root": {
-                    fontSize: "14px",
-                    fontWeight:400,
-                    fontFamily:'"Roboto",sans-serif !important',
-                    top: "-5px", // Adjust label size
-                    color:'#000000'
-                  },
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    size="small"
-                    placeholder="Date Added"
-                    InputProps={{
-                      ...params.InputProps,
-                      placeholder: "Date Added", // Add the placeholder here
-                    }} 
-                  />
-                )}
-              />
+            <DesktopDatePicker
+  value={selectedDate}
+  onChange={handleDateChange}
+  inputFormat="MM/DD/YYYY"  // Format for the selected date
+  renderInput={(params) => (
+    <TextField
+      {...params}
+      size="small"
+      placeholder="Date Added"
+      InputProps={{
+        ...params.InputProps,
+        inputProps: {
+          ...params.inputProps,
+          placeholder: "Date Added",  // Set placeholder explicitly here
+        },
+      }}
+      InputLabelProps={{
+        shrink: true,  // Ensure the label stays above the input
+      }}
+    />
+  )}
+  sx={{
+    "& .MuiInputBase-root": {
+      height: 40,
+      width: 152,
+      backgroundColor: "white",
+    },
+    "& .MuiInputBase-input": {
+      fontSize: "0.875rem",
+      padding: "8px 14px",
+      "&::placeholder": {
+        color: "rgba(0, 0, 0, 0.6)",
+        opacity: 1,
+      },
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "14px",
+      fontWeight: 400,
+      fontFamily: '"Roboto",sans-serif !important',
+      top: "-5px",
+      color: "#000000",
+    },
+  }}
+/>
+
+
             </Box>
             <Box>
               <FormControl

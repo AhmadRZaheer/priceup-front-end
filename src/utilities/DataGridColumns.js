@@ -1071,12 +1071,17 @@ export const AdminColumns = [
     renderCell: (params) => {
       return (
         <div className="new-table-text">
-          {new Date(params.row.createdAt).toLocaleDateString(undefined, {
+          {/* {new Date(params.row.createdAt).toLocaleDateString(undefined, {
             weekday: "long",
             day: "numeric",
             month: "long",
             year: "numeric",
-          })}
+          })} */}
+          {new Date(params.row.createdAt).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
         </div>
       );
     },
@@ -1422,19 +1427,19 @@ export const userRows = [
 export const userColumnsHardware = [
   {
     field: "name",
-    headerName: "Name",
-    headerClassName: "customHeaderClass-finishes",
+    headerName: "Finish Type",
+    headerClassName: "customHeaderClass",
     sortable: false,
     flex: 6,
+
     renderCell: (params) => {
       return (
         <div className="cellWrapper">
-          {params.row.image === "" ? (
-            "---"
-          ) : (
-            <DefaultImage image={params.row.image} name={params.row.name} />
-          )}
-          <div className="hardwareNameTable">{params.row.name}</div>
+          <div
+            style={{ fontSize: "14px", fontWeight: 700, paddingLeft: "16px" }}
+          >
+            {params.row.name}
+          </div>
         </div>
       );
     },

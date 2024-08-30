@@ -117,7 +117,7 @@ export const SingleField = ({
           width: "120px",
         }}
       >
-        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+        <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily:'"Roboto",sans-serif !important', }}>
           Label
         </Typography>
         <TextField
@@ -144,7 +144,7 @@ export const SingleField = ({
           width: "120px",
         }}
       >
-        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>Cost</Typography>
+        <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily:'"Roboto",sans-serif !important', }}>Cost</Typography>
         <TextField
           disabled={isEditField}
           placeholder="cost"

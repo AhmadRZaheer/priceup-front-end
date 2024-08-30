@@ -159,11 +159,11 @@ const AppRoutes = () => {
       ) : isSuperAdmin(decodedToken) ? (
         <Route path="/">
           <Route index element={<Admin />} />
-          <Route path="/team" element={<AdminTeam />} />
-          <Route path="/user" element={<AdminUser />} />
-          {superSuperAdminsList?.includes(decodedToken.email) && (
+          <Route path="/users" element={<AdminTeam />} />
+          {/* <Route path="/user" element={<AdminUser />} /> */}
+          {/* {superSuperAdminsList?.includes(decodedToken.email) && (
             <Route path="/superadmins" element={<Super_SuperAdmin />} />
-          )}
+          )} */}
           <Route path="*" element={<Admin />} />
         </Route>
       ) : isCustomAdmin(decodedToken) && decodedToken?.company_id === "" ? (

@@ -1,16 +1,25 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Box, Divider, Stack, Typography } from "@mui/material";
 import SingleNotificationItem from "../SingleNotificationItem";
 
 const NotificationSection = ({ list, handleItemClick, selectedId }) => {
+  const readList = useMemo(() => {
+    const nitification = list?.filter((data)=> data?.isRead === true);
+    return list ? nitification : [];
+  }, [list]);
+  const unReadList = useMemo(() => {
+    const nitification = list?.filter((data)=> data?.isRead === false);
+    return list ? nitification : [];
+  }, [list]);
+
   return (
     <Box>
       <Box
        className='notification'
         sx={{
-          height: "78.5vh",
+          height: "80.5vh",
           overflowY: "auto",
-          px: 1.5,
+          pr: 0.1,
           "&::-webkit-scrollbar": {
             "-webkit-appearance": "none",
             width: "12px",
@@ -34,11 +43,22 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
           ))}
         </Box> */}
         <Box>
-          <Stack sx={{ pt: 3, pb: 1, px: 2.5  }}>
+          {/* <Stack sx={{ pt: 3, pb: 1, px: 2.5  }}>
             <Typography className="todayText">Earlier</Typography>
-          </Stack>
-          <Divider />
-          {list.map((data, index) => (
+          </Stack> */}
+            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px'}}>
+              <Typography className="timeText" >New for you</Typography>
+            </Box>
+          {/* <Divider /> */}
+          {unReadList.map((data, index) => (
+            <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
+          ))}
+        </Box>
+        <Box>
+            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px'}}>
+              <Typography className="timeText" >Earlier</Typography>
+            </Box>
+          {readList.map((data, index) => (
             <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
           ))}
         </Box>

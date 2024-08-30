@@ -105,7 +105,7 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
           ) : (
             <ChevronRight sx={{ color: "#98A2B3", mr: 2 }} />
           )}
-          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily: '"Roboto", sans-serif !important', }}>
             {title}
           </Typography>
         </Button>

@@ -56,7 +56,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
   const formik = useFormik({
     initialValues: {
       id: data?.user?._id,
-      company_id: data?.company?._id,
+      company_id: data?._id,
       name: "",
       image: "",
       email: "",
@@ -154,21 +154,23 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
             )}
           </Box>
           <Box>
-            <Typography>Admin Name</Typography>
+            <Typography>Location Name</Typography>
             <TextField
-              placeholder="Name"
-              name="name"
-              value={formik.values.name}
+              placeholder="location name"
+              name="locationName"
+              value={formik.values.locationName}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.name && Boolean(formik.errors.name)}
-              helperText={formik.touched.name && formik.errors.name}
+              error={formik.touched.locationName}
+              helperText={
+                formik.touched.locationName && formik.errors.locationName
+              }
               variant="outlined"
               fullWidth
             />
           </Box>
           <Box>
-            <Typography>Admin Email</Typography>
+            <Typography>Location Email</Typography>
             <TextField
               placeholder="email"
               name="email"
@@ -182,17 +184,15 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
             />
           </Box>
           <Box>
-            <Typography>Location Name</Typography>
+            <Typography>Owner Name</Typography>
             <TextField
-              placeholder="location name"
-              name="locationName"
-              value={formik.values.locationName}
+              placeholder="Name"
+              name="name"
+              value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              error={formik.touched.locationName}
-              helperText={
-                formik.touched.locationName && formik.errors.locationName
-              }
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
               variant="outlined"
               fullWidth
             />

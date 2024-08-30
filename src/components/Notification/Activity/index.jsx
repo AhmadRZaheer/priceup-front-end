@@ -38,6 +38,9 @@ export const ActivitySection = ({ data }) => {
             setSelectedId(idParam);
         }
     },[idParam]);
+
+
+    
     console.log(selectedId,'sel id',idParam,'param id');
     return (<Grid container>
         <Grid item xs={6} sx={{borderRight:'0.5px solid #F1F1F1'}}>

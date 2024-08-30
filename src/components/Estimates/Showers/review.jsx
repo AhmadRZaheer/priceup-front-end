@@ -426,6 +426,7 @@ export const ShowerReview = ({ setStep }) => {
           flexDirection: "column",
           gap: { sm: 0, xs: 4 },
           backgroundColor: { xs: "#08061B", sm: "white" },
+          borderRadius: { sm: "12px", xs: 0 },
           // paddingTop: { sm: "40px" },
         }}
       >
@@ -493,7 +494,7 @@ export const ShowerReview = ({ setStep }) => {
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
               Modifications
             </Typography>
           </Box>
@@ -504,12 +505,12 @@ export const ShowerReview = ({ setStep }) => {
               margin: "auto",
 
               paddingX: { sm: 2, xs: 0 },
-              paddingY: 0,
+              py: '0px !important',
               // rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
-              paddingTop: 2,
+              // paddingTop: 2,
               marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
@@ -570,6 +571,7 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "black", xs: "white" },
+                      py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -591,6 +593,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -612,6 +615,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -629,33 +633,34 @@ export const ShowerReview = ({ setStep }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(selectedItemVariant) && (
-                    <Box
-                      sx={{
-                        alignItems: "center",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                      }}
-                    >
-                      <Box sx={{ width: "100%", display: "flex" }}>
-                        <Box
-                          sx={{
-                            width: "100%",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <ChannelTypeDesktop
-                            menuOptions={listData?.channelOrClamps}
-                            title={"Mounting"}
-                            type={"mounting"}
-                            listData={listData}
-                          />
+                      <Box
+                        sx={{
+                          alignItems: "center",
+                          borderBottom: {
+                            sm: "2px solid #D0D5DD",
+                            xs: "2px solid #423f57",
+                          },
+                           py:'6px'
+                        }}
+                      >
+                        <Box sx={{ width: "100%", display: "flex" }}>
+                          <Box
+                            sx={{
+                              width: "100%",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <ChannelTypeDesktop
+                              menuOptions={listData?.channelOrClamps}
+                              title={"Mounting"}
+                              type={"mounting"}
+                              listData={listData}
+                            />
+                          </Box>
                         </Box>
                       </Box>
-                    </Box>
-                  )}
+                    )}
                   <Box
                     sx={{
                       display: "flex",
@@ -665,6 +670,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -686,6 +692,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -707,6 +714,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -728,6 +736,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -735,7 +744,7 @@ export const ShowerReview = ({ setStep }) => {
                         menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
-                        // currentItem={selectedContent?.glassAddons}
+                      // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
                   </Box>
@@ -748,6 +757,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -771,12 +781,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       1" Holes
                     </Typography>
@@ -801,8 +806,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -831,12 +839,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Hinge Cut Out
                     </Typography>
@@ -861,8 +864,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -883,68 +889,66 @@ export const ShowerReview = ({ setStep }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(selectedItemVariant) && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        color: { sm: "#000000  ", xs: "white" },
-                      }}
-                    >
-                      <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
-                      >
-                        {" "}
-                        Clamp Cut Out
-                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
+                          justifyContent: "space-between",
+                          borderBottom: {
+                            sm: "2px solid #D0D5DD",
+                            xs: "2px solid #423f57",
+                          },
+                          color: { sm: "#000000  ", xs: "white" },
                         }}
                       >
-                        <TextField
-                          type="number"
-                          className="custom-textfield"
-                          InputProps={{
-                            inputProps: { min: 0 },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
+                        <Typography
+                         className='estimate-modifcation'
+                        >
+                          {" "}
+                          Clamp Cut Out
+                        </Typography>
+                        <Box
                           sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 2,
+                            width: "120px",
+                            padddingY: 4,
                           }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.clampCut}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "clampCut",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
+                        >
+                          <TextField
+                            type="number"
+                            className="custom-textfield"
+                            InputProps={{
+                              inputProps: { min: 0 },
+                            }}
+                            InputLabelProps={{
+                              style: {
+                                color: "rgba(255, 255, 255, 0.5)",
+                              },
+                            }}
+                            sx={{
+                              color: { sm: "black", xs: "white" },
+                              width: "100%",
+                              "& input[type=number]": {
+                                textAlign: "right",
+                              }
+                            }}
+                            variant="outlined"
+                            size="small"
+                            value={selectedContent.clampCut}
+                            onChange={(event) =>
+                              dispatch(
+                                setInputContent({
+                                  type: "clampCut",
+                                  value: event.target.value,
+                                })
+                              )
+                            }
+                          />
+                        </Box>
                       </Box>
-                    </Box>
-                  )}
+                    )}
                   <Box
                     sx={{
                       display: "flex",
@@ -958,12 +962,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Notch
                     </Typography>
@@ -988,8 +987,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1020,12 +1022,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Outages
                     </Typography>
@@ -1050,8 +1047,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1081,12 +1081,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Mitre
                     </Typography>
@@ -1111,8 +1106,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1143,12 +1141,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Polish
                     </Typography>
@@ -1173,8 +1166,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1205,12 +1201,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       People:
                     </Typography>
@@ -1235,8 +1226,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1267,12 +1261,7 @@ export const ShowerReview = ({ setStep }) => {
                     }}
                   >
                     <Typography
-                      sx={{
-                        padding: "16px 0px 16px 16px",
-                        fontSize: "14px",
-                        fontWeight: 500,
-                        lineHeight: "16.41px",
-                      }}
+                     className='estimate-modifcation'
                     >
                       Hours:
                     </Typography>
@@ -1297,8 +1286,11 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                          color: { sm: "black", xs: "white" },
+                           color: { sm: "black", xs: "white" },
                           width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                         }}
                         variant="outlined"
                         size="small"
@@ -1338,6 +1330,9 @@ export const ShowerReview = ({ setStep }) => {
                         width: "fit-content",
                         textTransform: "capitalize",
                         color: "#8477DA",
+                        fontSize:'16px',
+                        fontWeight:600,
+                        p:'10px 0px !important',
                         // backgroundColor: "#8477da",
                         "&:hover": {
                           // backgroundColor: "#8477da",
@@ -1345,7 +1340,7 @@ export const ShowerReview = ({ setStep }) => {
                         mt: 2,
                       }}
                       variant="text"
-                      startIcon={<Add />}
+                      startIcon={<Add sx={{mr:'2px'}} />}
                     >
                       Add Additional Field
                     </Button>

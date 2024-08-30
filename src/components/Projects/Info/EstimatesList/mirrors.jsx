@@ -301,6 +301,7 @@ const MirrorEstimatesList = ({ projectId, Status }) => {
               sx={{ width: "100%" }}
               rowHeight={70}
               hideFooter
+              disableColumnMenu
             />
           )}
           <Pagination

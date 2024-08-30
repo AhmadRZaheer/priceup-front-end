@@ -1,26 +1,36 @@
 .notificationText {
-  font-size: 30px !important;
-  font-weight: 500 !important;
-  line-height: 38px !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 20px !important;
   color: #101828 !important;
+  align-self: center;
 }
 .closeIcon {
   align-self: center !important;
   color: #101828 !important;
 }
+.timeText {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 19.66px !important;
+  color: #8477DA !important;
+  text-transform: capitalize;
+}
 .todayText {
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  line-height: 26.6px !important;
-  color: rgba(16, 13, 36, 0.57) !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 20.8px !important;
+  color: #283C46 !important;
+  // opacity: 70%;
   text-transform: capitalize;
 }
 .todayTextLight{
-  font-size: 18px !important;
-  font-weight: 500 !important;
-  line-height: 26.6px !important;
-  color:#ccc !important;
-  text-transform: capitalize;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 20.8px !important;
+  color: #283C46 !important;
+  // opacity: 70%;
+  text-transform: capitalize;;
 }
 .estimateText {
   font-size: 16.3px !important;
@@ -89,17 +99,17 @@
 }
 @media (max-height: 820px) {
     .drawerContainer{
-      height:74vh;
+      height:81vh;
     } 
     .notification{
-      height:73vh !important;
+      height:75vh !important;
     }
 }
 @media (max-height: 700px) {
     .drawerContainer{
-      height:72vh;
+      height:78vh;
     } 
     .notification{
-      height:68vh !important;
+      height:70vh !important;
     }
 }

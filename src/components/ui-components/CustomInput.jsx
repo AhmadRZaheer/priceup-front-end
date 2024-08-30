@@ -18,6 +18,7 @@ function CustomInputField({
   id,
   onClick,
   select,
+  color,
 }) {
   return (
     <>
@@ -44,6 +45,8 @@ function CustomInputField({
             ? "custom-textfield-error"
             : disabled
             ? "disabled-textfield"
+            : color === "purple"
+            ? "custom-textfield-purple"
             : "custom-textfield"
         }
       />
