@@ -42,6 +42,7 @@ import {
   getProjectId,
   addSelectedItem,
 } from "@/redux/estimateCalculations";
+import CheckIcon from "@mui/icons-material/Check";
 import {
   backendURL,
   calculateAreaAndPerimeter,
@@ -295,7 +296,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               alignItems: "center"
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700,fontFamily:'"Roboto", sans-serif !important' }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
               Layout & Measurement
             </Typography>
             <Button
@@ -430,7 +431,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 paddingX: { sm: 2, xs: 0 },
                 height: "100%",
                 // background: { sm: "#D9D9D9" },
-                gap: {lg:'84px',xs:4},
+                gap: { lg: '84px', xs: 4 },
                 borderRadius: "8px",
               }}
             >
@@ -475,14 +476,36 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         size="small"
                         className="custom-textfield-purple"
                         onChange={handleLayoutChange}
+                        renderValue={(value) => {
+                          const selectedItem = layouts?.find(item => item._id === value);
+                          return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
+                        }}
                         style={{
                           background: "#F6F5FF",
                           borderRadius: "4px",
                         }}
+                        sx={{p:'0px','&.MuiMenu-list':{
+                          p:'0px'
+                        }}}
                       >
                         {layouts?.map((item) => (
-                          <MenuItem key={`key-${item.name}`} value={item._id}>
-                            {item.name}
+                          <MenuItem key={`key-${item.name}`} value={item._id} sx={{p:'10px 12px !important'}}>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                width: "100%",
+                                gap:'10px'
+                              }}
+                            >
+                              <Typography sx={{ fontSize: "14px" }}>
+                                {item.name}
+                              </Typography>
+                              {item?._id === selectedLayout?._id ? (
+                                <CheckIcon sx={{ color: "#8477DA" }} />
+                              ) : null}
+                            </Box>
+
                           </MenuItem>
                         ))}
                       </Select>
@@ -512,7 +535,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                             lineHeight: "21.86px",
                           }}
                         >
-                          <Typography sx={{ mr: 0.5,fontSize:'16px',fontWeight:600,lineHeight:'21.86px' }}>
+                          <Typography sx={{ mr: 0.5, fontSize: '16px', fontWeight: 600, lineHeight: '21.86px' }}>
                             {String.fromCharCode(97 + index)}
                           </Typography>
                           <Tooltip title={""}>
@@ -774,7 +797,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   width: { xs: 120, sm: 117 },
                   backgroundColor: "#8477DA",
                   fontSize: 16,
-                  fontWeight:600,
+                  fontWeight: 600,
                   "&:hover": { backgroundColor: "#8477DA" },
                   ":disabled": {
                     bgcolor: "#c2c2c2",

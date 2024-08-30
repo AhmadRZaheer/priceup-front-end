@@ -791,16 +791,21 @@ const Summary = ({ setStep }) => {
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
-                          width: "120px",
+                          width: "93px",
                           padddingY: 4,
                         }}
                       >
                         <TextField
                           className="custom-textfield-purple"
+                          sx={{
+                            "& input": {
+                              p: "10px 0px 10px 10px !important",
+                            }
+                          }}
                           type="number"
                           InputProps={{
                             style: {
-                              color: "black",
+                              color: "black", paddingRight: '10px !important'
                             },
                             inputProps: { min: 0, max: 100 },
                             endAdornment: <> %</>,

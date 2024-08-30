@@ -505,12 +505,12 @@ export const ShowerReview = ({ setStep }) => {
               margin: "auto",
 
               paddingX: { sm: 2, xs: 0 },
-              paddingY: 0,
+              py: '0px !important',
               // rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
-              paddingTop: 2,
+              // paddingTop: 2,
               marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
@@ -571,6 +571,7 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "black", xs: "white" },
+                      py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -592,6 +593,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -613,6 +615,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -637,6 +640,7 @@ export const ShowerReview = ({ setStep }) => {
                             sm: "2px solid #D0D5DD",
                             xs: "2px solid #423f57",
                           },
+                           py:'6px'
                         }}
                       >
                         <Box sx={{ width: "100%", display: "flex" }}>
@@ -666,6 +670,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -687,6 +692,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -708,6 +714,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -729,6 +736,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -749,6 +757,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
+                       py:'6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -1321,6 +1330,9 @@ export const ShowerReview = ({ setStep }) => {
                         width: "fit-content",
                         textTransform: "capitalize",
                         color: "#8477DA",
+                        fontSize:'16px',
+                        fontWeight:600,
+                        p:'10px 0px !important',
                         // backgroundColor: "#8477da",
                         "&:hover": {
                           // backgroundColor: "#8477da",
@@ -1328,7 +1340,7 @@ export const ShowerReview = ({ setStep }) => {
                         mt: 2,
                       }}
                       variant="text"
-                      startIcon={<Add />}
+                      startIcon={<Add sx={{mr:'2px'}} />}
                     >
                       Add Additional Field
                     </Button>

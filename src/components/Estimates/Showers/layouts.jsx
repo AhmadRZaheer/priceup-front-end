@@ -249,9 +249,9 @@ export const ShowerLayouts = () => {
               // spacing={2}
               gap={1}
               sx={{
-                minHeight: "60vh",
+                minHeight: "55vh",
                 overflow: "auto",
-                maxHeight: "60vh",
+                maxHeight: "55vh",
                 width: "100%",
                 m: "auto",
               }}

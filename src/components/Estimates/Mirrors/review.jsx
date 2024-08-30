@@ -357,7 +357,7 @@ export const MirrorReview = ({ setStep }) => {
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
+            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
               Modifications
             </Typography>
           </Box>
@@ -372,7 +372,7 @@ export const MirrorReview = ({ setStep }) => {
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
               flexDirection: "column",
-              paddingTop: 2,
+              // paddingTop: 2,
               marginBottom: { sm: 4.6, xs: 10 },
             }}
           >
@@ -487,7 +487,7 @@ export const MirrorReview = ({ setStep }) => {
                           menuOptions={hardwaresList?.hardwares}
                           title={"Hardwares"}
                           type={mirrorHardwareTypes.HARDWARES}
-                          // currentItem={selectedContent.hardwares.item}
+                        // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -507,7 +507,7 @@ export const MirrorReview = ({ setStep }) => {
                           menuOptions={hardwaresList?.glassAddons}
                           title={"Glass Addons"}
                           type={mirrorHardwareTypes.GLASSADDONS}
-                          // currentItem={selectedContent.hardwares.item}
+                        // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -620,12 +620,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Holes
                       </Typography>
@@ -651,7 +646,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -740,12 +738,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Light Holes
                       </Typography>
@@ -771,7 +764,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -802,12 +798,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Notch
                       </Typography>
@@ -833,7 +824,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -862,12 +856,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Single Outlet Cutout
                       </Typography>
@@ -893,7 +882,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -923,12 +915,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Double Outlet Cutout
                       </Typography>
@@ -954,7 +941,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -983,12 +973,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Triple Outlet Cutout
                       </Typography>
@@ -1014,7 +999,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -1043,12 +1031,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Quad Outlet Cutout
                       </Typography>
@@ -1074,7 +1057,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -1278,12 +1264,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         People:
                       </Typography>
@@ -1309,7 +1290,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -1338,12 +1322,7 @@ export const MirrorReview = ({ setStep }) => {
                       }}
                     >
                       <Typography
-                        sx={{
-                          padding: "16px 0px 16px 16px",
-                          fontSize: "14px",
-                          fontWeight: 500,
-                          lineHeight: "16.41px",
-                        }}
+                        className='estimate-modifcation'
                       >
                         Hours:
                       </Typography>
@@ -1369,7 +1348,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                            width: "100%",
+                             width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          }
                           }}
                           variant="outlined"
                           size="small"
@@ -1409,6 +1391,9 @@ export const MirrorReview = ({ setStep }) => {
                           width: "fit-content",
                           textTransform: "capitalize",
                           color: "#8477DA",
+                          fontSize:'16px',
+                          fontWeight:600,
+                          p:'10px 0px !important',
                           // backgroundColor: "#8477da",
                           "&:hover": {
                             // backgroundColor: "#8477da",
@@ -1416,7 +1401,7 @@ export const MirrorReview = ({ setStep }) => {
                           mt: 2,
                         }}
                         variant="text"
-                        startIcon={<Add />}
+                        startIcon={<Add sx={{mr:'2px'}} />}
                       >
                         Add Additional Field
                       </Button>
