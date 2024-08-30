@@ -5,23 +5,39 @@ import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { showSnackbar } from "../../redux/snackBarSlice";
 
-export const useFetchDataCustomer = (page, limit, search) => {
+export const useFetchDataCustomer = (
+  page,
+  limit,
+  search,
+  status,
+  selectedDate,
+  id
+) => {
   async function fetchData() {
     const token = localStorage.getItem("token");
     try {
       let params = {};
-      if(page){
+      if (page) {
         params.page = page;
       }
-      if(limit){
+      if (limit) {
         params.limit = limit;
       }
-      if(search){
+      if (search) {
         params.search = search;
+      }
+      if (status) {
+        params.status = status;
+      }
+      if (selectedDate) {
+        params.selectedDate = selectedDate;
+      }
+      if (id) {
+        params.id = id;
       }
       const response = await axios.get(`${backendURL}/customers`, {
         headers: { Authorization: `Bearer ${token}` },
-        params: params
+        params: params,
       });
       if (response?.data && response?.data?.code === 200) {
         return response?.data?.data ? response?.data?.data : [];
@@ -58,7 +74,7 @@ export const useGetQuote = () => {
 
   return useMutation(handleGetQuote);
 };
-export const useFetchDataCustomerEstimates = (page,limit) => {
+export const useFetchDataCustomerEstimates = (page, limit) => {
   const fetchData = async ({ quoteId }) => {
     const token = localStorage.getItem("token");
     try {
@@ -70,7 +86,7 @@ export const useFetchDataCustomerEstimates = (page,limit) => {
         }
       );
       if (response?.data && response?.data?.code === 200) {
-        return response?.data?.data ? response?.data?.data : null
+        return response?.data?.data ? response?.data?.data : null;
       } else {
         throw new Error("An error occurred while fetching the data.");
       }

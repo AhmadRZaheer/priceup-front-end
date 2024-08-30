@@ -25,7 +25,7 @@ import { getDataRefetch } from "../../redux/staff";
 import DeleteModal from "../Modal/deleteModal";
 import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
-import { MoreHoriz } from "@mui/icons-material";
+import { ArrowForward, MoreHoriz } from "@mui/icons-material";
 import EditIcon from "@/Assets/d.svg";
 
 const FinishesTable = () => {
@@ -114,7 +114,7 @@ const FinishesTable = () => {
               aria-haspopup="true"
               onClick={(event) => handleClickAction(event, data)}
             >
-              <MoreHoriz sx={{ color: "black" }} />
+              <ArrowForward sx={{ color: "#8477DA" }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}

@@ -49,6 +49,7 @@ import Projects from "@/pages/Projects";
 import ProjectCreate from "@/pages/Projects/Create";
 import ProjectDetail from "@/pages/Projects/Detail";
 import EditLayout from "../ShowerLayout/EditLayout";
+import EidtCustomersPage from "@/pages/EditCustomer/editCustomer";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -99,6 +100,8 @@ const AppRoutes = () => {
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
+            <Route path="edit" element={<EidtCustomersPage />} />
+
             {/* <Route path=":userId" element={<Single />} />
             <Route path="new" element={<New />} /> */}
             {/* <Route path="steps" element={<Estimates />} /> */}

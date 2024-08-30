@@ -803,6 +803,113 @@ export const ProjectsColumns = (dropdownActions) => {
     },
   ];
 };
+export const LocationColumns = () => {
+  return [
+    {
+      field: "Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Street",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 2.1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.street}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "City",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1.9,
+      renderCell: (params) => {
+        return (
+          <>
+            {params?.row?.city ? (
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
+                {params?.row?.city}
+              </Typography>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
+          </>
+        );
+      },
+    },
+    {
+      field: "Postal Code",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.9,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.postalCode}
+            </Typography>
+          </>
+        );
+      },
+    },
+
+    {
+      field: "Country",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.9,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params.row?.country}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "State",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.state || "----"}
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
 
 export const teamColumns = [
   {
@@ -971,10 +1078,10 @@ export const AdminColumns = [
             year: "numeric",
           })} */}
           {new Date(params.row.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-              year: "numeric",
-            })}
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
         </div>
       );
     },
@@ -1040,13 +1147,17 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <div className="cellWrapper">
+          <div className="project-cellWrap">
             <div className="customerImg">
-              <DefaultImage image={params.row.image} name={params.row.name} />
+              <DefaultImage
+                type={5}
+                image={params.row.image}
+                name={params.row.name}
+              />
             </div>
             <div className="customerNameTable">
               {params.row.name}
-              <div className="userNameTable">{params.row.username}</div>
+              <div className="new-userNameTable">{params.row.username}</div>
             </div>
           </div>
         </>
@@ -1062,7 +1173,7 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>{params.row.email}</Typography>
+          <Typography className="projectRowTxt">{params.row.email}</Typography>
         </>
       );
     },
@@ -1076,7 +1187,7 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>
+          <Typography className="projectRowTxt">
             {params.row.phone === "" ? "---" : params.row.phone}
           </Typography>
         </>
@@ -1092,7 +1203,9 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>{params.row.address}</Typography>
+          <Typography className="projectRowTxt">
+            {params.row.address}
+          </Typography>
         </>
       );
     },
@@ -1106,7 +1219,9 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography color={"#667085"}>{params.row.lastQuotedOn}</Typography>
+          <Typography className="projectRowTxt">
+            {params.row.lastQuotedOn}
+          </Typography>
         </>
       );
     },
@@ -1319,10 +1434,15 @@ export const userColumnsHardware = [
 
     renderCell: (params) => {
       return (
-        <div className="cellWrapper">
-          <div
-            style={{ fontSize: "14px", fontWeight: 700, paddingLeft: "16px" }}
-          >
+        <div className="user-cellWrap">
+          <div className="customerImg">
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
+          </div>
+          <div className="new-customerNameTable">
             {params.row.name}
           </div>
         </div>

@@ -151,50 +151,50 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
       severity: "error",
     },
   ];
-  const dummyArray = [
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-    {
-      _id: "66a20158f92a3cada4e82604",
-      creatorData: { image: null, name: "test creator" },
-      customerData: { image: null, name: "test customer" },
-      updatedAt: "2024-07-25T12:57:17.641Z",
-    },
-  ];
+  // const dummyArray = [
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  //   {
+  //     _id: "66a20158f92a3cada4e82604",
+  //     creatorData: { image: null, name: "test creator" },
+  //     customerData: { image: null, name: "test customer" },
+  //     updatedAt: "2024-07-25T12:57:17.641Z",
+  //   },
+  // ];
   return (
     <Box
       sx={

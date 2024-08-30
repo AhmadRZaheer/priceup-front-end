@@ -1,14 +1,15 @@
 import React from "react";
-import "./customers.scss";
+import "./editCustomer.scss";
 import Customertable from "@/components/CustomerTable/customerTable";
 import CustomerTableForStaffView from "@/components/Staff/Customers";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
 import CommonLayout from "@/components/CommonLayout";
 import { Box } from "@mui/material";
+import EditCustomer from "@/components/EditCustomer";
 
-const Customers = () => {
-  const decodedToken = getDecryptedToken();
+const EidtCustomersPage = () => {
+  //   const decodedToken = getDecryptedToken();
   return (
     <>
       {/* <TopBar/>
@@ -17,11 +18,7 @@ const Customers = () => {
       {/* <CommonSideBar /> */}
       <CommonLayout>
         <Box className="customersContainer" sx={{ px: { sm: 2, xs: 0 } }}>
-          {decodedToken?.role === userRoles.STAFF ? (
-            <CustomerTableForStaffView />
-          ) : (
-            <Customertable />
-          )}
+          <EditCustomer />
         </Box>
       </CommonLayout>
       {/* </div> */}
@@ -29,4 +26,4 @@ const Customers = () => {
   );
 };
 
-export default Customers;
+export default EidtCustomersPage;
