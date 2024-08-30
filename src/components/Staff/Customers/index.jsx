@@ -25,7 +25,11 @@ export default function Customers() {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const itemsPerPage = 10;
-  const { data: customersList, refetch: customersRefetch, isFetching } = useFetchDataCustomer(page, itemsPerPage, search);
+  const {
+    data: customersList,
+    refetch: customersRefetch,
+    isFetching,
+  } = useFetchDataCustomer(page, itemsPerPage, search);
   // const [open, setOpen] = React.useState(false);
 
   // pagination state:
@@ -54,8 +58,7 @@ export default function Customers() {
     debounce(() => {
       if (page === 1) {
         customersRefetch();
-      }
-      else {
+      } else {
         setPage(1);
       }
     }, 500),
@@ -120,7 +123,7 @@ export default function Customers() {
           <Typography
             sx={{
               fontSize: 30,
-              pl: {sm:3,xs:0},
+              pl: { sm: 3, xs: 0 },
               color: { xs: "#101828", sm: "#101828" },
             }}
           >
@@ -194,7 +197,9 @@ export default function Customers() {
                     page={page}
                     pageSize={itemsPerPage}
                     rowCount={
-                      customersList?.totalRecords ? customersList?.totalRecords : 0
+                      customersList?.totalRecords
+                        ? customersList?.totalRecords
+                        : 0
                     }
                     // rowCount={filteredData.length}
                     sx={{ width: "100%" }}
@@ -202,7 +207,11 @@ export default function Customers() {
                   />
                   <Pagination
                     // totalRecords={filteredData.length ? filteredData.length : 0}
-                    totalRecords={customersList?.totalRecords ? customersList?.totalRecords : 0}
+                    totalRecords={
+                      customersList?.totalRecords
+                        ? customersList?.totalRecords
+                        : 0
+                    }
                     itemsPerPage={itemsPerPage}
                     page={page}
                     setPage={setPage}
@@ -238,7 +247,7 @@ export default function Customers() {
               sx={{
                 display: { sm: "none", xs: "block" },
                 marginTop: "10px",
-                height: {sm:"80vh",xs:'70vh'},
+                height: { sm: "80vh", xs: "70vh" },
                 overflow: "auto",
               }}
             >
@@ -306,15 +315,25 @@ export default function Customers() {
                   No Customer Found
                 </Typography>
               )}
-
             </Box>
-            {customersList?.customers?.length ? <Box sx={{ display: { sm: "none", xs: "block" } }}> <Pagination
-              totalRecords={customersList?.totalRecords ? customersList?.totalRecords : 0}
-              itemsPerPage={itemsPerPage}
-              page={page}
-              setPage={setPage} /></Box> : ''}
+            {customersList?.customers?.length ? (
+              <Box sx={{ display: { sm: "none", xs: "block" } }}>
+                {" "}
+                <Pagination
+                  totalRecords={
+                    customersList?.totalRecords
+                      ? customersList?.totalRecords
+                      : 0
+                  }
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                />
+              </Box>
+            ) : (
+              ""
+            )}
           </Box>
-
         </Box>
 
         {/* <CustomerEstimatesList

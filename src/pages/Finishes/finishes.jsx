@@ -1,25 +1,25 @@
 import React from "react";
 import "./hardware.scss";
-import Sidebar from "../../components/Sidebar/sidebar";
 import FinishesTable from "../../components/Finishes/finishesTable";
-import TopBar from "@/components/TopBar";
-import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 const Finishes = () => {
   return (
     <>
-    {/* <TopBar/>
+      {/* <TopBar/>
       <div className="Customers">
       {/* <Sidebar /> */}
       {/* <CommonSideBar /> */}
       <CommonLayout>
-      <div className="customersContainer">
-        <FinishesTable />
-      </div>
+        <Box
+          className="customersContainer"
+          sx={{ px: { sm: 2, xs: 0 }, pt: { sm: 1, xs: 0 } }}
+        >
+          <FinishesTable />
+        </Box>
       </CommonLayout>
-    {/* </div> */}
+      {/* </div> */}
     </>
-  
   );
 };
 

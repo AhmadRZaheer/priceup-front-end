@@ -303,10 +303,10 @@ export default function Estimates() {
                     },
                     "& .MuiInputLabel-root": {
                       fontSize: "14px",
-                      fontWeight:400,
-                      fontFamily:'"Roboto",sans-serif !important',
+                      fontWeight: 400,
+                      fontFamily: '"Roboto",sans-serif !important',
                       top: "-5px", // Adjust label size
-                      color:'#000000'
+                      color: "#000000",
                     },
                   }}
                   renderInput={(params) => (
@@ -327,14 +327,19 @@ export default function Estimates() {
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        // lineHeight: '16.41px',
-                        color: '#000000',
-                        fontFamily:'"Roboto",sans-serif !important'
-                      }}>Status</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Status
+                        </Typography>
+                      );
                     }
 
                     return (
@@ -362,7 +367,14 @@ export default function Estimates() {
                   </MenuItem>
                 </Select>
               </FormControl>
-              <Button variant="text" onClick={handleResetFilter} sx={{p:'6px 8px !important' ,fontFamily:'"Roboto",sans-serif !important'}}>
+              <Button
+                variant="text"
+                onClick={handleResetFilter}
+                sx={{
+                  p: "6px 8px !important",
+                  fontFamily: '"Roboto",sans-serif !important',
+                }}
+              >
                 Clear Filter
               </Button>
             </Box>
