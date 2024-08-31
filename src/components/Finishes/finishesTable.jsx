@@ -3,18 +3,16 @@ import "./hardwareTable.scss";
 import { userColumnsHardware } from "@/utilities/DataGridColumns";
 import ModeIcon from "@mui/icons-material/Mode";
 import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import { ArrowBack, ArrowForward, Search } from "@mui/icons-material";
 import { DataGrid } from "@mui/x-data-grid";
-import { Add } from "@mui/icons-material";
 import {
   Box,
   CircularProgress,
-  IconButton,
   Typography,
-  TextField,
-  Input,
-  InputAdornment,
   Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
 } from "@mui/material";
 import {
   useDeleteFinishes,
@@ -22,13 +20,13 @@ import {
 } from "../../utilities/ApiHooks/finishes";
 import AddEditFinish from "../Modal/addEditFinish";
 import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch, useSelector } from "react-redux";
-import { showSnackbar } from "../../redux/snackBarSlice";
+import { useSelector } from "react-redux";
 import { getDataRefetch } from "../../redux/staff";
 import DeleteModal from "../Modal/deleteModal";
-import { MAX_PAGES_DISPLAYED, itemsPerPage } from "@/utilities/constants";
-// import NewPagination from "../Pagination";
+import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
+import { ArrowForward, MoreHoriz } from "@mui/icons-material";
+import EditIcon from "@/Assets/d.svg";
 
 const FinishesTable = () => {
   const refetchData = useSelector(getDataRefetch);
@@ -36,7 +34,7 @@ const FinishesTable = () => {
     data: finishesData,
     refetch: finishesRefetch,
     isFetching,
-    isLoading
+    isLoading,
   } = useFetchDataFinishes();
   const {
     mutate: deleteFinish,
@@ -54,13 +52,25 @@ const FinishesTable = () => {
   const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); // Manage menu state in the parent
+  const [activeRow, setActiveRow] = useState(null); // State to keep track of which row triggered the menu
+
+  const handleClickAction = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setActiveRow(row); // Set the current row when the menu is triggered
+  };
+
+  const handleCloseAction = () => {
+    setAnchorEl(null);
+    setActiveRow(null);
+  };
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
   };
   useEffect(() => {
     finishesRefetch();
-  }, [refetchData,page]);
+  }, [refetchData, page]);
   // useEffect(() => {
   //   finishesRefetch();
   // }, []);
@@ -91,32 +101,98 @@ const FinishesTable = () => {
 
   const actionColumn = [
     {
-      field: "Status",
-      headerClassName: "customHeaderClass-finishes",
-      flex: 1,
+      field: "Actions",
+      headerClassName: "customHeaderClass",
+      flex: 0.5,
       renderCell: (params) => {
         const id = params.row._id;
-        const isMatchingId = id === matchingId;
+        const data = params.row;
+
         return (
           <div className="cellAction">
-            <div
-              className="deleteButton"
-              onClick={() => handleOpenDeleteModal(id)}
+            <IconButton
+              aria-haspopup="true"
+              onClick={(event) => handleClickAction(event, data)}
             >
-              {isMatchingId && loaderForDelete ? (
-                <CircularProgress size={24} color="warning" />
-              ) : (
-                <img src={DeleteIcon} alt="delete icon" />
-              )}
-            </div>
-            <div className="viewButton">
-              <CustomIconButton
-                handleClick={() => handleOpenEdit(params.row)}
-                icon={
-                  <ModeIcon sx={{ color: "white", fontSize: 18, mr: 0.4 }} />
-                }
-              />
-            </div>
+              <ArrowForward sx={{ color: "#8477DA" }} />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl && activeRow === data)} // Check if the active row matches the current row
+              onClose={handleCloseAction}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+              slotProps={{
+                paper: {
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "none",
+                    boxShadow: "0px 1px 2px 0px #1018280D",
+                    border: "1px solid #D0D5DD",
+                    p: 0,
+                    width: "171px",
+                    "& .MuiList-padding": {
+                      p: 0,
+                    },
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleCloseAction();
+                  handleOpenEdit(data); // Pass data directly
+                }}
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Edit</p>
+                <img width={20} height={20} src={EditIcon} alt="edit icons" />
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseAction();
+                  handleOpenDeleteModal(id); // Pass id directly
+                }}
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  borderTop: "0.2px solid #000000",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Delete</p>
+                <img
+                  width={20}
+                  height={20}
+                  src={DeleteIcon}
+                  alt="delete icon"
+                />
+              </MenuItem>
+            </Menu>
           </div>
         );
       },
@@ -124,33 +200,63 @@ const FinishesTable = () => {
   ];
 
   // Filter the finishesData based on the search input
-  const filteredData = finishesData?.filter((finish) =>
-    finish.name.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredData = finishesData?.filter((finish) =>
+  //   finish.name.toLowerCase().includes(search.toLowerCase())
+  // );
   return (
     <>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
-          height: "88vh",
-          pl: 1,
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
+          // height: "88vh",
+          // pl: 1,
         }}
       >
-        <div className="fpage-title">
-          <Typography variant="h4" sx={{ fontWeight: 500, color: "#101828" }}>
-            Finishes
-          </Typography>
-        </div>
         <Box
           sx={{
-            border: "1px solid #EAECF0",
-            margin: 2,
-            p: 0,
-            borderRadius: "8px",
-            background:'#FFFF'
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            width: "99.5%",
+            margin: "auto",
           }}
         >
           <div
+            style={{ fontSize: "24px", fontWeight: 600, lineHeight: "32.78px" }}
+          >
+            <p style={{ color: "#5D6164" }}>
+              Showers <span style={{ color: "black" }}> / Finishes</span>
+            </p>
+          </div>
+          <div>
+            <Button
+              onClick={handleOpen}
+              sx={{
+                backgroundColor: "#8477DA",
+                color: "white",
+                textTransform: "capitalize",
+                fontSize: "16px",
+                fontWeight: 600,
+                "&:hover": {
+                  backgroundColor: "#8477DA",
+                },
+              }}
+            >
+              Add New
+            </Button>
+          </div>
+        </Box>
+        <Box
+          sx={{
+            border: "1px solid #D0D5DD",
+            p: 0,
+            borderRadius: "12px",
+            background: "#FFFF",
+            mt: 4,
+            overflow: "hidden",
+          }}
+        >
+          {/* <div
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -183,14 +289,7 @@ const FinishesTable = () => {
                 </InputAdornment>
               }
             />
-            <div>
-              <CustomIconButton
-                handleClick={handleOpen}
-                icon={<Add style={{ color: "white" }} />}
-                buttonText="Add Finishes"
-              />
-            </div>
-          </div>
+          </div> */}
 
           <Box>
             {isLoading ? (
@@ -205,7 +304,7 @@ const FinishesTable = () => {
               >
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               </Box>
-            ) : filteredData.length === 0 ? (
+            ) : finishesData.length === 0 ? (
               <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
                 No Finishes Found
               </Typography>
@@ -217,32 +316,26 @@ const FinishesTable = () => {
                     border: "none",
                   }}
                   getRowId={(row) => row._id}
-                  rows={filteredData.slice(
+                  rows={finishesData.slice(
                     (page - 1) * itemsPerPage,
                     page * itemsPerPage
                   )}
                   columns={userColumnsHardware.concat(actionColumn)}
                   page={page}
                   pageSize={itemsPerPage}
-                  rowCount={filteredData.length}
+                  rowCount={finishesData.length}
                   sx={{ width: "100%" }}
                   hideFooter
+                  rowHeight={70}
+                  disableColumnFilter
+                  disableColumnMenu
                 />
                 <Pagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  totalRecords={finishesData.length ? finishesData.length : 0}
                   itemsPerPage={itemsPerPage}
                   page={page}
                   setPage={setPage}
                 />
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </div>
             )}
           </Box>

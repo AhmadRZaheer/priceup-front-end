@@ -76,7 +76,7 @@ const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
           ) : (
             <ChevronRight sx={{ color: "#98A2B3" }} />
           )}
-          <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+          <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily: '"Roboto", sans-serif !important', }}>
             {title}
           </Typography>
         </Box>

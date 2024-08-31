@@ -97,7 +97,7 @@ export default function AddTeamMembers({
       then: (schema) => schema.min(1, "At least one location is required").required("Please select default location"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    image: Yup.mixed(),
+    // image: Yup.mixed(),
   });
   const formik = useFormik({
     initialValues: {
@@ -264,7 +264,7 @@ export default function AddTeamMembers({
                       borderRadius: "54px !important",
                       border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: '10px 12px !important',
+                      p: '10px 12px !important',
                       lineHeight: '21px',
                       fontSize: 16
                     }}
@@ -285,9 +285,9 @@ export default function AddTeamMembers({
                   </Typography>
                 </Box>
               </label>
-              {formik.errors.image && (
+              {/* {formik.errors.image && (
                 <Typography color="error">{formik.errors.image}</Typography>
-              )}
+              )} */}
             </Box>
             <Grid container spacing={2}>
               <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
@@ -377,7 +377,7 @@ export default function AddTeamMembers({
                         <Typography
                           sx={{ padding: 0, width: "auto" }}
                         >
-                          Staff
+                          User
                         </Typography>
                       </MenuItem>
                     </Select>
@@ -390,7 +390,7 @@ export default function AddTeamMembers({
                 </Grid>
               )}
               {token && token.role === userRoles.SUPER_ADMIN && [userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(formik.values.role) && (
-                <Grid item xs={6} sx={{ width: "100%" }}>
+                <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
                   <Typography className="input-label-text">
                     Locations
                   </Typography>

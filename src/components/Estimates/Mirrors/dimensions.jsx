@@ -240,7 +240,7 @@ export const MirrorDimensions = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
+                  <Typography sx={{fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important'  }}>
                     Layout & Measurement
                   </Typography>
                 </Box>

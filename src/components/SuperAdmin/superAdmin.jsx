@@ -1,67 +1,45 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import "./superAdmin.scss";
-import TeamIcon from "../../Assets/user-gary.svg";
 import {
   Box,
   Button,
-  IconButton,
   Typography,
   InputAdornment,
   Grid,
   CircularProgress,
-  TextField,
-  Tooltip,
   FormControl,
-  InputLabel,
   Select,
   MenuItem,
 } from "@mui/material";
-import icon from "../../Assets/search-icon.svg";
-import DeleteIcon from "../../Assets/Delete-Icon.svg";
-import EditIcon from "../../Assets/d.svg";
-import CustomerIcon from "../../Assets/Customer-icon-gray.svg";
-import DefaultIcon from "../../Assets/layout-gray.svg";
+import icon from "@/Assets/search-icon.svg";
 import {
-  useDataCustomUser,
   useDeleteUser,
-  useFetchAllStaff,
-  useFetchDataAdmin,
-  useFetchDataSuperAdmin,
   useSwitchLocationSuperAdmin,
-} from "../../utilities/ApiHooks/superAdmin";
-import AddSuperAdminModel from "../Modal/addSuperAdminModel";
-import image1 from "../../Assets/Active-location.png";
-import image2 from "../../Assets/Non-Active-location.png";
-import image3 from "../../Assets/Team-Members.svg";
-import { Link } from "react-router-dom";
-import { Add, ContentCopy, Search } from "@mui/icons-material";
-import { backendURL, debounce } from "../../utilities/common";
-import EstimsteIcon from "../../Assets/estmales-gray.svg";
-import { useDispatch } from "react-redux";
+} from "@/utilities/ApiHooks/superAdmin";
+import { Add } from "@mui/icons-material";
+import { backendURL, getDecryptedToken } from "@/utilities/common";
 import DeleteModal from "../Modal/deleteModal";
-import EditLocationModal from "../Modal/editLoactionSuperAdmin";
-import DefaultImage from "../ui-components/defaultImage";
 import CloneLocationModel from "../Modal/cloneLocationModal";
-import { parseJwt } from "../ProtectedRoute/authVerify";
 import SingleLocation from "../ui-components/singleLocation";
 import WidgetCard from "../ui-components/widgetCard";
 import CustomInputField from "../ui-components/CustomInput";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import AddEditLocationModal from "../Modal/editLoactionSuperAdmin";
+import { debounce } from "lodash";
 
 const SuperAdminTable = () => {
   const routePrefix = `${backendURL}/companies`;
   const [search, setSearch] = useState("");
-  const [Status, setStatus] = useState(null);
+  const [status, setStatus] = useState(null);
+  const decodedToken = getDecryptedToken();
 
   const {
-    data: AdminData,
-    refetch: AdminRefetch,
+    data: locationsData,
+    refetch: refetchList,
     isFetched,
     isFetching,
   } = useFetchAllDocuments(
-    `${routePrefix}/by-role?search=${search} ${
-      Status !== null ? `&status=${Status}` : ""
+    `${routePrefix}/by-role?search=${search}${status !== null ? `&status=${status}` : ""
     }`
   );
   const {
@@ -70,44 +48,26 @@ const SuperAdminTable = () => {
     isSuccess: switchedSuperAdmin,
     isLoading: isSwitchingSuperAdmin,
   } = useSwitchLocationSuperAdmin();
-  const { data: staffData } = useFetchAllStaff();
   const {
-    mutate: deleteuserdata,
-    isSuccess,
+    mutateAsync: deleteuserdata,
     isLoading: deleteisLoading,
   } = useDeleteUser();
-  const superSuperAdminsList =
-    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
-  const [isEdit, setisEdit] = useState(false);
-  const [DeleteOpen, setDeleteOpen] = useState(false);
-  const [AddEditOpen, setAddEditOpen] = useState(false);
-  const [InactiveCount, setInActiveCount] = useState(0);
-  const [activeCount, setActiveCount] = useState(0);
-  // const [haveAccessUsers, sethaveAccessUsers] = useState([]);
-  const [OpenClone, setOpenClone] = useState(false);
-  const [isUserData, setisUserData] = useState(null);
-  // useEffect(() => {
-  //   sethaveAccessUsers((prevHaveAccessArray) => {
-  //     const matchingUserData = customUserData.filter((userData) =>
-  //       userData?.locationsAccess?.some(
-  //         (accessData) => accessData?.company_id === isUserData?.company?._id
-  //       )
-  //     );
-  //     return matchingUserData;
-  //   });
-  // }, [isUserData?.company, customUserData]);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [modifyModalOpen, setModifyModalOpen] = useState(false);
+  const [cloneModalOpen, setCloneModalOpen] = useState(false);
+  const [recordToModify, setRecordToModify] = useState(null);
 
-  const handleCloseAddEdit = () => setAddEditOpen(false);
-  const handleCloseDelete = () => setDeleteOpen(false);
   const handleDeleteUser = async () => {
-    await deleteuserdata(isUserData?.user);
+    await deleteuserdata(recordToModify?.user);
+    refetchList();
+    setDeleteModalOpen(false);
   };
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      AdminRefetch();
-    }, 500),
+      refetchList();
+    }, 700),
     [search]
   );
 
@@ -116,30 +76,28 @@ const SuperAdminTable = () => {
     debouncedRefetch();
   };
 
-  const handleOpenDelete = (data) => {
-    setDeleteOpen(true);
-    setisUserData(data);
+  const handleOpenDeleteModal = (data) => {
+    setRecordToModify(data);
+    setDeleteModalOpen(true);
   };
 
-  // const handleCloseEdit = () => setEditOpen(false);
-  const handleOpenEdit = (data) => {
-    setisEdit(true);
-    setAddEditOpen(true);
-    setisUserData(data);
+  const handleCloseDeleteModal = () => {
+    setDeleteModalOpen(false);
   };
-  const handleOpenClone = (data) => {
-    setOpenClone(true);
-    setisUserData(data);
-  };
-  const handleCloseClone = () => {
-    setOpenClone(false);
-  };
-  const token = localStorage.getItem("token");
-  const decodedToken = parseJwt(token);
 
-  // const filteredData = AdminData?.filter((admin) =>
-  //   admin.name.toLowerCase().includes(search.toLowerCase())
-  // );
+  const handleCloseModifyModal = () => setModifyModalOpen(false);
+  const handleOpenModifyModal = (data) => {
+    setRecordToModify(data);
+    setModifyModalOpen(true);
+  };
+  const handleOpenCloneModal = (data) => {
+    setRecordToModify(data);
+    setCloneModalOpen(true);
+  };
+  const handleCloseCloneModal = () => {
+    setCloneModalOpen(false);
+  };
+
   const handleAdminClick = (admin) => {
     switchLocationSuperAdmin({
       company_id: admin._id,
@@ -148,8 +106,8 @@ const SuperAdminTable = () => {
   };
 
   const handleCreateLocation = () => {
-    setisEdit(false);
-    setAddEditOpen(true);
+    setRecordToModify(null);
+    setModifyModalOpen(true);
   };
 
   const handleClearFilter = () => {
@@ -157,21 +115,14 @@ const SuperAdminTable = () => {
     setSearch("");
   };
 
+  const locationsList = useMemo(() => {
+    return locationsData?.companies ? locationsData?.companies : [];
+  }, [locationsData])
+
   useEffect(() => {
-    setActiveCount(AdminData.length);
-  }, [isFetched]);
-  useEffect(() => {
-    if (isSuccess) {
-      setDeleteOpen(false);
-      AdminRefetch();
-    }
-  }, [isSuccess]);
-  useEffect(() => {
-    AdminRefetch();
-  }, [Status]);
-  useEffect(() => {
-    AdminRefetch();
-  }, []);
+    refetchList();
+  }, [status]);
+
   useEffect(() => {
     if (switchedSuperAdmin) {
       localStorage.setItem("userReference", decodedToken.id);
@@ -193,15 +144,20 @@ const SuperAdminTable = () => {
           }}
         >
           <Box>
-            <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-              {" "}
+            <Typography sx={{
+              fontSize: 24,
+              fontWeight: 600,
+              lineHeight: '32.78px'
+            }}>
               Location Management
             </Typography>
             <Typography
               sx={{
+                color: "#212528",
                 fontSize: "16px",
                 fontWeight: 600,
-                color: "#212528",
+                lineHeight: '21.86px',
+                opacity: '70%'
               }}
             >
               Add, edit and manage your locations.
@@ -215,14 +171,15 @@ const SuperAdminTable = () => {
               sx={{
                 backgroundColor: "#8477DA",
                 "&:hover": { backgroundColor: "#8477DA" },
+                letterSpacing: '0px',
                 color: "white",
-                textTransform: "capitalize",
-                borderRadius: 2,
                 fontSize: 16,
                 fontWeight: 600,
+                gap: '10px',
               }}
-              startIcon={<Add color="white" />}
+            // startIcon={}
             >
+              <Add color="white" />
               Add New Location
             </Button>
           </Box>
@@ -230,10 +187,10 @@ const SuperAdminTable = () => {
       </div>
       <Grid container sx={{ px: 3.8 }} spacing={2}>
         {[
-          { title: "Active Locations", text: activeCount, variant: "blue" },
+          { title: "Active Locations", text: locationsData?.globalCounts?.activeLocations ?? 0, variant: "blue" },
           {
             title: "Non-Active Locations",
-            text: InactiveCount,
+            text: locationsData?.globalCounts?.inactiveLocations ?? 0,
             variant: "red",
           },
         ].map((item) => (
@@ -277,17 +234,23 @@ const SuperAdminTable = () => {
             />
           </Box>
 
-          <FormControl sx={{ width: "152px" }} size="small">
+          <FormControl sx={{ width: "152px" }} size="small" className="custom-textfield">
             <Select
-              value={Status}
+              value={status}
               onChange={(e) => setStatus(e.target.value)}
               displayEmpty
-              className="custom-textfield"
               placeholder="Status"
               sx={{ height: "40px" }}
               renderValue={(selected) => {
                 if (selected === null) {
-                  return <p>Status</p>;
+                  return <Typography
+                    sx={{
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      // lineHeight: '16.41px',
+                      color: '#000000',
+                      fontFamily: '"Roboto",sans-serif !important'
+                    }}>Status</Typography>;
                 }
 
                 return selected ? (
@@ -325,108 +288,14 @@ const SuperAdminTable = () => {
               </MenuItem>
             </Select>
           </FormControl>
-          <Box>
-            <Button onClick={handleClearFilter} variant="text" sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}>
+          {/* <Box> */}
+            <Button onClick={handleClearFilter} variant="text" sx={{  p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
               Clear Filter
             </Button>
-          </Box>
+          {/* </Box> */}
         </Box>
       </Box>
-      {/* <div className="types-main-contianer">
-        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <img
-              style={{ width: "42px", height: "100%" }}
-              src={image1}
-              alt="image type"
-            />
-            <Typography sx={{ fontSize: 18 }}>Active Locations</Typography>
-          </Box>
-          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {activeCount}
-          </Typography>
-        </Box>
-
-        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <img
-              style={{ width: "42px", height: "100%" }}
-              src={image2}
-              alt="image type"
-            />
-            <Typography sx={{ fontSize: 18 }}>Non-Active Locations</Typography>
-          </Box>
-          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {InactiveCount}
-          </Typography>
-        </Box>
-
-        <Box sx={{ p: 2, boxShadow: 1, borderRadius: 2, width: 250 }}>
-          <Box
-            sx={{
-              display: "flex",
-              gap: 1,
-              width: "100%",
-              alignItems: "center",
-            }}
-          >
-            <img
-              style={{ width: "42px", height: "100%" }}
-              src={image3}
-              alt="image type"
-            />
-            <Typography sx={{ fontSize: 18 }}>Users</Typography>
-          </Box>
-          <Typography sx={{ fontSize: 32, mt: 1, fontWeight: "bold" }}>
-            {staffData.length}
-          </Typography>
-        </Box>
-      </div> */}
-      {/* <Box sx={{ mt: 4, ml: 4, mb: 2 }}>
-        <TextField
-          placeholder="Search by Name"
-          variant="standard"
-          fullWidth
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          sx={{
-            width: "20% !important", // You can adjust the width as needed
-            // Adjust the margin as needed
-            ".MuiInputBase-root:after": {
-              border: "1px solid #8477DA",
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search sx={{ color: "#8477DA" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </Box> */}
       <Grid container gap={2} p={4} pt={0}>
-        {/* <DataGrid
-          getRowId={(row) => row._id}
-          rows={filteredData}
-          columns={AdminColumns2.concat(actionColumn)}
-          pageSizeOptions={[10]}
-          sx={{ width: "97%", m: "auto" }}
-        /> */}
         {isFetching ? (
           <Box
             sx={{
@@ -440,350 +309,17 @@ const SuperAdminTable = () => {
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
           </Box>
-        ) : AdminData.length !== 0 ? (
-          AdminData?.map((item) => {
-            const filterNonActive = item.staffs;
-            const handleToggleChange = (active) => {
-              setInActiveCount((prevCount) => {
-                if (!active && prevCount > 0) {
-                  return prevCount - 1;
-                } else if (active) {
-                  return prevCount + 1;
-                }
-                return prevCount; // No change if not active and count is 0
-              });
-
-              setActiveCount((prevCount) => {
-                if (active && prevCount > 0) {
-                  return prevCount - 1;
-                } else if (!active) {
-                  return prevCount + 1;
-                }
-
-                return prevCount; // No change if not active and count is 0
-              });
-            };
-
-            return (
-              <SingleLocation
-                data={item}
-                handleToggleChange={handleToggleChange}
-                nonActiveUsers={filterNonActive}
-                handleAccessLocation={handleAdminClick}
-                handleEdit={handleOpenEdit}
-                handleClone={handleOpenClone}
-                handleDelete={handleOpenDelete}
-                refetch={AdminRefetch}
-              />
-              // <Box
-              //   key={item?.user?._id}
-              //   sx={{
-              //     bgcolor: "white",
-              //     border: "1px solid #EAECF0",
-              //     width: "100%",
-              //     minHeight: "316px",
-              //     maxHeight: "316px",
-              //     display: "flex",
-              //     flexDirection: "column",
-              //     justifyContent: "space-between",
-              //   }}
-              // >
-              //   {/* uper part*/}
-              //   <Box
-              //     sx={{
-              //       display: "flex",
-              //       justifyContent: "space-between",
-              //       p: 2,
-              //     }}
-              //   >
-              //     {/* Box 1 */}
-              //     <Box
-              //       sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-              //     >
-              //       {/* Name and logo */}
-              //       <Box
-              //         sx={{ display: "flex", gap: 1.5, alignItems: "center" }}
-              //       >
-              //         <Box>
-              //           <DefaultImage
-              //             image={item?.company?.image}
-              //             name={item?.company?.name}
-              //           />
-              //         </Box>
-              //         <Typography
-              //           sx={{
-              //             color: "#101828",
-              //             fontSize: "18px",
-              //             fontWeight: 500,
-              //             textTransform:'capitalize'
-              //           }}
-              //         >
-              //           {item?.company?.name}
-              //           {/* {item?.user?.name} */}
-              //         </Typography>
-              //       </Box>
-              //       {/* Email */}
-              //       <Typography
-              //         sx={{ color: "#667085", fontSize: "14px", mt: 1 }}
-              //       >
-              //         {item?.company?.address ? item?.company?.address : ""}
-              //         {/* {item?.user?.email} */}
-              //       </Typography>
-
-              //       <Box sx={{ mt: 1 }}>
-              //         <Box sx={{ mt: 1 }}>
-              //           <Typography sx={{ fontSize: "14px", color: "#667085", textTransform: 'capitalize' }}>
-              //             {/* {item?.company?.name} */}
-              //             {item?.user?.name}
-              //           </Typography>
-              //           <Typography
-              //             sx={{ fontSize: "14px", color: "#667085", mt: 0.4 }}
-              //           >
-              //             {/* {item?.company?.address} */}
-              //             {item?.user?.email}{" "}
-              //           </Typography>
-              //           {/* Date Added */}
-              //           <Typography
-              //             sx={{ color: "#667085", fontSize: "14px", mt: 0.4 }}
-              //           >
-              //             {new Date(item?.user?.updatedAt).toLocaleDateString(
-              //               undefined,
-              //               {
-              //                 weekday: "long",
-              //                 day: "numeric",
-              //                 month: "long",
-              //                 year: "numeric",
-              //               }
-              //             )}
-              //           </Typography>
-              //         </Box>
-              //       </Box>
-              //     </Box>
-              //     {/* Box 2 */}
-              //     <Box
-              //       sx={{
-              //         display: "flex",
-              //         flexDirection: "column",
-              //         width: "180px",
-              //         gap: 1,
-              //       }}
-              //     >
-              //       <Box sx={{ height: "100px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Status
-              //         </Typography>
-
-              //         <Box sx={{ ml: -1.2 }}>
-              //           <TableRow
-              //             title={
-              //               item?.user?.status
-              //                 ? ""
-              //                 : "This Location is not Active"
-              //             }
-              //             row={item?.user}
-              //             onToggleChange={handleToggleChange}
-              //             type={"superAdmin"}
-              //             refetch={AdminRefetch}
-              //           />
-              //         </Box>
-              //       </Box>
-
-              //       <Box sx={{ height: "125px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Admins
-              //         </Typography>
-              //         <Grid container mt={1} gap={2}>
-              //           {filterNonActive.length !== 0 ? (
-              //             filterNonActive.map((user, index) => {
-              //               return (
-              //                 <DefaultImage
-              //                   key={index}
-              //                   image={user?.image}
-              //                   name={user?.name}
-              //                 />
-              //               );
-              //             })
-              //           ) : (
-              //             <Box
-              //               sx={{ display: "flex", gap: 1.5, color: "#667085" }}
-              //             >
-              //               <img src={TeamIcon} alt="image of customer" />
-              //               <Typography>{filterNonActive.length}</Typography>
-              //             </Box>
-              //           )}
-              //         </Grid>
-              //       </Box>
-              //     </Box>
-              //     {/* Box 3 */}
-              //     <Box
-              //       sx={{
-              //         display: "flex",
-              //         flexDirection: "column",
-              //         width: "180px",
-              //         gap: 1,
-              //       }}
-              //     >
-              //       <Box sx={{ height: "100px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Estimates
-              //         </Typography>
-              //         <Box
-              //           sx={{
-              //             display: "flex",
-              //             gap: 1.5,
-              //             color: "#667085",
-              //             alignItems: "center",
-              //             mt: 1,
-              //           }}
-              //         >
-              //           <img src={EstimsteIcon} alt="image of customer" />
-              //           <Typography sx={{ pt: 0.2 }}>
-              //             {item.estimates}
-              //           </Typography>
-              //         </Box>
-              //       </Box>
-
-              //       <Box sx={{ height: "100px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Users
-              //         </Typography>
-              //         <Box
-              //           sx={{
-              //             display: "flex",
-              //             gap: 1.5,
-              //             color: "#667085",
-              //             alignItems: "center",
-              //             mt: 1.2,
-              //           }}
-              //         >
-              //           <img src={TeamIcon} alt="image of customer" />
-              //           <Typography>{item.staffs}</Typography>
-              //         </Box>
-              //       </Box>
-              //     </Box>
-              //     {/* Box 4 */}
-              //     <Box
-              //       sx={{
-              //         display: "flex",
-              //         flexDirection: "column",
-              //         width: "180px",
-              //         gap: 1,
-              //       }}
-              //     >
-              //       <Box sx={{ height: "100px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Customers
-              //         </Typography>
-              //         <Box
-              //           sx={{
-              //             display: "flex",
-              //             gap: 1,
-              //             color: "#667085",
-              //             alignItems: "center",
-              //             mt: 1,
-              //           }}
-              //         >
-              //           <img src={CustomerIcon} alt="image of customer" />
-              //           <Typography>{item.customers}</Typography>
-              //         </Box>
-              //       </Box>
-
-              //       <Box sx={{ height: "100px" }}>
-              //         <Typography sx={{ fontSize: "16px", color: "#667085" }}>
-              //           Layouts
-              //         </Typography>
-              //         <Box
-              //           sx={{
-              //             display: "flex",
-              //             gap: 1,
-              //             color: "#667085",
-              //             alignItems: "center",
-              //             mt: 1.2,
-              //           }}
-              //         >
-              //           <img src={DefaultIcon} alt="image of customer" />
-              //           <Typography>{item.layouts}</Typography>
-              //         </Box>
-              //       </Box>
-              //     </Box>
-              //   </Box>
-              //   {/* lower part */}
-              //   <Box
-              //     sx={{
-              //       display: "flex",
-              //       justifyContent: "space-between",
-              //       p: 0.6,
-              //       height: "40px",
-              //       borderTop: "1px solid #EAECF0",
-              //       alignItems: "center",
-              //     }}
-              //   >
-              //     <Box></Box>
-              //     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              //       <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-              //         <IconButton
-              //           sx={{
-              //             p: 0,
-              //             borderRadius: "100%",
-              //             width: 28,
-              //             height: 28,
-              //           }}
-              //           onClick={() => handleOpenClone(item)}
-              //         >
-              //           <ContentCopy sx={{ width: "20px", height: "20px" }} />
-              //         </IconButton>
-              //         <IconButton
-              //           sx={{
-              //             p: 0,
-              //             borderRadius: "100%",
-              //             width: 28,
-              //             height: 28,
-              //           }}
-              //           onClick={() => handleOpenDelete(item)}
-              //         >
-              //           <img src={DeleteIcon} alt="delete icon" />
-              //         </IconButton>
-              //         <IconButton
-              //           onClick={() => handleOpenEdit(item)}
-              //           sx={{
-              //             p: 0,
-              //             borderRadius: "100%",
-              //             width: 28,
-              //             height: 28,
-              //           }}
-              //         >
-              //           <img src={EditIcon} alt="delete icon" />
-              //         </IconButton>
-              //       </Box>
-              //       <Tooltip
-              //         title={
-              //           !item.user.status && "Active this Location to Access"
-              //         }
-              //         placement="top"
-              //         arrow
-              //       >
-              //         <Box>
-              //           <Button
-              //             disabled={!item.user.status}
-              //             onClick={() => handleAdminClick(item)}
-              //             variant="text"
-              //             sx={{
-              //               p: 1,
-              //               m: 0,
-              //               color: "#7F56D9",
-              //               textTransform: "capitalize",
-              //               borderLeft: "1px solid #EAECF0",
-              //             }}
-              //           >
-              //             Access Location
-              //           </Button>
-              //         </Box>
-              //       </Tooltip>
-              //     </Box>
-              //   </Box>
-              // </Box>
-            );
-          })
+        ) : locationsList?.length > 0 ? (
+          locationsList?.map((item) =>
+            <SingleLocation
+              data={item}
+              handleAccessLocation={handleAdminClick}
+              handleEdit={handleOpenModifyModal}
+              handleClone={handleOpenCloneModal}
+              handleDelete={handleOpenDeleteModal}
+              refetch={refetchList}
+            />
+          )
         ) : (
           <Box
             sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}
@@ -793,32 +329,23 @@ const SuperAdminTable = () => {
         )}
       </Grid>
       <DeleteModal
-        open={DeleteOpen}
+        open={deleteModalOpen}
         text={"location"}
-        close={handleCloseDelete}
+        close={handleCloseDeleteModal}
         isLoading={deleteisLoading}
         handleDelete={handleDeleteUser}
       />
       <AddEditLocationModal
-        open={AddEditOpen}
-        isEdit={isEdit}
-        close={handleCloseAddEdit}
-        userdata={isUserData?.user}
-        companydata={isUserData?.company}
-        refetch={AdminRefetch}
+        open={modifyModalOpen}
+        handleClose={handleCloseModifyModal}
+        recordToModify={recordToModify}
+        refetch={refetchList}
       />
-      {/* <AddSuperAdminModel
-        open={open}
-        close={handleClose}
-        refetch={AdminRefetch}
-        // data={edit}
-        // isEdit={isEdit}
-      /> */}
       <CloneLocationModel
-        open={OpenClone}
-        close={handleCloseClone}
-        refetch={AdminRefetch}
-        data={isUserData}
+        open={cloneModalOpen}
+        close={handleCloseCloneModal}
+        refetch={refetchList}
+        data={recordToModify}
       />
     </Box>
   );

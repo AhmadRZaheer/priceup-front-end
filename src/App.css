@@ -312,3 +312,26 @@ input {
   height: 40px !important;
   min-height: 36px !important;
 }
+.estimate-modifcation{
+  padding: 16px 0px 16px 16px !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 16.41px !important;
+  font-family: "Roboto", sans-serif !important;
+}
+
+.locationCard {
+  width: 448px; 
+}
+
+@media (max-width: 1500px) and (min-width: 600px) {
+  .locationCard {
+    width: 330px;
+  }
+}
+
+@media (max-width: 599px) {
+  .locationCard {
+    width: 600px;
+  }
+}
