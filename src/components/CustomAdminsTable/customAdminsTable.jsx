@@ -98,7 +98,7 @@ const CustomAdminsTable = () => {
         height: "100vh",
         overflow: "auto",
         width: "100%",
-        bgcolor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+        bgcolor: { sm: "#F6F5FF", xs: '#FFFFFF' },
       }}
     >
       <Box
@@ -107,7 +107,7 @@ const CustomAdminsTable = () => {
           justifyContent: "space-between",
           px: 4,
           my: 2,
-          mt: 12,
+          // mt: 12,
         }}
       >
         <Typography sx={{ fontSize: 24, fontWeight: "bold" }}>
@@ -140,7 +140,7 @@ const CustomAdminsTable = () => {
               justifyContent: "center",
               height: "300px",
               alignItems: "center",
-              background:'#FFFF'
+              background: '#FFFF'
             }}
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
@@ -153,15 +153,15 @@ const CustomAdminsTable = () => {
                 // handleToggleChange={handleToggleChange}
                 nonActiveUsers={item.staffs}
                 handleAccessLocation={handleSwitchLocation}
-                // handleEdit={handleOpenEdit}
-                // handleClone={handleOpenClone}
-                // handleDelete={handleOpenDelete}
-                // refetch={AdminRefetch}
+              // handleEdit={handleOpenEdit}
+              // handleClone={handleOpenClone}
+              // handleDelete={handleOpenDelete}
+              // refetch={AdminRefetch}
               />
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 ,background:'#FFFF'}}>
+          <Box sx={{ color: "#667085", textAlign: "center", mt: 1, width: "100%", background: '#FFFF' }}>
             No Locations Found
           </Box>
         )}
