@@ -1625,3 +1625,47 @@ export const HardWareColumns = () => {
     },
   ];
 };
+export const MirrorsHardWareColumns = () => {
+  return [
+    {
+      field: "hardwareName",
+      headerName: "Hardware Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1.6,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '22px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '22px' }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+   
+    // {
+    //   field: "Actions",
+    //   headerClassName: "ProjectsColumnsHeaderClass",
+    //   flex: 0.7,
+    //   sortable: false,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <CustomToggle
+    //           checked={true}
+    //           // onChange={(event) => handleStatusChange(event)}
+    //           isText={false}
+    //           name="action"
+    //         />
+    //       </>
+    //     );
+    //   },
+    // },
+  ];
+};

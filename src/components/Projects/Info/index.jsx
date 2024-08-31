@@ -219,7 +219,7 @@ const ProjectInfoComponent = ({
               }}
             >
               <Add sx={{ mr: 0.5, color: "#FFFFFF" }} />
-              Create New Estimates
+              Create New Estimate
             </Button>
           </Box>
         ) : (

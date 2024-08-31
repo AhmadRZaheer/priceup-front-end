@@ -7,6 +7,7 @@ import DefaultImage from "@/components/ui-components/defaultImage";
 import HardwareOption from "@/components/common/HardwareOption";
 
 const HardwareItem = ({ entry, mainIndex, handleOpenUpdateModal, handleOpenDeleteModal, handleHardwareOptionDelete, handleUpdateItem, setItemToModify }) => {
+    console.log(entry,'fgfgfgfgfgfg');
     const [itemOptions, setItemOptions] = useState(entry?.options ?? []);
     const handleUpdateOption = (option) => {
         const index = itemOptions.findIndex((item) => item._id === option._id);
