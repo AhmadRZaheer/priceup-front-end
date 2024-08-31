@@ -64,13 +64,14 @@ import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 import AlertIcon from "@/Assets/alert-circle.svg";
 import AlertMessage from "@/components/ui-components/AlertMessage";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 export const SimpleLayoutDimensions = ({ setStep }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const estimateState = useSelector((state) => state.estimateCalculations);
   const projectId = useSelector(getProjectId);
-  const { data: layouts, isLoading: loading, refetch } = useFetchDataDefault();
+  const { data: layouts, isLoading: loading, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   const setHandleEstimatesPages = (item) => {
     dispatch(setNavigationDesktop(item));
   };
@@ -116,6 +117,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const handleLayoutChange = (event) => {
     const id = event.target.value;
     const selectedItem = layouts?.find((item) => item._id === id);
+    Object.keys(formik.values).forEach((key) => { // reset existing formik values
+      formik.setFieldValue(key, '');
+    })
     dispatch(setisCustomizedDoorWidth(false));
     dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     dispatch(setDoorWidth(0));
@@ -215,7 +219,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       }
     });
     return check;
-  }, [formik.values]);
+  }, [formik.values, noOfSidesOFCurrentLayout]);
 
   useEffect(() => {
     if (
@@ -266,7 +270,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     }
     refetch();
     return () => { };
-  }, []);
+  }, [selectedLayout]);
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -484,18 +488,20 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           background: "#F6F5FF",
                           borderRadius: "4px",
                         }}
-                        sx={{p:'0px','&.MuiMenu-list':{
-                          p:'0px'
-                        }}}
+                        sx={{
+                          p: '0px', '&.MuiMenu-list': {
+                            p: '0px'
+                          }
+                        }}
                       >
                         {layouts?.map((item) => (
-                          <MenuItem key={`key-${item.name}`} value={item._id} sx={{p:'10px 12px !important'}}>
+                          <MenuItem key={`key-${item.name}`} value={item._id} sx={{ p: '10px 12px !important' }}>
                             <Box
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 width: "100%",
-                                gap:'10px'
+                                gap: '10px'
                               }}
                             >
                               <Typography sx={{ fontSize: "14px" }}>

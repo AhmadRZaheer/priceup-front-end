@@ -28,6 +28,7 @@ import bgCustom from "@/Assets/customlayoutimage.svg";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { CheckCircle, Close } from "@mui/icons-material";
 import icon from "../../../Assets/search-icon.svg";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 export const ShowerLayouts = () => {
   const boxStyles = {
@@ -48,7 +49,7 @@ export const ShowerLayouts = () => {
     cursor: "pointer",
   };
 
-  const { data: layouts, isLoading: loading, refetch } = useFetchDataDefault();
+  const { data: layouts, isLoading: loading, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);

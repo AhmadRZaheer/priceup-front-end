@@ -236,19 +236,23 @@ export const ShowerReview = ({ setStep }) => {
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
-  let disable_com = false;
-  if (currentQuoteState === "create") {
-    disable_com = !selectedData || !measurements?.length;
-  } else if (currentQuoteState === "custom") {
-    let allFilled = true;
-    Object.entries(measurements).forEach?.(([key, value]) => {
-      const { count, width, height } = value;
-      if (!width || !height) {
-        allFilled = false;
-      }
-    });
-    disable_com = !allFilled;
-  }
+  const disable_com = useMemo(()=>{
+    let status = false;
+    if (currentQuoteState === "create") {
+      status = !selectedData || !measurements?.length;
+    } else if (currentQuoteState === "custom") {
+      let allFilled = true;
+      Object.entries(measurements).forEach?.(([key, value]) => {
+        const { count, width, height } = value;
+        if (!width || !height) {
+          allFilled = false;
+        }
+      });
+      status = !allFilled;
+    }
+    return status;
+  },[measurements])
+  
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     const estimateConfig = generateEstimatePayload(

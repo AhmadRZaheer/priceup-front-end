@@ -48,7 +48,7 @@ import { layoutVariants } from "@/utilities/constants";
 import { renderMeasurementSides } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 
 const Summary = ({ setStep }) => {
@@ -75,7 +75,6 @@ const Summary = ({ setStep }) => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
-  let disable_com = false;
   const [anchorEl, setAnchorEl] = useState(null);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
@@ -102,18 +101,23 @@ const Summary = ({ setStep }) => {
 
   const alertPopoverOpen = Boolean(anchorEl);
   const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
-  if (quoteState === "create") {
-    disable_com = !selectedData || !measurements?.length;
-  } else if (quoteState === "custom") {
-    let allFilled = true;
-    Object.entries(measurements).forEach?.(([key, value]) => {
-      const { count, width, height } = value;
-      if (!width || !height) {
-        allFilled = false;
-      }
-    });
-    disable_com = !allFilled;
-  }
+  const disable_com = useMemo(()=>{
+    let status = false;
+    if (quoteState === "create") {
+      status = !selectedData || !measurements?.length;
+    } else if (quoteState === "custom") {
+      let allFilled = true;
+      Object.entries(measurements).forEach?.(([key, value]) => {
+        const { count, width, height } = value;
+        if (!width || !height) {
+          allFilled = false;
+        }
+      });
+      status = !allFilled;
+    }
+    return status;
+  },[measurements])
+  
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`

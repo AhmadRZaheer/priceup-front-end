@@ -680,8 +680,30 @@ const getSwitchHingeNotification = (
     } else {
       return null;
     }
-  } else {
-    return null;
+  } else { // shift back to normal hinges if layout dimensions are normal and heavy duty hinge is not layout default hinge
+    if(reduxSelectedItem?.settings?.heavyDutyOption?.heavyDutyType === selectedContent.hinges?.item?._id && reduxSelectedItem?.settings?.hinges?.hingesType !== reduxSelectedItem?.settings?.heavyDutyOption?.heavyDutyType){
+      let hinge = reduxListData?.hinges?.find(
+        (item) =>
+          item._id === reduxSelectedItem?.settings?.hinges?.hingesType
+      );
+      if(hinge){
+        // set Notification
+      const hingesSwitch = {
+        status: true,
+        variant: notificationsVariant.WARNING,
+        message: `Hinges switched from standard to heavy`,
+      };
+      // Unselect content from slice
+      const hinges = {
+        ...selectedContent.hinges,
+        item: hinge,
+      };
+      return { hingesSwitch, hinges };
+      }
+    }
+    else{
+      return null;
+    }
   }
 };
 
