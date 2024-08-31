@@ -8,6 +8,7 @@ function CustomToggle({
   onClick,
   title,
   text,
+  isText=true
 }) {
   return (
     <>
@@ -49,9 +50,9 @@ function CustomToggle({
               },
             }}
           />
-          <Typography sx={{ mt: 1.4, width: text ? "100%" : text === "" ? "0px" : 60 }}>
+         {isText && <Typography sx={{ mt: 1.4, width: text ? "100%" : text === "" ? "0px" : 60 }}>
             {text ?? "Active"}
-          </Typography>
+          </Typography>}
         </Box>
       </Tooltip>
     </>

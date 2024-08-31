@@ -10,9 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CheckIcon from "@mui/icons-material/Check";
+import { backendURL } from "@/utilities/common";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import ShowerHardwareModel from "../Modal/ShowerHardwareModel";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 const data = [
   { id: 1, finishType: "Polished Nickel", cost: 1, status: "active" },
@@ -23,10 +29,30 @@ const data = [
   { id: 6, finishType: "Satin Brass", cost: 1, status: "active" },
   { id: 7, finishType: "Brushed Bronze", cost: 1, status: "active" },
 ];
-
+const routePrefix = `${backendURL}/layouts`;
 const ShowersHardWare = () => {
-  const [value, setValue] = useState();
+  const [recordToModify, setRecordToModify] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [selectedlayoutId, setSelectedLayoutId] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleChangeLayout = (event) => {
+    setSelectedLayoutId(event.target.value);
+  };
+
+  const {
+    data: allLayouts,
+    refetch: refetchAllLayouts,
+  } = useFetchAllDocuments(routePrefix);
+
+  useEffect(() => {
+    refetchAllLayouts();
+    // if (selectedlayoutId) {
+    //   refetchSingleLayout();
+    // }
+  }, [selectedlayoutId]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,24 +60,28 @@ const ShowersHardWare = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleEdit = () => {
+    setOpenModifyModal(true)
+    setRecordToModify(true);
+  }
+  const handleAdd = () => {
+    setOpenModifyModal(false)
+    setOpenAddModal(true)
+  }
   return (
     <>
-      <Box sx={{ display: "flex", gap: "12px" }}>
+      <Box sx={{ display: "flex", gap: "12px", pt: '30px' }}>
         <Typography
+          className='headingTxt'
           sx={{
-            fontSize: { lg: 24, md: 20 },
-            fontWeight: 600,
             color: "#5D6164",
-            display: "flex",
-            gap: 1.5,
+            display: 'flex'
           }}
         >
-          Showers
+          Showers &nbsp;
           <Box
+            className='headingTxt'
             sx={{
-              fontSize: { lg: 24, md: 20 },
-              fontWeight: 600,
               color: "#000000",
             }}
           >
@@ -59,7 +89,7 @@ const ShowersHardWare = () => {
           </Box>
         </Typography>
 
-        <FormControl sx={{ width: "152px" }} size="small">
+        {/* <FormControl sx={{ width: "152px" }} size="small">
           <Select
             value={value}
             labelId="demo-select-small-label"
@@ -74,24 +104,74 @@ const ShowersHardWare = () => {
             <MenuItem value={"voided"}>Voided</MenuItem>
             <MenuItem value={"approved"}>Approved</MenuItem>
           </Select>
+        </FormControl> */}
+
+
+        <FormControl
+          sx={{ width: "212px" }}
+          size="small"
+          className="custom-textfield"
+        >
+          <Select
+            value={selectedlayoutId}
+            size="small"
+            labelId="demo-select-small-label"
+            id="demo-select-small"
+            sx={{ height: "40px", background: "#F6F5FF", }}
+            onChange={handleChangeLayout}
+            renderValue={(value) => {
+              const selectedItem = allLayouts?.find(item => item._id === value);
+              return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
+            }}
+          >
+            {allLayouts?.map((data, index) => (
+              <MenuItem key={index} value={data?._id} sx={{
+                p: '10px 12px', ':hover': {
+                  background: '#EFF2F6'
+                }
+              }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    gap: '10px'
+                  }}
+                >
+                  <Typography sx={{ fontSize: "14px" }}>
+                    {data?.name}
+                  </Typography>
+                  {data?._id === selectedlayoutId ? (
+                    <CheckIcon sx={{ color: "#8477DA" }} />
+                  ) : null}
+                </Box>
+              </MenuItem>
+            ))}
+          </Select>
         </FormControl>
+
       </Box>
       <Box
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          pt: 3,
+          pt: 1.5,
           pb: 1.5,
         }}
       >
         <Typography className="handleTitle">Handles</Typography>
         <Button
           variant="contained"
+          onClick={handleAdd}
           sx={{
             background: "#8477DA",
             color: "#FFFFFF",
             fontWeight: 600,
             fontSize: 16,
+            letterSpacing: '0px',
+            ':hover': {
+              background: "#8477DA",
+            }
           }}
         >
           Add New
@@ -123,12 +203,13 @@ const ShowersHardWare = () => {
               variant="outlined"
               disableElevation
               onClick={handleClick}
-              // sx={{}}
               className="actionBtn"
-              endIcon={<KeyboardArrowDownIcon />}
             >
               Actions
+              <KeyboardArrowDownIcon sx={{ width: '16px', height: '16px' }} />
             </Button>
+
+
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -146,9 +227,33 @@ const ShowersHardWare = () => {
               MenuListProps={{
                 "aria-labelledby": "basic-button",
               }}
+              slotProps={{
+                paper: {
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "none",
+                    boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+                    border: "1px solid #D0D5DD",
+                    p: 0,
+                    width: "171px",
+                    "& .MuiList-padding": {
+                      p: 0,
+                    },
+                  },
+                },
+              }}
             >
-              <MenuItem onClick={handleClose}><Typography className='dropTxt'>Update</Typography></MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleClose} sx={{
+                p: '12px', ':hover': {
+                  background: '#EDEBFA'
+                }
+              }}><Typography className='dropTxt'>Update</Typography></MenuItem>
+              <MenuItem onClick={handleEdit} sx={{
+                p: '12px', ':hover': {
+                  background: '#EDEBFA'
+                }
+              }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -157,10 +262,14 @@ const ShowersHardWare = () => {
                   }}
                 >
                   <Typography className='dropTxt'>Edit</Typography>
-                  <Edit sx={{ color: "#8477DA" }} />
+                  <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
                 </Box>
               </MenuItem>
-              <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleClose} sx={{
+                p: '12px', ':hover': {
+                  background: '#EDEBFA'
+                }
+              }}>
                 <Box
                   sx={{
                     display: "flex",
@@ -169,60 +278,12 @@ const ShowersHardWare = () => {
                   }}
                 >
                   <Typography className='dropTxt'>Delete</Typography>
-                  <Delete sx={{ color: "red" }} />
+                  <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
                 </Box>
               </MenuItem>
             </Menu>
+
           </Box>
-          {/* <Box>
-            <FormControl sx={{ width: "77px", height: "26px" }} size="small">
-              <Select
-                value="Action"
-                onChange={(e) => e.preventDefault()} // Prevents changing the value
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                className="custom-textfield"
-                size="small"
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      width: "204px",
-                    },
-                  },
-                }}
-                sx={{ height: "40px" }}
-              >
-                <MenuItem value="Action" disabled>
-                  Action
-                </MenuItem>
-                <MenuItem value="Update">Update</MenuItem>
-                <MenuItem value="Edit">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography>Edit</Typography>
-                    <Edit sx={{ color: "#8477DA" }} />
-                  </Box>
-                </MenuItem>
-                <MenuItem value="Delete">
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography>Delete</Typography>
-                    <Delete sx={{ color: "red" }} />
-                  </Box>
-                </MenuItem>
-              </Select>
-            </FormControl>
-          </Box> */}
         </Box>
 
         <DataGrid
@@ -238,6 +299,16 @@ const ShowersHardWare = () => {
           hideFooter
           disableColumnMenu
         />
+
+
+        <ShowerHardwareModel open={openAddModal}
+          close={() => setOpenAddModal(false)}
+          recordToModify={recordToModify} />
+
+        <ShowerHardwareModel open={openModifyModal}
+          close={() => setOpenModifyModal(false)}
+          recordToModify={true} />
+
       </Box>
     </>
   );
