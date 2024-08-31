@@ -36,7 +36,6 @@ const Summary = ({ setStep }) => {
   const dispatch = useDispatch();
   const pricing = useSelector(getPricing);
   // const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
-  const disable_com = false;
   const modifiedProfitPercentage = useSelector(getModifiedProfitPercentage);
   const selectedContent = useSelector(getSelectedContent);
   const measurements = useSelector(getEstimateMeasurements);
@@ -50,6 +49,7 @@ const Summary = ({ setStep }) => {
     { title: "Pricing Subcategories", active: false },
     { title: "Gross Profit Margin", active: true },
   ]);
+  const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
 
   // Toggle handler function
   const handleToggle = (index) => {

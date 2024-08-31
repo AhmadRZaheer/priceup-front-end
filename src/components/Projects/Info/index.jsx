@@ -35,6 +35,8 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
 import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
 import StatusChip from "@/components/common/StatusChip";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project Name is required"),
@@ -47,7 +49,9 @@ const ProjectInfoComponent = ({
   projectData = null,
 }) => {
   const decryptedToken = getDecryptedToken();
-  const [Status, setStatus] = useState(null);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const creatorName =
     projectState === "create"
       ? decryptedToken?.name
@@ -146,8 +150,30 @@ const ProjectInfoComponent = ({
     setSelectedAddress(address);
     setOpenAddressSelectModal(false);
   };
-  //Serach State
-  const [search, setSearch] = useState("");
+
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setSelectedDate(null);
+  };
 
   //Craete Model
   const [openCategoryModal, setOpenCategoryModal] = useState(false);
@@ -176,7 +202,7 @@ const ProjectInfoComponent = ({
               fontWeight: 600,
               color: "#000000",
               display: "flex",
-              lineHeight:'32.78px',
+              lineHeight: '32.78px',
               gap: 1,
             }}
           >
@@ -190,8 +216,8 @@ const ProjectInfoComponent = ({
               color: "#212528",
               fontSize: { lg: 16, md: 14 },
               fontWeight: 600,
-              lineHeight:'21.86px',
-              opacity:'70%'
+              lineHeight: '21.86px',
+              opacity: '70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -797,7 +823,38 @@ const ProjectInfoComponent = ({
                     ),
                   }}
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearchChange}
+                />
+              </Box>
+              <Box>
+                <DesktopDatePicker
+                  label="Date Added"
+                  inputFormat="MM/DD/YYYY"
+                  className="custom-textfield"
+                  // maxDate={new Date()} // Sets the maximum date to the current date
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      height: 40,
+                      width: 150,
+                      backgroundColor: "white", // Adjust height
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: "0.875rem", // Adjust font size
+                      padding: "8px 14px", // Adjust padding
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      fontFamily: '"Roboto",sans-serif !important',
+                      top: "-5px", // Adjust label size
+                      color: '#000000'
+                    },
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small" />
+                  )}
                 />
               </Box>
               <FormControl
@@ -806,7 +863,7 @@ const ProjectInfoComponent = ({
               // className="custom-textfield"
               >
                 <Select
-                  value={Status}
+                  value={status}
                   className="custom-textfield"
                   id="demo-select-small"
                   size="small"
@@ -816,13 +873,13 @@ const ProjectInfoComponent = ({
                   renderValue={(selected) => {
                     if (selected === null) {
                       return <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        // lineHeight: '16.41px',
-                        color: '#000000',
-                        fontFamily:'"Roboto",sans-serif !important'
-                      }}>Status</Typography>;
+                        sx={{
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          // lineHeight: '16.41px',
+                          color: '#000000',
+                          fontFamily: '"Roboto",sans-serif !important'
+                        }}>Status</Typography>;
                     }
 
                     return (
@@ -855,9 +912,11 @@ const ProjectInfoComponent = ({
               </FormControl>
               <Button
                 variant="text"
-                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" ,p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
+                onClick={handleResetFilter}
+                sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
+                // sx={{ lineHeight: "21.86px" }}
               >
-                Clear Filters
+                Clear Filter
               </Button>
             </Box>
           </Box>
@@ -872,7 +931,7 @@ const ProjectInfoComponent = ({
               pt: { md: 2, xs: 1 },
               width: "99.5%",
               background: "#FFFF",
-              border:'1px solid #D0D5DD'
+              border: '1px solid #D0D5DD'
             }}
           >
             {/** Tabs Switch */}
@@ -886,17 +945,17 @@ const ProjectInfoComponent = ({
                   borderRadius: "6px",
                   background: "#F3F5F6",
                   width: "151px",
-                  minHeight:'40px',
-                  height:'40px',
+                  minHeight: '40px',
+                  height: '40px',
                   p: '2px',
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
                     borderRadius: "4px",
-                    p:'7px 12px',
+                    p: '7px 12px',
                     // minWidth:'79px',
-                    height:'40px',
-                    minHeight:'36px'
+                    height: '40px',
+                    minHeight: '36px'
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#8477DA",
@@ -905,23 +964,23 @@ const ProjectInfoComponent = ({
                 }}
               >
                 <Tab
-                className="categoryTab"
+                  className="categoryTab"
                   label="Showers"
                   sx={{
                     // fontSize: "14px",
                     // fontWeight: 600,
                     // color: "#000000",
                     // textTransform: "capitalize",
-                    minWidth:'70px',
+                    minWidth: '70px',
                     // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
                 />
                 <Tab
-                className="categoryTab"
+                  className="categoryTab"
                   label="Mirrors"
                   sx={{
-                    minWidth:'70px',
+                    minWidth: '70px',
                   }}
                   {...a11yProps(1)}
                 />
@@ -933,14 +992,18 @@ const ProjectInfoComponent = ({
             <CustomTabPanel value={activeTabNumber} index={0}>
               <ShowerEstimatesList
                 projectId={projectData?._id}
-                Status={Status}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
             <CustomTabPanel value={activeTabNumber} index={1}>
               <MirrorEstimatesList
                 projectId={projectData?._id}
-                Status={Status}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
               />
             </CustomTabPanel>
           </Box>

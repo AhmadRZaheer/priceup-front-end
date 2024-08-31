@@ -1,6 +1,6 @@
 import React from "react";
 import "./hardware.scss";
-import HardwareTable from "../../components/HardwareTable/hardwareTable";
+import HardwareTable from "@/components/HardwareTable/hardwareTable";
 
 import CommonLayout from "@/components/CommonLayout";
 import { Box } from "@mui/material";
@@ -11,10 +11,10 @@ const Hardware = () => {
     <>
       <CommonLayout>
       <div className="customersContainer">
-        {/* <HardwareTable /> */}
-        <Box className="econtent-wrapper" sx={{ px: { lg: '28px',sm:'20px', xs: '0px' } }}>
+        <HardwareTable />
+        {/* <Box className="econtent-wrapper" sx={{ px: { lg: '28px',sm:'20px', xs: '0px' } }}>
         <ShowersHardWare />
-        </Box>
+        </Box> */}
       </div>
       </CommonLayout>
     </>

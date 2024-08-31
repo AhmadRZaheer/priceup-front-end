@@ -41,6 +41,7 @@ import {
   setisCustomizedDoorWidth,
   getProjectId,
   addSelectedItem,
+  resetNotifications
 } from "@/redux/estimateCalculations";
 import CheckIcon from "@mui/icons-material/Check";
 import {
@@ -61,20 +62,20 @@ import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication"
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
-import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
-import AlertIcon from "@/Assets/alert-circle.svg";
-import AlertMessage from "@/components/ui-components/AlertMessage";
+// import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
+// import AlertMessage from "@/components/ui-components/AlertMessage";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import AlertsAndWarnings from "../AlertsAndWarnings";
 
 export const SimpleLayoutDimensions = ({ setStep }) => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const estimateState = useSelector((state) => state.estimateCalculations);
   const projectId = useSelector(getProjectId);
   const { data: layouts, isLoading: loading, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
-  const setHandleEstimatesPages = (item) => {
-    dispatch(setNavigationDesktop(item));
-  };
+  // const setHandleEstimatesPages = (item) => {
+  //   dispatch(setNavigationDesktop(item));
+  // };
   // const [editField, setEditField] = useState(true);
   const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
@@ -101,18 +102,6 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   const [selectedLayout, setSelectedLayout] = useState(selectedData);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClickPopover = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-  };
-
-  const alertPopoverOpen = Boolean(anchorEl);
-  const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
 
   const handleLayoutChange = (event) => {
     const id = event.target.value;
@@ -146,6 +135,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
+      dispatch(resetNotifications());
       const measurementsArray = Object.entries(values)
         .filter(([key, value]) => value !== "")
         .map(([key, value]) => ({
@@ -303,88 +293,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
             <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
               Layout & Measurement
             </Typography>
-            <Button
-              variant="outlined"
-              sx={{
-                border: "1px solid rgba(93, 97, 100, 1)",
-                p: "5px 8px 5px 8px !important",
-                display: "flex",
-                gap: 0.5,
-                borderRadius: "84px !important",
-                alignItems: "center",
-                color: "black",
-                ":hover": {
-                  border: "1px solid rgba(93, 97, 100, 1)",
-                },
-              }}
-              aria-describedby={alertPopoverid}
-              onClick={handleClickPopover}
-            >
-              <img
-                width={20}
-                height={20}
-                src={AlertIcon}
-                alt="alert yellow logo"
-              />
-              <Typography sx={{ fontSize: "12px", lineHeight: "14.06px", fontFamily: 'Roboto", sans-serif !important' }}>
-                View Alerts
-              </Typography>
-            </Button>
-            <Popover
-              id={alertPopoverid}
-              open={alertPopoverOpen}
-              anchorEl={anchorEl}
-              onClose={handleClosePopover}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              PaperProps={{
-                style: { borderRadius: "8px" },
-              }}
-            >
-              <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto" }}>
-                {[
-                  {
-                    title: "Alert Name",
-                    alertMessage: "Alert Message will be here!",
-                    varient: "error",
-                  },
-                  {
-                    title: "Alert Name",
-                    alertMessage: "Alert Message will be here!",
-                    varient: "info",
-                  },
-                  {
-                    title: "Alert Name",
-                    alertMessage: "Alert Message will be here!",
-                    varient: "success",
-                  },
-                  {
-                    title: "Alert Name",
-                    alertMessage: "Alert Message will be here!",
-                    varient: "success",
-                  },
-                  {
-                    title: "Alert Name",
-                    alertMessage: "Alert Message will be here!",
-                    varient: "success",
-                  },
-                ].map((item, index) => (
-                  <Box pt={index === 0 ? 0 : "4px"}>
-                    <AlertMessage
-                      title={item.title}
-                      alertMessage={item.alertMessage}
-                      varient={item.varient}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            </Popover>
+            <AlertsAndWarnings />
           </Box>
           <Box
             sx={{

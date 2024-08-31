@@ -456,6 +456,7 @@ export const generateNotificationsForCurrentEstimate = (
      /** switch glass thickness if glass size is greater than provided */
      const thicknessShiftResult = getGlassThicknessShiftNotification(
       selectedContent,
+      reduxSelectedItem,
       calculatedGlassThickness,
     );
     if (thicknessShiftResult?.glassThicknessSwitch)
@@ -475,6 +476,18 @@ export const generateNotificationsForCurrentEstimate = (
                count: 1
             };
           }
+      }
+      else if (thicknessShiftResult?.glassType?.thickness === thicknessTypes.THREEBYEIGHT && selectedContent.mountingChannel?.item && reduxSelectedItem?.settings?.glassType?.thickness === thicknessTypes.THREEBYEIGHT) { 
+        // shift mounting back to 3/8 when glass thickness shift back to 3/8
+        let itemFound = reduxListData?.mountingChannel?.find(
+          (item) => item.slug === "u-channel-3-8"
+        );
+        if(itemFound){
+          selectedContent.mountingChannel = {
+             item: itemFound,
+             count: 1
+          };
+        }
       }
       }
     /** end */
@@ -637,6 +650,14 @@ export const generateNotificationsForCurrentEstimate = (
         variant: notificationsVariant.INFO,
         message: `Panel weight is over ${panelOverWeightAmount}lb check your labor`,
       };
+    } else {
+      if(notifications.panelOverweight.status){
+        notifications.panelOverweight = {
+          status: false,
+          variant: notificationsVariant.INFO,
+          message: `Panel weight is normal`,
+        };
+      }
     }
     /** end */
 
@@ -691,7 +712,7 @@ const getSwitchHingeNotification = (
       const hingesSwitch = {
         status: true,
         variant: notificationsVariant.WARNING,
-        message: `Hinges switched from standard to heavy`,
+        message: `Hinges switched from heavy to standard`,
       };
       // Unselect content from slice
       const hinges = {
@@ -709,6 +730,7 @@ const getSwitchHingeNotification = (
 
 const getGlassThicknessShiftNotification = (
   selectedContent,
+  reduxSelectedItem,
   calculatedGlassThickness
 ) => {
   if (
@@ -728,6 +750,20 @@ const getGlassThicknessShiftNotification = (
     };
     return { glassThicknessSwitch, glassType };
   } else {
+    if(selectedContent.glassType?.thickness === thicknessTypes.ONEBYTWO && reduxSelectedItem?.settings?.glassType?.thickness === thicknessTypes.THREEBYEIGHT){
+    //set notification
+    const glassThicknessSwitch = {
+      status: true,
+      variant: notificationsVariant.INFO,
+      message: `Glass thickness switched from ${thicknessTypes.ONEBYTWO} to ${thicknessTypes.THREEBYEIGHT}`,
+    };
+    // set glass thickness
+    const glassType = {
+      ...selectedContent.glassType,
+      thickness: thicknessTypes.THREEBYEIGHT,
+    };
+    return { glassThicknessSwitch, glassType };
+    }
     return null;
   }
 };

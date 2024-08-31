@@ -106,14 +106,15 @@ const Summary = ({ setStep }) => {
     if (quoteState === "create") {
       status = !selectedData || !measurements?.length;
     } else if (quoteState === "custom") {
-      let allFilled = true;
-      Object.entries(measurements).forEach?.(([key, value]) => {
-        const { count, width, height } = value;
-        if (!width || !height) {
-          allFilled = false;
-        }
-      });
-      status = !allFilled;
+      let arraylength = Object.entries(measurements)?.length;
+      // Object.entries(measurements).forEach?.(([key, value]) => {
+      //   const { count, width, height } = value;
+      //   console.log(width,'width',height,'height',);
+      //   if (!width || !height) {
+      //     notAllFilled = false;
+      //   }
+      // });
+      status = arraylength > 0 ? false : true;
     }
     return status;
   },[measurements])
@@ -283,7 +284,7 @@ const Summary = ({ setStep }) => {
               Columns[2].active === false &&
               Columns[3].active === false &&
               Columns[4].active === false ? (
-              <Typography>no Esimate Details</Typography>
+              <Typography>No Estimate Detail</Typography>
             ) : (
               <Grid container spacing={2}>
                 {Columns[0].active && (
@@ -315,7 +316,7 @@ const Summary = ({ setStep }) => {
                             "Custom"}
                         </Typography>
                       </Box>
-                      {doorWidth && (
+                      {doorWidth && doorWidth > 0 ?  (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Door Width:
@@ -324,7 +325,7 @@ const Summary = ({ setStep }) => {
                             {doorWidth}
                           </Typography>
                         </Box>
-                      )}
+                      ) : ''}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Square Foot:

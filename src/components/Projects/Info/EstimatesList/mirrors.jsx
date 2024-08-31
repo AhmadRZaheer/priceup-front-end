@@ -24,22 +24,23 @@ import { useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import { debounce } from "lodash";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
-const debounce = (func, delay) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      func(...args);
-    }, delay);
-  };
-};
+// const debounce = (func, delay) => {
+//   let timeout;
+//   return (...args) => {
+//     clearTimeout(timeout);
+//     timeout = setTimeout(() => {
+//       func(...args);
+//     }, delay);
+//   };
+// };
 const routePrefix = `${backendURL}/estimates`;
 
-const MirrorEstimatesList = ({ projectId, Status }) => {
+const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
   const isMobile = useMediaQuery("(max-width:600px)");
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,14 +54,22 @@ const MirrorEstimatesList = ({ projectId, Status }) => {
   });
   const classes = useStyles();
   const itemsPerPage = 10;
+  let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.MIRRORS}`;
+    if (searchValue && searchValue.length) {
+        fetchAllEstimatesUrl += `&search=${searchValue}`;
+    }
+    if (statusValue) {
+      fetchAllEstimatesUrl += `&status=${statusValue}`;
+    }
+    if (dateValue) {
+      fetchAllEstimatesUrl += `&date=${dateValue}`
+    }
   const {
     data: estimatesList,
     isLoading,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
-  } = useFetchAllDocuments(
-    `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&search=${search}&category=${EstimateCategory.MIRRORS}&status=${Status}`
-  );
+  } = useFetchAllDocuments(fetchAllEstimatesUrl);
   const {
     mutate: deleteEstimates,
     isSuccess: deletedSuccessfully,
@@ -98,10 +107,10 @@ const MirrorEstimatesList = ({ projectId, Status }) => {
     } else {
       return [];
     }
-  }, [estimatesList, search]);
+  }, [estimatesList, searchValue]);
   useEffect(() => {
     refetchEstimatesList();
-  }, [page, deletedSuccessfully, projectId]);
+  }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -110,14 +119,20 @@ const MirrorEstimatesList = ({ projectId, Status }) => {
       } else {
         setPage(1);
       }
-    }, 500),
-    [search]
+    }, 700),
+    [page]
   );
-
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+  useEffect(() => {
     debouncedRefetch();
-  };
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [searchValue]);
+  // const handleChange = (e) => {
+  //   setSearch(e.target.value);
+  //   debouncedRefetch();
+  // };
   return (
     <>
       {/* <Box
