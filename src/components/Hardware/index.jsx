@@ -3,6 +3,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControl,
   Menu,
   MenuItem,
@@ -10,9 +11,15 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import CheckIcon from "@mui/icons-material/Check";
+import { backendURL } from "@/utilities/common";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import ShowerHardwareModel from "../Modal/ShowerHardwareModel";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 const data = [
   { id: 1, finishType: "Polished Nickel", cost: 1, status: "active" },
@@ -23,10 +30,30 @@ const data = [
   { id: 6, finishType: "Satin Brass", cost: 1, status: "active" },
   { id: 7, finishType: "Brushed Bronze", cost: 1, status: "active" },
 ];
-
+const routePrefix = `${backendURL}/layouts`;
 const ShowersHardWare = () => {
-  const [value, setValue] = useState();
+  const [recordToModify, setRecordToModify] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [selectedlayoutId, setSelectedLayoutId] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleChangeLayout = (event) => {
+    setSelectedLayoutId(event.target.value);
+  };
+
+  const {
+    data: allLayouts,
+    refetch: refetchAllLayouts,
+  } = useFetchAllDocuments(routePrefix);
+
+  useEffect(() => {
+    refetchAllLayouts();
+    // if (selectedlayoutId) {
+    //   refetchSingleLayout();
+    // }
+  }, [selectedlayoutId]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -34,32 +61,41 @@ const ShowersHardWare = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  const handleEdit = () => {
+    setOpenModifyModal(true)
+    setRecordToModify(true);
+  }
+  const handleAdd = () => {
+    setOpenModifyModal(false)
+    setOpenAddModal(true)
+  }
   return (
     <>
-      <Box sx={{ display: "flex", gap: "12px" }}>
-        <Typography
-          sx={{
-            fontSize: { lg: 24, md: 20 },
-            fontWeight: 600,
-            color: "#5D6164",
-            display: "flex",
-            gap: 1.5,
-          }}
-        >
-          Showers
-          <Box
+      <Box
+        sx={{
+          width: "100%",
+        }}
+      >
+        <Box sx={{ display: "flex", gap: "12px", pt: '30px' }}>
+          <Typography
+            className='headingTxt'
             sx={{
-              fontSize: { lg: 24, md: 20 },
-              fontWeight: 600,
-              color: "#000000",
+              color: "#5D6164",
+              display: 'flex'
             }}
           >
-            / Hardware
-          </Box>
-        </Typography>
+            Showers &nbsp;
+            <Box
+              className='headingTxt'
+              sx={{
+                color: "#000000",
+              }}
+            >
+              / Hardware
+            </Box>
+          </Typography>
 
-        <FormControl sx={{ width: "152px" }} size="small">
+          {/* <FormControl sx={{ width: "152px" }} size="small">
           <Select
             value={value}
             labelId="demo-select-small-label"
@@ -74,129 +110,156 @@ const ShowersHardWare = () => {
             <MenuItem value={"voided"}>Voided</MenuItem>
             <MenuItem value={"approved"}>Approved</MenuItem>
           </Select>
-        </FormControl>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          pt: 3,
-          pb: 1.5,
-        }}
-      >
-        <Typography className="handleTitle">Handles</Typography>
-        <Button
-          variant="contained"
-          sx={{
-            background: "#8477DA",
-            color: "#FFFFFF",
-            fontWeight: 600,
-            fontSize: 16,
-          }}
-        >
-          Add New
-        </Button>
-      </Box>
+        </FormControl> */}
+          <FormControl
+            sx={{ width: "212px" }}
+            size="small"
+            className="custom-textfield"
+          >
+            <Select
+              value={selectedlayoutId}
+              size="small"
+              labelId="demo-select-small-label"
+              id="demo-select-small"
+              sx={{ height: "40px", background: "#F6F5FF", }}
+              onChange={handleChangeLayout}
+              renderValue={(value) => {
+                const selectedItem = allLayouts?.find(item => item._id === value);
+                return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
+              }}
+            >
+              {allLayouts?.map((data, index) => (
+                <MenuItem key={index} value={data?._id} sx={{
+                  p: '10px 12px', ':hover': {
+                    background: '#EFF2F6'
+                  }
+                }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      width: "100%",
+                      gap: '10px'
+                    }}
+                  >
+                    <Typography sx={{ fontSize: "14px" }}>
+                      {data?.name}
+                    </Typography>
+                    {data?._id === selectedlayoutId ? (
+                      <CheckIcon sx={{ color: "#8477DA" }} />
+                    ) : null}
+                  </Box>
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-      <Box
-        sx={{
-          border: "1px solid #D0D5DD",
-          borderRadius: "12px",
-          background: "#FFFFFF",
-        }}
-      >
+        </Box>
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            py: "15px",
-            px: 4,
+            pt: 1.5,
+            pb: 1.5,
           }}
         >
-          <Typography className="tableHeader">8x8 Colonial Pull</Typography>
-          <Box>
-            <Button
-              id="demo-customized-button"
-              aria-controls={open ? "demo-customized-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              variant="outlined"
-              disableElevation
-              onClick={handleClick}
-              // sx={{}}
-              className="actionBtn"
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              Actions
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              elevation={0}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right",
-              }}
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleClose}><Typography className='dropTxt'>Update</Typography></MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <Typography className='dropTxt'>Edit</Typography>
-                  <Edit sx={{ color: "#8477DA" }} />
-                </Box>
-              </MenuItem>
-              <MenuItem onClick={handleClose}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    width: "100%",
-                  }}
-                >
-                  <Typography className='dropTxt'>Delete</Typography>
-                  <Delete sx={{ color: "red" }} />
-                </Box>
-              </MenuItem>
-            </Menu>
-          </Box>
-          {/* <Box>
-            <FormControl sx={{ width: "77px", height: "26px" }} size="small">
-              <Select
-                value="Action"
-                onChange={(e) => e.preventDefault()} // Prevents changing the value
-                labelId="demo-select-small-label"
-                id="demo-select-small"
-                className="custom-textfield"
-                size="small"
-                MenuProps={{
-                  PaperProps: {
-                    style: {
-                      width: "204px",
+          <Typography className="handleTitle">Handles</Typography>
+          <Button
+            variant="contained"
+            onClick={handleAdd}
+            sx={{
+              background: "#8477DA",
+              color: "#FFFFFF",
+              fontWeight: 600,
+              fontSize: 16,
+              letterSpacing: '0px',
+              ':hover': {
+                background: "#8477DA",
+              }
+            }}
+          >
+            Add New
+          </Button>
+        </Box>
+
+        <Box
+          sx={{
+            border: "1px solid #D0D5DD",
+            borderRadius: "12px",
+            overflow: "hidden",
+            width: "99.5%",
+            m: "auto",
+            mt: 1.5,
+            background: '#FFFF',
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              py: "15px",
+              px: 4,
+            }}
+          >
+            <Typography className="tableHeader">8x8 Colonial Pull</Typography>
+            <Box>
+              <Button
+                id="demo-customized-button"
+                aria-controls={open ? "demo-customized-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                variant="outlined"
+                disableElevation
+                onClick={handleClick}
+                className="actionBtn"
+              >
+                Actions
+                <KeyboardArrowDownIcon sx={{ width: '16px', height: '16px' }} />
+              </Button>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                elevation={0}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+                slotProps={{
+                  paper: {
+                    elevation: 0,
+                    sx: {
+                      overflow: "visible",
+                      filter: "none",
+                      boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+                      border: "1px solid #D0D5DD",
+                      p: 0,
+                      width: "171px",
+                      "& .MuiList-padding": {
+                        p: 0,
+                      },
                     },
                   },
                 }}
-                sx={{ height: "40px" }}
               >
-                <MenuItem value="Action" disabled>
-                  Action
-                </MenuItem>
-                <MenuItem value="Update">Update</MenuItem>
-                <MenuItem value="Edit">
+                <MenuItem onClick={handleClose} sx={{
+                  p: '12px', ':hover': {
+                    background: '#EDEBFA'
+                  }
+                }}><Typography className='dropTxt'>Update</Typography></MenuItem>
+                <MenuItem onClick={handleEdit} sx={{
+                  p: '12px', ':hover': {
+                    background: '#EDEBFA'
+                  }
+                }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -204,11 +267,15 @@ const ShowersHardWare = () => {
                       width: "100%",
                     }}
                   >
-                    <Typography>Edit</Typography>
-                    <Edit sx={{ color: "#8477DA" }} />
+                    <Typography className='dropTxt'>Edit</Typography>
+                    <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
                   </Box>
                 </MenuItem>
-                <MenuItem value="Delete">
+                <MenuItem onClick={handleClose} sx={{
+                  p: '12px', ':hover': {
+                    background: '#EDEBFA'
+                  }
+                }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -216,28 +283,63 @@ const ShowersHardWare = () => {
                       width: "100%",
                     }}
                   >
-                    <Typography>Delete</Typography>
-                    <Delete sx={{ color: "red" }} />
+                    <Typography className='dropTxt'>Delete</Typography>
+                    <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
                   </Box>
                 </MenuItem>
-              </Select>
-            </FormControl>
-          </Box> */}
-        </Box>
+              </Menu>
 
-        <DataGrid
-          loading={false}
-          style={{
-            border: "none",
-          }}
-          // getRowId={(row) => row._id}
-          rows={data}
-          columns={HardWareColumns()}
-          rowHeight={70.75}
-          sx={{ width: "100%" }}
-          hideFooter
-          disableColumnMenu
-        />
+            </Box>
+          </Box>
+
+          {false ? (
+            <Box
+              sx={{
+                width: 40,
+                m: "auto",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                maxHeight: "70vh",
+                minHeight: "20vh",
+              }}
+            >
+              <CircularProgress sx={{
+                width: "100%", '.MuiDataGrid-virtualScroller': {
+                  overflow: "hidden !important",
+                }
+              }} />
+            </Box>
+          ) :
+            data?.length === 0 ? (
+              <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
+                No Hardwear Found
+              </Typography>
+            ) : (
+              <DataGrid
+                loading={false}
+                style={{
+                  border: "none",
+                }}
+                // getRowId={(row) => row._id}
+                rows={data}
+                columns={HardWareColumns()}
+                rowHeight={70.75}
+                sx={{ width: "100%" }}
+                hideFooter
+                disableColumnMenu
+              />)}
+
+
+          <ShowerHardwareModel open={openAddModal}
+            close={() => setOpenAddModal(false)}
+            recordToModify={recordToModify} />
+
+          <ShowerHardwareModel open={openModifyModal}
+            close={() => setOpenModifyModal(false)}
+            recordToModify={true} />
+
+        </Box>
       </Box>
     </>
   );

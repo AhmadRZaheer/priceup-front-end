@@ -559,11 +559,11 @@ const AdminSideBar = () => {
                 <ViewStreamOutlined sx={{ mr:'12px',transform: "rotate(90deg)" }} />
                 <Typography sx={{  fontWeight: 600 }}>Mirrors</Typography>
               </AccordionSummary>
-              <AccordionDetails style={{ padding: "10px 0px" }}>
+              <AccordionDetails style={{ padding: "0px 0px" }}>
                 <div className="center">
                   <ul>
                     <InnerMenuItem link="/mirrors/hardwares">
-                      <span>Hardwares</span>
+                      <span>Hardware</span>
                     </InnerMenuItem>
                     <InnerMenuItem link="/mirrors/glass-addons">
                       <span>Glass Addons</span>

@@ -162,7 +162,7 @@ const CustomAdminsTable = () => {
           })
         ) : (
           <Box sx={{ color: "#667085", textAlign: "center", mt: 1, width: "100%", background: '#FFFF' }}>
-            No Locations Found
+            No Location Found
           </Box>
         )}
       </Grid>

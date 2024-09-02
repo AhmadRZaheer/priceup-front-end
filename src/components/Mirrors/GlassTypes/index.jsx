@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
     Box,
+    Button,
     CircularProgress,
+    IconButton,
+    Menu,
+    MenuItem,
+    Typography,
     useMediaQuery,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
@@ -14,6 +19,13 @@ import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
 import { setMirrorsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
+import { DataGrid } from "@mui/x-data-grid";
+import { MirrorsGlassType } from "@/utilities/DataGridColumns";
+import CustomInputField from "@/components/ui-components/CustomInput";
+import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 
 const MirrorsGlassTypeComponent = () => {
     const dispatch = useDispatch();
@@ -21,6 +33,7 @@ const MirrorsGlassTypeComponent = () => {
     const decodedToken = getDecryptedToken();
     const {
         data: glassTypesList,
+        isLoading,
         refetch: refetchGlassTypesList,
         isFetching: fetchingGlassTypesList,
     } = useFetchAllDocuments(routePrefix);
@@ -109,147 +122,399 @@ const MirrorsGlassTypeComponent = () => {
     console.log(itemToModify, 'item to modify');
 
     const miniTab = useMediaQuery("(max-width: 1280px)");
+    // Data Grid
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [activeRow, setActiveRow] = useState(null);
+    const [rowCosts, setRowCosts] = useState({});
+    const handleClickAction = (event, row) => {
+        setAnchorEl(event.currentTarget);
+        setActiveRow(row); // Set the current row when the menu is triggered
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+        setActiveRow(null);
+    };
+    const handleUpdateCost = (data) => {
+        handleClose();
+        const updatedOptions = data.options.map((option) => ({
+            ...option,
+            cost: rowCosts[`${data._id}-${option.thickness}`] !== undefined
+                ? parseFloat(rowCosts[`${data._id}-${option.thickness}`])
+                : option.cost,
+        }));
+        editGlassType({
+            data: { options: updatedOptions },
+            apiRoute: `${routePrefix}/${data._id}`,
+        });
+    };
+
+
+
+    const handleStatusChange = (row, optionIndex) => {
+        handleClose();
+
+        const updatedOptions = row.options.map((option, index) => {
+            // Only toggle the status of the option at the specified index
+            if (index === optionIndex) {
+                return {
+                    ...option,
+                    status: !option.status, // Toggle the status
+                };
+            }
+            return option;
+        });
+        editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+    };
+
+
+    const thicknessOptions = [{ id: 0, name: 'Thickness 1/4' }, { id: 1, name: 'Thickness 1/8' }]
+
+    const actionColumn = [
+        {
+            field: "Cost (Thickness 1/4)",
+            headerClassName: "ProjectsColumnsHeaderClass",
+            flex: 1.5,
+            sortable: false,
+            renderCell: (params) => (
+                <Box sx={{ width: "101px" }}>
+                    <CustomInputField
+                        size="small"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 0 }}
+                        name={`cost-${params.row._id}-1/4`}
+                        placeholder="Cost"
+                        value={rowCosts[`${params.row._id}-1/4`] || params.row.options.find(o => o.thickness === '1/4')?.cost || 0}
+                        onChange={(e) => setRowCosts({
+                            ...rowCosts,
+                            [`${params.row._id}-1/4`]: e.target.value,
+                        })}
+                    />
+                </Box>
+            ),
+        },
+        {
+            field: "Cost (Thickness 1/8)",
+            headerClassName: "ProjectsColumnsHeaderClass",
+            flex: 1.5,
+            sortable: false,
+            renderCell: (params) => (
+                <Box sx={{ width: "101px" }}>
+                    <CustomInputField
+                        size="small"
+                        variant="outlined"
+                        type="number"
+                        inputProps={{ min: 0 }}
+                        name={`cost-${params.row._id}-1/8`}
+                        placeholder="Cost"
+                        value={rowCosts[`${params.row._id}-1/8`] || params.row.options.find(o => o.thickness === '1/8')?.cost || 0}
+                        onChange={(e) => setRowCosts({
+                            ...rowCosts,
+                            [`${params.row._id}-1/8`]: e.target.value,
+                        })}
+                    />
+                </Box>
+            ),
+        },
+
+        {
+            field: "Status  (Thickness 1/4)",
+            headerClassName: "ProjectsColumnsHeaderClass",
+            flex: 1.5,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Box
+                            sx={{
+                                // height: "21px",
+                                bgcolor: params?.row?.options[0]?.status === true ? "#EFECFF" : '#F3F5F6',
+                                borderRadius: "70px",
+                                p: "6px 8px",
+                                display: "grid",
+                                gap: '7px',
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 500,
+                                    lineHeight: "21px",
+                                    color: params?.row?.options[0]?.status === true ? '#8477DA' : '#5D6164',
+                                }}
+                            >
+                                {params?.row?.options[0]?.status === true ? 'Active' : 'Inactive'}
+                            </Typography>
+                        </Box>
+                    </>
+                );
+            },
+        },
+        {
+            field: "Status  (Thickness 1/8)",
+            headerClassName: "ProjectsColumnsHeaderClass",
+            flex: 1.5,
+            sortable: false,
+            renderCell: (params) => {
+                return (
+                    <>
+                        <Box
+                            sx={{
+                                // height: "21px",
+                                bgcolor: params?.row?.options[1]?.status === true ? "#EFECFF" : '#F3F5F6',
+                                borderRadius: "70px",
+                                p: "6px 8px",
+                                display: "grid",
+                                gap: '7px',
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    fontSize: 14,
+                                    fontWeight: 500,
+                                    lineHeight: "21px",
+                                    color: params?.row?.options[1]?.status === true ? '#8477DA' : '#5D6164',
+                                }}
+                            >
+                                {params?.row?.options[1]?.status === true ? 'Active' : 'Inactive'}
+                            </Typography>
+                        </Box>
+                    </>
+                );
+            },
+        },
+        {
+            field: "Actions",
+            headerClassName: "ProjectsColumnsHeaderClass",
+            flex: 0.7,
+            sortable: false,
+            renderCell: (params) => {
+                const id = params.row._id;
+                const data = params.row;
+                return (
+                    <>
+                        <IconButton aria-haspopup="true"
+                            onClick={(event) => { handleClickAction(event, data); setItemToModify(data); }}>
+                            <MoreHorizOutlinedIcon />
+                        </IconButton>
+                        <Menu
+                            // id={params.row._id}
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl && activeRow === data)} // Check if the active row matches the current row
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "right",
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "right",
+                            }}
+                            MenuListProps={{
+                                "aria-labelledby": "basic-button",
+                            }}
+                            slotProps={{
+                                paper: {
+                                    elevation: 0,
+                                    sx: {
+                                        overflow: "visible",
+                                        filter: "none",
+                                        boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
+                                        border: "1px solid #D0D5DD",
+                                        p: 0,
+                                        width: "183px",
+                                        "& .MuiList-padding": {
+                                            p: 0,
+                                        },
+                                    },
+                                },
+                            }}
+                        >
+                            <MenuItem onClick={() => handleUpdateCost(data)} className='mirror-meun-item'><Typography className='dropTxt'>Update</Typography></MenuItem>
+
+                            <MenuItem
+                                onClick={() => { setItemToModify(params?.row); handleOpenUpdateModal(); handleClose() }}
+                                className='mirror-meun-item'>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <Typography className='dropTxt'>Edit</Typography>
+                                    <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+                                </Box>
+                            </MenuItem>
+                            {thicknessOptions.map((data) => (
+                                <MenuItem key={data.id} className='mirror-meun-item' onClick={() => handleStatusChange(params.row, data.id)}>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            justifyContent: "space-between",
+                                            width: "100%",
+                                        }}
+                                    >
+                                        <Typography className='dropTxt'>{data.name}</Typography>
+                                        <CustomSmallSwtich checked={params?.row?.options[data.id]?.status}
+                                            //  onChange={() => handleStatusChange(params.row, data.id)}
+                                            inputProps={{ 'aria-label': 'ant design' }} />
+                                    </Box>
+                                </MenuItem>
+                            ))}
+
+                            <MenuItem onClick={() => { setItemToModify(params?.row); handleOpenDeleteModal(); handleClose() }} sx={{
+                                p: '12px', ':hover': {
+                                    background: '#EDEBFA'
+                                }
+                            }}>
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <Typography className='dropTxt'>Delete</Typography>
+                                    <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                                </Box>
+                            </MenuItem>
+                        </Menu>
+
+                    </>
+                );
+            },
+        },
+    ]
+    const columns = MirrorsGlassType().concat(actionColumn);
+
+    console.log(glassTypesList, 'glassTypesListglassTypesList')
+
     return (
         <>
-            <div
-                style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignContent: "center",
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
+            <Box
+                sx={{
+                    width: "100%",
                 }}
             >
-                {" "}
-                <div
-                    style={{
-                        width: "250px",
-                        padding: 4,
-                        alignItems: "center",
-                        textTransform: "uppercase",
-                    }}
-                >
-                    <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-                        {'Glass Types'}
-                    </p>
-                </div>
-                <div
-                    style={{
-                        padding: 4,
-                    }}
-                >
-                    <CustomIconButton
-                        handleClick={handleOpenCreateModal}
-                        icon={<Add style={{ color: "white" }} />}
-                        buttonText=" Add"
-                    />
-                </div>{" "}
-            </div>
-            <div
-                style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    backgroundColor: "rgb(232, 232, 232)",
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                }}
-            >
-                {" "}
-                <div
-                    style={{
-                        width: "250px",
-                        padding: 4,
-                        alignItems: "center",
-                    }}
-                >
-                    Name
-                </div>{" "}
-
-                <div
-                    style={{
-                        width: "250px",
-
-                        padding: 4,
-                    }}
-                >
-                    Cost
-                </div>
-                <div
-                    style={{
-                        width: "250px",
-
-                        padding: 4,
-                    }}
-                >
-                    Status
-                </div>{" "}
-            </div>
-            {fetchingGlassTypesList ? (
                 <Box
                     sx={{
                         display: "flex",
-                        justifyContent: "center",
-                        padding: "20px",
-                        alignItems: "center",
-                        height: "56vh",
-                        background:'#FFFF'
+                        justifyContent: "space-between",
+                        pt: 1.5,
+                        pb: 1.5,
                     }}
                 >
-                    <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                    <Typography
+                        className='headingTxt'
+                        sx={{
+                            color: "#5D6164",
+                            display: 'flex',
+                            alignSelf: 'center'
+                        }}
+                    >
+                        Mirrors &nbsp;
+                        <Box
+                            className='headingTxt'
+                            sx={{
+                                color: "#000000",
+                            }}
+                        >
+                            / Glass Types
+                        </Box>
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        onClick={handleOpenCreateModal}
+                        sx={{
+                            background: "#8477DA",
+                            color: "#FFFFFF",
+                            fontWeight: 600,
+                            fontSize: 16,
+                            letterSpacing: '0px',
+                            ':hover': {
+                                background: "#8477DA",
+                            }
+                        }}
+                    >
+                        Add New
+                    </Button>
                 </Box>
-            ) : (
-                <Box
-                    sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        height: miniTab ? "69vh" : "76vh",
-                        overflowY: "scroll",
-                        background:'#FFFF'
-                    }}
-                >
-                    {glassTypesList.length !== 0 ? (
-                        glassTypesList?.map((entry, mainIndex) => (
-                            <HardwareItem entry={entry} key={mainIndex}
-                                mainIndex={mainIndex} handleOpenDeleteModal={handleOpenDeleteModal}
-                                handleOpenUpdateModal={handleOpenUpdateModal}
-                                handleHardwareOptionDelete={handleHardwareOptionDelete}
-                                handleUpdateItem={handleUpdateItem} itemToModify={itemToModify}
-                                setItemToModify={setItemToModify} />
-                        ))
-                    ) : (
-                        <Box sx={{ color: "#667085" }}>No GlassType Found</Box>
-                    )}
-                </Box>
-            )}
 
-            <DeleteModal
-                open={deleteModalOpen}
-                close={() => { setDeleteModalOpen(false) }}
-                isLoading={deleteGlassTypeLoading}
-                handleDelete={handleHardwareDelete}
-                text={"Glass Type"}
-            />
-            <HardwareEditModal
-                open={updateModalOpen}
-                close={() => { setUpdateModalOpen(false) }}
-                data={itemToModify}
-                isLoading={editGlassTypeLoading}
-                handleEdit={handleUpdateItem}
-                hardwareType={'Glass Type'}
-            />
-            <HardwareCreateModal
-                open={createModalOpen}
-                close={() => { setCreateModalOpen(false) }}
-                isLoading={createGlassTypeLoading}
-                handleCreate={handleCreateItem}
-                hardwareType={'Glass Type'}
-            />
+                <Box sx={{
+                    border: "1px solid #EAECF0",
+                    borderRadius: "8px",
+                    overflow: "hidden",
+                    width: "99.5%",
+                    m: "auto",
+                    mt: 1.5,
+                    background: '#FFFF'
+                }}>
+
+                    {isLoading ? (
+                        <Box
+                            sx={{
+                                width: 40,
+                                m: "auto",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                maxHeight: "70vh",
+                                minHeight: "20vh",
+                            }}
+                        >
+                            <CircularProgress sx={{ color: "#8477DA" }} />
+                        </Box>
+                    ) :
+                        glassTypesList?.length === 0 && !fetchingGlassTypesList ? (
+                            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
+                                No Hardwear Found
+                            </Typography>
+                        ) :
+                            (<Box>
+                                <DataGrid
+                                    loading={fetchingGlassTypesList}
+                                    style={{
+                                        border: "none",
+                                    }}
+                                    getRowId={(row) => row._id}
+                                    rows={glassTypesList}
+                                    columns={columns}
+                                    rowHeight={70.75}
+                                    sx={{
+                                        width: "100%", '.MuiDataGrid-virtualScroller': {
+                                            overflow: "hidden !important",
+                                        }
+                                    }}
+                                    hideFooter
+                                    disableColumnMenu
+                                />
+                            </Box>
+                            )}
+                </Box>
+                <DeleteModal
+                    open={deleteModalOpen}
+                    close={() => { setDeleteModalOpen(false) }}
+                    isLoading={deleteGlassTypeLoading}
+                    handleDelete={handleHardwareDelete}
+                    text={"Glass Type"}
+                />
+                <HardwareEditModal
+                    open={updateModalOpen}
+                    close={() => { setUpdateModalOpen(false) }}
+                    data={itemToModify}
+                    isLoading={editGlassTypeLoading}
+                    handleEdit={handleUpdateItem}
+                    hardwareType={'Glass Type'}
+                />
+                <HardwareCreateModal
+                    open={createModalOpen}
+                    close={() => { setCreateModalOpen(false) }}
+                    isLoading={createGlassTypeLoading}
+                    handleCreate={handleCreateItem}
+                    hardwareType={'Glass Type'}
+                />
+            </Box>
         </>
     );
 };
