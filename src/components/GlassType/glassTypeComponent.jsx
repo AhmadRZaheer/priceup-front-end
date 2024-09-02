@@ -9,7 +9,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import {
   useDeleteGlassTypeFull,
   useEditFullGlassType,
@@ -25,6 +25,7 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
 import DeleteModal from "../Modal/deleteModal";
+import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 
 const GlassTypeComponent = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -105,8 +106,8 @@ const GlassTypeComponent = ({ type }) => {
       flex: 4,
       renderCell: (params) => {
         // Target the correct option for "Thickness 3/8"
-        const thickness3by8 = params.row.options.find(
-          (option) => option.thickness === "3/8"
+        const thickness3by8 = params.row.options?.find(
+          (option) => option?.thickness === "3/8"
         );
 
         return (
@@ -134,8 +135,8 @@ const GlassTypeComponent = ({ type }) => {
       flex: 4,
       renderCell: (params) => {
         // Target the correct option for "Thickness 1/2"
-        const thickness1by2 = params.row.options.find(
-          (option) => option.thickness === "1/2"
+        const thickness1by2 = params.row?.options?.find(
+          (option) => option?.thickness === "1/2"
         );
 
         return (
@@ -169,14 +170,14 @@ const GlassTypeComponent = ({ type }) => {
         return thickness3by8?.status ? (
           <Typography
             className="status-active"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Active
           </Typography>
         ) : (
           <Typography
             className="status-inActive"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Inactive
           </Typography>
@@ -197,14 +198,14 @@ const GlassTypeComponent = ({ type }) => {
         return thickness1by2?.status ? (
           <Typography
             className="status-active"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Active
           </Typography>
         ) : (
           <Typography
             className="status-inActive"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Inactive
           </Typography>
@@ -217,7 +218,7 @@ const GlassTypeComponent = ({ type }) => {
       headerClassName: "customHeaderClass",
       flex: 2,
       renderCell: (params) => {
-        const id = params.row._id;
+
         const data = params.row;
 
         return (
@@ -297,7 +298,7 @@ const GlassTypeComponent = ({ type }) => {
                 }}
               >
                 <p>Edit</p>
-                <img width={20} height={20} src={EditIcon} alt="edit icon" />
+                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
               </MenuItem>
 
               {/* Toggle status for Thickness 3/8 */}
@@ -316,17 +317,18 @@ const GlassTypeComponent = ({ type }) => {
                     backgroundColor: " #EDEBFA",
                   },
                 }}
+                onClick={() => handleStatusChange(data, "3/8")}
               >
                 <p>Thickness 3/8</p>
-                <Box sx={{ width: "59px", height: "39px" }}>
-                  <CustomToggle
-                    checked={data.options.some(
-                      (option) => option.thickness === "3/8" && option.status
+                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
+                  <CustomSmallSwtich
+                    inputProps={{ 'aria-label': 'ant design' }}
+                    checked={data.options?.some(
+                      (option) => option?.thickness === "3/8" && option?.status
                     )}
                     onChange={() => handleStatusChange(data, "3/8")} // Update status for 3/8
-                    text={""}
                   />
-                </Box>
+                {/* </Box> */}
               </MenuItem>
 
               {/* Toggle status for Thickness 1/2 */}
@@ -345,17 +347,18 @@ const GlassTypeComponent = ({ type }) => {
                     backgroundColor: " #EDEBFA",
                   },
                 }}
+                onClick={() => handleStatusChange(data, "1/2")}
               >
                 <p>Thickness 1/2</p>
-                <Box sx={{ width: "59px", height: "39px" }}>
-                  <CustomToggle
-                    checked={data.options.some(
-                      (option) => option.thickness === "1/2" && option.status
+                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
+                  <CustomSmallSwtich
+                    inputProps={{ 'aria-label': 'ant design' }}
+                    checked={data.options?.some(
+                      (option) => option?.thickness === "1/2" && option?.status
                     )}
-                    onChange={() => handleStatusChange(data, "1/2")} // Update status for 1/2
-                    text={""}
+                    // onChange={() => handleStatusChange(data, "1/2")} // Update status for 1/2
                   />
-                </Box>
+                {/* </Box> */}
               </MenuItem>
 
               <MenuItem
@@ -378,12 +381,8 @@ const GlassTypeComponent = ({ type }) => {
                 }}
               >
                 <p>Delete</p>
-                <img
-                  width={20}
-                  height={20}
-                  src={DeleteIcon}
-                  alt="delete icon"
-                />
+
+                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
               </MenuItem>
             </Menu>
           </>

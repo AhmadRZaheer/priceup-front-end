@@ -24,6 +24,7 @@ import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
+import { ArrowForward } from "@mui/icons-material";
 
 const MirrorsEdgeWorkComponent = () => {
     const dispatch = useDispatch();
@@ -47,6 +48,11 @@ const MirrorsEdgeWorkComponent = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [activeRow, setActiveRow] = useState(null);
+    const [rowCosts, setRowCosts] = useState({});
+
     const handleOpenDeleteModal = () => {
         setDeleteModalOpen(true);
     }
@@ -106,22 +112,23 @@ const MirrorsEdgeWorkComponent = () => {
         if (editSuccess) {
             setUpdateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
         if (createSuccess) {
             setCreateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
         if (deleteSuccess) {
             setDeleteModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
     }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
     const miniTab = useMediaQuery("(max-width: 1280px)");
 
     // Data Grid
-    const [anchorEl, setAnchorEl] = useState(null);
-    const [activeRow, setActiveRow] = useState(null);
-    const [rowCosts, setRowCosts] = useState({});
+
     const handleClickAction = (event, row) => {
         setAnchorEl(event.currentTarget);
         setActiveRow(row); // Set the current row when the menu is triggered
@@ -303,7 +310,8 @@ const MirrorsEdgeWorkComponent = () => {
                     <>
                         <IconButton aria-haspopup="true"
                             onClick={(event) => { handleClickAction(event, data); setItemToModify(data) }}>
-                            <MoreHorizOutlinedIcon />
+                                         <ArrowForward sx={{ color: "#8477DA" }} />
+
                         </IconButton>
                         <Menu
                             // id={params.row._id}

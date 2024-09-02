@@ -21,11 +21,11 @@ const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
-  gap: 2,
+  gap: "19px",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
-  width: 841,
+  width: 809,
   bgcolor: "#FFFFFF",
   borderRadius: "12px",
   p: "24px 16px 24px 16px",
@@ -112,9 +112,11 @@ export default function AddEditGlassAddon({
       <Modal
         open={open}
         sx={{
-          backdropFilter: "blur(2px)",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        }}
+          // backdropFilter: "blur(2px)",
+          backgroundColor: "rgba(5, 0, 35, 0.1)",
+          ".MuiModal-backdrop": {
+            backgroundColor: "rgba(5, 0, 35, 0.1)",
+          },}}
       >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>

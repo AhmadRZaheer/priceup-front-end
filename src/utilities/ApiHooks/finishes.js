@@ -83,7 +83,7 @@ export const useCreateFinish = () => {
     formData.append("company_id", decodedToken?.company_id);
     formData.append("thickness", "both");
     formData.append("slug", slug);
-    formData.append("holesNeeded", props.thickness);
+    formData.append("holesNeeded",0);
 
     try {
       const response = await axios.post(
@@ -139,7 +139,7 @@ export const useEditFinish = () => {
     if (updatedHardware?.image) {
       formData.append("image", updatedHardware?.image);
     }
-    formData.append("holesNeeded", updatedHardware?.thickness);
+    formData.append("holesNeeded", 0);
     try {
       const response = await axios.put(
         `${backendURL}/finishes/${updatedHardware?.id}`,

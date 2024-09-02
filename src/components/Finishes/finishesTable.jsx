@@ -25,7 +25,7 @@ import { getDataRefetch } from "../../redux/staff";
 import DeleteModal from "../Modal/deleteModal";
 import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
-import { ArrowForward, MoreHoriz } from "@mui/icons-material";
+import { ArrowForward, DeleteOutlineOutlined, EditOutlined, MoreHoriz } from "@mui/icons-material";
 import EditIcon from "@/Assets/d.svg";
 
 const FinishesTable = () => {
@@ -162,7 +162,8 @@ const FinishesTable = () => {
                 }}
               >
                 <p>Edit</p>
-                <img width={20} height={20} src={EditIcon} alt="edit icons" />
+                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -185,12 +186,8 @@ const FinishesTable = () => {
                 }}
               >
                 <p>Delete</p>
-                <img
-                  width={20}
-                  height={20}
-                  src={DeleteIcon}
-                  alt="delete icon"
-                />
+                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+
               </MenuItem>
             </Menu>
           </div>

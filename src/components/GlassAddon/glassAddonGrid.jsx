@@ -8,7 +8,7 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { ArrowForward } from "@mui/icons-material";
+import { ArrowForward, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
 import {
   useDeleteGlassAddon,
   useEditFullGlassAddon,
@@ -24,6 +24,7 @@ import DeleteIcon from "../../Assets/Delete-Icon.svg";
 import CustomInputField from "../ui-components/CustomInput";
 import CustomToggle from "../ui-components/Toggle";
 import DeleteModal from "../Modal/deleteModal";
+import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -113,7 +114,7 @@ const GlassAddonGrid = ({ type }) => {
               value={
                 rowCosts[params.row._id] !== undefined
                   ? rowCosts[params.row._id]
-                  : params.row.options[0].cost
+                  : params.row.options[0]?.cost
               }
               onChange={(e) =>
                 setRowCosts({
@@ -134,17 +135,17 @@ const GlassAddonGrid = ({ type }) => {
       flex: 4,
 
       renderCell: (params) => {
-        return params.row.options[0].status ? (
+        return params.row.options[0]?.status ? (
           <Typography
             className="status-active"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Active
           </Typography>
         ) : (
           <Typography
             className="status-inActive"
-            sx={{ padding: 0, px: 2, width: "fit-content" }}
+            sx={{ width: "fit-content" }}
           >
             Inactive
           </Typography>
@@ -206,7 +207,7 @@ const GlassAddonGrid = ({ type }) => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  
+
                   fontWeight: 400,
                   ":hover": {
                     backgroundColor: " #EDEBFA",
@@ -236,7 +237,8 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Edit</p>
-                <img width={20} height={20} src={EditIcon} alt="edit icons" />
+                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+
               </MenuItem>
               <MenuItem
                 sx={{
@@ -253,15 +255,17 @@ const GlassAddonGrid = ({ type }) => {
                     backgroundColor: " #EDEBFA",
                   },
                 }}
+                onClick={() => handleStatusChange(data)}
               >
                 <p>Status</p>
-                <Box sx={{ width: "59px", height: "39px" }}>
-                  <CustomToggle
-                    checked={data.options[0].status}
-                    onChange={() => handleStatusChange(data)}
+                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
+                  <CustomSmallSwtich
+                    inputProps={{ 'aria-label': 'ant design' }}
+                    checked={data.options[0]?.status}
+                    // onChange={() => handleStatusChange(data)}
                     text={""}
                   />
-                </Box>
+                {/* </Box> */}
               </MenuItem>
 
               <MenuItem
@@ -286,12 +290,7 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Delete</p>
-                <img
-                  width={20}
-                  height={20}
-                  src={DeleteIcon}
-                  alt="delete icon"
-                />
+                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
               </MenuItem>
             </Menu>
           </>

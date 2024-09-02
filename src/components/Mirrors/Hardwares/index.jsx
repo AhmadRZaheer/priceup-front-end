@@ -27,6 +27,7 @@ import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
+import { ArrowForward } from "@mui/icons-material";
 
 const MirrorsHardwareComponent = () => {
     const dispatch = useDispatch();
@@ -50,6 +51,7 @@ const MirrorsHardwareComponent = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
+    const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
     const handleOpenDeleteModal = () => {
         setDeleteModalOpen(true);
     }
@@ -115,14 +117,17 @@ const MirrorsHardwareComponent = () => {
         if (editSuccess) {
             setUpdateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
         if (createSuccess) {
             setCreateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
         if (deleteSuccess) {
             setDeleteModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
         }
     }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
 
@@ -153,7 +158,7 @@ const MirrorsHardwareComponent = () => {
     };
 
     //Cost and status
-    const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+   
     // Handle the cost update
     const handleUpdateCost = (data) => {
         handleClose();
@@ -257,7 +262,7 @@ const MirrorsHardwareComponent = () => {
                                 handleClickAction(event, data);
                                 setItemToModify(params.row);
                             }}>
-                            <MoreHorizOutlinedIcon />
+                            <ArrowForward sx={{ color: "#8477DA" }} />
                         </IconButton>
                         <Menu
                             // id={params.row._id}
