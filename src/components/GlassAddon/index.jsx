@@ -32,18 +32,12 @@ const GlassAddonComponent = () => {
     <>
       <Box
         sx={{
-          backgroundColor: {sm:"#F6F5FF",xs:'#FFFFFF'},
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           height: "90vh",
           paddingTop: 2,
         }}
       >
-        <Box
-          sx={{
-            border: "1px solid rgb(232, 232, 232)",
-            margin: 2,
-            height: "84vh",
-          }}
-        >
+        <Box>
           <GlassAddonGrid type={"Glass Addons"} />
         </Box>
         <AddEditModel

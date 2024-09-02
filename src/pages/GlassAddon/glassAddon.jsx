@@ -1,23 +1,21 @@
 import React from "react";
 import "./glassAddon.scss";
-import Sidebar from "../../components/Sidebar/sidebar";
 import GlassAddonComponent from "../../components/GlassAddon";
-import TopBar from "@/components/TopBar";
-import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
 
 const GlassAddon = () => {
   return (
     <>
       {/* <TopBar />
       <div className="Customers"> */}
-        {/* <Sidebar /> */}
-        {/* <CommonSideBar/> */}
-        <CommonLayout>
-        <div className="customersContainer">
+      {/* <Sidebar /> */}
+      {/* <CommonSideBar/> */}
+      <CommonLayout>
+        <Box className="customersContainer" sx={{ px: { md: 2, xs: 0 } }}>
           <GlassAddonComponent />
-        </div>
-        </CommonLayout>
+        </Box>
+      </CommonLayout>
       {/* </div> */}
     </>
   );
