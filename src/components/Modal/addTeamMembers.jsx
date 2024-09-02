@@ -32,20 +32,24 @@ import { backendURL, getDecryptedToken } from "../../utilities/common";
 import { CloseTwoTone } from "@mui/icons-material";
 // import { useFetchAdminLocation } from "@/utilities/ApiHooks/superAdmin";
 import { userRoles } from "@/utilities/constants";
-import { useCreateDocument, useEditDocument } from "@/utilities/ApiHooks/common";
+import {
+  useCreateDocument,
+  useEditDocument,
+} from "@/utilities/ApiHooks/common";
 
 const style = {
   position: "absolute",
   display: "flex",
   flexDirection: "column",
-  gap: '19px',
+  gap: "19px",
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 809,
   bgcolor: "#FFFFFF",
   borderRadius: "12px",
-  p: '24px 16px 24px 16px',
+  p: "24px 16px 24px 16px",
+  border: "1px solid #D0D5DD",
 };
 
 const ITEM_HEIGHT = 48;
@@ -64,39 +68,41 @@ export default function AddTeamMembers({
   close,
   recordToModify,
   refetchUsers,
-  locationsList
+  locationsList,
 }) {
-
   const token = getDecryptedToken();
   const onDrop = (acceptedFiles) => {
     formik.setFieldValue("image", acceptedFiles[0]);
   };
   const inputRef = useRef(null); // Create a ref for the file input
   const { getInputProps } = useDropzone({ onDrop });
-  const {
-    mutateAsync: createUser,
-    isLoading: createLoading,
-  } = useCreateDocument();
-  const {
-    mutateAsync: updateUser,
-    isLoading: updateLoading,
-  } = useEditDocument();
+  const { mutateAsync: createUser, isLoading: createLoading } =
+    useCreateDocument();
+  const { mutateAsync: updateUser, isLoading: updateLoading } =
+    useEditDocument();
   // const { mutate: ResetPassword } = useResetPasswordTeamMembers();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
-    email: Yup.string().email("Invalid email address").required('Email is required'),
-    role: Yup.string().required('Role is required'),
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Email is required"),
+    role: Yup.string().required("Role is required"),
     role: Yup.string().when([], {
       is: () => token?.role === userRoles.SUPER_ADMIN, // Adjust this condition as per your logic
       then: (schema) => schema.required("Role is required"),
       otherwise: (schema) => schema.notRequired(),
     }),
-    assignedLocations: Yup.array().of(Yup.string()).when('role', {
-      is: userRoles.STAFF,
-      then: (schema) => schema.min(1, "At least one location is required").required("Please select default location"),
-      otherwise: (schema) => schema.notRequired(),
-    }),
+    assignedLocations: Yup.array()
+      .of(Yup.string())
+      .when("role", {
+        is: userRoles.STAFF,
+        then: (schema) =>
+          schema
+            .min(1, "At least one location is required")
+            .required("Please select default location"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
     // image: Yup.mixed(),
   });
   const formik = useFormik({
@@ -105,7 +111,8 @@ export default function AddTeamMembers({
       email: recordToModify?.email || "",
       image: recordToModify?.image || null,
       role: recordToModify?.role || "",
-      assignedLocations: recordToModify?.locationsAccess || recordToModify?.haveAccessTo || [],
+      assignedLocations:
+        recordToModify?.locationsAccess || recordToModify?.haveAccessTo || [],
     },
 
     enableReinitialize: true,
@@ -114,43 +121,62 @@ export default function AddTeamMembers({
       // {
       // console.log('onsubmit run');
       const formData = new FormData();
-      if (typeof values.image !== 'string') {
+      if (typeof values.image !== "string") {
         formData.append("image", values.image);
       }
       formData.append("name", values.name);
       formData.append("role", values.role);
-      formData.append("assignedLocations", JSON.stringify(values.assignedLocations));
+      formData.append(
+        "assignedLocations",
+        JSON.stringify(values.assignedLocations)
+      );
       try {
-        if (recordToModify) { // edit case
+        if (recordToModify) {
+          // edit case
           // console.log('edit',formData)
-          if (token?.role === userRoles.SUPER_ADMIN) { // for super admin
-            await updateUser({ apiRoute: `${routePrefix}/user/${recordToModify?._id}?role=${values.role}`, data: formData });
+          if (token?.role === userRoles.SUPER_ADMIN) {
+            // for super admin
+            await updateUser({
+              apiRoute: `${routePrefix}/user/${recordToModify?._id}?role=${values.role}`,
+              data: formData,
+            });
+          } else {
+            // for location admin
+            await updateUser({
+              apiRoute: `${backendURL}/staffs/${recordToModify?._id}`,
+              data: formData,
+            });
           }
-          else { // for location admin
-            await updateUser({ apiRoute: `${backendURL}/staffs/${recordToModify?._id}`, data: formData });
-          }
-        }
-        else {
+        } else {
           formData.append("email", values.email);
-          if (token?.role === userRoles.SUPER_ADMIN) { // for super admin
-            await createUser({ apiRoute: `${routePrefix}/user/save?role=${values.role}`, data: formData });
-          }
-          else { // for location admin
-            await createUser({ apiRoute: `${backendURL}/staffs/save`, data: formData });
+          if (token?.role === userRoles.SUPER_ADMIN) {
+            // for super admin
+            await createUser({
+              apiRoute: `${routePrefix}/user/save?role=${values.role}`,
+              data: formData,
+            });
+          } else {
+            // for location admin
+            await createUser({
+              apiRoute: `${backendURL}/staffs/save`,
+              data: formData,
+            });
           }
         }
         resetForm();
         refetchUsers();
         close();
-      }
-      catch (err) {
-        console.log(err, 'Error in creating user');
+      } catch (err) {
+        console.log(err, "Error in creating user");
       }
       // }
     },
   });
   const handleResetPass = async () => {
-    await updateUser({ apiRoute: `${routePrefix}/user/updatePassword/${recordToModify?._id}?role=${formik.values.role}`, data: {} });
+    await updateUser({
+      apiRoute: `${routePrefix}/user/updatePassword/${recordToModify?._id}?role=${formik.values.role}`,
+      data: {},
+    });
     close();
   };
   const handleButtonClick = () => {
@@ -165,30 +191,32 @@ export default function AddTeamMembers({
         sx={{
           // backdropFilter: "blur(2px)",
           backgroundColor: "rgba(5, 0, 35, 0.1)",
-          '.MuiModal-backdrop': {
+          ".MuiModal-backdrop": {
             backgroundColor: "rgba(5, 0, 35, 0.1)",
-          }
+          },
         }}
       >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-              <Typography sx={{
-                fontWeight: 700,
-                fontSize: 18,
-                lineHeight: '21.09px',
-                fontFamily: '"Roboto",sans-serif !important'
-              }}>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  fontSize: 18,
+                  lineHeight: "21.09px",
+                  fontFamily: '"Roboto",sans-serif !important',
+                }}
+              >
                 {recordToModify ? "Edit User" : "Add User"}
               </Typography>
               <Typography
                 sx={{
                   color: "#212528",
-                  lineHeight: '21.86px',
+                  lineHeight: "21.86px",
                   fontWeight: 600,
                   // mt:'5px',
                   fontSize: 16,
-                  opacity:'70%'
+                  opacity: "70%",
                 }}
               >
                 {recordToModify ? "Edit" : "Add"} your user details.
@@ -215,21 +243,27 @@ export default function AddTeamMembers({
             <Typography
               sx={{
                 color: "#000000",
-                lineHeight: '16.39px',
+                lineHeight: "16.39px",
                 fontSize: "12px",
                 fontWeight: 600,
               }}
             >
               Profile image
             </Typography>
-            <Box sx={{ display: "flex", gap: '19px', my: 2 }}>
+            <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
               <Box>
-                {formik.values.image !== undefined && formik.values.image !== null ? (
+                {formik.values.image !== undefined &&
+                formik.values.image !== null &&
+                formik.values.image !== "" ? (
                   <img
                     width={"84px"}
                     height={"84px"}
                     style={{ overflow: "hidden", borderRadius: "100%" }}
-                    src={typeof formik.values.image === 'string' ? `${backendURL}/${formik.values.image}` : URL.createObjectURL(formik.values.image)}
+                    src={
+                      typeof formik.values.image === "string"
+                        ? `${backendURL}/${formik.values.image}`
+                        : URL.createObjectURL(formik.values.image)
+                    }
                     alt="logo team"
                   />
                 ) : (
@@ -251,11 +285,13 @@ export default function AddTeamMembers({
                 style={{ display: "none" }}
               />
 
-              <label htmlFor="image-input" style={{ alignSelf: 'center' }}>
+              <label htmlFor="image-input" style={{ alignSelf: "center" }}>
                 <Box
-                  sx={{
-                    // padding: 2,
-                  }}
+                  sx={
+                    {
+                      // padding: 2,
+                    }
+                  }
                 >
                   <Button
                     sx={{
@@ -264,9 +300,9 @@ export default function AddTeamMembers({
                       borderRadius: "54px !important",
                       border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: '10px 12px !important',
-                      lineHeight: '21px',
-                      fontSize: 16
+                      px: "10px 12px !important",
+                      lineHeight: "21px",
+                      fontSize: 16,
                     }}
                     onClick={handleButtonClick}
                   >
@@ -278,7 +314,8 @@ export default function AddTeamMembers({
                       color: "#8477DA",
                       fontSize: "12px",
                       fontWeight: 600,
-                      lineHeight: '16.39px', mt: 0.5
+                      lineHeight: "16.39px",
+                      mt: 0.5,
                     }}
                   >
                     SVG, PNG, JPG or GIF (max. 800x400px)
@@ -290,7 +327,7 @@ export default function AddTeamMembers({
               )} */}
             </Box>
             <Grid container spacing={2}>
-              <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
+              <Grid item xs={6} sx={{ width: "100%" }} className="model-field">
                 <Typography className="input-label-text">Full Name</Typography>
                 <TextField
                   size="small"
@@ -306,13 +343,19 @@ export default function AddTeamMembers({
                   fullWidth
                 />
                 {formik.touched.name && formik.errors.name && (
-                  <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                  <Typography
+                    variant="caption"
+                    color="error"
+                    sx={{ paddingLeft: "5px" }}
+                  >
                     {formik.errors.name}
                   </Typography>
                 )}
               </Grid>
-              <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
-                <Typography className="input-label-text">Email Address</Typography>
+              <Grid item xs={6} sx={{ width: "100%" }} className="model-field">
+                <Typography className="input-label-text">
+                  Email Address
+                </Typography>
                 <TextField
                   size="small"
                   placeholder="Enter email address"
@@ -328,13 +371,22 @@ export default function AddTeamMembers({
                   disabled={recordToModify ? true : false}
                 />
                 {formik.touched.email && formik.errors.email && (
-                  <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                  <Typography
+                    variant="caption"
+                    color="error"
+                    sx={{ paddingLeft: "5px" }}
+                  >
                     {formik.errors.email}
                   </Typography>
                 )}
               </Grid>
               {token && token.role === userRoles.SUPER_ADMIN && (
-                <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ width: "100%" }}
+                  className="model-field"
+                >
                   <Typography className="input-label-text">
                     User Role
                   </Typography>
@@ -358,122 +410,146 @@ export default function AddTeamMembers({
                     >
                       <MenuItem value={userRoles.SUPER_ADMIN}>
                         {" "}
-                        <Typography
-                          sx={{ padding: 0, width: "auto" }}
-                        >
+                        <Typography sx={{ padding: 0, width: "auto" }}>
                           Super Admin
                         </Typography>
                       </MenuItem>
                       <MenuItem value={userRoles.CUSTOM_ADMIN}>
                         {" "}
-                        <Typography
-                          sx={{ padding: 0, width: "auto" }}
-                        >
+                        <Typography sx={{ padding: 0, width: "auto" }}>
                           Admin
                         </Typography>
                       </MenuItem>
                       <MenuItem value={userRoles.STAFF}>
                         {" "}
-                        <Typography
-                          sx={{ padding: 0, width: "auto" }}
-                        >
+                        <Typography sx={{ padding: 0, width: "auto" }}>
                           User
                         </Typography>
                       </MenuItem>
                     </Select>
                     {formik.touched.role && formik.errors.role && (
-                      <Typography variant="caption" color="error" sx={{ paddingLeft: '5px' }}>
+                      <Typography
+                        variant="caption"
+                        color="error"
+                        sx={{ paddingLeft: "5px" }}
+                      >
                         {formik.errors.role}
                       </Typography>
                     )}
                   </FormControl>
                 </Grid>
               )}
-              {token && token.role === userRoles.SUPER_ADMIN && [userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(formik.values.role) && (
-                <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
-                  <Typography className="input-label-text">
-                    Locations
-                  </Typography>
-                  <FormControl sx={{ width: "100%" }}>
-                    <Select
-                      size="small"
-                      className="custom-textfield"
-                      labelId="demo-multiple-checkbox-label"
-                      id="demo-multiple-checkbox"
-                      multiple
-                      value={formik.values.assignedLocations}
-                      // value={haveAccessArray.map((item) => item.id)} // Correct value management
-                      onChange={(event) => {
-                        const {
-                          target: { value },
-                        } = event;
-                        const selectedIds = typeof value === "string" ? value.split(",") : value;
+              {token &&
+                token.role === userRoles.SUPER_ADMIN &&
+                [userRoles.CUSTOM_ADMIN, userRoles.STAFF].includes(
+                  formik.values.role
+                ) && (
+                  <Grid
+                    item
+                    xs={6}
+                    sx={{ width: "100%" }}
+                    className="model-field"
+                  >
+                    <Typography className="input-label-text">
+                      Locations
+                    </Typography>
+                    <FormControl sx={{ width: "100%" }}>
+                      <Select
+                        size="small"
+                        className="custom-textfield"
+                        labelId="demo-multiple-checkbox-label"
+                        id="demo-multiple-checkbox"
+                        multiple
+                        value={formik.values.assignedLocations}
+                        // value={haveAccessArray.map((item) => item.id)} // Correct value management
+                        onChange={(event) => {
+                          const {
+                            target: { value },
+                          } = event;
+                          const selectedIds =
+                            typeof value === "string"
+                              ? value.split(",")
+                              : value;
 
-                        // Update formik values directly without additional state updates
-                        formik.setFieldValue("assignedLocations", selectedIds);
-                        // const {
-                        //   target: { value },
-                        // } = event;
-                        // const selectedIds =
-                        //   typeof value === "string" ? value.split(",") : value;
+                          // Update formik values directly without additional state updates
+                          formik.setFieldValue(
+                            "assignedLocations",
+                            selectedIds
+                          );
+                          // const {
+                          //   target: { value },
+                          // } = event;
+                          // const selectedIds =
+                          //   typeof value === "string" ? value.split(",") : value;
 
-                        // // Update haveAccessArray based on selected items
-                        // const newHaveAccessArray = locationData.filter(
-                        //   (location) => selectedIds.includes(location.id)
-                        // );
-                        // const newGiveAccessArray = locationData.filter(
-                        //   (location) => !selectedIds.includes(location.id)
-                        // );
+                          // // Update haveAccessArray based on selected items
+                          // const newHaveAccessArray = locationData.filter(
+                          //   (location) => selectedIds.includes(location.id)
+                          // );
+                          // const newGiveAccessArray = locationData.filter(
+                          //   (location) => !selectedIds.includes(location.id)
+                          // );
 
-                        // setHaveAccessArray(newHaveAccessArray);
-                        // setGiveAccessArray(newGiveAccessArray);
-                      }}
-                      input={<OutlinedInput />}
-                      renderValue={(selected) =>
-                        selected
-                          .map(
-                            (id) =>
-                              locationsList.find((loc) => loc._id === id)?.name
-                          )
-                          .join(", ")
-                      }
-                      MenuProps={MenuProps}
-                    >
-                      {locationsList.map((item) =>
-                        recordToModify?.company_id === item._id ? (
-                          <Tooltip
-                            key={item._id}
-                            title="Cannot Remove default"
-                            placement="top"
-                          >
-                            <Box>
-                              <MenuItem key={item._id} value={item._id} disabled>
-                                <Checkbox
+                          // setHaveAccessArray(newHaveAccessArray);
+                          // setGiveAccessArray(newGiveAccessArray);
+                        }}
+                        input={<OutlinedInput />}
+                        renderValue={(selected) =>
+                          selected
+                            .map(
+                              (id) =>
+                                locationsList.find((loc) => loc._id === id)
+                                  ?.name
+                            )
+                            .join(", ")
+                        }
+                        MenuProps={MenuProps}
+                      >
+                        {locationsList.map((item) =>
+                          recordToModify?.company_id === item._id ? (
+                            <Tooltip
+                              key={item._id}
+                              title="Cannot Remove default"
+                              placement="top"
+                            >
+                              <Box>
+                                <MenuItem
+                                  key={item._id}
+                                  value={item._id}
                                   disabled
-                                  checked={formik.values.assignedLocations.includes(item._id)}
-                                />
-                                <ListItemText primary={item.name} />
-                              </MenuItem>
-                            </Box>
-                          </Tooltip>
-                        ) : (
-                          <MenuItem key={item._id} value={item._id}>
-                            <Checkbox
-                              checked={formik.values.assignedLocations.includes(item._id)}
-                            />
-                            <ListItemText primary={item.name} />
-                          </MenuItem>
-                        )
-                      )}
-                    </Select>
-                    {formik.values.role === userRoles.STAFF && formik.touched.assignedLocations && formik.errors.assignedLocations && (
-                      <Typography variant="caption" color="error">
-                        {formik.errors.assignedLocations}
-                      </Typography>
-                    )}
-                  </FormControl>
-                </Grid>
-              )}
+                                >
+                                  <Checkbox
+                                    disabled
+                                    checked={formik.values.assignedLocations.includes(
+                                      item._id
+                                    )}
+                                  />
+                                  <ListItemText primary={item.name} />
+                                </MenuItem>
+                              </Box>
+                            </Tooltip>
+                          ) : (
+                            <MenuItem key={item._id} value={item._id}>
+                              <Checkbox
+                                checked={formik.values.assignedLocations.includes(
+                                  item._id
+                                )}
+                              />
+                              <ListItemText primary={item.name} />
+                            </MenuItem>
+                          )
+                        )}
+                      </Select>
+                      {formik.values.role === userRoles.STAFF &&
+                        formik.touched.assignedLocations &&
+                        formik.errors.assignedLocations && (
+                          <Typography variant="caption" color="error">
+                            {formik.errors.assignedLocations}
+                          </Typography>
+                        )}
+                    </FormControl>
+                  </Grid>
+                )}
             </Grid>
           </Box>
           <Box
@@ -493,7 +569,7 @@ export default function AddTeamMembers({
                     color: "#8477DA",
                     border: "1px solid #8477DA",
                     fontWeight: 600,
-                    fontSize: '16px'
+                    fontSize: "16px",
                   }}
                 >
                   Reset Password
@@ -502,7 +578,7 @@ export default function AddTeamMembers({
                 ""
               )}
             </Box>
-            <Box sx={{ display: "flex", gap: '12px' }}>
+            <Box sx={{ display: "flex", gap: "12px" }}>
               <Button
                 variant="outlined"
                 onClick={() => {
@@ -517,7 +593,10 @@ export default function AddTeamMembers({
                   border: "1px solid #D6DAE3",
                   width: "fit-content",
                   fontWeight: 600,
-                  fontSize: '16px'
+                  fontSize: "16px",
+                  ":hover": {
+                    border: "1px solid #8477da",
+                  },
                 }}
               >
                 {recordToModify ? "Discard Changes" : "Cancel"}
@@ -531,10 +610,13 @@ export default function AddTeamMembers({
                   "&:hover": {
                     backgroundColor: "#8477da",
                   },
-                  padding: createLoading || updateLoading ? '0px !important' : "10px 16px !important",
+                  padding:
+                    createLoading || updateLoading
+                      ? "0px !important"
+                      : "10px 16px !important",
                   position: "relative",
                   fontWeight: 600,
-                  fontSize: '16px'
+                  fontSize: "16px",
                 }}
               >
                 {createLoading || updateLoading ? (

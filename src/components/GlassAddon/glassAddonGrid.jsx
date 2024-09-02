@@ -1,34 +1,304 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
+  Button,
   CircularProgress,
   IconButton,
-  useMediaQuery,
+  Menu,
+  MenuItem,
+  Typography,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { ArrowForward } from "@mui/icons-material";
 import {
   useDeleteGlassAddon,
+  useEditFullGlassAddon,
   useFetchGlassAddons,
 } from "../../utilities/ApiHooks/glassAddon";
 import AddEditGlassAddon from "../Modal/addEditGlassAddon";
-import AddonList from "./addonList";
-import CustomIconButton from "../ui-components/CustomButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { getDataRefetch } from "../../redux/staff";
+import { DataGrid } from "@mui/x-data-grid";
+import { GlassAddonsColumn } from "@/utilities/DataGridColumns";
+import EditIcon from "@/Assets/d.svg";
+import DeleteIcon from "../../Assets/Delete-Icon.svg";
+import CustomInputField from "../ui-components/CustomInput";
+import CustomToggle from "../ui-components/Toggle";
+import DeleteModal from "../Modal/deleteModal";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
-
+  const itemsPerPage = 10;
   const {
     data: glassAddons,
     refetch: glassAddonRefetch,
     isFetching: glassAddonFetching,
   } = useFetchGlassAddons(type);
-  const { mutate: deleteGlassAddon, isSuccess: deleteSuccess } =
-    useDeleteGlassAddon();
+  const {
+    mutate: deleteGlassAddon,
+    isSuccess: deleteSuccess,
+    isLoading: LoadingForDelete,
+  } = useDeleteGlassAddon();
+  const { mutate: editGlassAddon, isSuccess: glassAddonEditSuccess } =
+    useEditFullGlassAddon();
+
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); // Manage menu state in the parent
+  const [activeRow, setActiveRow] = useState(null); // State to keep track of which row triggered the menu
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+
+  const handleClickAction = (event, row) => {
+    setAnchorEl(event.currentTarget);
+    setActiveRow(row); // Set the current row when the menu is triggered
+  };
+
+  const handleCloseAction = () => {
+    setAnchorEl(null);
+    setActiveRow(null);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+    setIsEdit(false);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpenEdit = (data) => {
+    setOpen(true);
+    setEdit(data);
+    setIsEdit(true);
+  };
+  const handleHardwareDelete = () => {
+    deleteGlassAddon(activeRow?._id);
+  };
+
+  // Handle the cost update
+  const handleUpdateCost = (data) => {
+    const updatedOptions = data.options.map((option) => ({
+      ...option,
+      cost:
+        rowCosts[data._id] !== undefined
+          ? parseFloat(rowCosts[data._id])
+          : option.cost,
+    }));
+
+    editGlassAddon({ optionsData: updatedOptions, id: data._id });
+  };
+  const handleStatusChange = (row) => {
+    const updatedOptions = row.options.map((option) => ({
+      ...option,
+      status: !option.status, // Toggle the status
+    }));
+
+    // Update the backend with the new status
+    editGlassAddon({ optionsData: updatedOptions, id: row._id });
+  };
+  const actionColumn = [
+    {
+      field: "cost",
+      headerName: "Cost",
+      headerClassName: "customHeaderClass",
+      sortable: false,
+      flex: 4,
+
+      renderCell: (params) => {
+        return (
+          <div>
+            <CustomInputField
+              type={"number"}
+              value={
+                rowCosts[params.row._id] !== undefined
+                  ? rowCosts[params.row._id]
+                  : params.row.options[0].cost
+              }
+              onChange={(e) =>
+                setRowCosts({
+                  ...rowCosts,
+                  [params.row._id]: e.target.value,
+                })
+              }
+            />
+          </div>
+        );
+      },
+    },
+    {
+      field: "status",
+      headerName: "Status",
+      headerClassName: "customHeaderClass",
+      sortable: false,
+      flex: 4,
+
+      renderCell: (params) => {
+        return params.row.options[0].status ? (
+          <Typography
+            className="status-active"
+            sx={{ padding: 0, px: 2, width: "fit-content" }}
+          >
+            Active
+          </Typography>
+        ) : (
+          <Typography
+            className="status-inActive"
+            sx={{ padding: 0, px: 2, width: "fit-content" }}
+          >
+            Inactive
+          </Typography>
+        );
+      },
+    },
+    {
+      field: "Actions",
+      align: "left",
+      headerClassName: "customHeaderClass",
+      flex: 2,
+      renderCell: (params) => {
+        // const id = params.row._id;
+        const data = params.row;
+        return (
+          <>
+            <IconButton
+              aria-haspopup="true"
+              onClick={(event) => handleClickAction(event, data)}
+            >
+              <ArrowForward sx={{ color: "#8477DA" }} />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl && activeRow === data)} // Check if the active row matches the current row
+              onClose={handleCloseAction}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+              slotProps={{
+                paper: {
+                  elevation: 0,
+                  sx: {
+                    overflow: "visible",
+                    filter: "none",
+                    boxShadow: "0px 1px 2px 0px #1018280D",
+                    border: "1px solid #D0D5DD",
+                    p: 0,
+                    width: "171px",
+                    "& .MuiList-padding": {
+                      p: 0,
+                    },
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem
+                onClick={() => {
+                  handleCloseAction();
+                  handleUpdateCost(data); // Pass data directly
+                }}
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Update</p>
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleCloseAction();
+                  handleOpenEdit(data); // Pass data directly
+                }}
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderTop: "1px solid #D0D5DD",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Edit</p>
+                <img width={20} height={20} src={EditIcon} alt="edit icons" />
+              </MenuItem>
+              <MenuItem
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderTop: "1px solid #D0D5DD",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Status</p>
+                <Box sx={{ width: "59px", height: "39px" }}>
+                  <CustomToggle
+                    checked={data.options[0].status}
+                    onChange={() => handleStatusChange(data)}
+                    text={""}
+                  />
+                </Box>
+              </MenuItem>
+
+              <MenuItem
+                onClick={() => {
+                  // handleCloseAction();
+                  setDeleteModalOpen(true);
+                  // handleHardwareDelete(id); // Pass id directly
+                }}
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  borderTop: "1px solid #D0D5DD",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+              >
+                <p>Delete</p>
+                <img
+                  width={20}
+                  height={20}
+                  src={DeleteIcon}
+                  alt="delete icon"
+                />
+              </MenuItem>
+            </Menu>
+          </>
+        );
+      },
+    },
+  ];
 
   useEffect(() => {
     if (refetchData) {
@@ -38,29 +308,19 @@ const GlassAddonGrid = ({ type }) => {
   useEffect(() => {
     glassAddonRefetch();
   }, []);
-  const handleOpen = (data) => {
-    setOpen(true);
-    setIsEdit(false);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const handleOpenEdit = (data, isEditAble) => {
-    setOpen(true);
-    setEdit(data);
-    setIsEdit(true);
-  };
-  const handleHardwareDelete = (id) => {
-    deleteGlassAddon(id);
-  };
-
   useEffect(() => {
+    if (glassAddonEditSuccess) {
+      glassAddonRefetch();
+      setRowCosts({});
+    }
     if (deleteSuccess) {
       glassAddonRefetch();
+      setActiveRow(null);
+      setDeleteModalOpen(false);
+      setRowCosts({});
     }
-  }, [deleteSuccess]);
-  const miniTab = useMediaQuery("(max-width: 1400px)");
+  }, [deleteSuccess, glassAddonEditSuccess]);
+  // const miniTab = useMediaQuery("(max-width: 1400px)");
   return (
     <>
       <div
@@ -68,40 +328,111 @@ const GlassAddonGrid = ({ type }) => {
           display: "flex",
           justifyContent: "space-between",
           alignContent: "center",
-          paddingTop: 15,
-          paddingBottom: 15,
-          paddingLeft: "10px",
-          paddingRight: "10px",
-          background:'#FFFF'
         }}
       >
         {" "}
-        <div
+        <p
           style={{
-            width: "250px",
-            padding: 4,
-            alignItems: "center",
-            textTransform: "uppercase",
-            background:'#FFFF'
+            fontWeight: 600,
+            fontSize: "24px",
+            lineHeight: "32.78px",
+            color: "#5D6164",
           }}
         >
-          <p style={{ fontWeight: "bold", paddingTop: 10, paddingBottom: 10 }}>
-            {type}
-          </p>
-        </div>
+          Showers<span style={{ color: "black" }}> / {type}</span>
+        </p>
         <div
           style={{
             padding: 4,
           }}
         >
-          <CustomIconButton
-            handleClick={handleOpen}
-            icon={<Add style={{ color: "white" }} />}
-            buttonText="Add"
-          />
+          <Button
+            onClick={handleOpen}
+            variant="contained"
+            sx={{
+              color: "white",
+              background: "#8477DA",
+              ":hover": {
+                background: "#8477DA",
+              },
+            }}
+          >
+            Add New
+          </Button>
         </div>{" "}
       </div>
-      <div
+
+      <Box
+        sx={{
+          border: "1px solid #EAECF0",
+          borderRadius: "8px",
+          width: "99.5%",
+          m: "auto",
+          overflow: "hidden",
+          mt: 2,
+        }}
+      >
+        {glassAddonFetching ? (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "20px",
+              alignItems: "center",
+              background: "#FFFF",
+              height: "56vh",
+            }}
+          >
+            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+          </Box>
+        ) : (
+          <div className="CustomerTable-1">
+            {glassAddons.length >= 1 ? (
+              <>
+                <DataGrid
+                  loading={glassAddonFetching}
+                  style={{ border: "none" }}
+                  getRowId={(row) => row._id}
+                  // rows={filteredData.slice(
+                  //   (page - 1) * itemsPerPage,
+                  //   page * itemsPerPage
+                  // )}
+                  disableColumnFilter
+                  disableColumnMenu
+                  rows={glassAddons}
+                  columns={GlassAddonsColumn.concat(actionColumn)}
+                  pageSize={itemsPerPage}
+                  rowCount={
+                    glassAddons?.totalRecords ? glassAddons?.totalRecords : 0
+                  }
+                  // rowCount={filteredData.length}
+                  sx={{ width: "100%" }}
+                  hideFooter
+                  rowHeight={70}
+                />
+
+                {/* <NewPagination
+                  totalRecords={filteredData.length ? filteredData.length : 0}
+                  setIsShowInput={setIsShowInput}
+                  isShowInput={isShowInput}
+                  setInputPage={setInputPage}
+                  inputPage={inputPage}
+                  page={page}
+                  setPage={setPage}
+                /> */}
+              </>
+            ) : (
+              <Typography
+                sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
+              >
+                No Addons Found
+              </Typography>
+            )}
+          </div>
+        )}
+      </Box>
+
+      {/* <div
         style={{
           display: "flex",
           gap: 4,
@@ -131,7 +462,7 @@ const GlassAddonGrid = ({ type }) => {
           }}
         >
           Part Number{" "}
-        </div>{" "} */}
+        </div>{" "} 
         <div
           style={{
             width: "250px",
@@ -150,15 +481,15 @@ const GlassAddonGrid = ({ type }) => {
         >
           Status
         </div>{" "}
-      </div>
-      {glassAddonFetching ? (
+      </div> */}
+      {/* {glassAddonFetching ? (
         <Box
           sx={{
             display: "flex",
             justifyContent: "center",
             padding: "20px",
             alignItems: "center",
-            background:'#FFFF',
+            background: "#FFFF",
             height: "56vh",
           }}
         >
@@ -172,7 +503,7 @@ const GlassAddonGrid = ({ type }) => {
             gap: 1,
             height: miniTab ? "58vh" : "67vh",
             overflowY: "scroll",
-            background:'#FFFF',
+            background: "#FFFF",
           }}
         >
           {glassAddons.length !== 0 ? (
@@ -189,8 +520,16 @@ const GlassAddonGrid = ({ type }) => {
             <Box sx={{ color: "#667085" }}>No GlassAddons Found</Box>
           )}
         </Box>
-      )}
-
+      )} */}
+      <DeleteModal
+        text={"Glass Addons"}
+        open={deleteModalOpen}
+        close={() => {
+          setDeleteModalOpen(false);
+        }}
+        isLoading={LoadingForDelete}
+        handleDelete={handleHardwareDelete}
+      />
       <AddEditGlassAddon
         open={open}
         close={handleClose}

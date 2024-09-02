@@ -37,7 +37,7 @@ const CampanySetting = () => {
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (newValue) => {
     setValue(newValue);
   };
   useEffect(() => {
@@ -70,41 +70,51 @@ const CampanySetting = () => {
       name: settingData?.name,
       address: settingData?.address,
       image: selectedImage,
-      showers:{
-      doorWidth: settingData?.showers?.doorWidth,
-      miscPricing: {
-        pricingFactor: settingData?.showers?.miscPricing?.pricingFactor,
-        hourlyRate: settingData?.showers?.miscPricing?.hourlyRate,
-        pricingFactorStatus: settingData?.showers?.miscPricing?.pricingFactorStatus,
+      showers: {
+        doorWidth: settingData?.showers?.doorWidth,
+        miscPricing: {
+          pricingFactor: settingData?.showers?.miscPricing?.pricingFactor,
+          hourlyRate: settingData?.showers?.miscPricing?.hourlyRate,
+          pricingFactorStatus:
+            settingData?.showers?.miscPricing?.pricingFactorStatus,
+        },
+        fabricatingPricing: {
+          oneHoleOneByTwoInchGlass:
+            settingData?.showers?.fabricatingPricing?.oneHoleOneByTwoInchGlass,
+          oneHoleThreeByEightInchGlass:
+            settingData?.showers?.fabricatingPricing
+              ?.oneHoleThreeByEightInchGlass,
+          clampCutoutOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.clampCutoutOneByTwoInch,
+          clampCutoutThreeByEightInch:
+            settingData?.showers?.fabricatingPricing
+              ?.clampCutoutThreeByEightInch,
+          hingeCutoutOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.hingeCutoutOneByTwoInch,
+          hingeCutoutThreeByEightInch:
+            settingData?.showers?.fabricatingPricing
+              ?.hingeCutoutThreeByEightInch,
+          minterOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.minterOneByTwoInch,
+          minterThreeByEightInch:
+            settingData?.showers?.fabricatingPricing?.minterThreeByEightInch,
+          notchOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.notchOneByTwoInch,
+          notchThreeByEightInch:
+            settingData?.showers?.fabricatingPricing?.notchThreeByEightInch,
+          outageOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.outageOneByTwoInch,
+          outageThreeByEightInch:
+            settingData?.showers?.fabricatingPricing?.outageThreeByEightInch,
+          polishPricePerOneByTwoInch:
+            settingData?.showers?.fabricatingPricing
+              ?.polishPricePerOneByTwoInch,
+          polishPricePerThreeByEightInch:
+            settingData?.showers?.fabricatingPricing
+              ?.polishPricePerThreeByEightInch,
+        },
       },
-      fabricatingPricing: {
-        oneHoleOneByTwoInchGlass:
-          settingData?.showers?.fabricatingPricing?.oneHoleOneByTwoInchGlass,
-        oneHoleThreeByEightInchGlass:
-          settingData?.showers?.fabricatingPricing?.oneHoleThreeByEightInchGlass,
-        clampCutoutOneByTwoInch:
-          settingData?.showers?.fabricatingPricing?.clampCutoutOneByTwoInch,
-        clampCutoutThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.clampCutoutThreeByEightInch,
-        hingeCutoutOneByTwoInch:
-          settingData?.showers?.fabricatingPricing?.hingeCutoutOneByTwoInch,
-        hingeCutoutThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.hingeCutoutThreeByEightInch,
-        minterOneByTwoInch: settingData?.showers?.fabricatingPricing?.minterOneByTwoInch,
-        minterThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.minterThreeByEightInch,
-        notchOneByTwoInch: settingData?.showers?.fabricatingPricing?.notchOneByTwoInch,
-        notchThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.notchThreeByEightInch,
-        outageOneByTwoInch: settingData?.showers?.fabricatingPricing?.outageOneByTwoInch,
-        outageThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.outageThreeByEightInch,
-        polishPricePerOneByTwoInch:
-          settingData?.showers?.fabricatingPricing?.polishPricePerOneByTwoInch,
-        polishPricePerThreeByEightInch:
-          settingData?.showers?.fabricatingPricing?.polishPricePerThreeByEightInch,
-      }},
-      mirrors:{
+      mirrors: {
         pricingFactor: settingData?.mirrors?.pricingFactor,
         hourlyRate: settingData?.mirrors?.hourlyRate,
         pricingFactorStatus: settingData?.mirrors?.pricingFactorStatus,
@@ -118,14 +128,18 @@ const CampanySetting = () => {
         // outletMultiplier: settingData?.mirrors?.outletMultiplier,
         lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier,
         notchMultiplier: settingData?.mirrors?.notchMultiplier,
-        singleOutletCutoutMultiplier: settingData?.mirrors?.singleOutletCutoutMultiplier,
-        doubleOutletCutoutMultiplier: settingData?.mirrors?.doubleOutletCutoutMultiplier,
-        tripleOutletCutoutMultiplier: settingData?.mirrors?.tripleOutletCutoutMultiplier,
-        quadOutletCutoutMultiplier: settingData?.mirrors?.quadOutletCutoutMultiplier,
+        singleOutletCutoutMultiplier:
+          settingData?.mirrors?.singleOutletCutoutMultiplier,
+        doubleOutletCutoutMultiplier:
+          settingData?.mirrors?.doubleOutletCutoutMultiplier,
+        tripleOutletCutoutMultiplier:
+          settingData?.mirrors?.tripleOutletCutoutMultiplier,
+        quadOutletCutoutMultiplier:
+          settingData?.mirrors?.quadOutletCutoutMultiplier,
         // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
-      }
+      },
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -313,10 +327,52 @@ const CampanySetting = () => {
           </Box>
         </Box>
 
-
         {/** Tabs Switch */}
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
+        <Box sx={{ borderBottom: 1, borderColor: "divider", pb: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              p: "2px",
+              background: "#F3F5F6",
+              border: "1px solid #D0D5DD",
+              borderRadius: "6px",
+              width: "fit-content",
+            }}
+          >
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 0 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(0)}
+            >
+              Showers
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 1 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(1)}
+            >
+              Mirrors
+            </Button>
+          </Box>
+          {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
             "& .MuiTab-root.Mui-selected": {
               color: '#8477DA'
             }, "& .MuiTabs-indicator": {
@@ -328,7 +384,7 @@ const CampanySetting = () => {
               fontSize: '15px', fontWeight: 600
             }} {...a11yProps(0)} />
             <Tab label="Mirrors" sx={{ fontSize: '15px', fontWeight: 600 }} {...a11yProps(1)} />
-          </Tabs>
+          </Tabs> */}
         </Box>
         {/** end */}
         {/** Showers tab */}
@@ -354,7 +410,9 @@ const CampanySetting = () => {
             >
               <Typography>Max Door Width</Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <p className="explain">Door width value must be in range between 1-39 </p>
+                <p className="explain">
+                  Door width value must be in range between 1-39{" "}
+                </p>
                 <CustomInputField
                   type="number"
                   name="showers.doorWidth"
@@ -363,8 +421,14 @@ const CampanySetting = () => {
                   onChange={formik.handleChange}
                   inputProps={{ min: 1, max: 39, style: { width: "200px" } }}
                   onBlur={formik.handleBlur}
-                  error={formik.touched?.showers?.doorWidth && Boolean(formik.errors?.showers?.doorWidth)}
-                  helperText={formik.touched?.showers?.doorWidth && formik.errors?.showers?.doorWidth}
+                  error={
+                    formik.touched?.showers?.doorWidth &&
+                    Boolean(formik.errors?.showers?.doorWidth)
+                  }
+                  helperText={
+                    formik.touched?.showers?.doorWidth &&
+                    formik.errors?.showers?.doorWidth
+                  }
                 />
               </Box>
             </Box>
@@ -402,7 +466,8 @@ const CampanySetting = () => {
                   <CustomToggle
                     name="showers.miscPricing.pricingFactorStatus"
                     checked={
-                      formik.values?.showers?.miscPricing?.pricingFactorStatus || false
+                      formik.values?.showers?.miscPricing
+                        ?.pricingFactorStatus || false
                     }
                     onChange={formik.handleChange}
                   />
@@ -419,11 +484,13 @@ const CampanySetting = () => {
             >
               <Typography>Default Hourly rate</Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Typography>Hourly rates to be used for labour price</Typography>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="miscPricing.hourlyRate"
                   size="small"
@@ -438,7 +505,9 @@ const CampanySetting = () => {
               </Box>
             </Box>
           </Box>
-          <Typography variant="h6" sx={{ paddingTop: 1 }}>Fabrication Pricing</Typography>
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Fabrication Pricing
+          </Typography>
           <Box
             sx={{
               display: "flex",
@@ -461,12 +530,13 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.oneHoleOneByTwoInchGlass"
                   size="small"
                   value={
-                    formik.values?.showers?.fabricatingPricing?.oneHoleOneByTwoInchGlass
+                    formik.values?.showers?.fabricatingPricing
+                      ?.oneHoleOneByTwoInchGlass
                   }
                   onChange={formik.handleChange}
                 />
@@ -484,7 +554,7 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.oneHoleThreeByEightInchGlass"
                   size="small"
@@ -509,12 +579,13 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.clampCutoutOneByTwoInch"
                   size="small"
                   value={
-                    formik.values?.showers?.fabricatingPricing?.clampCutoutOneByTwoInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.clampCutoutOneByTwoInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -533,12 +604,13 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.clampCutoutThreeByEightInch"
                   size="small"
                   value={
-                    formik.values?.showers?.fabricatingPricing?.clampCutoutThreeByEightInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.clampCutoutThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -558,11 +630,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.hingeCutoutOneByTwoInch"
                   value={
-                    formik.values?.showers?.fabricatingPricing?.hingeCutoutOneByTwoInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.hingeCutoutOneByTwoInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -581,11 +654,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="showers.fabricatingPricing.hingeCutoutThreeByEightInch"
                   value={
-                    formik.values?.showers?.fabricatingPricing?.hingeCutoutThreeByEightInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.hingeCutoutThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -606,9 +680,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
-                  value={formik.values?.showers?.fabricatingPricing?.minterOneByTwoInch}
+                  value={
+                    formik.values?.showers?.fabricatingPricing
+                      ?.minterOneByTwoInch
+                  }
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -628,10 +705,11 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   value={
-                    formik.values?.showers?.fabricatingPricing?.minterThreeByEightInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.minterThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -652,9 +730,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
-                  value={formik.values?.showers?.fabricatingPricing?.notchOneByTwoInch}
+                  value={
+                    formik.values?.showers?.fabricatingPricing
+                      ?.notchOneByTwoInch
+                  }
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -674,9 +755,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
-                  value={formik.values?.showers?.fabricatingPricing?.notchThreeByEightInch}
+                  value={
+                    formik.values?.showers?.fabricatingPricing
+                      ?.notchThreeByEightInch
+                  }
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -695,9 +779,12 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
-                  value={formik.values?.showers?.fabricatingPricing?.outageOneByTwoInch}
+                  value={
+                    formik.values?.showers?.fabricatingPricing
+                      ?.outageOneByTwoInch
+                  }
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -717,10 +804,11 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   value={
-                    formik.values?.showers?.fabricatingPricing?.outageThreeByEightInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.outageThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -740,10 +828,11 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   value={
-                    formik.values?.showers?.fabricatingPricing?.polishPricePerOneByTwoInch
+                    formik.values?.showers?.fabricatingPricing
+                      ?.polishPricePerOneByTwoInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -764,7 +853,7 @@ const CampanySetting = () => {
                   size="small"
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   value={
                     formik.values?.showers?.fabricatingPricing
@@ -829,11 +918,13 @@ const CampanySetting = () => {
             >
               <Typography>Default Hourly rate</Typography>
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                <Typography>Hourly rates to be used for labour price</Typography>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.hourlyRate"
                   size="small"
@@ -848,7 +939,9 @@ const CampanySetting = () => {
               </Box>
             </Box>
           </Box>
-          <Typography variant="h6" sx={{ paddingTop: 1 }}>Fabrication Pricing</Typography>
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Fabrication Pricing
+          </Typography>
           <Box
             sx={{
               display: "flex",
@@ -1032,13 +1125,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.holeMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.holeMultiplier
-                  }
+                  value={formik.values?.mirrors?.holeMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1078,13 +1169,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.lightHoleMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.lightHoleMultiplier
-                  }
+                  value={formik.values?.mirrors?.lightHoleMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1101,13 +1190,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.notchMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.notchMultiplier
-                  }
+                  value={formik.values?.mirrors?.notchMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1124,13 +1211,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.singleOutletCutoutMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.singleOutletCutoutMultiplier
-                  }
+                  value={formik.values?.mirrors?.singleOutletCutoutMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1147,13 +1232,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.doubleOutletCutoutMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.doubleOutletCutoutMultiplier
-                  }
+                  value={formik.values?.mirrors?.doubleOutletCutoutMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1170,13 +1253,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.tripleOutletCutoutMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.tripleOutletCutoutMultiplier
-                  }
+                  value={formik.values?.mirrors?.tripleOutletCutoutMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>
@@ -1193,13 +1274,11 @@ const CampanySetting = () => {
                 <CustomInputField
                   type="number"
                   inputProps={{
-                    min: 0
+                    min: 0,
                   }}
                   name="mirrors.quadOutletCutoutMultiplier"
                   size="small"
-                  value={
-                    formik.values?.mirrors?.quadOutletCutoutMultiplier
-                  }
+                  value={formik.values?.mirrors?.quadOutletCutoutMultiplier}
                   onChange={formik.handleChange}
                 />
               </Box>

@@ -1442,14 +1442,62 @@ export const userColumnsHardware = [
               type={5}
             />
           </div>
-          <div className="new-customerNameTable">
-            {params.row.name}
-          </div>
+          <div className="new-customerNameTable">{params.row.name}</div>
         </div>
       );
     },
   },
 ];
+
+export const GlassAddonsColumn = [
+  {
+    field: "name",
+    headerName: "Addon Type",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 3,
+
+    renderCell: (params) => {
+      return (
+        <div className="user-cellWrap">
+          <div className="customerImg">
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
+          </div>
+          <div className="new-customerNameTable">{params.row.name}</div>
+        </div>
+      );
+    },
+  },
+ 
+];
+export const GlassTypeColumn = [
+  {
+    field: "name",
+    headerName: "Glass Type",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 3,
+
+    renderCell: (params) => {
+      return (
+        <div className="user-cellWrap">
+          <div className="customerImg">
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
+          </div>
+          <div className="new-customerNameTable">{params.row.name}</div>
+        </div>
+      );
+    },
+  },
+]
 
 export const userRowsHardware = [
   {

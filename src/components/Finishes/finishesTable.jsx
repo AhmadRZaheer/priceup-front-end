@@ -157,7 +157,7 @@ const FinishesTable = () => {
                   alignItems: "center",
                   fontWeight: 400,
                   ":hover": {
-                    backgroundColor: " #EDEBFA",
+                    backgroundColor: "#EDEBFA",
                   },
                 }}
               >
@@ -173,7 +173,7 @@ const FinishesTable = () => {
                   padding: "12px",
                   m: 0,
                   color: "#5D6164",
-                  borderTop: "0.2px solid #000000",
+                  borderTop: "1px solid #D0D5DD",
                   fontSize: "16px",
                   display: "flex",
                   justifyContent: "space-between",
