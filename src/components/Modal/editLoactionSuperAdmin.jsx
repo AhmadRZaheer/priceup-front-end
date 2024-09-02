@@ -102,12 +102,12 @@ const AddEditLocationModal = ({
 
   return (
     <Modal open={open} onClose={handleClose}
-    sx={{
-      backgroundColor: "rgba(5, 0, 35, 0.1)",
-      '.MuiModal-backdrop': {
+      sx={{
         backgroundColor: "rgba(5, 0, 35, 0.1)",
-      }
-    }}
+        '.MuiModal-backdrop': {
+          backgroundColor: "rgba(5, 0, 35, 0.1)",
+        }
+      }}
     >
       <Box sx={style}>
         <Box
@@ -118,23 +118,31 @@ const AddEditLocationModal = ({
           }}
         >
           <Typography
-            sx={{   fontWeight: 700,
+            sx={{
+              fontWeight: 700,
               fontSize: 18,
               lineHeight: '21.09px',
-              fontFamily: '"Roboto",sans-serif !important' }}
+              fontFamily: '"Roboto",sans-serif !important'
+            }}
           >
-            Locations Management
+            {recordToModify ? (
+              "Edit Location"
+            ) : (
+              "Add location"
+            )}
+
+
           </Typography>
 
           <Box>
-              <IconButton
-                sx={{ p: 0 }}
-                onClick={handleClose}
-              >
-                <Close />
-              </IconButton>
-            </Box>
-{/* 
+            <IconButton
+              sx={{ p: 0 }}
+              onClick={handleClose}
+            >
+              <Close />
+            </IconButton>
+          </Box>
+          {/* 
           <Close
             onClick={handleClose}
             sx={{
@@ -149,8 +157,8 @@ const AddEditLocationModal = ({
         <Box
           sx={{
             background: "#F3F5F6",
-              padding: "16px",
-              borderRadius: "12px",
+            padding: "16px",
+            borderRadius: "12px",
             // mt: 2,
             // backgroundColor: "#f3f5f6",
             // borderRadius: "8px",
@@ -167,12 +175,12 @@ const AddEditLocationModal = ({
               }}
             >
               <Box
-                // sx={{
-                //   width: "84px",
-                //   height: "84px",
-                //   borderRadius: "100%",
-                //   overflow: "hidden",
-                // }}
+              // sx={{
+              //   width: "84px",
+              //   height: "84px",
+              //   borderRadius: "100%",
+              //   overflow: "hidden",
+              // }}
               >
                 {formik.values.locationImage !== undefined && formik.values.locationImage !== null ? (
                   <img
@@ -209,12 +217,12 @@ const AddEditLocationModal = ({
                       borderRadius: "54px !important",
                       border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: '10px 12px !important',
+                      p: '10px 12px !important',
                       lineHeight: '21px',
                       fontSize: 16
                     }}
                   >
-                    Upload Profile Image
+                    Upload Location Image
                   </Button>
                   <Typography
                     variant="body2"
@@ -233,12 +241,12 @@ const AddEditLocationModal = ({
             <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
               <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                className='input-label-text'
-                  // sx={{
-                  //   color: "#344054",
-                  //   fontSize: "14px",
-                  //   fontWeight: 500,
-                  // }}
+                  className='input-label-text'
+                // sx={{
+                //   color: "#344054",
+                //   fontSize: "14px",
+                //   fontWeight: 500,
+                // }}
                 >
                   Location Name
                 </Typography>
@@ -259,21 +267,21 @@ const AddEditLocationModal = ({
 
               <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                className='input-label-text'
-                  // sx={{
-                  //   color: "#344054",
-                  //   fontSize: "14px",
-                  //   fontWeight: 500,
-                  // }}
+                  className='input-label-text'
+                // sx={{
+                //   color: "#344054",
+                //   fontSize: "14px",
+                //   fontWeight: 500,
+                // }}
                 >
-                  Location Email
+                  Location Owner email
                 </Typography>
                 <CustomInputField
                   fullWidth={true}
                   type="text"
                   name="email"
                   disabled={recordToModify ? true : false}
-                  placeholder={"Enter Location Email Address"}
+                  placeholder={"Enter Location Owner Email"}
                   value={formik.values.email}
                   onChange={formik.handleChange}
                 />
@@ -287,14 +295,14 @@ const AddEditLocationModal = ({
             <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
               <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                className='input-label-text'
-                  // sx={{
-                  //   color: "#344054",
-                  //   fontSize: "14px",
-                  //   fontWeight: 500,
-                  // }}
+                  className='input-label-text'
+                // sx={{
+                //   color: "#344054",
+                //   fontSize: "14px",
+                //   fontWeight: 500,
+                // }}
                 >
-                  Location Owner
+                  Location Owner Name
                 </Typography>
                 <CustomInputField
                   fullWidth={true}
@@ -312,12 +320,12 @@ const AddEditLocationModal = ({
               </Box>
               <Box sx={{ width: "100%" }} className='model-field'>
                 <Typography
-                className='input-label-text'
-                  // sx={{
-                  //   color: "#344054",
-                  //   fontSize: "14px",
-                  //   fontWeight: 500,
-                  // }}
+                  className='input-label-text'
+                // sx={{
+                //   color: "#344054",
+                //   fontSize: "14px",
+                //   fontWeight: 500,
+                // }}
                 >
                   Location Address
                 </Typography>
@@ -344,28 +352,28 @@ const AddEditLocationModal = ({
         </Box>
 
         <Box
-          sx={{ display: "flex",  justifyContent: "space-between" }}
+          sx={{ display: "flex", justifyContent: "space-between" }}
         >
-         <Box>
-              {recordToModify ? (
-                <Button
-                  variant="outlined"
-                  onClick={handleResetPass}
-                  sx={{
-                    color: "#8477DA",
-                    border: "1px solid #8477DA",
-                    fontWeight: 600,
-                    fontSize: '16px'
-                  }}
-                >
-                  Reset Password
-                </Button>
-              ) : (
-                ""
-              )}
-            </Box>
+          <Box>
+            {recordToModify ? (
+              <Button
+                variant="outlined"
+                onClick={handleResetPass}
+                sx={{
+                  color: "#8477DA",
+                  border: "1px solid #8477DA",
+                  fontWeight: 600,
+                  fontSize: '16px'
+                }}
+              >
+                Reset Password
+              </Button>
+            ) : (
+              ""
+            )}
+          </Box>
 
-          <Box sx={{ display: "flex", gap: '12px'}}>
+          <Box sx={{ display: "flex", gap: '12px' }}>
             <Button
               onClick={handleClose}
               variant="outlined"
@@ -401,7 +409,7 @@ const AddEditLocationModal = ({
               ) : recordToModify ? (
                 "Save Changes"
               ) : (
-                "Add"
+                "Add location"
               )}
             </Button>
           </Box>

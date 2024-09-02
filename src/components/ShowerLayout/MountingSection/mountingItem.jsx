@@ -8,83 +8,55 @@ const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
   const handleMountingChannelClick = () => {
     handleSetMounting(type, item._id === selectedItem ? null : item._id);
   };
-  const handleOtherMountingClick = () => {
+  const handleOtherMountingValueOnCounterChange = (counterVal) => {
+
     switch (type) {
       case hardwareTypes.WALLCLAMP:
-        handleSetMounting(type, {
-          ...selectedItem,
-          wallClampType:
-            item._id === selectedItem?.wallClampType ? null : item._id,
-        });
-        break;
+        return { wallClampType: counterVal > 0 ? item._id : null, count: counterVal }
       case hardwareTypes.SLEEVEOVER:
-        handleSetMounting(type, {
-          ...selectedItem,
-          sleeveOverType:
-            item._id === selectedItem?.sleeveOverType ? null : item._id,
-        });
-        break;
+        return { sleeveOverType: counterVal > 0 ? item._id : null, count: counterVal }
       case hardwareTypes.GLASSTOGLASS:
-        handleSetMounting(type, {
-          ...selectedItem,
-          glassToGlassType:
-            item._id === selectedItem?.glassToGlassType ? null : item._id,
-        });
-        break;
+        return { glassToGlassType: counterVal > 0 ? item._id : null, count: counterVal }
       case hardwareTypes.CORNERWALLCLAMP:
-        handleSetMounting(type, {
-          ...selectedItem,
-          wallClampType:
-            item._id === selectedItem?.wallClampType ? null : item._id,
-        });
-        break;
+        return { wallClampType: counterVal > 0 ? item._id : null, count: counterVal }
       case hardwareTypes.CORNERSLEEVEOVER:
-        handleSetMounting(type, {
-          ...selectedItem,
-          sleeveOverType:
-            item._id === selectedItem?.sleeveOverType ? null : item._id,
-        });
-        break;
+        return { sleeveOverType: counterVal > 0 ? item._id : null, count: counterVal }
       case hardwareTypes.CORNERGLASSTOGLASS:
-        handleSetMounting(type, {
-          ...selectedItem,
-          glassToGlassType:
-            item._id === selectedItem?.glassToGlassType ? null : item._id,
-        });
-        break;
+        return { glassToGlassType: counterVal > 0 ? item._id : null, count: counterVal }
       default:
-        break;
+        return null;
     }
   };
   const [count, setCount] = useState(selectedItem?.count);
   const handleCountSet = (newVal, event) => {
     event.stopPropagation();
     if (newVal >= 0) {
+      const updatedObject = handleOtherMountingValueOnCounterChange(newVal);
       setCount(newVal);
-      handleSetMounting(type, { ...selectedItem, count: newVal });
+      handleSetMounting(type, updatedObject);
     }
   };
   const isSelected =
     type === hardwareTypes.WALLCLAMP
       ? selectedItem.wallClampType
       : type === hardwareTypes.SLEEVEOVER
-      ? selectedItem.sleeveOverType
-      : type === hardwareTypes.GLASSTOGLASS
-      ? selectedItem.glassToGlassType
-      : type === hardwareTypes.CORNERWALLCLAMP
-      ? selectedItem.wallClampType
-      : type === hardwareTypes.CORNERSLEEVEOVER
-      ? selectedItem.sleeveOverType
-      : type === hardwareTypes.CORNERGLASSTOGLASS
-      ? selectedItem.glassToGlassType
-      : selectedItem;
+        ? selectedItem.sleeveOverType
+        : type === hardwareTypes.GLASSTOGLASS
+          ? selectedItem.glassToGlassType
+          : type === hardwareTypes.CORNERWALLCLAMP
+            ? selectedItem.wallClampType
+            : type === hardwareTypes.CORNERSLEEVEOVER
+              ? selectedItem.sleeveOverType
+              : type === hardwareTypes.CORNERGLASSTOGLASS
+                ? selectedItem.glassToGlassType
+                : selectedItem;
   return (
     <MenuItem
       key={item.id}
       onClick={
         type === hardwareTypes.CHANNEL
           ? handleMountingChannelClick
-          : handleOtherMountingClick
+          : () => { }
       }
       sx={{ padding: 0 }}
     >
@@ -121,12 +93,12 @@ const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
             "cornerSleeveOver",
             "cornerGlassToGlass",
           ].includes(type) && (
-            <ActionButtons
-              key={`${type}-${item.slug}`}
-              handleCountSet={handleCountSet}
-              count={count}
-            />
-          )}
+              <ActionButtons
+                key={`${type}-${item.slug}`}
+                handleCountSet={handleCountSet}
+                count={count}
+              />
+            )}
         </Box>
       </Box>
     </MenuItem>

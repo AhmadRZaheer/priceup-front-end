@@ -300,9 +300,9 @@ export default function AddTeamMembers({
                       borderRadius: "54px !important",
                       border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: "10px 12px !important",
-                      lineHeight: "21px",
-                      fontSize: 16,
+                      p: '10px 12px !important',
+                      lineHeight: '21px',
+                      fontSize: 16
                     }}
                     onClick={handleButtonClick}
                   >

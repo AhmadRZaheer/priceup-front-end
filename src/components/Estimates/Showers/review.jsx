@@ -236,19 +236,24 @@ export const ShowerReview = ({ setStep }) => {
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
-  let disable_com = false;
-  if (currentQuoteState === "create") {
-    disable_com = !selectedData || !measurements?.length;
-  } else if (currentQuoteState === "custom") {
-    let allFilled = true;
-    Object.entries(measurements).forEach?.(([key, value]) => {
-      const { count, width, height } = value;
-      if (!width || !height) {
-        allFilled = false;
-      }
-    });
-    disable_com = !allFilled;
-  }
+  const disable_com = useMemo(()=>{
+    let status = false;
+    if (currentQuoteState === "create") {
+      status = !selectedData || !measurements?.length;
+    } else if (currentQuoteState === "custom") {
+      let arraylength = Object.entries(measurements)?.length;
+      // Object.entries(measurements).forEach?.(([key, value]) => {
+      //   const { count, width, height } = value;
+      //   console.log(width,'width',height,'height',);
+      //   if (!width || !height) {
+      //     notAllFilled = false;
+      //   }
+      // });
+      status = arraylength > 0 ? false : true;
+    }
+    return status;
+  },[measurements])
+
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
     const estimateConfig = generateEstimatePayload(
@@ -290,6 +295,14 @@ export const ShowerReview = ({ setStep }) => {
       })
     );
   };
+
+  const handleCancel = () => {
+  if(projectId){ 
+    navigate(`/projects/${projectId}`);
+  }else{
+    navigate("/estimates") 
+  }
+  }
 
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
@@ -339,7 +352,7 @@ export const ShowerReview = ({ setStep }) => {
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       if (projectId) {
-        navigate(`projects/${projectId}`);
+        navigate(`/projects/${projectId}`);
       } else {
         navigate("/estimates");
       }
@@ -409,9 +422,9 @@ export const ShowerReview = ({ setStep }) => {
     });
     return () => {
       console.log("unmount");
-      dispatch(resetNotifications());
+      // dispatch(resetNotifications());
     };
-  }, []);
+  }, [notifications]);
 
   return (
     <>
@@ -1332,7 +1345,7 @@ export const ShowerReview = ({ setStep }) => {
                         color: "#8477DA",
                         fontSize:'16px',
                         fontWeight:600,
-                        p:'10px 0px !important',
+                        p:'10px !important',
                         // backgroundColor: "#8477da",
                         "&:hover": {
                           // backgroundColor: "#8477da",
@@ -1484,11 +1497,9 @@ export const ShowerReview = ({ setStep }) => {
                   }}
                 >
                   {currentQuoteState === quoteState.EDIT && (
-                    <Link
-                      to={"/estimates"}
-                      style={{ textDecoration: "none", width: "100%" }}
-                    >
+                    
                       <Button
+                         onClick={handleCancel}
                         fullWidth
                         sx={{
                           boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -1500,7 +1511,7 @@ export const ShowerReview = ({ setStep }) => {
                       >
                         Cancel
                       </Button>
-                    </Link>
+                
                   )}
 
                   <Button

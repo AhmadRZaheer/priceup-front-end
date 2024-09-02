@@ -1,25 +1,22 @@
 import React from "react";
 import "./hardware.scss";
-import Sidebar from "../../components/Sidebar/sidebar";
-import HardwareTable from "../../components/HardwareTable/hardwareTable";
-import TopBar from "@/components/TopBar";
-import CommonSideBar from "@/components/CommonSideBar";
+import HardwareTable from "@/components/HardwareTable/hardwareTable";
+
 import CommonLayout from "@/components/CommonLayout";
+import { Box } from "@mui/material";
+import ShowersHardWare from "@/components/Hardware";
 
 const Hardware = () => {
   return (
     <>
-    {/* <TopBar/>
-    <div className="Customers"> */}
-      {/* <Sidebar /> */}
-      {/* <CommonSideBar/> */}
       <CommonLayout>
       <div className="customersContainer">
         <HardwareTable />
+        {/* <Box className="econtent-wrapper" sx={{ px: { lg: '28px',sm:'20px', xs: '0px' } }}>
+        <ShowersHardWare />
+        </Box> */}
       </div>
       </CommonLayout>
-      
-    {/* </div> */}
     </>
     
   );

@@ -270,7 +270,7 @@ const EditShowerLayout = () => {
       setAddMoreItemsArray(items);
 
       setMounting({
-        channelOrClamps: singleLayout?.layoutData?.settings?.channelOrClamps,
+        channelOrClamps: singleLayout?.layoutData?.settings?.channelOrClamps || "Channel",
         mountingChannel: singleLayout?.layoutData?.settings?.mountingChannel,
         wallClamp: singleLayout?.layoutData?.settings?.wallClamp,
         sleeveOver: singleLayout?.layoutData?.settings?.sleeveOver,

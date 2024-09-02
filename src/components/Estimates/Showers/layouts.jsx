@@ -28,6 +28,7 @@ import bgCustom from "@/Assets/customlayoutimage.svg";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { CheckCircle, Close } from "@mui/icons-material";
 import icon from "../../../Assets/search-icon.svg";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 export const ShowerLayouts = () => {
   const boxStyles = {
@@ -48,7 +49,7 @@ export const ShowerLayouts = () => {
     cursor: "pointer",
   };
 
-  const { data: layouts, isLoading: loading, refetch } = useFetchDataDefault();
+  const { data: layouts, isFetched, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedData = useSelector(selectedItem);
@@ -230,7 +231,7 @@ export const ShowerLayouts = () => {
           </Box>
         </Box>
         <Box sx={{ p: 2, background: "#F6F5FF" }}>
-          {loading ? (
+          {!isFetched ? (
             <Box
               sx={{
                 width: 40,
@@ -335,52 +336,9 @@ export const ShowerLayouts = () => {
                     alignItems: "center",
                   }}
                 >
-                  no Layout Found
+                  No Layout Found
                 </Typography>
               )}
-
-              {/* <Box
-                onClick={handleselectcustom}
-                sx={{
-                  ...boxStyles,
-                  backgroundColor: selectCustom
-                    ? "rgba(132, 119, 218, 0.1)"
-                    : "white",
-                  color: "black",
-                  position: "relative",
-                  width: "255px",
-                  height: "309px",
-                  border: selectCustom
-                    ? "1px solid rgba(132, 119, 218, 1)"
-                    : "1px solid rgba(208, 213, 221, 1)",
-                }}
-              >
-                {selectCustom && (
-                  <Box
-                    sx={{ position: "absolute", right: "10px", top: "10px" }}
-                  >
-                    <CheckCircle
-                      sx={{
-                        color: "rgba(132, 119, 218, 1)",
-                        width: "21px",
-                        height: "21px",
-                      }}
-                    />
-                  </Box>
-                )}
-                <img
-                  style={{
-                    zIndex: 1,
-                    width: "200px",
-                    height: "255px",
-                  }}
-                  src={bgCustom}
-                  alt="custom image"
-                />
-                <Typography sx={{ font: "16px", fontWeight: 600 }}>
-                  Custom
-                </Typography>
-              </Box> */}
             </Grid>
           )}
         </Box>

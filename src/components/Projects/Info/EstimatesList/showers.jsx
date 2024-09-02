@@ -16,22 +16,23 @@ import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { generateObjectForPDFPreview, renderMeasurementSides, setStateForShowerEstimate } from "@/utilities/estimates";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { debounce } from "lodash";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common")
 
-const debounce = (func, delay) => {
-    let timeout;
-    return (...args) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            func(...args);
-        }, delay);
-    };
-};
+// const debounce = (func, delay) => {
+//     let timeout;
+//     return (...args) => {
+//         clearTimeout(timeout);
+//         timeout = setTimeout(() => {
+//             func(...args);
+//         }, delay);
+//     };
+// };
 const routePrefix = `${backendURL}/estimates`;
 
-const ShowerEstimatesList = ({ projectId,Status }) => {
+const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
     const isMobile = useMediaQuery("(max-width:600px)");
-    const [search, setSearch] = useState("");
+    // const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -47,12 +48,22 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
     });
     const classes = useStyles();
     const itemsPerPage = 10;
+    let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.SHOWERS}`;
+    if (searchValue && searchValue.length) {
+        fetchAllEstimatesUrl += `&search=${searchValue}`;
+    }
+    if (statusValue) {
+        fetchAllEstimatesUrl += `&status=${statusValue}`;
+    }
+    if (dateValue) {
+        fetchAllEstimatesUrl += `&date=${dateValue}`
+    }
     const {
         data: estimatesList,
         isLoading,
         isFetching: estimatesListFetching,
         refetch: refetchEstimatesList,
-    } = useFetchAllDocuments(`${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&search=${search}&category=${EstimateCategory.SHOWERS}&status=${Status}`);
+    } = useFetchAllDocuments(fetchAllEstimatesUrl);
     const {
         mutate: deleteEstimates,
         isSuccess: deletedSuccessfully,
@@ -113,10 +124,10 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
         } else {
             return [];
         }
-    }, [estimatesList, search]);
+    }, [estimatesList, searchValue]);
     useEffect(() => {
         refetchEstimatesList();
-    }, [page, deletedSuccessfully, projectId]);
+    }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
 
     const debouncedRefetch = useCallback(
         debounce(() => {
@@ -126,14 +137,21 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
             else {
                 setPage(1);
             }
-        }, 500),
-        [search]
+        }, 700),
+        [page]
     );
-
-    const handleChange = (e) => {
-        setSearch(e.target.value);
+    useEffect(() => {
         debouncedRefetch();
-    };
+        // Cleanup function to cancel debounce if component unmounts
+        return () => {
+          debouncedRefetch.cancel();
+        };
+      }, [searchValue]);
+
+    // const handleChange = (e) => {
+    //     // setSearch(e.target.value);
+    //     debouncedRefetch();
+    // };
     return (<>
         {/* <Box
             sx={{
@@ -146,8 +164,8 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
             <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
                 Estimates
             </Typography> */}
-            {/* Search input field */}
-            {/* <TextField
+        {/* Search input field */}
+        {/* <TextField
                 placeholder="Search by Customer Name"
                 value={search}
                 variant="standard"
@@ -184,7 +202,7 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
                 Add
             </IconButton>
         </Box> */}
-        
+
         {isLoading ? (
             <Box
                 sx={{
@@ -195,18 +213,18 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
                     alignItems: "center",
                     maxHeight: "70vh",
                     minHeight: "20vh",
-                    background:'#FFFF',
-                    pb:3
+                    background: '#FFFF',
+                    pb: 3
                 }}
             >
                 <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background:'#FFFF' }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
                 No Estimate Found
             </Typography>
-        ) : (                           
-            <Box sx={{ background:'#FFFF',pb:3}}>
+        ) : (
+            <Box sx={{ background: '#FFFF', pb: 3 }}>
                 {isMobile ?
                     (filteredData?.map((item) => <Box
                         key={item._id}
@@ -215,7 +233,7 @@ const ShowerEstimatesList = ({ projectId,Status }) => {
                             justifyContent: "space-between",
                             paddingY: 2,
                             borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                            background:'#FFFF'
+                            background: '#FFFF'
                         }}
                     >
                         <Box sx={{ display: "flex", gap: 1 }}>

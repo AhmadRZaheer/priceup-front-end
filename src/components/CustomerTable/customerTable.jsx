@@ -21,44 +21,31 @@ import CustomIconButton from "@/components/ui-components/CustomButton";
 import ModeIcon from "@mui/icons-material/Mode";
 import EditCustomer from "@/components/Modal/editCustomer";
 import Pagination from "../Pagination";
-import { debounce } from "@/utilities/common";
+// import { debounce } from "@/utilities/common";
 import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import { useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 const CustomerTable = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const itemsPerPage = 10;
-  const [status, setStatus] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
   const {
     data: customersList,
     refetch: customersRefetch,
     isFetching,
-  } = useFetchDataCustomer(page, itemsPerPage, search, status, selectedDate);
+  } = useFetchDataCustomer(page, itemsPerPage, search);
   // const refetchData = useSelector(getDataRefetch);
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
 
-  const handleDateChange = (newDate) => {
-    if (newDate) {
-      // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate)
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
-      setSelectedDate(adjustedDate);
-    } else {
-      setSelectedDate(null);
-    }
-  };
+
   // pagination state:
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
@@ -87,29 +74,36 @@ const CustomerTable = () => {
       } else {
         setPage(1);
       }
-    }, 500),
-    [search]
+    }, 700),
+    [page]
   );
 
   const handleChange = (e) => {
     setSearch(e.target.value);
-    debouncedRefetch();
+    // debouncedRefetch();
   };
   const handleResetFilter = () => {
     setSearch("");
-    setStatus(null);
-    setSelectedDate(null);
   };
   const handleCloseQuotes = () => setOpenQuotesModal(false);
   const handleCloseEdit = () => setOpenEditModal(false);
-  const handleViewQuotes = (params) => {
-    setSelectedRowData(params.row);
-    setOpenQuotesModal(true);
-  };
-  const handleOpenEdit = (item) => {
-    setSelectedRowData(item);
-    setOpenEditModal(true);
-  };
+
+  useEffect(() => {
+    debouncedRefetch();
+    // Cleanup function to cancel debounce if component unmounts
+    return () => {
+      debouncedRefetch.cancel();
+    };
+  }, [search]);
+
+  // const handleViewQuotes = (params) => {
+  //   setSelectedRowData(params.row);
+  //   setOpenQuotesModal(true);
+  // };
+  // const handleOpenEdit = (item) => {
+  //   setSelectedRowData(item);
+  //   setOpenEditModal(true);
+  // };
   const actionColumn = [
     {
       field: "Actions",
@@ -190,7 +184,7 @@ const CustomerTable = () => {
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
-                  placeholder="Search"
+                  placeholder="Search by name"
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
@@ -202,90 +196,8 @@ const CustomerTable = () => {
                   onChange={handleChange}
                 />
               </Box>
-              <Box>
-                <DesktopDatePicker
-                  label="Date Added"
-                  inputFormat="MM/DD/YYYY"
-                  className="custom-textfield"
-                  // maxDate={new Date()} // Sets the maximum date to the current date
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  sx={{
-                    "& .MuiInputBase-root": {
-                      height: 40,
-                      width: 150,
-                      backgroundColor: "white", // Adjust height
-                    },
-                    "& .MuiInputBase-input": {
-                      fontSize: "0.875rem", // Adjust font size
-                      padding: "8px 14px", // Adjust padding
-                    },
-                    "& .MuiInputLabel-root": {
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      fontFamily: '"Roboto",sans-serif !important',
-                      top: "-5px", // Adjust label size
-                      color: "#000000",
-                    },
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} size="small" />
-                  )}
-                />
-              </Box>
             </Box>
             <Box sx={{ display: "flex", gap: 1, pt: { sm: 0, xs: 1 } }}>
-              <FormControl sx={{ width: "152px" }} size="small">
-                <Select
-                  value={status}
-                  id="demo-select-small"
-                  className="custom-textfield"
-                  size="small"
-                  displayEmpty
-                  sx={{ height: "40px" }}
-                  onChange={(e) => setStatus(e.target.value)}
-                  renderValue={(selected) => {
-                    if (selected === null) {
-                      return (
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            // lineHeight: '16.41px',
-                            color: "#000000",
-                            fontFamily: '"Roboto",sans-serif !important',
-                          }}
-                        >
-                          Status
-                        </Typography>
-                      );
-                    }
-
-                    return (
-                      <StatusChip
-                        variant={selected}
-                        sx={{ padding: 0, px: 2 }}
-                      />
-                    );
-                  }}
-                >
-                  <MenuItem value={"pending"}>
-                    <StatusChip
-                      variant={"pending"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
-                  </MenuItem>
-                  <MenuItem value={"voided"}>
-                    <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
-                  </MenuItem>
-                  <MenuItem value={"approved"}>
-                    <StatusChip
-                      variant={"approved"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
-                  </MenuItem>
-                </Select>
-              </FormControl>
               <Button
                 variant="text"
                 onClick={handleResetFilter}

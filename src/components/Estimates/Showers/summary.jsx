@@ -48,7 +48,7 @@ import { layoutVariants } from "@/utilities/constants";
 import { renderMeasurementSides } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 
 const Summary = ({ setStep }) => {
@@ -75,7 +75,6 @@ const Summary = ({ setStep }) => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const sqftArea = useSelector(getLayoutArea);
-  let disable_com = false;
   const [anchorEl, setAnchorEl] = useState(null);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
@@ -102,18 +101,24 @@ const Summary = ({ setStep }) => {
 
   const alertPopoverOpen = Boolean(anchorEl);
   const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
-  if (quoteState === "create") {
-    disable_com = !selectedData || !measurements?.length;
-  } else if (quoteState === "custom") {
-    let allFilled = true;
-    Object.entries(measurements).forEach?.(([key, value]) => {
-      const { count, width, height } = value;
-      if (!width || !height) {
-        allFilled = false;
-      }
-    });
-    disable_com = !allFilled;
-  }
+  const disable_com = useMemo(()=>{
+    let status = false;
+    if (quoteState === "create") {
+      status = !selectedData || !measurements?.length;
+    } else if (quoteState === "custom") {
+      let arraylength = Object.entries(measurements)?.length;
+      // Object.entries(measurements).forEach?.(([key, value]) => {
+      //   const { count, width, height } = value;
+      //   console.log(width,'width',height,'height',);
+      //   if (!width || !height) {
+      //     notAllFilled = false;
+      //   }
+      // });
+      status = arraylength > 0 ? false : true;
+    }
+    return status;
+  },[measurements])
+  
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
@@ -279,7 +284,7 @@ const Summary = ({ setStep }) => {
               Columns[2].active === false &&
               Columns[3].active === false &&
               Columns[4].active === false ? (
-              <Typography>no Esimate Details</Typography>
+              <Typography>No Estimate Detail</Typography>
             ) : (
               <Grid container spacing={2}>
                 {Columns[0].active && (
@@ -311,7 +316,7 @@ const Summary = ({ setStep }) => {
                             "Custom"}
                         </Typography>
                       </Box>
-                      {doorWidth && (
+                      {doorWidth && doorWidth > 0 ?  (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Door Width:
@@ -320,7 +325,7 @@ const Summary = ({ setStep }) => {
                             {doorWidth}
                           </Typography>
                         </Box>
-                      )}
+                      ) : ''}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Square Foot:
@@ -682,14 +687,6 @@ const Summary = ({ setStep }) => {
                       >
                         Pricing Subcategories
                       </Typography>
-                      <Box>
-                        <Typography className="text-xs-ragular-bold">
-                          Hardware Price:
-                        </Typography>
-                        <Typography className="text-xs-ragular">
-                          ${hardwarePrice?.toFixed(2) || 0}
-                        </Typography>
-                      </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Hardware Price:

@@ -18,7 +18,7 @@ import {
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomerSelect from "./CustomerSelect";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useCreateDocument,
   useEditDocument,
@@ -35,9 +35,11 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
 import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
 import StatusChip from "@/components/common/StatusChip";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const validationSchema = yup.object({
-  name: yup.string().required("Project Name is required"),
+  name: yup.string().required("Project Name is required").min(4, 'Must be at least 4 characters'),
   status: yup.string().required("Project Status is required"),
 });
 const routePrefix = `${backendURL}/projects`;
@@ -47,7 +49,9 @@ const ProjectInfoComponent = ({
   projectData = null,
 }) => {
   const decryptedToken = getDecryptedToken();
-  const [Status, setStatus] = useState(null);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const creatorName =
     projectState === "create"
       ? decryptedToken?.name
@@ -72,6 +76,8 @@ const ProjectInfoComponent = ({
   const [selectedAddress, setSelectedAddress] = useState(
     projectData?.addressData || null
   );
+  const [projectName, setProjectName] = useState(projectData?.name || "");
+  const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const [activeTabNumber, setActiveTabNumber] = useState(0); // 0 for showers, 1 for mirrors
@@ -83,11 +89,11 @@ const ProjectInfoComponent = ({
 
   const formik = useFormik({
     initialValues: {
-      name: projectData?.name || "",
+      name: projectName,
       status: projectData?.status || projectStatus.PENDING,
       customer: selectedCustomer?.name || "",
       address: selectedAddress?.name || "",
-      notes: projectData?.notes || "",
+      notes: projectNotes,
     },
     validationSchema,
     enableReinitialize: true,
@@ -146,13 +152,46 @@ const ProjectInfoComponent = ({
     setSelectedAddress(address);
     setOpenAddressSelectModal(false);
   };
-  //Serach State
-  const [search, setSearch] = useState("");
+
+  const handleDateChange = (newDate) => {
+    if (newDate) {
+      // Set time to noon (12:00) to avoid time zone issues
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
+      setSelectedDate(adjustedDate);
+    } else {
+      setSelectedDate(null);
+    }
+  };
+
+  const handleSearchChange = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const handleResetFilter = () => {
+    setSearch("");
+    setStatus(null);
+    setSelectedDate(null);
+  };
+  const handleClearProjectName = () => {
+    formik.setFieldValue("name", "");
+  }
 
   //Craete Model
   const [openCategoryModal, setOpenCategoryModal] = useState(false);
   const handleOpenCategoryModal = () => setOpenCategoryModal(true);
   const handleCloseCategoryModal = () => setOpenCategoryModal(false);
+
+  useEffect(() => {
+    setProjectName(formik.values.name);
+  }, [formik.values.name])
+
+  useEffect(() => {
+    setProjectNotes(formik.values.notes);
+  }, [formik.values.notes])
 
   return (
     <Box
@@ -176,7 +215,7 @@ const ProjectInfoComponent = ({
               fontWeight: 600,
               color: "#000000",
               display: "flex",
-              lineHeight:'32.78px',
+              lineHeight: '32.78px',
               gap: 1,
             }}
           >
@@ -190,8 +229,8 @@ const ProjectInfoComponent = ({
               color: "#212528",
               fontSize: { lg: 16, md: 14 },
               fontWeight: 600,
-              lineHeight:'21.86px',
-              opacity:'70%'
+              lineHeight: '21.86px',
+              opacity: '70%'
             }}
           >
             Create, edit and manage your Projects.
@@ -323,7 +362,7 @@ const ProjectInfoComponent = ({
                               <InputAdornment
                                 position="end"
                                 sx={{ cursor: "pointer" }}
-                                onClick={() => { }}
+                                onClick={handleClearProjectName}
                               >
                                 <Close sx={{}} />
                               </InputAdornment>
@@ -388,7 +427,7 @@ const ProjectInfoComponent = ({
                         value={creatorName}
                       /> */}
                       </Box>
-                      {/** Address Select Block */}
+                      {/** Customer Select Block */}
 
                       <Box
                         sx={{
@@ -404,24 +443,23 @@ const ProjectInfoComponent = ({
                           }}
                         >
                           <Box mb={0.6}>
-                            <label htmlFor="name">Location:</label>
+                            <label htmlFor="name">Select Customer:</label>
                             {/* <span style={{ color: "red" }}>*</span> */}
                           </Box>
                           <CustomInputField
-                            disabled={!selectedCustomer}
-                            id="address"
-                            name="address"
-                            // label="Select an Address"
+                            id="customer"
+                            name="customer"
+                            // label="Select a Customer"
                             size="small"
                             variant="outlined"
-                            onClick={handleAddressSelect}
+                            onClick={handleCustomerSelect}
                             InputProps={{
-                              endAdornment: selectedAddress ? (
+                              endAdornment: selectedCustomer ? (
                                 <InputAdornment
                                   position="end"
                                   sx={{ cursor: "pointer" }}
                                   onClick={(event) => {
-                                    handleAddressUnSelect(event);
+                                    handleCustomerUnSelect(event);
                                   }}
                                 >
                                   <Close sx={{}} />
@@ -440,35 +478,25 @@ const ProjectInfoComponent = ({
                               color: { sm: "black", xs: "white" },
                               width: "100%",
                             }}
-                            value={formik.values.address}
+                            value={formik.values.customer}
+                            onChange={() => { }}
                           />
                         </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.street}
+                            {selectedCustomer?.email}
                           </Typography>
                         </Box>
                         <Box
                           sx={{
                             display: "flex",
-                            gap: 0.5,
-                            alignItems: "baseline",
                             paddingX: 0.5,
+                            gap: 0.6,
+                            flexWrap: "wrap",
                           }}
                         >
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.state},
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.city}
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.postalCode}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.country}
+                            {selectedCustomer?.address}
                           </Typography>
                         </Box>
                       </Box>
@@ -561,6 +589,7 @@ const ProjectInfoComponent = ({
                         </Select>
                       </FormControl> */}
                       </Box>
+
                       <Box
                         sx={{
                           display: "flex",
@@ -600,7 +629,7 @@ const ProjectInfoComponent = ({
                         value={createdDate}
                       /> */}
                       </Box>
-                      {/** Customer Select Block */}
+                      {/** Address Select Block */}
 
                       <Box
                         sx={{
@@ -616,23 +645,24 @@ const ProjectInfoComponent = ({
                           }}
                         >
                           <Box mb={0.6}>
-                            <label htmlFor="name">Select Customer:</label>
+                            <label htmlFor="name">Location:</label>
                             {/* <span style={{ color: "red" }}>*</span> */}
                           </Box>
                           <CustomInputField
-                            id="customer"
-                            name="customer"
-                            // label="Select a Customer"
+                            disabled={!selectedCustomer}
+                            id="address"
+                            name="address"
+                            // label="Select an Address"
                             size="small"
                             variant="outlined"
-                            onClick={handleCustomerSelect}
+                            onClick={handleAddressSelect}
                             InputProps={{
-                              endAdornment: selectedCustomer ? (
+                              endAdornment: selectedAddress ? (
                                 <InputAdornment
                                   position="end"
                                   sx={{ cursor: "pointer" }}
                                   onClick={(event) => {
-                                    handleCustomerUnSelect(event);
+                                    handleAddressUnSelect(event);
                                   }}
                                 >
                                   <Close sx={{}} />
@@ -651,28 +681,39 @@ const ProjectInfoComponent = ({
                               color: { sm: "black", xs: "white" },
                               width: "100%",
                             }}
-                            value={formik.values.customer}
-                            onChange={() => { }}
+                            value={formik.values.address}
                           />
                         </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.email}
+                            {selectedAddress?.street}
                           </Typography>
                         </Box>
                         <Box
                           sx={{
                             display: "flex",
+                            gap: 0.5,
+                            alignItems: "baseline",
                             paddingX: 0.5,
-                            gap: 0.6,
-                            flexWrap: "wrap",
                           }}
                         >
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.address}
+                            {selectedAddress?.state},
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.city}
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.postalCode}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.country}
                           </Typography>
                         </Box>
                       </Box>
+
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
@@ -747,7 +788,7 @@ const ProjectInfoComponent = ({
                       backgroundColor: "#8477da",
                     },
                   }}
-                  disabled={!selectedCustomer || !selectedAddress}
+                  disabled={!selectedCustomer || !selectedAddress || projectName?.length < 4}
                   variant="contained"
                 >
                   {updateLoading || createLoading ? (
@@ -797,7 +838,38 @@ const ProjectInfoComponent = ({
                     ),
                   }}
                   value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  onChange={handleSearchChange}
+                />
+              </Box>
+              <Box>
+                <DesktopDatePicker
+                  label="Date Added"
+                  inputFormat="MM/DD/YYYY"
+                  className="custom-textfield"
+                  // maxDate={new Date()} // Sets the maximum date to the current date
+                  value={selectedDate}
+                  onChange={handleDateChange}
+                  sx={{
+                    "& .MuiInputBase-root": {
+                      height: 40,
+                      width: 150,
+                      backgroundColor: "white", // Adjust height
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: "0.875rem", // Adjust font size
+                      padding: "8px 14px", // Adjust padding
+                    },
+                    "& .MuiInputLabel-root": {
+                      fontSize: "14px",
+                      fontWeight: 400,
+                      fontFamily: '"Roboto",sans-serif !important',
+                      top: "-5px", // Adjust label size
+                      color: '#000000'
+                    },
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} size="small" />
+                  )}
                 />
               </Box>
               <FormControl
@@ -806,7 +878,7 @@ const ProjectInfoComponent = ({
               // className="custom-textfield"
               >
                 <Select
-                  value={Status}
+                  value={status}
                   className="custom-textfield"
                   id="demo-select-small"
                   size="small"
@@ -816,13 +888,13 @@ const ProjectInfoComponent = ({
                   renderValue={(selected) => {
                     if (selected === null) {
                       return <Typography
-                      sx={{
-                        fontSize: '14px',
-                        fontWeight: 400,
-                        // lineHeight: '16.41px',
-                        color: '#000000',
-                        fontFamily:'"Roboto",sans-serif !important'
-                      }}>Status</Typography>;
+                        sx={{
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          // lineHeight: '16.41px',
+                          color: '#000000',
+                          fontFamily: '"Roboto",sans-serif !important'
+                        }}>Status</Typography>;
                     }
 
                     return (
@@ -855,9 +927,11 @@ const ProjectInfoComponent = ({
               </FormControl>
               <Button
                 variant="text"
-                sx={{ color: "#0075FF", fontSize: "14px", minWidth: "98px" ,p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
+                onClick={handleResetFilter}
+                sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}
+              // sx={{ lineHeight: "21.86px" }}
               >
-                Clear Filters
+                Clear Filter
               </Button>
             </Box>
           </Box>
@@ -872,7 +946,7 @@ const ProjectInfoComponent = ({
               pt: { md: 2, xs: 1 },
               width: "99.5%",
               background: "#FFFF",
-              border:'1px solid #D0D5DD'
+              border: '1px solid #D0D5DD'
             }}
           >
             {/** Tabs Switch */}
@@ -886,17 +960,17 @@ const ProjectInfoComponent = ({
                   borderRadius: "6px",
                   background: "#F3F5F6",
                   width: "151px",
-                  minHeight:'40px',
-                  height:'40px',
+                  minHeight: '40px',
+                  height: '40px',
                   p: '2px',
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
                     borderRadius: "4px",
-                    p:'7px 12px',
+                    p: '7px 12px',
                     // minWidth:'79px',
-                    height:'40px',
-                    minHeight:'36px'
+                    height: '40px',
+                    minHeight: '36px'
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#8477DA",
@@ -905,23 +979,23 @@ const ProjectInfoComponent = ({
                 }}
               >
                 <Tab
-                className="categoryTab"
+                  className="categoryTab"
                   label="Showers"
                   sx={{
                     // fontSize: "14px",
                     // fontWeight: 600,
                     // color: "#000000",
                     // textTransform: "capitalize",
-                    minWidth:'70px',
+                    minWidth: '70px',
                     // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
                 />
                 <Tab
-                className="categoryTab"
+                  className="categoryTab"
                   label="Mirrors"
                   sx={{
-                    minWidth:'70px',
+                    minWidth: '70px',
                   }}
                   {...a11yProps(1)}
                 />
@@ -933,14 +1007,18 @@ const ProjectInfoComponent = ({
             <CustomTabPanel value={activeTabNumber} index={0}>
               <ShowerEstimatesList
                 projectId={projectData?._id}
-                Status={Status}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
             <CustomTabPanel value={activeTabNumber} index={1}>
               <MirrorEstimatesList
                 projectId={projectData?._id}
-                Status={Status}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
               />
             </CustomTabPanel>
           </Box>

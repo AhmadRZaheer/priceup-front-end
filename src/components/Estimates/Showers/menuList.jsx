@@ -36,9 +36,16 @@ const MenuList = ({
 }) => {
   const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);
-  const [countVal, setCountVal] = useState(count || 0);
-  const [thicknessVal, setThicknessVal] = useState(thickness || "1/2");
+  const [countVal, setCountVal] = useState(0);
+  const [thicknessVal, setThicknessVal] = useState("1/2");
   const [selectedItem, setSelectedItem] = useState(null);
+
+  useEffect(()=>{
+   setThicknessVal(thickness);
+  },[thickness])
+  useEffect(()=>{
+   setCountVal(count);
+  },[count])
   useEffect(() => {
     setSelectedItem(currentItem);
   }, [currentItem]);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Box,
   Button,
@@ -139,7 +139,7 @@ export const MirrorReview = ({ setStep }) => {
   const selectedContent = useSelector(getSelectedContent);
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
-  const disable_com = false;
+  const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
   //     dispatch(setToggles({ type, value }));
@@ -181,6 +181,15 @@ export const MirrorReview = ({ setStep }) => {
       })
     );
   };
+
+  const handleCancel = () => {
+    if(projectId){
+      navigate(`/projects/${projectId}`);
+    }
+    else {
+      navigate("/estimates") 
+    }
+  }
 
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
@@ -274,9 +283,9 @@ export const MirrorReview = ({ setStep }) => {
     });
     return () => {
       console.log("unmount");
-      dispatch(resetNotifications());
+      // dispatch(resetNotifications());
     };
-  }, []);
+  }, [notifications]);
 
   return (
     <>
@@ -1393,7 +1402,7 @@ export const MirrorReview = ({ setStep }) => {
                           color: "#8477DA",
                           fontSize:'16px',
                           fontWeight:600,
-                          p:'10px 0px !important',
+                          p:'10px !important',
                           // backgroundColor: "#8477da",
                           "&:hover": {
                             // backgroundColor: "#8477da",
@@ -1547,11 +1556,8 @@ export const MirrorReview = ({ setStep }) => {
                   }}
                 >
                   {currentEstimateState === quoteState.EDIT && (
-                    <Link
-                      to={"/estimates"}
-                      style={{ textDecoration: "none", width: "100%" }}
-                    >
                       <Button
+                        onClick={handleCancel}
                         fullWidth
                         sx={{
                           boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -1563,7 +1569,6 @@ export const MirrorReview = ({ setStep }) => {
                       >
                         Cancel
                       </Button>
-                    </Link>
                   )}
 
                   <Button

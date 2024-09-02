@@ -276,7 +276,7 @@ const ViewDrawer = ({ open, handleClose, data }) => {
                   </Typography>
                 </Grid>
               ) : ''}
-              {data.settings?.transom ? (
+              {/* {data.settings?.transom?.name ? (
                 <Grid
                   item
                   xs={5.5}
@@ -287,10 +287,10 @@ const ViewDrawer = ({ open, handleClose, data }) => {
                     Transom (if full height)
                   </Typography>
                   <Typography className="drawerBoldTitle">
-                    {data.settings?.transom}
+                    {data.settings?.transom?.name}
                   </Typography>
                 </Grid>
-              ) : ''}
+              ) : ''} */}
               {data.settings?.header?.name ? (
                 <Grid
                   item

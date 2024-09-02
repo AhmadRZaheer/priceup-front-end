@@ -26,6 +26,7 @@ const PDFPreview = () => {
   const [quote, setQuote] = useState(null);
   const handleClose = () => {
     localStorage.removeItem('pdf-estimate');
+    // navigate(-1);
     if(quote?.projectId){
       navigate(`/projects/${quote?.projectId}`);
     }else{

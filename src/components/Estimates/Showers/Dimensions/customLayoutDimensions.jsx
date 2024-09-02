@@ -37,6 +37,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
 import { NavLink, useNavigate } from "react-router-dom";
+import AlertsAndWarnings from "../AlertsAndWarnings";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -228,6 +229,7 @@ export const CustomLayoutDimensions = ({ setStep }) => {
             <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
               Layout & Measurement
             </Typography>
+            <AlertsAndWarnings />
           </Box>
           <Box
             sx={{

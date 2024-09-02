@@ -232,13 +232,13 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                       borderRadius: "54px !important",
                       border: "1px solid #D4DBDF",
                       textTransform: "capitalize",
-                      px: '10px 12px !important',
+                      p: '10px 12px !important',
                       lineHeight: '21px',
                       fontSize: 16
                     }}
                     onClick={handleButtonClick}
                   >
-                    Upload Profile Image
+                    Upload Location Image
                   </Button>
                   <Typography
                     variant="body2"
@@ -263,7 +263,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 <Typography className="input-label-text">Location Name</Typography>
                 <TextField
                   size="small"
-                  placeholder="location name"
+                  placeholder="Enter Location Name"
                   name="locationName"
                   className="custom-textfield"
                   value={formik.values.locationName}
@@ -283,10 +283,10 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 )}
               </Grid>
               <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                <Typography className="input-label-text">Location Email</Typography>
+                <Typography className="input-label-text">Location owner email</Typography>
                 <TextField
                   size="small"
-                  placeholder="email"
+                  placeholder="Enter Location Owner Email"
                   className="custom-textfield"
                   name="email"
                   value={formik.values.email}
@@ -304,10 +304,10 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 )}
               </Grid>
               <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                <Typography className="input-label-text">Owner Name</Typography>
+                <Typography className="input-label-text">Location Owner Name</Typography>
                 <TextField
                   size="small"
-                  placeholder="Name"
+                  placeholder="Location Owner Name"
                   className="custom-textfield"
                   name="name"
                   value={formik.values.name}
@@ -365,7 +365,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 {LoadingForAdd ? (
                   <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                 ) : (
-                  "Clone"
+                  "Clone Location"
                 )}
               </Button>
             </Box>

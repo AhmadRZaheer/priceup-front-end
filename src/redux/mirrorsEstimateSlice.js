@@ -224,6 +224,7 @@ const mirrorsEstimateSlice = createSlice({
       });
 
       state.estimateId = estimateData._id;
+      state.sqftArea = estimateData.config?.sqftArea;
       state.content = {
         ...state.content,
         glassType: {
