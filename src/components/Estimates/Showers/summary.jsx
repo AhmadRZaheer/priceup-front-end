@@ -697,14 +697,6 @@ const Summary = ({ setStep }) => {
                       </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
-                          Hardware Price:
-                        </Typography>
-                        <Typography className="text-xs-ragular">
-                          ${hardwarePrice?.toFixed(2) || 0}
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography className="text-xs-ragular-bold">
                           Glass Price:
                         </Typography>
                         <Typography className="text-xs-ragular">

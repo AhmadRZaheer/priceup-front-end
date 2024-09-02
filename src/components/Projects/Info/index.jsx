@@ -18,7 +18,7 @@ import {
 import { useFormik } from "formik";
 import * as yup from "yup";
 import CustomerSelect from "./CustomerSelect";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useCreateDocument,
   useEditDocument,
@@ -39,7 +39,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 const validationSchema = yup.object({
-  name: yup.string().required("Project Name is required"),
+  name: yup.string().required("Project Name is required").min(4, 'Must be at least 4 characters'),
   status: yup.string().required("Project Status is required"),
 });
 const routePrefix = `${backendURL}/projects`;
@@ -76,6 +76,8 @@ const ProjectInfoComponent = ({
   const [selectedAddress, setSelectedAddress] = useState(
     projectData?.addressData || null
   );
+  const [projectName, setProjectName] = useState(projectData?.name || "");
+  const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const [activeTabNumber, setActiveTabNumber] = useState(0); // 0 for showers, 1 for mirrors
@@ -87,11 +89,11 @@ const ProjectInfoComponent = ({
 
   const formik = useFormik({
     initialValues: {
-      name: projectData?.name || "",
+      name: projectName,
       status: projectData?.status || projectStatus.PENDING,
       customer: selectedCustomer?.name || "",
       address: selectedAddress?.name || "",
-      notes: projectData?.notes || "",
+      notes: projectNotes,
     },
     validationSchema,
     enableReinitialize: true,
@@ -174,11 +176,22 @@ const ProjectInfoComponent = ({
     setStatus(null);
     setSelectedDate(null);
   };
+  const handleClearProjectName = () => {
+    formik.setFieldValue("name", "");
+  }
 
   //Craete Model
   const [openCategoryModal, setOpenCategoryModal] = useState(false);
   const handleOpenCategoryModal = () => setOpenCategoryModal(true);
   const handleCloseCategoryModal = () => setOpenCategoryModal(false);
+
+  useEffect(() => {
+    setProjectName(formik.values.name);
+  }, [formik.values.name])
+
+  useEffect(() => {
+    setProjectNotes(formik.values.notes);
+  }, [formik.values.notes])
 
   return (
     <Box
@@ -349,7 +362,7 @@ const ProjectInfoComponent = ({
                               <InputAdornment
                                 position="end"
                                 sx={{ cursor: "pointer" }}
-                                onClick={() => { }}
+                                onClick={handleClearProjectName}
                               >
                                 <Close sx={{}} />
                               </InputAdornment>
@@ -414,7 +427,7 @@ const ProjectInfoComponent = ({
                         value={creatorName}
                       /> */}
                       </Box>
-                      {/** Address Select Block */}
+                      {/** Customer Select Block */}
 
                       <Box
                         sx={{
@@ -430,24 +443,23 @@ const ProjectInfoComponent = ({
                           }}
                         >
                           <Box mb={0.6}>
-                            <label htmlFor="name">Location:</label>
+                            <label htmlFor="name">Select Customer:</label>
                             {/* <span style={{ color: "red" }}>*</span> */}
                           </Box>
                           <CustomInputField
-                            disabled={!selectedCustomer}
-                            id="address"
-                            name="address"
-                            // label="Select an Address"
+                            id="customer"
+                            name="customer"
+                            // label="Select a Customer"
                             size="small"
                             variant="outlined"
-                            onClick={handleAddressSelect}
+                            onClick={handleCustomerSelect}
                             InputProps={{
-                              endAdornment: selectedAddress ? (
+                              endAdornment: selectedCustomer ? (
                                 <InputAdornment
                                   position="end"
                                   sx={{ cursor: "pointer" }}
                                   onClick={(event) => {
-                                    handleAddressUnSelect(event);
+                                    handleCustomerUnSelect(event);
                                   }}
                                 >
                                   <Close sx={{}} />
@@ -466,35 +478,25 @@ const ProjectInfoComponent = ({
                               color: { sm: "black", xs: "white" },
                               width: "100%",
                             }}
-                            value={formik.values.address}
+                            value={formik.values.customer}
+                            onChange={() => { }}
                           />
                         </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.street}
+                            {selectedCustomer?.email}
                           </Typography>
                         </Box>
                         <Box
                           sx={{
                             display: "flex",
-                            gap: 0.5,
-                            alignItems: "baseline",
                             paddingX: 0.5,
+                            gap: 0.6,
+                            flexWrap: "wrap",
                           }}
                         >
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.state},
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.city}
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.postalCode}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.country}
+                            {selectedCustomer?.address}
                           </Typography>
                         </Box>
                       </Box>
@@ -587,6 +589,7 @@ const ProjectInfoComponent = ({
                         </Select>
                       </FormControl> */}
                       </Box>
+
                       <Box
                         sx={{
                           display: "flex",
@@ -626,7 +629,7 @@ const ProjectInfoComponent = ({
                         value={createdDate}
                       /> */}
                       </Box>
-                      {/** Customer Select Block */}
+                      {/** Address Select Block */}
 
                       <Box
                         sx={{
@@ -642,23 +645,24 @@ const ProjectInfoComponent = ({
                           }}
                         >
                           <Box mb={0.6}>
-                            <label htmlFor="name">Select Customer:</label>
+                            <label htmlFor="name">Location:</label>
                             {/* <span style={{ color: "red" }}>*</span> */}
                           </Box>
                           <CustomInputField
-                            id="customer"
-                            name="customer"
-                            // label="Select a Customer"
+                            disabled={!selectedCustomer}
+                            id="address"
+                            name="address"
+                            // label="Select an Address"
                             size="small"
                             variant="outlined"
-                            onClick={handleCustomerSelect}
+                            onClick={handleAddressSelect}
                             InputProps={{
-                              endAdornment: selectedCustomer ? (
+                              endAdornment: selectedAddress ? (
                                 <InputAdornment
                                   position="end"
                                   sx={{ cursor: "pointer" }}
                                   onClick={(event) => {
-                                    handleCustomerUnSelect(event);
+                                    handleAddressUnSelect(event);
                                   }}
                                 >
                                   <Close sx={{}} />
@@ -677,28 +681,39 @@ const ProjectInfoComponent = ({
                               color: { sm: "black", xs: "white" },
                               width: "100%",
                             }}
-                            value={formik.values.customer}
-                            onChange={() => { }}
+                            value={formik.values.address}
                           />
                         </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.email}
+                            {selectedAddress?.street}
                           </Typography>
                         </Box>
                         <Box
                           sx={{
                             display: "flex",
+                            gap: 0.5,
+                            alignItems: "baseline",
                             paddingX: 0.5,
-                            gap: 0.6,
-                            flexWrap: "wrap",
                           }}
                         >
                           <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.address}
+                            {selectedAddress?.state},
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.city}
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.postalCode}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.country}
                           </Typography>
                         </Box>
                       </Box>
+
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
@@ -773,7 +788,7 @@ const ProjectInfoComponent = ({
                       backgroundColor: "#8477da",
                     },
                   }}
-                  disabled={!selectedCustomer || !selectedAddress}
+                  disabled={!selectedCustomer || !selectedAddress || projectName?.length < 4}
                   variant="contained"
                 >
                   {updateLoading || createLoading ? (
@@ -913,8 +928,8 @@ const ProjectInfoComponent = ({
               <Button
                 variant="text"
                 onClick={handleResetFilter}
-                sx={{p:'6px 8px !important',fontFamily:'"Roboto",sans-serif !important'}}
-                // sx={{ lineHeight: "21.86px" }}
+                sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}
+              // sx={{ lineHeight: "21.86px" }}
               >
                 Clear Filter
               </Button>

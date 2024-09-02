@@ -1,5 +1,5 @@
 import Logo from "@/Assets/bar-chart-2.svg";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import MountingItem from "./mountingItem";
 import { hardwareTypes, thicknessTypes } from "@/utilities/constants";
 import MountingList from "./mountingList";
@@ -12,9 +12,8 @@ const MountingSection = ({
   list,
   activeGlassThickness,
 }) => {
-  const [activeMounting, setActiveMounting] = useState(
-    mounting?.channelOrClamps || "Channel"
-  );
+  const [activeMounting, setActiveMounting] = useState("");
+
   const [showCornerClamps, setShowCornerClamps] = useState(false);
   const handleActiveMounting = (val) => {
     setActiveMounting(val);
@@ -64,6 +63,11 @@ const MountingSection = ({
     mounting?.cornerWallClamp?.wallClampType ||
     mounting?.cornerSleeveOver?.sleeveOverType ||
     mounting?.cornerGlassToGlass?.glassToGlassType;
+
+  useEffect(() => {
+    setActiveMounting(mounting?.channelOrClamps);
+  }, [mounting?.channelOrClamps])
+
   return (
     <Box sx={{ display: "flex", gap: 4, width: "100%" }}>
       <Box sx={{ width: "50%" }}>
