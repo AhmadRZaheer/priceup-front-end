@@ -52,10 +52,7 @@ export default function ShowerHardwareModel({
   close,
   recordToModify,
 }) {
-
-
   const inputRef = useRef(null); // Create a ref for the file input
-
   const handleButtonClick = () => {
     inputRef.current.click(); // Trigger click on the file input
   };
@@ -192,7 +189,7 @@ export default function ShowerHardwareModel({
                 <Typography color="error">{formik.errors.image}</Typography>
               )} */}
             </Box>
-            <Box  sx={{display:'flex',flexDirection:'column' ,gap:'16px'}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <Box sx={{ width: "100%", }} className='model-field'>
                 <Typography className="input-label-text">Hardware Label</Typography>
                 <TextField
@@ -210,8 +207,10 @@ export default function ShowerHardwareModel({
                 />
               </Box>
               <Box sx={{ width: "100%", }} className='model-field'>
-                <Typography className="input-label-text">Hardware Label</Typography>
-                <Accordion sx={{ background: '#FFFFFF', boxShadow: 'none', border: '1px solid #D4DBDF', borderRadius: '4px', }}>
+                <Typography className="input-label-text">Fabrication </Typography>
+                <Accordion sx={{ background: '#FFFFFF', boxShadow: 'none', border: '1px solid #D4DBDF', borderRadius: '4px', "&.Mui-expanded":{
+                   borderRadius: '4px 4px 12px 12px'
+                } }}>
                   <AccordionSummary
                     expandIcon={<ExpandMoreIcon sx={{ color: '#000000' }} />}
                     aria-controls="panel1-content"
@@ -222,7 +221,8 @@ export default function ShowerHardwareModel({
                       minHeight: "40px",
                       "&.Mui-expanded": {
                         minHeight: "40px",
-                        height: '40px'
+                        height: '40px',
+                        borderBottom:'1px solid #D0D5DD',
                       },
                       ".MuiAccordionSummary-content": {
                         margin: '0px !important'
@@ -231,10 +231,10 @@ export default function ShowerHardwareModel({
                   >
                     <Typography sx={{ fontSize: '14px', lineHeight: '19.12px', color: '#959EA3' }}>Using customized values</Typography>
                   </AccordionSummary>
-                  <AccordionDetails style={{ p: "24px 30px" }}>
+                  <AccordionDetails sx={{ p: "24px 30px" }}>
                     <Grid container spacing={2}>
                       <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                        <Typography className="input-label-text">1" Holes</Typography>
+                        <Typography className="accordian-label-text">1" Holes</Typography>
                         <TextField
                           size="small"
                           placeholder="01"
@@ -242,11 +242,11 @@ export default function ShowerHardwareModel({
                           className="custom-textfield"
                           variant="outlined"
                           fullWidth
-                          sx={{...fieldSx}}
+                          sx={{ ...fieldSx }}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <EditOutlinedIcon sx={{width:'20px',height:'20px'}} />
+                                <EditOutlinedIcon sx={{ width: '20px', height: '20px' }} />
                               </InputAdornment>
                             ),
                           }}
@@ -261,11 +261,11 @@ export default function ShowerHardwareModel({
                           className="custom-textfield"
                           variant="outlined"
                           fullWidth
-                          sx={{...fieldSx}}
+                          sx={{ ...fieldSx }}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <EditOutlinedIcon sx={{width:'20px',height:'20px'}} />
+                                <EditOutlinedIcon sx={{ width: '20px', height: '20px' }} />
                               </InputAdornment>
                             ),
                           }}
@@ -281,11 +281,11 @@ export default function ShowerHardwareModel({
                           className="custom-textfield"
                           variant="outlined"
                           fullWidth
-                          sx={{...fieldSx}}
+                          sx={{ ...fieldSx }}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <EditOutlinedIcon sx={{width:'20px',height:'20px'}} />
+                                <EditOutlinedIcon sx={{ width: '20px', height: '20px' }} />
                               </InputAdornment>
                             ),
                           }}
@@ -300,11 +300,11 @@ export default function ShowerHardwareModel({
                           className="custom-textfield"
                           variant="outlined"
                           fullWidth
-                          sx={{...fieldSx}}
+                          sx={{ ...fieldSx }}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <EditOutlinedIcon sx={{width:'20px',height:'20px'}} />
+                                <EditOutlinedIcon sx={{ width: '20px', height: '20px' }} />
                               </InputAdornment>
                             ),
                           }}
@@ -319,11 +319,11 @@ export default function ShowerHardwareModel({
                           className="custom-textfield"
                           variant="outlined"
                           fullWidth
-                          sx={{...fieldSx}}
+                          sx={{ ...fieldSx }}
                           InputProps={{
                             endAdornment: (
                               <InputAdornment position="end">
-                                <EditOutlinedIcon sx={{width:'20px',height:'20px'}} />
+                                <EditOutlinedIcon sx={{ width: '20px', height: '20px' }} />
                               </InputAdornment>
                             ),
                           }}

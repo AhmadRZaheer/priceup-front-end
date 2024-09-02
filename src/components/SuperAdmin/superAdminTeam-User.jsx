@@ -160,7 +160,8 @@ const SuperAdminTeam = () => {
   };
 
   const handleOpenModifyModal = (record) => (
-    setRecordToModify(record), setOpenModifyModal(true)
+    setRecordToModify(record),
+    setOpenModifyModal(true)
   );
   const handleCloseModifyModal = () => {
     setOpenModifyModal(false);

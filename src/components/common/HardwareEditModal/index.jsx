@@ -75,6 +75,9 @@ export default function HardwareEditModal({
     const handleButtonClick = () => {
         inputRef.current.click(); // Trigger click on the file input
     };
+    const handleDiscard = () => {
+        formik.resetForm();
+    };
 
 
     return (
@@ -119,15 +122,15 @@ export default function HardwareEditModal({
                         </Typography>
                     </Box>
                     <Box>
-              <IconButton
-                sx={{ p: 0 }}
-                onClick={() => {
-                  close();
-                }}
-              >
-                <CloseTwoTone />
-              </IconButton>
-            </Box>
+                        <IconButton
+                            sx={{ p: 0 }}
+                            onClick={() => {
+                                close();
+                            }}
+                        >
+                            <CloseTwoTone />
+                        </IconButton>
+                    </Box>
                 </Box>
 
                 {/* <Box>
@@ -212,7 +215,7 @@ export default function HardwareEditModal({
                             fontWeight: 600,
                         }}
                     >
-                        Hardware image
+                        {hardwareType} image
                     </Typography>
 
                     <Box sx={{ display: "flex", gap: '19px', my: 2 }}>
@@ -328,7 +331,7 @@ export default function HardwareEditModal({
                     <Box sx={{ display: "flex", gap: '12px' }}>
                         <Button
                             variant="outlined"
-                            onClick={close}
+                            onClick={handleDiscard}
                             sx={{
                                 color: "#212528",
                                 border: "1px solid #D6DAE3",

@@ -359,7 +359,7 @@ const StaffLocationsTable = () => {
           })
         ) : (
           <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
-            No Locations Found
+            No Location Found
           </Box>
         )}
       </Grid>

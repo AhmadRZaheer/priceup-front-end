@@ -324,7 +324,7 @@ const SuperAdminTable = () => {
           <Box
             sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}
           >
-            No Locations Found
+            No Location Found
           </Box>
         )}
       </Grid>

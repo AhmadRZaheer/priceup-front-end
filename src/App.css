@@ -142,6 +142,11 @@ input {
   font-weight: 600 !important;
   line-height: 16.39px !important;
 }
+.accordian-label-text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+}
 
 .MuiButton-root {
   text-transform: capitalize !important;
@@ -334,4 +339,12 @@ input {
   .locationCard {
     width: 600px;
   }
+}
+
+.mirror-meun-item{
+  padding: 12px !important;
+  border-bottom: 0.2px solid #D0D5DD !important;
+}
+.mirror-meun-item:hover {
+  background: #EDEBFA !important;
 }

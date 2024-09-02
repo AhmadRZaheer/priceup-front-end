@@ -7,12 +7,10 @@ import {
     Menu,
     MenuItem,
     styled,
-    Switch,
+
     Typography,
     useMediaQuery,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
-import CustomIconButton from "@/components/ui-components/CustomButton";
 import { useCreateDocument, useDeleteDocument, useDeleteDocumentProp, useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
 import HardwareItem from "@/components/common/HardwareItem";
@@ -38,6 +36,7 @@ const MirrorsHardwareComponent = () => {
         data: hardwaresList,
         refetch: refetchHardwaresList,
         isFetching: fetchingHardwaresList,
+        isLoading
     } = useFetchAllDocuments(routePrefix);
     const { mutate: deleteHardware, isLoading: deleteHardwareLoading, isSuccess: deleteSuccess } =
         useDeleteDocument();
@@ -59,9 +58,9 @@ const MirrorsHardwareComponent = () => {
         deleteHardware({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
     };
 
-    const handleHardwareOptionDelete = (itemId, optionId) => {
-        deleteHardwareOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
-    };
+    // const handleHardwareOptionDelete = (itemId, optionId) => {
+    //     deleteHardwareOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
+    // };
 
     const handleOpenUpdateModal = () => {
         setUpdateModalOpen(true);
@@ -91,8 +90,14 @@ const MirrorsHardwareComponent = () => {
     };
 
     const handleOpenCreateModal = () => {
+        setItemToModify(null);
         setCreateModalOpen(true);
     };
+    const handleOpenModifyModal = (record) => {
+        setItemToModify(record);
+        setUpdateModalOpen(true);
+        handleClose();
+    }
 
     const handleCreateItem = (props) => {
         const slug = createSlug(props.name);
@@ -123,12 +128,18 @@ const MirrorsHardwareComponent = () => {
 
     //Drop Down
     const [anchorEl, setAnchorEl] = useState(null);
-    const handleClick = (event) => {
+    const [activeRow, setActiveRow] = useState(null);
+
+    const handleClickAction = (event, row) => {
         setAnchorEl(event.currentTarget);
+        setActiveRow(row); // Set the current row when the menu is triggered
     };
+
     const handleClose = () => {
         setAnchorEl(null);
+        setActiveRow(null);
     };
+
     const open = Boolean(anchorEl);
     //Status   
     const handleStatusChange = (row) => {
@@ -155,53 +166,6 @@ const MirrorsHardwareComponent = () => {
         }));
         editHardware({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${data._id}` });
     };
-    //Toggle
-    // const AntSwitch = styled(Switch)(({ theme }) => ({
-    //     width: 28,
-    //     height: 16,
-    //     padding: 0,
-    //     display: 'flex',
-    //     '&:active': {
-    //         '& .MuiSwitch-thumb': {
-    //             width: 15,
-    //         },
-    //         '& .MuiSwitch-switchBase.Mui-checked': {
-    //             transform: 'translateX(9px)',
-    //         },
-    //     },
-    //     '& .MuiSwitch-switchBase': {
-    //         padding: 2,
-    //         '&.Mui-checked': {
-    //             transform: 'translateX(12px)',
-    //             color: '#fff',
-    //             '& + .MuiSwitch-track': {
-    //                 opacity: 1,
-    //                 backgroundColor: '#7F56D9',
-    //                 ...theme.applyStyles('dark', {
-    //                     backgroundColor: '#177ddc',
-    //                 }),
-    //             },
-    //         },
-    //     },
-    //     '& .MuiSwitch-thumb': {
-    //         boxShadow: '0 2px 4px 0 rgb(0 35 11 / 20%)',
-    //         width: 12,
-    //         height: 12,
-    //         borderRadius: 6,
-    //         transition: theme.transitions.create(['width'], {
-    //             duration: 200,
-    //         }),
-    //     },
-    //     '& .MuiSwitch-track': {
-    //         borderRadius: 16 / 2,
-    //         opacity: 1,
-    //         backgroundColor: 'rgba(0,0,0,.25)',
-    //         boxSizing: 'border-box',
-    //         ...theme.applyStyles('dark', {
-    //             backgroundColor: 'rgba(255,255,255,.35)',
-    //         }),
-    //     },
-    // }));
 
 
     const actionColumn = [
@@ -284,17 +248,22 @@ const MirrorsHardwareComponent = () => {
             flex: 0.7,
             sortable: false,
             renderCell: (params) => {
+                const id = params.row._id;
+                const data = params.row;
                 return (
                     <>
-                        <IconButton onClick={handleClick}>
+                        <IconButton aria-haspopup="true"
+                            onClick={(event) => {
+                                handleClickAction(event, data);
+                                setItemToModify(params.row);
+                            }}>
                             <MoreHorizOutlinedIcon />
                         </IconButton>
                         <Menu
-                            id="basic-menu"
+                            // id={params.row._id}
                             anchorEl={anchorEl}
-                            open={open}
+                            open={Boolean(anchorEl && activeRow === data)} // Check if the active row matches the current row
                             onClose={handleClose}
-                            elevation={0}
                             anchorOrigin={{
                                 vertical: "bottom",
                                 horizontal: "right",
@@ -323,19 +292,13 @@ const MirrorsHardwareComponent = () => {
                                 },
                             }}
                         >
-                            <MenuItem onClick={() => handleUpdateCost(params.row)} sx={{
-                                p: '12px', borderBottom: '0.2px solid  #D0D5DD', ':hover': {
-                                    background: '#EDEBFA'
-                                }
-                            }}><Typography className='dropTxt'>Update</Typography></MenuItem>
-
+                            <MenuItem className='mirror-meun-item' onClick={() => handleUpdateCost(data)} >
+                                <Typography className='dropTxt'>Update</Typography>
+                            </MenuItem>
                             <MenuItem
-                                onClick={() => { setItemToModify(params?.row); handleOpenUpdateModal(); handleClose() }}
-                                sx={{
-                                    p: '12px', ':hover': {
-                                        background: '#EDEBFA'
-                                    }
-                                }}>
+                                onClick={() => handleOpenModifyModal(params.row)}
+                                // onClick={() => { setItemToModify(params?.row); handleOpenUpdateModal(); handleClose() }}
+                                className='mirror-meun-item'>
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -347,11 +310,7 @@ const MirrorsHardwareComponent = () => {
                                     <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
                                 </Box>
                             </MenuItem>
-                            <MenuItem sx={{
-                                p: '12px', ':hover': {
-                                    background: '#EDEBFA'
-                                }
-                            }}>
+                            <MenuItem className='mirror-meun-item' onClick={() => handleStatusChange(params.row)}>
                                 <Box
                                     sx={{
                                         display: "flex",
@@ -360,7 +319,9 @@ const MirrorsHardwareComponent = () => {
                                     }}
                                 >
                                     <Typography className='dropTxt'>Change Status</Typography>
-                                    <CustomSmallSwtich checked={params?.row?.options[0]?.status} onChange={() => handleStatusChange(params.row)} inputProps={{ 'aria-label': 'ant design' }} />
+                                    <CustomSmallSwtich checked={params?.row?.options[0]?.status}
+                                        //  onChange={() => handleStatusChange(params.row)}
+                                        inputProps={{ 'aria-label': 'ant design' }} />
                                 </Box>
                             </MenuItem>
                             <MenuItem onClick={() => { setItemToModify(params?.row); handleOpenDeleteModal(); handleClose() }} sx={{
@@ -380,17 +341,13 @@ const MirrorsHardwareComponent = () => {
                                 </Box>
                             </MenuItem>
                         </Menu>
-                        {/* <CustomToggle
-                    checked={true}
-                    // onChange={(event) => handleStatusChange(event)}
-                    isText={false}
-                    name="action"
-                  /> */}
+
                     </>
                 );
             },
         },
     ]
+
     const columns = MirrorsHardWareColumns().concat(actionColumn);
 
     const miniTab = useMediaQuery("(max-width: 1280px)");
@@ -398,185 +355,137 @@ const MirrorsHardwareComponent = () => {
         <>
             <Box
                 sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    pt: 1.5,
-                    pb: 1.5,
+                    width: "100%",
                 }}
             >
-                <Typography
-                    className='headingTxt'
+                <Box
                     sx={{
-                        color: "#5D6164",
-                        display: 'flex'
+                        display: "flex",
+                        justifyContent: "space-between",
+                        pt: 1.5,
+                        pb: 1.5,
                     }}
                 >
-                    Mirrors &nbsp;
-                    <Box
+                    <Typography
                         className='headingTxt'
                         sx={{
-                            color: "#000000",
+                            color: "#5D6164",
+                            display: 'flex',
+                            alignSelf: 'center'
                         }}
                     >
-                        / Hardware
-                    </Box>
-                </Typography>
-                <Button
-                    variant="contained"
-                    onClick={handleOpenCreateModal}
-                    sx={{
-                        background: "#8477DA",
-                        color: "#FFFFFF",
-                        fontWeight: 600,
-                        fontSize: 16,
-                        letterSpacing: '0px',
-                        ':hover': {
+                        Mirrors &nbsp;
+                        <Box
+                            className='headingTxt'
+                            sx={{
+                                color: "#000000",
+                            }}
+                        >
+                            / Hardware
+                        </Box>
+                    </Typography>
+                    <Button
+                        variant="contained"
+                        onClick={handleOpenCreateModal}
+                        sx={{
                             background: "#8477DA",
-                        }
-                    }}
-                >
-                    Add New
-                </Button>
-                {/* <div
-                    style={{
-                        padding: 4,
-                    }}
-                >
-                    <CustomIconButton
-                        handleClick={handleOpenCreateModal}
-                        icon={<Add style={{ color: "white" }} />}
-                        buttonText=" Add"
-                    />
-                </div> */}
-            </Box>
+                            color: "#FFFFFF",
+                            fontWeight: 600,
+                            fontSize: 16,
+                            letterSpacing: '0px',
+                            ':hover': {
+                                background: "#8477DA",
+                            }
+                        }}
+                    >
+                        Add New
+                    </Button>
 
-            <Box sx={{
-                border: "1px solid #EAECF0",
-                borderRadius: "8px",
-                width: "99.5%",
-                m: "auto",
-                overflow: "hidden",
-                mt: 2,
-                background: '#FFFF'
-            }}>
-                <DataGrid
-                    loading={fetchingHardwaresList}
-                    style={{
-                        border: "none",
-                    }}
-                    getRowId={(row) => row._id}
-                    rows={hardwaresList}
-                    columns={columns}
-                    rowHeight={70.75}
-                    sx={{ width: "99.9%" }}
-                    hideFooter
-                    disableColumnMenu
-                />
-            </Box>
-            {/* <div
-                style={{
-                    display: "flex",
-                    gap: 4,
-                    alignContent: "center",
-                    backgroundColor: "rgb(232, 232, 232)",
-                    paddingTop: 15,
-                    paddingBottom: 15,
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
-                }}
-            >
-                {" "}
-                <div
-                    style={{
-                        width: "250px",
-                        padding: 4,
-                        alignItems: "center",
-                    }}
-                >
-                    Name
-                </div>{" "}
-
-                <div
-                    style={{
-                        width: "250px",
-
-                        padding: 4,
-                    }}
-                >
-                    Cost
-                </div>
-                <div
-                    style={{
-                        width: "250px",
-
-                        padding: 4,
-                    }}
-                >
-                    Status
-                </div>{" "}
-            </div>
-            {fetchingHardwaresList ? (
-                <Box
-                    sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        padding: "20px",
-                        alignItems: "center",
-                        height: "56vh",
-                        background: '#FFFF'
-                    }}
-                >
-                    <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                 </Box>
-            ) : (
+
+                {/* // <Box sx={{
+            //     border: "1px solid #EAECF0",
+            //     borderRadius: "8px",
+            //     width: "99.5%",
+            //     m: "auto",
+            //     overflow: "hidden",
+            //     mt: 2,
+            //     background: '#FFFF'
+            // }}> */}
+
                 <Box
                     sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        height: miniTab ? "69vh" : "76vh",
-                        overflowY: "scroll",
+                        border: "1px solid #EAECF0",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        width: "99.5%",
+                        m: "auto",
+                        mt: 1.5,
                         background: '#FFFF'
                     }}
                 >
-                    {hardwaresList?.length !== 0 ? (
-                        hardwaresList?.map((entry, mainIndex) => (
-
-                            <HardwareItem entry={entry} key={mainIndex}
-                                mainIndex={mainIndex} handleOpenDeleteModal={handleOpenDeleteModal}
-                                handleOpenUpdateModal={handleOpenUpdateModal}
-                                handleHardwareOptionDelete={handleHardwareOptionDelete}
-                                handleUpdateItem={handleUpdateItem} itemToModify={itemToModify}
-                                setItemToModify={setItemToModify} />
-                        ))
+                    {isLoading ? (
+                        <Box
+                            sx={{
+                                width: "100%",
+                                textAlign: "center",
+                                display: "flex",
+                                justifyContent: "center",
+                                height: "300px",
+                                alignItems: "center",
+                                background: "#FFFF",
+                            }}
+                        >
+                            <CircularProgress sx={{ color: "#8477DA" }} />
+                        </Box>
+                    ) : hardwaresList?.length === 0 && !fetchingHardwaresList ? (
+                        <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
+                            No Hardwear Found
+                        </Typography>
                     ) : (
-                        <Box sx={{ color: "#667085" }}>No Edge Work Found</Box>
+                        <Box> <DataGrid
+                            loading={fetchingHardwaresList}
+                            style={{
+                                border: "none",
+                            }}
+                            getRowId={(row) => row._id}
+                            rows={hardwaresList}
+                            columns={columns}
+                            rowHeight={70.75}
+                            sx={{
+                                width: "100%", '.MuiDataGrid-virtualScroller': {
+                                    overflow: "hidden !important",
+                                }
+                            }}
+                            hideFooter
+                            disableColumnMenu
+                        /></Box>
                     )}
                 </Box>
-            )} */}
 
-            <DeleteModal
-                open={deleteModalOpen}
-                text={"Hardware"}
-                close={() => { setDeleteModalOpen(false) }}
-                isLoading={deleteHardwareLoading}
-                handleDelete={handleHardwareDelete}
-            />
-            <HardwareEditModal
-                open={updateModalOpen}
-                close={() => { setUpdateModalOpen(false) }}
-                data={itemToModify}
-                isLoading={editHardwareLoading}
-                handleEdit={handleUpdateItem}
-                hardwareType={'Hardware'}
-            />
-            <HardwareCreateModal
-                open={createModalOpen}
-                close={() => { setCreateModalOpen(false) }}
-                isLoading={createHardwareLoading}
-                handleCreate={handleCreateItem}
-                hardwareType={'Hardware'}
-            />
+                <DeleteModal
+                    open={deleteModalOpen}
+                    text={"Hardware"}
+                    close={() => { setDeleteModalOpen(false) }}
+                    isLoading={deleteHardwareLoading}
+                    handleDelete={handleHardwareDelete}
+                />
+                <HardwareEditModal
+                    open={updateModalOpen}
+                    close={() => { setUpdateModalOpen(false) }}
+                    data={itemToModify}
+                    isLoading={editHardwareLoading}
+                    handleEdit={handleUpdateItem}
+                    hardwareType={'Hardware'}
+                />
+                <HardwareCreateModal
+                    open={createModalOpen}
+                    close={() => { setCreateModalOpen(false) }}
+                    isLoading={createHardwareLoading}
+                    handleCreate={handleCreateItem}
+                    hardwareType={'Hardware'}
+                />
+            </Box>
         </>
     );
 };

@@ -7,10 +7,11 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "@/Assets/imageUploader.svg";
 import { useState } from "react";
-import { CircularProgress, Grid, TextField } from "@mui/material";
+import { CircularProgress, Grid, IconButton, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { backendURL } from "@/utilities/common";
 import DefaultImageIcon from "../../../Assets/default-image.jpg";
+import { CloseTwoTone } from "@mui/icons-material";
 
 const style = {
     position: "absolute",
@@ -94,24 +95,36 @@ export default function HardwareCreateModal({
                         // alignItems: "baseline",
                     }}
                 >
-                    <Typography sx={{
-                        fontWeight: 700,
-                        fontSize: 18,
-                        lineHeight: '21.09px',
-                        fontFamily: '"Roboto",sans-serif !important'
-                    }}>{`Add ${hardwareType}`}</Typography>
-                    <Typography
-                sx={{
-                  color: "#212528",
-                  lineHeight: '21.86px',
-                  fontWeight: 600,
-                  // mt:'5px',
-                  fontSize: 16,
-                  opacity:'70%'
-                }}
-              >
-                {`Add ${hardwareType} details`}
-              </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <Typography sx={{
+                            fontWeight: 700,
+                            fontSize: 18,
+                            lineHeight: '21.09px',
+                            fontFamily: '"Roboto",sans-serif !important'
+                        }}>{`Add ${hardwareType}`}</Typography>
+                        <Typography
+                            sx={{
+                                color: "#212528",
+                                lineHeight: '21.86px',
+                                fontWeight: 600,
+                                // mt:'5px',
+                                fontSize: 16,
+                                opacity: '70%'
+                            }}
+                        >
+                            {`Add ${hardwareType} details`}
+                        </Typography>
+                    </Box>
+                    <Box>
+                        <IconButton
+                            sx={{ p: 0 }}
+                            onClick={() => {
+                                close();
+                            }}
+                        >
+                            <CloseTwoTone />
+                        </IconButton>
+                    </Box>
                 </Box>
                 <Box
                     sx={{
@@ -127,7 +140,7 @@ export default function HardwareCreateModal({
                         fontWeight: 600,
                     }}
                 >
-                        Hardware image
+                        {hardwareType} image
                     </Typography>
                     <Box sx={{ display: "flex", gap: '19px', my: 2 }}>
                         <Box>

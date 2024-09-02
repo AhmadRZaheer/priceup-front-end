@@ -1640,15 +1640,41 @@ export const MirrorsHardWareColumns = () => {
       ),
       renderCell: (params) => {
         return (
-          <Box>
-            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '22px' }}>
-              {params?.row?.name}
-            </Typography>
+          <Box
+            className="project-cellWrap"
+          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
           </Box>
         );
       },
     },
-   
+
     // {
     //   field: "Actions",
     //   headerClassName: "ProjectsColumnsHeaderClass",
@@ -1667,5 +1693,161 @@ export const MirrorsHardWareColumns = () => {
     //     );
     //   },
     // },
+  ];
+};
+export const MirrorsGlassAddons = () => {
+  return [
+    {
+      field: "addonType",
+      headerName: "Addon Type",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1.6,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '22px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box
+            className="project-cellWrap"
+          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+        );
+      },
+    },
+
+  ];
+};
+export const MirrorsEdgeWork = () => {
+  return [
+    {
+      field: "name",
+      headerName: "Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '22px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box
+            className="project-cellWrap"
+          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+        );
+      },
+    },
+
+  ];
+};
+export const MirrorsGlassType = () => {
+  return [
+    {
+      field: "glassType",
+      headerName: "Glass Type",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      flex: 1,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '22px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box
+            className="project-cellWrap"
+          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+        );
+      },
+    },
+
   ];
 };
