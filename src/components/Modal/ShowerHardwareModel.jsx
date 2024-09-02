@@ -253,7 +253,7 @@ export default function ShowerHardwareModel({
                         />
                       </Grid>
                       <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                        <Typography className="input-label-text">Hinge Cut Out</Typography>
+                        <Typography className="accordian-label-text">Hinge Cut Out</Typography>
                         <TextField
                           size="small"
                           placeholder="01"
@@ -272,7 +272,7 @@ export default function ShowerHardwareModel({
                         />
                       </Grid>
                       <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                        <Typography className="input-label-text">Clamp Cut Out
+                        <Typography className="accordian-label-text">Clamp Cut Out
                         </Typography>
                         <TextField
                           size="small"
@@ -292,7 +292,7 @@ export default function ShowerHardwareModel({
                         />
                       </Grid>
                       <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
-                        <Typography className="input-label-text">Notch</Typography>
+                        <Typography className="accordian-label-text">Notch</Typography>
                         <TextField
                           size="small"
                           placeholder="01"
@@ -311,7 +311,7 @@ export default function ShowerHardwareModel({
                         />
                       </Grid>
                       <Grid item xs={6} sx={{ width: "100%" }} className='model-field'>
-                        <Typography className="input-label-text">Outages</Typography>
+                        <Typography className="accordian-label-text">Outages</Typography>
                         <TextField
                           size="small"
                           placeholder="01"
