@@ -43,16 +43,16 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
                 <Stack direction="column">
                     <Typography className="twTxt">{measurementSides}</Typography>
-                    <Typography className="summaryData" ><Box className='headingTxt'>Square Foot</Box>&nbsp;: {sqftArea}</Typography>
-                    <Typography className="summaryData"><Box className='headingTxt'>Square FootTotal Price</Box>&nbsp; : {data.cost}</Typography>
+                    <Typography className="summaryData" ><Box className='heading-txt'>Square Foot</Box>&nbsp;: {sqftArea}</Typography>
+                    <Typography className="summaryData"><Box className='heading-txt'>Square FootTotal Price</Box>&nbsp; : {data.cost}</Typography>
                 </Stack>
                 {decryptedToken?.role !== userRoles.SUPER_ADMIN ? <Button
                     onClick={handleEditEstimate}
                     variant="contained"
                     startIcon={<EditOutlinedIcon />}
-                    className="estimatebtn"
+                    className="estimate-btn"
                     sx={{
-                        py: 1,
+                        // py: 1,
                         ":hover": {
                             background: "#8477DA",
                         },
@@ -65,28 +65,28 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
                 Summary
             </Typography>
             <Stack direction="row" sx={{ flexDirection: "column", gap: "7px" }}>
-                {data.resourceInfoWithFullObjects?.hardwareFinishes && <Typography className="summaryData"><Box className='headingTxt'>Finish</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hardwareFinishes?.name}</Typography>}
-                {data.resourceInfoWithFullObjects?.handles?.item && <Typography className="summaryData"><Box className='headingTxt'>Handles</Box>&nbsp; : {data.resourceInfoWithFullObjects?.handles?.item?.name} (
+                {data.resourceInfoWithFullObjects?.hardwareFinishes && <Typography className="summaryData"><Box className='heading-txt'>Finish</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hardwareFinishes?.name}</Typography>}
+                {data.resourceInfoWithFullObjects?.handles?.item && <Typography className="summaryData"><Box className='heading-txt'>Handles</Box>&nbsp; : {data.resourceInfoWithFullObjects?.handles?.item?.name} (
                     {data.resourceInfoWithFullObjects?.handles?.count})</Typography>}
-                {data.resourceInfoWithFullObjects?.hinges?.item && <Typography className="summaryData"><Box className='headingTxt'>Hinges</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hinges?.item?.name} (
+                {data.resourceInfoWithFullObjects?.hinges?.item && <Typography className="summaryData"><Box className='heading-txt'>Hinges</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hinges?.item?.name} (
                     {data.resourceInfoWithFullObjects?.hinges?.count})</Typography>}
-                {["channel"].includes(data.config?.mountingState) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='headingTxt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
+                {["channel"].includes(data.config?.mountingState) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='heading-txt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
                     <>
-                        {data.resourceInfoWithFullObjects?.wallClamp?.length ? <Typography className="summaryData"><Box className='headingTxt'>WallClamps</Box>&nbsp; : {data.resourceInfoWithFullObjects?.wallClamp?.map(
+                        {data.resourceInfoWithFullObjects?.wallClamp?.length ? <Typography className="summaryData"><Box className='heading-txt'>WallClamps</Box>&nbsp; : {data.resourceInfoWithFullObjects?.wallClamp?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                         )}</Typography> : ''}
-                        {data.resourceInfoWithFullObjects?.sleeveOver?.length ? <Typography className="summaryData"><Box className='headingTxt'>Sleeve Over</Box>&nbsp; : {data.resourceInfoWithFullObjects?.sleeveOver?.map(
+                        {data.resourceInfoWithFullObjects?.sleeveOver?.length ? <Typography className="summaryData"><Box className='heading-txt'>Sleeve Over</Box>&nbsp; : {data.resourceInfoWithFullObjects?.sleeveOver?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                         )}</Typography> : ''}
-                        {data.resourceInfoWithFullObjects?.glassToGlass?.length ? <Typography className="summaryData"><Box className='headingTxt'>Glass To Glass</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassToGlass?.map(
+                        {data.resourceInfoWithFullObjects?.glassToGlass?.length ? <Typography className="summaryData"><Box className='heading-txt'>Glass To Glass</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassToGlass?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
@@ -96,49 +96,49 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
 
                     </>
                 }
-                {data.resourceInfoWithFullObjects?.cornerWallClamp?.length ? <Typography className="summaryData"><Box className='headingTxt'>Corner Wall Clamp</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerWallClamp?.map(
+                {data.resourceInfoWithFullObjects?.cornerWallClamp?.length ? <Typography className="summaryData"><Box className='heading-txt'>Corner Wall Clamp</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerWallClamp?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                 )}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.cornerSleeveOver?.length ? <Typography className="summaryData"><Box className='headingTxt'>Corner Sleeve Over</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerSleeveOver?.map(
+                {data.resourceInfoWithFullObjects?.cornerSleeveOver?.length ? <Typography className="summaryData"><Box className='heading-txt'>Corner Sleeve Over</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerSleeveOver?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                 )}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.length ? <Typography className="summaryData"><Box className='headingTxt'>Corner Glass To Glass</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.map(
+                {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.length ? <Typography className="summaryData"><Box className='heading-txt'>Corner Glass To Glass</Box>&nbsp; : {data.resourceInfoWithFullObjects?.cornerGlassToGlass?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                 )}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item && <Typography className="summaryData"><Box className='headingTxt'>Sliding Door System</Box>&nbsp; : {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item?.name} (
+                {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item && <Typography className="summaryData"><Box className='heading-txt'>Sliding Door System</Box>&nbsp; : {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item?.name} (
                     {data.resourceInfoWithFullObjects?.slidingDoorSystem?.count})</Typography>}
-                {data.resourceInfoWithFullObjects?.header?.item && <Typography className="summaryData"><Box className='headingTxt'>Header</Box>&nbsp; : {data.resourceInfoWithFullObjects?.header?.item?.name} (
+                {data.resourceInfoWithFullObjects?.header?.item && <Typography className="summaryData"><Box className='heading-txt'>Header</Box>&nbsp; : {data.resourceInfoWithFullObjects?.header?.item?.name} (
                     {data.resourceInfoWithFullObjects?.header?.count})</Typography>}
-                {data.resourceInfoWithFullObjects?.glassType?.item && <Typography className="summaryData"><Box className='headingTxt'>Glass Type</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassType?.item?.name} (
+                {data.resourceInfoWithFullObjects?.glassType?.item && <Typography className="summaryData"><Box className='heading-txt'>Glass Type</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassType?.item?.name} (
                     {data.resourceInfoWithFullObjects?.glassType?.thickness})</Typography>}
-                {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"><Box className='headingTxt'>Glass Addons</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassAddons?.map(
+                {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"><Box className='heading-txt'>Glass Addons</Box>&nbsp; : {data.resourceInfoWithFullObjects?.glassAddons?.map(
                     (row) => (
                         <span >
                             {row.name}{", "}
                         </span>
                     )
                 )}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.hardwareAddons?.length ? <Typography className="summaryData"><Box className='headingTxt'>Hardware Addons</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hardwareAddons?.map(
+                {data.resourceInfoWithFullObjects?.hardwareAddons?.length ? <Typography className="summaryData"><Box className='heading-txt'>Hardware Addons</Box>&nbsp; : {data.resourceInfoWithFullObjects?.hardwareAddons?.map(
                             (row) => (
                                 <span >
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
                 )}</Typography> : ''}
-                <Typography className="summaryData"><Box className='headingTxt'>People</Box>&nbsp; : {data.config?.people}</Typography>
-                <Typography className="summaryData"><Box className='headingTxt'>Hours</Box>&nbsp; : {data.config?.hours}</Typography>
+                <Typography className="summaryData"><Box className='heading-txt'>People</Box>&nbsp; : {data.config?.people}</Typography>
+                <Typography className="summaryData"><Box className='heading-txt'>Hours</Box>&nbsp; : {data.config?.hours}</Typography>
                 <Typography className="twTxt" sx={{ py: 1 }}>
                     Additional Fields
                 </Typography>

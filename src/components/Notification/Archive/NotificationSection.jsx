@@ -17,7 +17,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
       <Box
        className='notification'
         sx={{
-          height: "80.5vh",
+          height: "78.5vh",
           overflowY: "auto",
           pr: 0.1,
           "&::-webkit-scrollbar": {

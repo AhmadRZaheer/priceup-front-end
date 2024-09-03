@@ -182,7 +182,6 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
             <DefaultImage image={data?.image} type={5} name={data?.name} />
             <Typography className="tableHeader">{data?.name}</Typography>
           </Box>
-
           <Box>
             <Button
               id="demo-customized-button"

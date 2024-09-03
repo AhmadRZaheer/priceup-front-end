@@ -72,6 +72,7 @@ export default function AddEditModelHardware({
 
     useEffect(() => {
         if (CreatedSuccessfully) {
+            resetFormHandle();
             refetch();
             close();
         }
@@ -112,11 +113,11 @@ export default function AddEditModelHardware({
             : {
                 name: "",
                 image: "",
-                oneInchHoles: "",
-                hingeCut: "",
-                clampCut: "",
-                notch: "",
-                outages: "",
+                oneInchHoles: 0,
+                hingeCut: 0,
+                clampCut: 0,
+                notch: 0,
+                outages: 0,
                 hardware_category_slug: categorySlug,
             },
         enableReinitialize: true,
@@ -126,7 +127,7 @@ export default function AddEditModelHardware({
                 isEdit
                     ? handleEditClick({ hardwareData: values, id: data._id })
                     : handleCreateClick(values);
-                resetFormHandle();
+                // resetFormHandle();
             }
         },
     });
