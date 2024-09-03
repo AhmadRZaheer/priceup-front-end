@@ -7,17 +7,20 @@ button {
 .reset-form {
   display: flex;
   flex-direction: column;
-  margin-top: -22px;
+  /* margin-top: -22px; */
 }
 
 label {
   text-align: left;
   padding: 0;
   font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: #344054
 }
 
 input {
-  margin: 0.5rem 0;
+  /* margin: 0.5rem 0; */
   background: #ffffff;
   border: 1px solid #d0d5dd;
   box-shadow: 0px 1px 2px rgba(16, 24, 40, 0.05);
@@ -27,28 +30,31 @@ input {
 }
 
 .auth-form-container {
-  padding: 26px 24px 24px;
-  gap: 32px;
+  padding: 26px 24px 24px 24px;
+  /* gap: 32px; */
   background: #ffffff;
   box-shadow: 0px 20px 24px -4px rgba(16, 24, 40, 0.08),
     0px 8px 8px -4px rgba(16, 24, 40, 0.03);
   border-radius: 12px;
-  width: 300px;
+  width: 360px;
 }
 
 .cancel,
 .forget-pass {
-  background-color: white;
-  border: none;
-  color: #8477da;
-  font-weight: 600;
+  background-color: white !important;
+  border: none !important;
+  color: #8477da !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 24px !important;
+  
 }
 
 .logo-img {
   padding: 20px;
   width: 100%;
   max-width: 150px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
 }
 
 .user-cellWrap {
@@ -142,6 +148,7 @@ input {
   font-weight: 600 !important;
   line-height: 16.39px !important;
 }
+
 .accordian-label-text {
   font-size: 14px !important;
   font-weight: 500 !important;
@@ -317,7 +324,8 @@ input {
   height: 40px !important;
   min-height: 36px !important;
 }
-.estimate-modifcation{
+
+.estimate-modifcation {
   padding: 16px 0px 16px 16px !important;
   font-size: 14px !important;
   font-weight: 500 !important;
@@ -326,7 +334,7 @@ input {
 }
 
 .locationCard {
-  width: 448px; 
+  width: 448px;
 }
 
 @media (max-width: 1500px) and (min-width: 600px) {
@@ -341,10 +349,11 @@ input {
   }
 }
 
-.mirror-meun-item{
+.mirror-meun-item {
   padding: 12px !important;
   border-bottom: 0.2px solid #D0D5DD !important;
 }
+
 .mirror-meun-item:hover {
   background: #EDEBFA !important;
 }
