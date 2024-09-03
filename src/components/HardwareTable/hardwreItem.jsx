@@ -30,6 +30,7 @@ const HardwareItem = ({ entry, mainIndex, hardwareRefetch, type }) => {
     isSuccess: deleteSuccess,
     isLoading: LoadingForDelete,
   } = useDeleteHardwares();
+  
   const handleHardwareDelete = () => {
     deleteHardware(deleteRecord);
     setDeleteModalOpen(false);

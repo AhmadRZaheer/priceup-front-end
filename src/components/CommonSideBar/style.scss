@@ -11,7 +11,6 @@
       margin-left:12px;
     }
   }
-
   .center {
     ul {
       list-style: none;
@@ -79,7 +78,6 @@
           background-color: #8477da;
           color:#FFFF;
           .iconButton{
-            background-color: #8477da;
             color:#FFFF;
         }
         
@@ -88,7 +86,7 @@
           background-color: #8477da;
           color:#FFFF;
           .iconButton{
-            background-color: #8477da;
+            // background-color: #8477da;
             color:#FFFF;
         }
         // .innerItem{
@@ -111,11 +109,11 @@
 
         .iconButton{
             &:hover {
-                background-color: #8477da;
+                // background-color: #8477da;
                 color:#FFFF;
               }
               &.active {
-                background-color: #8477da;
+                // background-color: #8477da;
                 color:#FFFF;
               }
         }

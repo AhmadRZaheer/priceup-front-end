@@ -1565,10 +1565,9 @@ export const rowsHardwareHandle = [
   },
 ];
 
-export const HardWareColumns = () => {
-  return [
+export const HardWareColumns =[
     {
-      field: "finishType",
+      field: "name",
       headerName: "Finishn Type",
       headerClassName: "ProjectsColumnsHeaderClass",
       flex: 1.6,
@@ -1582,97 +1581,14 @@ export const HardWareColumns = () => {
         return (
           <Box>
             <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '22px' }}>
-              {params?.row?.finishType}
+              {params?.row?.name}
             </Typography>
           </Box>
         );
       },
     },
-    {
-      field: "Cost",
-      headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1.6,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Box
-              sx={{
-                width: "101px",
-              }}
-            >
-              <CustomInputField
-                size="small"
-                variant="outlined"
-                type="number"
-                inputProps={{
-                  min: 0,
-                }}
-                name="cost"
-                placeholder="Cost"
-                // sx={{ width: "101px",height:'38px' }}
-                value={params?.row?.cost}
-              // onChange={(event) => handleCostChange(event)}
-              />
-            </Box>
-          </>
-        );
-      },
-    },
-    {
-      field: "Status",
-      headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 2.5,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Box
-              sx={{
-                // height: "21px",
-                bgcolor: params?.row.status === 'active' ? "#EFECFF" : '#F3F5F6',
-                borderRadius: "70px",
-                p: "6px 8px",
-                display: "grid",
-                gap: '7px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: "21px",
-                  color: params?.row.status === 'active' ? '#8477DA' : '#5D6164',
-                }}
-              >
-                {params?.row.status?.charAt(0).toUpperCase() +
-                  params?.row.status?.slice(1)}
-              </Typography>
-            </Box>
-          </>
-        );
-      },
-    },
-    {
-      field: "",
-      headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 0.7,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <CustomToggle
-              checked={true}
-              // onChange={(event) => handleStatusChange(event)}
-              isText={false}
-              name="action"
-            />
-          </>
-        );
-      },
-    },
+
   ];
-};
 export const MirrorsHardWareColumns = () => {
   return [
     {

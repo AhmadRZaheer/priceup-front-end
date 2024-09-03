@@ -51,14 +51,14 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
     useEditDocument();
   console.log(notificationsList, 'list');
   const readList = useMemo(() => {
-    const nitification = notificationsList?.filter((data)=> data?.isRead === true);
+    const nitification = notificationsList?.filter((data) => data?.isRead === true);
     return notificationsList ? nitification : [];
   }, [notificationsList]);
   const unReadList = useMemo(() => {
-    const nitification = notificationsList?.filter((data)=> data?.isRead === false);
+    const nitification = notificationsList?.filter((data) => data?.isRead === false);
     return notificationsList ? nitification : [];
   }, [notificationsList]);
-  
+
 
   const handleCheckboxChange = async (event) => {
     if (event.target.checked) {
@@ -100,7 +100,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
         >
           <Stack
             direction="row"
-            sx={{ justifyContent: "space-between", pr: 2,pl:'21px', my: { sm: 2, xs: 3 } }}
+            sx={{ justifyContent: "space-between", pr: 2, pl: '21px', my: { sm: 2, xs: 3 } }}
           >
             <Stack direction="row" gap={1}>
               <Typography className="notificationText">
@@ -128,8 +128,8 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
             </IconButton> */}
           </Stack>
           {/* <Stack direction="row" sx={{ py: 1, px: 2, justifyContent: 'end' }}> */}
-            {/* <Typography className="todayText" sx={{color:'#8477DA'}}>Earlier</Typography> */}
-            {/* <Stack direction="row" gap={0.5}>
+          {/* <Typography className="todayText" sx={{color:'#8477DA'}}>Earlier</Typography> */}
+          {/* <Stack direction="row" gap={0.5}>
               {editLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : unReadCount > 0 ? <Checkbox
                 onChange={handleCheckboxChange}
                 sx={{
@@ -149,16 +149,22 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               mb: 2,
             }}
           >
-            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px'}}>
+            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '21px' }}>
               <Typography className="timeText" >New for you</Typography>
             </Box>
-            {unReadList.map((data, index) => (
-              <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
-            ))}
-            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px',mt:3}}>
+            {unReadList.length === 0 ? (
+              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+            ) :
+              unReadList?.map((data, index) => (
+                <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
+              ))}
+            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '21px', mt: 3 }}>
               <Typography className="timeText" >Earlier</Typography>
             </Box>
-            {readList.map((data, index) => (
+            {readList.length === 0 ? (
+              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+            ) :
+            readList?.map((data, index) => (
               <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
             ))}
           </Box>

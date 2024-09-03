@@ -1,74 +1,66 @@
-import { HardWareColumns } from "@/utilities/DataGridColumns";
-import { Delete, Edit } from "@mui/icons-material";
+
 import {
   Box,
   Button,
   CircularProgress,
   FormControl,
-  Menu,
   MenuItem,
   Select,
   Typography,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
 import "./style.scss";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import CheckIcon from "@mui/icons-material/Check";
 import { backendURL } from "@/utilities/common";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import ShowerHardwareModel from "../Modal/ShowerHardwareModel";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import { useFetchDatahardware, useFetchDatahardwareCategory } from "../../utilities/ApiHooks/hardware";
+import HardwaerTable from "./HardwaerTable";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import AddEditHardware from "../Modal/addEditHardware";
+import AddEditModelHardware from "../Modal/AddEditModelHardware";
 
-const data = [
-  { id: 1, finishType: "Polished Nickel", cost: 1, status: "active" },
-  { id: 2, finishType: "Matte Black", cost: 1, status: "inactive" },
-  { id: 3, finishType: "Satin Brass", cost: 1, status: "active" },
-  { id: 4, finishType: "Polished Nickel", cost: 1, status: "active" },
-  { id: 5, finishType: "Matte Black", cost: 1, status: "active" },
-  { id: 6, finishType: "Satin Brass", cost: 1, status: "active" },
-  { id: 7, finishType: "Brushed Bronze", cost: 1, status: "active" },
-];
-const routePrefix = `${backendURL}/layouts`;
+
 const ShowersHardWare = () => {
-  const [recordToModify, setRecordToModify] = useState(false);
-  const [openAddModal, setOpenAddModal] = useState(false);
-  const [openModifyModal, setOpenModifyModal] = useState(false);
-  const [selectedlayoutId, setSelectedLayoutId] = useState('');
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleChangeLayout = (event) => {
-    setSelectedLayoutId(event.target.value);
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const layoutId = searchParams.get("slug");
+  const { data: hardwareCategoryData, refetch: refetchAllCategory, } = useFetchDatahardwareCategory()
+  const [selectedlayoutSlug, setSelectedLayoutSlug] = useState(layoutId ?? 'handles');
+  
+  //Edit
+  const [openModel, setOpenModel] = useState(false);
+  const [edit, setEdit] = useState(null);
+  const [isEdit, setIsEdit] = useState(false);
+  const handleCloseModel = () => {
+    setOpenModel(false);
+  };
+  const handleOpenModel = (data) => {
+    setOpenModel(true);
+    setIsEdit(false);
   };
 
   const {
-    data: allLayouts,
-    refetch: refetchAllLayouts,
-  } = useFetchAllDocuments(routePrefix);
+    data: hardwareData,
+    isFetching: hardwareFetching,
+    refetch: hardwareRefetch,
+  } = useFetchDatahardware(selectedlayoutSlug);
+
+  const handleChangeLayout = (event) => {
+    setSelectedLayoutSlug(event.target.value);
+    navigate(`/hardware?slug=${event.target.value}`)
+  };
 
   useEffect(() => {
-    refetchAllLayouts();
-    // if (selectedlayoutId) {
-    //   refetchSingleLayout();
-    // }
-  }, [selectedlayoutId]);
-
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-  const handleEdit = () => {
-    setOpenModifyModal(true)
-    setRecordToModify(true);
-  }
-  const handleAdd = () => {
-    setOpenModifyModal(false)
-    setOpenAddModal(true)
-  }
+    hardwareRefetch();
+  }, [selectedlayoutSlug])
+  useEffect(() => {
+    refetchAllCategory();
+  }, [])
+  // const handleStatusChange = ({ id, data }) => {
+  //   const updatedData = data?.map(item =>
+  //     item._id === id ? { ...item, status: !item.status } : item
+  //   );
+  //   setStatus(updatedData);
+  // };
   return (
     <>
       <Box
@@ -95,41 +87,26 @@ const ShowersHardWare = () => {
             </Box>
           </Typography>
 
-          {/* <FormControl sx={{ width: "152px" }} size="small">
-          <Select
-            value={value}
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            // label="Status"
-            className="custom-textfield"
-            size="small"
-            sx={{ height: "40px" }}
-            onChange={(e) => setValue(e.target.value)}
-          >
-            <MenuItem value="Handles">Handles</MenuItem>
-            <MenuItem value={"voided"}>Voided</MenuItem>
-            <MenuItem value={"approved"}>Approved</MenuItem>
-          </Select>
-        </FormControl> */}
           <FormControl
             sx={{ width: "212px" }}
             size="small"
             className="custom-textfield"
           >
             <Select
-              value={selectedlayoutId}
+              value={selectedlayoutSlug}
               size="small"
               labelId="demo-select-small-label"
               id="demo-select-small"
               sx={{ height: "40px", background: "#F6F5FF", }}
               onChange={handleChangeLayout}
+              displayEmpty
               renderValue={(value) => {
-                const selectedItem = allLayouts?.find(item => item._id === value);
+                const selectedItem = hardwareCategoryData?.find(item => item?.slug === value);
                 return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
               }}
             >
-              {allLayouts?.map((data, index) => (
-                <MenuItem key={index} value={data?._id} sx={{
+              {hardwareCategoryData?.map((data, index) => (
+                <MenuItem key={index} value={data?.slug} sx={{
                   p: '10px 12px', ':hover': {
                     background: '#EFF2F6'
                   }
@@ -145,7 +122,7 @@ const ShowersHardWare = () => {
                     <Typography sx={{ fontSize: "14px" }}>
                       {data?.name}
                     </Typography>
-                    {data?._id === selectedlayoutId ? (
+                    {data?.slug === selectedlayoutSlug ? (
                       <CheckIcon sx={{ color: "#8477DA" }} />
                     ) : null}
                   </Box>
@@ -166,7 +143,7 @@ const ShowersHardWare = () => {
           <Typography className="handleTitle">Handles</Typography>
           <Button
             variant="contained"
-            onClick={handleAdd}
+            onClick={handleOpenModel}
             sx={{
               background: "#8477DA",
               color: "#FFFFFF",
@@ -181,118 +158,8 @@ const ShowersHardWare = () => {
             Add New
           </Button>
         </Box>
-
-        <Box
-          sx={{
-            border: "1px solid #D0D5DD",
-            borderRadius: "12px",
-            overflow: "hidden",
-            width: "99.5%",
-            m: "auto",
-            mt: 1.5,
-            background: '#FFFF',
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              py: "15px",
-              px: 4,
-            }}
-          >
-            <Typography className="tableHeader">8x8 Colonial Pull</Typography>
-            <Box>
-              <Button
-                id="demo-customized-button"
-                aria-controls={open ? "demo-customized-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                variant="outlined"
-                disableElevation
-                onClick={handleClick}
-                className="actionBtn"
-              >
-                Actions
-                <KeyboardArrowDownIcon sx={{ width: '16px', height: '16px' }} />
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                elevation={0}
-                anchorOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-                slotProps={{
-                  paper: {
-                    elevation: 0,
-                    sx: {
-                      overflow: "visible",
-                      filter: "none",
-                      boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
-                      border: "1px solid #D0D5DD",
-                      p: 0,
-                      width: "171px",
-                      "& .MuiList-padding": {
-                        p: 0,
-                      },
-                    },
-                  },
-                }}
-              >
-                <MenuItem onClick={handleClose} sx={{
-                  p: '12px', ':hover': {
-                    background: '#EDEBFA'
-                  }
-                }}><Typography className='dropTxt'>Update</Typography></MenuItem>
-                <MenuItem onClick={handleEdit} sx={{
-                  p: '12px', ':hover': {
-                    background: '#EDEBFA'
-                  }
-                }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography className='dropTxt'>Edit</Typography>
-                    <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
-                  </Box>
-                </MenuItem>
-                <MenuItem onClick={handleClose} sx={{
-                  p: '12px', ':hover': {
-                    background: '#EDEBFA'
-                  }
-                }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      width: "100%",
-                    }}
-                  >
-                    <Typography className='dropTxt'>Delete</Typography>
-                    <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
-                  </Box>
-                </MenuItem>
-              </Menu>
-
-            </Box>
-          </Box>
-
-          {false ? (
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {hardwareFetching ? (
             <Box
               sx={{
                 width: 40,
@@ -310,37 +177,33 @@ const ShowersHardWare = () => {
                 }
               }} />
             </Box>
-          ) :
-            data?.length === 0 ? (
-              <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                No Hardwear Found
-              </Typography>
-            ) : (
-              <DataGrid
-                loading={false}
-                style={{
-                  border: "none",
-                }}
-                // getRowId={(row) => row._id}
-                rows={data}
-                columns={HardWareColumns()}
-                rowHeight={70.75}
-                sx={{ width: "100%" }}
-                hideFooter
-                disableColumnMenu
-              />)}
-
-
-          <ShowerHardwareModel open={openAddModal}
-            close={() => setOpenAddModal(false)}
-            recordToModify={recordToModify} />
-
-          <ShowerHardwareModel open={openModifyModal}
-            close={() => setOpenModifyModal(false)}
-            recordToModify={true} />
+          ) : hardwareData && hardwareData?.length <= 0 ? (
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
+              No Hardwear Found
+            </Typography>
+          ) : hardwareData.map((data, index) => (
+            <HardwaerTable data={data} key={index} refetchData={hardwareRefetch} selectedSlug={selectedlayoutSlug} loading={hardwareFetching} />
+          ))
+          }
 
         </Box>
       </Box>
+      <AddEditModelHardware
+        open={openModel}
+        close={handleCloseModel}
+        data={edit}
+        isEdit={isEdit}
+        refetch={hardwareRefetch}
+        categorySlug={selectedlayoutSlug}
+      />
+
+      {/* <ShowerHardwareModel open={openAddModal}
+        close={() => setOpenAddModal(false)}
+        recordToModify={recordToModify} />
+
+      <ShowerHardwareModel open={openModifyModal}
+        close={() => setOpenModifyModal(false)}
+        recordToModify={true} /> */}
     </>
   );
 };

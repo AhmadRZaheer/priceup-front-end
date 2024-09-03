@@ -90,7 +90,7 @@ const HardWareComponent = ({ type }) => {
             }}
           >
             <img width={"25px"} height={"20px"} src={AddIcon} alt="add icon" />
-            Add
+            Add 
           </IconButton>
         </div>{" "}
       </div>

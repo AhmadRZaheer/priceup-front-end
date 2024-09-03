@@ -1,12 +1,13 @@
 import {
   Box,
+  Grid,
   IconButton,
   InputAdornment,
   Tooltip,
   Typography,
 } from "@mui/material";
 import CustomInputField from "./CustomInput";
-import { Done, Edit } from "@mui/icons-material";
+import { Done, Edit, EditOutlined } from "@mui/icons-material";
 import { useState } from "react";
 
 export const SingleFieldEdit = ({
@@ -29,13 +30,14 @@ export const SingleFieldEdit = ({
   };
   return (
     <>
-      <Box>
-        <Typography>{label}</Typography>
+      <Grid item xs={6} sx={{ width: "100%", }} className='model-field'>
+        <Typography className="accordian-label-text">{label}</Typography>
         <CustomInputField
           size="small"
           placeholder={placeholder}
           name={name}
           type="text"
+          className="custom-textfield"
           inputProps={{
             min: 0,
             maxLength: 7,
@@ -43,18 +45,18 @@ export const SingleFieldEdit = ({
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Tooltip title={isEdit ? "Done" : "Edit"}>
+                <Tooltip title={isEdit ? "Edit" : "Done"}>
                   {isEdit ? (
+                    <EditOutlined
+                      fontSize="small"
+                      onClick={handleEdit}
+                      sx={{ cursor: "pointer", width: '20px', height: '20px' }}
+                    />
+                  ) : (
                     <Done
                       fontSize="small"
                       onClick={handleEdit}
-                      style={{ cursor: "pointer" }}
-                    />
-                  ) : (
-                    <Edit
-                      fontSize="small"
-                      onClick={handleEdit}
-                      style={{ cursor: "pointer" }}
+                      sx={{ cursor: "pointer", width: '20px', height: '20px' }}
                     />
                   )}
                 </Tooltip>
@@ -70,7 +72,7 @@ export const SingleFieldEdit = ({
           fullWidth
           disabled={isEdit}
         />
-      </Box>
+      </Grid>
     </>
   );
 };

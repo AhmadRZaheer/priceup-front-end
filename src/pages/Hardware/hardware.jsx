@@ -11,10 +11,10 @@ const Hardware = () => {
     <>
       <CommonLayout>
       <div className="customersContainer">
-        <HardwareTable />
-        {/* <Box className="econtent-wrapper" sx={{ px: { lg: '28px',sm:'20px', xs: '0px' } }}>
+        {/* <HardwareTable /> */}
+        <Box className="econtent-wrapper" sx={{ px: { lg: '28px',sm:'20px', xs: '0px' } }}>
         <ShowersHardWare />
-        </Box> */}
+        </Box>
       </div>
       </CommonLayout>
     </>

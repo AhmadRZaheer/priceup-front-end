@@ -33,6 +33,9 @@ const HardwareTable = () => {
   };
 
   const { data: hardwareCategoryData } = useFetchDatahardwareCategory();
+
+  // console.log(hardwareCategoryData,'hardwareCategoryData');
+
   return (
     <>
       <Box
@@ -43,7 +46,7 @@ const HardwareTable = () => {
       >
         <div className="h-page-title">
           <Typography style={{ fontSize: 30, paddingLeft: 10 }}>
-            Hardware
+            Hardware ssss
           </Typography>
         </div>
         <div
