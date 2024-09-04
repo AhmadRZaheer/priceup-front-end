@@ -292,4 +292,4 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     </>
   );
 });
-export default HardwareTable
+export default HardwareTable;

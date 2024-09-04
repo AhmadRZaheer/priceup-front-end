@@ -13,19 +13,22 @@ import "./style.scss";
 import CheckIcon from "@mui/icons-material/Check";
 import { backendURL } from "@/utilities/common";
 import { useFetchDatahardware, useFetchDatahardwareCategory } from "../../utilities/ApiHooks/hardware";
-import HardwaerTable from "./HardwaerTable";
+import HardwareTable from "./HardwareTable";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import AddEditHardware from "../Modal/addEditHardware";
 import AddEditModelHardware from "../Modal/AddEditModelHardware";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 
 const ShowersHardWare = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const layoutId = searchParams.get("slug");
-  const { data: hardwareCategoryData, refetch: refetchAllCategory, } = useFetchDatahardwareCategory()
-  const [selectedlayoutSlug, setSelectedLayoutSlug] = useState(layoutId ?? 'handles');
-  
+  const categorySlug = searchParams.get("slug");
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [pageLoading, setPageLoading] = useState(true);
+  const { data: hardwareCategoryData, refetch: refetchAllCategory } = useFetchAllDocuments(`${backendURL}/hardwareCategory`);
+  const { data: hardwareData, isFetching: hardwareFetching, refetch: hardwareRefetch } = useFetchAllDocuments(`${backendURL}/hardwares/category/${selectedCategory}`);
+
   //Edit
   const [openModel, setOpenModel] = useState(false);
   const [edit, setEdit] = useState(null);
@@ -38,23 +41,23 @@ const ShowersHardWare = () => {
     setIsEdit(false);
   };
 
-  const {
-    data: hardwareData,
-    isFetching: hardwareFetching,
-    refetch: hardwareRefetch,
-  } = useFetchDatahardware(selectedlayoutSlug);
-
-  const handleChangeLayout = (event) => {
-    setSelectedLayoutSlug(event.target.value);
+  const handleChangeCategory = (event) => {
+    setSelectedCategory(event.target.value);
     navigate(`/hardware?slug=${event.target.value}`)
   };
 
   useEffect(() => {
-    hardwareRefetch();
-  }, [selectedlayoutSlug])
+    if (selectedCategory && selectedCategory.length) {
+      hardwareRefetch();
+      setPageLoading(false);
+    }
+  }, [selectedCategory])
   useEffect(() => {
     refetchAllCategory();
-  }, [])
+  }, []);
+  useEffect(() => {
+    setSelectedCategory(categorySlug || 'handles');
+  }, [categorySlug])
   // const handleStatusChange = ({ id, data }) => {
   //   const updatedData = data?.map(item =>
   //     item._id === id ? { ...item, status: !item.status } : item
@@ -93,12 +96,12 @@ const ShowersHardWare = () => {
             className="custom-textfield"
           >
             <Select
-              value={selectedlayoutSlug}
+              value={selectedCategory}
               size="small"
               labelId="demo-select-small-label"
               id="demo-select-small"
               sx={{ height: "40px", background: "#F6F5FF", }}
-              onChange={handleChangeLayout}
+              onChange={handleChangeCategory}
               displayEmpty
               renderValue={(value) => {
                 const selectedItem = hardwareCategoryData?.find(item => item?.slug === value);
@@ -122,7 +125,7 @@ const ShowersHardWare = () => {
                     <Typography sx={{ fontSize: "14px" }}>
                       {data?.name}
                     </Typography>
-                    {data?.slug === selectedlayoutSlug ? (
+                    {data?.slug === selectedCategory ? (
                       <CheckIcon sx={{ color: "#8477DA" }} />
                     ) : null}
                   </Box>
@@ -159,7 +162,7 @@ const ShowersHardWare = () => {
           </Button>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {hardwareFetching ? (
+          {hardwareFetching || pageLoading ? (
             <Box
               sx={{
                 width: 40,
@@ -179,10 +182,10 @@ const ShowersHardWare = () => {
             </Box>
           ) : hardwareData && hardwareData?.length <= 0 ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-              No Hardwear Found
+              No Hardware Found
             </Typography>
           ) : hardwareData.map((data, index) => (
-            <HardwaerTable data={data} key={index} refetchData={hardwareRefetch} selectedSlug={selectedlayoutSlug} loading={hardwareFetching} />
+            <HardwareTable data={data} key={index} refetchData={hardwareRefetch} selectedSlug={selectedCategory} />
           ))
           }
 
@@ -194,7 +197,7 @@ const ShowersHardWare = () => {
         data={edit}
         isEdit={isEdit}
         refetch={hardwareRefetch}
-        categorySlug={selectedlayoutSlug}
+        categorySlug={selectedCategory}
       />
 
       {/* <ShowerHardwareModel open={openAddModal}
