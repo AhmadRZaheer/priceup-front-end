@@ -34,6 +34,7 @@ const GlassTypeComponent = ({ type }) => {
     data: GlassTypeData,
     refetch: GlassTypeRefetch,
     isFetching: GlassTypeFetching,
+    isLoading
   } = useFetchDataGlassType(type);
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
     useEditFullGlassType();
@@ -49,6 +50,7 @@ const GlassTypeComponent = ({ type }) => {
   const [activeRow, setActiveRow] = useState(null); // State to keep track of which row triggered the menu
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+  const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -84,7 +86,7 @@ const GlassTypeComponent = ({ type }) => {
         ? parseFloat(rowCosts[data._id][option.thickness])
         : option.cost,
     }));
-
+    setUpdateRefetch(false);
     editGlassType({ optionsData: updatedOptions, id: data._id });
   };
 
@@ -96,6 +98,7 @@ const GlassTypeComponent = ({ type }) => {
     }));
 
     editGlassType({ optionsData: updatedOptions, id: row._id });
+    setUpdateRefetch(true);
   };
   const actionColumn = [
     {
@@ -401,8 +404,9 @@ const GlassTypeComponent = ({ type }) => {
   }, []);
   useEffect(() => {
     if (GlassTypeEditSuccess) {
-      GlassTypeRefetch();
-      setRowCosts({});
+      if (updateRefetch) {
+        GlassTypeRefetch();
+      }
     }
     if (deleteSuccess) {
       setDeleteModalOpen(false);
@@ -513,7 +517,7 @@ const GlassTypeComponent = ({ type }) => {
           mt: 2,
         }}
       >
-        {GlassTypeFetching ? (
+        {isLoading ? (
           <Box
             sx={{
               display: "flex",

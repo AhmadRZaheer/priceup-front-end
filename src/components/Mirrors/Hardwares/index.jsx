@@ -50,6 +50,7 @@ const MirrorsHardwareComponent = () => {
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
+    const [updateRefetch, setUpdateRefetch] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
     const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
     const handleOpenDeleteModal = () => {
@@ -73,6 +74,7 @@ const MirrorsHardwareComponent = () => {
         const isFile = typeof props?.image === 'object';
         if (props?.options) {
             editHardware({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         } else {
 
             const formData = new FormData();
@@ -87,6 +89,7 @@ const MirrorsHardwareComponent = () => {
             }
             console.log(formData, 'form data')
             editHardware({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         }
         localStorage.setItem("scrollToIndex", props.id);
     };
@@ -112,24 +115,9 @@ const MirrorsHardwareComponent = () => {
         formData.append("slug", slug);
         createHardware({ data: formData, apiRoute: `${routePrefix}/save` });
     }
-    useEffect(() => {
-        refetchHardwaresList();
-        if (editSuccess) {
-            setUpdateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (createSuccess) {
-            setCreateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (deleteSuccess) {
-            setDeleteModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-    }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
+
+
+
 
     //Drop Down
     const [anchorEl, setAnchorEl] = useState(null);
@@ -148,17 +136,17 @@ const MirrorsHardwareComponent = () => {
     const open = Boolean(anchorEl);
     //Status   
     const handleStatusChange = (row) => {
-        handleClose();
         const updatedOptions = row.options.map((option) => ({
             ...option,
             status: !option.status, // Toggle the status
         }));
         // Update the backend with the new status
         editHardware({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+        setUpdateRefetch(true);
     };
 
     //Cost and status
-   
+
     // Handle the cost update
     const handleUpdateCost = (data) => {
         handleClose();
@@ -169,9 +157,33 @@ const MirrorsHardwareComponent = () => {
                     ? parseFloat(rowCosts[data._id])
                     : option.cost,
         }));
+        setUpdateRefetch(false);
         editHardware({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${data._id}` });
     };
+    useEffect(() => {
+        refetchHardwaresList();
 
+        if (createSuccess) {
+            setCreateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+        if (deleteSuccess) {
+            setDeleteModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+    }, [deleteSuccess, createSuccess, deleteOptionSuccess]);
+    useEffect(() => {
+        if (editSuccess) {
+            if (updateRefetch) {
+                refetchHardwaresList();
+            }
+            setUpdateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            // setRowCosts({})
+        }
+    }, [editSuccess])
 
     const actionColumn = [
         {
@@ -379,7 +391,7 @@ const MirrorsHardwareComponent = () => {
                             alignSelf: 'center'
                         }}
                     >
-                        Mirrors &nbsp;
+                        Mirrors &nbsp; ss
                         <Box
                             className='headingTxt'
                             sx={{
@@ -448,23 +460,24 @@ const MirrorsHardwareComponent = () => {
                             No Hardwear Found
                         </Typography>
                     ) : (
-                        <Box> <DataGrid
-                            loading={fetchingHardwaresList}
-                            style={{
-                                border: "none",
-                            }}
-                            getRowId={(row) => row._id}
-                            rows={hardwaresList}
-                            columns={columns}
-                            rowHeight={70.75}
-                            sx={{
-                                width: "100%", '.MuiDataGrid-virtualScroller': {
-                                    overflow: "hidden !important",
-                                }
-                            }}
-                            hideFooter
-                            disableColumnMenu
-                        /></Box>
+                        <Box>
+                            <DataGrid
+                                loading={fetchingHardwaresList}
+                                style={{
+                                    border: "none",
+                                }}
+                                getRowId={(row) => row._id}
+                                rows={hardwaresList}
+                                columns={columns}
+                                rowHeight={70.75}
+                                sx={{
+                                    width: "100%", '.MuiDataGrid-virtualScroller': {
+                                        overflow: "hidden !important",
+                                    }
+                                }}
+                                hideFooter
+                                disableColumnMenu
+                            /></Box>
                     )}
                 </Box>
 

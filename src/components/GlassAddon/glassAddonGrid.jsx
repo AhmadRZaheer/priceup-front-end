@@ -33,6 +33,7 @@ const GlassAddonGrid = ({ type }) => {
     data: glassAddons,
     refetch: glassAddonRefetch,
     isFetching: glassAddonFetching,
+    isLoading
   } = useFetchGlassAddons(type);
   const {
     mutate: deleteGlassAddon,
@@ -49,6 +50,7 @@ const GlassAddonGrid = ({ type }) => {
   const [activeRow, setActiveRow] = useState(null); // State to keep track of which row triggered the menu
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+  const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -86,7 +88,7 @@ const GlassAddonGrid = ({ type }) => {
           ? parseFloat(rowCosts[data._id])
           : option.cost,
     }));
-
+    setUpdateRefetch(false);
     editGlassAddon({ optionsData: updatedOptions, id: data._id });
   };
   const handleStatusChange = (row) => {
@@ -97,6 +99,7 @@ const GlassAddonGrid = ({ type }) => {
 
     // Update the backend with the new status
     editGlassAddon({ optionsData: updatedOptions, id: row._id });
+    setUpdateRefetch(true);
   };
   const actionColumn = [
     {
@@ -110,11 +113,13 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <div>
             <CustomInputField
+              disabled={params.row.slug === 'no-treatment'}
+              inputProps={{ min: 0 }}
               type={"number"}
               value={
-                rowCosts[params.row._id] !== undefined
+                (rowCosts[params.row._id] !== undefined
                   ? rowCosts[params.row._id]
-                  : params.row.options[0]?.cost
+                  : params.row.options[0]?.cost) || 0
               }
               onChange={(e) =>
                 setRowCosts({
@@ -135,7 +140,7 @@ const GlassAddonGrid = ({ type }) => {
       flex: 4,
 
       renderCell: (params) => {
-        return params.row.options[0]?.status ? (
+        return params.row.options[0]?.status  || params.row.slug === 'no-treatment' ? (
           <Typography
             className="status-active"
             sx={{ width: "fit-content" }}
@@ -163,10 +168,11 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <>
             <IconButton
+            disabled={params.row.slug === 'no-treatment'}
               aria-haspopup="true"
               onClick={(event) => handleClickAction(event, data)}
             >
-              <ArrowForward sx={{ color: "#8477DA" }} />
+              <ArrowForward sx={{ color: params.row.slug === 'no-treatment' ? '': "#8477DA" }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -259,12 +265,12 @@ const GlassAddonGrid = ({ type }) => {
               >
                 <p>Status</p>
                 {/* <Box sx={{ width: "59px", height: "39px" }}> */}
-                  <CustomSmallSwtich
-                    inputProps={{ 'aria-label': 'ant design' }}
-                    checked={data.options[0]?.status}
-                    // onChange={() => handleStatusChange(data)}
-                    text={""}
-                  />
+                <CustomSmallSwtich
+                  inputProps={{ 'aria-label': 'ant design' }}
+                  checked={data.options[0]?.status}
+                  // onChange={() => handleStatusChange(data)}
+                  text={""}
+                />
                 {/* </Box> */}
               </MenuItem>
 
@@ -309,8 +315,10 @@ const GlassAddonGrid = ({ type }) => {
   }, []);
   useEffect(() => {
     if (glassAddonEditSuccess) {
-      glassAddonRefetch();
-      setRowCosts({});
+      if (updateRefetch) {
+        glassAddonRefetch();
+      }
+      // setRowCosts({});
     }
     if (deleteSuccess) {
       glassAddonRefetch();
@@ -371,7 +379,7 @@ const GlassAddonGrid = ({ type }) => {
           mt: 2,
         }}
       >
-        {glassAddonFetching ? (
+        {isLoading ? (
           <Box
             sx={{
               display: "flex",
