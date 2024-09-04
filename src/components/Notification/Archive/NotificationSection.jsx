@@ -46,7 +46,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
           {/* <Stack sx={{ pt: 3, pb: 1, px: 2.5  }}>
             <Typography className="todayText">Earlier</Typography>
           </Stack> */}
-            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px'}}>
+            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)', p: '10px 21px'}}>
               <Typography className="timeText" >New for you</Typography>
             </Box>
           {/* <Divider /> */}
@@ -58,7 +58,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
           ))}
         </Box>
         <Box>
-            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)',p:'21px'}}>
+            <Box sx={{borderTop:'1px solid rgba(0, 0, 0, 0.05)',background:'rgba(0, 0, 0, 0.02)', p: '10px 21px'}}>
               <Typography className="timeText" >Earlier</Typography>
             </Box>
             {readList.length === 0 ? (

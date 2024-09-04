@@ -59,9 +59,9 @@ const Login = (props) => {
             <form className="login-form" style={{display:'flex',flexDirection:'column',gap:'32px'}}>
               <Box sx={{display:'flex',flexDirection:'column',gap:'20px'}}>
             <Box sx={{display:'flex',flexDirection:'column',gap:'6px'}}>
-              <Typography htmlFor="email" className="input-label-text">Email or Username</Typography>
+              <Typography htmlFor="email" className="input-label-text">Email</Typography>
               <CustomInputField
-                placeholder="Enter Email or Username"
+                placeholder="Enter Email"
                 type='text'
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -112,16 +112,16 @@ const Login = (props) => {
               Login as Field Agent
             </button> */}
             </form>
-            <Box sx={{display:'flex',justifyContent:'center',mt:'8px'}}>
-            <Button
+            {/* <Box sx={{display:'flex',justifyContent:'center',mt:'8px'}}> */}
+            {/* <Button
             fullWidth
               className="forget-pass"
               onClick={() => props.onFormSwitch("reset")}
               sx={{p: '10px 18px !important'}}
             >
               Forget Password?
-            </Button>
-            </Box>
+            </Button> */}
+            {/* </Box> */}
             </Box>
           </div>
           </Box>

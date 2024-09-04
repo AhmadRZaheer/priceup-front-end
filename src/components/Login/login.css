@@ -28,5 +28,5 @@
   color: #101828 !important;
   display: flex;
   align-self: center;
-  font-family: 'Inter';
+  font-family: "Roboto", sans-serif !important;
 }

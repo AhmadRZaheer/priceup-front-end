@@ -149,7 +149,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               mb: 2,
             }}
           >
-            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '21px' }}>
+            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '10px 21px' }}>
               <Typography className="timeText" >New for you</Typography>
             </Box>
             {unReadList.length === 0 ? (
@@ -158,7 +158,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               unReadList?.map((data, index) => (
                 <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
               ))}
-            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '21px', mt: 3 }}>
+            <Box sx={{ borderTop: '1px solid rgba(0, 0, 0, 0.05)', background: 'rgba(0, 0, 0, 0.02)', p: '10px 21px', mt: 3 }}>
               <Typography className="timeText" >Earlier</Typography>
             </Box>
             {readList.length === 0 ? (

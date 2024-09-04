@@ -30,7 +30,7 @@ const SingleNotificationItem = ({ data, sx, handleItemClick, selectedId }) => {
         }}
       >
 
-        <Stack direction="row" gap={1}>
+        <Stack direction="row" gap={2}>
           <Box sx={{ height: '10px', width: '10px', borderRadius: '4.94px', background: '#8477DA' , alignSelf:'center' }} />
           <Stack direction='column'>
             <Typography
