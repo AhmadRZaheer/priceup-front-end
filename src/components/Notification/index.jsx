@@ -52,7 +52,7 @@ const Notifications = () => {
   }
   return (
     <Box>
-      <Grid sx={{ pt: 1, pb: 2, px: 2 }}>
+      <Grid sx={{ pb: 2, px: 2 }}>
         <Stack direction="row" gap={1} sx={{}}>
           <Typography className='notificationText'
             sx={{

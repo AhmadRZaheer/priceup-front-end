@@ -214,7 +214,7 @@ const FinishesTable = () => {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            width: "99.5%",
+            // width: "99.5%",
             margin: "auto",
           }}
         >
@@ -246,9 +246,9 @@ const FinishesTable = () => {
         <Box
           sx={{
             border: "1px solid #D0D5DD",
-            p: 0,
-            borderRadius: "12px",
+            borderRadius: "8px",
             background: "#FFFF",
+            width: "99.88%",
             mt: 4,
             overflow: "hidden",
           }}

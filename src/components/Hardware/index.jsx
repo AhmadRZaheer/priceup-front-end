@@ -68,7 +68,7 @@ const ShowersHardWare = () => {
           width: "100%",
         }}
       >
-        <Box sx={{ display: "flex", gap: "12px", pt: '30px' }}>
+        <Box sx={{ display: "flex", gap: "12px",}}>
           <Typography
             className='headingTxt'
             sx={{

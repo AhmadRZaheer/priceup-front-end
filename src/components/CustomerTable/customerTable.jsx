@@ -153,7 +153,7 @@ const CustomerTable = () => {
       <Box
         sx={{
           backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
-          height: "98.2vh",
+          // height: "98.2vh",
         }}
       >
         <Box
@@ -161,11 +161,10 @@ const CustomerTable = () => {
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
-            width: "99.5%",
+            // width: "99.5%",
             pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
-            my: 1,
-            pt: 3,
+            mb: 1,
           }}
         >
           <Typography
@@ -214,9 +213,9 @@ const CustomerTable = () => {
         </Box>
         <Box
           sx={{
-            border: "1px solid #EAECF0",
+            border: "1px solid #D0D5DD",
             borderRadius: "8px",
-            width: "99.5%",
+            width: "99.88%",
             m: "auto",
             overflow: "hidden",
             mt: 2,

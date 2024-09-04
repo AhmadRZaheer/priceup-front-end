@@ -128,7 +128,7 @@ const SingleLocation = ({
                 </Box>
               ) : (
                 <Box sx={{ color: "#667085" }}>
-                  <Typography>No User</Typography>
+                  <Typography sx={{height:'39px'}}>No User</Typography>
                 </Box>
               )}
             </Box>

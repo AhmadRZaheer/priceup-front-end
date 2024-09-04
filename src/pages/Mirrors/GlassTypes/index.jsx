@@ -13,7 +13,7 @@ export const MirrorsGlassType = () => {
         {/* <Sidebar /> */}
         {/* <CommonSideBar/> */}
         <CommonLayout>
-        <Box className="gtcontent-wrapper">
+        <Box>
             <MirrorsGlassTypeComponent />
         </Box>
         </CommonLayout>

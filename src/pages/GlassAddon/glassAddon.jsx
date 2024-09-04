@@ -12,7 +12,7 @@ const GlassAddon = () => {
       {/* <Sidebar /> */}
       {/* <CommonSideBar/> */}
       <CommonLayout>
-        <Box className="customersContainer" sx={{ px: { md: 2, xs: 0 } }}>
+        <Box className="customersContainer">
           <GlassAddonComponent />
         </Box>
       </CommonLayout>

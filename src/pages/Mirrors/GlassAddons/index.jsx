@@ -13,7 +13,7 @@ export const MirrorsGlassAddon = () => {
         {/* <Sidebar /> */}
         {/* <CommonSideBar /> */}
         <CommonLayout>
-        <Box className="gcontent-wrapper">
+        <Box>
             <MirrorsGlassAddonComponent />
         </Box>
        </CommonLayout>

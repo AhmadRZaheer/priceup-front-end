@@ -348,11 +348,7 @@ const GlassAddonGrid = ({ type }) => {
         >
           Showers<span style={{ color: "black" }}> / {type}</span>
         </p>
-        <div
-          style={{
-            padding: 4,
-          }}
-        >
+        <div>
           <Button
             onClick={handleOpen}
             variant="contained"
@@ -371,9 +367,9 @@ const GlassAddonGrid = ({ type }) => {
 
       <Box
         sx={{
-          border: "1px solid #EAECF0",
+          border: "1px solid #D0D5DD",
           borderRadius: "8px",
-          width: "99.5%",
+          width: "99.88%",
           m: "auto",
           overflow: "hidden",
           mt: 2,

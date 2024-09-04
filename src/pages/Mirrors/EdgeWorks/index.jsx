@@ -13,7 +13,7 @@ export const MirrorsEdgeWork = () => {
         {/* <Sidebar /> */}
         {/* <CommonSideBar/> */}
         <CommonLayout>
-        <Box className="edcontent-wrapper">
+        <Box >
             <MirrorsEdgeWorkComponent />
         </Box>
         </CommonLayout>

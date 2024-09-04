@@ -111,19 +111,18 @@ export default function Customers() {
         sx={{
           display: "flex",
           justifyContent: "center",
-          paddingTop: { sm: 3, xs: 9 },
-          width: "98%",
+          paddingTop: { sm: 0, xs: 9 },
+          width: "100%",
           // height: "100vh",
           color: { xs: "white", sm: "black" },
           overflow: "auto",
           m: "auto",
         }}
       >
-        <Box sx={{ width: "98%" }}>
+        <Box sx={{ width: "100%", }}>
           <Typography
             sx={{
               fontSize: 30,
-              pl: { sm: 3, xs: 0 },
               color: { xs: "#101828", sm: "#101828" },
             }}
           >
@@ -132,7 +131,7 @@ export default function Customers() {
 
           <Box
             sx={{
-              m: 3,
+              mb: 3,
               border: "1px solid #EAECF0",
               borderRadius: "8px",
               display: { sm: "block", xs: "none" },
@@ -179,7 +178,19 @@ export default function Customers() {
               />
             </Box>
 
-            <Box className="CustomerTable-1">
+            <Box
+              // sx={{
+              //   border: "1px solid #D0D5DD",
+              //   borderRadius: "8px",
+              //   overflow: "hidden",
+              //   width: "99.88%",
+              //   m: "auto",
+              //   mt: 1.5,
+              //   background: '#FFFF'
+              // }}
+
+              className="CustomerTable-1"
+              >
               {filteredData.length >= 1 ? (
                 <>
                   <DataGrid

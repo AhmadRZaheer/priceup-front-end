@@ -162,9 +162,9 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
       <Box
         sx={{
           border: '1px solid #D0D5DD',
-          borderRadius: '12px',
+          borderRadius: '8px',
           overflow: 'hidden',
-          width: '99.5%',
+          width: "99.88%",
           m: 'auto',
           mt: 1.5,
           background: '#FFFF',

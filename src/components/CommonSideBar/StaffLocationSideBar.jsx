@@ -350,10 +350,10 @@ const StaffLocationSideBar = () => {
             <FmdGoodOutlined   />
             <span>Old Estimates</span>
           </MenuSigleItem>
-          <MenuSigleItem link="/customers">
+          {/* <MenuSigleItem link="/customers">
             <FmdGoodOutlined   />
             <span>Customer</span>
-          </MenuSigleItem>
+          </MenuSigleItem> */}
           </Box>         
         </ul>
       </div>

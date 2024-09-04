@@ -69,10 +69,10 @@ export default function Projects() {
     <>
       <Box
         sx={{
-          p: { sm: "20px 0px 20px 0px", xs: "70px 0px 20px 10px" },
+          p: { sm: "0px 0px 20px 0px", xs: "70px 0px 20px 10px" },
           display: "flex",
           justifyContent: "space-between",
-          width: "99.5%",
+          // width: "99.5%",
           gap: 1,
         }}
       >
@@ -98,7 +98,7 @@ export default function Projects() {
             Create, edit and manage your Projects.
           </Typography>
         </Box>
-        <Box>
+        <Box sx={{alignSelf:'center'}}>
           <Button
             fullWidth
             variant="contained"
@@ -136,7 +136,7 @@ export default function Projects() {
         {/* {decodedToken?.role !== userRoles.STAFF ? ( */}
         <Box
           sx={{
-            width: { sm: "99.5%", xs: "99%" },
+            width: { sm: "100%", xs: "99%" },
             // pr: 2,
             px: { sm: 0, xs: 1 },
           }}
@@ -194,7 +194,7 @@ export default function Projects() {
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
-            width: "99.5%",
+            // width: "99.5%",
             pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
             my: 1,
@@ -320,13 +320,11 @@ export default function Projects() {
 
         <Box
           sx={{
-            width: "99.5%",
-            border: "1px solid #EAECF0",
+            width: "99.88%",
+            border: "1px solid #D0D5DD",
             borderRadius: "8px",
             background: "#FFFFFF",
-            mr: { sm: 0, xs: 1 },
-            ml: { sm: 0, xs: 1 },
-            mb: 2,
+            m: "auto",
             mt: 2,
           }}
         >

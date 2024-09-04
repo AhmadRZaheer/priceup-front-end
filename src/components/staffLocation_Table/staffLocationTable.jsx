@@ -94,8 +94,8 @@ const StaffLocationsTable = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          px: 4,
-          my: 2,
+          // px: 4,
+          mb: 2,
           // mt: 12,
         }}
       >
@@ -119,7 +119,7 @@ const StaffLocationsTable = () => {
           />
         </Box>
       </Box>
-      <Grid container gap={2} p={4} pt={0}>
+      <Grid container gap={2} >
         {isLoading || isSwitching ? (
           <Box
             sx={{

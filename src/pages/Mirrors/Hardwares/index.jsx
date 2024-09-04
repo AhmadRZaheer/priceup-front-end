@@ -13,7 +13,7 @@ export const MirrorsHardware = () => {
         {/* <Sidebar /> */}
         {/* <CommonSideBar/> */}
         <CommonLayout>
-        <Box className="mcontent-wrapper">
+        <Box>
             <MirrorsHardwareComponent />
         </Box>
         </CommonLayout>

@@ -14,7 +14,7 @@ const Settings = () => {
       {/* <Sidebar /> */}
       {/* <CommonSideBar/> */}
       <CommonLayout>
-      <div className="settingsContainer">
+      <div>
         <CampanySetting />
       </div>
       </CommonLayout>

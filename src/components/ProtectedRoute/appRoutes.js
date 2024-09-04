@@ -145,7 +145,7 @@ const AppRoutes = () => {
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
           </Route>
-          <Route path="/customers" element={<Customers />} />
+          {/* <Route path="/customers" element={<Customers />} /> */}
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
             <Route path="category" element={<EstimateCategory />} />

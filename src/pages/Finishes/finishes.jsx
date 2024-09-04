@@ -13,7 +13,6 @@ const Finishes = () => {
       <CommonLayout>
         <Box
           className="customersContainer"
-          sx={{ px: { sm: 2, xs: 0 }, pt: { sm: 1, xs: 0 } }}
         >
           <FinishesTable />
         </Box>

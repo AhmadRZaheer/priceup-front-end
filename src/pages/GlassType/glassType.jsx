@@ -11,7 +11,7 @@ const GlassType = () => {
       {/* <Sidebar /> */}
       {/*  <CommonSideBar/> */}
       <CommonLayout>
-        <Box className="customersContainer" sx={{ px: { sm: 2, xs: 0 } }}>
+        <Box className="customersContainer">
           <GlassTypeTable />
         </Box>
       </CommonLayout>

@@ -34,7 +34,6 @@ const GlassAddonComponent = () => {
         sx={{
           backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           height: "90vh",
-          paddingTop: 2,
         }}
       >
         <Box>

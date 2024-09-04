@@ -172,9 +172,9 @@ const CampanySetting = () => {
           gap: 3,
           backgroundColor: "#F6F5FF",
           // height: "98vh",
-          paddingLeft: 3.5,
-          pr: 3.5,
-          pt: 2.4,
+          // paddingLeft: 3.5,
+          // pr: 3.5,
+          // pt: 2.4,
         }}
       >
         {/* setting */}

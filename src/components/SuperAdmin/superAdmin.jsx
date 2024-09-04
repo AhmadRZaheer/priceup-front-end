@@ -132,15 +132,17 @@ const SuperAdminTable = () => {
   }, [switchedSuperAdmin]);
 
   return (
-    <Box sx={{ height: "90vh", overflow: "auto" }}>
+    <Box sx={{ 
+      // height: "90vh",
+       overflow: "auto"
+        }}>
       <div className="page-title-location">
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            width: "98%",
+            // width: "98%",
             margin: "auto",
-            mt: 2,
           }}
         >
           <Box>
@@ -163,7 +165,7 @@ const SuperAdminTable = () => {
               Add, edit and manage your locations.
             </Typography>
           </Box>
-          <Box sx={{}}>
+          <Box sx={{alignSelf:'center'}}>
             <Button
               fullWidth
               variant="contained"
@@ -185,7 +187,7 @@ const SuperAdminTable = () => {
           </Box>
         </Box>
       </div>
-      <Grid container sx={{ px: 3.8 }} spacing={2}>
+      <Grid container sx={{}} spacing={2}>
         {[
           { title: "Active Locations", text: locationsData?.globalCounts?.activeLocations ?? 0, variant: "blue" },
           {
@@ -208,7 +210,6 @@ const SuperAdminTable = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          px: 4,
           my: 2,
           mt: 3,
         }}
@@ -295,7 +296,7 @@ const SuperAdminTable = () => {
           {/* </Box> */}
         </Box>
       </Box>
-      <Grid container gap={2} p={4} pt={0}>
+      <Grid container gap={2} pt={0}>
         {isFetching ? (
           <Box
             sx={{

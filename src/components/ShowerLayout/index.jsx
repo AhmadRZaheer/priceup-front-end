@@ -16,7 +16,7 @@ const ShowerLayout = () => {
     refetch();
   }, [refetch]);
   return (
-    <Box sx={{ px: "34px", py: 3 }}>
+    <Box>
       <Box
         sx={{
           display: "flex",

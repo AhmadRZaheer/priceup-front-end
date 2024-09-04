@@ -95,7 +95,7 @@ const CustomAdminsTable = () => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        // height: "100vh",
         overflow: "auto",
         width: "100%",
         bgcolor: { sm: "#F6F5FF", xs: '#FFFFFF' },
@@ -105,8 +105,8 @@ const CustomAdminsTable = () => {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-          px: 4,
-          my: 2,
+          // px: 4,
+          mb: 2,
           // mt: 12,
         }}
       >
@@ -130,7 +130,7 @@ const CustomAdminsTable = () => {
           />
         </Box>
       </Box>
-      <Grid container gap={2} p={4} pt={0}>
+      <Grid container gap={2}>
         {isLoading ? (
           <Box
             sx={{

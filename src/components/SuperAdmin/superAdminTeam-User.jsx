@@ -300,12 +300,14 @@ const SuperAdminTeam = () => {
 
   return (
     <>
-      <Box sx={{ width: "100%", m: "auto" }}>
+      <Box sx={{  overflow: "auto", }}>
+      <div className="page-title-location">
         <Box
           sx={{
-            p: "20px 20px 20px 30px",
             display: "flex",
             justifyContent: "space-between",
+            // width: "98%",
+            margin: "auto",
           }}
         >
           <Box>
@@ -330,7 +332,7 @@ const SuperAdminTeam = () => {
               Add, edit and manage your Users.
             </Typography>
           </Box>
-          <Box>
+          <Box sx={{alignSelf:'center'}}>
             <Button
               fullWidth
               variant="contained"
@@ -350,7 +352,8 @@ const SuperAdminTeam = () => {
             </Button>
           </Box>
         </Box>
-        <Grid container sx={{ px: 3 }} spacing={2}>
+        </div>
+        <Grid container sx={{ }} spacing={2}>
           {[
             {
               title: "Total Users",
@@ -387,7 +390,6 @@ const SuperAdminTeam = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            px: 3,
             my: 2,
           }}
         >
@@ -620,10 +622,10 @@ const SuperAdminTeam = () => {
 
         <Box
           sx={{
-            border: "1px solid rgba(212, 219, 223, 1)",
+            border: "1px solid #D0D5DD",
             borderRadius: "8px",
             overflow: "hidden",
-            width: "97%",
+            width: "99.88%",
             m: "auto",
           }}
         >
@@ -646,7 +648,7 @@ const SuperAdminTeam = () => {
               No User Found
             </Typography>
           ) : (
-            <div className="CustomerTable">
+            <div >
               <DataGrid
                 loading={usersListFetching}
                 style={{

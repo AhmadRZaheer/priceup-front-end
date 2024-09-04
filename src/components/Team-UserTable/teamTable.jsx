@@ -224,15 +224,15 @@ const TeamTable = () => {
         sx={{
           width: "100%",
           backgroundColor: { sm: "#F6F5FF", xs: '#FFFFFF' },
-          height: "98.2vh",
+          // height: "98.2vh",
         }}
       >
         <Box
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            px: 3.5,
-            py: 2,
+            // px: 3.5,
+            pb: 2,
           }}
         >
           <Box>
@@ -257,7 +257,7 @@ const TeamTable = () => {
               Add, edit and manage your Users.
             </Typography>
           </Box>
-          <Box>
+          <Box sx={{ alignSelf: 'center' }}>
             <Button
               variant="contained"
               sx={{
@@ -279,7 +279,7 @@ const TeamTable = () => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            px: 3,
+            // px: 3,
             my: 2,
           }}
         >
@@ -381,69 +381,69 @@ const TeamTable = () => {
 
         <Box
           sx={{
-            border: "1px solid rgba(208, 213, 221, 1)",
+            width: "99.88%",
             borderRadius: "8px",
             overflow: "hidden",
-            width: "97%",
+            border: "1px solid #D0D5DD",
             m: "auto",
           }}
         >
-          <div className="CustomerTable-team">
-            {filteredData.length >= 1 ? (
-              <>
-                <DataGrid
-                  loading={staffsListFetching}
-                  style={{
-                    border: "none",
-                  }}
-                  getRowId={(row) => row._id}
-                  rows={filteredData}
-                  columns={teamColumns.concat(actionColumn)}
-                  page={page}
-                  pageSize={itemsPerPage}
-                  rowCount={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
-                  // rowCount={filteredData.length}
-                  // pageSizeOptions={[1, , 25]}
-                  sx={{ width: "100%" }}
-                  hideFooter
-                  disableColumnMenu
-                  pagination={false}
-                />
-                <Pagination
-                  totalRecords={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
-                  itemsPerPage={itemsPerPage}
-                  page={page}
-                  setPage={setPage}
-                />
-              </>
-            ) : (
-              <Typography
-                sx={{
-                  textAlign: "center",
-                  fontSize: 20,
-                  color: "#667085",
-                  py: 2,
+        <div className="CustomerTable-team">
+          {filteredData.length >= 1 ? (
+            <>
+              <DataGrid
+                loading={staffsListFetching}
+                style={{
+                  border: "none",
                 }}
-              >
-                No User found
-              </Typography>
-            )}
-          </div>
-        </Box>
-        <DeleteModal
-          open={openDeleteModal}
-          close={handleCloseDeleteModal}
-          isLoading={deleteStaffLoading}
-          handleDelete={handleStaffDelete}
-        />
-        <AddTeamMembers
-          open={openModifyModal}
-          close={handleCloseModifyModal}
-          recordToModify={recordToModify}
-          refetchUsers={refetchStaffsList}
-          locationsList={[]}
-        />
+                getRowId={(row) => row._id}
+                rows={filteredData}
+                columns={teamColumns.concat(actionColumn)}
+                page={page}
+                pageSize={itemsPerPage}
+                rowCount={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
+                // rowCount={filteredData.length}
+                // pageSizeOptions={[1, , 25]}
+                sx={{ width: "100%" }}
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
+              <Pagination
+                totalRecords={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
+                itemsPerPage={itemsPerPage}
+                page={page}
+                setPage={setPage}
+              />
+            </>
+          ) : (
+            <Typography
+              sx={{
+                textAlign: "center",
+                fontSize: 20,
+                color: "#667085",
+                py: 2,
+              }}
+            >
+              No User found
+            </Typography>
+          )}
+        </div>
       </Box>
+      <DeleteModal
+        open={openDeleteModal}
+        close={handleCloseDeleteModal}
+        isLoading={deleteStaffLoading}
+        handleDelete={handleStaffDelete}
+      />
+      <AddTeamMembers
+        open={openModifyModal}
+        close={handleCloseModifyModal}
+        recordToModify={recordToModify}
+        refetchUsers={refetchStaffsList}
+        locationsList={[]}
+      />
+    </Box >
     </>
   );
 };

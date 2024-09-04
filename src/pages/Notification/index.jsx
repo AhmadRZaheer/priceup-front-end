@@ -53,7 +53,7 @@ const Notification = () => {
   return (
     <>
       <CommonLayout>
-        <Box className="content-wrapper" sx={{px: { lg: '28px',sm:'20px', xs: '0px' }}}>
+        <Box className="content-wrapper">
           <Notifications />
         </Box>
       </CommonLayout>

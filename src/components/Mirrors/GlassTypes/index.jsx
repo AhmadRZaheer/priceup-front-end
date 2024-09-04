@@ -412,7 +412,6 @@ const MirrorsGlassTypeComponent = () => {
                     sx={{
                         display: "flex",
                         justifyContent: "space-between",
-                        pt: 1.5,
                         pb: 1.5,
                     }}
                 >
@@ -453,10 +452,10 @@ const MirrorsGlassTypeComponent = () => {
                 </Box>
 
                 <Box sx={{
-                    border: "1px solid #EAECF0",
+                    border: "1px solid #D0D5DD",
                     borderRadius: "8px",
                     overflow: "hidden",
-                    width: "99.5%",
+                    width: "99.88%",
                     m: "auto",
                     mt: 1.5,
                     background: '#FFFF'

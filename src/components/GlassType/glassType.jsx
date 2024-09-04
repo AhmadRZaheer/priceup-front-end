@@ -34,7 +34,7 @@ const GlassTypeTable = () => {
         sx={{
           backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           height: "90vh",
-          paddingTop: 2,
+          // paddingTop: 2,
         }}
       >
         <GlassTypeComponent type={"Glass Types"} />

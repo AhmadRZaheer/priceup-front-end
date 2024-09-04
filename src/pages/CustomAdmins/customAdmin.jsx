@@ -13,7 +13,7 @@ const CustomAdminPage = () => {
     //   <CommonSideBar />
     //   <TopBar/>
     <CommonLayout>
-      <Box sx={{width: '100%',flex:6}}>
+      <Box >
         <CustomAdminsTable />
       </Box>
       </CommonLayout>

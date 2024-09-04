@@ -8,10 +8,11 @@ const CommonLayout = ({ children }) => {
   return (
     <>
       <TopBar />
-      <Box style={{ display: "flex" }}>
+      <Box style={{  }}>
         <CommonSideBar />
-
-        {children}
+        <Box sx={{py:4,px:'22px',ml:{sm:'296px',xs:'0px'}}}>
+          {children}
+        </Box>
       </Box>
     </>
   );
