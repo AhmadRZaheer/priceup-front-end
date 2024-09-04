@@ -49,7 +49,7 @@ const MirrorsGlassTypeComponent = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
-
+    const [updateRefetch, setUpdateRefetch] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRow, setActiveRow] = useState(null);
     const [rowCosts, setRowCosts] = useState({});
@@ -75,6 +75,7 @@ const MirrorsGlassTypeComponent = () => {
         const isFile = typeof props?.image === 'object';
         if (props?.options) {
             editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         } else {
 
             const formData = new FormData();
@@ -89,6 +90,7 @@ const MirrorsGlassTypeComponent = () => {
             }
             console.log(formData, 'form data')
             editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         }
         localStorage.setItem("scrollToIndex", props.id);
     };
@@ -108,26 +110,6 @@ const MirrorsGlassTypeComponent = () => {
         formData.append("slug", slug);
         createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
     }
-    useEffect(() => {
-        refetchGlassTypesList();
-        if (editSuccess) {
-            setUpdateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (createSuccess) {
-            setCreateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (deleteSuccess) {
-            setDeleteModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-    }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
-
-    console.log(itemToModify, 'item to modify');
 
     const miniTab = useMediaQuery("(max-width: 1280px)");
     // Data Grid
@@ -148,17 +130,13 @@ const MirrorsGlassTypeComponent = () => {
                 ? parseFloat(rowCosts[`${data._id}-${option.thickness}`])
                 : option.cost,
         }));
+        setUpdateRefetch(false);
         editGlassType({
             data: { options: updatedOptions },
             apiRoute: `${routePrefix}/${data._id}`,
         });
     };
-
-
-
     const handleStatusChange = (row, optionIndex) => {
-        handleClose();
-
         const updatedOptions = row.options.map((option, index) => {
             // Only toggle the status of the option at the specified index
             if (index === optionIndex) {
@@ -170,8 +148,33 @@ const MirrorsGlassTypeComponent = () => {
             return option;
         });
         editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+        setUpdateRefetch(true);
     };
 
+    useEffect(() => {
+        refetchGlassTypesList();
+       
+        if (createSuccess) {
+            setCreateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+        if (deleteSuccess) {
+            setDeleteModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+    }, [deleteSuccess,  createSuccess, deleteOptionSuccess]);
+
+    useEffect(()=>{
+        if (editSuccess) {
+            if (updateRefetch) {
+                refetchGlassTypesList();
+              }
+            setUpdateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+        }
+    },[editSuccess])
 
     const thicknessOptions = [{ id: 0, name: 'Thickness 1/4' }, { id: 1, name: 'Thickness 1/8' }]
 

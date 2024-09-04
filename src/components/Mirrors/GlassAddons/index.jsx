@@ -58,7 +58,7 @@ const MirrorsGlassAddonComponent = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [itemToModify, setItemToModify] = useState(null);
-
+  const [updateRefetch, setUpdateRefetch] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
@@ -69,12 +69,6 @@ const MirrorsGlassAddonComponent = () => {
 
   const handleHardwareDelete = () => {
     deleteGlassAddon({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
-  };
-
-  const handleHardwareOptionDelete = (itemId, optionId) => {
-    deleteGlassAddonOption({
-      apiRoute: `${routePrefix}/${itemId}/${optionId}`,
-    });
   };
 
   const handleOpenUpdateModal = () => {
@@ -89,6 +83,7 @@ const MirrorsGlassAddonComponent = () => {
         data: { options: props.options },
         apiRoute: `${routePrefix}/${props.id}`,
       });
+      setUpdateRefetch(true);
     } else {
       const formData = new FormData();
       if (props?.name) {
@@ -105,6 +100,7 @@ const MirrorsGlassAddonComponent = () => {
         data: formData,
         apiRoute: `${routePrefix}/${props.id}`,
       });
+      setUpdateRefetch(true);
     }
     localStorage.setItem("scrollToIndex", props.id);
   };
@@ -124,26 +120,7 @@ const MirrorsGlassAddonComponent = () => {
     formData.append("slug", slug);
     createGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
   };
-  useEffect(() => {
-    refetchGlassAddonsList();
-    if (editSuccess) {
-      setUpdateModalOpen(false);
-      dispatch(setMirrorsHardwareRefetch());
-      setRowCosts({})
-    }
-    if (createSuccess) {
-      setCreateModalOpen(false);
-      dispatch(setMirrorsHardwareRefetch());
-      setRowCosts({})
-    }
-    if (deleteSuccess) {
-      setDeleteModalOpen(false);
-      dispatch(setMirrorsHardwareRefetch());
-      setRowCosts({})
-    }
-  }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
-
-  const miniTab = useMediaQuery("(max-width: 1280px)");
+   const miniTab = useMediaQuery("(max-width: 1280px)");
 
   // Data Grid
 
@@ -165,18 +142,45 @@ const MirrorsGlassAddonComponent = () => {
           ? parseFloat(rowCosts[data._id])
           : option.cost,
     }));
+    setUpdateRefetch(false);
     editGlassAddon({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${data._id}` });
   };
 
   const handleStatusChange = (row) => {
-    handleClose();
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
     }));
     // Update the backend with the new status
     editGlassAddon({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+    setUpdateRefetch(true);
   };
+
+  useEffect(() => {
+    refetchGlassAddonsList();
+
+    if (createSuccess) {
+      setCreateModalOpen(false);
+      dispatch(setMirrorsHardwareRefetch());
+      setRowCosts({})
+    }
+    if (deleteSuccess) {
+      setDeleteModalOpen(false);
+      dispatch(setMirrorsHardwareRefetch());
+      setRowCosts({})
+    }
+  }, [deleteSuccess, createSuccess, deleteOptionSuccess]);
+
+  useEffect(() => {
+    if (editSuccess) {
+      if (updateRefetch) {
+        refetchGlassAddonsList();
+      }
+      setUpdateModalOpen(false);
+      dispatch(setMirrorsHardwareRefetch());
+      // setRowCosts({})
+    }
+  }, [editSuccess])
 
   const actionColumn = [
     {

@@ -48,7 +48,7 @@ const MirrorsEdgeWorkComponent = () => {
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [updateModalOpen, setUpdateModalOpen] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
-
+    const [updateRefetch, setUpdateRefetch] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRow, setActiveRow] = useState(null);
     const [rowCosts, setRowCosts] = useState({});
@@ -61,10 +61,6 @@ const MirrorsEdgeWorkComponent = () => {
         deleteGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
     };
 
-    const handleHardwareOptionDelete = (itemId, optionId) => {
-        deleteGlassTypeOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
-    };
-
     const handleOpenUpdateModal = () => {
         setUpdateModalOpen(true);
     };
@@ -74,6 +70,7 @@ const MirrorsEdgeWorkComponent = () => {
         const isFile = typeof props?.image === 'object';
         if (props?.options) {
             editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         } else {
 
             const formData = new FormData();
@@ -88,6 +85,7 @@ const MirrorsEdgeWorkComponent = () => {
             }
             console.log(formData, 'form data')
             editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+            setUpdateRefetch(true);
         }
         localStorage.setItem("scrollToIndex", props.id);
     };
@@ -107,24 +105,6 @@ const MirrorsEdgeWorkComponent = () => {
         formData.append("slug", slug);
         createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
     }
-    useEffect(() => {
-        refetchEdgeWorksList();
-        if (editSuccess) {
-            setUpdateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (createSuccess) {
-            setCreateModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-        if (deleteSuccess) {
-            setDeleteModalOpen(false);
-            dispatch(setMirrorsHardwareRefetch());
-            setRowCosts({})
-        }
-    }, [deleteSuccess, editSuccess, createSuccess, deleteOptionSuccess]);
     const miniTab = useMediaQuery("(max-width: 1280px)");
 
     // Data Grid
@@ -157,17 +137,13 @@ const MirrorsEdgeWorkComponent = () => {
                 ? parseFloat(rowCosts[`${data._id}-${option.thickness}`])
                 : option.cost,
         }));
+        setUpdateRefetch(false);
         editGlassType({
             data: { options: updatedOptions },
             apiRoute: `${routePrefix}/${data._id}`,
         });
     };
-
-
-
     const handleStatusChange = (row, optionIndex) => {
-        handleClose();
-
         const updatedOptions = row.options.map((option, index) => {
             // Only toggle the status of the option at the specified index
             if (index === optionIndex) {
@@ -179,8 +155,33 @@ const MirrorsEdgeWorkComponent = () => {
             return option;
         });
         editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+        setUpdateRefetch(true);
     };
 
+    useEffect(() => {
+        refetchEdgeWorksList();
+
+        if (createSuccess) {
+            setCreateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+        if (deleteSuccess) {
+            setDeleteModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            setRowCosts({})
+        }
+    }, [deleteSuccess, createSuccess, deleteOptionSuccess]);
+    useEffect(() => {
+        if (editSuccess) {
+            if (updateRefetch) {
+                refetchEdgeWorksList();
+            }
+            setUpdateModalOpen(false);
+            dispatch(setMirrorsHardwareRefetch());
+            // setRowCosts({})
+        }
+    }, [editSuccess])
 
     const thicknessOptions = [{ id: 0, name: 'Thickness 1/4' }, { id: 1, name: 'Thickness 1/8' }]
 
@@ -310,7 +311,7 @@ const MirrorsEdgeWorkComponent = () => {
                     <>
                         <IconButton aria-haspopup="true"
                             onClick={(event) => { handleClickAction(event, data); setItemToModify(data) }}>
-                                         <ArrowForward sx={{ color: "#8477DA" }} />
+                            <ArrowForward sx={{ color: "#8477DA" }} />
 
                         </IconButton>
                         <Menu
