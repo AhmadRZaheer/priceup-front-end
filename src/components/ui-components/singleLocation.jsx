@@ -1,4 +1,4 @@
-import { Box, Button, Divider, IconButton, Stack, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Divider, IconButton, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import DefaultImage from "./defaultImage";
 import "./singleLocation.scss";
 import { AddCircleRounded, East } from "@mui/icons-material";
@@ -20,10 +20,11 @@ const SingleLocation = ({
   refetch,
 }) => {
   const userToken = getDecryptedToken();
+  const responsive = useMediaQuery('(min-width:1400px) and (max-width:1550px)');
   return (
     <>
       <Box
-      className='locationCard'
+        // className='locationCard'
         sx={{
           // width: { lg: "448px", xs: "600px" },
           borderRadius: "8px",
@@ -31,9 +32,9 @@ const SingleLocation = ({
           boxShadow: "0px 1px 2px 0px rgba(16, 24, 40, 0.05)",
           padding: "16px",
           backgroundColor: "white",
-          display:'flex',
-          flexDirection:'column',
-          gap:'10px'
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '10px'
         }}
       >
         <Box
@@ -44,13 +45,13 @@ const SingleLocation = ({
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <DefaultImage image={data?.image} name={data?.name} type={6} />
+            <DefaultImage image={data?.image} name={data?.name} type={responsive? 1 : 6}  />
             <Tooltip title={data?.name} placement="top">
               <Typography
                 sx={{
                   fontSize: 20,
                   fontWeight: 600,
-                  width: "200px", // Adjust width as per your requirement
+                  width: responsive ? '150px' : '200px',              
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -66,7 +67,7 @@ const SingleLocation = ({
             {data.user?.status ? "Active" : "Inactive"}
           </Typography>
         </Box>
-        <Divider sx={{borderColor:'#D0D5DD'}} />
+        <Divider sx={{ borderColor: '#D0D5DD' }} />
         {/* statuses */}
         <Box
           sx={{
@@ -80,10 +81,10 @@ const SingleLocation = ({
         >
           {/* users */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text">Users</Typography>
+            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}>Users</Typography>
             <Box>
               {data?.staffs?.length !== 0 ? (
-                <Box className="user-cellWrap" sx={{height: "33px"}}>
+                <Box className="user-cellWrap" sx={{ height:responsive?'27px':'33px' }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -104,7 +105,8 @@ const SingleLocation = ({
                             key={index}
                             image={user?.image}
                             name={user?.name}
-                            type={5}
+                            // type={5}
+                            style={{height:responsive?'25px':'31px',width:responsive?'25px':'31px'}}
                           />
                         </Box>
                       );
@@ -121,41 +123,41 @@ const SingleLocation = ({
                       />
                     )}
                   </Box>
-                  <Typography sx={{ fontSize: "15px", fontWeight: 500 }}>
+                  <Typography sx={{ fontSize: responsive ? '13px' :"15px", fontWeight: 500 }}>
                     {data?.staffs?.length}{" "}
                     {data?.staffs?.length === 1 ? "User" : "Users"}
                   </Typography>
                 </Box>
               ) : (
                 <Box sx={{ color: "#667085" }}>
-                  <Typography sx={{height:'39px'}}>No User</Typography>
+                  <Typography sx={{ height: '39px' }}>No User</Typography>
                 </Box>
               )}
             </Box>
           </Stack>
           {/* Layouts */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text"> Layouts</Typography>
-            <Typography  sx={{fontSize:'16px', fontWeight: 600 }}>
+            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Layouts</Typography>
+            <Typography  sx={{ fontSize: responsive?15:16, fontWeight: responsive ? 500 : 600 }}>
               {data?.layouts ?? 0}
             </Typography>
           </Stack>
           {/* Customers */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text"> Customers</Typography>
-            <Typography sx={{fontSize:'16px', fontWeight: 600 }}>
+            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Customers</Typography>
+            <Typography sx={{ fontSize: '16px', fontWeight: 600 }}>
               {data?.customers ?? 0}
             </Typography>
           </Stack>
           {/* Layouts */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text"> Estimates</Typography>
-            <Typography sx={{ fontSize:'16px',fontWeight: 600 }}>
+            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Estimates</Typography>
+            <Typography sx={{ fontSize: '16px', fontWeight: 600 }}>
               {data?.estimates ?? 0}
             </Typography>
           </Stack>
         </Box>
-        <Divider sx={{borderColor:'#D0D5DD'}} />
+        <Divider sx={{ borderColor: '#D0D5DD' }} />
         {/* actions */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Button
@@ -163,24 +165,27 @@ const SingleLocation = ({
             onClick={() => handleAccessLocation(data)}
             variant="outlined"
             sx={{
-              fontWeight: 600,
-              lineHeight:'21.86px',
-              fontSize:'16px',
+
               height: "40px",
               color: "rgba(132, 119, 218, 1)",
               borderColor: "rgba(132, 119, 218, 1)",
-              letterSpacing:'0px',
+
               ":hover": {
                 borderColor: "rgba(132, 119, 218, 1)",
               },
-              gap:'10px'
+              gap: '10px'
             }}
-            // endIcon={<East />}
-          >
-            Access Location
-            <East sx={{width:'17px',height:'17px'}} />
+          // endIcon={<East />}
+          ><Typography sx={{
+            display:'flex',
+            fontWeight: 600,
+            lineHeight: '21.86px',
+            fontSize: '16px',
+            letterSpacing: '0px',
+          }}>Access&nbsp; {!responsive && <Box>Location</Box>} </Typography>
+            <East sx={{ width: '17px', height: '17px' }} />
           </Button>
-          <Box sx={{ display: "flex", alignItems: "center", height: "40px",gap:'12px' }}>
+          <Box sx={{ display: "flex", alignItems: "center", height: "40px", gap: '12px' }}>
             {handleClone && (
               <IconButton
                 sx={{ width: 20, height: 20 }}
@@ -217,18 +222,18 @@ const SingleLocation = ({
                 />
               </IconButton>
             )}
-              {userToken?.role === userRoles.SUPER_ADMIN && <Box>
-                <TableRow
-                  title={
-                    data?.user?.status ? "" : "This Location is not Active"
-                  }
-                  text={""}
-                  row={data?.user}
-                  onToggleChange={()=>{}}
-                  type={"superAdmin"}
-                  refetch={refetch}
-                />
-              </Box>}
+            {userToken?.role === userRoles.SUPER_ADMIN && <Box>
+              <TableRow
+                title={
+                  data?.user?.status ? "" : "This Location is not Active"
+                }
+                text={""}
+                row={data?.user}
+                onToggleChange={() => { }}
+                type={"superAdmin"}
+                refetch={refetch}
+              />
+            </Box>}
           </Box>
         </Box>
       </Box>

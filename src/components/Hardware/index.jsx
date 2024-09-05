@@ -25,6 +25,7 @@ const ShowersHardWare = () => {
   const layoutId = searchParams.get("slug");
   const { data: hardwareCategoryData, refetch: refetchAllCategory, } = useFetchDatahardwareCategory()
   const [selectedlayoutSlug, setSelectedLayoutSlug] = useState(layoutId ?? 'handles');
+  const [selectedHardware, setSelectedHardware] = useState('Handles');
   
   //Edit
   const [openModel, setOpenModel] = useState(false);
@@ -45,8 +46,9 @@ const ShowersHardWare = () => {
   } = useFetchDatahardware(selectedlayoutSlug);
 
   const handleChangeLayout = (event) => {
-    setSelectedLayoutSlug(event.target.value);
-    navigate(`/hardware?slug=${event.target.value}`)
+    setSelectedHardware(event.target.value.name)
+    setSelectedLayoutSlug(event.target.value.slug);
+    navigate(`/hardware?slug=${event.target.value.slug}`)
   };
 
   useEffect(() => {
@@ -106,7 +108,7 @@ const ShowersHardWare = () => {
               }}
             >
               {hardwareCategoryData?.map((data, index) => (
-                <MenuItem key={index} value={data?.slug} sx={{
+                <MenuItem key={index} value={data} sx={{
                   p: '10px 12px', ':hover': {
                     background: '#EFF2F6'
                   }
@@ -140,7 +142,7 @@ const ShowersHardWare = () => {
             pb: 1.5,
           }}
         >
-          <Typography className="handleTitle">Handles</Typography>
+          <Typography className="handleTitle">{selectedHardware}</Typography>
           <Button
             variant="contained"
             onClick={handleOpenModel}
@@ -179,7 +181,7 @@ const ShowersHardWare = () => {
             </Box>
           ) : hardwareData && hardwareData?.length <= 0 ? (
             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-              No Hardwear Found
+              No Hardware Found
             </Typography>
           ) : hardwareData.map((data, index) => (
             <HardwaerTable data={data} key={index} refetchData={hardwareRefetch} selectedSlug={selectedlayoutSlug} loading={hardwareFetching} />

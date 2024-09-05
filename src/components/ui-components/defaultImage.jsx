@@ -36,7 +36,7 @@ const NameAcronyms = ({ name, width, height, borderRadius = "100%", type }) => {
   );
 };
 
-const DefaultImage = ({ image, name, type = 1 }) => {
+const DefaultImage = ({ image, name, type = 1,style }) => {
   const [imageError, setImageError] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -73,6 +73,7 @@ const DefaultImage = ({ image, name, type = 1 }) => {
           borderRadius: "100%",
           width: containerWidthHeightbyType,
           height: containerWidthHeightbyType,
+          ...style
         }}
       >
         {!imageError ? (
@@ -81,6 +82,7 @@ const DefaultImage = ({ image, name, type = 1 }) => {
             style={{
               width: imageWidthHeightbyType,
               height: imageWidthHeightbyType,
+              ...style
             }}
             onError={() => setImageError(true)}
             src={`${backendURL}/${image}`}

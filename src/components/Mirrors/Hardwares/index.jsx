@@ -457,7 +457,7 @@ const MirrorsHardwareComponent = () => {
                         </Box>
                     ) : hardwaresList?.length === 0 && !fetchingHardwaresList ? (
                         <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                            No Hardwear Found
+                            No Hardware Found
                         </Typography>
                     ) : (
                         <Box>

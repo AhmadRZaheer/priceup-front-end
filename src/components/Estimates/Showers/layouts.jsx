@@ -163,7 +163,7 @@ export const ShowerLayouts = () => {
           background: { sm: "white", xs: "#08061B" },
           //   display: "flex",
           //   flexDirection: "column",
-          width: { sm: "calc(100vw - 380px)" },
+          // width: { sm: "calc(100vw - 380px)" },
         }}
       >
         <Box

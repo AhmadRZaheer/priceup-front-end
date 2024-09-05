@@ -203,7 +203,7 @@ const ProjectInfoComponent = ({
     >
       <Box
         sx={{
-          p: { sm: "10px 20px 20px 8px", xs: "20px 0px 20px 0px" },
+          p: { sm: "0px 0px 20px 0px", xs: "20px 0px 20px 0px" },
           display: "flex",
           justifyContent: "space-between",
         }}
@@ -237,7 +237,7 @@ const ProjectInfoComponent = ({
           </Typography>
         </Box>
         {projectState !== "create" ? (
-          <Box>
+          <Box sx={{alignSelf:'center'}}>
             <Button
               fullWidth
               variant="contained"
@@ -944,7 +944,7 @@ const ProjectInfoComponent = ({
               boxShadow: "rgba(16, 24, 40, 0.05) 0px 1px 2px",
               borderRadius: "8px",
               pt: { md: 2, xs: 1 },
-              width: "99.5%",
+              // width: "99.5%",
               background: "#FFFF",
               border: '1px solid #D0D5DD'
             }}

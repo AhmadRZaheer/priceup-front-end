@@ -12,7 +12,7 @@ function SingleUser({ item, active, handleClick, disabled = false }) {
         key={item?.id}
         sx={{
           width: "85.8%",
-          height:'56px',
+          height:'44px',
           ml: "10px",
           marginBottom: "5px",
           textTransform: "lowercase",

@@ -79,14 +79,14 @@ export default function AddEditGlassType({
   const formik = useFormik({
     initialValues: isEdit
       ? {
-          name: data?.name,
-          image: data?.image,
-          id: data?._id,
-        }
+        name: data?.name,
+        image: data?.image,
+        id: data?._id,
+      }
       : {
-          name: "",
-          image: "",
-        },
+        name: "",
+        image: "",
+      },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values, { resetForm }) => {
@@ -126,7 +126,8 @@ export default function AddEditGlassType({
           backgroundColor: "rgba(5, 0, 35, 0.1)",
           ".MuiModal-backdrop": {
             backgroundColor: "rgba(5, 0, 35, 0.1)",
-          },}}
+          },
+        }}
       >
         <Box sx={style}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -172,11 +173,22 @@ export default function AddEditGlassType({
               borderRadius: "12px",
             }}
           >
+            <Typography
+              sx={{
+                color: "#000000",
+                lineHeight: "16.39px",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              Glass Type image
+            </Typography>
+
             <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
               <Box>
                 {formik.values.image !== undefined &&
-                formik.values.image !== null &&
-                formik.values.image !== "" ? (
+                  formik.values.image !== null &&
+                  formik.values.image !== "" ? (
                   <img
                     width={"84px"}
                     height={"84px"}
@@ -228,7 +240,7 @@ export default function AddEditGlassType({
                     }}
                     onClick={handleButtonClick}
                   >
-                    Upload Profile Image
+                    Upload Image
                   </Button>
                   <Typography
                     variant="body2"
@@ -311,7 +323,7 @@ export default function AddEditGlassType({
               ) : isEdit ? (
                 "Save Changes"
               ) : (
-                "Add Addons"
+                "Create"
               )}
             </Button>
           </Box>

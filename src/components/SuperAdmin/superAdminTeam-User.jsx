@@ -623,9 +623,10 @@ const SuperAdminTeam = () => {
         <Box
           sx={{
             border: "1px solid #D0D5DD",
+            background:'#FFFFFF',
             borderRadius: "8px",
             overflow: "hidden",
-            width: "99.88%",
+            // width: "99.88%",
             m: "auto",
           }}
         >

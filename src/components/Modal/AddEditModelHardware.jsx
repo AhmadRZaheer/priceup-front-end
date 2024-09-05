@@ -200,7 +200,7 @@ export default function AddEditModelHardware({
                                     opacity: "70%",
                                 }}
                             >
-                                {isEdit ? "Edit" : "Add"} your user details.
+                                {isEdit ? "Edit" : "Add"} Hardware details.
                             </Typography>
                         </Box>
                         <Box>
@@ -230,7 +230,7 @@ export default function AddEditModelHardware({
                                 fontWeight: 600,
                             }}
                         >
-                            Profile image
+                            Hardware image
                         </Typography>
                         <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
                             <Box>
@@ -288,7 +288,7 @@ export default function AddEditModelHardware({
                                         }}
                                         onClick={handleButtonClick}
                                     >
-                                        Upload Profile Image
+                                        Upload Image
                                     </Button>
                                     <Typography
                                         variant="body2"

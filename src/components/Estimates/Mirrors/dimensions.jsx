@@ -137,7 +137,7 @@ export const MirrorDimensions = () => {
         // background: "white",
         // height: "100vh",
         background: { sm: "#F6F5FF", xs: "#08061B" },
-        padding: 2,
+        // padding: 2,
         overflow: { sm: "", xs: "auto" },
       }}
     >
@@ -203,7 +203,7 @@ export const MirrorDimensions = () => {
             display: "flex",
             justifyContent: "space-between",
             gap: 2,
-            paddingY: 3,
+            pt: 3,
             // alignItems: "start",
           }}
         >
@@ -642,6 +642,7 @@ export const MirrorDimensions = () => {
             sx={{
               // flexGrow: 1
               width: { lg: "40%", md: "50%" },
+              pr:'1px'
             }}
           >
             <MirrorReview />

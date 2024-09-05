@@ -83,7 +83,7 @@ const EditCustomer = () => {
   }, []);
 
   return (
-    <Box sx={{ mt: 1 }}>
+    <Box >
       <Box>
         <Typography sx={{ fontSize: "20px", fontWeight: 600 }}>
           Edit Customer

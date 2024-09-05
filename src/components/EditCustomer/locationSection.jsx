@@ -127,7 +127,7 @@ export default function LocationSection() {
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
-            width: "99.5%",
+            // width: "99.5%",
             pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
             my: 1,
@@ -168,8 +168,8 @@ export default function LocationSection() {
 
         <Box
           sx={{
-            width: "99.5%",
-            border: "1px solid #EAECF0",
+            width: "99.88%",
+            border: "1px solid #D0D5DD",
             borderRadius: "8px",
             background: "#FFFFFF",
             mr: { sm: 0, xs: 1 },

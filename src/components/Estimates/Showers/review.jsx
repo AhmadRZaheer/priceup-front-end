@@ -432,7 +432,8 @@ export const ShowerReview = ({ setStep }) => {
         className={disable_com ? "box_disaled" : ""}
         sx={{
           width: { xs: "100%", sm: "96%" },
-          margin: { sm: "auto", xs: 0 },
+          ml: { sm: "auto", xs: 0 },
+          mr: { sm: "1px", xs: 0 },
           display: "flex",
           alignItems: "center",
           height: { xs: "100vh", sm: "auto" },
@@ -493,7 +494,6 @@ export const ShowerReview = ({ setStep }) => {
           sx={{
             width: "100%",
             borderRadius: { sm: "12px", xs: 0 },
-
             border: { sm: "1px solid #EAECF0", xs: "none" },
             overflow: { sm: "hidden" },
             border: "1px solid rgba(208, 213, 221, 1)",

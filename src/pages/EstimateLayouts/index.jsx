@@ -23,9 +23,9 @@ const EstimateLayouts = () => {
           className="content-wrapper"
           // sx={{pl:{sm:'25px',xs:'0px'}}}
           sx={{
-            paddingLeft: { sm: "25px", xs: "0px" },
-            paddingRight: { sm: "25px", xs: "0px" },
-            paddingTop: { sm: 2, xs: 0 },
+            // paddingLeft: { sm: "25px", xs: "0px" },
+            // paddingRight: { sm: "25px", xs: "0px" },
+            // paddingTop: { sm: 2, xs: 0 },
             backgroundColor: { sm: "#F6F5FF", xs: "#08061B" },
           }}
         >

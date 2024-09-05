@@ -485,7 +485,7 @@ const MirrorsEdgeWorkComponent = () => {
                     ) :
                         edgeWorksList?.length === 0 && !fetchingEdgeWorksList ? (
                             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                                No Hardwear Found
+                                No Edge work Found
                             </Typography>
                         ) : (
                             <DataGrid

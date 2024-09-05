@@ -141,7 +141,7 @@ export default function AddEditGlassAddon({
                   opacity: "70%",
                 }}
               >
-                {isEdit ? "Edit" : "Add"} Hardware details.
+                {isEdit ? "Edit" : "Add"} Addons details.
               </Typography>
             </Box>
             <Box>
@@ -162,6 +162,16 @@ export default function AddEditGlassAddon({
               borderRadius: "12px",
             }}
           >
+             <Typography
+              sx={{
+                color: "#000000",
+                lineHeight: "16.39px",
+                fontSize: "12px",
+                fontWeight: 600,
+              }}
+            >
+              Addon image
+            </Typography>
             <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
               <Box>
                 {formik.values.image !== undefined &&
@@ -218,7 +228,7 @@ export default function AddEditGlassAddon({
                     }}
                     onClick={handleButtonClick}
                   >
-                    Upload Profile Image
+                    Upload Image
                   </Button>
                   <Typography
                     variant="body2"
@@ -301,7 +311,7 @@ export default function AddEditGlassAddon({
               ) : isEdit ? (
                 "Save Changes"
               ) : (
-                "Add Addons"
+                "Create"
               )}
             </Button>
           </Box>

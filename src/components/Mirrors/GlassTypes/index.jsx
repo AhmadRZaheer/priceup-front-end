@@ -478,7 +478,7 @@ const MirrorsGlassTypeComponent = () => {
                     ) :
                         glassTypesList?.length === 0 && !fetchingGlassTypesList ? (
                             <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                                No Hardwear Found
+                                No Glass Type Found
                             </Typography>
                         ) :
                             (<Box>

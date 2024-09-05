@@ -515,7 +515,7 @@ const CampanySetting = () => {
               gap: 2,
               // maxHeight: "38vh",
               // overflowY: "scroll",
-              paddingY: 1,
+              pt: 1,
             }}
           >
             <Box

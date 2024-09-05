@@ -298,7 +298,7 @@ const EditShowerLayout = () => {
   }, [selectedlayoutId]);
 
   return (
-    <Box sx={{ px: 3, py: 3 }}>
+    <Box>
       <Box sx={{ display: "flex", gap: "12px" }}>
         <Box sx={{ display: 'flex', gap: '5px' }}>
           <Typography className="layouttitle">

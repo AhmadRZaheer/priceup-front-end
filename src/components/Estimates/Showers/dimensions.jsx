@@ -28,7 +28,7 @@ export const ShowerDimensions = () => {
         sx={{
           // background: "white",
           background: { sm: "#F6F5FF", xs: "#08061B" },
-          padding: 2,
+          // padding: 2,
           height: { sm: "auto", xs: "95vh" },
           overflow: { sm: "", xs: "auto" },
         }}
@@ -104,7 +104,7 @@ export const ShowerDimensions = () => {
               display: "flex",
               justifyContent: "space-between",
               gap: 1,
-              paddingY: 3,
+              pt: 3,
               // alignItems: "start",
             }}
           >

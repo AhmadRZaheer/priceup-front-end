@@ -132,10 +132,10 @@ const SuperAdminTable = () => {
   }, [switchedSuperAdmin]);
 
   return (
-    <Box sx={{ 
+    <Box sx={{
       // height: "90vh",
-       overflow: "auto"
-        }}>
+      overflow: "auto"
+    }}>
       <div className="page-title-location">
         <Box
           sx={{
@@ -165,7 +165,7 @@ const SuperAdminTable = () => {
               Add, edit and manage your locations.
             </Typography>
           </Box>
-          <Box sx={{alignSelf:'center'}}>
+          <Box sx={{ alignSelf: 'center' }}>
             <Button
               fullWidth
               variant="contained"
@@ -196,7 +196,7 @@ const SuperAdminTable = () => {
             variant: "red",
           },
         ].map((item) => (
-          <Grid item lg={4} md={6} xs={6}>
+          <Grid item lg={3} md={6} xs={6}>
             <WidgetCard
               text={item.text}
               title={item.title}
@@ -290,9 +290,9 @@ const SuperAdminTable = () => {
             </Select>
           </FormControl>
           {/* <Box> */}
-            <Button onClick={handleClearFilter} variant="text" sx={{  p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
-              Clear Filter
-            </Button>
+          <Button onClick={handleClearFilter} variant="text" sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
+            Clear Filter
+          </Button>
           {/* </Box> */}
         </Box>
       </Box>
@@ -312,14 +312,21 @@ const SuperAdminTable = () => {
           </Box>
         ) : locationsList?.length > 0 ? (
           locationsList?.map((item) =>
-            <SingleLocation
-              data={item}
-              handleAccessLocation={handleAdminClick}
-              handleEdit={handleOpenModifyModal}
-              handleClone={handleOpenCloneModal}
-              handleDelete={handleOpenDeleteModal}
-              refetch={refetchList}
-            />
+            <Grid item xs={5.8} xl={3.87} sx={{
+              '@media (min-width: 1400px) and (max-width: 1550px)': {
+                flexBasis: '32.2%',  // Equivalent to lg={12} for screens smaller than 1400px
+                maxWidth: '32.2%',
+              },
+            }}>
+              <SingleLocation
+                data={item}
+                handleAccessLocation={handleAdminClick}
+                handleEdit={handleOpenModifyModal}
+                handleClone={handleOpenCloneModal}
+                handleDelete={handleOpenDeleteModal}
+                refetch={refetchList}
+              />
+            </Grid>
           )
         ) : (
           <Box

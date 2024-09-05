@@ -168,7 +168,7 @@ export default function AddEditFinish({
                   opacity: "70%",
                 }}
               >
-                {isEdit ? "Edit Finish detail" : "Add Finish detail"}
+                {isEdit ? "Edit Finish details." : "Add Finish details."}
               </Typography>
             </Box>
             <IconButton
@@ -189,7 +189,7 @@ export default function AddEditFinish({
                 fontWeight: 600,
               }}
             >
-              Hardware image
+              Finish Type image
             </Typography>
             <Box sx={{ display: "flex", gap: "19px", my: 2 }}>
               <Box>

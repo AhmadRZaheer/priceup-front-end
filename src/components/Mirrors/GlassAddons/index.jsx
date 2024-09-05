@@ -437,7 +437,7 @@ const MirrorsGlassAddonComponent = () => {
           ) :
             glassAddonsList?.length === 0 && !fetchingGlassAddonsList ? (
               <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                No Hardwear Found
+                No Glass Addon Found
               </Typography>
             ) : (
               <DataGrid

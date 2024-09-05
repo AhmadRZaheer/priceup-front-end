@@ -17,7 +17,7 @@ const EidtCustomersPage = () => {
       {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
       {/* <CommonSideBar /> */}
       <CommonLayout>
-        <Box className="customersContainer" sx={{ px: { sm: 2, xs: 0 } }}>
+        <Box className="customersContainer" >
           <EditCustomer />
         </Box>
       </CommonLayout>

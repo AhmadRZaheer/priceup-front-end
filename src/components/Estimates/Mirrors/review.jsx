@@ -292,7 +292,7 @@ export const MirrorReview = ({ setStep }) => {
       <Box
         className={disable_com ? "box_disaled" : ""}
         sx={{
-          width: { xs: "100%", sm: "100%" },
+          width: { xs: "99.5%", sm: "100%" },
           margin: { sm: "auto", xs: 0 },
           display: "flex",
           alignItems: "center",
@@ -300,6 +300,7 @@ export const MirrorReview = ({ setStep }) => {
           flexDirection: "column",
           gap: { sm: 0, xs: 4 },
           backgroundColor: { xs: "#08061B", sm: "white" },
+          borderRadius: { sm: "12px", xs: 0 },
           // paddingTop: { sm: "40px" },
         }}
       >
