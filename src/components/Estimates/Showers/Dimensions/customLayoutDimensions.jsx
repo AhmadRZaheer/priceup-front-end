@@ -19,6 +19,7 @@ import {
   getQuoteState,
   initializeStateForCustomQuote,
   initializeStateForEditQuote,
+  resetNotifications,
   selectedItem,
   setHardwareFabricationQuantity,
   setLayoutArea,
@@ -121,7 +122,7 @@ export const CustomLayoutDimensions = ({ setStep }) => {
     //     )
     //   )
     //   .flat();
-
+    dispatch(resetNotifications());
     const result = calculateAreaAndPerimeter(
       values,
       layoutVariants.CUSTOM,
@@ -640,7 +641,7 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                   gap: 1,
                 }}
               >
-                <NavLink
+                {(currentQuoteState === quoteState.CUSTOM || isMobile) && <NavLink
                   to={
                     currentQuoteState === quoteState.EDIT
                       ? projectId
@@ -670,7 +671,7 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                     {" "}
                     Back
                   </Button>
-                </NavLink>
+                </NavLink>}
                 <Button
                   onClick={handleSubmit}
                   type="button"

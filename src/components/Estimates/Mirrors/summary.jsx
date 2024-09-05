@@ -46,7 +46,7 @@ const Summary = ({ setStep }) => {
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
     { title: "Total Price", active: true },
-    { title: "Pricing Subcategories", active: false },
+    { title: "Pricing Subcategories", active: true },
     { title: "Gross Profit Margin", active: true },
   ]);
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;

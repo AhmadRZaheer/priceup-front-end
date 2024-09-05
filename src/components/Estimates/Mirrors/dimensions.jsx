@@ -20,6 +20,7 @@ import {
   getSelectedContent,
   getSelectedItem,
   initializeStateForEditQuote,
+  resetNotifications,
   setEstimateMeasurements,
   setMultipleNotifications,
   setSandBlasting,
@@ -59,7 +60,7 @@ export const MirrorDimensions = () => {
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
-  console.log(measurements, "measurements");
+  // console.log(measurements, "measurements");
   const customInitalValues = {
     [0]: {
       count: 1,
@@ -101,6 +102,7 @@ export const MirrorDimensions = () => {
   };
 
   const handleSubmit = () => {
+    dispatch(resetNotifications());
     dispatch(setEstimateMeasurements(values));
     const sqft = getAreaSqft(values);
     dispatch(setSqftArea(sqft.areaSqft));
@@ -976,7 +978,7 @@ export const MirrorDimensions = () => {
                       gap: 1,
                     }}
                   >
-                    <NavLink
+                   {(currentEstimateState === quoteState.CREATE || isMobile) && <NavLink
                       to={
                         currentEstimateState === quoteState.EDIT
                           ? projectId
@@ -1001,7 +1003,7 @@ export const MirrorDimensions = () => {
                         {" "}
                         Back
                       </Button>
-                    </NavLink>
+                    </NavLink>}
                     <Button
                       onClick={handleSubmit}
                       type="button"
