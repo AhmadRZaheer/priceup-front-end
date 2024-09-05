@@ -1,10 +1,11 @@
 import { backendURL } from "@/utilities/common";
 import { hardwareTypes } from "@/utilities/constants";
 import { Box, MenuItem, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ActionButtons from "./actionButtons";
 
 const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
+  const [count, setCount] = useState(0);
   const handleMountingChannelClick = () => {
     handleSetMounting(type, item._id === selectedItem ? null : item._id);
   };
@@ -27,7 +28,6 @@ const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
         return null;
     }
   };
-  const [count, setCount] = useState(selectedItem?.count);
   const handleCountSet = (newVal, event) => {
     event.stopPropagation();
     if (newVal >= 0) {
@@ -49,7 +49,14 @@ const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
               ? selectedItem.sleeveOverType === item._id
               : type === hardwareTypes.CORNERGLASSTOGLASS
                 ? selectedItem.glassToGlassType === item._id
-                : selectedItem  === item._id;
+                : selectedItem === item._id;
+  useEffect(() => {
+    if (isSelected) {
+      setCount(selectedItem.count)
+    } else {
+      setCount(0)
+    }
+  }, [isSelected]);
   return (
     <MenuItem
       key={item.id}
