@@ -148,6 +148,12 @@ const CustomAdminsTable = () => {
         ) : locationsData.length !== 0 ? (
           locationsData?.map((item) => {
             return (
+              <Grid item xs={5.8} xl={3.89} sx={{
+                '@media (min-width: 1400px) and (max-width: 1550px)': {
+                  flexBasis: '32.3%',  // Equivalent to lg={12} for screens smaller than 1400px
+                  maxWidth: '32.3%',
+                },
+              }}>
               <SingleLocation
                 data={item}
                 // handleToggleChange={handleToggleChange}
@@ -158,6 +164,7 @@ const CustomAdminsTable = () => {
               // handleDelete={handleOpenDelete}
               // refetch={AdminRefetch}
               />
+              </Grid>
             );
           })
         ) : (
