@@ -38,18 +38,18 @@ const MountingItem = ({ item, type, handleSetMounting, selectedItem }) => {
   };
   const isSelected =
     type === hardwareTypes.WALLCLAMP
-      ? selectedItem.wallClampType
+      ? selectedItem.wallClampType === item._id
       : type === hardwareTypes.SLEEVEOVER
-        ? selectedItem.sleeveOverType
+        ? selectedItem.sleeveOverType === item._id
         : type === hardwareTypes.GLASSTOGLASS
-          ? selectedItem.glassToGlassType
+          ? selectedItem.glassToGlassType === item._id
           : type === hardwareTypes.CORNERWALLCLAMP
-            ? selectedItem.wallClampType
+            ? selectedItem.wallClampType === item._id
             : type === hardwareTypes.CORNERSLEEVEOVER
-              ? selectedItem.sleeveOverType
+              ? selectedItem.sleeveOverType === item._id
               : type === hardwareTypes.CORNERGLASSTOGLASS
-                ? selectedItem.glassToGlassType
-                : selectedItem;
+                ? selectedItem.glassToGlassType === item._id
+                : selectedItem  === item._id;
   return (
     <MenuItem
       key={item.id}
