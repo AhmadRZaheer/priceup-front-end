@@ -568,7 +568,7 @@ const GlassTypeComponent = ({ type }) => {
               <Typography
                 sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
               >
-                No Addons Found
+                No Glass Type Found
               </Typography>
             )}
           </div>

@@ -428,7 +428,7 @@ const GlassAddonGrid = ({ type }) => {
               <Typography
                 sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}
               >
-                No Addons Found
+                No Glass Addons Found
               </Typography>
             )}
           </div>
