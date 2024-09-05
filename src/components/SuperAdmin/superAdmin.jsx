@@ -312,10 +312,10 @@ const SuperAdminTable = () => {
           </Box>
         ) : locationsList?.length > 0 ? (
           locationsList?.map((item) =>
-            <Grid item xs={5.8} xl={3.87} sx={{
+            <Grid item xs={5.8} xl={3.89} sx={{
               '@media (min-width: 1400px) and (max-width: 1550px)': {
-                flexBasis: '32.2%',  // Equivalent to lg={12} for screens smaller than 1400px
-                maxWidth: '32.2%',
+                flexBasis: '32.3%',  // Equivalent to lg={12} for screens smaller than 1400px
+                maxWidth: '32.3%',
               },
             }}>
               <SingleLocation
