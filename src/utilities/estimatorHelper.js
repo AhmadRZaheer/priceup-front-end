@@ -169,6 +169,15 @@ export const getEstimateErrorStatus = (selectedContent) => {
 
 export const getSelectedContentErrorMsgs = (selectedContent) => {
     let errors = null;
+    if (!selectedContent.hardwareFinish) {
+        errors = {
+          ...errors,
+          hardwareFinish:{
+            status:false,
+            message:`No hardware finish is selected.`
+          }
+        }
+    }
     if (selectedContent.handles?.item) {
       const status = getActiveStatus(selectedContent.handles?.item,selectedContent.hardwareFinishes,hardwareTypes.HANDLES);
        if(status === false){
@@ -392,6 +401,16 @@ export const generateNotificationsForCurrentEstimate = (
   const doorWeight = estimateState.doorWeight;
   const doorWidth = estimateState.doorWidth;
   const measurements = estimateState.measurements;
+
+
+    if(!selectedContent.hardwareFinishes){
+        // generate hardwareFinish not selected
+        notifications.finishNotSelected = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `No hardware finish is selected.`,
+        };
+    }
 
     if (selectedContent.handles?.item) {
       // generate handle not available notification in current finish

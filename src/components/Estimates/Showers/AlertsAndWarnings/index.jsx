@@ -1,9 +1,11 @@
 import AlertMessage from "@/components/ui-components/AlertMessage";
-import { Box, Button, Popover, Typography } from "@mui/material";
+import { Badge, Box, Button, Popover, Typography } from "@mui/material";
 import { useMemo, useState } from "react";
 import AlertIcon from "@/Assets/alert-circle.svg";
 import { getNotifications } from "@/redux/estimateCalculations";
 import { useSelector } from "react-redux";
+import "./alertAnimation.scss"
+import { severityColor } from "@/utilities/constants";
 
 const AlertsAndWarnings = () => {
     const [anchorEl, setAnchorEl] = useState(null);
@@ -16,7 +18,7 @@ const AlertsAndWarnings = () => {
     const handleClosePopover = () => {
         setAnchorEl(null);
     };
-
+    const notificationFound = true;
     const alertPopoverOpen = Boolean(anchorEl);
     const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
     const notificationsAvailableStatus = useMemo(() => {
@@ -50,33 +52,52 @@ const AlertsAndWarnings = () => {
 
     return (
         <>
-            <Button
-                variant="outlined"
+            <Badge
+                badgeContent={3}
+                color="primary"
                 sx={{
-                    border: "1px solid rgba(93, 97, 100, 1)",
-                    p: "5px 8px 5px 8px !important",
-                    display: "flex",
-                    gap: 0.5,
-                    borderRadius: "84px !important",
-                    alignItems: "center",
-                    color: "black",
-                    ":hover": {
-                        border: "1px solid rgba(93, 97, 100, 1)",
+                    "& .MuiBadge-badge": {
+                        padding: "3px !important",
+                        color: "#FFFF",
+                        background: severityColor.ERROR,
+                        top: "4px",
+                        right: "2px",
+                        minWidth: "18px",
+                        height: "18px",
+
                     },
                 }}
-                aria-describedby={alertPopoverid}
-                onClick={handleClickPopover}
             >
-                <img
-                    width={20}
-                    height={20}
-                    src={AlertIcon} // Ensure AlertIcon is imported or defined
-                    alt="alert yellow logo"
-                />
-                <Typography sx={{ fontSize: "12px", lineHeight: "14.06px", fontFamily: 'Roboto, sans-serif !important' }}>
-                    View Alerts
-                </Typography>
-            </Button>
+                <Button
+                    variant="outlined"
+                    className={notificationFound ? "btn btn-animated btn-white" : ""}
+                    sx={{
+                        border: `1px solid ${notificationFound ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
+                        p: "5px 8px 5px 8px !important",
+                        display: "flex",
+                        gap: 0.5,
+                        borderRadius: "84px !important",
+                        alignItems: "center",
+                        color: notificationFound ? "white" : "black",
+                        backgroundColor: `${notificationFound ? severityColor.DEFAULT : "white"} !important`,
+                        ":hover": {
+                            border: `1px solid ${notificationFound ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
+                        },
+                    }}
+                    aria-describedby={alertPopoverid}
+                    onClick={handleClickPopover}
+                >
+                    <img
+                        width={20}
+                        height={20}
+                        src={AlertIcon} // Ensure AlertIcon is imported or defined
+                        alt="alert yellow logo"
+                    />
+                    <Typography sx={{ fontSize: "12px", lineHeight: "14.06px", fontFamily: 'Roboto, sans-serif !important' }}>
+                        View Alerts
+                    </Typography>
+                </Button>
+            </Badge>
             <Popover
                 id={alertPopoverid}
                 open={alertPopoverOpen}
@@ -95,7 +116,7 @@ const AlertsAndWarnings = () => {
                 }}
             >
                 {notificationsAvailableStatus ?
-                    <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto", display: "flex", flexDirection: "column",gap: "4px" }}>
+                    <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto", display: "flex", flexDirection: "column", gap: "4px" }}>
                         {Object.entries(notifications).map(([key, value]) => {
                             if (
                                 [

@@ -76,6 +76,11 @@ const initialState = {
   returnWeight: 0,
   measurements: [],
   notifications: {
+    finishNotSelected: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
     hingesSwitch: {
       status: false,
       variant: notificationsVariant.DEFAULT,

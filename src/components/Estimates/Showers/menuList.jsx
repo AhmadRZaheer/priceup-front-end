@@ -66,17 +66,19 @@ const MenuList = ({
   };
   const opneClose = () => {
     if (
-      selectedContent.hardwareFinishes !== null ||
+      selectedContent.hardwareFinishes ||
       ["hardwareFinishes"].includes(type)
-    )
+    ){
       setAnchorEl(!anchorEl);
-    else
+    }
+    else{
       dispatch(
         showSnackbar({
-          message: "Please select 'hardwareFinishes' first",
+          message: "Please select hardware finish first",
           severity: "warning",
         })
       );
+    }
   };
   return (
     <Box>

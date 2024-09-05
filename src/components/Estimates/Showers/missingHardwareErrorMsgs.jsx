@@ -16,6 +16,21 @@ const MissingHardwaresErrorForShowerLayout = () => {
             flexDirection: 'column'
         }}
     >
+        {/** Hardware finish not selected */}
+        {hardwareDisable?.hardwareFinish && <Box
+            sx={{
+                display: "flex",
+                textAlign: "baseline",
+                gap: 0.6,
+            }}
+        >
+            <Typography sx={{ fontWeight: "bold" }}>
+                Hardware Finish:
+            </Typography>
+            <Typography>
+                {hardwareDisable?.hardwareFinish?.message}
+            </Typography>
+        </Box>}
         {/** Handle not available */}
         {hardwareDisable?.handle && <Box
             sx={{
