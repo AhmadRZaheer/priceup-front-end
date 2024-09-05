@@ -21,7 +21,7 @@ import {
 } from "../../utilities/ApiHooks/finishes";
 import { backendURL } from "../../utilities/common";
 import { CloseOutlined } from "@mui/icons-material";
-import DefaultImageIcon from "@/Assets/default-image.jpg";
+import DefaultImageIcon from "@/Assets/DefaultIMG.png";
 import CustomInputField from "../ui-components/CustomInput";
 const style = {
   position: "absolute",

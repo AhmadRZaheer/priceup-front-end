@@ -153,7 +153,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               <Typography className="timeText" >New for you</Typography>
             </Box>
             {unReadList.length === 0 ? (
-              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+              <Typography className="archText" sx={{display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
             ) :
               unReadList?.map((data, index) => (
                 <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />
@@ -162,7 +162,7 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
               <Typography className="timeText" >Earlier</Typography>
             </Box>
             {readList.length === 0 ? (
-              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+              <Typography className="archText" sx={{display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
             ) :
             readList?.map((data, index) => (
               <SingleNotificationItem handleItemClick={handleItemClick} data={data} key={index} />

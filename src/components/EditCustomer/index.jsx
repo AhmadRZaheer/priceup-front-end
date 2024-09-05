@@ -4,7 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import InputImageIcon from "../../Assets/imageUploader.svg";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import React, { useEffect, useRef, useState } from "react";
 import { CircularProgress, Divider, Grid } from "@mui/material";
 import { useDropzone } from "react-dropzone";

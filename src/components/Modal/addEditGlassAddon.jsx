@@ -13,7 +13,7 @@ import {
 import { useEffect } from "react";
 import { useDropzone } from "react-dropzone";
 import { backendURL } from "../../utilities/common";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import { CloseTwoTone } from "@mui/icons-material";
 import CustomInputField from "../ui-components/CustomInput";
 
@@ -248,7 +248,7 @@ export default function AddEditGlassAddon({
                 <Typography color="error">{formik.errors.image}</Typography>
               )} */}
             </Box>
-            <Box>
+            <Box className='model-field'>
               <Typography className="input-label-text">Addons Label</Typography>
               <CustomInputField
                 placeholder="Enter Addons Label"

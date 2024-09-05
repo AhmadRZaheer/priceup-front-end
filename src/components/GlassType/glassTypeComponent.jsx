@@ -114,6 +114,7 @@ const GlassTypeComponent = ({ type }) => {
         );
 
         return (
+          <Box sx={{ width: "101px" }}>
           <CustomInputField
             type="number"
             value={rowCosts[params.row._id]?.["3/8"] ?? thickness3by8?.cost}
@@ -127,6 +128,7 @@ const GlassTypeComponent = ({ type }) => {
               })
             }
           />
+          </Box>
         );
       },
     },
@@ -143,6 +145,7 @@ const GlassTypeComponent = ({ type }) => {
         );
 
         return (
+          <Box sx={{ width: "101px" }}>
           <CustomInputField
             type="number"
             value={rowCosts[params.row._id]?.["1/2"] ?? thickness1by2?.cost}
@@ -156,6 +159,7 @@ const GlassTypeComponent = ({ type }) => {
               })
             }
           />
+          </Box>
         );
       },
     },
@@ -248,7 +252,7 @@ const GlassTypeComponent = ({ type }) => {
                     boxShadow: "0px 1px 2px 0px #1018280D",
                     border: "1px solid #D0D5DD",
                     p: 0,
-                    width: "171px",
+                    width: "181px",
                     "& .MuiList-padding": {
                       p: 0,
                     },
@@ -434,7 +438,7 @@ const GlassTypeComponent = ({ type }) => {
             color: "#5D6164",
           }}
         >
-          Showers<span style={{ color: "black" }}> / {type}</span>
+          Shower<span style={{ color: "black" }}> / {type}</span>
         </p>
         <div>
           <Button

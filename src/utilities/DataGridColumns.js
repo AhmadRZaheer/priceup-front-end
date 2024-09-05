@@ -1568,8 +1568,8 @@ export const rowsHardwareHandle = [
 export const HardWareColumns =[
     {
       field: "name",
-      headerName: "Finishn Type",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerName: "Finish Type",
+      headerClassName: "showerHardwareHeader",
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (

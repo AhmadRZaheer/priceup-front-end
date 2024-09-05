@@ -222,7 +222,7 @@ const FinishesTable = () => {
             style={{ fontSize: "24px", fontWeight: 600, lineHeight: "32.78px" }}
           >
             <p style={{ color: "#5D6164" }}>
-              Showers <span style={{ color: "black" }}> / Finishes</span>
+              Shower <span style={{ color: "black" }}> / Finishes</span>
             </p>
           </div>
           <div>

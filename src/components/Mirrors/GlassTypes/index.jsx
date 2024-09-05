@@ -423,7 +423,7 @@ const MirrorsGlassTypeComponent = () => {
                             alignSelf: 'center'
                         }}
                     >
-                        Mirrors &nbsp;
+                        Mirror &nbsp;
                         <Box
                             className='headingTxt'
                             sx={{

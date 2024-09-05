@@ -111,7 +111,7 @@ const GlassAddonGrid = ({ type }) => {
 
       renderCell: (params) => {
         return (
-          <div>
+          <Box sx={{ width: "101px" }}>
             <CustomInputField
               disabled={params.row.slug === 'no-treatment'}
               inputProps={{ min: 0 }}
@@ -128,7 +128,7 @@ const GlassAddonGrid = ({ type }) => {
                 })
               }
             />
-          </div>
+          </Box>
         );
       },
     },
@@ -190,7 +190,7 @@ const GlassAddonGrid = ({ type }) => {
                     boxShadow: "0px 1px 2px 0px #1018280D",
                     border: "1px solid #D0D5DD",
                     p: 0,
-                    width: "171px",
+                    width: "183px",
                     "& .MuiList-padding": {
                       p: 0,
                     },
@@ -263,7 +263,7 @@ const GlassAddonGrid = ({ type }) => {
                 }}
                 onClick={() => handleStatusChange(data)}
               >
-                <p>Status</p>
+                <p>Change Status</p>
                 {/* <Box sx={{ width: "59px", height: "39px" }}> */}
                 <CustomSmallSwtich
                   inputProps={{ 'aria-label': 'ant design' }}
@@ -346,7 +346,7 @@ const GlassAddonGrid = ({ type }) => {
             color: "#5D6164",
           }}
         >
-          Showers<span style={{ color: "black" }}> / {type}</span>
+          Shower<span style={{ color: "black" }}> / {type}</span>
         </p>
         <div>
           <Button
@@ -369,7 +369,7 @@ const GlassAddonGrid = ({ type }) => {
         sx={{
           border: "1px solid #D0D5DD",
           borderRadius: "8px",
-          width: "99.88%",
+          width: "100%",
           m: "auto",
           overflow: "hidden",
           mt: 2,

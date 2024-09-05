@@ -41,7 +41,7 @@ function CustomToggle({
               },
 
               "& .MuiSwitch-track": {
-                backgroundColor: "#7F56D9 !important",
+                backgroundColor: "#8477DA !important",
                 opacity: `${checked ? 1 : 0.2} !important`,
                 paddingTop: 1.4,
                 pl: 1.6,

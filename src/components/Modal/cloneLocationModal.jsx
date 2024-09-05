@@ -14,7 +14,7 @@ import {
   useCreateAdminsMembers,
   useEditUser,
 } from "../../utilities/ApiHooks/superAdmin";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import { backendURL } from "@/utilities/common";
 import { CloseTwoTone } from "@mui/icons-material";
 

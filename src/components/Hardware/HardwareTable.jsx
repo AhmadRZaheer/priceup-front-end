@@ -93,7 +93,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     () => [
       {
         field: 'Cost',
-        headerClassName: 'ProjectsColumnsHeaderClass',
+        headerClassName: 'showerHardwareHeader',
         flex: 1.6,
         sortable: false,
         renderCell: (params) => (
@@ -113,7 +113,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
       },
       {
         field: 'Status',
-        headerClassName: 'ProjectsColumnsHeaderClass',
+        headerClassName: 'showerHardwareHeader',
         flex: 2.5,
         sortable: false,
         renderCell: (params) => (
@@ -141,7 +141,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
       },
       {
         field: '',
-        headerClassName: 'ProjectsColumnsHeaderClass',
+        headerClassName: 'showerHardwareHeader',
         flex: 0.7,
         sortable: false,
         renderCell: (params) => (

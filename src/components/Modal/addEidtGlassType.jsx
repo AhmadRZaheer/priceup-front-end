@@ -16,7 +16,7 @@ import {
 import { useEffect } from "react";
 import { backendURL } from "../../utilities/common";
 import { CloseTwoTone } from "@mui/icons-material";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import CustomInputField from "../ui-components/CustomInput";
 
 const style = {

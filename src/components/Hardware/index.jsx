@@ -81,7 +81,7 @@ const ShowersHardWare = () => {
               display: 'flex'
             }}
           >
-            Showers &nbsp;
+            Shower &nbsp;
             <Box
               className='headingTxt'
               sx={{

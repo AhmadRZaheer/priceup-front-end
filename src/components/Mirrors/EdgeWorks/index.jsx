@@ -411,8 +411,6 @@ const MirrorsEdgeWorkComponent = () => {
                     width: "100%",
                 }}
             >
-
-
                 <Box
                     sx={{
                         display: "flex",
@@ -429,7 +427,7 @@ const MirrorsEdgeWorkComponent = () => {
                             alignSelf: 'center'
                         }}
                     >
-                        Mirrors &nbsp;
+                        Mirror &nbsp;
                         <Box
                             className='headingTxt'
                             sx={{

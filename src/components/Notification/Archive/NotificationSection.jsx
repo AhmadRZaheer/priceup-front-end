@@ -51,7 +51,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
             </Box>
           {/* <Divider /> */}
           {unReadList.length === 0 ? (
-              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+              <Typography className="archText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
             ) :
           unReadList.map((data, index) => (
             <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />
@@ -62,7 +62,7 @@ const NotificationSection = ({ list, handleItemClick, selectedId }) => {
               <Typography className="timeText" >Earlier</Typography>
             </Box>
             {readList.length === 0 ? (
-              <Typography className="notificationText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
+              <Typography className="archText" sx={{p:'21px',display:'flex',justifyContent:'center'}}>No Result Found!</Typography>
             ) :
           readList.map((data, index) => (
             <SingleNotificationItem data={data} key={index} sx={{ px: '32px !important' }} handleItemClick={handleItemClick} selectedId={selectedId} />

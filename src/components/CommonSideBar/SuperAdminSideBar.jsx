@@ -19,6 +19,7 @@ import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import MenuSigleItem from "./MenuSigleItem";
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 
 const SuperAdminSideBar = () => {
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
@@ -135,11 +136,15 @@ const SuperAdminSideBar = () => {
           </li> */}
           <MenuSigleItem link="/admin" secondLink="/">
             <FmdGoodOutlined sx={{   }} />
-            <span>Locations</span>
+            <span>Location Management</span>
           </MenuSigleItem>
           <MenuSigleItem link="/users">
             <PeopleAltOutlinedIcon sx={{   }} />
-            <span>Users</span>
+            <span>User Management</span>
+          </MenuSigleItem>
+          <MenuSigleItem link="/notification?tab=Activity" secondLink='/notification'>
+            <AccessTimeOutlinedIcon sx={{   }} />
+            <span>Activity Logs</span>
           </MenuSigleItem>
           {/* <MenuSigleItem link="/user">
             <PeopleAltOutlinedIcon sx={{   }} />

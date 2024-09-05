@@ -382,14 +382,14 @@ const MirrorsGlassAddonComponent = () => {
               alignSelf: 'center'
             }}
           >
-            Mirrors &nbsp;
+            Mirror &nbsp;
             <Box
               className='headingTxt'
               sx={{
                 color: "#000000",
               }}
             >
-              / Glass Addon
+              / Glass Addons
             </Box>
           </Typography>
           <Button

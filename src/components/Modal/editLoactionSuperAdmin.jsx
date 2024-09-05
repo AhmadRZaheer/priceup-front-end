@@ -13,7 +13,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { backendURL } from "@/utilities/common";
 import { useCreateDocument, useEditDocument } from "@/utilities/ApiHooks/common";
-import DefaultImageIcon from "@/Assets/default-image.jpg";
+import DefaultImageIcon from "@/Assets/DefaultIMG.png";
 import { useDropzone } from "react-dropzone";
 
 const style = {

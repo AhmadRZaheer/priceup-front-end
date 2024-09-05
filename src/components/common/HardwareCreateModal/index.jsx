@@ -10,7 +10,7 @@ import { useState } from "react";
 import { CircularProgress, Grid, IconButton, TextField } from "@mui/material";
 import { useDropzone } from "react-dropzone";
 import { backendURL } from "@/utilities/common";
-import DefaultImageIcon from "../../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../../Assets/DefaultIMG.png";
 import { CloseTwoTone } from "@mui/icons-material";
 
 const style = {
@@ -208,10 +208,10 @@ export default function HardwareCreateModal({
                     </Box>
                     <Box>
                         <Box sx={{ width: "100%", }} className='model-field'>
-                            <Typography className="input-label-text">Hardware Label</Typography>
+                            <Typography className="input-label-text">{hardwareType} Label</Typography>
                             <TextField
                                 size="small"
-                                placeholder="Enter Hardware Label"
+                                placeholder={`Enter ${hardwareType} Label`}
                                 name="name"
                                 className="custom-textfield"
                                 value={formik.values.name}

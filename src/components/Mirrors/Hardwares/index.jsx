@@ -391,7 +391,7 @@ const MirrorsHardwareComponent = () => {
                             alignSelf: 'center'
                         }}
                     >
-                        Mirrors &nbsp;
+                        Mirror &nbsp;
                         <Box
                             className='headingTxt'
                             sx={{

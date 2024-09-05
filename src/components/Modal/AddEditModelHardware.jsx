@@ -6,7 +6,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import InputImageIcon from "../../Assets/imageUploader.svg";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import { useState } from "react";
 import {
     Accordion,
@@ -305,7 +305,7 @@ export default function AddEditModelHardware({
                                 </Box>
                             </label>
                         </Box>
-                    </Box>
+                    {/* </Box> */}
 
                     {/* <Box>
             <input
@@ -403,7 +403,7 @@ export default function AddEditModelHardware({
                                 }}
                             >
                                 <AccordionSummary
-                                    expandIcon={<ExpandMore sx={{ color: '#000000' }} />}
+                                    expandIcon={<ExpandMore sx={{ color: '#000000',width:'20px',height:'20px' }} />}
                                     aria-controls="panel1a-content"
                                     id="panel1a-header"
                                     sx={{
@@ -662,6 +662,7 @@ export default function AddEditModelHardware({
 
 
                     </Box>
+                    </Box>
 
                     <Box
                         sx={{
@@ -705,7 +706,7 @@ export default function AddEditModelHardware({
                                 {LoadingForAdd || LoadingForEdit ? (
                                     <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                                 ) : isEdit ? (
-                                    "Update"
+                                    "Save Changes"
                                 ) : (
                                     "Create"
                                 )}

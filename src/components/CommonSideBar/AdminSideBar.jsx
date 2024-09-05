@@ -470,7 +470,7 @@ const AdminSideBar = () => {
               >
                  <DevicesFoldOutlinedIcon sx={{  mr:'12px' }} />
                 {/* <ViewStreamOutlined sx={{  ,transform: "rotate(90deg)" }} /> */}
-                <Typography sx={{  fontWeight: 600 }}>Showers</Typography>
+                <Typography sx={{  fontWeight: 600 }}>Shower</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -557,7 +557,7 @@ const AdminSideBar = () => {
                 }}
               >
                 <ViewStreamOutlined sx={{ mr:'12px',transform: "rotate(90deg)" }} />
-                <Typography sx={{  fontWeight: 600 }}>Mirrors</Typography>
+                <Typography sx={{  fontWeight: 600 }}>Mirror</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "0px 0px" }}>
                 <div className="center">

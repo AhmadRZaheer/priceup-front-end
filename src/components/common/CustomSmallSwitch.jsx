@@ -21,7 +21,7 @@ export const CustomSmallSwtich = styled(Switch)(({ theme }) => ({
             color: '#fff',
             '& + .MuiSwitch-track': {
                 opacity: 1,
-                backgroundColor: '#7F56D9',
+                backgroundColor: '#8477DA',
                 ...theme.applyStyles('dark', {
                     backgroundColor: '#177ddc',
                 }),

@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 // import InputImageIcon from "../../Assets/imageUploader.svg";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import { useRef } from "react";
 import {
   Accordion,

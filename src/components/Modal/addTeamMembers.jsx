@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 // import InputImageIcon from "../../Assets/imageUploader.svg";
-import DefaultImageIcon from "../../Assets/default-image.jpg";
+import DefaultImageIcon from "../../Assets/DefaultIMG.png";
 import { useRef } from "react";
 import {
   Checkbox,
