@@ -18,10 +18,11 @@ const AlertsAndWarnings = () => {
     const handleClosePopover = () => {
         setAnchorEl(null);
     };
-    const notificationFound = true;
+
     const alertPopoverOpen = Boolean(anchorEl);
     const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
     const notificationsAvailableStatus = useMemo(() => {
+        let response = { status: false, count: 0 };
         for (const [key, value] of Object.entries(notifications)) {
             if (
                 [
@@ -37,23 +38,25 @@ const AlertsAndWarnings = () => {
             ) {
                 for (const item of value) {
                     if (item.status) {
-                        return true;
+                        response.status = true;
+                        response.count += 1;
                     }
                 }
             } else {
                 if (value.status) {
-                    return true;
+                    response.status = true;
+                    response.count += 1;
                 }
             }
         }
-        return false;
+        return response;
     }, [notifications]);
 
 
     return (
         <>
             <Badge
-                badgeContent={3}
+                badgeContent={notificationsAvailableStatus?.count}
                 color="primary"
                 sx={{
                     "& .MuiBadge-badge": {
@@ -70,18 +73,18 @@ const AlertsAndWarnings = () => {
             >
                 <Button
                     variant="outlined"
-                    className={notificationFound ? "btn btn-animated btn-white" : ""}
+                    className={notificationsAvailableStatus?.status ? "btn btn-animated btn-white" : ""}
                     sx={{
-                        border: `1px solid ${notificationFound ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
+                        border: `1px solid ${notificationsAvailableStatus?.status ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
                         p: "5px 8px 5px 8px !important",
                         display: "flex",
                         gap: 0.5,
                         borderRadius: "84px !important",
                         alignItems: "center",
-                        color: notificationFound ? "white" : "black",
-                        backgroundColor: `${notificationFound ? severityColor.DEFAULT : "white"} !important`,
+                        color: notificationsAvailableStatus?.status ? "white" : "black",
+                        backgroundColor: `${notificationsAvailableStatus?.status ? severityColor.DEFAULT : "white"} !important`,
                         ":hover": {
-                            border: `1px solid ${notificationFound ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
+                            border: `1px solid ${notificationsAvailableStatus?.status ? severityColor.DEFAULT : "rgba(93, 97, 100, 1)"}`,
                         },
                     }}
                     aria-describedby={alertPopoverid}
@@ -115,7 +118,7 @@ const AlertsAndWarnings = () => {
                     style: { borderRadius: "8px" },
                 }}
             >
-                {notificationsAvailableStatus ?
+                {notificationsAvailableStatus?.status ?
                     <Box sx={{ p: "8px", maxHeight: "441px", overflow: "auto", display: "flex", flexDirection: "column", gap: "4px" }}>
                         {Object.entries(notifications).map(([key, value]) => {
                             if (

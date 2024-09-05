@@ -110,6 +110,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       formik.setFieldValue(key, '');
     })
     dispatch(setisCustomizedDoorWidth(false));
+    dispatch(resetNotifications());
     dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     dispatch(setDoorWidth(0));
     setSelectedLayout(selectedItem);
@@ -261,6 +262,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     refetch();
     return () => { };
   }, [selectedLayout]);
+
   return (
     <>
       <form onSubmit={formik.handleSubmit}>
@@ -672,8 +674,8 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 bgcolor: { sm: "white", xs: "#08061B" },
               }}
             >
-              <Box sx={{ display: { sm: "none", xs: "block" } }}>
-                <NavLink
+              <Box sx={{ display: "block" }}>
+                {(currentQuoteState === quoteState.CREATE || isMobile) && <NavLink
                   to={
                     currentQuoteState === quoteState.EDIT
                       ? projectId
@@ -686,10 +688,15 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     sx={{
                       width: { xs: 120, sm: 150 },
                       color: "black",
-                      border: "1px solid black",
+                      border: "1px solid #D0D5DD",
+                      ":hover": {
+                        border: "1px solid #8477DA",
+                      },
                       fontSize: 18,
                       // ml: 2,
                       backgroundColor: "white",
+                      height: 42,
+                      fontWeight: 600,
                     }}
                     fullWidth
                     variant="outlined"
@@ -698,7 +705,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     {" "}
                     Back
                   </Button>
-                </NavLink>
+                </NavLink>}
               </Box>
               <Button
                 type="submit"

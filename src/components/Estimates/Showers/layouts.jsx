@@ -14,6 +14,7 @@ import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 import {
   addSelectedItem,
   getProjectId,
+  resetNotifications,
   // initializeStateForCreateQuote,
   // initializeStateForCustomQuote,
   selectedItem,
@@ -77,6 +78,7 @@ export const ShowerLayouts = () => {
     setselectCustom(false);
   };
   const setStorePage = () => {
+    dispatch(resetNotifications());
     dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     dispatch(setDoorWidth(0));
     navigate("/estimates/dimensions");

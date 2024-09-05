@@ -169,7 +169,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
 
 export const getSelectedContentErrorMsgs = (selectedContent) => {
     let errors = null;
-    if (!selectedContent.hardwareFinish) {
+    if (!selectedContent.hardwareFinishes) {
         errors = {
           ...errors,
           hardwareFinish:{

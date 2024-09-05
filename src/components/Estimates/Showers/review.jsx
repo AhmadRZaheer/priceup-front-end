@@ -213,7 +213,7 @@ export const ShowerReview = ({ setStep }) => {
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
-  console.log(isMobile, "isMobile");
+  // console.log(isMobile, "isMobile");
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
@@ -380,51 +380,51 @@ export const ShowerReview = ({ setStep }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("mount");
-    const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
-    let delay = 0;
-    Object.entries(notifications).forEach(([key, value]) => {
-      if (
-        [
-          "glassAddonsNotAvailable",
-          "hardwareAddonsNotAvailable",
-          "wallClampNotAvailable",
-          "sleeveOverNotAvailable",
-          "glassToGlassNotAvailable",
-          "cornerWallClampNotAvailable",
-          "cornerSleeveOverNotAvailable",
-          "cornerGlassToGlassNotAvailable",
-        ].includes(key)
-      ) {
-        value?.forEach((item) => {
-          if (item.status) {
-            setTimeout(() => {
-              enqueueSnackbar(item.message, {
-                variant: item.variant,
-                // autoHideDuration: 5000, // Set a custom duration for each snackbar
-              });
-            }, delay);
-            delay += delayBetweenSnackbars;
-          }
-        });
-      } else {
-        if (value.status) {
-          setTimeout(() => {
-            enqueueSnackbar(value.message, {
-              variant: value.variant,
-              // autoHideDuration: 5000, // Set a custom duration for each snackbar
-            });
-          }, delay);
-          delay += delayBetweenSnackbars;
-        }
-      }
-    });
-    return () => {
-      console.log("unmount");
-      // dispatch(resetNotifications());
-    };
-  }, [notifications]);
+  // useEffect(() => {
+  //   console.log("mount");
+  //   const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
+  //   let delay = 0;
+  //   Object.entries(notifications).forEach(([key, value]) => {
+  //     if (
+  //       [
+  //         "glassAddonsNotAvailable",
+  //         "hardwareAddonsNotAvailable",
+  //         "wallClampNotAvailable",
+  //         "sleeveOverNotAvailable",
+  //         "glassToGlassNotAvailable",
+  //         "cornerWallClampNotAvailable",
+  //         "cornerSleeveOverNotAvailable",
+  //         "cornerGlassToGlassNotAvailable",
+  //       ].includes(key)
+  //     ) {
+  //       value?.forEach((item) => {
+  //         if (item.status) {
+  //           setTimeout(() => {
+  //             enqueueSnackbar(item.message, {
+  //               variant: item.variant,
+  //               // autoHideDuration: 5000, // Set a custom duration for each snackbar
+  //             });
+  //           }, delay);
+  //           delay += delayBetweenSnackbars;
+  //         }
+  //       });
+  //     } else {
+  //       if (value.status) {
+  //         setTimeout(() => {
+  //           enqueueSnackbar(value.message, {
+  //             variant: value.variant,
+  //             // autoHideDuration: 5000, // Set a custom duration for each snackbar
+  //           });
+  //         }, delay);
+  //         delay += delayBetweenSnackbars;
+  //       }
+  //     }
+  //   });
+  //   return () => {
+  //     console.log("unmount");
+  //     // dispatch(resetNotifications());
+  //   };
+  // }, [notifications]);
 
   return (
     <>
@@ -1535,10 +1535,7 @@ export const ShowerReview = ({ setStep }) => {
                       fontWeight: 600,
                     }}
                   >
-                    {" "}
-                    {currentQuoteState === quoteState.EDIT
-                      ? "Update Estimate"
-                      : "Save Estimate"}
+                  Save Estimate
                   </Button>
                 </Box>
               </Box>

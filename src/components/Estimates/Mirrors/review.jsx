@@ -252,40 +252,40 @@ export const MirrorReview = ({ setStep }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("mount");
-    const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
-    let delay = 0;
-    Object.entries(notifications).forEach(([key, value]) => {
-      if (["glassAddonsNotAvailable", "hardwaresNotAvailable"].includes(key)) {
-        value?.forEach((item) => {
-          if (item.status) {
-            setTimeout(() => {
-              enqueueSnackbar(item.message, {
-                variant: item.variant,
-                // autoHideDuration: 5000, // Set a custom duration for each snackbar
-              });
-            }, delay);
-            delay += delayBetweenSnackbars;
-          }
-        });
-      } else {
-        if (value.status) {
-          setTimeout(() => {
-            enqueueSnackbar(value.message, {
-              variant: value.variant,
-              // autoHideDuration: 5000, // Set a custom duration for each snackbar
-            });
-          }, delay);
-          delay += delayBetweenSnackbars;
-        }
-      }
-    });
-    return () => {
-      console.log("unmount");
-      // dispatch(resetNotifications());
-    };
-  }, [notifications]);
+  // useEffect(() => {
+  //   console.log("mount");
+  //   const delayBetweenSnackbars = 1500; // Adjust this delay as needed (in milliseconds)
+  //   let delay = 0;
+  //   Object.entries(notifications).forEach(([key, value]) => {
+  //     if (["glassAddonsNotAvailable", "hardwaresNotAvailable"].includes(key)) {
+  //       value?.forEach((item) => {
+  //         if (item.status) {
+  //           setTimeout(() => {
+  //             enqueueSnackbar(item.message, {
+  //               variant: item.variant,
+  //               // autoHideDuration: 5000, // Set a custom duration for each snackbar
+  //             });
+  //           }, delay);
+  //           delay += delayBetweenSnackbars;
+  //         }
+  //       });
+  //     } else {
+  //       if (value.status) {
+  //         setTimeout(() => {
+  //           enqueueSnackbar(value.message, {
+  //             variant: value.variant,
+  //             // autoHideDuration: 5000, // Set a custom duration for each snackbar
+  //           });
+  //         }, delay);
+  //         delay += delayBetweenSnackbars;
+  //       }
+  //     }
+  //   });
+  //   return () => {
+  //     console.log("unmount");
+  //     // dispatch(resetNotifications());
+  //   };
+  // }, [notifications]);
 
   return (
     <>
@@ -1588,10 +1588,7 @@ export const MirrorReview = ({ setStep }) => {
                       },
                     }}
                   >
-                    {" "}
-                    {currentEstimateState === quoteState.EDIT
-                      ? "Update Estimate"
-                      : "Save Estimate"}
+                  Save Estimate
                   </Button>
                 </Box>
               </Box>
