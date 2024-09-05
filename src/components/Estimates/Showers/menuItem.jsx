@@ -141,6 +141,7 @@ const MenuItem = ({
           <Box>
             {type === "hardwareAddons" ? (
               <OptionWithCounter
+                status={status}
                 key={`${type}-${item.slug}`}
                 item={item}
                 type={type}
@@ -152,6 +153,7 @@ const MenuItem = ({
               />
             ) : ["wallClamp", "sleeveOver", "glassToGlass"].includes(type) ? (
               <OptionWithCounter
+                status={status}
                 key={`${type}-${item.slug}`}
                 item={item}
                 type={type}
@@ -167,6 +169,7 @@ const MenuItem = ({
                 "cornerGlassToGlass",
               ].includes(type) ? (
               <OptionWithCounter
+                status={status}
                 key={`${type}-${item.slug}`}
                 item={item}
                 type={type}

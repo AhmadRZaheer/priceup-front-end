@@ -4,18 +4,29 @@ const AlertMessage = ({ title, alertMessage, varient }) => {
   const isError = varient === "error";
   const isSuccess = varient === "success";
   const isInfo = varient === "info";
+  const isWarning = varient === "warning";
+  const borderColor =  isError
+  ? "rgba(226, 42, 45, 1)"
+  : isSuccess
+  ? "rgba(0, 173, 120, 1)"
+  : isInfo
+  ? "rgba(0, 96, 239, 1)"
+  : isWarning
+  ? "rgba(240, 173, 78,1)"
+  : "rgba(0, 96, 239, 1)";
+  const backgroundColor = isError
+  ? "rgba(226, 42, 45, 0.08)"
+  : isSuccess
+  ? "rgba(0, 173, 120,  0.08)"
+  : isInfo
+  ? "rgba(0, 96, 239,  0.08)"
+  : isWarning
+  ? "#FCDEC0"
+  : "rgba(0, 96, 239,  0.08)";
   return (
     <Box
       sx={{
-        borderLeft: `5px solid ${
-          isError
-            ? "rgba(226, 42, 45, 1)"
-            : isSuccess
-            ? "rgba(0, 173, 120, 1)"
-            : isInfo
-            ? "rgba(0, 96, 239, 1)"
-            : "rgba(0, 96, 239, 1)"
-        }`,
+        borderLeft: `5px solid ${borderColor}`,
         width: "435px",
         height: "85px",
         borderRadius: "4px 0px 0px 4px",
@@ -24,13 +35,7 @@ const AlertMessage = ({ title, alertMessage, varient }) => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        backgroundColor: isError
-          ? "rgba(226, 42, 45, 0.08)"
-          : isSuccess
-          ? "rgba(0, 173, 120,  0.08)"
-          : isInfo
-          ? "rgba(0, 96, 239,  0.08)"
-          : "rgba(0, 96, 239,  0.08)",
+        backgroundColor: backgroundColor,
       }}
     >
       <Typography

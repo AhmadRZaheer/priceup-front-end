@@ -73,7 +73,13 @@ export const hardwareTypes = {
 };
 
 export const standardDoorWidth = 28;
-
+export const severityColor = {
+  DEFAULT: "#8477DA",
+  ERROR: "rgba(226, 42, 45, 1)",
+  INFO: "rgba(0, 96, 239,  0.5)",
+  SUCCESS: "rgba(0, 173, 120,  1)",
+  WARNING: "#FCDEC0",
+};
 export const severity = {
   DEFAULT: "default",
   ERROR: "error",

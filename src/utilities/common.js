@@ -62,38 +62,38 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.handles.count
     : 0;
   const hingesPrice = selectedContent?.hinges?.item
     ? (selectedContent?.hinges?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.hinges.count
     : 0;
   const mountingChannel = selectedContent?.mountingChannel.item
     ? selectedContent?.mountingChannel?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
       )?.cost || 0
     : 0;
 
   let mountingWallClamps = 0;
   selectedContent?.mountingClamps?.wallClamp?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingWallClamps += price ? price * row.count : 0;
   });
   let mountingsleeveOver = 0;
   selectedContent?.mountingClamps?.sleeveOver?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingsleeveOver += price ? price * row.count : 0;
   });
   let mountingglassToGlass = 0;
   selectedContent?.mountingClamps?.glassToGlass?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingglassToGlass += price ? price * row.count : 0;
   });
@@ -101,21 +101,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   let cornerWallClamps = 0;
   selectedContent?.cornerClamps?.cornerWallClamp?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
   selectedContent?.cornerClamps?.cornerSleeveOver?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
   selectedContent?.cornerClamps?.cornerGlassToGlass?.forEach((row) => {
     const price = row.item.finishes?.find(
-      (item) => selectedContent.hardwareFinishes._id === item.finish_id
+      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerGlassToGlass += price ? price * row.count : 0;
   });
@@ -137,12 +137,12 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   : 0;
   const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
     ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.slidingDoorSystem.count
     : 0;
   const headerPrice = selectedContent?.header?.item
     ? (selectedContent?.header?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes._id === item.finish_id
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
 
