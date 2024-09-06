@@ -102,10 +102,12 @@ const ShowersHardWare = () => {
               size="small"
               labelId="demo-select-small-label"
               id="demo-select-small"
+              className="hardwareSelect"
               sx={{
-                height: "40px", background: "#F6F5FF", '.MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input': {
-                  pr: '0px !important',
-                },
+                height: "40px", background: "#F6F5FF", 
+                //  '.hardwareSelect .MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input': {
+                //   pr: '0px !important',
+                // },
                 '.MuiOutlinedInput-input': {
                   p: '10px !important'
                 }

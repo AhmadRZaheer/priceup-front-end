@@ -183,11 +183,11 @@ export const MirrorReview = ({ setStep }) => {
   };
 
   const handleCancel = () => {
-    if(projectId){
+    if (projectId) {
       navigate(`/projects/${projectId}`);
     }
     else {
-      navigate("/estimates") 
+      navigate("/estimates")
     }
   }
 
@@ -625,7 +625,7 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-
+                        py: 2,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
@@ -648,6 +648,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -656,10 +659,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -743,7 +746,7 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-
+                        py: 2,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
@@ -766,6 +769,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -774,10 +780,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -803,7 +809,7 @@ export const MirrorReview = ({ setStep }) => {
                           sm: "2px solid #D0D5DD",
                           xs: "2px solid #423f57",
                         },
-
+                        py: 2,
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
@@ -826,6 +832,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -834,10 +843,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -863,6 +872,7 @@ export const MirrorReview = ({ setStep }) => {
                           xs: "2px solid #423f57",
                         },
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -884,6 +894,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -892,10 +905,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -922,6 +935,7 @@ export const MirrorReview = ({ setStep }) => {
                         },
 
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -943,6 +957,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -951,10 +968,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -980,6 +997,7 @@ export const MirrorReview = ({ setStep }) => {
                           xs: "2px solid #423f57",
                         },
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -1001,6 +1019,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -1009,10 +1030,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -1038,6 +1059,7 @@ export const MirrorReview = ({ setStep }) => {
                           xs: "2px solid #423f57",
                         },
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -1059,6 +1081,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -1067,10 +1092,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -1271,6 +1296,7 @@ export const MirrorReview = ({ setStep }) => {
                         },
 
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -1292,6 +1318,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -1300,10 +1329,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -1329,6 +1358,7 @@ export const MirrorReview = ({ setStep }) => {
                           xs: "2px solid #423f57",
                         },
                         color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
                       }}
                     >
                       <Typography
@@ -1350,6 +1380,9 @@ export const MirrorReview = ({ setStep }) => {
                           className="custom-textfield"
                           InputProps={{
                             inputProps: { min: 0 },
+                            style: {
+                              height: '38px',
+                            }
                           }}
                           InputLabelProps={{
                             style: {
@@ -1358,10 +1391,10 @@ export const MirrorReview = ({ setStep }) => {
                           }}
                           sx={{
                             color: { sm: "black", xs: "white" },
-                             width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -1401,9 +1434,9 @@ export const MirrorReview = ({ setStep }) => {
                           width: "fit-content",
                           textTransform: "capitalize",
                           color: "#8477DA",
-                          fontSize:'16px',
-                          fontWeight:600,
-                          p:'10px !important',
+                          fontSize: '16px',
+                          fontWeight: 600,
+                          p: '10px !important',
                           // backgroundColor: "#8477da",
                           "&:hover": {
                             // backgroundColor: "#8477da",
@@ -1411,7 +1444,7 @@ export const MirrorReview = ({ setStep }) => {
                           mt: 2,
                         }}
                         variant="text"
-                        startIcon={<Add sx={{mr:'2px'}} />}
+                        startIcon={<Add sx={{ mr: '2px' }} />}
                       >
                         Add Additional Field
                       </Button>
@@ -1557,19 +1590,19 @@ export const MirrorReview = ({ setStep }) => {
                   }}
                 >
                   {currentEstimateState === quoteState.EDIT && (
-                      <Button
-                        onClick={handleCancel}
-                        fullWidth
-                        sx={{
-                          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                          color: "#344054",
-                          textTransform: "initial",
-                          border: "1px solid #D0D5DD",
-                          backgroundColor: { sm: "transparent", xs: "white" },
-                        }}
-                      >
-                        Cancel
-                      </Button>
+                    <Button
+                      onClick={handleCancel}
+                      fullWidth
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { sm: "transparent", xs: "white" },
+                      }}
+                    >
+                      Cancel
+                    </Button>
                   )}
 
                   <Button
@@ -1588,7 +1621,7 @@ export const MirrorReview = ({ setStep }) => {
                       },
                     }}
                   >
-                  Save Estimate
+                    Save Estimate
                   </Button>
                 </Box>
               </Box>

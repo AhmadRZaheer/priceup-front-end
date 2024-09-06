@@ -236,7 +236,7 @@ export const ShowerReview = ({ setStep }) => {
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
-  const disable_com = useMemo(()=>{
+  const disable_com = useMemo(() => {
     let status = false;
     if (currentQuoteState === "create") {
       status = !selectedData || !measurements?.length;
@@ -252,7 +252,7 @@ export const ShowerReview = ({ setStep }) => {
       status = arraylength > 0 ? false : true;
     }
     return status;
-  },[measurements])
+  }, [measurements])
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
@@ -297,11 +297,11 @@ export const ShowerReview = ({ setStep }) => {
   };
 
   const handleCancel = () => {
-  if(projectId){ 
-    navigate(`/projects/${projectId}`);
-  }else{
-    navigate("/estimates") 
-  }
+    if (projectId) {
+      navigate(`/projects/${projectId}`);
+    } else {
+      navigate("/estimates")
+    }
   }
 
   const handleEstimateSubmit = () => {
@@ -584,7 +584,7 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "black", xs: "white" },
-                      py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -606,7 +606,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -628,7 +628,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -653,7 +653,7 @@ export const ShowerReview = ({ setStep }) => {
                             sm: "2px solid #D0D5DD",
                             xs: "2px solid #423f57",
                           },
-                           py:'6px'
+                          py: '6px'
                         }}
                       >
                         <Box sx={{ width: "100%", display: "flex" }}>
@@ -683,7 +683,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -705,7 +705,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -727,7 +727,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -749,7 +749,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -770,7 +770,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                       py:'6px'
+                      py: '6px'
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -791,10 +791,11 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       1" Holes
                     </Typography>
@@ -812,6 +813,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -819,8 +823,9 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
+
                           "& input[type=number]": {
                             textAlign: "right",
                           }
@@ -849,10 +854,11 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Hinge Cut Out
                     </Typography>
@@ -870,6 +876,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -877,7 +886,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -912,10 +921,11 @@ export const ShowerReview = ({ setStep }) => {
                             xs: "2px solid #423f57",
                           },
                           color: { sm: "#000000  ", xs: "white" },
+                          py: 2
                         }}
                       >
                         <Typography
-                         className='estimate-modifcation'
+                          className='estimate-modifcation'
                         >
                           {" "}
                           Clamp Cut Out
@@ -934,6 +944,9 @@ export const ShowerReview = ({ setStep }) => {
                             className="custom-textfield"
                             InputProps={{
                               inputProps: { min: 0 },
+                              style: {
+                                height: '38px',
+                              }
                             }}
                             InputLabelProps={{
                               style: {
@@ -972,10 +985,11 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Notch
                     </Typography>
@@ -993,6 +1007,9 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1000,7 +1017,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1032,10 +1049,11 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Outages
                     </Typography>
@@ -1053,6 +1071,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1060,7 +1081,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1091,10 +1112,11 @@ export const ShowerReview = ({ setStep }) => {
                       },
 
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Mitre
                     </Typography>
@@ -1112,6 +1134,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1119,7 +1144,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1151,10 +1176,11 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Polish
                     </Typography>
@@ -1172,6 +1198,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1179,7 +1208,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1211,10 +1240,11 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       People:
                     </Typography>
@@ -1232,6 +1262,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1239,7 +1272,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1271,10 +1304,11 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
+                      py: 2
                     }}
                   >
                     <Typography
-                     className='estimate-modifcation'
+                      className='estimate-modifcation'
                     >
                       Hours:
                     </Typography>
@@ -1292,6 +1326,9 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         InputProps={{
                           inputProps: { min: 0 },
+                          style: {
+                            height: '38px',
+                          }
                         }}
                         InputLabelProps={{
                           style: {
@@ -1299,7 +1336,7 @@ export const ShowerReview = ({ setStep }) => {
                           },
                         }}
                         sx={{
-                           color: { sm: "black", xs: "white" },
+                          color: { sm: "black", xs: "white" },
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
@@ -1343,9 +1380,9 @@ export const ShowerReview = ({ setStep }) => {
                         width: "fit-content",
                         textTransform: "capitalize",
                         color: "#8477DA",
-                        fontSize:'16px',
-                        fontWeight:600,
-                        p:'10px !important',
+                        fontSize: '16px',
+                        fontWeight: 600,
+                        p: '10px !important',
                         // backgroundColor: "#8477da",
                         "&:hover": {
                           // backgroundColor: "#8477da",
@@ -1353,7 +1390,7 @@ export const ShowerReview = ({ setStep }) => {
                         mt: 2,
                       }}
                       variant="text"
-                      startIcon={<Add sx={{mr:'2px'}} />}
+                      startIcon={<Add sx={{ mr: '2px' }} />}
                     >
                       Add Additional Field
                     </Button>
@@ -1497,21 +1534,21 @@ export const ShowerReview = ({ setStep }) => {
                   }}
                 >
                   {currentQuoteState === quoteState.EDIT && (
-                    
-                      <Button
-                         onClick={handleCancel}
-                        fullWidth
-                        sx={{
-                          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
-                          color: "#344054",
-                          textTransform: "initial",
-                          border: "1px solid #D0D5DD",
-                          backgroundColor: { sm: "transparent", xs: "white" },
-                        }}
-                      >
-                        Cancel
-                      </Button>
-                
+
+                    <Button
+                      onClick={handleCancel}
+                      fullWidth
+                      sx={{
+                        boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                        color: "#344054",
+                        textTransform: "initial",
+                        border: "1px solid #D0D5DD",
+                        backgroundColor: { sm: "transparent", xs: "white" },
+                      }}
+                    >
+                      Cancel
+                    </Button>
+
                   )}
 
                   <Button
@@ -1535,7 +1572,7 @@ export const ShowerReview = ({ setStep }) => {
                       fontWeight: 600,
                     }}
                   >
-                  Save Estimate
+                    Save Estimate
                   </Button>
                 </Box>
               </Box>

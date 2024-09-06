@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
   MenuItem as MuiMenuItem,
+  Select,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -90,7 +91,7 @@ const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
               alignSelf: "flex-end",
             }}
           >
-            <TextField
+            <Select
               select
               size="small"
               variant="outlined"
@@ -98,7 +99,7 @@ const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
               InputProps={{
                 style: {
                   borderRadius: "4px",
-                  height: "40px",
+                  height: "38px",
                 },
                 inputProps: { min: 0, max: 50 },
               }}
@@ -110,9 +111,13 @@ const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
               sx={{
                 border: { sm: "none", xs: "2px solid #423f57" },
                 // borderRadius: { sm: 0, xs: 2 },
-                color: { sm: "black", xs: "white" },
-                width: "100%",
+                color: { sm: "#000000", xs: "white" },
+                fontSize:'12px',fontFamily:'"Roboto", sans-serif !important',lineHeight:'14.06px',
+                width: "63px",
                 mb: 1,
+                '.MuiOutlinedInput-input':{
+                  display:'flex',alignItems:'end'
+                }
               }}
               value={thicknessVal}
               onChange={(event) => handleThicknessSet(event.target.value)}
@@ -123,7 +128,7 @@ const MenuList = ({ menuOptions, title, type, thickness, currentItem }) => {
               <MuiMenuItem key="1/8" value="1/8">
                 1/8
               </MuiMenuItem>
-            </TextField>
+            </Select>
           </Box>
         )}
       </Box>

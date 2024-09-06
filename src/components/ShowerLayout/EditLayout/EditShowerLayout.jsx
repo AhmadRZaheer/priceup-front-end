@@ -326,6 +326,18 @@ const EditShowerLayout = () => {
             id="demo-select-small"
             sx={{ height: "40px", background: "#F6F5FF", width: "262px" }}
             onChange={handleChangeLayout}
+            displayEmpty
+            renderValue={(value) => {
+              const selectedItem = allLayouts?.find(item => item?._id === value);
+              return <Typography sx={{
+                fontSize: "14px",
+                fontFamily: '"Roboto", sans-serif !important',
+                color: '#000000',
+                textOverflow: 'ellipsis', overflow: 'hidden',
+                textWrap: 'nowrap',
+                pt: '2px'
+              }}>{selectedItem?.name}</Typography>;
+            }}
           >
             {allLayouts?.map((data, index) => (
               <MenuItem key={index} value={data?._id}>
