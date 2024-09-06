@@ -35,6 +35,7 @@ import { getLocationMirrorSettings } from "@/redux/locationSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { MirrorReview } from "./review";
 import Summary from "./summary";
+import AlertsAndWarnings from "./AlertsAndWarnings";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -245,6 +246,7 @@ export const MirrorDimensions = () => {
                   <Typography sx={{fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important'  }}>
                     Layout & Measurement
                   </Typography>
+                  <AlertsAndWarnings />
                 </Box>
                 <Box
                   sx={{
