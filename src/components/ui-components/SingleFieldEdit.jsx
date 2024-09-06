@@ -71,6 +71,10 @@ export const SingleFieldEdit = ({
           variant="outlined"
           fullWidth
           disabled={isEdit}
+          sx={{
+            border: '1px solid #8477DA !important',
+            background: '#F6F5FF',
+          }}
         />
       </Grid>
     </>

@@ -62,6 +62,7 @@ const MirrorsGlassAddonComponent = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
+  const [rowStatus, setRowStatus] = useState({});
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -120,7 +121,7 @@ const MirrorsGlassAddonComponent = () => {
     formData.append("slug", slug);
     createGlassAddon({ data: formData, apiRoute: `${routePrefix}/save` });
   };
-   const miniTab = useMediaQuery("(max-width: 1280px)");
+  const miniTab = useMediaQuery("(max-width: 1280px)");
 
   // Data Grid
 
@@ -147,6 +148,10 @@ const MirrorsGlassAddonComponent = () => {
   };
 
   const handleStatusChange = (row) => {
+    setRowStatus({
+      ...rowStatus,
+      [row._id]: !row.options[0].status,
+    })
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
@@ -185,7 +190,13 @@ const MirrorsGlassAddonComponent = () => {
   const actionColumn = [
     {
       field: "Cost",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerName: "Cost",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 1.6,
       sortable: false,
       renderCell: (params) => {
@@ -224,7 +235,13 @@ const MirrorsGlassAddonComponent = () => {
     },
     {
       field: "Status",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerName: "Status",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 2.5,
       sortable: false,
       renderCell: (params) => {
@@ -257,7 +274,13 @@ const MirrorsGlassAddonComponent = () => {
     },
     {
       field: "Actions",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerName: "Actions",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 0.7,
       sortable: false,
       renderCell: (params) => {
@@ -328,7 +351,8 @@ const MirrorsGlassAddonComponent = () => {
                   }}
                 >
                   <Typography className='dropTxt'>Change Status</Typography>
-                  <CustomSmallSwtich checked={params?.row?.options[0]?.status}
+                  <CustomSmallSwtich checked={rowStatus[params.row._id] !== undefined
+                    ? rowStatus[params.row._id] : params?.row?.options[0]?.status}
                     // onChange={() => handleStatusChange(params.row)} 
                     inputProps={{ 'aria-label': 'ant design' }} />
                 </Box>

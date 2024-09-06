@@ -53,7 +53,7 @@ const ShowersHardWare = () => {
       hardwareRefetch();
       setPageLoading(false);
     }
-  }, [selectedCategory,hardwareCategoryData])
+  }, [selectedCategory, hardwareCategoryData])
   useEffect(() => {
     refetchAllCategory();
   }, []);
@@ -102,12 +102,26 @@ const ShowersHardWare = () => {
               size="small"
               labelId="demo-select-small-label"
               id="demo-select-small"
-              sx={{ height: "40px", background: "#F6F5FF", }}
+              sx={{
+                height: "40px", background: "#F6F5FF", '.MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input': {
+                  pr: '0px !important',
+                },
+                '.MuiOutlinedInput-input': {
+                  p: '10px !important'
+                }
+              }}
               onChange={handleChangeCategory}
               displayEmpty
               renderValue={(value) => {
                 const selectedItem = hardwareCategoryData?.find(item => item?.slug === value);
-                return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
+                return <Typography sx={{
+                  fontSize: "14px",
+                  fontFamily: '"Roboto", sans-serif !important',
+                  color: '#000000',
+                  textOverflow: 'ellipsis', overflow: 'hidden',
+                  textWrap: 'nowrap',
+                  pt:'2px'
+                }}>{selectedItem?.name}</Typography>;
               }}
             >
               {hardwareCategoryData?.map((data, index) => (

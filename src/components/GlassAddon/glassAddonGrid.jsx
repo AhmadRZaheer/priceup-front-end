@@ -50,6 +50,7 @@ const GlassAddonGrid = ({ type }) => {
   const [activeRow, setActiveRow] = useState(null); // State to keep track of which row triggered the menu
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+  const [rowStatus, setRowStatus] = useState({});
   const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
@@ -92,6 +93,10 @@ const GlassAddonGrid = ({ type }) => {
     editGlassAddon({ optionsData: updatedOptions, id: data._id });
   };
   const handleStatusChange = (row) => {
+    setRowStatus({
+      ...rowStatus,
+      [row._id]: !row.options[0].status,
+    })
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
@@ -105,7 +110,12 @@ const GlassAddonGrid = ({ type }) => {
     {
       field: "cost",
       headerName: "Cost",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       sortable: false,
       flex: 4,
 
@@ -135,12 +145,17 @@ const GlassAddonGrid = ({ type }) => {
     {
       field: "status",
       headerName: "Status",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       sortable: false,
       flex: 4,
 
       renderCell: (params) => {
-        return params.row.options[0]?.status  || params.row.slug === 'no-treatment' ? (
+        return params.row.options[0]?.status || params.row.slug === 'no-treatment' ? (
           <Typography
             className="status-active"
             sx={{ width: "fit-content" }}
@@ -160,7 +175,12 @@ const GlassAddonGrid = ({ type }) => {
     {
       field: "Actions",
       align: "left",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 2,
       renderCell: (params) => {
         // const id = params.row._id;
@@ -168,11 +188,11 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <>
             <IconButton
-            disabled={params.row.slug === 'no-treatment'}
+              disabled={params.row.slug === 'no-treatment'}
               aria-haspopup="true"
               onClick={(event) => handleClickAction(event, data)}
             >
-              <ArrowForward sx={{ color: params.row.slug === 'no-treatment' ? '': "#8477DA" }} />
+              <ArrowForward sx={{ color: params.row.slug === 'no-treatment' ? '' : "#8477DA" }} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -267,7 +287,8 @@ const GlassAddonGrid = ({ type }) => {
                 {/* <Box sx={{ width: "59px", height: "39px" }}> */}
                 <CustomSmallSwtich
                   inputProps={{ 'aria-label': 'ant design' }}
-                  checked={data.options[0]?.status}
+                  checked={rowStatus[params.row._id] !== undefined
+                    ? rowStatus[params.row._id] : data.options[0]?.status}
                   // onChange={() => handleStatusChange(data)}
                   text={""}
                 />

@@ -53,6 +53,8 @@ const MirrorsHardwareComponent = () => {
     const [updateRefetch, setUpdateRefetch] = useState(false);
     const [itemToModify, setItemToModify] = useState(null);
     const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
+    const [rowStatus, setRowStatus] = useState({});
+
     const handleOpenDeleteModal = () => {
         setDeleteModalOpen(true);
     }
@@ -64,10 +66,9 @@ const MirrorsHardwareComponent = () => {
     // const handleHardwareOptionDelete = (itemId, optionId) => {
     //     deleteHardwareOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
     // };
-
-    const handleOpenUpdateModal = () => {
-        setUpdateModalOpen(true);
-    };
+    // const handleOpenUpdateModal = () => {
+    //     setUpdateModalOpen(true);
+    // };
 
     const handleUpdateItem = (props) => {
         console.log(props, 'item modified')
@@ -115,10 +116,6 @@ const MirrorsHardwareComponent = () => {
         formData.append("slug", slug);
         createHardware({ data: formData, apiRoute: `${routePrefix}/save` });
     }
-
-
-
-
     //Drop Down
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRow, setActiveRow] = useState(null);
@@ -132,13 +129,17 @@ const MirrorsHardwareComponent = () => {
         setAnchorEl(null);
         setActiveRow(null);
     };
-
     const open = Boolean(anchorEl);
+
     //Status   
     const handleStatusChange = (row) => {
+        setRowStatus({
+            ...rowStatus,
+            [row._id]: !row.options[0].status,
+        })
         const updatedOptions = row.options.map((option) => ({
             ...option,
-            status: !option.status, // Toggle the status
+            status: !option.status,
         }));
         // Update the backend with the new status
         editHardware({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
@@ -188,11 +189,16 @@ const MirrorsHardwareComponent = () => {
     const actionColumn = [
         {
             field: "Cost",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Cost",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.6,
             sortable: false,
             renderCell: (params) => {
-                console.log(params, 'ffffprams')
                 return (
                     <>
                         <Box
@@ -228,7 +234,13 @@ const MirrorsHardwareComponent = () => {
         },
         {
             field: "Status",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Status",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 2.5,
             sortable: false,
             renderCell: (params) => {
@@ -261,7 +273,13 @@ const MirrorsHardwareComponent = () => {
         },
         {
             field: "Actions",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Actions",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 0.7,
             sortable: false,
             renderCell: (params) => {
@@ -336,7 +354,8 @@ const MirrorsHardwareComponent = () => {
                                     }}
                                 >
                                     <Typography className='dropTxt'>Change Status</Typography>
-                                    <CustomSmallSwtich checked={params?.row?.options[0]?.status}
+                                    <CustomSmallSwtich checked={rowStatus[params.row._id] !== undefined
+                                        ? rowStatus[params.row._id] : params?.row?.options[0]?.status}
                                         //  onChange={() => handleStatusChange(params.row)}
                                         inputProps={{ 'aria-label': 'ant design' }} />
                                 </Box>
@@ -367,7 +386,7 @@ const MirrorsHardwareComponent = () => {
 
     const columns = MirrorsHardWareColumns().concat(actionColumn);
 
-    const miniTab = useMediaQuery("(max-width: 1280px)");
+    // const miniTab = useMediaQuery("(max-width: 1280px)");
     return (
         <>
             <Box

@@ -53,6 +53,7 @@ const MirrorsGlassTypeComponent = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRow, setActiveRow] = useState(null);
     const [rowCosts, setRowCosts] = useState({});
+    const [rowStatus, setRowStatus] = useState({});
 
     const handleOpenDeleteModal = () => {
         setDeleteModalOpen(true);
@@ -113,7 +114,7 @@ const MirrorsGlassTypeComponent = () => {
 
     const miniTab = useMediaQuery("(max-width: 1280px)");
     // Data Grid
-   
+
     const handleClickAction = (event, row) => {
         setAnchorEl(event.currentTarget);
         setActiveRow(row); // Set the current row when the menu is triggered
@@ -136,24 +137,27 @@ const MirrorsGlassTypeComponent = () => {
             apiRoute: `${routePrefix}/${data._id}`,
         });
     };
-    const handleStatusChange = (row, optionIndex) => {
-        const updatedOptions = row.options.map((option, index) => {
-            // Only toggle the status of the option at the specified index
-            if (index === optionIndex) {
-                return {
-                    ...option,
-                    status: !option.status, // Toggle the status
-                };
+    const handleStatusChange = (row, thickness) => {
+        const updatedOptions = row.options.map((option) => ({
+            ...option,
+            status: option.thickness === thickness ? !option.status : option.status,
+        }));
+
+        // Update the status state for the specific row and thickness
+        setRowStatus((prevStatus) => ({
+            ...prevStatus,
+            [row._id]: {
+                ...prevStatus[row._id],
+                [thickness]: !row.options.find(option => option.thickness === thickness).status,
             }
-            return option;
-        });
+        }));
         editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
         setUpdateRefetch(true);
     };
 
     useEffect(() => {
         refetchGlassTypesList();
-       
+
         if (createSuccess) {
             setCreateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
@@ -164,24 +168,30 @@ const MirrorsGlassTypeComponent = () => {
             dispatch(setMirrorsHardwareRefetch());
             setRowCosts({})
         }
-    }, [deleteSuccess,  createSuccess, deleteOptionSuccess]);
+    }, [deleteSuccess, createSuccess, deleteOptionSuccess]);
 
-    useEffect(()=>{
+    useEffect(() => {
         if (editSuccess) {
             if (updateRefetch) {
                 refetchGlassTypesList();
-              }
+            }
             setUpdateModalOpen(false);
             dispatch(setMirrorsHardwareRefetch());
         }
-    },[editSuccess])
+    }, [editSuccess])
 
-    const thicknessOptions = [{ id: 0, name: 'Thickness 1/4' }, { id: 1, name: 'Thickness 1/8' }]
+    const thicknessOptions = [{ id: '1/4', name: 'Thickness 1/4' }, { id: '1/8', name: 'Thickness 1/8' }]
 
     const actionColumn = [
         {
             field: "Cost (Thickness 1/4)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Cost (Thickness 1/4)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => (
@@ -204,7 +214,13 @@ const MirrorsGlassTypeComponent = () => {
         },
         {
             field: "Cost (Thickness 1/8)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Cost (Thickness 1/8)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => (
@@ -228,7 +244,13 @@ const MirrorsGlassTypeComponent = () => {
 
         {
             field: "Status  (Thickness 1/4)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Status  (Thickness 1/4)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => {
@@ -261,7 +283,13 @@ const MirrorsGlassTypeComponent = () => {
         },
         {
             field: "Status  (Thickness 1/8)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Status  (Thickness 1/8)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => {
@@ -294,7 +322,13 @@ const MirrorsGlassTypeComponent = () => {
         },
         {
             field: "Actions",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Actions",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 0.7,
             sortable: false,
             renderCell: (params) => {
@@ -367,7 +401,10 @@ const MirrorsGlassTypeComponent = () => {
                                         <Typography className='dropTxt'>{data.name}</Typography>
                                         <CustomSmallSwtich
                                             inputProps={{ 'aria-label': 'ant design' }}
-                                            checked={params?.row?.options[data.id]?.status}
+                                            checked={rowStatus[params.row._id]?.[data.id] !== undefined
+                                                ? rowStatus[params.row._id][data.id]
+                                                : params.row?.options.some(option => option.thickness === data.id && option.status)
+                                            }
                                         //  onChange={() => handleStatusChange(params.row, data.id)} 
                                         />
                                     </Box>

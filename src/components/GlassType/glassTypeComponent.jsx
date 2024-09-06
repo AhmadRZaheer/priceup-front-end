@@ -51,6 +51,7 @@ const GlassTypeComponent = ({ type }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
   const [updateRefetch, setUpdateRefetch] = useState(false);
+  const [rowStatus, setRowStatus] = useState({});
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -91,22 +92,52 @@ const GlassTypeComponent = ({ type }) => {
   };
 
   // Handle status change for specific thickness index
+  // const handleStatusChange = (row, thickness,id) => {
+  //   setRowStatus({
+  //     ...rowStatus,
+  //     [thickness]: !row.options[id].status,
+  // })
+  //   const updatedOptions = row.options.map((option) => ({
+  //     ...option,
+  //     status: option.thickness === thickness ? !option.status : option.status,
+  //   }));
+
+  //   editGlassType({ optionsData: updatedOptions, id: row._id });
+  //   setUpdateRefetch(true);
+  // };
+
   const handleStatusChange = (row, thickness) => {
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: option.thickness === thickness ? !option.status : option.status,
     }));
 
+    // Update the status state for the specific row and thickness
+    setRowStatus((prevStatus) => ({
+      ...prevStatus,
+      [row._id]: {
+        ...prevStatus[row._id],
+        [thickness]: !row.options.find(option => option.thickness === thickness).status,
+      }
+    }));
+    // Perform the mutation to update the server
     editGlassType({ optionsData: updatedOptions, id: row._id });
     setUpdateRefetch(true);
   };
+
   const actionColumn = [
     {
       field: "cost (Thickness 3/8)",
       headerName: "Cost (Thickness 3/8)",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       sortable: false,
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 4,
+
       renderCell: (params) => {
         // Target the correct option for "Thickness 3/8"
         const thickness3by8 = params.row.options?.find(
@@ -115,19 +146,19 @@ const GlassTypeComponent = ({ type }) => {
 
         return (
           <Box sx={{ width: "101px" }}>
-          <CustomInputField
-            type="number"
-            value={rowCosts[params.row._id]?.["3/8"] ?? thickness3by8?.cost}
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [params.row._id]: {
-                  ...rowCosts[params.row._id],
-                  "3/8": e.target.value,
-                },
-              })
-            }
-          />
+            <CustomInputField
+              type="number"
+              value={rowCosts[params.row._id]?.["3/8"] ?? thickness3by8?.cost}
+              onChange={(e) =>
+                setRowCosts({
+                  ...rowCosts,
+                  [params.row._id]: {
+                    ...rowCosts[params.row._id],
+                    "3/8": e.target.value,
+                  },
+                })
+              }
+            />
           </Box>
         );
       },
@@ -135,8 +166,13 @@ const GlassTypeComponent = ({ type }) => {
     {
       field: "cost (Thickness 1/2)",
       headerName: "Cost (Thickness 1/2)",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       sortable: false,
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 4,
       renderCell: (params) => {
         // Target the correct option for "Thickness 1/2"
@@ -146,19 +182,19 @@ const GlassTypeComponent = ({ type }) => {
 
         return (
           <Box sx={{ width: "101px" }}>
-          <CustomInputField
-            type="number"
-            value={rowCosts[params.row._id]?.["1/2"] ?? thickness1by2?.cost}
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [params.row._id]: {
-                  ...rowCosts[params.row._id],
-                  "1/2": e.target.value,
-                },
-              })
-            }
-          />
+            <CustomInputField
+              type="number"
+              value={rowCosts[params.row._id]?.["1/2"] ?? thickness1by2?.cost}
+              onChange={(e) =>
+                setRowCosts({
+                  ...rowCosts,
+                  [params.row._id]: {
+                    ...rowCosts[params.row._id],
+                    "1/2": e.target.value,
+                  },
+                })
+              }
+            />
           </Box>
         );
       },
@@ -166,8 +202,13 @@ const GlassTypeComponent = ({ type }) => {
     {
       field: "status (Thickness 3/8)",
       headerName: "Status (Thickness 3/8)",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       sortable: false,
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 4,
       renderCell: (params) => {
         const thickness3by8 = params.row.options.find(
@@ -194,8 +235,13 @@ const GlassTypeComponent = ({ type }) => {
     {
       field: "status (Thickness 1/2)",
       headerName: "Status (Thickness 1/2)",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       sortable: false,
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
       flex: 4,
       renderCell: (params) => {
         const thickness1by2 = params.row.options.find(
@@ -222,12 +268,16 @@ const GlassTypeComponent = ({ type }) => {
     {
       field: "Actions",
       align: "left",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       flex: 2,
+      renderHeader: (params) => (
+        <Box>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      sortable: false,
       renderCell: (params) => {
-
         const data = params.row;
-
         return (
           <>
             <IconButton
@@ -309,6 +359,36 @@ const GlassTypeComponent = ({ type }) => {
               </MenuItem>
 
               {/* Toggle status for Thickness 3/8 */}
+              {/* <MenuItem
+                sx={{
+                  padding: "12px",
+                  m: 0,
+                  color: "#5D6164",
+                  fontSize: "16px",
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  borderTop: "1px solid #D0D5DD",
+                  fontWeight: 400,
+                  ":hover": {
+                    backgroundColor: " #EDEBFA",
+                  },
+                }}
+                onClick={() => handleStatusChange(data, "3/8",0)}
+              >
+                <p>Thickness 3/8</p>
+                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
+              {/* <CustomSmallSwtich
+                    inputProps={{ 'aria-label': 'ant design' }}
+                    checked={ rowStatus["3/8"] !== undefined
+                      ? rowStatus["3/8"] : data.options?.some(
+                      (option) => option?.thickness === "3/8" && option?.status
+                    )} */}
+              {/* // onChange={() => handleStatusChange(data, "3/8",1)} // Update status for 3/8 */}
+              {/* /> */}
+              {/* </Box> */}
+              {/* </MenuItem> */}
+
               <MenuItem
                 sx={{
                   padding: "12px",
@@ -327,16 +407,15 @@ const GlassTypeComponent = ({ type }) => {
                 onClick={() => handleStatusChange(data, "3/8")}
               >
                 <p>Thickness 3/8</p>
-                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
-                  <CustomSmallSwtich
-                    inputProps={{ 'aria-label': 'ant design' }}
-                    checked={data.options?.some(
-                      (option) => option?.thickness === "3/8" && option?.status
-                    )}
-                    onChange={() => handleStatusChange(data, "3/8")} // Update status for 3/8
-                  />
-                {/* </Box> */}
+                <CustomSmallSwtich
+                  inputProps={{ 'aria-label': 'ant design' }}
+                  checked={rowStatus[data._id]?.["3/8"] !== undefined
+                    ? rowStatus[data._id]["3/8"]
+                    : data.options.some(option => option.thickness === "3/8" && option.status)
+                  }
+                />
               </MenuItem>
+
 
               {/* Toggle status for Thickness 1/2 */}
               <MenuItem
@@ -357,15 +436,13 @@ const GlassTypeComponent = ({ type }) => {
                 onClick={() => handleStatusChange(data, "1/2")}
               >
                 <p>Thickness 1/2</p>
-                {/* <Box sx={{ width: "59px", height: "39px" }}> */}
-                  <CustomSmallSwtich
-                    inputProps={{ 'aria-label': 'ant design' }}
-                    checked={data.options?.some(
-                      (option) => option?.thickness === "1/2" && option?.status
-                    )}
-                    // onChange={() => handleStatusChange(data, "1/2")} // Update status for 1/2
-                  />
-                {/* </Box> */}
+                <CustomSmallSwtich
+                  inputProps={{ 'aria-label': 'ant design' }}
+                  checked={rowStatus[data._id]?.["1/2"] !== undefined
+                    ? rowStatus[data._id]["1/2"]
+                    : data.options.some(option => option.thickness === "1/2" && option.status)
+                  }
+                />
               </MenuItem>
 
               <MenuItem
