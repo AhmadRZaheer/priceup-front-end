@@ -1694,6 +1694,7 @@ const estimateCalcSlice = createSlice({
       state.perimeter = estimateData.config.perimeter;
       state.sqftArea = estimateData.config.sqftArea;
       state.selectedItem = estimateData;
+      state.doorWidth = estimateData?.config?.doorWidth || 0;
     },
   },
 });
