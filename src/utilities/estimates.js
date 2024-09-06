@@ -9,6 +9,7 @@ import {
 } from "./constants";
 import {
   addSelectedItem,
+  resetNotifications,
   resetState,
   setDoorWeight,
   setDoorWidth,
@@ -644,6 +645,7 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
 
 export const setStateForShowerEstimate = (item, dispatch, navigate) => {
   // if (item?.category === EstimateCategory.SHOWERS) {
+  dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
   dispatch(setEstimateState(quoteState.EDIT));
   dispatch(resetState());

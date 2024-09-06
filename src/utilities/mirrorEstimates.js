@@ -2,6 +2,7 @@ import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { EstimateCategory, mirrorHardwareTypes, notificationsVariant, quoteState } from "./constants";
 import {
   resetMirrorEstimateState,
+  resetNotifications,
   setEstimateMeasurements,
   setMirrorProjectId,
   setSelectedItem,
@@ -279,6 +280,7 @@ export const calculateTotal = (
 };
 
 export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
+  dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
   dispatch(setEstimateState(quoteState.EDIT));
   dispatch(resetMirrorEstimateState());

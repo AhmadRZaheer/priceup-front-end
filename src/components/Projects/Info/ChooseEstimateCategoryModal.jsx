@@ -16,10 +16,11 @@ import { EstimateCategory } from "@/utilities/constants";
 import { useNavigate } from "react-router-dom";
 import {
   resetMirrorEstimateState,
+  resetNotifications as resetNotificationsMirror,
   setMirrorProjectId,
 } from "@/redux/mirrorsEstimateSlice";
 import DefaultIcon from "@/Assets/columns.svg";
-import { resetState, setShowerProjectId } from "@/redux/estimateCalculations";
+import { resetNotifications as resetNotificationsShower, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
 
 const style = {
   position: "absolute",
@@ -72,11 +73,13 @@ export default function ChooseEstimateCategoryModal({
 
     if (category === EstimateCategory.SHOWERS) {
       // showers
+      dispatch(resetNotificationsShower());
       dispatch(setShowerProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
       navigate("/estimates/layouts");
     } else {
       // mirrors
+      dispatch(resetNotificationsMirror());
       dispatch(setMirrorProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
       navigate("/estimates/dimensions");
