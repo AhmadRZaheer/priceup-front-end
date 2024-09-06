@@ -3,6 +3,7 @@ import { userRoles } from "@/utilities/constants"
 import { Box, Button, Stack, Typography } from "@mui/material"
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import './style.scss';
+import { showEditButtonForEstimateStatus } from "@/utilities/estimates";
 // import { useSelector } from "react-redux";
 // import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 const renderMeasurements = (measurements) => {
@@ -30,7 +31,7 @@ export const MirrorSummarySection = ({ data, handleEditEstimate }) => {
     // const mirrosHardwareList = useSelector(getMirrorsHardware);
     const measurementSides = renderMeasurements(data?.config?.measurements ?? []);
     const sqftArea = data?.config?.sqftArea ?? 0;
-
+    const showEditButtonForEstimate = showEditButtonForEstimateStatus(decryptedToken);
     return (
         <Box sx={{ py: 4, pl: 14, pr: 3 }}>
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
@@ -39,7 +40,7 @@ export const MirrorSummarySection = ({ data, handleEditEstimate }) => {
                     <Typography className="summaryData"><Box className='headingTxt'>Square Foot</Box>&nbsp; : {sqftArea}</Typography>
                     <Typography className="summaryData"><Box className='headingTxt'>Total Price</Box>&nbsp; : {data.cost?.toFixed(2)}</Typography>
                 </Stack>
-                {decryptedToken?.role !== userRoles.SUPER_ADMIN ? <Button
+                {showEditButtonForEstimate ? <Button
                     onClick={handleEditEstimate}
                     variant="contained"
                     startIcon={<EditOutlinedIcon />}
