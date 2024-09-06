@@ -6,6 +6,7 @@ import {
   panelOverWeightAmount,
   quoteState,
   thicknessTypes,
+  userRoles,
 } from "./constants";
 import {
   addSelectedItem,
@@ -675,4 +676,23 @@ export const setStateForShowerEstimate = (item, dispatch, navigate) => {
   }
   navigate("/estimates/dimensions");
   // }
+};
+
+export const showEditButtonForEstimateStatus = (decryptedToken) => {
+  switch (decryptedToken?.role) {
+    case userRoles.SUPER_ADMIN:
+      return false;
+    case userRoles.ADMIN:
+      return true;
+    case userRoles.STAFF:
+      return true;
+    case userRoles.CUSTOM_ADMIN:
+      if (decryptedToken?.company_id) {
+        return true;
+      } else {
+        return false;
+      }
+    default:
+      return false;
+  }
 };

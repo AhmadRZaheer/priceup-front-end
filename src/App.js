@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -13,6 +13,7 @@ import { SnackbarProvider } from "notistack";
 import { CustomHooks } from "@/utilities/CustomHooks";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SplashScreen from "./components/ui-components/SplashScreen";
 
 
 function App() {
@@ -26,6 +27,22 @@ function App() {
   const closeSnackbarHandler = () => {
     dispatch(closeSnackbar());
   };
+
+  const [showSplash, setShowSplash] = useState(true);
+
+  useEffect(() => {
+    const navigationEntries = performance.getEntriesByType('navigation');
+    // Check if it's a full page reload (navigation type 1 or 'reload')
+    if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
+      setTimeout(() => {
+        setShowSplash(false);
+      }, 2000); // Adjust the splash screen duration
+    } else {
+      // Direct route navigation (no splash screen needed)
+      setShowSplash(false);
+    }
+  }, []);
+
   // Close the snackbar after 3 seconds
   useEffect(() => {
     if (snackbar.open) {
@@ -42,6 +59,9 @@ function App() {
 
   return (
     <div className="App">
+      {showSplash ? (
+         <SplashScreen /> 
+      ) : (
       <QueryClientProvider client={queryClient}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <SnackbarProvider
@@ -60,6 +80,7 @@ function App() {
           </SnackbarProvider>
         </LocalizationProvider>
       </QueryClientProvider>
+      )}
       <Snackbars
         open={snackbar.open}
         message={snackbar.message}

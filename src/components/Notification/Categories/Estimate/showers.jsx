@@ -3,6 +3,7 @@ import { layoutVariants, userRoles } from "@/utilities/constants";
 import { Box, Button, Stack, Typography } from "@mui/material";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import './style.scss';
+import { showEditButtonForEstimateStatus } from "@/utilities/estimates";
 // import { useSelector } from "react-redux";
 // import { getListData } from "@/redux/estimateCalculations";
 
@@ -37,7 +38,7 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
     // const showersHardwareList = useSelector(getListData);
     const measurementSides = renderMeasurements(data?.config?.layout_id, data?.config?.measurements ?? []);
     const sqftArea = data.config?.sqftArea;
-
+    const showEditButtonForEstimate = showEditButtonForEstimateStatus(decryptedToken);
     return (
         <Box sx={{ py: 4, pl: 14, pr: '60px' }}>
             <Stack direction="row" sx={{ justifyContent: "space-between" }}>
@@ -46,7 +47,7 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
                     <Typography className="summaryData" ><Box className='heading-txt'>Square Foot</Box>&nbsp;: {sqftArea}</Typography>
                     <Typography className="summaryData"><Box className='heading-txt'>Total Price</Box>&nbsp; : {data.cost}</Typography>
                 </Stack>
-                {decryptedToken?.role !== userRoles.SUPER_ADMIN ? <Button
+                {showEditButtonForEstimate ? <Button
                     onClick={handleEditEstimate}
                     variant="contained"
                     startIcon={<EditOutlinedIcon />}

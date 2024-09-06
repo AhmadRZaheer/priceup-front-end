@@ -56,8 +56,8 @@ const AppRoutes = () => {
   const decodedToken = useMemo(() => {
     return parseJwt(token);
   }, [token]);
-  const superSuperAdminsList =
-    JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
+  // const superSuperAdminsList =
+  //   JSON.parse(process.env.REACT_APP_SUPER_USER_ADMIN) ?? [];
 
   return (
     <Routes>
