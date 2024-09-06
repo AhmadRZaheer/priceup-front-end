@@ -102,8 +102,13 @@ const FinishesTable = () => {
   const actionColumn = [
     {
       field: "Actions",
-      headerClassName: "customHeaderClass",
+      headerClassName: "showerHardwareHeader",
       flex: 0.5,
+      headerName: "Actions",
+      renderHeader: (params) => (
+        params.colDef.headerName
+      ),
+
       renderCell: (params) => {
         const id = params.row._id;
         const data = params.row;

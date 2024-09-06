@@ -93,9 +93,13 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
     () => [
       {
         field: 'Cost',
+        headerName: "Cost",
         headerClassName: 'showerHardwareHeader',
         flex: 1.6,
         sortable: false,
+        renderHeader: (params) => (
+          params.colDef.headerName
+        ),
         renderCell: (params) => (
           <Box sx={{ width: '101px' }}>
             <CustomInputField
@@ -113,9 +117,13 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
       },
       {
         field: 'Status',
+        headerName: "Status",
         headerClassName: 'showerHardwareHeader',
         flex: 2.5,
         sortable: false,
+        renderHeader: (params) => (
+          params.colDef.headerName
+        ),
         renderCell: (params) => (
           <Box
             sx={{
@@ -175,7 +183,7 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
             display: 'flex',
             justifyContent: 'space-between',
             py: '15px',
-            px: 4,
+            px: 3,
           }}
         >
           <Box sx={{ display: 'flex', gap: 1.5 }}>

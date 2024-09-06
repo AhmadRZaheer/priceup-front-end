@@ -375,3 +375,8 @@ input {
 .mirror-meun-item:hover {
   background: #EDEBFA !important;
 }
+
+/* input field padding */
+.MuiOutlinedInput-input{
+  padding: 10px !important
+}

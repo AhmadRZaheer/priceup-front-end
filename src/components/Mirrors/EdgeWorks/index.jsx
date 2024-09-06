@@ -52,6 +52,7 @@ const MirrorsEdgeWorkComponent = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [activeRow, setActiveRow] = useState(null);
     const [rowCosts, setRowCosts] = useState({});
+    const [rowStatus, setRowStatus] = useState({});
 
     const handleOpenDeleteModal = () => {
         setDeleteModalOpen(true);
@@ -143,17 +144,21 @@ const MirrorsEdgeWorkComponent = () => {
             apiRoute: `${routePrefix}/${data._id}`,
         });
     };
-    const handleStatusChange = (row, optionIndex) => {
-        const updatedOptions = row.options.map((option, index) => {
-            // Only toggle the status of the option at the specified index
-            if (index === optionIndex) {
-                return {
-                    ...option,
-                    status: !option.status, // Toggle the status
-                };
+    const handleStatusChange = (row, thickness) => {
+        const updatedOptions = row.options.map((option) => ({
+            ...option,
+            status: option.thickness === thickness ? !option.status : option.status,
+        }));
+
+        // Update the status state for the specific row and thickness
+        setRowStatus((prevStatus) => ({
+            ...prevStatus,
+            [row._id]: {
+                ...prevStatus[row._id],
+                [thickness]: !row.options.find(option => option.thickness === thickness).status,
             }
-            return option;
-        });
+        }));
+
         editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
         setUpdateRefetch(true);
     };
@@ -183,12 +188,18 @@ const MirrorsEdgeWorkComponent = () => {
         }
     }, [editSuccess])
 
-    const thicknessOptions = [{ id: 0, name: 'Thickness 1/4' }, { id: 1, name: 'Thickness 1/8' }]
+    const thicknessOptions = [{ id: '1/4', name: 'Thickness 1/4' }, { id: '1/8', name: 'Thickness 1/8' }]
 
     const actionColumn = [
         {
             field: "Cost (Thickness 1/4)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Cost (Thickness 1/4)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => (
@@ -211,7 +222,13 @@ const MirrorsEdgeWorkComponent = () => {
         },
         {
             field: "Cost (Thickness 1/8)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Cost (Thickness 1/8)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => (
@@ -235,7 +252,13 @@ const MirrorsEdgeWorkComponent = () => {
 
         {
             field: "Status  (Thickness 1/4)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Status  (Thickness 1/4)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => {
@@ -268,7 +291,13 @@ const MirrorsEdgeWorkComponent = () => {
         },
         {
             field: "Status  (Thickness 1/8)",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Status  (Thickness 1/8)",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 1.5,
             sortable: false,
             renderCell: (params) => {
@@ -301,7 +330,13 @@ const MirrorsEdgeWorkComponent = () => {
         },
         {
             field: "Actions",
-            headerClassName: "ProjectsColumnsHeaderClass",
+            headerName: "Actions",
+            headerClassName: "showerHardwareHeader",
+            renderHeader: (params) => (
+                <Box>
+                    {params.colDef.headerName}
+                </Box>
+            ),
             flex: 0.7,
             sortable: false,
             renderCell: (params) => {
@@ -373,7 +408,12 @@ const MirrorsEdgeWorkComponent = () => {
                                         }}
                                     >
                                         <Typography className='dropTxt'>{data.name}</Typography>
-                                        <CustomSmallSwtich checked={params?.row?.options[data.id]?.status}
+                                        <CustomSmallSwtich
+                                            checked={rowStatus[params.row._id]?.[data.id] !== undefined
+                                                ? rowStatus[params.row._id][data.id]
+                                                : params.row?.options.some(option => option.thickness === data.id && option.status)
+                                            }
+                                            // checked={params?.row?.options[data.id]?.status}
                                             //  onChange={() => handleStatusChange(params.row, data.id)} 
                                             inputProps={{ 'aria-label': 'ant design' }} />
                                     </Box>

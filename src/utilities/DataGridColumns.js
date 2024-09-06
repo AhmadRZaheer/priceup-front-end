@@ -1430,12 +1430,18 @@ export const userColumnsHardware = [
   {
     field: "name",
     headerName: "Finish Type",
-    headerClassName: "customHeaderClass",
+    headerClassName: "showerHardwareHeader",
     sortable: false,
     flex: 6,
+    renderHeader: (params) => (
+      <Box sx={{ pl: '14px' }}>
+        {params.colDef.headerName}
+      </Box>
+    ),
 
     renderCell: (params) => {
       return (
+        <Box sx={{ pl: '14px'}}>
         <div className="user-cellWrap">
           <div className="customerImg">
             <DefaultImage
@@ -1446,6 +1452,7 @@ export const userColumnsHardware = [
           </div>
           <div className="new-customerNameTable">{params.row.name}</div>
         </div>
+        </Box>
       );
     },
   },
@@ -1455,12 +1462,18 @@ export const GlassAddonsColumn = [
   {
     field: "name",
     headerName: "Addon Type",
-    headerClassName: "customHeaderClass",
+    headerClassName: "showerHardwareHeader",
     sortable: false,
     flex: 3,
+    renderHeader: (params) => (
+      <Box sx={{ pl: '14px' }}>
+        {params.colDef.headerName}
+      </Box>
+    ),
 
     renderCell: (params) => {
       return (
+        <Box sx={{ pl: '14px' }}>
         <div className="user-cellWrap">
           <div className="customerImg">
             <DefaultImage
@@ -1471,6 +1484,7 @@ export const GlassAddonsColumn = [
           </div>
           <div className="new-customerNameTable">{params.row.name}</div>
         </div>
+        </Box>
       );
     },
   },
@@ -1480,12 +1494,18 @@ export const GlassTypeColumn = [
   {
     field: "name",
     headerName: "Glass Type",
-    headerClassName: "customHeaderClass",
+    headerClassName: "showerHardwareHeader",
     sortable: false,
-    flex: 3,
+    flex: 4,
+    renderHeader: (params) => (
+      <Box sx={{ pl: '14px' }}>
+        {params.colDef.headerName}
+      </Box>
+    ),
 
     renderCell: (params) => {
       return (
+        <Box sx={{ pl: '14px'}}>
         <div className="user-cellWrap">
           <div className="customerImg">
             <DefaultImage
@@ -1496,6 +1516,7 @@ export const GlassTypeColumn = [
           </div>
           <div className="new-customerNameTable">{params.row.name}</div>
         </div>
+        </Box>
       );
     },
   },
@@ -1573,14 +1594,14 @@ export const HardWareColumns =[
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '22px' }}>
+        <Box sx={{ pl: '14px' }}>
           {params.colDef.headerName}
         </Box>
       ),
       renderCell: (params) => {
         return (
           <Box>
-            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '22px' }}>
+            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '14px' }}>
               {params?.row?.name}
             </Typography>
           </Box>
@@ -1594,20 +1615,19 @@ export const MirrorsHardWareColumns = () => {
     {
       field: "hardwareName",
       headerName: "Hardware Name",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerClassName: "showerHardwareHeader",
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '22px' }}>
+        <Box sx={{ pl: '14px' }}>
           {params.colDef.headerName}
         </Box>
       ),
       renderCell: (params) => {
         return (
+          <Box  sx={{ pl: '14px', }}>
           <Box
-            className="project-cellWrap"
-          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-          >
+            className="project-cellWrap" >
             <div className="customerImg">
               <DefaultImage
                 image={params.row.image}
@@ -1634,6 +1654,7 @@ export const MirrorsHardWareColumns = () => {
                 </Typography>
               </Box>
             </div>
+          </Box>
           </Box>
         );
       },
@@ -1664,16 +1685,17 @@ export const MirrorsGlassAddons = () => {
     {
       field: "addonType",
       headerName: "Addon Type",
-      headerClassName: "ProjectsColumnsHeaderClass",
+      headerClassName: "showerHardwareHeader",
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '22px' }}>
+        <Box sx={{ pl: '14px' }}>
           {params.colDef.headerName}
         </Box>
       ),
       renderCell: (params) => {
         return (
+          <Box  sx={{ pl: '14px', }}>
           <Box
             className="project-cellWrap"
           // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
@@ -1704,6 +1726,7 @@ export const MirrorsGlassAddons = () => {
                 </Typography>
               </Box>
             </div>
+          </Box>
           </Box>
         );
       },
@@ -1716,16 +1739,17 @@ export const MirrorsEdgeWork = () => {
     {
       field: "name",
       headerName: "Name",
-      headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1,
+      headerClassName: "showerHardwareHeader",
+      flex: 1.2,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '22px' }}>
+        <Box sx={{ pl: '14px' }}>
           {params.colDef.headerName}
         </Box>
       ),
       renderCell: (params) => {
         return (
+          <Box  sx={{ pl: '14px', }}>
           <Box
             className="project-cellWrap"
           // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
@@ -1757,6 +1781,7 @@ export const MirrorsEdgeWork = () => {
               </Box>
             </div>
           </Box>
+          </Box>
         );
       },
     },
@@ -1768,16 +1793,17 @@ export const MirrorsGlassType = () => {
     {
       field: "glassType",
       headerName: "Glass Type",
-      headerClassName: "ProjectsColumnsHeaderClass",
-      flex: 1,
+      headerClassName: "showerHardwareHeader",
+      flex: 1.3,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '22px' }}>
+        <Box sx={{ pl: '14px' }}>
           {params.colDef.headerName}
         </Box>
       ),
       renderCell: (params) => {
         return (
+          <Box  sx={{ pl: '14px', }}>          
           <Box
             className="project-cellWrap"
           // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
@@ -1808,6 +1834,7 @@ export const MirrorsGlassType = () => {
                 </Typography>
               </Box>
             </div>
+          </Box>
           </Box>
         );
       },

@@ -260,10 +260,10 @@ export default function AddEditGlassType({
                 <Typography color="error">{formik.errors.image}</Typography>
               )} */}
             </Box>
-            <Box>
-              <Typography className="input-label-text">Name</Typography>
+            <Box className='model-field'>
+              <Typography className="input-label-text">Glass Type Label</Typography>
               <CustomInputField
-                placeholder="Name"
+                placeholder="Glass Type Label"
                 name="name"
                 value={formik.values.name}
                 onChange={formik.handleChange}

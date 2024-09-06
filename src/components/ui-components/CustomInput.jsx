@@ -19,6 +19,7 @@ function CustomInputField({
   onClick,
   select,
   color,
+  sx
 }) {
   return (
     <>
@@ -49,7 +50,7 @@ function CustomInputField({
             ? "custom-textfield-purple"
             : "custom-textfield"
         }
-        // style={{...sx}}
+        style={{...sx}}
       />
     </>
   );
