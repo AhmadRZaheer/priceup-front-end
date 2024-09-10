@@ -771,11 +771,11 @@ const ProjectInfoComponent = ({
               }}
             >
               <Box>
-                <Typography
+                {/* <Typography
                   sx={{ fontSize: { sm: "17px", xs: "15px" }, fontWeight: 600 }}
                 >
                   Please fill in all fields marked with * sign.
-                </Typography>
+                </Typography> */}
               </Box>
               <Box>
                 <Button

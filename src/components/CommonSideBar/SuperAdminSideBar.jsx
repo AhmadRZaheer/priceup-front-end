@@ -3,7 +3,7 @@ import "./style.scss";
 import logout from "../../Assets/logout.svg";
 import { NavLink, useLocation } from "react-router-dom";
 import { logoutHandler } from "../../redux/userAuth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LagoutModal from "../Modal/logOut";
 import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
@@ -20,8 +20,10 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import MenuSigleItem from "./MenuSigleItem";
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import { getLocationsRefetch, setChangeLocation, } from "@/redux/refetch";
 
 const SuperAdminSideBar = () => {
+  const locationsRefetch = useSelector(getLocationsRefetch);
   const { data: AdminData, refetch: teamMemberRefetch } = useFetchDataAdmin();
   const {
     mutate: switchLocationSuperAdmin,
@@ -51,73 +53,77 @@ const SuperAdminSideBar = () => {
   };
   useEffect(() => {
     teamMemberRefetch();
-  }, []);
+  }, [locationsRefetch]);
   const handleAdminNameClick = (admin) => {
     switchLocationSuperAdmin({
       company_id: admin._id,
       adminId: admin.user_id,
     });
+      setAnchorEl(null);
   };
   useEffect(() => {
     if (switchedSuperAdmin) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());       
       localStorage.removeItem("token");
       localStorage.setItem("userReference", decodedToken.id);
       localStorage.setItem("token", useTokenSuperAdmin);
+      //  setTimeout(() => {
       window.location.href = "/";
+      //  }, 1000);
     }
   }, [switchedSuperAdmin]);
   return (
     <>
       <Tooltip title="See Locations">
-            <Button
-              sx={{
-                mx: "auto",
-                width: 264,
-                height: "56px",
-                color: "white",
-                padding: "4px 12px",
-                display: "flex",
-                borderRadius: "6px",
-                background: "#000000",
-                m: 2,
-                display: "flex",
-                justifyContent: "space-between",
-                ":hover": {
-                  backgroundColor: "#000000",
-                  },
-              }}
-              onClick={handleSeeLocationsClick}
-            >
-              <Box sx={{ display: "flex", gap: "12px" }}>
-              <VisibilityOutlinedIcon sx={{  }} />
+        <Button
+          sx={{
+            mx: "auto",
+            width: 264,
+            height: "56px",
+            color: "white",
+            padding: "4px 12px",
+            borderRadius: "6px",
+            background: "#000000",
+            m: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            ":hover": {
+              backgroundColor: "#000000",
+            },
+          }}
+          onClick={handleSeeLocationsClick}
+        >
+          <Box sx={{ display: "flex", gap: "12px" }}>
+            <VisibilityOutlinedIcon sx={{}} />
 
-                <span
-                  style={{
-                    whiteSpace: "nowrap",
-                    display: "flex",
-                    alignItems: "center",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden",
-                    textTransform: "capitalize",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    lineHeight: "21.86px",
-                  }}
-                >
-                  See Locations
-                </span>
-              </Box>
-              <ExpandMoreOutlinedIcon
-                className="setLocation"
-                sx={{
-                  color: "#FFFF",
-                  transform:
-                    anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
-                }}
-              />
-            </Button>
-          </Tooltip>
-          <hr style={{ border: "1px solid #D1D4DB" }} />
+            <span
+              style={{
+                whiteSpace: "nowrap",
+                display: "flex",
+                alignItems: "center",
+                textOverflow: "ellipsis",
+                overflow: "hidden",
+                textTransform: "capitalize",
+                fontSize: "16px",
+                fontWeight: 600,
+                lineHeight: "21.86px",
+              }}
+            >
+              See Locations
+            </span>
+          </Box>
+          <ExpandMoreOutlinedIcon
+            className="setLocation"
+            sx={{
+              color: "#FFFF",
+              transform:
+                anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+            }}
+          />
+        </Button>
+      </Tooltip>
+      <hr style={{ border: "1px solid #D1D4DB" }} />
       <div className="center">
         <ul>
           {/* <li
@@ -135,15 +141,15 @@ const SuperAdminSideBar = () => {
             </Button>
           </li> */}
           <MenuSigleItem link="/admin" secondLink="/">
-            <FmdGoodOutlined sx={{   }} />
+            <FmdGoodOutlined sx={{}} />
             <span>Location Management</span>
           </MenuSigleItem>
           <MenuSigleItem link="/users">
-            <PeopleAltOutlinedIcon sx={{   }} />
+            <PeopleAltOutlinedIcon sx={{}} />
             <span>User Management</span>
           </MenuSigleItem>
           <MenuSigleItem link="/notification?tab=Activity" secondLink='/notification'>
-            <AccessTimeOutlinedIcon sx={{   }} />
+            <AccessTimeOutlinedIcon sx={{}} />
             <span>Activity Logs</span>
           </MenuSigleItem>
           {/* <MenuSigleItem link="/user">

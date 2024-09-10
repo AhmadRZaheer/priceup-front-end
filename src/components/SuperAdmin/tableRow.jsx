@@ -13,13 +13,17 @@ import {
 import CustomToggle from "../ui-components/Toggle";
 import { useEditTeamMembers } from "../../utilities/ApiHooks/team";
 import { useUpdateSuper_SuperAdmins } from "../../utilities/ApiHooks/super_superAdmins";
+import { setLocationsRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
+  const dispatch = useDispatch();
   const {
     mutate: updateLocationAdminStatus,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useUserStatus();
+
   const { mutate: updateSuperAdminStatus } = useUpdateSuper_SuperAdmins();
   const {
     mutate: updateCustomAdminStatus,
@@ -34,7 +38,8 @@ const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
     setActive(!active);
     if (type === "superAdmin") {
       updateLocationAdminStatus({ status: !active, id: row?._id });
-      onToggleChange(active);
+      onToggleChange(!active);
+      dispatch(setLocationsRefetch())
     } else if (type === "superAdminTeam") {
       updateLocationStaffStatus({ status: !active, id: row?._id });
     } else if (type === "superAdminUser") {
@@ -46,7 +51,9 @@ const TableRow = ({ row, onToggleChange, type, title, refetch, text }) => {
   };
   useEffect(() => {
     if (SuccessForEditUser || SuccessForEdit || isSuccessStaffUpdated) {
-      refetch();
+      if(type !== "superAdmin"){
+        refetch();
+      }      
     }
   }, [SuccessForEditUser, SuccessForEdit, isSuccessStaffUpdated]);
 

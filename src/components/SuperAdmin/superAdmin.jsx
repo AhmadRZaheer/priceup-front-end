@@ -26,11 +26,16 @@ import CustomInputField from "../ui-components/CustomInput";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import AddEditLocationModal from "../Modal/editLoactionSuperAdmin";
 import { debounce } from "lodash";
+import { setChangeLocation } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const SuperAdminTable = () => {
   const routePrefix = `${backendURL}/companies`;
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
+  const dispatch = useDispatch();
+
+  const [locationAccessLoading, setLocationAccessLoading] = useState({});
   const decodedToken = getDecryptedToken();
 
   const {
@@ -38,6 +43,7 @@ const SuperAdminTable = () => {
     refetch: refetchList,
     isFetched,
     isFetching,
+    isSuccess
   } = useFetchAllDocuments(
     `${routePrefix}/by-role?search=${search}${status !== null ? `&status=${status}` : ""
     }`
@@ -57,6 +63,7 @@ const SuperAdminTable = () => {
   const [modifyModalOpen, setModifyModalOpen] = useState(false);
   const [cloneModalOpen, setCloneModalOpen] = useState(false);
   const [recordToModify, setRecordToModify] = useState(null);
+  const [firstLoad, setFirstLoad] = useState(true);
 
   const handleDeleteUser = async () => {
     await deleteuserdata(recordToModify?.user);
@@ -99,6 +106,8 @@ const SuperAdminTable = () => {
   };
 
   const handleAdminClick = (admin) => {
+
+    setLocationAccessLoading((prev) => ({ ...prev, [admin._id]: true }));
     switchLocationSuperAdmin({
       company_id: admin._id,
       adminId: admin.user._id,
@@ -123,13 +132,24 @@ const SuperAdminTable = () => {
     refetchList();
   }, [status]);
 
+
   useEffect(() => {
     if (switchedSuperAdmin) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("userReference", decodedToken.id);
       localStorage.setItem("token", useTokenSuperAdmin);
       window.location.href = "/";
     }
   }, [switchedSuperAdmin]);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (isSuccess && isFetching === false) {
+  //       setFirstLoad(false)
+  //     }
+  //   }, 2000);
+  // }, [isSuccess]);
 
   return (
     <Box sx={{
@@ -297,44 +317,47 @@ const SuperAdminTable = () => {
         </Box>
       </Box>
       <Grid container gap={2} pt={0}>
-        {isFetching ? (
-          <Box
-            sx={{
-              width: "100%",
-              textAlign: "center",
-              display: "flex",
-              justifyContent: "center",
-              height: "300px",
-              alignItems: "center",
-            }}
-          >
-            <CircularProgress sx={{ color: "#8477DA" }} />
-          </Box>
-        ) : locationsList?.length > 0 ? (
-          locationsList?.map((item) =>
-            <Grid item xs={5.8} xl={3.89} sx={{
-              '@media (min-width: 1400px) and (max-width: 1550px)': {
-                flexBasis: '32.3%',  // Equivalent to lg={12} for screens smaller than 1400px
-                maxWidth: '32.3%',
-              },
-            }}>
-              <SingleLocation
-                data={item}
-                handleAccessLocation={handleAdminClick}
-                handleEdit={handleOpenModifyModal}
-                handleClone={handleOpenCloneModal}
-                handleDelete={handleOpenDeleteModal}
-                refetch={refetchList}
-              />
-            </Grid>
-          )
-        ) : (
-          <Box
-            sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}
-          >
-            No Location Found
-          </Box>
-        )}
+        {
+          isFetching ? (
+            <Box
+              sx={{
+                width: "100%",
+                textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+                height: "300px",
+                alignItems: "center",
+              }}
+            >
+              <CircularProgress sx={{ color: "#8477DA" }} />
+            </Box>
+          ) :
+            locationsList?.length > 0 ? (
+              locationsList?.map((item) =>
+                <Grid item xs={5.8} xl={3.89} key={item._id} sx={{
+                  '@media (min-width: 1400px) and (max-width: 1550px)': {
+                    flexBasis: '32.3%',  // Equivalent to lg={12} for screens smaller than 1400px
+                    maxWidth: '32.3%',
+                  },
+                }}>
+                  <SingleLocation
+                    data={item}
+                    handleAccessLocation={handleAdminClick}
+                    handleEdit={handleOpenModifyModal}
+                    handleClone={handleOpenCloneModal}
+                    handleDelete={handleOpenDeleteModal}
+                    refetch={refetchList}
+                    isloading={locationAccessLoading[item._id]}
+                  />
+                </Grid>
+              )
+            ) : (
+              <Box
+                sx={{ color: "#667085", mt: 1, width: "100%", textAlign: "center" }}
+              >
+                No Location Found
+              </Box>
+            )}
       </Grid>
       <DeleteModal
         open={deleteModalOpen}

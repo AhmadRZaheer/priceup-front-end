@@ -363,7 +363,7 @@ export default function CloneLocationModel({ open, close, data, refetch }) {
                 }}
               >
                 {LoadingForAdd ? (
-                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                  <CircularProgress size={24} sx={{ color: "#8477DA",px:2.5 }} />
                 ) : (
                   "Clone Location"
                 )}

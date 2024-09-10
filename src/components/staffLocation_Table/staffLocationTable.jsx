@@ -17,16 +17,20 @@ import SingleLocation from "../ui-components/singleLocation";
 import CustomInputField from "../ui-components/CustomInput";
 import { backendURL, debounce, getDecryptedToken } from "@/utilities/common";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { setChangeLocation } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const StaffLocationsTable = () => {
   const routePrefix = `${backendURL}/staffs`;
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
+  const dispatch= useDispatch();
+  const [locationAccessLoading, setLocationAccessLoading] = useState({});
   const {
     data: locationsData,
     refetch: fetchLocations,
-    isFetched,
-    isLoading,
+    isFetched,    
+    isFetching
   } = useFetchAllDocuments(
     `${routePrefix}/haveAccess/${decodedToken?.id}?search=${search}`
   );
@@ -67,14 +71,17 @@ const StaffLocationsTable = () => {
       return;
     }
     if (companydata._id !== decodedToken.company_id) {
+      setLocationAccessLoading((prev) => ({ ...prev, [companydata._id]: true }));
       await switchLocationUser(companydata._id);
       console.log("user changed");
     }
   };
   useEffect(() => {
     if (switched) {
-      localStorage.setItem("token", newToken);
-      window.location.href = "/";
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
+      localStorage.setItem("token", newToken);    
+        window.location.href = "/";      
     }
   }, [switched]);
 
@@ -120,7 +127,7 @@ const StaffLocationsTable = () => {
         </Box>
       </Box>
       <Grid container gap={2} >
-        {isLoading || isSwitching ? (
+        {isFetching  ? (
           <Box
             sx={{
               width: "100%",
@@ -136,16 +143,24 @@ const StaffLocationsTable = () => {
         ) : locationsData.length !== 0 ? (
           locationsData?.map((item) => {
             return (
+              <Grid item xs={5.8} xl={3.89} key={item._id} sx={{
+                '@media (min-width: 1400px) and (max-width: 1550px)': {
+                  flexBasis: '32.3%',  
+                  maxWidth: '32.3%',
+                },
+              }}>
               <SingleLocation
                 data={item}
                 // handleToggleChange={handleToggleChange}
                 nonActiveUsers={item.staffs}
                 handleAccessLocation={handleSwitchLocation}
+                isloading={locationAccessLoading[item._id]}
                 // handleEdit={handleOpenEdit}
                 // handleClone={handleOpenClone}
                 // handleDelete={handleOpenDelete}
                 // refetch={AdminRefetch}
               />
+              </Grid>
               // <Box
               //   key={item?.user?._id}
               //   sx={{
@@ -358,7 +373,7 @@ const StaffLocationsTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1 }}>
+          <Box sx={{ color: "#667085", textAlign: "center", mt: 1, width: "100%", }}>
             No Location Found
           </Box>
         )}

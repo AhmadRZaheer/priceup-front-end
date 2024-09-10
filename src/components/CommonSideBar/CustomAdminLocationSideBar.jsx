@@ -17,6 +17,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DefaultImage from "../ui-components/defaultImage";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import MenuSigleItem from "./MenuSigleItem";
+import { setChangeLocation } from "@/redux/refetch";
 
 const CustomAdminLocationSideBar = () => {
   const { mutate: fetchLocations, data: locationsData } =
@@ -50,6 +51,7 @@ const CustomAdminLocationSideBar = () => {
   }, []);
 
   const handleSwitchLocation = async (companyData) => {
+    setAnchorEl(null);
     if (!companyData || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
@@ -61,6 +63,8 @@ const CustomAdminLocationSideBar = () => {
   };
   useEffect(() => {
     if (switched) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", newToken);
       window.location.href = "/";
     }

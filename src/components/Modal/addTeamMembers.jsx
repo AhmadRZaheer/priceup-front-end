@@ -619,10 +619,8 @@ export default function AddTeamMembers({
                   fontSize: "16px",
                 }}
               >
-                {createLoading || updateLoading ? (
-                  <Box sx={{ position: "absolute", bottom: "-1px" }}>
-                    <CircularProgress size={24} sx={{ color: "white" }} />
-                  </Box>
+                {createLoading || updateLoading ? (                 
+                    <CircularProgress size={24} sx={{ color: "#8477DA",px:2.5  }} />
                 ) : recordToModify ? (
                   "Save Changes"
                 ) : (

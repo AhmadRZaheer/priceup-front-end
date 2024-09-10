@@ -286,7 +286,7 @@ export const EstimatesColumns = (
         return (
           <>
             <Typography sx={{ width: 190, py: 1, color: "#667085" }}>
-              {new Date(params?.row?.updatedAt).toDateString()}
+              {new Date(params?.row?.createdAt).toDateString()}
             </Typography>
           </>
         );

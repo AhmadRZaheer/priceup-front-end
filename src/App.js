@@ -13,12 +13,15 @@ import { SnackbarProvider } from "notistack";
 import { CustomHooks } from "@/utilities/CustomHooks";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import SplashScreen from "./components/ui-components/SplashScreen";
+import SplashScreen from "@/components/ui-components/SplashScreen";
+import { getChangeLocation } from "./redux/refetch";
 
 
 function App() {
   const dispatch = useDispatch();
   const queryClient = new QueryClient();
+  const [splashLoadings, setSplashLoadings] = useState(() => localStorage.getItem('splashLoading'));
+  const splashLoading = localStorage.getItem('splashLoading')
   const logOut = useCallback(() => {
     dispatch(logoutHandler());
   }, [dispatch]);
@@ -29,20 +32,29 @@ function App() {
   };
 
   const [showSplash, setShowSplash] = useState(true);
+  const LocationsRefetch = useSelector(getChangeLocation);
+console.log(splashLoading,'splashLoading');
 
-  useEffect(() => {
-    const navigationEntries = performance.getEntriesByType('navigation');
-    // Check if it's a full page reload (navigation type 1 or 'reload')
-    if (navigationEntries.length > 0 && navigationEntries[0].type === 'reload') {
-      setTimeout(() => {
-        setShowSplash(false);
-      }, 2000); // Adjust the splash screen duration
-    } else {
-      // Direct route navigation (no splash screen needed)
-      setShowSplash(false);
-    }
-  }, []);
+useEffect(()=>{
+  if (splashLoading === 'true') {
+    localStorage.setItem('splashLoading', 'false');
+    setSplashLoadings('false'); 
+  } }, [splashLoading,LocationsRefetch]);
 
+  // useEffect(() => {
+  //   const navigationEntries = performance.getEntriesByType('navigation');
+  //   // Check if it's a full page reload (navigation type 1 or 'reload')
+  //   if ((navigationEntries.length > 0 && navigationEntries[0].type === 'reload')) {
+  //     setTimeout(() => {
+        
+  //       setShowSplash(false);
+  //     }, 500); // Adjust the splash screen duration
+  //   } else {
+  //     // Direct route navigation (no splash screen needed)
+  //     setShowSplash(false);
+  //   }
+  // }, []);
+ 
   // Close the snackbar after 3 seconds
   useEffect(() => {
     if (snackbar.open) {
@@ -59,7 +71,7 @@ function App() {
 
   return (
     <div className="App">
-      {showSplash ? (
+      {splashLoading === 'true' ? (
          <SplashScreen /> 
       ) : (
       <QueryClientProvider client={queryClient}>

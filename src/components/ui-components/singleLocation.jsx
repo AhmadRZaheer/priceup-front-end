@@ -1,4 +1,4 @@
-import { Box, Button, Divider, IconButton, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Divider, IconButton, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import DefaultImage from "./defaultImage";
 import "./singleLocation.scss";
 import { AddCircleRounded, East } from "@mui/icons-material";
@@ -8,6 +8,7 @@ import EditIcon from "../../Assets/d.svg";
 import TableRow from "../SuperAdmin/tableRow";
 import { getDecryptedToken } from "@/utilities/common";
 import { userRoles } from "@/utilities/constants";
+import { useState } from "react";
 
 const SingleLocation = ({
   data,
@@ -18,8 +19,10 @@ const SingleLocation = ({
   handleDelete,
   handleEdit,
   refetch,
+  isloading
 }) => {
   const userToken = getDecryptedToken();
+  const [locationStatus, setLocationStatus] = useState(data?.user?.status);
   const responsive = useMediaQuery('(min-width:1400px) and (max-width:1550px)');
   return (
     <>
@@ -45,13 +48,13 @@ const SingleLocation = ({
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <DefaultImage image={data?.image} name={data?.name} type={responsive? 1 : 6}  />
+            <DefaultImage image={data?.image} name={data?.name} type={responsive ? 1 : 6} />
             <Tooltip title={data?.name} placement="top">
               <Typography
                 sx={{
                   fontSize: 20,
                   fontWeight: 600,
-                  width: responsive ? '150px' : '200px',              
+                  width: responsive ? '150px' : '200px',
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
@@ -62,9 +65,13 @@ const SingleLocation = ({
             </Tooltip>
           </Box>
           <Typography
-            className={data.user?.status ? "status-active" : "status-inActive"}
+            className={
+              // data.user?.status  
+              locationStatus ? "status-active" : "status-inActive"}
           >
-            {data.user?.status ? "Active" : "Inactive"}
+            {
+              // data.user?.status
+              locationStatus ? "Active" : "Inactive"}
           </Typography>
         </Box>
         <Divider sx={{ borderColor: '#D0D5DD' }} />
@@ -81,10 +88,10 @@ const SingleLocation = ({
         >
           {/* users */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}>Users</Typography>
+            <Typography className="section-name-text" sx={{ fontSize: responsive ? 12 : 14 }}>Users</Typography>
             <Box>
               {data?.staffs?.length !== 0 ? (
-                <Box className="user-cellWrap" sx={{ height:responsive?'27px':'33px' }}>
+                <Box className="user-cellWrap" sx={{ height: responsive ? '27px' : '33px' }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -106,7 +113,7 @@ const SingleLocation = ({
                             image={user?.image}
                             name={user?.name}
                             // type={5}
-                            style={{height:responsive?'25px':'31px',width:responsive?'25px':'31px'}}
+                            style={{ height: responsive ? '25px' : '31px', width: responsive ? '25px' : '31px' }}
                           />
                         </Box>
                       );
@@ -123,7 +130,7 @@ const SingleLocation = ({
                       />
                     )}
                   </Box>
-                  <Typography sx={{ fontSize: responsive ? '13px' :"15px", fontWeight: 500 }}>
+                  <Typography sx={{ fontSize: responsive ? '13px' : "15px", fontWeight: 500 }}>
                     {data?.staffs?.length}{" "}
                     {data?.staffs?.length === 1 ? "User" : "Users"}
                   </Typography>
@@ -137,21 +144,21 @@ const SingleLocation = ({
           </Stack>
           {/* Layouts */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Layouts</Typography>
-            <Typography  sx={{ fontSize: responsive?15:16, fontWeight: responsive ? 500 : 600 }}>
+            <Typography className="section-name-text" sx={{ fontSize: responsive ? 12 : 14 }}> Layouts</Typography>
+            <Typography sx={{ fontSize: responsive ? 15 : 16, fontWeight: responsive ? 500 : 600 }}>
               {data?.layouts ?? 0}
             </Typography>
           </Stack>
           {/* Customers */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Customers</Typography>
+            <Typography className="section-name-text" sx={{ fontSize: responsive ? 12 : 14 }}> Customers</Typography>
             <Typography sx={{ fontSize: '16px', fontWeight: 600 }}>
               {data?.customers ?? 0}
             </Typography>
           </Stack>
           {/* Layouts */}
           <Stack direction='column' gap='6px'>
-            <Typography className="section-name-text" sx={{fontSize: responsive? 12: 14 }}> Estimates</Typography>
+            <Typography className="section-name-text" sx={{ fontSize: responsive ? 12 : 14 }}> Estimates</Typography>
             <Typography sx={{ fontSize: '16px', fontWeight: 600 }}>
               {data?.estimates ?? 0}
             </Typography>
@@ -161,7 +168,7 @@ const SingleLocation = ({
         {/* actions */}
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Button
-            disabled={!data.user.status}
+            disabled={!locationStatus || isloading}
             onClick={() => handleAccessLocation(data)}
             variant="outlined"
             sx={{
@@ -176,14 +183,23 @@ const SingleLocation = ({
               gap: '10px'
             }}
           // endIcon={<East />}
-          ><Typography sx={{
-            display:'flex',
-            fontWeight: 600,
-            lineHeight: '21.86px',
-            fontSize: '16px',
-            letterSpacing: '0px',
-          }}>Access&nbsp; {!responsive && <Box>Location</Box>} </Typography>
-            <East sx={{ width: '17px', height: '17px' }} />
+          >
+            {/* {isloading ? (
+              <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+            ) : ( */}
+            <>
+              <Typography sx={{
+                display: 'flex',
+                fontWeight: 600,
+                lineHeight: '21.86px',
+                fontSize: '16px',
+                letterSpacing: '0px',
+              }}>Access&nbsp; {!responsive && <Box>Location</Box>} </Typography>
+              {isloading ? (
+                <CircularProgress size={24} sx={{ color: "#BDBDBD" }} />
+              ) : (<East sx={{ width: '17px', height: '17px' }} />)}
+            </>
+            {/* )} */}
           </Button>
           <Box sx={{ display: "flex", alignItems: "center", height: "40px", gap: '12px' }}>
             {handleClone && (
@@ -225,11 +241,12 @@ const SingleLocation = ({
             {userToken?.role === userRoles.SUPER_ADMIN && <Box>
               <TableRow
                 title={
-                  data?.user?.status ? "" : "This Location is not Active"
+                  // data?.user?.status &&
+                  locationStatus ? "" : "This Location is not Active"
                 }
                 text={""}
                 row={data?.user}
-                onToggleChange={() => { }}
+                onToggleChange={(params) => { setLocationStatus(params) }}
                 type={"superAdmin"}
                 refetch={refetch}
               />

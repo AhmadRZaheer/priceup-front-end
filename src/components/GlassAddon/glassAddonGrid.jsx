@@ -109,7 +109,7 @@ const GlassAddonGrid = ({ type }) => {
   const actionColumn = [
     {
       field: "cost",
-      headerName: "Cost",
+      headerName: "Cost per square inch",
       headerClassName: "showerHardwareHeader",
       renderHeader: (params) => (
         <Box>

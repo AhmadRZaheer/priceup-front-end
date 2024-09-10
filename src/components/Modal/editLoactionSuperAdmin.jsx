@@ -403,9 +403,7 @@ const AddEditLocationModal = ({
               disabled={addLocationLoading || updateLocationLoading}
             >
               {addLocationLoading || updateLocationLoading ? (
-                <Box sx={{ position: "absolute", bottom: "-1px" }}>
-                  <CircularProgress size={24} sx={{ color: "white" }} />
-                </Box>
+                  <CircularProgress size={24} sx={{ color: "#8477DA",px:2.5 }} />                
               ) : recordToModify ? (
                 "Save Changes"
               ) : (

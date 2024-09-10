@@ -42,8 +42,10 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import InnerMenuItem from "./InnerMenuItem";
+import { setChangeLocation } from "@/redux/refetch";
 
 const AdminSideBar = () => {
+  const dispatch = useDispatch();
   const { data: AdminData, refetch } = useFetchDataAdmin();
   const { mutate: haveAccessSet, data: haveAccessData } =
     useFetchCustomAdminHaveAccessTo();
@@ -95,6 +97,7 @@ const AdminSideBar = () => {
     useState(null); /** Added for branch PD-28 */
 
   const handleAdminNameClick = (admin) => {
+    setAnchorEl(null);
     if (decodedToken.company_id !== admin?._id) {
       setActiveLocation(admin);
       switchLocationSuperAdmin({
@@ -104,6 +107,7 @@ const AdminSideBar = () => {
     }
   };
   const handleCustomUserClick = async (companyData) => {
+    setAnchorEl(null);
     if (!companyData || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
@@ -114,6 +118,7 @@ const AdminSideBar = () => {
     }
   };
   const handleBackCustomAdminClick = async () => {
+    setAnchorEl(null);
     if (!decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
@@ -124,6 +129,7 @@ const AdminSideBar = () => {
     }
   };
   const handleBackToSuperAdmin = async () => {
+    setAnchorEl(null);
     if (!decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
@@ -161,25 +167,34 @@ const AdminSideBar = () => {
   }, []);
   useEffect(() => {
     if (switched) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", useToken);
       window.location.href = "/";
     }
-    if (switchedBack) {
-      localStorage.setItem("token", useTokenBack.token);
-      window.location.href = "/locations";
-    }
+    // if (switchedBack) {
+    //   localStorage.setItem("token", useTokenBack.token);
+    //   window.location.href = "/locations";
+    // }
     if (switchedSuperAdmin) {
-      if (decodedToken.role === userRoles.SUPER_ADMIN) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
+      if (decodedToken.role === userRoles.SUPER_ADMIN) {       
         localStorage.setItem("userReference", decodedToken.id);
       }
       localStorage.setItem("token", useTokenSuperAdmin);
       window.location.href = "/";
     }
     if (switchedBack) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", useTokenBack.token);
       window.location.href = "/locations";
     }
     if (switchedBackSuperAdmin) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
+
       localStorage.removeItem("userReference");
       localStorage.setItem("token", useTokenBackSuperAdmin.token);
       window.location.href = "/";

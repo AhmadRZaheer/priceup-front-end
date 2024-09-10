@@ -8,6 +8,11 @@ export const getShowersHardwareRefetch = (state) =>
   state.refetch.showersHardwareRefetch;
 export const getNotificationsRefetch = (state) =>
   state.refetch.notificationsRefetch;
+export const getLocationsRefetch = (state) =>
+  state.refetch.locationsRefetch;
+export const getChangeLocation = (state) =>
+  state.refetch.locationsChange;
+
 
 const refetchSlice = createSlice({
   name: "refetch",
@@ -17,6 +22,8 @@ const refetchSlice = createSlice({
     mirrorsHardwareRefetch: 0,
     showersHardwareRefetch: 0,
     notificationsRefetch: 0,
+    locationsRefetch: 0,
+    locationsChange: 0,
   },
   reducers: {
     setEstimatesListRefetch: (state) => {
@@ -34,6 +41,12 @@ const refetchSlice = createSlice({
     setNotificationsRefetch: (state) => {
       state.notificationsRefetch += 1;
     },
+    setLocationsRefetch: (state) => {
+      state.locationsRefetch += 1;
+    },
+    setChangeLocation: (state) => {
+      state.locationsChange += 1;
+    },
   },
 });
 
@@ -43,6 +56,8 @@ export const {
   setMirrorsHardwareRefetch,
   setShowersHardwareRefetch,
   setNotificationsRefetch,
+  setLocationsRefetch,
+  setChangeLocation
 } = refetchSlice.actions;
 
 export default refetchSlice.reducer;

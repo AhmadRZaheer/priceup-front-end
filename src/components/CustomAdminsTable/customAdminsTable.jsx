@@ -22,16 +22,20 @@ import SingleLocation from "../ui-components/singleLocation";
 import CustomInputField from "../ui-components/CustomInput";
 import { backendURL, debounce, getDecryptedToken } from "@/utilities/common";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { setChangeLocation } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const CustomAdminsTable = () => {
   const routePrefix = `${backendURL}/customUsers`;
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
+  const dispatch = useDispatch();
+  const [locationAccessLoading, setLocationAccessLoading] = useState({});
   const {
     data: locationsData,
     refetch: fetchLocations,
     isFetched,
-    isLoading,
+    isFetching,
   } = useFetchAllDocuments(`${routePrefix}/haveAccess/${decodedToken?.id}?search=${search}`);
   // const {
   //   data: locationsData,
@@ -64,18 +68,21 @@ const CustomAdminsTable = () => {
   //   return result ?? [];
   // }, [locationsData, search]);
 
-  const handleSwitchLocation = async (companyData) => {
+  const handleSwitchLocation = async (companyData) => {   
     if (!companyData._id || !decodedToken) {
       console.error("Invalid user data or decoded token.");
       return;
     }
     if (companyData._id !== decodedToken.company_id) {
+      setLocationAccessLoading((prev) => ({ ...prev, [companyData._id]: true }));
       await switchLocationUser(companyData._id);
       console.log("user changed");
     }
   };
   useEffect(() => {
     if (switched) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", newToken);
       window.location.href = "/";
     }
@@ -131,7 +138,7 @@ const CustomAdminsTable = () => {
         </Box>
       </Box>
       <Grid container gap={2}>
-        {isLoading ? (
+        {isFetching ? (
           <Box
             sx={{
               width: "100%",
@@ -140,7 +147,7 @@ const CustomAdminsTable = () => {
               justifyContent: "center",
               height: "300px",
               alignItems: "center",
-              background: '#FFFF'
+              // background: '#FFFF'
             }}
           >
             <CircularProgress sx={{ color: "#8477DA" }} />
@@ -148,9 +155,9 @@ const CustomAdminsTable = () => {
         ) : locationsData.length !== 0 ? (
           locationsData?.map((item) => {
             return (
-              <Grid item xs={5.8} xl={3.89} sx={{
+              <Grid item xs={5.8} xl={3.89} key={item._id} sx={{
                 '@media (min-width: 1400px) and (max-width: 1550px)': {
-                  flexBasis: '32.3%',  // Equivalent to lg={12} for screens smaller than 1400px
+                  flexBasis: '32.3%', 
                   maxWidth: '32.3%',
                 },
               }}>
@@ -159,6 +166,7 @@ const CustomAdminsTable = () => {
                 // handleToggleChange={handleToggleChange}
                 nonActiveUsers={item.staffs}
                 handleAccessLocation={handleSwitchLocation}
+                isloading={locationAccessLoading[item._id]}
               // handleEdit={handleOpenEdit}
               // handleClone={handleOpenClone}
               // handleDelete={handleOpenDelete}
@@ -168,7 +176,7 @@ const CustomAdminsTable = () => {
             );
           })
         ) : (
-          <Box sx={{ color: "#667085", textAlign: "center", mt: 1, width: "100%", background: '#FFFF' }}>
+          <Box sx={{ color: "#667085", textAlign: "center", mt: 1, width: "100%",}}>
             No Location Found
           </Box>
         )}

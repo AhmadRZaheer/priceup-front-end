@@ -31,6 +31,7 @@ import {
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
 import EstimsteIcon from "../../Assets/bar.svg";
 import MenuSigleItem from "./MenuSigleItem";
+import { setChangeLocation } from "@/redux/refetch";
 
 const StaffLocationSideBar = () => {
   const {
@@ -83,6 +84,7 @@ const StaffLocationSideBar = () => {
   }, []);
 
   const handleSwitchLocation = (location) => {
+    setAnchorEl(null);
     if (location?._id !== activeLocation?._id) {
       setActiveLocation(location);
       switchLocation(location._id);
@@ -90,14 +92,19 @@ const StaffLocationSideBar = () => {
     }
   };
   const handleBacktoStaffLocation = () => {
+    setAnchorEl(null);
     backToStaffLocationsRefetch();
   };
   useEffect(() => {
     if (switchLocationSuccess) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", switchLocationData);
       window.location.href = "/";
     }
     if (switchedBack) {
+      localStorage.setItem('splashLoading', 'true')
+      dispatch(setChangeLocation());
       localStorage.setItem("token", useTokenBack.token);
       window.location.href = "/locations";
     }
