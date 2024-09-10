@@ -212,7 +212,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
           No Estimate Found
         </Typography>
       ) : (
-        <Box sx={{ background: "#FFFF", pb: 3 }}>
+        <Box sx={{ background: "#FFFF", pb: 3,borderRadius:'8px' }}>
           {isMobile ? (
             filteredData?.map((item) => (
               <Box

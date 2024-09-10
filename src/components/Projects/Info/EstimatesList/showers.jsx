@@ -224,9 +224,10 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                 No Estimate Found
             </Typography>
         ) : (
-            <Box sx={{ background: '#FFFF', pb: isMobile ? 3 : 0 }}>
+            <Box sx={{ background: '#FFFF', pb: isMobile ? 3 : 0,borderRadius:'8px' }}>
                 {isMobile ?
-                    (filteredData?.map((item) => <Box
+                    (filteredData?.map((item) =>
+                         <Box
                         key={item._id}
                         sx={{
                             display: "flex",

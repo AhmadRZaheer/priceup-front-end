@@ -114,7 +114,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
     }, 700),
     [page]
   );
-  
+
   useEffect(() => {
     debouncedRefetch();
     // Cleanup function to cancel debounce if component unmounts
@@ -289,7 +289,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
                   justifyContent: "space-between",
                   paddingY: 2,
                   borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                  px:{sm:0,xs:0.8}
+                  px: { sm: 0, xs: 0.8 }
                 }}
               >
                 <Box sx={{ display: "flex", gap: 1 }}>
@@ -356,7 +356,11 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
                 projectsList?.totalRecords ? projectsList?.totalRecords : 0
               }
               rowHeight={70.75}
-              sx={{ width: "100%" }}
+              sx={{
+                width: "100%", '.MuiDataGrid-main': {
+                  borderRadius: '8px !important'
+                }
+              }}
               hideFooter
               disableColumnMenu
             />
