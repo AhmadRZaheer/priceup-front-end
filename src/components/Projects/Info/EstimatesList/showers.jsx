@@ -220,7 +220,7 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                 <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF', borderRadius:'12px' }}>
                 No Estimate Found
             </Typography>
         ) : (
@@ -328,7 +328,9 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                         rowCount={
                             estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
                         }
-                        sx={{ width: "100%" }}
+                        sx={{ width: "100%",'.MuiDataGrid-main':{
+                            borderRadius:'8px !important',
+                          } }}
                         rowHeight={70}
                         hideFooter
                         disableColumnMenu

@@ -207,6 +207,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
             p: 2,
             textAlign: "center",
             background: "#FFFF",
+            borderRadius:'12px'
           }}
         >
           No Estimate Found
@@ -313,7 +314,9 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
               rowCount={
                 estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
               }
-              sx={{ width: "100%" }}
+              sx={{ width: "100%",'.MuiDataGrid-main':{
+                borderRadius:'8px !important',
+              } }}
               rowHeight={70}
               hideFooter
               disableColumnMenu
