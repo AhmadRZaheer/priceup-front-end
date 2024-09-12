@@ -170,6 +170,7 @@ const AdminSideBar = () => {
         "/wine-cellar/glass-types",
         "/wine-cellar/finishes",
         "/wine-cellar/hardware",
+        "/wine-cellar/layouts",
       ].includes(location.pathname)
     ) {
       setExpandWineAccordian(true);
@@ -672,6 +673,9 @@ const AdminSideBar = () => {
                     </InnerMenuItem>
                     <InnerMenuItem link="/wine-cellar/glass-types">
                       <span>Glass Types</span>
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/layouts">
+                      <span>Layouts</span>
                     </InnerMenuItem>
                   </ul>
                 </div>
