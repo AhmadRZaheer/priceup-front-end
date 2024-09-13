@@ -133,6 +133,7 @@ const AppRoutes = () => {
             <Route path="glass-addons" element={<MirrorsGlassAddon />} />
             <Route path="*" element={<MirrorsHardware />} />
           </Route>
+          {/** Wine Cellar */}
           <Route path="wine-cellar/">
             <Route index element={<WineCellarHardware />} />
             <Route path="hardwares" element={<WineCellarHardware />} />

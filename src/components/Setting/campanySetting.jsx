@@ -63,6 +63,13 @@ const CampanySetting = () => {
         .max(39, "Door width cannot exceed 39"),
       // add validation for other nested fields if necessary
     }),
+    wineCaller: Yup.object().shape({
+      doorWidth: Yup.number()
+        .required("Max door width is required")
+        .min(1, "Door width must be at least 1")
+        .max(39, "Door width cannot exceed 39"),
+      // add validation for other nested fields if necessary
+    }),
   });
   const { getInputProps } = useDropzone({ onDrop });
   const formik = useFormik({
@@ -140,12 +147,40 @@ const CampanySetting = () => {
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
       },
+      // Wine Caller
+      wineCaller: {
+        doorWidth: settingData?.wineCaller?.doorWidth || 0,
+        miscPricing: {
+          pricingFactor: settingData?.wineCaller?.miscPricing?.pricingFactor || 0,
+          hourlyRate: settingData?.wineCaller?.miscPricing?.hourlyRate || 0,
+          pricingFactorStatus:
+            settingData?.wineCaller?.miscPricing?.pricingFactorStatus,
+        },
+        fabricatingPricing: {
+          oneHoleOneByTwoInchGlass:
+            settingData?.wineCaller?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
+          oneHoleThreeByEightInchGlass:
+            settingData?.wineCaller?.fabricatingPricing
+              ?.oneHoleThreeByEightInchGlass || 0,
+          hingeCutoutOneByTwoInch:
+            settingData?.wineCaller?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
+          hingeCutoutThreeByEightInch:
+            settingData?.wineCaller?.fabricatingPricing
+              ?.hingeCutoutThreeByEightInch || 0,
+          polishPricePerOneByTwoInch:
+            settingData?.wineCaller?.fabricatingPricing
+              ?.polishPricePerOneByTwoInch || 0,
+          polishPricePerThreeByEightInch:
+            settingData?.wineCaller?.fabricatingPricing
+              ?.polishPricePerThreeByEightInch || 0,
+        },
+      },
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values, "editedData");
-      handleEditSetting(values);
+      // handleEditSetting(values);
     },
   });
 
@@ -370,6 +405,22 @@ const CampanySetting = () => {
               onClick={() => handleChange(1)}
             >
               Mirrors
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 2 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(2)}
+            >
+              Wine Cellar
             </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -1355,6 +1406,288 @@ const CampanySetting = () => {
           </Box>
         </CustomTabPanel>
         {/** end */}
+
+        {/** Wine Caller tab */}
+        <CustomTabPanel value={value} index={2}>
+          <Box
+            sx={{
+              // borderTop: "1px solid #EAECF0",
+              // borderBottom: "1px solid #EAECF0",
+              // paddingTop: 0,
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {/* <Typography variant="h6">Max Door Width</Typography> */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Max Door Width</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">
+                  Door width value must be in range between 1-39{" "}
+                </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCaller.doorWidth"
+                  size="small"
+                  value={formik.values?.wineCaller?.doorWidth}
+                  onChange={formik.handleChange}
+                  inputProps={{ min: 1, max: 39, style: { width: "200px" } }}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched?.wineCaller?.doorWidth &&
+                    Boolean(formik.errors?.wineCaller?.doorWidth)
+                  }
+                  helperText={
+                    formik.touched?.wineCaller?.doorWidth &&
+                    formik.errors?.wineCaller?.doorWidth
+                  }
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              borderTop: "1px solid #EAECF0",
+              borderBottom: "1px solid #EAECF0",
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="h6">Misc. Pricing</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Pricing factor</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">Factor to multiply price </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCaller.miscPricing.pricingFactor"
+                  size="small"
+                  value={formik.values?.wineCaller?.miscPricing?.pricingFactor}
+                  onChange={formik.handleChange}
+                />
+
+                <Box sx={{ ml: 2 }}>
+                  <CustomToggle
+                    name="wineCaller.miscPricing.pricingFactorStatus"
+                    checked={
+                      formik.values?.wineCaller?.miscPricing
+                        ?.pricingFactorStatus || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Default Hourly rate</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
+                <CustomInputField
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  name="wineCaller.miscPricing.hourlyRate"
+                  size="small"
+                  value={formik.values?.wineCaller?.miscPricing?.hourlyRate}
+                  onChange={formik.handleChange}
+                />
+                <FormControlLabel
+                  sx={{ visibility: "hidden" }}
+                  control={<Switch color="success" />}
+                  label={"active"}
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Fabrication Pricing
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              // maxHeight: "38vh",
+              // overflowY: "scroll",
+              pt: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>1" Hole (1/2in Glass)</Typography>
+              <Box mr={19}>
+                <CustomInputField
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  name="wineCaller.fabricatingPricing.oneHoleOneByTwoInchGlass"
+                  size="small"
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.oneHoleOneByTwoInchGlass
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>1" Hole (3/8in Glass)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  name="wineCaller.fabricatingPricing.oneHoleThreeByEightInchGlass"
+                  size="small"
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.oneHoleThreeByEightInchGlass
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hinge Cutout (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  size="small"
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  name="wineCaller.fabricatingPricing.hingeCutoutOneByTwoInch"
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.hingeCutoutOneByTwoInch
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hinge Cutout (3/8in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  size="small"
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  name="wineCaller.fabricatingPricing.hingeCutoutThreeByEightInch"
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.hingeCutoutThreeByEightInch
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCaller.fabricatingPricing.polishPricePerOneByTwoInch"
+                  size="small"
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.polishPricePerOneByTwoInch
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCaller.fabricatingPricing.polishPricePerThreeByEightInch"
+                  size="small"
+                  type="number"
+                  inputProps={{
+                    min: 0,
+                  }}
+                  value={
+                    formik.values?.wineCaller?.fabricatingPricing
+                      ?.polishPricePerThreeByEightInch
+                  }
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        {/** end */}
+
       </Box>
     </form>
   );
