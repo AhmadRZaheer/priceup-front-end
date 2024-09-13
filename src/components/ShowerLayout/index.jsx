@@ -1,8 +1,7 @@
-import { Box, Button, CircularProgress, Grid, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import "./style.scss";
-// import { Add } from "@mui/icons-material";
-import SingleShowerCard from "./SingleShowerCard";
+import SingleShowerCard from "../common/Layouts/SingleLayoutCard";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 
 const ShowerLayout = () => {

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // import { getDefaultId } from "@/redux/defaultSlice";
 // import { useFetchSingleDefault } from "@/utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "@/utilities/common";
-import image from "../../Assets/dummy.png";
+import image from "@/Assets/dummy.png";
 import "./style.scss";
 
 // const modification = [
@@ -14,8 +14,11 @@ import "./style.scss";
 //   // Add other modifications as necessary
 // ];
 
-const ViewDrawer = ({ open, handleClose, data }) => {
+const ViewDrawer = ({ open, handleClose, data ,variant }) => {
   const navigate = useNavigate();
+  const targetUrl = variant === 'shower'
+  ? `/layouts/edit?id=${data?._id}`
+  : `/wine-cellar/layouts/edit?id=${data?._id}`;
 
   return (
     <SwipeableDrawer
@@ -377,7 +380,7 @@ const ViewDrawer = ({ open, handleClose, data }) => {
             Close
           </Button>
           <Button
-            onClick={() => navigate(`/layouts/edit?id=${data._id}`)}
+            onClick={() => navigate(targetUrl)}
             variant="contained"
             className="drawerBtn"
             sx={{

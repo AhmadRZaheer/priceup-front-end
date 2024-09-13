@@ -54,6 +54,7 @@ import WineCellarHardware from "@/pages/WineCellar/Hardware";
 import WineCellarGlassType from "@/pages/WineCellar/GlassType";
 import WineCellarFinishes from "@/pages/WineCellar/Finishes";
 import WineCellarLayouts from "@/pages/WineCellar/Layouts";
+import EditWineLayout from "../WineCellar/Layouts/EditLayout";
 
 
 const AppRoutes = () => {
@@ -141,6 +142,7 @@ const AppRoutes = () => {
             <Route path="finishes" element={<WineCellarFinishes />} />
             <Route path="layouts/">
               <Route index element={<WineCellarLayouts />} />
+              <Route path="edit" element={<EditWineLayout />} />
             </Route>
             <Route path="*" element={<WineCellarHardware />} />
           </Route>
