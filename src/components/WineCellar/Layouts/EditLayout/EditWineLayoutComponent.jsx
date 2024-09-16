@@ -221,7 +221,7 @@ const singleLayout = {
         "type": "660507a8a4983e276851dd45",
         "thickness": "3/8"
       },
-    
+
       "other": {
         "people": 2,
         "hours": 2
@@ -1092,7 +1092,7 @@ const singleLayout = {
         "createdAt": "2024-03-28T06:01:12.351Z",
         "updatedAt": "2024-09-13T05:42:57.152Z",
         "__v": 0
-      }     
+      }
     ],
   },
 
@@ -1193,6 +1193,12 @@ const EditWineLayoutComponent = () => {
           formik.setFieldValue('doorLock.count', 0);
         }
         break;
+        case 'heavyDutyOption':
+          if (addMoreItemsArray[id]?.status) {
+            formik.setFieldValue('heavyDutyOption.heavyDutyType', null);
+            formik.setFieldValue('heavyDutyOption.height', 0);
+          }
+          break;
       case 'hinges':
         if (addMoreItemsArray[id]?.status) {
           formik.setFieldValue('hinges.hingesType', null);
