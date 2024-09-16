@@ -113,6 +113,12 @@ export const setWineItemsStatusAfterFirstLoad = (layout) => {
   } else {
     items.doorLock = { name: "Door Lock", status: false };
   }
+  //Heavy Duty Type
+  if (layout?.settings?.heavyDutyOption?.heavyDutyType) {
+    items.heavyDutyOption = { name: "Heavy Duty Option", status: true };
+  } else {
+    items.heavyDutyOption = { name: "Heavy Duty Option", status: false };
+  }
   // hinges
   if (layout?.settings?.hinges?.hingesType) {
     items.hinges = { name: "Hinges", status: true };
@@ -127,9 +133,9 @@ export const setWineItemsStatusAfterFirstLoad = (layout) => {
   }
   // Channel
   if (layout?.settings?.mountingChannel) {
-    items.channel = { name: "Mounting", status: true };
+    items.channel = { name: "Channel", status: true };
   } else {
-    items.channel = { name: "Mounting", status: false };
+    items.channel = { name: "Channel", status: false };
   }
   return items;
 };

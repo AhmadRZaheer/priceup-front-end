@@ -217,43 +217,11 @@ const singleLayout = {
         "threshold": 0,
         "height": 0
       },
-      "heavyPivotOption": {
-        "heavyPivotType": 'None',
-        "threshold": 0,
-        "height": 0
-      },
-      "wallClamp": {
-        "wallClampType": 'None',
-        "count": 0
-      },
-      "sleeveOver": {
-        "sleeveOverType": 'None',
-        "count": 0
-      },
-      "glassToGlass": {
-        "glassToGlassType": 'None',
-        "count": 0
-      },
-      "cornerWallClamp": {
-        "wallClampType": 'None',
-        "count": 0
-      },
-      "cornerSleeveOver": {
-        "sleeveOverType": 'None',
-        "count": 0
-      },
-      "cornerGlassToGlass": {
-        "glassToGlassType": 'None',
-        "count": 0
-      },
       "glassType": {
         "type": "660507a8a4983e276851dd45",
         "thickness": "3/8"
       },
-      "slidingDoorSystem": {
-        "type": "660507a8a4983e276851dcf9",
-        "count": 1
-      },
+    
       "other": {
         "people": 2,
         "hours": 2
@@ -877,7 +845,255 @@ const singleLayout = {
         "updatedAt": "2024-09-13T05:42:57.152Z",
         "__v": 0
       }
-    ]
+    ],
+    "heavyDutyOption": [
+      {
+        "_id": "660507a8a4983e276851dc89",
+        "name": "Pivot Bevel",
+        "slug": "pivot-bevel",
+        "image": "images/hardwares/default.png",
+        "operableTransom": false,
+        "hardware_category_slug": "hinges",
+        "oneInchHoles": 0,
+        "hingeCut": 0,
+        "clampCut": 0,
+        "notch": 0,
+        "outages": 0,
+        "company_id": "660507a8a4983e276851dc28",
+        "finishes": [
+          {
+            "name": "Brushed Bronze",
+            "image": "images/finishes/brushed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 10,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2a",
+            "_id": "660507a8a4983e276851dc8a"
+          },
+          {
+            "name": "Polished Nickel",
+            "image": "images/finishes/polished_nickle.jpeg",
+            "partNumber": "",
+            "cost": 12,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2b",
+            "_id": "660507a8a4983e276851dc8b"
+          },
+          {
+            "name": "Satin Brass",
+            "image": "images/finishes/satin_brass.jpeg",
+            "partNumber": "",
+            "cost": 14,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2c",
+            "_id": "660507a8a4983e276851dc8c"
+          },
+          {
+            "name": "Matte Black",
+            "image": "images/finishes/matte_black.jpeg",
+            "partNumber": "",
+            "cost": 16,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2d",
+            "_id": "660507a8a4983e276851dc8d"
+          },
+          {
+            "name": "Oil Rubbed Bronze",
+            "image": "images/finishes/oil_rubbed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 18,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2e",
+            "_id": "660507a8a4983e276851dc8e"
+          },
+          {
+            "name": "Brushed Nickel",
+            "image": "images/finishes/brushed_nickle.jpeg",
+            "partNumber": "",
+            "cost": 20,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2f",
+            "_id": "660507a8a4983e276851dc8f"
+          },
+          {
+            "name": "Polished Chrome",
+            "image": "images/finishes/polished_chrome.jpeg",
+            "partNumber": "",
+            "cost": 22,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc30",
+            "_id": "660507a8a4983e276851dc90"
+          }
+        ],
+        "createdAt": "2024-03-28T06:01:12.351Z",
+        "updatedAt": "2024-09-13T05:42:57.152Z",
+        "__v": 0
+      },
+      {
+        "_id": "660507a8a4983e276851dc71",
+        "name": "Sleeve Over Pivot (PPH07)",
+        "slug": "sleeve-over-pivot-pph07",
+        "image": "images/hardwares/default.png",
+        "operableTransom": false,
+        "hardware_category_slug": "hinges",
+        "oneInchHoles": 0,
+        "hingeCut": 0,
+        "clampCut": 0,
+        "notch": 0,
+        "outages": 0,
+        "company_id": "660507a8a4983e276851dc28",
+        "finishes": [
+          {
+            "name": "Brushed Bronze",
+            "image": "images/finishes/brushed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 10,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2a",
+            "_id": "660507a8a4983e276851dc72"
+          },
+          {
+            "name": "Polished Nickel",
+            "image": "images/finishes/polished_nickle.jpeg",
+            "partNumber": "",
+            "cost": 12,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2b",
+            "_id": "660507a8a4983e276851dc73"
+          },
+          {
+            "name": "Satin Brass",
+            "image": "images/finishes/satin_brass.jpeg",
+            "partNumber": "",
+            "cost": 14,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2c",
+            "_id": "660507a8a4983e276851dc74"
+          },
+          {
+            "name": "Matte Black",
+            "image": "images/finishes/matte_black.jpeg",
+            "partNumber": "",
+            "cost": 16,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2d",
+            "_id": "660507a8a4983e276851dc75"
+          },
+          {
+            "name": "Oil Rubbed Bronze",
+            "image": "images/finishes/oil_rubbed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 18,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2e",
+            "_id": "660507a8a4983e276851dc76"
+          },
+          {
+            "name": "Brushed Nickel",
+            "image": "images/finishes/brushed_nickle.jpeg",
+            "partNumber": "",
+            "cost": 20,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2f",
+            "_id": "660507a8a4983e276851dc77"
+          },
+          {
+            "name": "Polished Chrome",
+            "image": "images/finishes/polished_chrome.jpeg",
+            "partNumber": "",
+            "cost": 22,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc30",
+            "_id": "660507a8a4983e276851dc78"
+          }
+        ],
+        "createdAt": "2024-03-28T06:01:12.351Z",
+        "updatedAt": "2024-09-13T05:42:57.152Z",
+        "__v": 0
+      },
+      {
+        "_id": "660507a8a4983e276851dc69",
+        "name": "HVY Pivot Bevel",
+        "slug": "hvy-pivot-bevel",
+        "image": "images/hardwares/default.png",
+        "operableTransom": false,
+        "hardware_category_slug": "hinges",
+        "oneInchHoles": 0,
+        "hingeCut": 0,
+        "clampCut": 0,
+        "notch": 0,
+        "outages": 0,
+        "company_id": "660507a8a4983e276851dc28",
+        "finishes": [
+          {
+            "name": "Brushed Bronze",
+            "image": "images/finishes/brushed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 10,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2a",
+            "_id": "660507a8a4983e276851dc6a"
+          },
+          {
+            "name": "Polished Nickel",
+            "image": "images/finishes/polished_nickle.jpeg",
+            "partNumber": "",
+            "cost": 12,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2b",
+            "_id": "660507a8a4983e276851dc6b"
+          },
+          {
+            "name": "Satin Brass",
+            "image": "images/finishes/satin_brass.jpeg",
+            "partNumber": "",
+            "cost": 14,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2c",
+            "_id": "660507a8a4983e276851dc6c"
+          },
+          {
+            "name": "Matte Black",
+            "image": "images/finishes/matte_black.jpeg",
+            "partNumber": "",
+            "cost": 16,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2d",
+            "_id": "660507a8a4983e276851dc6d"
+          },
+          {
+            "name": "Oil Rubbed Bronze",
+            "image": "images/finishes/oil_rubbed_bronze.jpeg",
+            "partNumber": "",
+            "cost": 18,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2e",
+            "_id": "660507a8a4983e276851dc6e"
+          },
+          {
+            "name": "Brushed Nickel",
+            "image": "images/finishes/brushed_nickle.jpeg",
+            "partNumber": "",
+            "cost": 20,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc2f",
+            "_id": "660507a8a4983e276851dc6f"
+          },
+          {
+            "name": "Polished Chrome",
+            "image": "images/finishes/polished_chrome.jpeg",
+            "partNumber": "",
+            "cost": 22,
+            "status": true,
+            "finish_id": "660507a8a4983e276851dc30",
+            "_id": "660507a8a4983e276851dc70"
+          }
+        ],
+        "createdAt": "2024-03-28T06:01:12.351Z",
+        "updatedAt": "2024-09-13T05:42:57.152Z",
+        "__v": 0
+      }     
+    ],
   },
 
 };
@@ -922,6 +1138,13 @@ const EditWineLayoutComponent = () => {
       count: singleLayout?.layoutData?.settings?.doorLock.count,
     },
 
+    heavyDutyOption: {
+      heavyDutyType:
+        singleLayout?.layoutData?.settings?.heavyDutyOption.heavyDutyType,
+      height: singleLayout?.layoutData?.settings?.heavyDutyOption.height,
+      threshold: singleLayout?.layoutData?.settings?.heavyDutyOption.threshold,
+    },
+
     hardwareFinishes: singleLayout?.layoutData?.settings?.hardwareFinishes,
 
     hinges: {
@@ -946,7 +1169,7 @@ const EditWineLayoutComponent = () => {
     initialValues,
     enableReinitialize: true,
     onSubmit: (values) => {
-      console.log({settings: { ...values, ...mounting }});
+      console.log({ settings: { ...values, ...mounting } });
       // updateDefault({ settings: { ...values, ...mounting }, id: layoutId });
     },
   });
@@ -1487,6 +1710,76 @@ const EditWineLayoutComponent = () => {
                         </Box>
                       </Grid>}
 
+                    {addMoreItemsArray?.heavyDutyOption?.status && (
+                      <Grid item md={6} xs={12} sx={{ pb: 1 }}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: "12px",
+                          }}
+                        >
+                          <Typography className="modificationTitle">
+                            Heavy Duty Option
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "10px",
+                            }}
+                          >
+                            <CustomInputMenu
+                              color={"purple"}
+                              size="small"
+                              variant="outlined"
+                              name="heavyDutyOption.heavyDutyType"
+                              fullWidth={true}
+                              value={
+                                formik.values.heavyDutyOption.heavyDutyType || ""
+                              }
+                              onChange={(e) => {
+                                formik.handleChange(e);
+
+                                if (e.target.value === null) {
+                                  formik.setFieldValue(
+                                    "heavyDutyOption.threshold",
+                                    0
+                                  );
+                                  formik.setFieldValue(
+                                    "heavyDutyOption.height",
+                                    0
+                                  );
+                                }
+                              }}
+                              onBlur={formik.handleBlur}
+                              MenuData={singleLayout?.listData?.heavyDutyOption}
+                            />
+
+                            <CustomInputField
+                              color={"purple"}
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0 },
+                              }}
+                              size="small"
+                              variant="outlined"
+                              placeholder={"height"}
+                              name="heavyDutyOption.height"
+                              fullWidth={true}
+                              value={
+                                formik.values.heavyDutyOption.height !== undefined
+                                  ? formik.values.heavyDutyOption.height
+                                  : null
+                              }
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                            />
+                          </Box>
+                        </Box>
+                      </Grid>
+                    )}
+
                     {addMoreItemsArray?.channel?.status && (
                       <Grid xs={6} sx={{ p: 1.8, pb: 1 }}>
                         <Box
@@ -1497,7 +1790,7 @@ const EditWineLayoutComponent = () => {
                           }}
                         >
                           <Typography className="modificationTitle">
-                            Mounting
+                            Channel
                           </Typography>
                           <Box
                             sx={{
