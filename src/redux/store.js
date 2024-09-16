@@ -14,6 +14,7 @@ import mirrorsHardwareReducer from "./mirrorsHardwareSlice";
 import estimateReducer from "./estimateSlice";
 import mirrorsEstimateReducer from "./mirrorsEstimateSlice";
 import notificationsSlice from "./notificationsSlice";
+import wineCellarSlice from "./wineCellarSlice";
 
 const store = configureStore({
   reducer: {
@@ -31,6 +32,7 @@ const store = configureStore({
     estimate: estimateReducer,
     mirrorsEstimate: mirrorsEstimateReducer,
     notifications: notificationsSlice,
+    wineCellar: wineCellarSlice,
   },
 });
 

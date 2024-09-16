@@ -21,6 +21,7 @@ import {
 } from "@/redux/mirrorsEstimateSlice";
 import DefaultIcon from "@/Assets/columns.svg";
 import { resetNotifications as resetNotificationsShower, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
+import { resetNotificationsWineCaller, resetWineCellarState, setWineCellarProjectId } from "@/redux/wineCellarSlice";
 
 const style = {
   position: "absolute",
@@ -69,6 +70,7 @@ export default function ChooseEstimateCategoryModal({
     dispatch(resetEstimateState());
     dispatch(resetMirrorEstimateState());
     dispatch(resetState());
+    dispatch(resetWineCellarState())
     dispatch(setEstimateState("create"));
 
     if (category === EstimateCategory.SHOWERS) {
@@ -77,7 +79,13 @@ export default function ChooseEstimateCategoryModal({
       dispatch(setShowerProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
       navigate("/estimates/layouts");
-    } else {
+    } else if(category === EstimateCategory.WINECELLAR){
+      dispatch(resetNotificationsWineCaller());
+      dispatch(setWineCellarProjectId(projectId));
+      dispatch(setEstimateCategory(EstimateCategory.WINECELLAR));
+      navigate("/estimates/layouts");
+    }
+    else {
       // mirrors
       dispatch(resetNotificationsMirror());
       dispatch(setMirrorProjectId(projectId));
@@ -112,7 +120,7 @@ export default function ChooseEstimateCategoryModal({
                   fontSize: "18px",
                   fontWeight: 700,
                   lineHeight: "21.09px",
-                  fontFamily:'"Roboto",sans-serif !important'
+                  fontFamily: '"Roboto",sans-serif !important'
                 }}
               >
                 Create Estimate
@@ -129,7 +137,7 @@ export default function ChooseEstimateCategoryModal({
                 fontWeight: 600,
                 lineHeight: "21.86px",
                 color: "#212528",
-                opacity:'70%',
+                opacity: '70%',
                 // pt: 0.5,
               }}
             >
@@ -144,7 +152,7 @@ export default function ChooseEstimateCategoryModal({
               height: "291px",
             }}
           >
-            <Grid container gap={1} sx={{ height: "100%" }}>
+            <Grid container gap={2} sx={{ height: "100%" }}>
               <Box
                 key={"showers-cat"}
                 sx={{
@@ -155,7 +163,7 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.SHOWERS ? "black" : "white",
-                  width: "244px",
+                  width: "214px",
                   height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
@@ -170,7 +178,7 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ fontSize: "16px", color: "#FFFFFF" ,lineHeight:'21.86px' }}>
+                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
                   Showers
                 </Typography>
               </Box>
@@ -184,7 +192,7 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.MIRRORS ? "black" : "white",
-                  width: "244px",
+                  width: "214px",
                   height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
@@ -199,8 +207,37 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ fontSize: "16px", color: "#FFFFFF",lineHeight:'21.86px' }}>
+                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
                   Mirrors
+                </Typography>
+              </Box>
+              <Box
+                key={"wineCellar-cat"}
+                sx={{
+                  ...boxStyles,
+                  backgroundColor:
+                    category !== EstimateCategory.WINECELLAR
+                      ? "rgba(184, 184, 185, 1)"
+                      : "#8477DA",
+                  color:
+                    category !== EstimateCategory.WINECELLAR ? "black" : "white",
+                  width: "214px",
+                  height: "243px",
+                }}
+                onClick={() => handleBoxClick(EstimateCategory.WINECELLAR)}
+              >
+                <img
+                  style={{
+                    position: "relative",
+                    zIndex: 1,
+                    width: "150px",
+                    height: "170px",
+                  }}
+                  src={DefaultIcon}
+                  alt="Selected"
+                />
+                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
+                  Wine Cellar
                 </Typography>
               </Box>
             </Grid>

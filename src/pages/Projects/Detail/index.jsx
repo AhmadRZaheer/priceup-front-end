@@ -27,15 +27,15 @@ const ProjectDetail = () => {
         <>
             {/* <TopBar />
             <div className="main-wrapper"> */}
-                {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
-                {/* <CommonSideBar/> */}
-                <CommonLayout>
+            {/* {decodedToken?.role === userRoles.STAFF ? <MobileBar /> : <Sidebar />} */}
+            {/* <CommonSideBar/> */}
+            <CommonLayout>
                 <Box className="econtent-wrapper" >
                     {getLoading ? <Box sx={{ width: 'fit-content', margin: '100px auto', color: '#8477da' }}><CircularProgress /> </Box> : !getLoading && getProject ?
                         <ProjectInfoComponent projectData={getProject} projectState="edit" /> : <Typography>Invalid ID. No preview found.</Typography>
                     }
                 </Box>
-                </CommonLayout>
+            </CommonLayout>
             {/* </div> */}
         </>
     );

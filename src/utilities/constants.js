@@ -91,6 +91,7 @@ export const severity = {
 export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
+  WINECELLAR: "wineCellar",
 };
 
 export const mirrorHardwareTypes = {

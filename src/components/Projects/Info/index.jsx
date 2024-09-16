@@ -37,6 +37,7 @@ import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
 import StatusChip from "@/components/common/StatusChip";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import WineCellarEstimatesList from "./EstimatesList/wineCellar";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project Name is required").min(4, 'Must be at least 4 characters'),
@@ -237,7 +238,7 @@ const ProjectInfoComponent = ({
           </Typography>
         </Box>
         {projectState !== "create" ? (
-          <Box sx={{alignSelf:'center'}}>
+          <Box sx={{ alignSelf: 'center' }}>
             <Button
               fullWidth
               variant="contained"
@@ -959,7 +960,7 @@ const ProjectInfoComponent = ({
                   border: "1px solid #D0D5DD",
                   borderRadius: "6px",
                   background: "#F3F5F6",
-                  width: "151px",
+                  width: "252.5px",
                   minHeight: '40px',
                   height: '40px',
                   p: '2px',
@@ -982,12 +983,7 @@ const ProjectInfoComponent = ({
                   className="categoryTab"
                   label="Showers"
                   sx={{
-                    // fontSize: "14px",
-                    // fontWeight: 600,
-                    // color: "#000000",
-                    // textTransform: "capitalize",
                     minWidth: '70px',
-                    // p:'7px 12px',
                   }}
                   {...a11yProps(0)}
                 />
@@ -998,6 +994,14 @@ const ProjectInfoComponent = ({
                     minWidth: '70px',
                   }}
                   {...a11yProps(1)}
+                />
+                <Tab
+                  className="categoryTab"
+                  label="Wine Cellar"
+                  sx={{
+                    minWidth: '70px',
+                  }}
+                  {...a11yProps(2)}
                 />
               </Tabs>
             </Grid>
@@ -1015,6 +1019,15 @@ const ProjectInfoComponent = ({
             {/** Mirrors tab */}
             <CustomTabPanel value={activeTabNumber} index={1}>
               <MirrorEstimatesList
+                projectId={projectData?._id}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
+              />
+            </CustomTabPanel>
+            {/** Wine Cellar tab */}
+            <CustomTabPanel value={activeTabNumber} index={2}>
+              <WineCellarEstimatesList  
                 projectId={projectData?._id}
                 searchValue={search}
                 statusValue={status}
