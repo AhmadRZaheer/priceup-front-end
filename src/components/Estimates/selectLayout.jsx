@@ -12,7 +12,7 @@ export const SelectLayout = () => {
             <ShowerLayouts /> :
             estimateCategory === EstimateCategory.MIRRORS ?
                 <MirrorLayouts /> :
-                estimateCategory === EstimateCategory.WINECELLAR ?
+                estimateCategory === EstimateCategory.WINECELLARS ?
                     <WineCallerLayouts /> : ''}
     </>)
 }

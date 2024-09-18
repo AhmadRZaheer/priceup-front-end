@@ -12,7 +12,7 @@ export const SetDimensions = () => {
             <ShowerDimensions /> :
             estimateCategory === EstimateCategory.MIRRORS ?
                 <MirrorDimensions /> :
-                estimateCategory === EstimateCategory.WINECELLAR ?
+                estimateCategory === EstimateCategory.WINECELLARS ?
                     <WineCellarDimensions /> : ''}
     </>)
 }

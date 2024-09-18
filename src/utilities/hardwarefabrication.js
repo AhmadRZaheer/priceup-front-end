@@ -67,7 +67,8 @@ export const getHardwareFabricationQuantity = (
     // for sleeve over
     if (selectedContent.mountingClamps.sleeveOver?.length) {
       selectedContent.mountingClamps.sleeveOver.forEach((record) => {
-        const sleeveOverResult = getGenericFabrication(  // use generic fabrication method for sleeve over to avoid default clamp cut count
+        const sleeveOverResult = getGenericFabrication(
+          // use generic fabrication method for sleeve over to avoid default clamp cut count
           record.item,
           record.count
         );
@@ -317,13 +318,13 @@ export const getHardwareSpecificFabrication = (
   currentHardware,
   newSelectedHardware
 ) => {
-  let existingFabricationValues = { 
+  let existingFabricationValues = {
     oneInchHoles: Number(fabricationValues.oneInchHoles),
     hingeCut: Number(fabricationValues.hingeCut),
     clampCut: Number(fabricationValues.clampCut),
     notch: Number(fabricationValues.notch),
-    outages: Number(fabricationValues.outages)
-   };
+    outages: Number(fabricationValues.outages),
+  };
   let currentHardwareFabrication = null;
 
   if (currentHardware?.item) {
@@ -373,15 +374,14 @@ export const getHardwareSpecificFabrication = (
   }
 
   /* check to avoid negative value **/
-  if(existingFabricationValues.oneInchHoles < 0)
-  existingFabricationValues.oneInchHoles = 0;
-  if(existingFabricationValues.hingeCut < 0)
+  if (existingFabricationValues.oneInchHoles < 0)
+    existingFabricationValues.oneInchHoles = 0;
+  if (existingFabricationValues.hingeCut < 0)
     existingFabricationValues.hingeCut = 0;
-  if(existingFabricationValues.clampCut < 0)
+  if (existingFabricationValues.clampCut < 0)
     existingFabricationValues.clampCut = 0;
-  if(existingFabricationValues.notch < 0)
-    existingFabricationValues.notch = 0;
-  if(existingFabricationValues.outages < 0)
+  if (existingFabricationValues.notch < 0) existingFabricationValues.notch = 0;
+  if (existingFabricationValues.outages < 0)
     existingFabricationValues.outages = 0;
   /* end **/
 
@@ -425,6 +425,133 @@ export const getHardwareSpecificFabrication = (
         );
     }
 
+    if (newSelectedHardwareFabrication) {
+      existingFabricationValues.oneInchHoles +=
+        newSelectedHardwareFabrication.oneInchHoles;
+      existingFabricationValues.hingeCut +=
+        newSelectedHardwareFabrication.hingeCut;
+      existingFabricationValues.clampCut +=
+        newSelectedHardwareFabrication.clampCut;
+      existingFabricationValues.notch += newSelectedHardwareFabrication.notch;
+      existingFabricationValues.outages +=
+        newSelectedHardwareFabrication.outages;
+    }
+  }
+
+  return existingFabricationValues;
+};
+export const getWineHardwareSpecificFabrication = (
+  type,
+  fabricationValues,
+  currentHardware,
+  newSelectedHardware
+) => {
+  let existingFabricationValues = {
+    oneInchHoles: Number(fabricationValues.oneInchHoles),
+    hingeCut: Number(fabricationValues.hingeCut),
+    clampCut: Number(fabricationValues.clampCut),
+    notch: Number(fabricationValues.notch),
+    outages: Number(fabricationValues.outages),
+  };
+  let currentHardwareFabrication = null;
+
+  if (currentHardware?.item) {
+    if ([hardwareTypes.HANDLES].includes(type))
+      currentHardwareFabrication = getHandleFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    else if ([hardwareTypes.HINGES].includes(type))
+      currentHardwareFabrication = getHingeFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    // else if (
+    //   [
+    //     hardwareTypes.WALLCLAMP,
+    //     // hardwareTypes.SLEEVEOVER,   // comment sleeve over here to use getGenericFabrication for calcluating its fabrication
+    //     hardwareTypes.GLASSTOGLASS,
+    //     hardwareTypes.CORNERWALLCLAMP,
+    //     hardwareTypes.CORNERSLEEVEOVER,
+    //     hardwareTypes.CORNERGLASSTOGLASS,
+    //   ].includes(type)
+    // )
+    //   currentHardwareFabrication = getMountingClampFabrication(
+    //     currentHardware?.item,
+    //     currentHardware?.count
+    //   );
+    else if ([hardwareTypes.CHANNEL].includes(type))
+      currentHardwareFabrication = getMountingChannelFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    else
+      currentHardwareFabrication = getGenericFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+  }
+
+  if (currentHardwareFabrication) {
+    existingFabricationValues.oneInchHoles -=
+      currentHardwareFabrication.oneInchHoles;
+    existingFabricationValues.hingeCut -= currentHardwareFabrication.hingeCut;
+    existingFabricationValues.clampCut -= currentHardwareFabrication.clampCut;
+    existingFabricationValues.notch -= currentHardwareFabrication.notch;
+    existingFabricationValues.outages -= currentHardwareFabrication.outages;
+  }
+
+  /* check to avoid negative value **/
+  if (existingFabricationValues.oneInchHoles < 0)
+    existingFabricationValues.oneInchHoles = 0;
+  if (existingFabricationValues.hingeCut < 0)
+    existingFabricationValues.hingeCut = 0;
+  if (existingFabricationValues.clampCut < 0)
+    existingFabricationValues.clampCut = 0;
+  if (existingFabricationValues.notch < 0) existingFabricationValues.notch = 0;
+  if (existingFabricationValues.outages < 0)
+    existingFabricationValues.outages = 0;
+  /* end **/
+
+  if (newSelectedHardware) {
+    let newSelectedHardwareFabrication = null;
+
+    if (newSelectedHardware?.item) {
+      if ([hardwareTypes.HANDLES].includes(type))
+        newSelectedHardwareFabrication = getHandleFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      else if ([hardwareTypes.HINGES].includes(type))
+        newSelectedHardwareFabrication = getHingeFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      // else if (
+      //   [
+      //     hardwareTypes.WALLCLAMP,
+      //     // hardwareTypes.SLEEVEOVER,   // comment sleeve over here to use getGenericFabrication for calcluating its fabrication
+      //     hardwareTypes.GLASSTOGLASS,
+      //     hardwareTypes.CORNERWALLCLAMP,
+      //     hardwareTypes.CORNERSLEEVEOVER,
+      //     hardwareTypes.CORNERGLASSTOGLASS,
+      //   ].includes(type)
+      // )
+      //   newSelectedHardwareFabrication = getMountingClampFabrication(
+      //     newSelectedHardware?.item,
+      //     newSelectedHardware?.count
+      //   );
+      else if ([hardwareTypes.CHANNEL].includes(type))
+        newSelectedHardwareFabrication = getMountingChannelFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      else
+        newSelectedHardwareFabrication = getGenericFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+    }
 
     if (newSelectedHardwareFabrication) {
       existingFabricationValues.oneInchHoles +=

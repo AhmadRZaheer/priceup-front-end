@@ -79,10 +79,10 @@ export default function ChooseEstimateCategoryModal({
       dispatch(setShowerProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
       navigate("/estimates/layouts");
-    } else if(category === EstimateCategory.WINECELLAR){
+    } else if(category === EstimateCategory.WINECELLARS){
       dispatch(resetNotificationsWineCaller());
       dispatch(setWineCellarProjectId(projectId));
-      dispatch(setEstimateCategory(EstimateCategory.WINECELLAR));
+      dispatch(setEstimateCategory(EstimateCategory.WINECELLARS));
       navigate("/estimates/layouts");
     }
     else {
@@ -216,15 +216,15 @@ export default function ChooseEstimateCategoryModal({
                 sx={{
                   ...boxStyles,
                   backgroundColor:
-                    category !== EstimateCategory.WINECELLAR
+                    category !== EstimateCategory.WINECELLARS
                       ? "rgba(184, 184, 185, 1)"
                       : "#8477DA",
                   color:
-                    category !== EstimateCategory.WINECELLAR ? "black" : "white",
+                    category !== EstimateCategory.WINECELLARS ? "black" : "white",
                   width: "214px",
                   height: "243px",
                 }}
-                onClick={() => handleBoxClick(EstimateCategory.WINECELLAR)}
+                onClick={() => handleBoxClick(EstimateCategory.WINECELLARS)}
               >
                 <img
                   style={{

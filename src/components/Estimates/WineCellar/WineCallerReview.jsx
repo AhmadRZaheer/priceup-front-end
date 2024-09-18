@@ -10,33 +10,6 @@ import {
 import MenuList from "./menuList";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getContent,
-  getLayoutArea,
-  getQuoteState,
-  setInputContent,
-  setTotal,
-  getTotal,
-  getMeasurementSide,
-  getLayoutPerimeter,
-  getQuoteId,
-  setHardwarePrice,
-  setGlassPrice,
-  setGlassAddonsPrice,
-  setFabricationPrice,
-  setLaborPrice,
-  selectedItem,
-  setCost,
-  setProfit,
-  getListData,
-  setHardwareAddonsPrice,
-  setContent,
-  getAdditionalFields,
-  getDoorWidth,
-  getisCustomizedDoorWidth,
-  setAdditionalFieldsPrice,
-  getProjectId,
-} from "@/redux/estimateCalculations";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 // import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "@/utilities/common";
@@ -49,11 +22,36 @@ import {
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { SingleField } from "@/components/ui-components/SingleFieldComponent";
 import { getEstimateErrorStatus } from "@/utilities/estimatorHelper";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationWineCellarSettings } from "@/redux/locationSlice";
 import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import EnterLabelModal from "../enterLabelModal";
 import { Add } from "@mui/icons-material";
-import { getWineQuoteState } from "@/redux/wineCellarSlice";
+import {
+  getisCustomWineDoorWidth,
+  getWineAdditionalFields,
+  getWineContent,
+  getWineDoorWidth,
+  getWineLayoutArea,
+  getWineLayoutPerimeter,
+  getWineListData,
+  getWineMeasurements,
+  getWineProjectId,
+  getWineQuoteId,
+  getWineQuoteState,
+  getWineTotal,
+  selectedWineItem,
+  setWineAdditionalFieldsPrice,
+  setWineContent,
+  setWineCost,
+  setWineFabricationPrice,  
+  setWineGlassPrice,  
+  setWineHardwarePrice,
+  setWineInputContent,
+  setWineLaborPrice,
+  setWineProfit,
+  setWineTotal,
+} from "@/redux/wineCellarSlice";
+import WineChannelTypeDesktop from "./WineChannelorClamp";
 
 export const generateEstimatePayload = (
   estimateState,
@@ -80,67 +78,12 @@ export const generateEstimatePayload = (
   let filteredFields = selectedContent.additionalFields.filter(
     (item) => item.label !== "" && item.cost !== 0
   );
-
-  const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
-    return {
-      type: row.item._id,
-      count: row.count,
-    };
-  });
-  const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
-  const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
   const additionalFieldsArray = filteredFields.map((row) => {
     return {
       cost: row.cost,
       label: row.label,
     };
   });
-  const glassToGlassArray = selectedContent?.mountingClamps?.glassToGlass?.map(
-    (row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    }
-  );
-  const cornerWallClampArray =
-    selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const cornerSleeveOverArray =
-    selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const cornerGlassToGlassArray =
-    selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
-      return {
-        type: row.item._id,
-        count: row.count,
-      };
-    });
-  const glassAddonsArray = selectedContent?.glassAddons?.map(
-    (item) => item?._id
-  );
   const estimateConfig = {
     doorWidth: Number(doorWidthredux),
     isCustomizedDoorWidth: isCustomizedDoorWidth,
@@ -150,46 +93,24 @@ export const generateEstimatePayload = (
       type: selectedContent?.handles?.item?._id,
       count: selectedContent?.handles?.count,
     },
+    doorLock: {
+      type: selectedContent?.type?.item?._id,
+      count: selectedContent?.type?.count,
+    },
     hinges: {
       type: selectedContent?.hinges?.item?._id,
       count: selectedContent?.hinges?.count,
-    },
-    mountingClamps: {
-      wallClamp: [...wallClampArray],
-      sleeveOver: [...sleeveOverArray],
-      glassToGlass: [...glassToGlassArray],
-    },
-    cornerClamps: {
-      wallClamp: [...cornerWallClampArray],
-      sleeveOver: [...cornerSleeveOverArray],
-      glassToGlass: [...cornerGlassToGlassArray],
     },
     mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
     },
-    glassAddons: [...glassAddonsArray],
-    slidingDoorSystem: {
-      type: selectedContent?.slidingDoorSystem?.item?._id,
-      count: selectedContent?.slidingDoorSystem?.count,
-    },
-    header: {
-      type: selectedContent?.header?.item?._id,
-      count: selectedContent?.header?.count,
-    },
     oneInchHoles: selectedContent?.oneInchHoles,
-    hingeCut: selectedContent?.hingeCut,
-    clampCut: selectedContent?.clampCut,
-    notch: selectedContent?.notch,
-    outages: selectedContent?.outages,
-    mitre: selectedContent?.mitre,
-    polish: selectedContent?.polish,
+    hingeCut: selectedContent?.hingeCut,   
     people: selectedContent?.people,
     hours: selectedContent?.hours,
     userProfitPercentage: selectedContent?.userProfitPercentage,
-    hardwareAddons: [...hardwareAddonsArray],
-    sleeveOverCount: selectedContent?.sleeveOverCount,
     towelBarsCount: selectedContent?.sleeveOverCount,
     measurements: measurementsArray,
     perimeter: perimeter,
@@ -209,20 +130,21 @@ export const WineCallerReview = ({ setStep }) => {
   const [labelModalOpen, setLabelModalOpen] = useState(false);
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
-  const showerLocationSettings = useSelector(getLocationShowerSettings);
-  const listData = useSelector(getListData);
-  const estimatesTotal = useSelector(getTotal);
-  const projectId = useSelector(getProjectId);
-  const measurements = useSelector(getMeasurementSide);
-  const perimeter = useSelector(getLayoutPerimeter);
-  const doorWidthredux = useSelector(getDoorWidth);
-  const quoteId = useSelector(getQuoteId);
-  const sqftArea = useSelector(getLayoutArea);
+  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const listData = useSelector(getWineListData);
+  const estimatesTotal = useSelector(getWineTotal);
+  const projectId = useSelector(getWineProjectId);
+  const measurements = useSelector(getWineMeasurements);
+  const perimeter = useSelector(getWineLayoutPerimeter);
+  const doorWidthredux = useSelector(getWineDoorWidth);
+  const quoteId = useSelector(getWineQuoteId);
+  const sqftArea = useSelector(getWineLayoutArea);
   const currentQuoteState = useSelector(getWineQuoteState);
-  const selectedContent = useSelector(getContent);
-  const selectedData = useSelector(selectedItem);
-  const addedFields = useSelector(getAdditionalFields);
-  const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
+  const selectedContent = useSelector(getWineContent);
+  const selectedData = useSelector(selectedWineItem);
+  const addedFields = useSelector(getWineAdditionalFields);
+  const isCustomizedDoorWidth = useSelector(getisCustomWineDoorWidth);
+  console.log(listData, "listDatalistData");
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
@@ -230,10 +152,11 @@ export const WineCallerReview = ({ setStep }) => {
     let status = false;
     if (currentQuoteState === "create") {
       status = !selectedData || !measurements?.length;
-    } else if (currentQuoteState === "custom") {
-      let arraylength = Object.entries(measurements)?.length;
-      status = arraylength > 0 ? false : true;
     }
+    //  else if (currentQuoteState === "custom") {
+    //   let arraylength = Object.entries(measurements)?.length;
+    //   status = arraylength > 0 ? false : true;
+    // }
     return status;
   }, [measurements]);
 
@@ -258,10 +181,6 @@ export const WineCallerReview = ({ setStep }) => {
     });
   };
 
-  const setHandleEstimatesPages = () => {
-    navigate("/estimates/dimensions");
-  };
-
   const handleAddField = () => {
     const newData = [
       ...addedFields,
@@ -270,9 +189,8 @@ export const WineCallerReview = ({ setStep }) => {
         cost: 0,
       },
     ];
-
     dispatch(
-      setContent({
+      setWineContent({
         type: "additionalFields",
         item: newData,
       })
@@ -317,19 +235,17 @@ export const WineCallerReview = ({ setStep }) => {
     const prices = calculateTotal(
       selectedContent,
       sqftArea,
-      showerLocationSettings,
+      wineCellarLocationSettings,
       currentQuoteState
     );
-    dispatch(setHardwarePrice(prices.hardwarePrice));
-    dispatch(setGlassPrice(prices.glassPrice));
-    dispatch(setHardwareAddonsPrice(prices.hardwareAddonsPrice));
-    dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
-    dispatch(setFabricationPrice(prices.fabricationPrice));
-    dispatch(setLaborPrice(prices.laborPrice));
-    dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
-    dispatch(setTotal(prices.total));
-    dispatch(setCost(prices.cost));
-    dispatch(setProfit(prices.profit));
+    dispatch(setWineHardwarePrice(prices.hardwarePrice));
+    dispatch(setWineGlassPrice(prices.glassPrice));
+    dispatch(setWineFabricationPrice(prices.fabricationPrice));
+    dispatch(setWineLaborPrice(prices.laborPrice));
+    dispatch(setWineAdditionalFieldsPrice(prices.additionalFieldPrice));
+    dispatch(setWineTotal(prices.total));
+    dispatch(setWineCost(prices.cost));
+    dispatch(setWineProfit(prices.profit));
   }, [selectedContent]);
 
   useEffect(() => {
@@ -350,7 +266,7 @@ export const WineCallerReview = ({ setStep }) => {
   };
 
   const handleAdditionalFieldModify = (fields) => {
-    dispatch(setContent({ type: "additionalFields", item: fields }));
+    dispatch(setWineContent({ type: "additionalFields", item: fields }));
   };
 
   useEffect(() => {
@@ -545,7 +461,14 @@ export const WineCallerReview = ({ setStep }) => {
                         },
                         py: "6px",
                       }}
-                    ></Box>
+                    >
+                      <WineChannelTypeDesktop
+                        menuOptions={'Channel'}
+                        title={"Channel"}
+                        type={"mounting"}
+                        listData={listData}
+                      />
+                    </Box>
                   )}
                   <Box
                     sx={{
@@ -566,90 +489,6 @@ export const WineCallerReview = ({ setStep }) => {
                         type={"glassType"}
                         thickness={selectedContent.glassType.thickness}
                         currentItem={selectedContent?.glassType?.item}
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      py: "6px",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <MenuList
-                        menuOptions={listData?.slidingDoorSystem}
-                        title={"Sliding Door System"}
-                        type={"slidingDoorSystem"}
-                        count={selectedContent.slidingDoorSystem.count}
-                        currentItem={selectedContent?.slidingDoorSystem?.item}
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      py: "6px",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <MenuList
-                        menuOptions={listData?.header}
-                        title={"Header"}
-                        type={"header"}
-                        count={selectedContent.header.count}
-                        currentItem={selectedContent?.header?.item}
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      py: "6px",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <MenuList
-                        menuOptions={listData?.glassAddons}
-                        title={"Glass Addons"}
-                        type={"glassAddons"}
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      py: "6px",
-                    }}
-                  >
-                    <Box sx={{ width: "100%" }}>
-                      <MenuList
-                        menuOptions={listData?.hardwareAddons}
-                        title={"Hardware Addons"}
-                        type={"hardwareAddons"}
                       />
                     </Box>
                   </Box>
@@ -705,7 +544,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.oneInchHoles}
                         onChange={(event) =>
                           dispatch(
-                            setInputContent({
+                            setWineInputContent({
                               type: "oneInchHoles",
                               value: event.target.value,
                             })
@@ -765,7 +604,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.hingeCut}
                         onChange={(event) =>
                           dispatch(
-                            setInputContent({
+                            setWineInputContent({
                               type: "hingeCut",
                               value: event.target.value,
                             })
@@ -774,314 +613,7 @@ export const WineCallerReview = ({ setStep }) => {
                       />
                     </Box>
                   </Box>
-                  {![
-                    layoutVariants.DOOR,
-                    layoutVariants.DOUBLEDOOR,
-                    layoutVariants.DOUBLEBARN,
-                  ].includes(selectedItemVariant) && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        borderBottom: {
-                          sm: "2px solid #D0D5DD",
-                          xs: "2px solid #423f57",
-                        },
-                        color: { sm: "#000000  ", xs: "white" },
-                        py: 2,
-                      }}
-                    >
-                      <Typography className="estimate-modifcation">
-                        {" "}
-                        Clamp Cut Out
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 2,
-                          width: "120px",
-                          padddingY: 4,
-                        }}
-                      >
-                        <TextField
-                          type="number"
-                          className="custom-textfield"
-                          InputProps={{
-                            inputProps: { min: 0 },
-                            style: {
-                              height: "38px",
-                            },
-                          }}
-                          InputLabelProps={{
-                            style: {
-                              color: "rgba(255, 255, 255, 0.5)",
-                            },
-                          }}
-                          sx={{
-                            color: { sm: "black", xs: "white" },
-                            width: "100%",
-                            "& input[type=number]": {
-                              textAlign: "right",
-                            },
-                          }}
-                          variant="outlined"
-                          size="small"
-                          value={selectedContent.clampCut}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "clampCut",
-                                value: event.target.value,
-                              })
-                            )
-                          }
-                        />
-                      </Box>
-                    </Box>
-                  )}
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2,
-                    }}
-                  >
-                    <Typography className="estimate-modifcation">
-                      Notch
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        className="custom-textfield"
-                        type="number"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: "38px",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          },
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.notch}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "notch",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2,
-                    }}
-                  >
-                    <Typography className="estimate-modifcation">
-                      Outages
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: "38px",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          },
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.outages}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "outages",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
 
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2,
-                    }}
-                  >
-                    <Typography className="estimate-modifcation">
-                      Mitre
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: "38px",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          },
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.mitre}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "mitre",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2,
-                    }}
-                  >
-                    <Typography className="estimate-modifcation">
-                      Polish
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: "38px",
-                          },
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          },
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.polish}
-                        onChange={(event) => {
-                          dispatch(
-                            setInputContent({
-                              type: "polish",
-                              value: event.target.value,
-                            })
-                          );
-                        }}
-                      />
-                    </Box>
-                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -1133,7 +665,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.people}
                         onChange={(event) =>
                           dispatch(
-                            setInputContent({
+                            setWineInputContent({
                               type: "people",
                               value: event.target.value,
                             })
@@ -1193,7 +725,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.hours}
                         onChange={(event) =>
                           dispatch(
-                            setInputContent({
+                            setWineInputContent({
                               type: "hours",
                               value: event.target.value,
                             })

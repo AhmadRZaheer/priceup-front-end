@@ -24,8 +24,7 @@ import {
   getWineDoorWidth,
   getWineFabricationTotal,
   getWineGlassAddonsTotal,
-  getWineGlassTotal,
-  getWineHardwareAddonsTotal,
+  getWineGlassTotal,  
   getWineHardwareTotal,
   getWineLaborTotal,
   getWineLayoutArea,
@@ -44,8 +43,6 @@ const WineCellarSummary = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getWineHardwareTotal);
   const glassPrice = useSelector(getWineGlassTotal);
-  const glassAddonsPrice = useSelector(getWineGlassAddonsTotal);
-  const hardwareAddonsPrice = useSelector(getWineHardwareAddonsTotal);
   const fabricationPrice = useSelector(getWineFabricationTotal);
   const laborPrice = useSelector(getWineLaborTotal);
   const additionalFieldsPrice = useSelector(getWineAdditionalFieldsTotal);
@@ -434,7 +431,7 @@ const WineCellarSummary = ({ setStep }) => {
                         </>
                       ) : (
                         <>
-                          {" "}
+                          {/* {" "}
                           {selectedContent?.mountingClamps?.wallClamp
                             ?.length ? (
                             <Box>
@@ -468,8 +465,8 @@ const WineCellarSummary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )}
-                          {selectedContent?.mountingClamps?.glassToGlass
+                          )} */}
+                          {/* {selectedContent?.mountingClamps?.glassToGlass
                             ?.length ? (
                             <Box>
                               <Typography className="text-xs-ragular-bold">
@@ -485,10 +482,10 @@ const WineCellarSummary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )}{" "}
+                          )}{" "} */}
                         </>
                       )}
-                      {selectedContent?.cornerClamps?.cornerWallClamp
+                      {/* {selectedContent?.cornerClamps?.cornerWallClamp
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -504,8 +501,8 @@ const WineCellarSummary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )}
-                      {selectedContent?.cornerClamps?.cornerSleeveOver
+                      )} */}
+                      {/* {selectedContent?.cornerClamps?.cornerSleeveOver
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -521,8 +518,8 @@ const WineCellarSummary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )}
-                      {selectedContent?.cornerClamps?.cornerGlassToGlass
+                      )} */}
+                      {/* {selectedContent?.cornerClamps?.cornerGlassToGlass
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -538,7 +535,7 @@ const WineCellarSummary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )}
+                      )} */}
                       {selectedContent?.glassType?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -550,7 +547,7 @@ const WineCellarSummary = ({ setStep }) => {
                           </Typography>
                         </Box>
                       )}
-                      {selectedContent?.slidingDoorSystem?.item && (
+                      {/* {selectedContent?.slidingDoorSystem?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Sliding Door System:
@@ -560,7 +557,7 @@ const WineCellarSummary = ({ setStep }) => {
                             {selectedContent?.slidingDoorSystem?.count})
                           </Typography>
                         </Box>
-                      )}
+                      )} */}
                       {selectedContent?.transom && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -569,7 +566,7 @@ const WineCellarSummary = ({ setStep }) => {
                           <Typography className="text-xs-ragular"></Typography>
                         </Box>
                       )}
-                      {selectedContent?.header?.item && (
+                      {/* {selectedContent?.header?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Header:
@@ -579,8 +576,8 @@ const WineCellarSummary = ({ setStep }) => {
                             {selectedContent?.header?.count})
                           </Typography>
                         </Box>
-                      )}
-                      {selectedContent?.glassAddons?.length ? (
+                      )} */}
+                      {/* {selectedContent?.glassAddons?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Glass Addons:
@@ -591,8 +588,8 @@ const WineCellarSummary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )}
-                      {selectedContent?.hardwareAddons?.length > 0 && (
+                      )} */}
+                      {/* {selectedContent?.hardwareAddons?.length > 0 && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Add ons:{" "}
@@ -603,7 +600,7 @@ const WineCellarSummary = ({ setStep }) => {
                             )}{" "}
                           </Typography>
                         </Box>
-                      )}
+                      )} */}
                       <Box
                         sx={{
                           display: "flex",
@@ -685,14 +682,14 @@ const WineCellarSummary = ({ setStep }) => {
                           ${glassPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box>
+                      {/* <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${glassAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box>
+                      </Box> */}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Fabrication Price:
@@ -701,14 +698,14 @@ const WineCellarSummary = ({ setStep }) => {
                           ${fabricationPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      <Box>
+                      {/* <Box>
                         <Typography className="text-xs-ragular-bold">
                           Hardware Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${hardwareAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box>
+                      </Box> */}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Labor Price:

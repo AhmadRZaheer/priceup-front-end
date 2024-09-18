@@ -57,6 +57,7 @@ export const userRoles = {
 
 export const hardwareTypes = {
   HANDLES: "handles",
+  DOORLOCK: "doorLock",
   HINGES: "hinges",
   SLIDINGDOORSYSTEM: "slidingDoorSystem",
   HEADER: "header",
@@ -91,7 +92,7 @@ export const severity = {
 export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
-  WINECELLAR: "wineCellar",
+  WINECELLARS: "wineCellars"
 };
 
 export const mirrorHardwareTypes = {

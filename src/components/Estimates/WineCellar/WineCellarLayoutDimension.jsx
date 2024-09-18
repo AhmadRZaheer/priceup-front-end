@@ -55,7 +55,7 @@ import {
   setWineReturnWeight,
   updateWineMeasurements,
 } from "@/redux/wineCellarSlice";
-// import AlertsAndWarnings from "../AlertsAndWarnings";
+import WineAlertsAndWarnings from "./WinwAlertsAndWarning";
 
 const WineCellarLayouts = [
   {
@@ -278,7 +278,7 @@ const WineCellarLayouts = [
       },
       hardwareFinishes: "6602b5d0a4983e276850a4af",
       channelOrClamps: "Clamps",
-      mountingChannel: null,
+      mountingChannel: "6602b5d1a4983e276850a6ea",
       outages: 2,
       measurementSides: 5,
       variant: "doornotchedpanelandreturn",
@@ -354,7 +354,7 @@ export const WineCellarLayoutDimension = ({ setStep }) => {
       {}
     ),
   });
-console.log(initialValues,'initialValuesinitialValues')
+  console.log(initialValues, "initialValuesinitialValues");
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -522,7 +522,7 @@ console.log(initialValues,'initialValuesinitialValues')
             >
               Layout & Measurement
             </Typography>
-            {/* <AlertsAndWarnings /> */}
+            <WineAlertsAndWarnings />
           </Box>
           <Box
             sx={{
@@ -776,7 +776,6 @@ console.log(initialValues,'initialValuesinitialValues')
                     <Box
                       sx={{
                         display: "flex",
-                        // width: "100%",
                         alignItems: { sm: "start", xs: "center" },
                         flexDirection: { sm: "column", xs: "row" },
                         width: { md: "48.6%", xs: "100%" },
@@ -787,7 +786,6 @@ console.log(initialValues,'initialValuesinitialValues')
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          // width: "200px",
                           gap: 1,
                         }}
                       >
