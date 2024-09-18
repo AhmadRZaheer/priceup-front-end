@@ -89,6 +89,11 @@ const initialState = {
       variant: notificationsVariant.DEFAULT,
       message: "",
     },
+    doorLockNotAvailable: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
     hingeNotAvailable: {
       status: false,
       variant: notificationsVariant.DEFAULT,
@@ -124,14 +129,6 @@ const initialState = {
       item: null,
       count: 0,
     },
-    // header: {
-    //   item: null,
-    //   count: 0,
-    // },
-    // slidingDoorSystem: {
-    //   item: null,
-    //   count: 0,
-    // },
     glassType: {
       item: null,
       thickness: thicknessTypes.THREEBYEIGHT,
@@ -139,14 +136,8 @@ const initialState = {
     glassAddons: [],
     oneInchHoles: 0,
     hingeCut: 0,
-    // clampCut: 0,
-    // notch: 0,
-    // outages: 0,
-    // mitre: 0,
-    // polish: 0,
     people: 0,
     hours: 0,
-    // hardwareAddons: [],
     mountingState: "channel",
     userProfitPercentage: 0,
   },
