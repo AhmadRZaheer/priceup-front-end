@@ -94,10 +94,10 @@ const CampanySetting = () => {
           hingeCutoutThreeByEightInch:
             settingData?.showers?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch,
-          minterOneByTwoInch:
-            settingData?.showers?.fabricatingPricing?.minterOneByTwoInch,
-          minterThreeByEightInch:
-            settingData?.showers?.fabricatingPricing?.minterThreeByEightInch,
+            miterOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.miterOneByTwoInch,
+            miterThreeByEightInch:
+            settingData?.showers?.fabricatingPricing?.miterThreeByEightInch,
           notchOneByTwoInch:
             settingData?.showers?.fabricatingPricing?.notchOneByTwoInch,
           notchThreeByEightInch:
@@ -676,7 +676,7 @@ const CampanySetting = () => {
 
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="showers.fabricatingPricing.minterOneByTwoInch"
+                  name="showers.fabricatingPricing.miterOneByTwoInch"
                   size="small"
                   type="number"
                   inputProps={{
@@ -684,7 +684,7 @@ const CampanySetting = () => {
                   }}
                   value={
                     formik.values?.showers?.fabricatingPricing
-                      ?.minterOneByTwoInch
+                      ?.miterOneByTwoInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -701,7 +701,7 @@ const CampanySetting = () => {
 
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="showers.fabricatingPricing.minterThreeByEightInch"
+                  name="showers.fabricatingPricing.miterThreeByEightInch"
                   size="small"
                   type="number"
                   inputProps={{
@@ -709,7 +709,7 @@ const CampanySetting = () => {
                   }}
                   value={
                     formik.values?.showers?.fabricatingPricing
-                      ?.minterThreeByEightInch
+                      ?.miterThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
