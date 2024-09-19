@@ -89,6 +89,19 @@ const ViewDrawer = ({ open, handleClose, data ,variant }) => {
                   }
                 </Typography>
               </Grid>
+              {variant === 'wineCellar' &&  <Grid
+                item
+                xs={5.5}
+                className="cardTitleContainer"
+                sx={{ py: 1, height: "fit-content" }}
+              >
+                <Typography className="drawerTitle">Door Lock</Typography>
+                <Typography className="drawerBoldTitle">
+                  {data.settings?.doorLock?.type?.name ? `${data.settings?.doorLock?.type?.name}(
+                  ${data.settings?.doorLock?.count})` : '---'
+                  }
+                </Typography>
+              </Grid>}
               <Grid
                 item
                 xs={5.5}

@@ -63,8 +63,7 @@ const ShowerLayout = () => {
           {
             // m: "0px !important",
             // gap: '21px',
-            // display: "flex",
-            // justifyContent: { md: "space-between", xs: "normal" },
+            // display: "flex",            
           }
         }
       >
