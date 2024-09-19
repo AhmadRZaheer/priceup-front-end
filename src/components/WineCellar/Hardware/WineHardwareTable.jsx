@@ -10,15 +10,10 @@ import {
   Menu,
   MenuItem,
   Typography,
-  CircularProgress,
-  Stack,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import React, { useEffect, useState, useCallback, useMemo } from "react";
-import {
-  useDeleteHardwares,
-  useEditFullHardware,
-} from "@/utilities/ApiHooks/hardware";
+import React, { useEffect, useState, useCallback } from "react";
+
 import CustomToggle from "@/components/ui-components/Toggle";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import DeleteModal from "@/components/Modal/deleteModal";
@@ -79,7 +74,6 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   }, [data._id, finishes, editHardware]);
 
   const handleStatusChange = useCallback((id) => {
-    console.log(id);
     setFinishes((prevFinishes) =>
       prevFinishes.map((item) =>
         item._id === id ? { ...item, status: !item.status } : item

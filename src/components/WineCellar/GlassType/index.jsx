@@ -69,7 +69,6 @@ const WineGlassTypeComponent = () => {
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
   };
-  console.log(rowCosts, "rowCostsrowCosts");
   const handleHardwareDelete = () => {
     deleteWineGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
   };
@@ -79,7 +78,6 @@ const WineGlassTypeComponent = () => {
   };
 
   const handleUpdateItem = (props) => {
-    console.log(props, "item modified");
     const isFile = typeof props?.image === "object";
     if (props?.options) {
       editWineGlassType({
@@ -98,7 +96,6 @@ const WineGlassTypeComponent = () => {
       if (props?.options) {
         formData.append("options", props.options);
       }
-      console.log(formData, "form data");
       editWineGlassType({
         data: formData,
         apiRoute: `${routePrefix}/${props.id}`,
@@ -113,7 +110,6 @@ const WineGlassTypeComponent = () => {
   };
 
   const handleCreateItem = (props) => {
-    console.log(props);
     const slug = createSlug(props.name);
     const formData = new FormData();
     if (props.image) {
@@ -150,7 +146,6 @@ const WineGlassTypeComponent = () => {
     });
   };
   const handleStatusChange = (row, thickness) => {
-    console.log(row, thickness, "thickness");
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: option.thickness === thickness ? !option.status : option.status,

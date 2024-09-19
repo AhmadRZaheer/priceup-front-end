@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import DefaultImageIcon from "../../Assets/DefaultIMG.png";
-import { useState } from "react";
 import {
   Accordion,
   AccordionDetails,
@@ -16,10 +15,6 @@ import {
   IconButton,
 } from "@mui/material";
 import { useDropzone } from "react-dropzone";
-import {
-  useCreateHardware,
-  useEditHardware,
-} from "../../utilities/ApiHooks/hardware";
 import { useEffect } from "react";
 import {
   backendURL,
@@ -60,7 +55,6 @@ export default function AddEditWineHardwareModel({
   const onDrop = (acceptedFiles) => {
     formik.setFieldValue("image", acceptedFiles[0]);
   };
-  console.log(data, "model dataaaa");
   const decodedToken = getDecryptedToken();
   const routePrefix = `${backendURL}/wineCellars/hardwares`;
   const { getInputProps } = useDropzone({ onDrop });
@@ -69,14 +63,8 @@ export default function AddEditWineHardwareModel({
     isLoading: LoadingForAdd,
     isSuccess: CreatedSuccessfully,
   } = useCreateDocument();
-  //   const {
-  //     mutate: editHardware,
-  //     isLoading: LoadingForEdit,
-  //     isSuccess: SuccessForEdit,
-  //   } = useEditHardware();
-
   const {
-    mutate: editHardware,
+    mutate: editWineHardware,
     isLoading: LoadingForEdit,
     isSuccess: SuccessForEdit,
   } = useEditDocument();
@@ -91,9 +79,7 @@ export default function AddEditWineHardwareModel({
     if (SuccessForEdit) {
       refetch();
       close();
-      console.log(SuccessForEdit, "effect s");
     }
-    console.log("effect");
   }, [CreatedSuccessfully, SuccessForEdit]);
 
   const handleCreateClick = (props) => {
@@ -112,16 +98,20 @@ export default function AddEditWineHardwareModel({
   };
 
   const handleEditClick = (props) => {
-    // const id = data;
     const formData = new FormData();
     formData.append("name", props.hardwareData.name);
     formData.append("fabrication.hingeCut", props.hardwareData.hingeCut);
-    formData.append("fabrication.oneInchHoles", props.hardwareData.oneInchHoles);
+    formData.append(
+      "fabrication.oneInchHoles",
+      props.hardwareData.oneInchHoles
+    );
     if (props.hardwareData.image) {
       formData.append("image", props.hardwareData.image);
     }
-    // editHardware(props, id);
-    editHardware({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
+    editWineHardware({
+      data: formData,
+      apiRoute: `${routePrefix}/${props.id}`,
+    });
   };
 
   const validationSchema = Yup.object().shape({
@@ -147,7 +137,6 @@ export default function AddEditWineHardwareModel({
     enableReinitialize: true,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-        console.log(values,'ffgererwqssd');
       {
         isEdit
           ? handleEditClick({ hardwareData: values, id: data._id })
@@ -157,10 +146,7 @@ export default function AddEditWineHardwareModel({
   });
   const typeOfValue = () => {
     let statement = "";
-    if (
-      formik.values.hingeCut === 0 &&
-      formik.values.oneInchHoles === 0 
-    ) {
+    if (formik.values.hingeCut === 0 && formik.values.oneInchHoles === 0) {
       statement = "Using Default Values";
     } else {
       statement = "Using Customized Values";
