@@ -22,6 +22,7 @@ import { setStateForShowerEstimate } from "@/utilities/estimates";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { useNavigate } from "react-router-dom";
 import { EstimateSummary } from "./Categories/Estimate";
+import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
 
 const CustomTypo = ({ title, sx }) => {
     return (
@@ -62,6 +63,8 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
             setStateForShowerEstimate(record.resourceInfo, dispatch, navigate);
         } else if (record.resourceInfo?.category === EstimateCategory.MIRRORS) {
             setStateForMirrorEstimate(record.resourceInfo, dispatch, navigate);
+        }else if (record.resourceInfo?.category === EstimateCategory.WINECELLARS) {
+            setStateForWineCellarEstimate(record.resourceInfo, dispatch, navigate);
         }
     };
     // console.log(record.resourceInfo?.customerData?.email, 'record1');

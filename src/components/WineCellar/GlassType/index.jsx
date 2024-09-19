@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,7 +10,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { ArrowForward } from "@mui/icons-material";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
@@ -18,81 +18,44 @@ import { useDispatch } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { WineMirrorsGlassType } from "@/utilities/DataGridColumns";
 import CustomInputField from "@/components/ui-components/CustomInput";
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
-
-const WineFinishesData = [
-  {
-    "_id": "66dab944a82554091c42585c",
-    "name": "RFTRR",
-    "slug": "rftrr",
-    "image": "images/others/default.png",
-    "company_id": "660507a8a4983e276851dc28",
-    "options": [
-      {
-        "cost": 0,
-        "thickness": "1/4",
-        "status": true,
-        "_id": "66dab944a82554091c42585d"
-      },
-      {
-        "cost": 0,
-        "thickness": "1/8",
-        "status": true,
-        "_id": "66dab944a82554091c42585e"
-      }
-    ]
-  },
-  {
-    "_id": "77dab945b82665092d42695d",
-    "name": "XYZ Product",
-    "slug": "xyz-product",
-    "image": "images/others/product.png",
-    "company_id": "770607b8b5093e276852ed29",
-    "options": [
-      {
-        "cost": 10,
-        "thickness": "3/8",
-        "status": true,
-        "_id": "77dab945b82665092d42695e"
-      },
-      {
-        "cost": 20,
-        "thickness": "1/2",
-        "status": false,
-        "_id": "77dab945b82665092d42695f"
-      }
-    ]
-  },
-  {
-    "_id": "88dab946c92776093e537a6f",
-    "name": "ABC Item",
-    "slug": "abc-item",
-    "image": "images/others/item.png",
-    "company_id": "880708c9c6104e276953fe30",
-    "options": [
-      {
-        "cost": 5,
-        "thickness": "1/6",
-        "status": true,
-        "_id": "88dab946c92776093e537a70"
-      },
-      {
-        "cost": 15,
-        "thickness": "5/8",
-        "status": true,
-        "_id": "88dab946c92776093e537a71"
-      }
-    ]
-  }
-]
-
+import {
+  useCreateDocument,
+  useDeleteDocument,
+  useEditDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
+import { setMirrorsHardwareRefetch } from "@/redux/refetch";
 
 const WineGlassTypeComponent = () => {
   const dispatch = useDispatch();
-  // const routePrefix = `${backendURL}/mirrors/glassTypes`;
-  // const decodedToken = getDecryptedToken();
+  const routePrefix = `${backendURL}/wineCellars/glassTypes`;
+  const {
+    data: wineGlassTypesList,
+    isLoading,
+    refetch: refetchGlassTypesList,
+    isFetching: fetchingGlassTypesList,
+  } = useFetchAllDocuments(routePrefix);
+
+  const {
+    mutate: createWineGlassType,
+    isLoading: createWineGlassTypeLoading,
+    isSuccess: createWineGlassSuccess,
+  } = useCreateDocument();
+  const {
+    mutate: editWineGlassType,
+    isLoading: editGlassTypeLoading,
+    isSuccess: editSuccess,
+  } = useEditDocument();
+  const {
+    mutate: deleteWineGlassType,
+    isLoading: deleteGlassTypeLoading,
+    isSuccess: deleteWineSuccess,
+  } = useDeleteDocument();
+
+  const decodedToken = getDecryptedToken();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
@@ -105,12 +68,9 @@ const WineGlassTypeComponent = () => {
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
-  }
-
+  };
   const handleHardwareDelete = () => {
-    console.log(itemToModify)
-    setDeleteModalOpen(false);
-    // deleteGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
+    deleteWineGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
   };
 
   const handleOpenUpdateModal = () => {
@@ -118,28 +78,31 @@ const WineGlassTypeComponent = () => {
   };
 
   const handleUpdateItem = (props) => {
-    console.log(props, 'item modified')
-    // const isFile = typeof props?.image === 'object';
-    // if (props?.options) {
-    //   editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
-    //   setUpdateRefetch(true);
-    // } else {
-
-    //   const formData = new FormData();
-    //   if (props?.name) {
-    //     formData.append("name", props.name);
-    //   }
-    //   if (props?.image && isFile) {
-    //     formData.append("image", props.image);
-    //   }
-    //   if (props?.options) {
-    //     formData.append("options", props.options);
-    //   }
-    //   console.log(formData, 'form data')
-    //   editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
-    //   setUpdateRefetch(true);
-    // }
-    // localStorage.setItem("scrollToIndex", props.id);
+    const isFile = typeof props?.image === "object";
+    if (props?.options) {
+      editWineGlassType({
+        data: { options: props.options },
+        apiRoute: `${routePrefix}/${props.id}`,
+      });
+      setUpdateRefetch(true);
+    } else {
+      const formData = new FormData();
+      if (props?.name) {
+        formData.append("name", props.name);
+      }
+      if (props?.image && isFile) {
+        formData.append("image", props.image);
+      }
+      if (props?.options) {
+        formData.append("options", props.options);
+      }
+      editWineGlassType({
+        data: formData,
+        apiRoute: `${routePrefix}/${props.id}`,
+      });
+      setUpdateRefetch(true);
+    }
+    localStorage.setItem("scrollToIndex", props.id);
   };
 
   const handleOpenCreateModal = () => {
@@ -147,18 +110,17 @@ const WineGlassTypeComponent = () => {
   };
 
   const handleCreateItem = (props) => {
-    console.log(props)
-    // const slug = createSlug(props.name);
-    // const formData = new FormData();
-    // if (props.image) {
-    //   formData.append("image", props.image);
-    // }
-    // formData.append("name", props.name);
-    // formData.append("company_id", decodedToken?.company_id);
-    // formData.append("slug", slug);
-    // createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
-  }
-  
+    const slug = createSlug(props.name);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("slug", slug);
+    createWineGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
+  };
+
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
     setActiveRow(row); // Set the current row when the menu is triggered
@@ -167,15 +129,21 @@ const WineGlassTypeComponent = () => {
     setAnchorEl(null);
     setActiveRow(null);
   };
+
   const handleUpdateCost = (data) => {
     handleClose();
     const updatedOptions = data.options.map((option) => ({
       ...option,
-      cost: rowCosts[`${data._id}-${option.thickness}`] !== undefined
-        ? parseFloat(rowCosts[`${data._id}-${option.thickness}`])
-        : option.cost,
+      cost:
+        rowCosts[`${data._id}-${option.thickness}`] !== undefined
+          ? parseFloat(rowCosts[`${data._id}-${option.thickness}`])
+          : option.cost,
     }));
     setUpdateRefetch(false);
+    editWineGlassType({
+      data: { options: updatedOptions },
+      apiRoute: `${routePrefix}/${data._id}`,
+    });
   };
   const handleStatusChange = (row, thickness) => {
     const updatedOptions = row.options.map((option) => ({
@@ -188,50 +156,53 @@ const WineGlassTypeComponent = () => {
       ...prevStatus,
       [row._id]: {
         ...prevStatus[row._id],
-        [thickness]: !row.options.find(option => option.thickness === thickness).status,
-      }
+        [thickness]: !row.options.find(
+          (option) => option.thickness === thickness
+        ).status,
+      },
     }));
-    // editGlassType({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+    editWineGlassType({
+      data: { options: updatedOptions },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
     setUpdateRefetch(true);
   };
 
-  // useEffect(() => {
-  //   // refetchGlassTypesList();
+  useEffect(() => {
+    refetchGlassTypesList();
+    if (createWineGlassSuccess) {
+      setCreateModalOpen(false);
+      // dispatch(setMirrorsHardwareRefetch());
+      setRowCosts({});
+    }
+    if (deleteWineSuccess) {
+      setDeleteModalOpen(false);
+      // dispatch(setMirrorsHardwareRefetch());
+      setRowCosts({});
+    }
+  }, [createWineGlassSuccess, deleteWineSuccess]);
 
-  //   if (createSuccess) {
-  //     setCreateModalOpen(false);
-  //     dispatch(setMirrorsHardwareRefetch());
-  //     setRowCosts({})
-  //   }
-  //   if (deleteSuccess) {
-  //     setDeleteModalOpen(false);
-  //     dispatch(setMirrorsHardwareRefetch());
-  //     setRowCosts({})
-  //   }
-  // }, [deleteSuccess, createSuccess]);
+  useEffect(() => {
+    if (editSuccess) {
+      if (updateRefetch) {
+        refetchGlassTypesList();
+      }
+      setUpdateModalOpen(false);
+      // dispatch(setMirrorsHardwareRefetch());
+    }
+  }, [editSuccess]);
 
-  // useEffect(() => {
-  //   if (editSuccess) {
-  //     if (updateRefetch) {
-  //       // refetchGlassTypesList();
-  //     }
-  //     setUpdateModalOpen(false);
-  //     dispatch(setMirrorsHardwareRefetch());
-  //   }
-  // }, [editSuccess])
-
-  const thicknessOptions = [{ id: '1/4', name: 'Thickness 1/4' }, { id: '1/8', name: 'Thickness 1/8' }]
+  const thicknessOptions = [
+    { id: "3/8", name: "Thickness 3/8" },
+    { id: "1/2", name: "Thickness 1/2" },
+  ];
 
   const actionColumn = [
     {
-      field: "Cost (Thickness 1/4)",
-      headerName: "Cost (Thickness 1/4)",
+      field: "Cost (Thickness 3/8)",
+      headerName: "Cost (Thickness 3/8)",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 1.5,
       sortable: false,
       renderCell: (params) => (
@@ -241,26 +212,28 @@ const WineGlassTypeComponent = () => {
             variant="outlined"
             type="number"
             inputProps={{ min: 0 }}
-            name={`cost-${params.row._id}-1/4`}
+            name={`cost-${params.row._id}-3/8`}
             placeholder="Cost"
-            value={rowCosts[`${params.row._id}-1/4`] || params.row.options.find(o => o.thickness === '1/4')?.cost || 0}
-            onChange={(e) => setRowCosts({
-              ...rowCosts,
-              [`${params.row._id}-1/4`]: e.target.value,
-            })}
+            value={
+              rowCosts[`${params.row._id}-3/8`] ||
+              params.row.options.find((o) => o.thickness === "3/8")?.cost ||
+              0
+            }
+            onChange={(e) =>
+              setRowCosts({
+                ...rowCosts,
+                [`${params.row._id}-3/8`]: e.target.value,
+              })
+            }
           />
         </Box>
       ),
     },
     {
-      field: "Cost (Thickness 1/8)",
-      headerName: "Cost (Thickness 1/8)",
+      field: "Cost (Thickness 1/2)",
+      headerName: "Cost (Thickness 1/2)",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 1.5,
       sortable: false,
       renderCell: (params) => (
@@ -270,105 +243,106 @@ const WineGlassTypeComponent = () => {
             variant="outlined"
             type="number"
             inputProps={{ min: 0 }}
-            name={`cost-${params.row._id}-1/8`}
+            name={`cost-${params.row._id}-1/2`}
             placeholder="Cost"
-            value={rowCosts[`${params.row._id}-1/8`] || params.row.options.find(o => o.thickness === '1/8')?.cost || 0}
-            onChange={(e) => setRowCosts({
-              ...rowCosts,
-              [`${params.row._id}-1/8`]: e.target.value,
-            })}
+            value={
+              rowCosts[`${params.row._id}-1/2`] ||
+              params.row.options.find((o) => o.thickness === "1/2")?.cost ||
+              0
+            }
+            onChange={(e) =>
+              setRowCosts({
+                ...rowCosts,
+                [`${params.row._id}-1/2`]: e.target.value,
+              })
+            }
           />
         </Box>
       ),
+    },
+    {
+      field: "Status  (Thickness 3/8)",
+      headerName: "Status  (Thickness 3/8)",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
+      flex: 1.5,
+      sortable: false,
+      renderCell: (params) => {
+        const thickness3by8 = params.row.options.find(
+          (option) => option.thickness === "3/8"
+        );
+
+        return (
+          <>
+            <Box
+              sx={{
+                // height: "21px",
+                bgcolor: thickness3by8.status ? "#EFECFF" : "#F3F5F6",
+                borderRadius: "70px",
+                p: "6px 8px",
+                display: "grid",
+                gap: "7px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  lineHeight: "21px",
+                  color: thickness3by8.status ? "#8477DA" : "#5D6164",
+                }}
+              >
+                {thickness3by8.status ? "Active" : "Inactive"}
+              </Typography>
+            </Box>
+          </>
+        );
+      },
+    },
+    {
+      field: "Status  (Thickness 1/2)",
+      headerName: "Status  (Thickness 1/2)",
+      headerClassName: "showerHardwareHeader",
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
+      flex: 1.5,
+      sortable: false,
+      renderCell: (params) => {
+        const thickness1by2 = params.row.options.find(
+          (option) => option.thickness === "1/2"
+        );
+        return (
+          <>
+            <Box
+              sx={{
+                // height: "21px",
+                bgcolor: thickness1by2.status ? "#EFECFF" : "#F3F5F6",
+                borderRadius: "70px",
+                p: "6px 8px",
+                display: "grid",
+                gap: "7px",
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 500,
+                  lineHeight: "21px",
+                  color: thickness1by2.status ? "#8477DA" : "#5D6164",
+                }}
+              >
+                {thickness1by2.status ? "Active" : "Inactive"}
+              </Typography>
+            </Box>
+          </>
+        );
+      },
     },
 
-    {
-      field: "Status  (Thickness 1/4)",
-      headerName: "Status  (Thickness 1/4)",
-      headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
-      flex: 1.5,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Box
-              sx={{
-                // height: "21px",
-                bgcolor: params?.row?.options[0]?.status === true ? "#EFECFF" : '#F3F5F6',
-                borderRadius: "70px",
-                p: "6px 8px",
-                display: "grid",
-                gap: '7px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: "21px",
-                  color: params?.row?.options[0]?.status === true ? '#8477DA' : '#5D6164',
-                }}
-              >
-                {params?.row?.options[0]?.status === true ? 'Active' : 'Inactive'}
-              </Typography>
-            </Box>
-          </>
-        );
-      },
-    },
-    {
-      field: "Status  (Thickness 1/8)",
-      headerName: "Status  (Thickness 1/8)",
-      headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
-      flex: 1.5,
-      sortable: false,
-      renderCell: (params) => {
-        return (
-          <>
-            <Box
-              sx={{
-                // height: "21px",
-                bgcolor: params?.row?.options[1]?.status === true ? "#EFECFF" : '#F3F5F6',
-                borderRadius: "70px",
-                p: "6px 8px",
-                display: "grid",
-                gap: '7px',
-              }}
-            >
-              <Typography
-                sx={{
-                  fontSize: 14,
-                  fontWeight: 500,
-                  lineHeight: "21px",
-                  color: params?.row?.options[1]?.status === true ? '#8477DA' : '#5D6164',
-                }}
-              >
-                {params?.row?.options[1]?.status === true ? 'Active' : 'Inactive'}
-              </Typography>
-            </Box>
-          </>
-        );
-      },
-    },
     {
       field: "Actions",
       headerName: "Actions",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 0.7,
       sortable: false,
       renderCell: (params) => {
@@ -376,8 +350,13 @@ const WineGlassTypeComponent = () => {
         const data = params.row;
         return (
           <>
-            <IconButton aria-haspopup="true"
-              onClick={(event) => { handleClickAction(event, data); setItemToModify(data); }}>
+            <IconButton
+              aria-haspopup="true"
+              onClick={(event) => {
+                handleClickAction(event, data);
+                setItemToModify(data);
+              }}
+            >
               <ArrowForward sx={{ color: "#8477DA" }} />
             </IconButton>
             <Menu
@@ -413,11 +392,21 @@ const WineGlassTypeComponent = () => {
                 },
               }}
             >
-              <MenuItem onClick={() => handleUpdateCost(data)} className='mirror-meun-item'><Typography className='dropTxt'>Update</Typography></MenuItem>
+              <MenuItem
+                onClick={() => handleUpdateCost(data)}
+                className="mirror-meun-item"
+              >
+                <Typography className="dropTxt">Update</Typography>
+              </MenuItem>
 
               <MenuItem
-                onClick={() => { setItemToModify(params?.row); handleOpenUpdateModal(); handleClose() }}
-                className='mirror-meun-item'>
+                onClick={() => {
+                  setItemToModify(params?.row);
+                  handleOpenUpdateModal();
+                  handleClose();
+                }}
+                className="mirror-meun-item"
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -425,12 +414,19 @@ const WineGlassTypeComponent = () => {
                     width: "100%",
                   }}
                 >
-                  <Typography className='dropTxt'>Edit</Typography>
-                  <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+                  <Typography className="dropTxt">Edit</Typography>
+                  <EditOutlinedIcon
+                    sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
               {thicknessOptions.map((data) => (
-                <MenuItem key={data.id} className='mirror-meun-item' onClick={() => handleStatusChange(params.row, data.id)}>
+                <MenuItem
+                disabled={editGlassTypeLoading}
+                  key={data.id}
+                  className="mirror-meun-item"
+                  onClick={() => handleStatusChange(params.row, data.id)}
+                >
                   <Box
                     sx={{
                       display: "flex",
@@ -438,24 +434,35 @@ const WineGlassTypeComponent = () => {
                       width: "100%",
                     }}
                   >
-                    <Typography className='dropTxt'>{data.name}</Typography>
+                    <Typography className="dropTxt">{data.name}</Typography>
                     <CustomSmallSwtich
-                      inputProps={{ 'aria-label': 'ant design' }}
-                      checked={rowStatus[params.row._id]?.[data.id] !== undefined
-                        ? rowStatus[params.row._id][data.id]
-                        : params.row?.options.some(option => option.thickness === data.id && option.status)
+                      inputProps={{ "aria-label": "ant design" }}
+                      checked={
+                        rowStatus[params.row._id]?.[data.id] !== undefined
+                          ? rowStatus[params.row._id][data.id]
+                          : params.row?.options.some(
+                              (option) =>
+                                option.thickness === data.id && option.status
+                            )
                       }
-                    //  onChange={() => handleStatusChange(params.row, data.id)} 
                     />
                   </Box>
                 </MenuItem>
               ))}
 
-              <MenuItem onClick={() => { setItemToModify(params?.row); handleOpenDeleteModal(); handleClose() }} sx={{
-                p: '12px', ':hover': {
-                  background: '#EDEBFA'
-                }
-              }}>
+              <MenuItem
+                onClick={() => {
+                  setItemToModify(params?.row);
+                  handleOpenDeleteModal();
+                  handleClose();
+                }}
+                sx={{
+                  p: "12px",
+                  ":hover": {
+                    background: "#EDEBFA",
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -463,17 +470,18 @@ const WineGlassTypeComponent = () => {
                     width: "100%",
                   }}
                 >
-                  <Typography className='dropTxt'>Delete</Typography>
-                  <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                  <Typography className="dropTxt">Delete</Typography>
+                  <DeleteOutlineOutlinedIcon
+                    sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
             </Menu>
-
           </>
         );
       },
     },
-  ]
+  ];
   const columns = WineMirrorsGlassType().concat(actionColumn);
   return (
     <>
@@ -490,16 +498,16 @@ const WineGlassTypeComponent = () => {
           }}
         >
           <Typography
-            className='headingTxt'
+            className="headingTxt"
             sx={{
               color: "#5D6164",
-              display: 'flex',
-              alignSelf: 'center'
+              display: "flex",
+              alignSelf: "center",
             }}
           >
             Wine Cellar &nbsp;
             <Box
-              className='headingTxt'
+              className="headingTxt"
               sx={{
                 color: "#000000",
               }}
@@ -515,27 +523,28 @@ const WineGlassTypeComponent = () => {
               color: "#FFFFFF",
               fontWeight: 600,
               fontSize: 16,
-              letterSpacing: '0px',
-              ':hover': {
+              letterSpacing: "0px",
+              ":hover": {
                 background: "#8477DA",
-              }
+              },
             }}
           >
             Add New
           </Button>
         </Box>
 
-        <Box sx={{
-          border: "1px solid #D0D5DD",
-          borderRadius: "8px",
-          overflow: "hidden",
-          width: "99.88%",
-          m: "auto",
-          mt: 1.5,
-          background: '#FFFF'
-        }}>
-
-          {false ? (
+        <Box
+          sx={{
+            border: "1px solid #D0D5DD",
+            borderRadius: "8px",
+            overflow: "hidden",
+            width: "99.88%",
+            m: "auto",
+            mt: 1.5,
+            background: "#FFFF",
+          }}
+        >
+          {isLoading ? (
             <Box
               sx={{
                 width: 40,
@@ -549,54 +558,67 @@ const WineGlassTypeComponent = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          ) :
-            // glassTypesList?.length === 0 && !fetchingGlassTypesList ? (
-            //   <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-            //     No Glass Type Found
-            //   </Typography>
-            // ) :
-            (<Box>
+          ) : wineGlassTypesList?.length === 0 && !fetchingGlassTypesList ? (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No Glass Type Found
+            </Typography>
+          ) : (
+            <Box>
               <DataGrid
-                loading={false}
+                loading={fetchingGlassTypesList}
                 style={{
                   border: "none",
                 }}
                 getRowId={(row) => row._id}
-                rows={WineFinishesData}
+                rows={wineGlassTypesList}
                 columns={columns}
                 rowHeight={70.75}
                 sx={{
-                  width: "100%", '.MuiDataGrid-virtualScroller': {
+                  width: "100%",
+                  ".MuiDataGrid-virtualScroller": {
                     overflow: "hidden !important",
-                  }
+                  },
                 }}
                 hideFooter
                 disableColumnMenu
               />
             </Box>
-            )}
+          )}
         </Box>
         <DeleteModal
           open={deleteModalOpen}
-          close={() => { setDeleteModalOpen(false) }}
-          isLoading={false}
+          close={() => {
+            setDeleteModalOpen(false);
+          }}
+          isLoading={deleteGlassTypeLoading}
           handleDelete={handleHardwareDelete}
           text={"Glass Type"}
         />
         <HardwareEditModal
           open={updateModalOpen}
-          close={() => { setUpdateModalOpen(false) }}
+          close={() => {
+            setUpdateModalOpen(false);
+          }}
           data={itemToModify}
-          isLoading={false}
+          isLoading={editGlassTypeLoading}
           handleEdit={handleUpdateItem}
-          hardwareType={'Glass Type'}
+          hardwareType={"Glass Type"}
         />
         <HardwareCreateModal
           open={createModalOpen}
-          close={() => { setCreateModalOpen(false) }}
-          isLoading={false}
+          close={() => {
+            setCreateModalOpen(false);
+          }}
+          isLoading={createWineGlassTypeLoading}
           handleCreate={handleCreateItem}
-          hardwareType={'Glass Type'}
+          hardwareType={"Glass Type"}
         />
       </Box>
     </>
@@ -604,4 +626,3 @@ const WineGlassTypeComponent = () => {
 };
 
 export default WineGlassTypeComponent;
-

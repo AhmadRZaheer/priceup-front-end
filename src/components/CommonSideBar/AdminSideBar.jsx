@@ -169,7 +169,7 @@ const AdminSideBar = () => {
       [
         "/wine-cellar/glass-types",
         "/wine-cellar/finishes",
-        "/wine-cellar/hardware",
+        "/wine-cellar/hardwares",
         "/wine-cellar/layouts",
       ].includes(location.pathname)
     ) {
@@ -665,7 +665,7 @@ const AdminSideBar = () => {
               <AccordionDetails style={{ padding: "0px 0px" }}>
                 <div className="center">
                   <ul>
-                    <InnerMenuItem link="/wine-cellar/hardware">
+                    <InnerMenuItem link="/wine-cellar/hardwares">
                       <span>Hardware</span>
                     </InnerMenuItem>
                     <InnerMenuItem link="/wine-cellar/finishes">

@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControlLabel,
   Switch,
   Tab,
@@ -32,7 +33,7 @@ const CampanySetting = () => {
   const dispatch = useDispatch();
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
-  const { mutate: editSetting, isSuccess: SuccessForEdit } = useEditSetting();
+  const { mutate: editSetting,  isLoading: editLoading,isSuccess: SuccessForEdit } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
@@ -63,7 +64,7 @@ const CampanySetting = () => {
         .max(39, "Door width cannot exceed 39"),
       // add validation for other nested fields if necessary
     }),
-    wineCaller: Yup.object().shape({
+    wineCellars: Yup.object().shape({
       doorWidth: Yup.number()
         .required("Max door width is required")
         .min(1, "Door width must be at least 1")
@@ -101,10 +102,10 @@ const CampanySetting = () => {
           hingeCutoutThreeByEightInch:
             settingData?.showers?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch,
-          minterOneByTwoInch:
-            settingData?.showers?.fabricatingPricing?.minterOneByTwoInch,
-          minterThreeByEightInch:
-            settingData?.showers?.fabricatingPricing?.minterThreeByEightInch,
+              miterOneByTwoInch:
+            settingData?.showers?.fabricatingPricing?.miterOneByTwoInch,
+            miterThreeByEightInch:
+            settingData?.showers?.fabricatingPricing?.miterThreeByEightInch,
           notchOneByTwoInch:
             settingData?.showers?.fabricatingPricing?.notchOneByTwoInch,
           notchThreeByEightInch:
@@ -148,30 +149,30 @@ const CampanySetting = () => {
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
       },
       // Wine Caller
-      wineCaller: {
-        doorWidth: settingData?.wineCaller?.doorWidth || 0,
+      wineCellars: {
+        doorWidth: settingData?.wineCellars?.doorWidth || 0,
         miscPricing: {
-          pricingFactor: settingData?.wineCaller?.miscPricing?.pricingFactor || 0,
-          hourlyRate: settingData?.wineCaller?.miscPricing?.hourlyRate || 0,
+          pricingFactor: settingData?.wineCellars?.miscPricing?.pricingFactor || 0,
+          hourlyRate: settingData?.wineCellars?.miscPricing?.hourlyRate || 0,
           pricingFactorStatus:
-            settingData?.wineCaller?.miscPricing?.pricingFactorStatus,
+            settingData?.wineCellars?.miscPricing?.pricingFactorStatus,
         },
         fabricatingPricing: {
           oneHoleOneByTwoInchGlass:
-            settingData?.wineCaller?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
+            settingData?.wineCellars?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
           oneHoleThreeByEightInchGlass:
-            settingData?.wineCaller?.fabricatingPricing
+            settingData?.wineCellars?.fabricatingPricing
               ?.oneHoleThreeByEightInchGlass || 0,
           hingeCutoutOneByTwoInch:
-            settingData?.wineCaller?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
+            settingData?.wineCellars?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
           hingeCutoutThreeByEightInch:
-            settingData?.wineCaller?.fabricatingPricing
+            settingData?.wineCellars?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch || 0,
           polishPricePerOneByTwoInch:
-            settingData?.wineCaller?.fabricatingPricing
+            settingData?.wineCellars?.fabricatingPricing
               ?.polishPricePerOneByTwoInch || 0,
           polishPricePerThreeByEightInch:
-            settingData?.wineCaller?.fabricatingPricing
+            settingData?.wineCellars?.fabricatingPricing
               ?.polishPricePerThreeByEightInch || 0,
         },
       },
@@ -180,7 +181,7 @@ const CampanySetting = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values, "editedData");
-      // handleEditSetting(values);
+      handleEditSetting(values);
     },
   });
 
@@ -222,6 +223,7 @@ const CampanySetting = () => {
           <Typography variant="h4">Setting</Typography>
           <Box sx={{ width: "200px" }}>
             <Button
+             disabled={editLoading}
               sx={{
                 backgroundColor: "#8477DA",
                 boxShadow: 0,
@@ -231,7 +233,11 @@ const CampanySetting = () => {
               variant="contained"
               onClick={formik.handleSubmit}
             >
-              Update
+            {editLoading ? (
+                <CircularProgress size={20} sx={{ color: "#8477DA" }} />
+              ) : (
+                "Update"
+              )}
             </Button>
           </Box>
         </Box>
@@ -543,7 +549,7 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="miscPricing.hourlyRate"
+                  name="showers.miscPricing.hourlyRate"
                   size="small"
                   value={formik.values?.showers?.miscPricing?.hourlyRate}
                   onChange={formik.handleChange}
@@ -727,7 +733,7 @@ const CampanySetting = () => {
 
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="showers.fabricatingPricing.minterOneByTwoInch"
+                  name="showers.fabricatingPricing.miterOneByTwoInch"
                   size="small"
                   type="number"
                   inputProps={{
@@ -735,7 +741,7 @@ const CampanySetting = () => {
                   }}
                   value={
                     formik.values?.showers?.fabricatingPricing
-                      ?.minterOneByTwoInch
+                      ?.miterOneByTwoInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -752,7 +758,7 @@ const CampanySetting = () => {
 
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="showers.fabricatingPricing.minterThreeByEightInch"
+                  name="showers.fabricatingPricing.miterThreeByEightInch"
                   size="small"
                   type="number"
                   inputProps={{
@@ -760,7 +766,7 @@ const CampanySetting = () => {
                   }}
                   value={
                     formik.values?.showers?.fabricatingPricing
-                      ?.minterThreeByEightInch
+                      ?.miterThreeByEightInch
                   }
                   onChange={formik.handleChange}
                 />
@@ -1435,19 +1441,19 @@ const CampanySetting = () => {
                 </p>
                 <CustomInputField
                   type="number"
-                  name="wineCaller.doorWidth"
+                  name="wineCellars.doorWidth"
                   size="small"
-                  value={formik.values?.wineCaller?.doorWidth}
+                  value={formik.values?.wineCellars?.doorWidth}
                   onChange={formik.handleChange}
                   inputProps={{ min: 1, max: 39, style: { width: "200px" } }}
                   onBlur={formik.handleBlur}
                   error={
-                    formik.touched?.wineCaller?.doorWidth &&
-                    Boolean(formik.errors?.wineCaller?.doorWidth)
+                    formik.touched?.wineCellars?.doorWidth &&
+                    Boolean(formik.errors?.wineCellars?.doorWidth)
                   }
                   helperText={
-                    formik.touched?.wineCaller?.doorWidth &&
-                    formik.errors?.wineCaller?.doorWidth
+                    formik.touched?.wineCellars?.doorWidth &&
+                    formik.errors?.wineCellars?.doorWidth
                   }
                 />
               </Box>
@@ -1476,17 +1482,17 @@ const CampanySetting = () => {
                 <p className="explain">Factor to multiply price </p>
                 <CustomInputField
                   type="number"
-                  name="wineCaller.miscPricing.pricingFactor"
+                  name="wineCellars.miscPricing.pricingFactor"
                   size="small"
-                  value={formik.values?.wineCaller?.miscPricing?.pricingFactor}
+                  value={formik.values?.wineCellars?.miscPricing?.pricingFactor}
                   onChange={formik.handleChange}
                 />
 
                 <Box sx={{ ml: 2 }}>
                   <CustomToggle
-                    name="wineCaller.miscPricing.pricingFactorStatus"
+                    name="wineCellars.miscPricing.pricingFactorStatus"
                     checked={
-                      formik.values?.wineCaller?.miscPricing
+                      formik.values?.wineCellars?.miscPricing
                         ?.pricingFactorStatus || false
                     }
                     onChange={formik.handleChange}
@@ -1512,9 +1518,9 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="wineCaller.miscPricing.hourlyRate"
+                  name="wineCellars.miscPricing.hourlyRate"
                   size="small"
-                  value={formik.values?.wineCaller?.miscPricing?.hourlyRate}
+                  value={formik.values?.wineCellars?.miscPricing?.hourlyRate}
                   onChange={formik.handleChange}
                 />
                 <FormControlLabel
@@ -1552,10 +1558,10 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="wineCaller.fabricatingPricing.oneHoleOneByTwoInchGlass"
+                  name="wineCellars.fabricatingPricing.oneHoleOneByTwoInchGlass"
                   size="small"
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.oneHoleOneByTwoInchGlass
                   }
                   onChange={formik.handleChange}
@@ -1576,10 +1582,10 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="wineCaller.fabricatingPricing.oneHoleThreeByEightInchGlass"
+                  name="wineCellars.fabricatingPricing.oneHoleThreeByEightInchGlass"
                   size="small"
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.oneHoleThreeByEightInchGlass
                   }
                   onChange={formik.handleChange}
@@ -1602,9 +1608,9 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="wineCaller.fabricatingPricing.hingeCutoutOneByTwoInch"
+                  name="wineCellars.fabricatingPricing.hingeCutoutOneByTwoInch"
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.hingeCutoutOneByTwoInch
                   }
                   onChange={formik.handleChange}
@@ -1626,9 +1632,9 @@ const CampanySetting = () => {
                   inputProps={{
                     min: 0,
                   }}
-                  name="wineCaller.fabricatingPricing.hingeCutoutThreeByEightInch"
+                  name="wineCellars.fabricatingPricing.hingeCutoutThreeByEightInch"
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.hingeCutoutThreeByEightInch
                   }
                   onChange={formik.handleChange}
@@ -1645,14 +1651,14 @@ const CampanySetting = () => {
               <Typography>Polish Price per Inch (1/2in)</Typography>
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="wineCaller.fabricatingPricing.polishPricePerOneByTwoInch"
+                  name="wineCellars.fabricatingPricing.polishPricePerOneByTwoInch"
                   size="small"
                   type="number"
                   inputProps={{
                     min: 0,
                   }}
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.polishPricePerOneByTwoInch
                   }
                   onChange={formik.handleChange}
@@ -1670,14 +1676,14 @@ const CampanySetting = () => {
 
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
-                  name="wineCaller.fabricatingPricing.polishPricePerThreeByEightInch"
+                  name="wineCellars.fabricatingPricing.polishPricePerThreeByEightInch"
                   size="small"
                   type="number"
                   inputProps={{
                     min: 0,
                   }}
                   value={
-                    formik.values?.wineCaller?.fabricatingPricing
+                    formik.values?.wineCellars?.fabricatingPricing
                       ?.polishPricePerThreeByEightInch
                   }
                   onChange={formik.handleChange}

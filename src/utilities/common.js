@@ -173,7 +173,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       Number(selectedContent?.outages) *
         estimatesData?.fabricatingPricing?.outageOneByTwoInch +
       Number(selectedContent?.mitre) *
-        estimatesData?.fabricatingPricing?.minterOneByTwoInch +
+        estimatesData?.fabricatingPricing?.miterOneByTwoInch +
       Number(selectedContent?.polish) *
         estimatesData?.fabricatingPricing?.polishPricePerOneByTwoInch;
   } else if (selectedContent.glassType.thickness === "3/8") {
@@ -189,7 +189,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       Number(selectedContent?.outages) *
         estimatesData?.fabricatingPricing?.outageThreeByEightInch +
       Number(selectedContent?.mitre) *
-        estimatesData?.fabricatingPricing?.minterThreeByEightInch +
+        estimatesData?.fabricatingPricing?.miterThreeByEightInch +
       Number(selectedContent?.polish) *
         estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch;
   }
