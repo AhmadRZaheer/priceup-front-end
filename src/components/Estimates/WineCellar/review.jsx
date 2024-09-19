@@ -27,31 +27,33 @@ import HardwareMissingAlert from "@/components/Modal/hardwareMissingAlert";
 import EnterLabelModal from "../enterLabelModal";
 import { Add } from "@mui/icons-material";
 import {
-  getisCustomWineDoorWidth,
-  getWineAdditionalFields,
-  getWineContent,
-  getWineDoorWidth,
-  getWineLayoutArea,
-  getWineLayoutPerimeter,
-  getWineListData,
-  getWineMeasurements,
-  getWineProjectId,
-  getWineQuoteId,
-  getWineQuoteState,
-  getWineTotal,
-  selectedWineItem,
-  setWineAdditionalFieldsPrice,
-  setWineContent,
-  setWineCost,
-  setWineFabricationPrice,  
-  setWineGlassPrice,  
-  setWineHardwarePrice,
-  setWineInputContent,
-  setWineLaborPrice,
-  setWineProfit,
-  setWineTotal,
-} from "@/redux/wineCellarSlice";
-import WineChannelTypeDesktop from "./WineChannelorClamp";
+  getisCustomDoorWidth,
+  getAdditionalFields,
+  getContent,
+  getDoorWidth,
+  getLayoutArea,
+  getLayoutPerimeter,
+  // getWineListData,
+  getMeasurements,
+  // getWineProjectId,
+  getQuoteId,
+  // getWineQuoteState,
+  getTotal,
+  selectedItem,
+  setAdditionalFieldsPrice,
+  setContent,
+  setCost,
+  setFabricationPrice,  
+  setGlassPrice,  
+  setHardwarePrice,
+  setInputContent,
+  setLaborPrice,
+  setProfit,
+  setTotal,
+} from "@/redux/wineCellarEstimateSlice";
+import ChannelOrClamp from "./channelorClamp";
+import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 export const generateEstimatePayload = (
   estimateState,
@@ -119,7 +121,7 @@ export const generateEstimatePayload = (
   return estimateConfig;
 };
 
-export const WineCallerReview = ({ setStep }) => {
+const Review = ({ setStep }) => {
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -131,19 +133,19 @@ export const WineCallerReview = ({ setStep }) => {
   const [hardwareMissingAlert, setHardwareMissingAlert] = useState(false);
   const [estimateConfig, setEstimateConfig] = useState(null);
   const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-  const listData = useSelector(getWineListData);
-  const estimatesTotal = useSelector(getWineTotal);
-  const projectId = useSelector(getWineProjectId);
-  const measurements = useSelector(getWineMeasurements);
-  const perimeter = useSelector(getWineLayoutPerimeter);
-  const doorWidthredux = useSelector(getWineDoorWidth);
-  const quoteId = useSelector(getWineQuoteId);
-  const sqftArea = useSelector(getWineLayoutArea);
-  const currentQuoteState = useSelector(getWineQuoteState);
-  const selectedContent = useSelector(getWineContent);
-  const selectedData = useSelector(selectedWineItem);
-  const addedFields = useSelector(getWineAdditionalFields);
-  const isCustomizedDoorWidth = useSelector(getisCustomWineDoorWidth);
+  const listData = useSelector(getWineCellarsHardware);
+  const estimatesTotal = useSelector(getTotal);
+  const projectId = useSelector(getProjectId);
+  const measurements = useSelector(getMeasurements);
+  const perimeter = useSelector(getLayoutPerimeter);
+  const doorWidthredux = useSelector(getDoorWidth);
+  const quoteId = useSelector(getQuoteId);
+  const sqftArea = useSelector(getLayoutArea);
+  const currentQuoteState = useSelector(getEstimateState);
+  const selectedContent = useSelector(getContent);
+  const selectedData = useSelector(selectedItem);
+  const addedFields = useSelector(getAdditionalFields);
+  const isCustomizedDoorWidth = useSelector(getisCustomDoorWidth);
   console.log(listData, "listDatalistData");
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -190,7 +192,7 @@ export const WineCallerReview = ({ setStep }) => {
       },
     ];
     dispatch(
-      setWineContent({
+      setContent({
         type: "additionalFields",
         item: newData,
       })
@@ -238,14 +240,14 @@ export const WineCallerReview = ({ setStep }) => {
       wineCellarLocationSettings,
       currentQuoteState
     );
-    dispatch(setWineHardwarePrice(prices.hardwarePrice));
-    dispatch(setWineGlassPrice(prices.glassPrice));
-    dispatch(setWineFabricationPrice(prices.fabricationPrice));
-    dispatch(setWineLaborPrice(prices.laborPrice));
-    dispatch(setWineAdditionalFieldsPrice(prices.additionalFieldPrice));
-    dispatch(setWineTotal(prices.total));
-    dispatch(setWineCost(prices.cost));
-    dispatch(setWineProfit(prices.profit));
+    dispatch(setHardwarePrice(prices.hardwarePrice));
+    dispatch(setGlassPrice(prices.glassPrice));
+    dispatch(setFabricationPrice(prices.fabricationPrice));
+    dispatch(setLaborPrice(prices.laborPrice));
+    dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
+    dispatch(setTotal(prices.total));
+    dispatch(setCost(prices.cost));
+    dispatch(setProfit(prices.profit));
   }, [selectedContent]);
 
   useEffect(() => {
@@ -266,7 +268,7 @@ export const WineCallerReview = ({ setStep }) => {
   };
 
   const handleAdditionalFieldModify = (fields) => {
-    dispatch(setWineContent({ type: "additionalFields", item: fields }));
+    dispatch(setContent({ type: "additionalFields", item: fields }));
   };
 
   useEffect(() => {
@@ -462,7 +464,7 @@ export const WineCallerReview = ({ setStep }) => {
                         py: "6px",
                       }}
                     >
-                      <WineChannelTypeDesktop
+                      <ChannelOrClamp
                         menuOptions={'Channel'}
                         title={"Channel"}
                         type={"mounting"}
@@ -544,7 +546,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.oneInchHoles}
                         onChange={(event) =>
                           dispatch(
-                            setWineInputContent({
+                            setInputContent({
                               type: "oneInchHoles",
                               value: event.target.value,
                             })
@@ -604,7 +606,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.hingeCut}
                         onChange={(event) =>
                           dispatch(
-                            setWineInputContent({
+                            setInputContent({
                               type: "hingeCut",
                               value: event.target.value,
                             })
@@ -665,7 +667,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.people}
                         onChange={(event) =>
                           dispatch(
-                            setWineInputContent({
+                            setInputContent({
                               type: "people",
                               value: event.target.value,
                             })
@@ -725,7 +727,7 @@ export const WineCallerReview = ({ setStep }) => {
                         value={selectedContent.hours}
                         onChange={(event) =>
                           dispatch(
-                            setWineInputContent({
+                            setInputContent({
                               type: "hours",
                               value: event.target.value,
                             })
@@ -906,3 +908,5 @@ export const WineCallerReview = ({ setStep }) => {
     </>
   );
 };
+
+export default Review;
