@@ -165,7 +165,7 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.SHOWERS ? "black" : "white",
-                  width: "214px",
+                  width: "213px",
                   height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.SHOWERS)}
@@ -194,7 +194,7 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.MIRRORS ? "black" : "white",
-                  width: "214px",
+                  width: "213px",
                   height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.MIRRORS)}
@@ -223,7 +223,7 @@ export default function ChooseEstimateCategoryModal({
                       : "#8477DA",
                   color:
                     category !== EstimateCategory.WINECELLARS ? "black" : "white",
-                  width: "214px",
+                  width: "213px",
                   height: "243px",
                 }}
                 onClick={() => handleBoxClick(EstimateCategory.WINECELLARS)}

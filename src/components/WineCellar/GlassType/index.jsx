@@ -65,6 +65,7 @@ const WineGlassTypeComponent = () => {
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
+  const [editGlassType, setEditGlassType] = useState(false);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -146,6 +147,7 @@ const WineGlassTypeComponent = () => {
     });
   };
   const handleStatusChange = (row, thickness) => {
+    setEditGlassType(true);
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: option.thickness === thickness ? !option.status : option.status,
@@ -172,12 +174,10 @@ const WineGlassTypeComponent = () => {
     refetchGlassTypesList();
     if (createWineGlassSuccess) {
       setCreateModalOpen(false);
-      // dispatch(setMirrorsHardwareRefetch());
       setRowCosts({});
     }
     if (deleteWineSuccess) {
       setDeleteModalOpen(false);
-      // dispatch(setMirrorsHardwareRefetch());
       setRowCosts({});
     }
   }, [createWineGlassSuccess, deleteWineSuccess]);
@@ -188,7 +188,9 @@ const WineGlassTypeComponent = () => {
         refetchGlassTypesList();
       }
       setUpdateModalOpen(false);
-      // dispatch(setMirrorsHardwareRefetch());
+      setTimeout(() => {
+        setEditGlassType(false);
+      }, 600);
     }
   }, [editSuccess]);
 
@@ -422,7 +424,7 @@ const WineGlassTypeComponent = () => {
               </MenuItem>
               {thicknessOptions.map((data) => (
                 <MenuItem
-                disabled={editGlassTypeLoading}
+                  disabled={editGlassType}
                   key={data.id}
                   className="mirror-meun-item"
                   onClick={() => handleStatusChange(params.row, data.id)}
