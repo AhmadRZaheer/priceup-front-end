@@ -28,7 +28,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 
 const MirrorsGlassTypeComponent = () => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch();  
     const routePrefix = `${backendURL}/mirrors/glassTypes`;
     const decodedToken = getDecryptedToken();
     const {

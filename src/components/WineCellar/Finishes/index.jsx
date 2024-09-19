@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { WineFinishesColumns } from "@/utilities/DataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
 import {
@@ -9,67 +9,26 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  
 } from "@mui/material";
-// import Pagination from "../Pagination";
-import { ArrowForward, DeleteOutlineOutlined, EditOutlined,  } from "@mui/icons-material";
+import {
+  ArrowForward,
+  DeleteOutlineOutlined,
+  EditOutlined,
+} from "@mui/icons-material";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
-
-const WineFinishesData = [
-  {
-      "_id": "660507a8a4983e276851dc2b",
-      "name": "Polished Nickel",
-      "slug": "polished-nickel",
-      "image": "images/finishes/polished_nickle.jpeg",
-      "partNumber": "1",
-      "holesNeeded": 1,
-      "cost": 0,
-      "status": false,
-      "company_id": "660507a8a4983e276851dc28"
-  },
-  {
-      "_id": "770507a9b5983e276851dc3c",
-      "name": "Brushed Bronze",
-      "slug": "brushed-bronze",
-      "image": "images/finishes/brushed_bronze.jpeg",
-      "partNumber": "2",
-      "holesNeeded": 2,
-      "cost": 5,
-      "status": true,
-      "company_id": "770507a9b5983e276851dc29"
-  },
-  {
-      "_id": "880507a0b6983e276851dc4d",
-      "name": "Satin Chrome",
-      "slug": "satin-chrome",
-      "image": "images/finishes/satin_chrome.jpeg",
-      "partNumber": "3",
-      "holesNeeded": 3,
-      "cost": 10,
-      "status": true,
-      "company_id": "880507a0b6983e276851dc2a"
-  },
-  {
-      "_id": "990507a1c7983e276851dc5e",
-      "name": "Antique Brass",
-      "slug": "antique-brass",
-      "image": "images/finishes/antique_brass.jpeg",
-      "partNumber": "4",
-      "holesNeeded": 4,
-      "cost": 15,
-      "status": false,
-      "company_id": "990507a1c7983e276851dc2b"
-  }
-]
+import {
+  useCreateDocument,
+  useDeleteDocument,
+  useEditDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
+import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
 
 const WineFinishComponent = () => {
-  // const {
-  //   mutate: deleteFinish,
-  //   isSuccess: deleteSuccess,
-  //   isLoading: loaderForDelete,
-  // } = useDeleteFinishes();
+  const apiUrl = `${backendURL}/wineCellars/finishes/`;
+  const decodedToken = getDecryptedToken();
   const [open, setOpen] = React.useState(false);
   const [updateModalOpen, setUpdateModalOpen] = useState(false);
   const [itemToModify, setItemToModify] = useState(null);
@@ -77,8 +36,34 @@ const WineFinishComponent = () => {
   const [deleteRecord, setDeleteRecord] = useState(null);
   // pagination state:
   const [page, setPage] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null); 
+  const [anchorEl, setAnchorEl] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
+
+  //Fetch All Documents
+  const {
+    data: WineFinishesData,
+    refetch: finishesWineRefetch,
+    isFetching,
+    isLoading,
+  } = useFetchAllDocuments(apiUrl);
+  // Create New Finish
+  const {
+    mutate: createWineFinish,
+    isLoading: createWineFinishLoading,
+    isSuccess: createWineFinishSuccess,
+  } = useCreateDocument();
+  //Edit Item
+  const {
+    mutate: editWineFinish,
+    isLoading: editWineFinishLoading,
+    isSuccess: editWineFinishSuccess,
+  } = useEditDocument();
+  //Delete Item
+  const {
+    mutate: deleteWineFinishType,
+    isLoading: deleteWineFinishTypeLoading,
+    isSuccess: deleteWineFinishSuccess,
+  } = useDeleteDocument();
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -93,12 +78,7 @@ const WineFinishComponent = () => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
   };
-  // useEffect(() => {
-  //   finishesRefetch();
-  // }, [refetchData, page]);
-  // useEffect(() => {
-  //   finishesRefetch();
-  // }, []);
+
   const handleOpen = () => {
     setOpen(true);
   };
@@ -110,55 +90,47 @@ const WineFinishComponent = () => {
   };
 
   const handleFinishDelete = () => {
-    // deleteFinish(deleteRecord);
-    console.log(deleteRecord);
-    setDeleteModalOpen(false);
+    deleteWineFinishType({ apiRoute: `${apiUrl}/${deleteRecord}` });
   };
-
-  // useEffect(() => {
-  //   if (deleteSuccess) {
-  //     finishesRefetch();
-  //   }
-  // }, [deleteSuccess]);
 
   const handleCreateItem = (props) => {
-    console.log(props)
-    setOpen(false)
-    // const slug = createSlug(props.name);
-    // const formData = new FormData();
-    // if (props.image) {
-    //     formData.append("image", props.image);
-    // }
-    // formData.append("name", props.name);
-    // formData.append("company_id", decodedToken?.company_id);
-    // formData.append("slug", slug);
-    // createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
-  }
-  const handleUpdateItem = (props) => {
-    console.log(props, 'item modified')
-    setOpen(false)
-    // const isFile = typeof props?.image === 'object';
-    // if (props?.options) {
-    //     editGlassType({ data: { options: props.options }, apiRoute: `${routePrefix}/${props.id}` });
-    //     setUpdateRefetch(true);
-    // } else {
-
-    //     const formData = new FormData();
-    //     if (props?.name) {
-    //         formData.append("name", props.name);
-    //     }
-    //     if (props?.image && isFile) {
-    //         formData.append("image", props.image);
-    //     }
-    //     if (props?.options) {
-    //         formData.append("options", props.options);
-    //     }
-    //     console.log(formData, 'form data')
-    //     editGlassType({ data: formData, apiRoute: `${routePrefix}/${props.id}` });
-    //     setUpdateRefetch(true);
-    // }
-    // localStorage.setItem("scrollToIndex", props.id);
+    const slug = createSlug(props.name);
+    const formData = new FormData();
+    if (props.image) {
+      formData.append("image", props.image);
+    }
+    formData.append("name", props.name);
+    formData.append("company_id", decodedToken?.company_id);
+    formData.append("slug", slug);
+    createWineFinish({ data: formData, apiRoute: `${apiUrl}/save` });
   };
+  const handleUpdateItem = (props) => {
+    const isFile = typeof props?.image === "object";
+    const formData = new FormData();
+    const slug = createSlug(props?.name);
+    if (props?.image && isFile) {
+      formData.append("image", props?.image);
+    }
+    formData.append("name", props?.name);
+    formData.append("slug", slug);
+    editWineFinish({
+      data: formData,
+      apiRoute: `${apiUrl}/${props.id}`,
+    });
+  };
+
+  useEffect(() => {
+    finishesWineRefetch();
+    if (createWineFinishSuccess) {
+      setOpen(false);
+    }
+    if (deleteWineFinishSuccess) {
+      setDeleteModalOpen(false);
+    }
+    if (editWineFinishSuccess) {
+      setUpdateModalOpen(false);
+    }
+  }, [createWineFinishSuccess, deleteWineFinishSuccess, editWineFinishSuccess]);
 
   const actionColumn = [
     {
@@ -166,9 +138,7 @@ const WineFinishComponent = () => {
       headerClassName: "showerHardwareHeader",
       flex: 0.5,
       headerName: "Actions",
-      renderHeader: (params) => (
-        params.colDef.headerName
-      ),
+      renderHeader: (params) => params.colDef.headerName,
 
       renderCell: (params) => {
         const id = params.row._id;
@@ -177,7 +147,10 @@ const WineFinishComponent = () => {
           <div className="cellAction">
             <IconButton
               aria-haspopup="true"
-              onClick={(event) => { handleClickAction(event, data); setItemToModify(data) }}
+              onClick={(event) => {
+                handleClickAction(event, data);
+                setItemToModify(data);
+              }}
             >
               <ArrowForward sx={{ color: "#8477DA" }} />
             </IconButton>
@@ -228,8 +201,9 @@ const WineFinishComponent = () => {
                 }}
               >
                 <p>Edit</p>
-                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
-
+                <EditOutlined
+                  sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                />
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -252,8 +226,9 @@ const WineFinishComponent = () => {
                 }}
               >
                 <p>Delete</p>
-                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
-
+                <DeleteOutlineOutlined
+                  sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                />
               </MenuItem>
             </Menu>
           </div>
@@ -313,7 +288,7 @@ const WineFinishComponent = () => {
           }}
         >
           <Box>
-            {false ? (
+            {isLoading ? (
               <Box
                 sx={{
                   display: "flex",
@@ -332,7 +307,7 @@ const WineFinishComponent = () => {
             ) : (
               <div className="hardwareTable">
                 <DataGrid
-                  loading={false}
+                  loading={isFetching}
                   style={{
                     border: "none",
                   }}
@@ -358,25 +333,26 @@ const WineFinishComponent = () => {
           close={() => {
             setDeleteModalOpen(false);
           }}
-          isLoading={false}
+          isLoading={deleteWineFinishTypeLoading}
           handleDelete={handleFinishDelete}
         />
         <HardwareCreateModal
           open={open}
           close={handleClose}
-          isLoading={false}
+          isLoading={createWineFinishLoading}
           handleCreate={handleCreateItem}
-          hardwareType={'Finish Type'}
+          hardwareType={"Finish Type"}
         />
         <HardwareEditModal
           open={updateModalOpen}
-          close={() => { setUpdateModalOpen(false) }}
+          close={() => {
+            setUpdateModalOpen(false);
+          }}
           data={itemToModify}
-          isLoading={false}
+          isLoading={editWineFinishLoading}
           handleEdit={handleUpdateItem}
-          hardwareType={'Finish Type'}
+          hardwareType={"Finish Type"}
         />
-
       </Box>
     </>
   );

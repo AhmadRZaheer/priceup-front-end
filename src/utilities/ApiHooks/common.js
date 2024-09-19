@@ -120,7 +120,7 @@ export const useDeleteDocument = () => {
 };
 //   ${routePrefix}/${props}
 
-export const useCreateDocument = () => {
+export const useCreateDocument = () => { 
   const dispatch = useDispatch();
   const handleCreate = async (props) => {
     const token = localStorage.getItem("token");
