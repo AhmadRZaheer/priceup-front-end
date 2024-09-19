@@ -5,11 +5,11 @@ import AlertIcon from "@/Assets/alert-circle.svg";
 import { useSelector } from "react-redux";
 import "./alertAnimation.scss";
 import { severityColor } from "@/utilities/constants";
-import { getWineNotifications } from "@/redux/wineCellarSlice";
+import { getNotifications } from "@/redux/wineCellarEstimateSlice";
 
-const WineAlertsAndWarnings = () => {
+const AlertsAndWarnings = () => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const notifications = useSelector(getWineNotifications);
+  const notifications = useSelector(getNotifications);
 
   const handleClickPopover = (event) => {
     setAnchorEl(event.currentTarget);
@@ -189,4 +189,4 @@ const WineAlertsAndWarnings = () => {
   );
 };
 
-export default WineAlertsAndWarnings;
+export default AlertsAndWarnings;

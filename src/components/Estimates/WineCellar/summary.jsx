@@ -17,48 +17,49 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import {
-  getWineAdditionalFieldsTotal,
-  getWineContent,
-  getWineCost,
-  getWineDoorWeight,
-  getWineDoorWidth,
-  getWineFabricationTotal,
-  getWineGlassAddonsTotal,
-  getWineGlassTotal,  
-  getWineHardwareTotal,
-  getWineLaborTotal,
-  getWineLayoutArea,
-  getWineMeasurements,
-  getWinePanelWeight,
-  getWineProfit,
-  getWineQuoteState,
-  getWineReturnWeight,
-  getWineTotal,
-  getWineUserProfitPercentage,
-  selectedWineItem,
-  setWineUserProfitPercentage,
-} from "@/redux/wineCellarSlice";
+  getAdditionalFieldsTotal,
+  getContent,
+  getCost,
+  getDoorWeight,
+  getDoorWidth,
+  getFabricationTotal,
+  // getWineGlassAddonsTotal,
+  getGlassTotal,  
+  getHardwareTotal,
+  getLaborTotal,
+  getLayoutArea,
+  getMeasurements,
+  getPanelWeight,
+  getProfit,
+  // getWineQuoteState,
+  getReturnWeight,
+  getTotal,
+  getUserProfitPercentage,
+  selectedItem,
+  setUserProfitPercentage,
+} from "@/redux/wineCellarEstimateSlice";
+import { getEstimateState } from "@/redux/estimateSlice";
 
-const WineCellarSummary = ({ setStep }) => {
+const Summary = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const hardwarePrice = useSelector(getWineHardwareTotal);
-  const glassPrice = useSelector(getWineGlassTotal);
-  const fabricationPrice = useSelector(getWineFabricationTotal);
-  const laborPrice = useSelector(getWineLaborTotal);
-  const additionalFieldsPrice = useSelector(getWineAdditionalFieldsTotal);
-  const userProfitPercentage = useSelector(getWineUserProfitPercentage);
-  const doorWidth = useSelector(getWineDoorWidth);
-  const doorWeight = useSelector(getWineDoorWeight);
-  const panelWeight = useSelector(getWinePanelWeight);
-  const returnWeight = useSelector(getWineReturnWeight);
-  const totalPrice = useSelector(getWineTotal);
-  const actualCost = useSelector(getWineCost);
-  const grossProfit = useSelector(getWineProfit);
-  const selectedContent = useSelector(getWineContent);
-  const measurements = useSelector(getWineMeasurements);
-  const selectedData = useSelector(selectedWineItem);
-  const quoteState = useSelector(getWineQuoteState);
-  const sqftArea = useSelector(getWineLayoutArea);
+  const hardwarePrice = useSelector(getHardwareTotal);
+  const glassPrice = useSelector(getGlassTotal);
+  const fabricationPrice = useSelector(getFabricationTotal);
+  const laborPrice = useSelector(getLaborTotal);
+  const additionalFieldsPrice = useSelector(getAdditionalFieldsTotal);
+  const userProfitPercentage = useSelector(getUserProfitPercentage);
+  const doorWidth = useSelector(getDoorWidth);
+  const doorWeight = useSelector(getDoorWeight);
+  const panelWeight = useSelector(getPanelWeight);
+  const returnWeight = useSelector(getReturnWeight);
+  const totalPrice = useSelector(getTotal);
+  const actualCost = useSelector(getCost);
+  const grossProfit = useSelector(getProfit);
+  const selectedContent = useSelector(getContent);
+  const measurements = useSelector(getMeasurements);
+  const selectedData = useSelector(selectedItem);
+  const quoteState = useSelector(getEstimateState);
+  const sqftArea = useSelector(getLayoutArea);
   const [anchorEl, setAnchorEl] = useState(null);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
@@ -99,11 +100,11 @@ const WineCellarSummary = ({ setStep }) => {
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
     if (Number(event.target.value) < 100) {
-      dispatch(setWineUserProfitPercentage(Number(event.target.value)));
+      dispatch(setUserProfitPercentage(Number(event.target.value)));
     }
   };
   const resetUserProfit = () => {
-    dispatch(setWineUserProfitPercentage(0));
+    dispatch(setUserProfitPercentage(0));
   };
   return (
     <>
@@ -878,4 +879,4 @@ const WineCellarSummary = ({ setStep }) => {
     </>
   );
 };
-export default WineCellarSummary;
+export default Summary;

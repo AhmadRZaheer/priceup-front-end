@@ -10,6 +10,7 @@ import {
   resetEstimateState,
   setEstimateCategory,
   setEstimateState,
+  setProjectId,
 } from "@/redux/estimateSlice";
 import bgCustom from "@/Assets/customlayoutimage.svg";
 import { EstimateCategory } from "@/utilities/constants";
@@ -21,7 +22,7 @@ import {
 } from "@/redux/mirrorsEstimateSlice";
 import DefaultIcon from "@/Assets/columns.svg";
 import { resetNotifications as resetNotificationsShower, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
-import { resetNotificationsWineCaller, resetWineCellarState, setWineCellarProjectId } from "@/redux/wineCellarSlice";
+import { resetNotifications as resetNotificationsWineCaller, resetWineCellarEstimateState, setWineCellarProjectId } from "@/redux/wineCellarEstimateSlice";
 
 const style = {
   position: "absolute",
@@ -69,9 +70,10 @@ export default function ChooseEstimateCategoryModal({
   const handleSubmit = () => {
     dispatch(resetEstimateState());
     dispatch(resetMirrorEstimateState());
+    dispatch(resetWineCellarEstimateState());
     dispatch(resetState());
-    dispatch(resetWineCellarState())
     dispatch(setEstimateState("create"));
+    dispatch(setProjectId(projectId));
 
     if (category === EstimateCategory.SHOWERS) {
       // showers
@@ -81,7 +83,7 @@ export default function ChooseEstimateCategoryModal({
       navigate("/estimates/layouts");
     } else if(category === EstimateCategory.WINECELLARS){
       dispatch(resetNotificationsWineCaller());
-      dispatch(setWineCellarProjectId(projectId));
+      // dispatch(setWineCellarProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.WINECELLARS));
       navigate("/estimates/layouts");
     }

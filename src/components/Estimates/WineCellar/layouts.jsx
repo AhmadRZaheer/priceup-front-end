@@ -10,252 +10,14 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { backendURL } from "@/utilities/common";
 import { useDispatch, useSelector } from "react-redux";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { CheckCircle, Close } from "@mui/icons-material";
 import icon from "@/Assets/search-icon.svg";
-import { addSelectedWineItem, getWineProjectId, resetNotificationsWineCaller, selectedWineItem, setisCustomWineDoorWidth, setWineDoorWidth, setWineQuoteState, updateWineMeasurements } from "@/redux/wineCellarSlice";
+import { setSelectedItem, resetNotifications, selectedItem, setisCustomDoorWidth, setDoorWidth, updateMeasurements } from "@/redux/wineCellarEstimateSlice";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { getProjectId, setEstimateState } from "@/redux/estimateSlice";
 
-const WineCellarLayouts = [
-  {
-    "settings": {
-      "handles": {
-        "handleType": "6602b5d0a4983e276850a4d8",
-        "count": 1
-      },
-      "hinges": {
-        "hingesType": "6602b5d0a4983e276850a518",
-        "count": 2
-      },
-      "pivotHingeOption": {
-        "pivotHingeType": "6602b5d0a4983e276850a4e8",
-        "count": 2
-      },
-      "heavyDutyOption": {
-        "heavyDutyType": "6602b5d0a4983e276850a510",
-        "threshold": 85,
-        "height": 100
-      },
-      "heavyPivotOption": {
-        "heavyPivotType": null,
-        "threshold": 0,
-        "height": 0
-      },
-      "wallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "sleeveOver": {
-        "sleeveOverType": null,
-        "count": 0
-      },
-      "glassToGlass": {
-        "glassToGlassType": null,
-        "count": 0
-      },
-      "cornerWallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "cornerSleeveOver": {
-        "sleeveOverType": null,
-        "count": 0
-      },
-      "cornerGlassToGlass": {
-        "glassToGlassType": "6602b5d0a4983e276850a538",
-        "count": 1
-      },
-      "glassType": {
-        "type": "6602b5d0a4983e276850a5c4",
-        "thickness": "3/8"
-      },
-      "slidingDoorSystem": {
-        "type": null,
-        "count": 0
-      },
-      "other": {
-        "people": 2,
-        "hours": 3
-      },
-      "hardwareFinishes": "6602b5d0a4983e276850a4af",
-      "channelOrClamps": "Channel",
-      "mountingChannel": "6602b5d1a4983e276850a6ea",
-      "outages": 3,
-      "glassAddon": "6602b5d0a4983e276850a5ca",
-      "measurementSides": 3,
-      "variant": "doorpanelandreturn",
-      "notch": 0,
-      "transom": null,
-      "header": null
-    },
-    "_id": "6602b5d1a4983e276850a724",
-    "name": "Door Panel & Return",
-    "image": "images/layouts/layout_6.png",
-    "company_id": "6602b5d0a4983e276850a4a7",
-    "createdAt": "2024-03-26T11:47:29.404Z",
-    "updatedAt": "2024-03-26T11:47:29.404Z",
-    "__v": 0
-  },
-  {
-    "settings": {
-      "handles": {
-        "handleType": "6602b5d0a4983e276850a4c8",
-        "count": 1
-      },
-      "hinges": {
-        "hingesType": "6602b5d0a4983e276850a518",
-        "count": 2
-      },
-      "pivotHingeOption": {
-        "pivotHingeType": "6602b5d0a4983e276850a508",
-        "count": 2
-      },
-      "heavyDutyOption": {
-        "heavyDutyType": "6602b5d0a4983e276850a510",
-        "threshold": 85,
-        "height": 100
-      },
-      "heavyPivotOption": {
-        "heavyPivotType": null,
-        "threshold": 0,
-        "height": 0
-      },
-      "wallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "sleeveOver": {
-        "sleeveOverType": null,
-        "count": 0
-      },
-      "glassToGlass": {
-        "glassToGlassType": null,
-        "count": 0
-      },
-      "cornerWallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "cornerSleeveOver": {
-        "sleeveOverType": null,
-        "count": 0
-      },
-      "cornerGlassToGlass": {
-        "glassToGlassType": null,
-        "count": 0
-      },
-      "glassType": {
-        "type": "6602b5d0a4983e276850a5c4",
-        "thickness": "3/8"
-      },
-      "slidingDoorSystem": {
-        "type": null,
-        "count": 0
-      },
-      "other": {
-        "people": 2,
-        "hours": 2
-      },
-      "hardwareFinishes": "6602b5d0a4983e276850a4af",
-      "outages": 2,
-      "transom": "6602b5d0a4983e276850a548",
-      "measurementSides": 2,
-      "variant": "door",
-      "channelOrClamps": "",
-      "mountingChannel": null,
-      "notch": 0,
-      "header": null,
-      "glassAddon": null
-    },
-    "_id": "6602b5d1a4983e276850a722",
-    "name": "Door",
-    "image": "images/layouts/layout_1.png",
-    "company_id": "6602b5d0a4983e276850a4a7",
-    "createdAt": "2024-03-26T11:47:29.398Z",
-    "updatedAt": "2024-03-26T11:47:29.398Z",
-    "__v": 0
-  },
-  {
-    "settings": {
-      "handles": {
-        "handleType": "6602b5d0a4983e276850a4d8",
-        "count": 1
-      },
-      "hinges": {
-        "hingesType": "6602b5d0a4983e276850a518",
-        "count": 2
-      },
-      "pivotHingeOption": {
-        "pivotHingeType": null,
-        "count": 0
-      },
-      "heavyDutyOption": {
-        "heavyDutyType": null,
-        "threshold": 0,
-        "height": 0
-      },
-      "heavyPivotOption": {
-        "heavyPivotType": null,
-        "threshold": 0,
-        "height": 0
-      },
-      "wallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "sleeveOver": {
-        "sleeveOverType": null,
-        "count": 0
-      },
-      "glassToGlass": {
-        "glassToGlassType": null,
-        "count": 0
-      },
-      "cornerWallClamp": {
-        "wallClampType": null,
-        "count": 0
-      },
-      "cornerSleeveOver": {
-        "sleeveOverType": "6602b5d0a4983e276850a538",
-        "count": 3
-      },
-      "cornerGlassToGlass": {
-        "glassToGlassType": "6602b5d0a4983e276850a538",
-        "count": 1
-      },
-      "glassType": {
-        "type": "6602b5d0a4983e276850a5c4",
-        "thickness": "3/8"
-      },
-      "slidingDoorSystem": {
-        "type": null,
-        "count": 0
-      },
-      "other": {
-        "people": 2,
-        "hours": 2
-      },
-      "hardwareFinishes": "6602b5d0a4983e276850a4af",
-      "channelOrClamps": "Clamps",
-      "mountingChannel": null,
-      "outages": 2,
-      "measurementSides": 5,
-      "variant": "doornotchedpanelandreturn",
-      "notch": 0,
-      "transom": null,
-      "header": null,
-      "glassAddon": null
-    },
-    "_id": "6602b5d1a4983e276850a719",
-    "name": "Door Notched Panel & Return",
-    "image": "images/layouts/layout_7.png",
-    "company_id": "6602b5d0a4983e276850a4a7",
-    "createdAt": "2024-03-26T11:47:29.393Z",
-    "updatedAt": "2024-07-03T16:45:55.274Z",
-    "__v": 0
-  },
-
-]
 
 export const WineCallerLayouts = () => {
   const boxStyles = {
@@ -275,39 +37,39 @@ export const WineCallerLayouts = () => {
     flexDirection: "column",
     cursor: "pointer",
   };
-
+  const { data: layouts, isFetched, refetch } = useFetchAllDocuments(`${backendURL}/wineCellars/layouts/for-estimate`);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const selectedData = useSelector(selectedWineItem);
-  const projectId = useSelector(getWineProjectId);
+  const selectedData = useSelector(selectedItem);
+  const projectId = useSelector(getProjectId);
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const [search, setSearch] = useState("");
 
   const filteredData = useMemo(() => {
-    if (WineCellarLayouts) {
-      const result = WineCellarLayouts.filter((item) =>
+    if (layouts) {
+      const result = layouts.filter((item) =>
         item.name.toLowerCase().includes(search?.toLowerCase() || "")
       );
       return result;
     }
     return [];
-  }, [WineCellarLayouts, search]);
+  }, [layouts, search]);
 
   const handleBoxClick = (layout) => {
-    dispatch(setisCustomWineDoorWidth(false));
-    dispatch(addSelectedWineItem(layout));
-    dispatch(setWineQuoteState("create"));
+    dispatch(setisCustomDoorWidth(false));
+    dispatch(setSelectedItem(layout));
+    dispatch(setEstimateState("create"));
   };
   const setStorePage = () => {
-    dispatch(resetNotificationsWineCaller());
-    dispatch(updateWineMeasurements([])); // reset measurement array on shifting layout
-    dispatch(setWineDoorWidth(0));
+    dispatch(resetNotifications());
+    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
+    dispatch(setDoorWidth(0));
     navigate("/estimates/dimensions");
   };
-  // useEffect(() => {
-  //   refetch();
-  // }, []);
+  useEffect(() => {
+    refetch();
+  }, []);
   return (
     <Box
       sx={{
@@ -425,7 +187,7 @@ export const WineCallerLayouts = () => {
           </Box>
         </Box>
         <Box sx={{ p: 2, background: "#F6F5FF" }}>
-          {false ? (
+          {!isFetched ? (
             <Box
               sx={{
                 width: 40,

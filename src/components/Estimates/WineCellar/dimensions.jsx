@@ -5,18 +5,19 @@ import { Box, useMediaQuery } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useState } from "react";
 import {
-  getWineProjectId,
-  getWineQuoteState,
-  selectedWineItem,
-} from "@/redux/wineCellarSlice";
-import { WineCellarLayoutDimension } from "./WineCellarLayoutDimension";
-import WineCellarSummary from "./WineCellarSummary";
-import { WineCallerReview } from "./WineCallerReview";
+  // getWineProjectId,
+  // getWineQuoteState,
+  selectedItem,
+} from "@/redux/wineCellarEstimateSlice";
+import Summary from "./summary";
+import Review from "./review";
+import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import { SimpleLayoutDimensions } from "./Dimensions/simpleLayoutDimensions";
 
 export const WineCellarDimensions = () => {
-  const activeQuoteState = useSelector(getWineQuoteState);
-  const item = useSelector(selectedWineItem);
-  const projectId = useSelector(getWineProjectId);
+  const activeQuoteState = useSelector(getEstimateState);
+  const item = useSelector(selectedItem);
+  const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
   console.log(step, "step");
@@ -112,21 +113,21 @@ export const WineCellarDimensions = () => {
               {activeQuoteState === quoteState.CREATE ||
               (activeQuoteState === quoteState.EDIT &&
                 item?.config?.layout_id) ? (
-                <WineCellarLayoutDimension />
+                <SimpleLayoutDimensions />
               ) : //  activeQuoteState === quoteState.CUSTOM ||
               //   (activeQuoteState === quoteState.EDIT &&
               //     !item?.config?.layout_id) ? (
               //   <CustomLayoutDimensions />
               // ) :
               null}
-              <WineCellarSummary />
+              <Summary />
             </Box>
             <Box
               sx={{
                 width: { lg: "40%", md: "50%" },
               }}
             >
-              <WineCallerReview />
+              <Review />
             </Box>
           </Box>
         ) : (
@@ -135,7 +136,7 @@ export const WineCellarDimensions = () => {
               (activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT &&
                   item?.config?.layout_id)) && (
-                <WineCellarLayoutDimension setStep={setStep} />
+                <SimpleLayoutDimensions setStep={setStep} />
               )}
             {/* {step === 0 &&
               (activeQuoteState === quoteState.CUSTOM ||
@@ -143,8 +144,8 @@ export const WineCellarDimensions = () => {
                   !item?.config?.layout_id)) && (
                 <CustomLayoutDimensions setStep={setStep} />
               )} */}
-            {step === 1 && <WineCallerReview setStep={setStep} />}
-            {step === 2 && <WineCellarSummary setStep={setStep} />}
+            {step === 1 && <Review setStep={setStep} />}
+            {step === 2 && <Summary setStep={setStep} />}
           </>
         )}
       </Box>

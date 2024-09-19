@@ -11,12 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { thicknessTypes } from "@/utilities/constants";
 import MenuItem from "./menuItem";
-import { getWineContent, getWineListData, setWineActiveMounting, setWineContent } from "@/redux/wineCellarSlice";
+import { getContent, setActiveMounting, setContent } from "@/redux/wineCellarEstimateSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
-const WineChannelTypeDesktop = ({ menuOptions, title, type }) => {
+const ChannelorClamp = ({ menuOptions, title, type }) => {
   const [anchorEl, setAnchorEl] = useState(false);
-  const selectedContent = useSelector(getWineContent);
-  const listData = useSelector(getWineListData);
+  const selectedContent = useSelector(getContent);
+  const listData = useSelector(getWineCellarsHardware);
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
     let active = 'u-channel-3-8';
@@ -37,17 +38,17 @@ const WineChannelTypeDesktop = ({ menuOptions, title, type }) => {
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
-      dispatch(setWineContent({ type: type, item: item }));
+      dispatch(setContent({ type: type, item: item }));
     } else {
       if (["channel"].includes(item.toLowerCase())) {
-        dispatch(setWineActiveMounting(item.toLowerCase()));
+        dispatch(setActiveMounting(item.toLowerCase()));
       } else {
         setCornerActive(!cornerActive);
       }
     }
   };
   const handleChannelSelect = (item) => {
-    dispatch(setWineContent({ type: "channel", item: item }));
+    dispatch(setContent({ type: "channel", item: item }));
   };
   const opneClose = () => {
     if (
@@ -198,4 +199,4 @@ const WineChannelTypeDesktop = ({ menuOptions, title, type }) => {
   );
 };
 
-export default WineChannelTypeDesktop;
+export default ChannelorClamp;
