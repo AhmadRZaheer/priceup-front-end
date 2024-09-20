@@ -217,9 +217,8 @@ const WineGlassTypeComponent = () => {
             name={`cost-${params.row._id}-3/8`}
             placeholder="Cost"
             value={
-              rowCosts[`${params.row._id}-3/8`] ||
-              params.row.options.find((o) => o.thickness === "3/8")?.cost ||
-              0
+              rowCosts[`${params.row._id}-3/8`] ??
+              (params.row.options.find((o) => o.thickness === "3/8")?.cost ?? 0)
             }
             onChange={(e) =>
               setRowCosts({
@@ -248,9 +247,8 @@ const WineGlassTypeComponent = () => {
             name={`cost-${params.row._id}-1/2`}
             placeholder="Cost"
             value={
-              rowCosts[`${params.row._id}-1/2`] ||
-              params.row.options.find((o) => o.thickness === "1/2")?.cost ||
-              0
+              rowCosts[`${params.row._id}-1/2`] ??
+              (params.row.options.find((o) => o.thickness === "1/2")?.cost ?? 0 ) 
             }
             onChange={(e) =>
               setRowCosts({

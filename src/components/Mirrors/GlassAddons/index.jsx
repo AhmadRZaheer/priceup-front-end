@@ -27,6 +27,7 @@ import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 const MirrorsGlassAddonComponent = () => {
   const dispatch = useDispatch();
   const routePrefix = `${backendURL}/mirrors/glassAddons`;
+  
   const decodedToken = getDecryptedToken();
   const {
     data: glassAddonsList,

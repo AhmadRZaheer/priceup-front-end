@@ -302,7 +302,7 @@ const WineFinishComponent = () => {
               </Box>
             ) : WineFinishesData.length === 0 ? (
               <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
-                No Finishes Found
+                No Finishe Found
               </Typography>
             ) : (
               <div className="hardwareTable">

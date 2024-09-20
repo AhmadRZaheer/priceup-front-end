@@ -8,7 +8,11 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { ArrowForward, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
+import {
+  ArrowForward,
+  DeleteOutlineOutlined,
+  EditOutlined,
+} from "@mui/icons-material";
 import {
   useDeleteGlassAddon,
   useEditFullGlassAddon,
@@ -33,7 +37,7 @@ const GlassAddonGrid = ({ type }) => {
     data: glassAddons,
     refetch: glassAddonRefetch,
     isFetching: glassAddonFetching,
-    isLoading
+    isLoading,
   } = useFetchGlassAddons(type);
   const {
     mutate: deleteGlassAddon,
@@ -51,6 +55,7 @@ const GlassAddonGrid = ({ type }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
   const [rowStatus, setRowStatus] = useState({});
+
   const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
@@ -96,7 +101,7 @@ const GlassAddonGrid = ({ type }) => {
     setRowStatus({
       ...rowStatus,
       [row._id]: !row.options[0].status,
-    })
+    });
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
@@ -111,11 +116,7 @@ const GlassAddonGrid = ({ type }) => {
       field: "cost",
       headerName: "Cost per square inch",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
       flex: 4,
 
@@ -123,13 +124,19 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <Box sx={{ width: "101px" }}>
             <CustomInputField
-              disabled={params.row.slug === 'no-treatment'}
-              inputProps={{ min: 0 }}
-              type={"number"}
+              disabled={params.row.slug === "no-treatment"}
+              size="small"
+              variant="outlined"
+              type="number"
+              inputProps={{
+                min: 0,
+              }}
+              name="cost"
+              placeholder="Cost"
               value={
-                (rowCosts[params.row._id] !== undefined
+                rowCosts[params.row._id] !== undefined
                   ? rowCosts[params.row._id]
-                  : params.row.options[0]?.cost) || 0
+                  : params.row.options[0]?.cost
               }
               onChange={(e) =>
                 setRowCosts({
@@ -146,27 +153,18 @@ const GlassAddonGrid = ({ type }) => {
       field: "status",
       headerName: "Status",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
       flex: 4,
 
       renderCell: (params) => {
-        return params.row.options[0]?.status || params.row.slug === 'no-treatment' ? (
-          <Typography
-            className="status-active"
-            sx={{ width: "fit-content" }}
-          >
+        return params.row.options[0]?.status ||
+          params.row.slug === "no-treatment" ? (
+          <Typography className="status-active" sx={{ width: "fit-content" }}>
             Active
           </Typography>
         ) : (
-          <Typography
-            className="status-inActive"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-inActive" sx={{ width: "fit-content" }}>
             Inactive
           </Typography>
         );
@@ -176,11 +174,7 @@ const GlassAddonGrid = ({ type }) => {
       field: "Actions",
       align: "left",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 2,
       renderCell: (params) => {
         // const id = params.row._id;
@@ -188,11 +182,15 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <>
             <IconButton
-              disabled={params.row.slug === 'no-treatment'}
+              disabled={params.row.slug === "no-treatment"}
               aria-haspopup="true"
               onClick={(event) => handleClickAction(event, data)}
             >
-              <ArrowForward sx={{ color: params.row.slug === 'no-treatment' ? '' : "#8477DA" }} />
+              <ArrowForward
+                sx={{
+                  color: params.row.slug === "no-treatment" ? "" : "#8477DA",
+                }}
+              />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -263,8 +261,9 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Edit</p>
-                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
-
+                <EditOutlined
+                  sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                />
               </MenuItem>
               <MenuItem
                 sx={{
@@ -286,9 +285,12 @@ const GlassAddonGrid = ({ type }) => {
                 <p>Change Status</p>
                 {/* <Box sx={{ width: "59px", height: "39px" }}> */}
                 <CustomSmallSwtich
-                  inputProps={{ 'aria-label': 'ant design' }}
-                  checked={rowStatus[params.row._id] !== undefined
-                    ? rowStatus[params.row._id] : data.options[0]?.status}
+                  inputProps={{ "aria-label": "ant design" }}
+                  checked={
+                    rowStatus[params.row._id] !== undefined
+                      ? rowStatus[params.row._id]
+                      : data.options[0]?.status
+                  }
                   // onChange={() => handleStatusChange(data)}
                   text={""}
                 />
@@ -317,7 +319,9 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Delete</p>
-                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                <DeleteOutlineOutlined
+                  sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                />
               </MenuItem>
             </Menu>
           </>

@@ -206,7 +206,7 @@ const MirrorsGlassTypeComponent = () => {
       setUpdateModalOpen(false);
       setTimeout(() => {
         setEditGlassTypeLoad(false);
-      }, 600);      
+      }, 600);
       dispatch(setMirrorsHardwareRefetch());
     }
   }, [editSuccess]);
@@ -234,9 +234,8 @@ const MirrorsGlassTypeComponent = () => {
             name={`cost-${params.row._id}-1/4`}
             placeholder="Cost"
             value={
-              rowCosts[`${params.row._id}-1/4`] ||
-              params.row.options.find((o) => o.thickness === "1/4")?.cost ||
-              0
+              rowCosts[`${params.row._id}-1/4`] ??
+              params.row.options.find((o) => o.thickness === "1/4")?.cost
             }
             onChange={(e) =>
               setRowCosts({
@@ -265,9 +264,8 @@ const MirrorsGlassTypeComponent = () => {
             name={`cost-${params.row._id}-1/8`}
             placeholder="Cost"
             value={
-              rowCosts[`${params.row._id}-1/8`] ||
-              params.row.options.find((o) => o.thickness === "1/8")?.cost ||
-              0
+              rowCosts[`${params.row._id}-1/8`] ??
+              params.row.options.find((o) => o.thickness === "1/8")?.cost
             }
             onChange={(e) =>
               setRowCosts({
