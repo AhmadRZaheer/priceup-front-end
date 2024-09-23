@@ -6,6 +6,7 @@ import { ErrorOutline } from "@mui/icons-material";
 import { EstimateCategory } from "@/utilities/constants";
 import MissingHardwaresErrorForShowerLayout from "@/components/Estimates/Showers/missingHardwareErrorMsgs";
 import MissingHardwaresErrorForMirrorLayout from "@/components/Estimates/Mirrors/missingHardwareErrorMsgs";
+import MissingHardwaresErrorForWineCellarLayout from "../Estimates/WineCellar/missingHardwareErrorMsgs";
 
 const style = {
   position: "absolute",
@@ -34,7 +35,7 @@ export default function HardwareMissingAlert({ open, handleClose, estimateCatego
           <Typography sx={{ fontWeight: "bold", fontSize: 22 }}> <ErrorOutline sx={{ fontSize: 22, mb: '-3px' }} /> Missing Hardware Alert</Typography>
           <Typography>Following are some errors in current selected hardware,
             Please try changing your hardware...</Typography>
-          {estimateCategory === EstimateCategory.SHOWERS ? <MissingHardwaresErrorForShowerLayout /> : estimateCategory === EstimateCategory.MIRRORS ? <MissingHardwaresErrorForMirrorLayout /> : ''}
+          {estimateCategory === EstimateCategory.SHOWERS ? <MissingHardwaresErrorForShowerLayout /> : estimateCategory === EstimateCategory.MIRRORS ? <MissingHardwaresErrorForMirrorLayout /> : <MissingHardwaresErrorForWineCellarLayout />}
           <Box
             sx={{
               display: "flex",

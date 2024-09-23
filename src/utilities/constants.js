@@ -12,6 +12,10 @@ export const layoutVariants = {
   SINGLEBARN: "singlebarn",
   DOUBLEBARN: "doublebarn",
   CUSTOM: "custom",
+  INLINE: "inline",
+  NINTYDEGREE: "90-degree",
+  THREESIDEDGLASS: "3-sided-glass",
+  GLASSCUBE: "glass-cube"
 };
 
 export const notificationTypes = {

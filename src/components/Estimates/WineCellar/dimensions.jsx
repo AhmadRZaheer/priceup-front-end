@@ -20,7 +20,7 @@ export const WineCellarDimensions = () => {
   const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
-  console.log(step, "step");
+
   return (
     <Box>
       <Box

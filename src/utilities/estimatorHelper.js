@@ -7,6 +7,8 @@ export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.HINGES:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
+    case hardwareTypes.DOORLOCK:
+      return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.SLIDINGDOORSYSTEM:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.HEADER:
@@ -47,6 +49,11 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
      }
    }
+   if (selectedContent.doorLock?.item) {
+    if(!getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK)){
+     return false;
+    }
+  }
    if (selectedContent.slidingDoorSystem?.item) {
     if(!getActiveStatus(selectedContent.slidingDoorSystem?.item,selectedContent.hardwareFinishes,hardwareTypes.SLIDINGDOORSYSTEM)){
       return false;
@@ -57,7 +64,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.hardwareAddons.length) {
+   if (selectedContent.hardwareAddons?.length) {
     let noSelectedDisableFound = true;
     selectedContent.hardwareAddons.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -74,7 +81,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.glassAddons.length) {
+   if (selectedContent.glassAddons?.length) {
     let noSelectedDisableFound = true;
     selectedContent.glassAddons.forEach(element => {
       if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -91,7 +98,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.wallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -103,7 +110,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.sleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -115,7 +122,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.glassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -127,7 +134,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerWallClamp.length) {
+   if (selectedContent.cornerClamps?.cornerWallClamp?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -139,7 +146,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerSleeveOver.length) {
+   if (selectedContent.cornerClamps?.cornerSleeveOver?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -151,7 +158,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerGlassToGlass.length) {
+   if (selectedContent.cornerClamps?.cornerGlassToGlass?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){
@@ -186,6 +193,18 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
           handle:{
             status:false,
             message:`"${selectedContent.handles.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`
+          }
+        }
+       } 
+    }
+    if (selectedContent.doorLock?.item) {
+      const status = getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK);
+       if(status === false){
+        errors = {
+          ...errors,
+          doorLock:{
+            status:false,
+            message:`"${selectedContent.doorLock.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`
           }
         }
        } 
@@ -226,7 +245,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.hardwareAddons.length){
+    if(selectedContent.hardwareAddons?.length){
       let selectedDisableNames = '';
     selectedContent.hardwareAddons.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -255,7 +274,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.glassAddons.length){
+    if(selectedContent.glassAddons?.length){
       let selectedDisableNames = '';
     selectedContent.glassAddons.forEach(element => {
       if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -284,7 +303,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.wallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -301,7 +320,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.sleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -318,7 +337,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.glassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -335,7 +354,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerWallClamp.length){
+    if(selectedContent.cornerClamps?.cornerWallClamp?.length){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -352,7 +371,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerSleeveOver.length){
+    if(selectedContent.cornerClamps?.cornerSleeveOver?.length){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -369,7 +388,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerGlassToGlass.length){
+    if(selectedContent.cornerClamps?.cornerGlassToGlass?.length){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){
@@ -420,6 +439,16 @@ export const generateNotificationsForCurrentEstimate = (
           status: true,
           variant: notificationsVariant.WARNING,
           message: `Handle "${selectedContent.handles.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
+        };
+    }
+    if (selectedContent.doorLock?.item) {
+      // generate handle not available notification in current finish
+      const status = getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK);
+      if (!status)
+        notifications.doorLockNotAvailable = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Door Lock "${selectedContent.doorLock.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
     }
      /** switch hinges if width increases layout defaults only for layouts which have variant */
@@ -523,7 +552,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.glassAddons.length){
+    if(selectedContent.glassAddons?.length){
       let glassAddonsNotAvailable = [];
       selectedContent.glassAddons.forEach(element => {
         if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -539,7 +568,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.hardwareAddons.length){
+    if(selectedContent.hardwareAddons?.length){
       let hardwareAddonsNotAvailable = [];
       selectedContent.hardwareAddons.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -566,7 +595,7 @@ export const generateNotificationsForCurrentEstimate = (
        } 
     }
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length){
       let wallClampNotAvailable = [];
       selectedContent.mountingClamps.wallClamp.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -582,7 +611,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length){
       let sleeveOverNotAvailable = [];
       selectedContent.mountingClamps.sleeveOver.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -598,7 +627,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length){
       let glassToGlassNotAvailable = [];
       selectedContent.mountingClamps.glassToGlass.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -614,7 +643,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerWallClamp.length){
+    if(selectedContent.cornerClamps?.cornerWallClamp?.length){
       let cornerWallClampNotAvailable = [];
       selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -630,7 +659,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerSleeveOver.length){
+    if(selectedContent.cornerClamps?.cornerSleeveOver?.length){
       let cornerSleeveOverNotAvailable = [];
       selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -646,7 +675,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerGlassToGlass.length){
+    if(selectedContent.cornerClamps?.cornerGlassToGlass?.length){
       let cornerGlassToGlassNotAvailable = [];
       selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){

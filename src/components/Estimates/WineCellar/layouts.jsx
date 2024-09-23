@@ -14,7 +14,7 @@ import { useEffect, useMemo, useState } from "react";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import { CheckCircle, Close } from "@mui/icons-material";
 import icon from "@/Assets/search-icon.svg";
-import { setSelectedItem, resetNotifications, selectedItem, setisCustomDoorWidth, setDoorWidth, updateMeasurements } from "@/redux/wineCellarEstimateSlice";
+import { setSelectedItem, resetNotifications, selectedItem, setisCustomizedDoorWidth, setDoorWidth, updateMeasurements } from "@/redux/wineCellarEstimateSlice";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { getProjectId, setEstimateState } from "@/redux/estimateSlice";
 
@@ -57,7 +57,7 @@ export const WineCallerLayouts = () => {
   }, [layouts, search]);
 
   const handleBoxClick = (layout) => {
-    dispatch(setisCustomDoorWidth(false));
+    dispatch(setisCustomizedDoorWidth(false));
     dispatch(setSelectedItem(layout));
     dispatch(setEstimateState("create"));
   };

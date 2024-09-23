@@ -1597,6 +1597,7 @@ export const ShowerReview = ({ setStep }) => {
         estimateCategory={"showers"}
         estimatesTotal={estimatesTotal}
         projectId={projectId}
+        selectedLayout={selectedData}
       />
     </>
   );

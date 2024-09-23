@@ -50,6 +50,7 @@ import {
   setLaborPrice,
   setProfit,
   setTotal,
+  getDoorQuantity,
 } from "@/redux/wineCellarEstimateSlice";
 import ChannelOrClamp from "./channelorClamp";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
@@ -62,6 +63,7 @@ export const generateEstimatePayload = (
   layout_id,
   isCustomizedDoorWidth,
   doorWidthredux,
+  doorQuantity,
   perimeter,
   sqftArea
 ) => {
@@ -88,6 +90,7 @@ export const generateEstimatePayload = (
   });
   const estimateConfig = {
     doorWidth: Number(doorWidthredux),
+    doorQuantity: Number(doorQuantity),
     isCustomizedDoorWidth: isCustomizedDoorWidth,
     additionalFields: [...additionalFieldsArray],
     hardwareFinishes: selectedContent?.hardwareFinishes?._id,
@@ -96,8 +99,8 @@ export const generateEstimatePayload = (
       count: selectedContent?.handles?.count,
     },
     doorLock: {
-      type: selectedContent?.type?.item?._id,
-      count: selectedContent?.type?.count,
+      type: selectedContent?.doorLock?.item?._id,
+      count: selectedContent?.doorLock?.count,
     },
     hinges: {
       type: selectedContent?.hinges?.item?._id,
@@ -113,7 +116,7 @@ export const generateEstimatePayload = (
     people: selectedContent?.people,
     hours: selectedContent?.hours,
     userProfitPercentage: selectedContent?.userProfitPercentage,
-    towelBarsCount: selectedContent?.sleeveOverCount,
+    // towelBarsCount: selectedContent?.sleeveOverCount,
     measurements: measurementsArray,
     perimeter: perimeter,
     sqftArea: sqftArea,
@@ -139,6 +142,7 @@ const Review = ({ setStep }) => {
   const measurements = useSelector(getMeasurements);
   const perimeter = useSelector(getLayoutPerimeter);
   const doorWidthredux = useSelector(getDoorWidth);
+  const doorQuantity = useSelector(getDoorQuantity);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
   const currentQuoteState = useSelector(getEstimateState);
@@ -146,7 +150,7 @@ const Review = ({ setStep }) => {
   const selectedData = useSelector(selectedItem);
   const addedFields = useSelector(getAdditionalFields);
   const isCustomizedDoorWidth = useSelector(getisCustomDoorWidth);
-  console.log(listData, "listDatalistData");
+
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
   }, [currentQuoteState]);
@@ -171,6 +175,7 @@ const Review = ({ setStep }) => {
       selectedData?.config?.layout_id,
       isCustomizedDoorWidth,
       doorWidthredux,
+      doorQuantity,
       perimeter,
       sqftArea
     );
@@ -219,6 +224,7 @@ const Review = ({ setStep }) => {
           selectedData?.config?.layout_id,
           isCustomizedDoorWidth,
           doorWidthredux,
+          doorQuantity,
           perimeter,
           sqftArea
         );
@@ -892,7 +898,7 @@ const Review = ({ setStep }) => {
       <HardwareMissingAlert
         open={hardwareMissingAlert}
         handleClose={() => setHardwareMissingAlert(false)}
-        estimateCategory={EstimateCategory.SHOWERS}
+        estimateCategory={EstimateCategory.WINECELLARS}
       />
       <EnterLabelModal
         open={labelModalOpen}
@@ -901,9 +907,10 @@ const Review = ({ setStep }) => {
         }}
         key={"label-modal"}
         estimateConfig={estimateConfig}
-        estimateCategory={"showers"}
+        estimateCategory={EstimateCategory.WINECELLARS}
         estimatesTotal={estimatesTotal}
         projectId={projectId}
+        selectedLayout={selectedData}
       />
     </>
   );

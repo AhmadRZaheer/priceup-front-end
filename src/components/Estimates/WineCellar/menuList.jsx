@@ -17,9 +17,10 @@ import {
   setContent,
   setCounters,
   setThickness,
-} from "@/redux/estimateCalculations";
+} from "@/redux/wineCellarEstimateSlice";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import MenuItem from "./menuItem";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 const MenuList = ({
   menuOptions,
@@ -29,6 +30,7 @@ const MenuList = ({
   thickness,
   currentItem,
 }) => {
+  const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
   const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(0);
@@ -57,7 +59,7 @@ const MenuList = ({
   };
   const handleThicknessSet = (thickness) => {
     setThicknessVal(thickness);
-    dispatch(setThickness(thickness));
+    dispatch(setThickness({thickness,hardwaresList:wineCellarHardwaresList}));
   };
   const opneClose = () => {
     if (

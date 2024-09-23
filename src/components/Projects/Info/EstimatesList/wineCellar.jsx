@@ -13,7 +13,7 @@ import { getListData, } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { generateObjectForPDFPreview, renderMeasurementSides, setStateForShowerEstimate } from "@/utilities/estimates";
+import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 
@@ -38,7 +38,7 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
     });
     const classes = useStyles();
     const itemsPerPage = 10;
-    let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.SHOWERS}`;
+    let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.WINECELLARS}`;
     if (searchValue && searchValue.length) {
         fetchAllEstimatesUrl += `&search=${searchValue}`;
     }
@@ -71,34 +71,34 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
     };
     const handlePreviewPDFClick = (item) => {
         console.log(item, 'item');
-        const formattedData = generateObjectForPDFPreview(
-            showersHardwareList,
-            item,
-            showersLocationSettings?.miscPricing
-        );
-        const pricing = calculateTotal(
-            formattedData,
-            formattedData?.sqftArea,
-            showersLocationSettings
-        );
-        const measurementString = renderMeasurementSides(
-            quoteState.EDIT,
-            formattedData?.measurements,
-            formattedData?.layout_id
-        );
-        localStorage.setItem(
-            "pdf-estimate",
-            JSON.stringify({
-                ...formattedData,
-                measurements: measurementString,
-                pricing,
-            })
-        );
-        navigate(`/estimates/${item?._id}/pdf-preview`);
+        // const formattedData = generateObjectForPDFPreview(
+        //     showersHardwareList,
+        //     item,
+        //     showersLocationSettings?.miscPricing
+        // );
+        // const pricing = calculateTotal(
+        //     formattedData,
+        //     formattedData?.sqftArea,
+        //     showersLocationSettings
+        // );
+        // const measurementString = renderMeasurementSides(
+        //     quoteState.EDIT,
+        //     formattedData?.measurements,
+        //     formattedData?.layout_id
+        // );
+        // localStorage.setItem(
+        //     "pdf-estimate",
+        //     JSON.stringify({
+        //         ...formattedData,
+        //         measurements: measurementString,
+        //         pricing,
+        //     })
+        // );
+        // navigate(`/estimates/${item?._id}/pdf-preview`);
     };
 
     const handleIconButtonClick = (item) => {
-        setStateForShowerEstimate(item, dispatch, navigate);
+        setStateForWineCellarEstimate(item, dispatch, navigate);
     };
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {
