@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
 
 const PDFFile = ({controls,data}) => {
   const [loading,setLoading] = useState(true);
-  console.log(loading,'loading');
+  console.log(data?.quote?.hardwareAddons,'loadingloading');
   return (<Document onRender={()=>{console.log('pdf rendered');setLoading(false)}}>
     {loading ? "Loading..." : <Page size="A4" style={styles.page} wrap>
       {/** Section 1 */}
@@ -310,8 +310,8 @@ const PDFFile = ({controls,data}) => {
           {data?.quote?.hardwareAddons?.length ? (
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Hardware Addons:</Text>
-            {data?.quote?.hardwareAddons?.map((item) => (
-              <Text style={{fontSize:'12px'}}>{`${item?.name} `}</Text>))}
+            {data?.quote?.hardwareAddons?.map((record) => (
+              <Text style={{fontSize:'12px'}}>{`${record?.item?.name} - (${record?.count}), `}</Text>))}
           </View>
           ) : (
             ""
