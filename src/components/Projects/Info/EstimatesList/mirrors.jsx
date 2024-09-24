@@ -107,11 +107,11 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   //     formattedData?.layout_id
   // );
 
-  // };
+  };
 
-  // const handleIconButtonClick = (item) => {
-  //   setStateForMirrorEstimate(item, dispatch, navigate);
-  // };
+  const handleIconButtonClick = (item) => {
+    setStateForMirrorEstimate(item, dispatch, navigate);
+  };
   // const handleCreateQuote = () => {
   //     console.log('create quote');
   //     dispatch(resetMirrorEstimateState());
@@ -120,7 +120,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   //     dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
   //     dispatch(setEstimateState("create"));
   //     navigate("/estimates/dimensions");
-  };
+  // };
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
