@@ -99,7 +99,7 @@ export const generateEstimatePayload = (
       count: selectedContent?.handles?.count,
     },
     doorLock: {
-      type: selectedContent?.doorLock?.item?._id,
+      type: selectedContent?.doorLock?.item?._id || null,
       count: selectedContent?.doorLock?.count,
     },
     hinges: {
@@ -452,6 +452,28 @@ const Review = ({ setStep }) => {
                         type={"hinges"}
                         count={selectedContent.hinges.count}
                         currentItem={selectedContent?.hinges?.item}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.doorLocks}
+                        title={"Door Lock"}
+                        type={"doorLock"}
+                        count={selectedContent.doorLock.count}
+                        currentItem={selectedContent?.doorLock?.item}
                       />
                     </Box>
                   </Box>
