@@ -11,7 +11,8 @@ import GCS_logo from "../../Assets/GCS-logo.png";
 import CustomImage from "../../Assets/customlayoutimage.png";
 import { backendURL } from "../../utilities/common";
 import { renderMeasurementSides } from "../../utilities/estimates";
-import { quoteState } from "../../utilities/constants";
+import { EstimateCategory, quoteState } from "../../utilities/constants";
+import { useParams } from "react-router-dom";
 // Create styles
 const styles = StyleSheet.create({
   page: {
@@ -81,7 +82,7 @@ const PDFFile = ({controls,data}) => {
         <View style={styles.top_view_2}>
           <View style={styles.top_view_2_container}>
             <Text style={{fontWeight:"extrabold",fontSize:'14px'}}>Job ID:</Text>
-            <Text style={styles.top_view_2_value}> #{data?.quote?._id}</Text>
+            <Text style={styles.top_view_2_value}>{data?.quote?.id}</Text>
           </View>
           <View style={styles.top_view_2_container}>
             <Text style={{fontWeight:"extrabold",fontSize:'14px'}}> Date:</Text>
@@ -177,7 +178,7 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'14px',fontWeight:'bold'}}>Glass Price:</Text>
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.glassPrice?.toFixed(2) || 0}</Text>
           </View>
-          <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Glass Addons Price:</Text>
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.glassAddonsPrice?.toFixed(2) || 0}</Text>
           </View>
@@ -225,6 +226,10 @@ const PDFFile = ({controls,data}) => {
         {data?.quote?.handles?.item ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Handles:</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.handles?.item?.name} - ({data?.quote?.handles?.count})</Text>
+          </View> : ''}
+        {data?.quote?.doorLock?.item ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+          <Text style={{fontSize:'14px'}}>Handles:</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.doorLock?.item?.name} - ({data?.quote?.doorLock?.count})</Text>
           </View> : ''}
         {data?.quote?.hinges?.item ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Hinges:</Text>
@@ -292,7 +297,7 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'14px'}}>Header:</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.header?.item?.name} - ({data?.quote?.header?.count})</Text>
           </View> : ''}
-        {data?.quote?.glassAddons?.length ? (
+        {data?.quote?.glassAddons?.length &&  data?.quote?.category === EstimateCategory.SHOWERS ? (
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
             <Text style={{fontSize:'12px'}}>

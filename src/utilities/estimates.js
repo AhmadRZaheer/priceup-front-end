@@ -1,4 +1,8 @@
-import { setEstimateCategory, setEstimateState, setProjectId } from "@/redux/estimateSlice";
+import {
+  setEstimateCategory,
+  setEstimateState,
+  setProjectId,
+} from "@/redux/estimateSlice";
 import {
   EstimateCategory,
   layoutVariants,
@@ -417,6 +421,10 @@ export const generateObjectForPDFPreview = (
   handleType = listData?.handles?.find(
     (item) => item._id === estimateData?.config?.handles?.type
   );
+  let doorLock = null;
+  doorLock = listData?.doorLocks?.find(
+    (item) => item._id === estimateData?.config?.doorLock?.type
+  );
   let hingesType = null;
   hingesType = listData?.hinges?.find(
     (item) => item._id === estimateData?.config?.hinges?.type
@@ -553,6 +561,10 @@ export const generateObjectForPDFPreview = (
       item: handleType,
       count: estimateData?.config?.handles?.count,
     },
+    doorLock: {
+      item: doorLock,
+      count: estimateData?.config?.doorLock?.count,
+    },
     hinges: {
       item: hingesType,
       count: estimateData?.config?.hinges?.count,
@@ -571,14 +583,14 @@ export const generateObjectForPDFPreview = (
     },
 
     mountingClamps: {
-      wallClamp: [...wallClampArray],
-      sleeveOver: [...sleeveOverArray],
-      glassToGlass: [...glassToGlassArray],
+      wallClamp: wallClampArray ? [...wallClampArray] : [],
+      sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
+      glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
     },
     cornerClamps: {
-      cornerWallClamp: [...cornerWallClampArray],
-      cornerSleeveOver: [...cornerSleeveOverArray],
-      cornerGlassToGlass: [...cornerGlassToGlassArray],
+      cornerWallClamp:cornerWallClampArray ? [...cornerWallClampArray]: [],
+      cornerSleeveOver: cornerSleeveOverArray ? [...cornerSleeveOverArray]:[],
+      cornerGlassToGlass: cornerGlassToGlassArray ?[...cornerGlassToGlassArray] :[],
     },
     mountingChannel: {
       item: channelItem || null,
@@ -591,7 +603,7 @@ export const generateObjectForPDFPreview = (
         ? "clamps"
         : "channel",
     glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
-    hardwareAddons: [...hardwareAddons],
+    hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
     oneInchHoles: estimateData?.config?.oneInchHoles,
     hingeCut: estimateData?.config?.hingeCut,
     clampCut: estimateData?.config?.clampCut,

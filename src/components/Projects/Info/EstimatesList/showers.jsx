@@ -96,12 +96,14 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
             formattedData?.measurements,
             formattedData?.layout_id
         );
+        const id = item?._id;
         localStorage.setItem(
             "pdf-estimate",
             JSON.stringify({
                 ...formattedData,
                 measurements: measurementString,
                 pricing,
+                id
             })
         );
         navigate(`/estimates/${item?._id}/pdf-preview`);

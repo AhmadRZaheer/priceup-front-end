@@ -9,13 +9,14 @@ import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { backendURL, calculateTotal } from "@/utilities/common";
 import { Edit, } from "@mui/icons-material";
-import { getListData, } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import {  getLocationWineCellarSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { generateObjectForPDFPreview, renderMeasurementSides } from "@/utilities/estimates";
 
 
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common")
@@ -26,8 +27,8 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
     const [page, setPage] = useState(1);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const showersHardwareList = useSelector(getListData);
-    const showersLocationSettings = useSelector(getLocationShowerSettings);
+    const wineCellarHardwareList = useSelector(getWineCellarsHardware);
+    const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
     const useStyles = makeStyles({
         overflowText: {
             maxWidth: "115px",
@@ -70,31 +71,33 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
         setDeleteModalOpen(false);
     };
     const handlePreviewPDFClick = (item) => {
-        console.log(item, 'item');
-        // const formattedData = generateObjectForPDFPreview(
-        //     showersHardwareList,
-        //     item,
-        //     showersLocationSettings?.miscPricing
-        // );
-        // const pricing = calculateTotal(
-        //     formattedData,
-        //     formattedData?.sqftArea,
-        //     showersLocationSettings
-        // );
-        // const measurementString = renderMeasurementSides(
-        //     quoteState.EDIT,
-        //     formattedData?.measurements,
-        //     formattedData?.layout_id
-        // );
-        // localStorage.setItem(
-        //     "pdf-estimate",
-        //     JSON.stringify({
-        //         ...formattedData,
-        //         measurements: measurementString,
-        //         pricing,
-        //     })
-        // );
-        // navigate(`/estimates/${item?._id}/pdf-preview`);
+        console.log(item, 'item2222222222222222');
+        const formattedData = generateObjectForPDFPreview(
+            wineCellarHardwareList,
+            item,
+            wineCellarLocationSettings?.miscPricing
+        );
+        const pricing = calculateTotal(
+            formattedData,
+            formattedData?.sqftArea,
+            wineCellarLocationSettings
+        );
+        const measurementString = renderMeasurementSides(
+            quoteState.EDIT,
+            formattedData?.measurements,
+            formattedData?.layout_id
+        );
+        const id = item?._id;
+        localStorage.setItem(
+            "pdf-estimate",
+            JSON.stringify({
+                ...formattedData,
+                measurements: measurementString,
+                pricing,
+                id
+            })
+        );
+        navigate(`/estimates/${item?._id}/pdf-preview`);
     };
 
     const handleIconButtonClick = (item) => {

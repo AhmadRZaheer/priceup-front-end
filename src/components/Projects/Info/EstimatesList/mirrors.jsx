@@ -14,17 +14,19 @@ import {
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory } from "@/utilities/constants";
+import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { backendURL } from "@/utilities/common";
 import { Add, Edit, Search } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
 // import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import { calculateTotal, renderMeasurementSides, setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getLocationMirrorSettings } from "@/redux/locationSlice";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 // const debounce = (func, delay) => {
@@ -42,6 +44,8 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   const isMobile = useMediaQuery("(max-width:600px)");
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const mirrorsHardwareList = useSelector(getMirrorsHardware);
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const useStyles = makeStyles({
@@ -87,11 +91,27 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   };
   const handlePreviewPDFClick = (item) => {
     console.log(item, "item");
-  };
+  //   const formattedData = generateObjectForPDFPreview(
+  //     mirrorsHardwareList,
+  //     item,
+  //     mirrorsLocationSettings?.miscPricing
+  // );
+  // const pricing = calculateTotal(
+  //     formattedData,
+  //     formattedData?.sqftArea,
+  //     mirrorsLocationSettings
+  // );
+  // const measurementString = renderMeasurementSides(
+  //     quoteState.EDIT,
+  //     formattedData?.measurements,
+  //     formattedData?.layout_id
+  // );
 
-  const handleIconButtonClick = (item) => {
-    setStateForMirrorEstimate(item, dispatch, navigate);
-  };
+  // };
+
+  // const handleIconButtonClick = (item) => {
+  //   setStateForMirrorEstimate(item, dispatch, navigate);
+  // };
   // const handleCreateQuote = () => {
   //     console.log('create quote');
   //     dispatch(resetMirrorEstimateState());
@@ -100,7 +120,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   //     dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
   //     dispatch(setEstimateState("create"));
   //     navigate("/estimates/dimensions");
-  // };
+  };
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
