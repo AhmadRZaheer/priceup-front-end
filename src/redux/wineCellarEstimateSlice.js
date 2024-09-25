@@ -239,7 +239,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
         );
         let doorLockType = null;
         doorLockType = hardwaresList?.doorLocks?.find(
-          (item) => item._id === layoutData?.settings?.type?.handleType
+          (item) => item._id === layoutData?.settings?.doorLock?.type
         );
   
         let hingesType = null;
@@ -503,9 +503,10 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
           [
             hardwareTypes.HANDLES,
             hardwareTypes.HINGES,
-            hardwareTypes.SLIDINGDOORSYSTEM,
-            hardwareTypes.HEADER,
+            // hardwareTypes.SLIDINGDOORSYSTEM,
+            // hardwareTypes.HEADER,
             hardwareTypes.CHANNEL,
+            hardwareTypes.DOORLOCK
           ].includes(type)
         ) {
           let currentHardware = null;
@@ -516,6 +517,17 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
             currentHardware = {
               item: state.content.mountingChannel.item,
               count: state.content.mountingChannel.item ? 1 : 0,
+            };
+            newHardware = {
+              item: selectedSameItem ? null : item,
+              count: selectedSameItem ? 0 : 1,
+            };
+          } else if ([hardwareTypes.DOORLOCK].includes(type)){
+            const selectedSameItem =
+              item?._id === state.content.doorLock.item?._id;
+            currentHardware = {
+              item: state.content.doorLock.item,
+              count: state.content.doorLock.item ? 1 : 0,
             };
             newHardware = {
               item: selectedSameItem ? null : item,
@@ -546,11 +558,20 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
             };
           }
         }
-        if (["channel"].includes(type)) {
+        if ([hardwareTypes.CHANNEL].includes(type)) {
           const found = item?._id === state.content.mountingChannel.item?._id;
           state.content = {
             ...state.content,
             mountingChannel: {
+              item: found ? null : item,
+              count: found ? 0 : 1,
+            },
+          };
+        } else if ([hardwareTypes.DOORLOCK].includes(type)) {
+          const found = item?._id === state.content.doorLock.item?._id;
+          state.content = {
+            ...state.content,
+            doorLock: {
               item: found ? null : item,
               count: found ? 0 : 1,
             },

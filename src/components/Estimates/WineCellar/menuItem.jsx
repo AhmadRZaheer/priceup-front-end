@@ -75,7 +75,7 @@ const MenuItem = ({
       ? selectedContent?.cornerClamps?.cornerGlassToGlass.some(
           (selectedItem) => selectedItem?.item?._id === item?._id
         )
-      : ["handles", "hinges", "slidingDoorSystem", "header"].includes(type)
+      : ["handles", "hinges", "slidingDoorSystem", "header", "doorLock"].includes(type)
       ? item === selectedItem
       : // status && item === selectedItem
         item === selectedItem;

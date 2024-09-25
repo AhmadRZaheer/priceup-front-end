@@ -417,6 +417,17 @@ const Summary = ({ setStep }) => {
                           </Typography>
                         </Box>
                       )}
+                      {selectedContent?.doorLock?.item && (
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Door Lock:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {selectedContent?.doorLock?.item?.name} (
+                            {selectedContent?.doorLock?.count})
+                          </Typography>
+                        </Box>
+                      )}
                       {["channel"].includes(selectedContent?.mountingState) ? (
                         <>
                           {selectedContent?.mountingChannel?.item && (
