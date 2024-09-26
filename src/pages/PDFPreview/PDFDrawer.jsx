@@ -13,6 +13,7 @@ export default function PDFPreviewDrawer({ handleClick }) {
   };
   const toggleDrawerClose = () => {
     setOpen(false);
+    localStorage.removeItem("pdf-estimate");
   };
 
   return (

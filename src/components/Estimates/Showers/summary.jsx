@@ -127,7 +127,7 @@ const Summary = ({ setStep }) => {
       item?.measurements,
       item?.layout_id
     );
-    const id = "--";
+    const id = estimateState === quoteState.CREATE ? "--" : selectedData._id;
     localStorage.setItem(
       "pdf-estimate",
       JSON.stringify({
