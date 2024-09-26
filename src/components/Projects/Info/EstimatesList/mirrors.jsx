@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { calculateTotal, renderMeasurementSides, setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import { calculateTotal, generateObjectForPDFPreview, renderMeasurementSides, setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
@@ -91,21 +91,43 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   };
   const handlePreviewPDFClick = (item) => {
     console.log(item, "item");
-  //   const formattedData = generateObjectForPDFPreview(
-  //     mirrorsHardwareList,
-  //     item,
-  //     mirrorsLocationSettings?.miscPricing
-  // );
-  // const pricing = calculateTotal(
-  //     formattedData,
-  //     formattedData?.sqftArea,
-  //     mirrorsLocationSettings
-  // );
-  // const measurementString = renderMeasurementSides(
-  //     quoteState.EDIT,
-  //     formattedData?.measurements,
-  //     formattedData?.layout_id
-  // );
+    const formattedData = generateObjectForPDFPreview(
+      mirrorsHardwareList,
+      item,
+      mirrorsLocationSettings?.miscPricing
+  );
+  console.log(formattedData?.measurements,'data');
+  const pricingMirror = calculateTotal(
+      formattedData,
+      formattedData?.sqftArea,
+      mirrorsLocationSettings,
+      formattedData.measurements
+  );
+  
+  const pricing = {
+    glassPrice:pricingMirror.glass,
+    fabricationPrice: pricingMirror.fabrication,
+    laborPrice:pricingMirror.labor,
+    additionalFieldPrice:pricingMirror.additionalFields,
+    cost:pricingMirror.cost,
+    total:pricingMirror.total,
+    profit:pricingMirror.profitPercentage
+  }
+  const measurementString = renderMeasurementSides(
+      formattedData?.measurements
+  );
+  console.log(measurementString,'string ');
+  const id = item?._id;
+    localStorage.setItem(
+        "pdf-estimate",
+        JSON.stringify({
+            ...formattedData,
+            measurements: measurementString,
+            pricing,
+            id
+        })
+    );
+    navigate(`/estimates/${item?._id}/pdf-preview`);
 
   };
 
