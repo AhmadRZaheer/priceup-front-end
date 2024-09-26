@@ -12,7 +12,6 @@ import CustomImage from "../../Assets/customlayoutimage.png";
 import { backendURL } from "../../utilities/common";
 import { renderMeasurementSides } from "../../utilities/estimates";
 import { EstimateCategory, quoteState } from "../../utilities/constants";
-import { useParams } from "react-router-dom";
 import { dimensionsSection, fabricationSection, pdfFields, pricingSection, summarySection } from "@/utilities/pdfConfigs";
 // Create styles
 const styles = StyleSheet.create({
@@ -66,6 +65,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+const commaFn = (index, arrLength) => index < arrLength - 1 ? ", " : "";
 
 // Create Document Component
 
@@ -224,7 +224,7 @@ const PDFFile = ({controls,data}) => {
           </View>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Profit:</Text>
-          <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.profit?.toFixed(2) || 0} %</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.pricing?.profit?.toFixed(2) || 0} %</Text>
           </View>
         </View>}
        </View>
@@ -258,43 +258,44 @@ const PDFFile = ({controls,data}) => {
           {summarySection[data?.quote?.category]?.includes(pdfFields.WALLCLAMP) && data?.quote?.mountingClamps?.wallClamp?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>WallClamps:</Text>
          <Text style={{fontSize:'12px'}}>
-          {data?.quote?.mountingClamps?.wallClamp?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+          {data?.quote?.mountingClamps?.wallClamp?.map((row, index) => (
+          `${row.item.name} (${row.count})${commaFn(index, data.quote.mountingClamps.wallClamp.length)}`
+           ))}
          </Text>
          </View> : ''}
          {summarySection[data?.quote?.category]?.includes(pdfFields.SLEEVEOVER) && data?.quote?.mountingClamps?.sleeveOver?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Sleeve Over:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.mountingClamps?.sleeveOver?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+             (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.mountingClamps?.sleeveOver.length)}`))}
          </Text>
          </View> : ''}
          {summarySection[data?.quote?.category]?.includes(pdfFields.GLASSTOGLASS) && data?.quote?.mountingClamps?.glassToGlass?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Glass To Glass:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.mountingClamps?.glassToGlass?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+             (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.mountingClamps?.glassToGlass.length)}`))}
          </Text>
          </View> : ''}
          {summarySection[data?.quote?.category]?.includes(pdfFields.CORNERWALLCLAMP) && data?.quote?.cornerClamps?.cornerWallClamp?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Corner WallClamp:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.cornerClamps?.cornerWallClamp?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+             (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.cornerClamps?.cornerWallClamp.length)}`))}
          </Text>
          </View> : ''}
          {summarySection[data?.quote?.category]?.includes(pdfFields.CORNERSLEEVEOVER) && data?.quote?.cornerClamps?.cornerSleeveOver?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Corner Sleeve Over:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.cornerClamps?.cornerSleeveOver?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+             (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.cornerClamps?.cornerSleeveOver.length)}`))}
          </Text>
          </View> : ''}
          {summarySection[data?.quote?.category]?.includes(pdfFields.CORNERGLASSTOGLASS) && data?.quote?.cornerClamps?.cornerGlassToGlass?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Corner Glass To Glass:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.cornerClamps?.cornerGlassToGlass?.map(
-             (row) => (`${row.item.name} (${row.count}){" "}`))}
+             (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.cornerClamps?.cornerGlassToGlass.length)}`))}
          </Text>
          </View> : ''}
           </View>}

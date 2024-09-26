@@ -59,6 +59,7 @@ export const backendURL =
 // };
 
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
+  console.log(selectedContent,'selectedContentselectedContent')
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(

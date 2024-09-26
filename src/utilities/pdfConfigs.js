@@ -135,6 +135,7 @@ export const summarySection = {
     "handles",
     "hinges",
     "mountingChannel",
+    "glassType",
     "doorLock",
   ],
 };

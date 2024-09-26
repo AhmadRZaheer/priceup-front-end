@@ -80,7 +80,7 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
         setDeleteModalOpen(false);
     };
     const handlePreviewPDFClick = (item) => {
-        console.log(item, 'item');
+        console.log(item, 'itemeereerererer',showersHardwareList);
         const formattedData = generateObjectForPDFPreview(
             showersHardwareList,
             item,
