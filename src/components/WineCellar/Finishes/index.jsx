@@ -25,6 +25,8 @@ import {
   useFetchAllDocuments,
 } from "@/utilities/ApiHooks/common";
 import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
+import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const WineFinishComponent = () => {
   const apiUrl = `${backendURL}/wineCellars/finishes/`;
@@ -38,7 +40,7 @@ const WineFinishComponent = () => {
   const [page, setPage] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
-
+  const dispatch = useDispatch();
   //Fetch All Documents
   const {
     data: WineFinishesData,
@@ -123,12 +125,15 @@ const WineFinishComponent = () => {
     finishesWineRefetch();
     if (createWineFinishSuccess) {
       setOpen(false);
+      dispatch(setWineCellarsHardwareRefetch());
     }
     if (deleteWineFinishSuccess) {
       setDeleteModalOpen(false);
+      dispatch(setWineCellarsHardwareRefetch());
     }
     if (editWineFinishSuccess) {
       setUpdateModalOpen(false);
+      dispatch(setWineCellarsHardwareRefetch());
     }
   }, [createWineFinishSuccess, deleteWineFinishSuccess, editWineFinishSuccess]);
 

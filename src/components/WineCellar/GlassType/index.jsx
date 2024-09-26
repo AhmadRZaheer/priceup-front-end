@@ -27,7 +27,7 @@ import {
   useEditDocument,
   useFetchAllDocuments,
 } from "@/utilities/ApiHooks/common";
-import { setMirrorsHardwareRefetch } from "@/redux/refetch";
+import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
 
 const WineGlassTypeComponent = () => {
   const dispatch = useDispatch();
@@ -174,10 +174,12 @@ const WineGlassTypeComponent = () => {
     refetchGlassTypesList();
     if (createWineGlassSuccess) {
       setCreateModalOpen(false);
+      dispatch(setWineCellarsHardwareRefetch());
       setRowCosts({});
     }
     if (deleteWineSuccess) {
       setDeleteModalOpen(false);
+      dispatch(setWineCellarsHardwareRefetch());
       setRowCosts({});
     }
   }, [createWineGlassSuccess, deleteWineSuccess]);
@@ -191,6 +193,7 @@ const WineGlassTypeComponent = () => {
       setTimeout(() => {
         setEditGlassType(false);
       }, 600);
+      dispatch(setWineCellarsHardwareRefetch());
     }
   }, [editSuccess]);
 

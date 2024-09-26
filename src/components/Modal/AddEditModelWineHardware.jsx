@@ -28,6 +28,8 @@ import {
   useCreateDocument,
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
+import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const style = {
   position: "absolute",
@@ -55,6 +57,7 @@ export default function AddEditWineHardwareModel({
   const onDrop = (acceptedFiles) => {
     formik.setFieldValue("image", acceptedFiles[0]);
   };
+  const dispatch = useDispatch();
   const decodedToken = getDecryptedToken();
   const routePrefix = `${backendURL}/wineCellars/hardwares`;
   const { getInputProps } = useDropzone({ onDrop });
@@ -73,11 +76,13 @@ export default function AddEditWineHardwareModel({
     if (CreatedSuccessfully) {
       resetFormHandle();
       refetch();
+      dispatch(setWineCellarsHardwareRefetch());
       close();
     }
 
     if (SuccessForEdit) {
       refetch();
+      dispatch(setWineCellarsHardwareRefetch());
       close();
     }
   }, [CreatedSuccessfully, SuccessForEdit]);

@@ -24,6 +24,8 @@ import {
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
 import { backendURL } from "@/utilities/common";
+import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
+import { useDispatch } from "react-redux";
 
 const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   const routePrefix = `${backendURL}/wineCellars/hardwares`;
@@ -35,7 +37,7 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   const open = Boolean(anchorEl);
   const { mutate: editHardware, isSuccess: hardwareEditSuccess } =
     useEditDocument();
-
+  const dispatch = useDispatch();
   const {
     mutate: deleteHardwareFinish,
     isLoading: LoadingForDelete,
@@ -49,9 +51,13 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   useEffect(() => {
     if (deleteSuccess) {
       refetchData();
+      dispatch(setWineCellarsHardwareRefetch());
       setDeleteModalOpen(false);
     }
-  }, [deleteSuccess]);
+    if(hardwareEditSuccess){
+      dispatch(setWineCellarsHardwareRefetch());
+    }
+  }, [deleteSuccess,hardwareEditSuccess]);
   const handleClick = useCallback((event) => {
     setAnchorEl(event.currentTarget);
   }, []);
