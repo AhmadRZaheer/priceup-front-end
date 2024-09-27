@@ -5,9 +5,6 @@ import {
   Box,
   Button,
   CircularProgress,
-  IconButton,
-  InputAdornment,
-  TextField,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -16,26 +13,15 @@ import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory } from "@/utilities/constants";
 import { backendURL } from "@/utilities/common";
-import { Add, Edit, Search } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-// import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
-// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
-// const debounce = (func, delay) => {
-//   let timeout;
-//   return (...args) => {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => {
-//       func(...args);
-//     }, delay);
-//   };
-// };
 const routePrefix = `${backendURL}/estimates`;
 
 const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
@@ -92,15 +78,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   const handleIconButtonClick = (item) => {
     setStateForMirrorEstimate(item, dispatch, navigate);
   };
-  // const handleCreateQuote = () => {
-  //     console.log('create quote');
-  //     dispatch(resetMirrorEstimateState());
-  //     dispatch(resetEstimateState());
-  //     dispatch(setMirrorProjectId(projectId));
-  //     dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-  //     dispatch(setEstimateState("create"));
-  //     navigate("/estimates/dimensions");
-  // };
+  
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
@@ -108,82 +86,36 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
       return [];
     }
   }, [estimatesList, searchValue]);
-  useEffect(() => {
-    refetchEstimatesList();
-  }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchEstimatesList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+            refetchEstimatesList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
-  useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [searchValue]);
-  // const handleChange = (e) => {
-  //   setSearch(e.target.value);
-  //   debouncedRefetch();
-  // };
+    [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
+);
+
+useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+        setPage(1);
+    }
+    if (searchValue) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+        refetchEstimatesList();
+    }
+}, [statusValue, dateValue, searchValue, page, deletedSuccessfully, projectId]);
+  
   return (
     <>
-      {/* <Box
-            sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                paddingX: isMobile ? 0.5 : 2,
-            }}
-        >
-            <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
-                Estimates
-            </Typography>
-            Search input field */}
-      {/*  <TextField
-                placeholder="Search by Customer Name"
-                value={search}
-                variant="standard"
-                onChange={(e) => handleChange(e)}
-                sx={{
-                    mb: 2,
-                    ".MuiInputBase-root:after": {
-                        border: "1px solid #8477DA",
-                    },
-                    width: isMobile ? '150px' : 'auto'
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <Search sx={{ color: "#8477DA" }} />
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            <IconButton
-                onClick={handleCreateQuote}
-                disabled={estimatesListFetching}
-                sx={{
-                    backgroundColor: "#8477DA",
-                    color: "white",
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    borderRadius: 1,
-                    padding: 1,
-                    fontSize: 16,
-                    height: 35,
-                }}
-            >
-                <Add sx={{ color: "white" }} />
-                Add
-            </IconButton>
-        </Box> */}
       {isLoading ? (
         <Box
           sx={{

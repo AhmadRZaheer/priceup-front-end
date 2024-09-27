@@ -107,28 +107,34 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
             return [];
         }
     }, [estimatesList, searchValue]);
-    useEffect(() => {
-        refetchEstimatesList();
-    }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
 
     const debouncedRefetch = useCallback(
         debounce(() => {
-            if (page === 1) {
-                refetchEstimatesList();
-            }
-            else {
-                setPage(1);
+            // Always refetch when page is 1, else reset page to 1 to trigger refetch
+            if (page !== 1) {
+                setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+            } else {
+                refetchEstimatesList();  // If already on page 1, just refetch directly
             }
         }, 700),
-        [page]
+        [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
     );
+    
     useEffect(() => {
-        debouncedRefetch();
-        // Cleanup function to cancel debounce if component unmounts
-        return () => {
-            debouncedRefetch.cancel();
-        };
-    }, [searchValue]);
+        // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+        if (statusValue || dateValue || searchValue) {
+            setPage(1);
+        }
+        if (searchValue) {
+            debouncedRefetch();
+            return () => {
+                debouncedRefetch.cancel();
+            };
+        } else {
+            refetchEstimatesList();
+        }
+    }, [statusValue, dateValue, searchValue, page, deletedSuccessfully, projectId]);
+
     return (<>
 
         {isLoading ? (

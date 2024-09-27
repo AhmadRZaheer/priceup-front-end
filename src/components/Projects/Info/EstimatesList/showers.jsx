@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import { Box, Button, CircularProgress, IconButton, InputAdornment, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, CircularProgress, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { backendURL, calculateTotal } from "@/utilities/common";
-import { Add, Edit, Search } from "@mui/icons-material";
-// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import { getListData, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
+import { Edit } from "@mui/icons-material";
+import { getListData } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
@@ -19,20 +18,10 @@ import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common")
 
-// const debounce = (func, delay) => {
-//     let timeout;
-//     return (...args) => {
-//         clearTimeout(timeout);
-//         timeout = setTimeout(() => {
-//             func(...args);
-//         }, delay);
-//     };
-// };
 const routePrefix = `${backendURL}/estimates`;
 
 const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
     const isMobile = useMediaQuery("(max-width:600px)");
-    // const [search, setSearch] = useState("");
     const [page, setPage] = useState(1);
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -80,7 +69,6 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
         setDeleteModalOpen(false);
     };
     const handlePreviewPDFClick = (item) => {
-        console.log(item, 'item');
         const formattedData = generateObjectForPDFPreview(
             showersHardwareList,
             item,
@@ -110,14 +98,7 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
     const handleIconButtonClick = (item) => {
         setStateForShowerEstimate(item, dispatch, navigate);
     };
-    // const handleCreateQuote = () => {
-    //     dispatch(resetEstimateState());
-    //     dispatch(resetState());
-    //     dispatch(setShowerProjectId(projectId));
-    //     dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-    //     dispatch(setEstimateState("create"));
-    //     navigate("/estimates/layouts");
-    // };
+
     const filteredData = useMemo(() => {
         if (estimatesList && estimatesList?.estimates?.length) {
             return estimatesList?.estimates;
@@ -125,84 +106,35 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
             return [];
         }
     }, [estimatesList, searchValue]);
-    useEffect(() => {
-        refetchEstimatesList();
-    }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
 
     const debouncedRefetch = useCallback(
         debounce(() => {
-            if (page === 1) {
-                refetchEstimatesList();
-            }
-            else {
-                setPage(1);
+            // Always refetch when page is 1, else reset page to 1 to trigger refetch
+            if (page !== 1) {
+                setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+            } else {
+                refetchEstimatesList();  // If already on page 1, just refetch directly
             }
         }, 700),
-        [page]
+        [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
     );
+    
     useEffect(() => {
-        debouncedRefetch();
-        // Cleanup function to cancel debounce if component unmounts
-        return () => {
-          debouncedRefetch.cancel();
-        };
-      }, [searchValue]);
+        // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+        if (statusValue || dateValue || searchValue) {
+            setPage(1);
+        }
+        if (searchValue) {
+            debouncedRefetch();
+            return () => {
+                debouncedRefetch.cancel();
+            };
+        } else {
+            refetchEstimatesList();
+        }
+    }, [statusValue, dateValue, searchValue, page, deletedSuccessfully, projectId]);
 
-    // const handleChange = (e) => {
-    //     // setSearch(e.target.value);
-    //     debouncedRefetch();
-    // };
     return (<>
-        {/* <Box
-            sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                paddingX: isMobile ? 0.5 : 2,
-            }}
-        >
-            <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
-                Estimates
-            </Typography> */}
-        {/* Search input field */}
-        {/* <TextField
-                placeholder="Search by Customer Name"
-                value={search}
-                variant="standard"
-                onChange={(e) => handleChange(e)}
-                sx={{
-                    mb: 2,
-                    ".MuiInputBase-root:after": {
-                        border: "1px solid #8477DA",
-                    },
-                    width: isMobile ? '150px' : 'auto'
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <Search sx={{ color: "#8477DA" }} />
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            <IconButton
-                onClick={handleCreateQuote}
-                disabled={estimatesListFetching}
-                sx={{
-                    backgroundColor: "#8477DA",
-                    color: "white",
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    borderRadius: 1,
-                    padding: 1,
-                    fontSize: 16,
-                    height: 35,
-                }}
-            >
-                <Add sx={{ color: "white" }} />
-                Add
-            </IconButton>
-        </Box> */}
-
         {isLoading ? (
             <Box
                 sx={{
@@ -220,97 +152,97 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                 <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
         ) : filteredData?.length === 0 && !estimatesListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF', borderRadius:'12px' }}>
+            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF', borderRadius: '12px' }}>
                 No Estimate Found
             </Typography>
         ) : (
-            <Box sx={{ background: '#FFFF', pb: isMobile ? 3 : 0,borderRadius:'8px' }}>
+            <Box sx={{ background: '#FFFF', pb: isMobile ? 3 : 0, borderRadius: '8px' }}>
                 {isMobile ?
                     (filteredData?.map((item) =>
-                         <Box
-                        key={item._id}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            paddingY: 2,
-                            borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                            background: '#FFFF'
-                        }}
-                    >
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                            <Box
-                                sx={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: "100%",
-                                    overflow: "hidden",
-                                }}
-                            >
-                                <DefaultImage
-                                    image={item?.creatorData?.image}
-                                    name={item?.creatorData?.name}
-                                />
-                            </Box>
-
-                            <Box>
-                                <Box sx={{ display: "flex", gap: 0.6 }}>
-                                    <Typography className={classes.overflowText}>
-                                        {item?.creatorData?.name}
-                                    </Typography>
-                                    <Typography
-                                        sx={{ fontSize: 16, fontWeight: "Medium" }}
-                                    >
-                                        {" "}
-                                        - Creator
-                                    </Typography>
-                                </Box>
-                                <Box sx={{ display: "flex", gap: 0.6 }}>
-                                    <Typography sx={{ fontSize: 14 }}>
-                                        {item?.customerData?.name}
-                                    </Typography>
-                                    <Typography sx={{ fontSize: 14 }}>
-                                        {" "}
-                                        - Customer
-                                    </Typography>
-                                </Box>
-                            </Box>
-                        </Box>
                         <Box
+                            key={item._id}
                             sx={{
                                 display: "flex",
-                                flexDirection: "column",
-                                textAlign: "center",
-                                width: 100,
+                                justifyContent: "space-between",
+                                paddingY: 2,
+                                borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                                background: '#FFFF'
                             }}
                         >
-                            <Typography color="red" marginRight={3}></Typography>
+                            <Box sx={{ display: "flex", gap: 1 }}>
+                                <Box
+                                    sx={{
+                                        width: 40,
+                                        height: 40,
+                                        borderRadius: "100%",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    <DefaultImage
+                                        image={item?.creatorData?.image}
+                                        name={item?.creatorData?.name}
+                                    />
+                                </Box>
 
-                            <Button
-                                onClick={() => handleIconButtonClick(item)}
+                                <Box>
+                                    <Box sx={{ display: "flex", gap: 0.6 }}>
+                                        <Typography className={classes.overflowText}>
+                                            {item?.creatorData?.name}
+                                        </Typography>
+                                        <Typography
+                                            sx={{ fontSize: 16, fontWeight: "Medium" }}
+                                        >
+                                            {" "}
+                                            - Creator
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: "flex", gap: 0.6 }}>
+                                        <Typography sx={{ fontSize: 14 }}>
+                                            {item?.customerData?.name}
+                                        </Typography>
+                                        <Typography sx={{ fontSize: 14 }}>
+                                            {" "}
+                                            - Customer
+                                        </Typography>
+                                    </Box>
+                                </Box>
+                            </Box>
+                            <Box
                                 sx={{
-                                    height: 25,
-                                    color: "white",
-                                    background: "#8477DA",
-                                    "&:hover": { background: "#8477DA" },
-                                    width: "fit-content",
-                                    margin: "0px auto",
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    textAlign: "center",
+                                    width: 100,
                                 }}
-                                disabled={estimatesListFetching}
                             >
-                                <Edit sx={{
-                                    color: "white",
-                                    fontSize: 16,
-                                    marginRight: "5px",
-                                }} />
-                                Edit
-                            </Button>
-                            <Typography
-                                sx={{ fontWeight: "Medium", fontSize: 12 }}
-                            >
-                                {new Date(item?.updatedAt).toDateString()}
-                            </Typography>
-                        </Box>
-                    </Box>))
+                                <Typography color="red" marginRight={3}></Typography>
+
+                                <Button
+                                    onClick={() => handleIconButtonClick(item)}
+                                    sx={{
+                                        height: 25,
+                                        color: "white",
+                                        background: "#8477DA",
+                                        "&:hover": { background: "#8477DA" },
+                                        width: "fit-content",
+                                        margin: "0px auto",
+                                    }}
+                                    disabled={estimatesListFetching}
+                                >
+                                    <Edit sx={{
+                                        color: "white",
+                                        fontSize: 16,
+                                        marginRight: "5px",
+                                    }} />
+                                    Edit
+                                </Button>
+                                <Typography
+                                    sx={{ fontWeight: "Medium", fontSize: 12 }}
+                                >
+                                    {new Date(item?.updatedAt).toDateString()}
+                                </Typography>
+                            </Box>
+                        </Box>))
                     : (<DataGrid
                         loading={estimatesListFetching}
                         style={{
@@ -328,9 +260,11 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                         rowCount={
                             estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
                         }
-                        sx={{ width: "100%",'.MuiDataGrid-main':{
-                            borderRadius:'8px !important',
-                          } }}
+                        sx={{
+                            width: "100%", '.MuiDataGrid-main': {
+                                borderRadius: '8px !important',
+                            }
+                        }}
                         rowHeight={70}
                         hideFooter
                         disableColumnMenu

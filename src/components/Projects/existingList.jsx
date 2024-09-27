@@ -1,15 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
-  IconButton,
   Typography,
-  InputAdornment,
-  TextField,
   CircularProgress,
   useMediaQuery,
 } from "@mui/material";
-import { Add, DeleteOutline, ManageSearch, Search } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { DeleteOutline, ManageSearch } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
 import { ProjectsColumns } from "@/utilities/DataGridColumns";
@@ -24,16 +20,6 @@ import DefaultImage from "@/components/ui-components/defaultImage";
 import { makeStyles } from "@material-ui/core";
 import ActionsDropdown from "../common/ActionsDropdown";
 import { debounce } from "lodash";
-
-// const debounce = (func, delay) => {
-//   let timeout;
-//   return (...args) => {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => {
-//       func(...args);
-//     }, delay);
-//   };
-// };
 
 export default function ExistingList({ searchValue, statusValue, dateValue }) {
   const isMobile = useMediaQuery("(max-width:600px)");
@@ -92,51 +78,35 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
   };
 
   const handleViewDetail = (item) => {
-    console.log("view project detail", item);
     navigate(`/projects/${item?._id}`);
   };
 
-  // const handleCreateProject = () => {
-  //   console.log("create project");
-  //   navigate("/projects/create");
-  // };
-  useEffect(() => {
-    refetchProjectsList();
-  }, [page, deletedSuccessfully, statusValue, dateValue]);
-
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchProjectsList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+          refetchProjectsList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
+    [page, refetchProjectsList]  // Ensure refetchProjectsList is included in dependencies
+);
 
-  useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [searchValue]);
-
-  // const debouncedRefetch = useCallback(
-  //   debounce(() => {
-  //     if (page === 1) {
-  //       refetchProjectsList();
-  //     } else {
-  //       setPage(1);
-  //     }
-  //   }, 500),
-  //   [searchValue]
-  // );
-
-  // useEffect(() => {
-  //   debouncedRefetch();
-  // }, [searchValue]);
+useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+        setPage(1);
+    }
+    if (searchValue) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+      refetchProjectsList();
+    }
+}, [statusValue, dateValue, searchValue, page, deletedSuccessfully]);
 
   const dropdownActions = [
     {
@@ -151,50 +121,7 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
       severity: "error",
     },
   ];
-  // const dummyArray = [
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  //   {
-  //     _id: "66a20158f92a3cada4e82604",
-  //     creatorData: { image: null, name: "test creator" },
-  //     customerData: { image: null, name: "test customer" },
-  //     updatedAt: "2024-07-25T12:57:17.641Z",
-  //   },
-  // ];
+  
   return (
     <Box
       sx={
@@ -204,62 +131,6 @@ export default function ExistingList({ searchValue, statusValue, dateValue }) {
         }
       }
     >
-      {/* <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          paddingY: 2,
-          paddingX: isMobile ? 0.5 : 2,
-        }}
-      >
-        <Typography
-          sx={{
-            fontSize: isMobile ? 18 : 20,
-            fontWeight: "bold",
-            color: "#101828",
-          }}
-        >
-          Projects
-        </Typography>
-        {/* Search input field 
-        <TextField
-          placeholder="Search by Customer / Project Name"
-          value={search}
-          variant="standard"
-          onChange={(e) => handleChange(e)}
-          sx={{
-            mb: 2,
-            ".MuiInputBase-root:after": {
-              border: "1px solid #8477DA",
-            },
-            width: isMobile ? "150px" : "auto",
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search sx={{ color: "#8477DA" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <IconButton
-          onClick={handleCreateProject}
-          disabled={projectsListFetching}
-          sx={{
-            backgroundColor: "#8477DA",
-            color: "white",
-            "&:hover": { backgroundColor: "#8477DA" },
-            borderRadius: 1,
-            padding: 1,
-            textTransform: "capitalize",
-            fontSize: 16,
-            height: 35,
-          }}
-        >
-          <Add sx={{ width: 24 }} />
-          Add
-        </IconButton>
-      </Box> */}
       {isLoading ? (
         <Box
           sx={{

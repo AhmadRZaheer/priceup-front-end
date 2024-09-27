@@ -1,40 +1,39 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Box,
-  IconButton,
+  // IconButton,
   Typography,
-  InputAdornment,
-  TextField,
+  // InputAdornment,
+  // TextField,
   CircularProgress,
-  Button,
+  // Button,
   useMediaQuery,
-  
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import { Search } from "@mui/icons-material";
+// import { Search } from "@mui/icons-material";
 import {
   useDeleteEstimates,
-  useFetchDataEstimate,
-  useGetEstimates,
+  // useFetchDataEstimate,
+  // useGetEstimates,
 } from "@/utilities/ApiHooks/estimate";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addSelectedItem,
-  resetState,
-  setisCustomizedDoorWidth,
-  setDoorWeight,
-  setDoorWidth,
+  // addSelectedItem,
+  // resetState,
+  // setisCustomizedDoorWidth,
+  // setDoorWeight,
+  // setDoorWidth,
   // setListData,
-  setNavigationDesktop,
-  setPanelWeight,
-  setQuoteState,
-  setReturnWeight,
-  updateMeasurements,
+  // setNavigationDesktop,
+  // setPanelWeight,
+  // setQuoteState,
+  // setReturnWeight,
+  // updateMeasurements,
   getListData,
 } from "@/redux/estimateCalculations";
-import PlusWhiteIcon from "@/Assets/plus-white.svg";
+// import PlusWhiteIcon from "@/Assets/plus-white.svg";
 import { useNavigate } from "react-router-dom";
-import { backendURL, calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
+import { backendURL, calculateTotal } from "@/utilities/common";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import Pagination from "@/components/Pagination";
@@ -47,18 +46,18 @@ import {
 } from "@/utilities/estimates";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
-import {
-  resetEstimateState,
-  setEstimateCategory,
-  setEstimateState,
-} from "@/redux/estimateSlice";
-import {
-  resetMirrorEstimateState,
-  setEstimateMeasurements,
-  setSelectedItem,
-} from "@/redux/mirrorsEstimateSlice";
+// import {
+//   resetEstimateState,
+//   setEstimateCategory,
+//   setEstimateState,
+// } from "@/redux/estimateSlice";
+// import {
+//   resetMirrorEstimateState,
+//   setEstimateMeasurements,
+//   setSelectedItem,
+// } from "@/redux/mirrorsEstimateSlice";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
-import NewPagination from "../Pagination";
+// import NewPagination from "../Pagination";
 import { debounce } from "lodash";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import DefaultImage from "../ui-components/defaultImage";
@@ -67,7 +66,7 @@ import ActionsDropdown from "../common/ActionsDropdown";
 import {
   DeleteOutline,
   Edit,
-  ManageSearch,
+  // ManageSearch,
   RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 
@@ -125,7 +124,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   // } = useFetchDataEstimate();
   const {
     mutate: deleteEstimates,
-    isSuccess: deletedSuccessfully,
+    // isSuccess: deletedSuccessfully,
     isLoading: LoadingForDelete,
   } = useDeleteEstimates();
   const dispatch = useDispatch();
@@ -185,36 +184,32 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     }
   };
 
-  // const handleCreateQuote = () => {
-  //   dispatch(resetMirrorEstimateState());
-  //   dispatch(resetEstimateState());
-  //   dispatch(resetState());
-  //   dispatch(setisCustomizedDoorWidth(false));
-  //   dispatch(setQuoteState("create"));
-  //   navigate("/estimates/dimensions");
-  // };
-  useEffect(() => {
-    refetchEstimatesList();
-  }, [refetchEstimatesCounter, page, statusValue, dateValue]);
-
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchEstimatesList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+          refetchEstimatesList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
-  
-  useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [searchValue]);
+    [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
+);
+
+useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+        setPage(1);
+    }
+    if (searchValue) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+      refetchEstimatesList();
+    }
+}, [statusValue, dateValue, searchValue, page, refetchEstimatesCounter]);
 
   const dropdownActions = [
     {
@@ -235,81 +230,8 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     },
   ];
 
-  // const debouncedRefetch = useCallback(
-  //   debounce(() => {
-  //     if (page === 1) {
-  //       refetchEstimatesList();
-  //     } else {
-  //       setPage(1);
-  //     }
-  //   }, 500),
-  //   [searchValue]
-  // );
-
-  // useEffect(() => {
-  //   debouncedRefetch();
-  // }, [searchValue]);
-
-  // useEffect(() => {
-  //   refetchEstimatesList();
-  // }, [page])
-  console.log(estimatesList, "estimatesList", estimatesListFetching);
   return (
     <Box>
-      {/* <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          p: 2,
-        }}
-      >
-        <Typography sx={{ fontSize: 20, fontWeight: "bold", color: "#101828" }}>
-          Estimates
-        </Typography> */}
-      {/* Search input field */}
-      {/* <TextField
-          placeholder="Search by Customer Name"
-          value={search}
-          variant="standard"
-          onChange={(e) => handleChange(e)}
-          sx={{
-            mb: 2,
-            ".MuiInputBase-root:after": {
-              border: "1px solid #8477DA",
-            },
-          }}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <Search sx={{ color: "#8477DA" }} />
-              </InputAdornment>
-            ),
-          }}
-        />
-        <IconButton
-          onClick={handleCreateQuote}
-          disabled={true}
-          sx={{
-            backgroundColor: "#8477DA",
-            color: "white",
-            "&:hover": { backgroundColor: "#8477DA" },
-            borderRadius: 1,
-            padding: 1,
-            textTransform: "capitalize",
-            fontSize: 16,
-            height: 35,
-          }}
-        >
-          <img
-            width={"26px"}
-            height={"20px"}
-            src={PlusWhiteIcon}
-            alt="plus icon"
-          />
-          Add
-        </IconButton>
-      </Box> */}
-
       {isLoading ? (
         <Box
           sx={{
