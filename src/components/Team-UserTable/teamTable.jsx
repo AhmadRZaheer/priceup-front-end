@@ -147,26 +147,30 @@ const TeamTable = () => {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchStaffsList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+          refetchStaffsList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
+    [page, refetchStaffsList]  // Ensure refetchStaffsList is included in dependencies
+);
 
-  useEffect(() => {
-    refetchStaffsList();
-  }, [page, deletedSuccessfully, status, selectedDate]);
-
-  useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [search]);
+useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    if (status || selectedDate || search) {
+        setPage(1);
+    }
+    if (search) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+      refetchStaffsList();
+    }
+}, [status, selectedDate, search, page, deletedSuccessfully]);
 
   useEffect(() => {
     refetchLocationsList();
