@@ -174,26 +174,30 @@ const SuperAdminTeam = () => {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchUsersList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+          refetchUsersList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
+    [page, refetchUsersList]  // Ensure refetchUsersList is included in dependencies
+);
 
-  useEffect(() => {
-    refetchUsersList();
-  }, [page, deletedSuccessfully, status, selectedDate, role]);
-
-  useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [search]);
+useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, role or search) change
+    if (status || selectedDate || search || role) {
+        setPage(1);
+    }
+    if (search) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+      refetchUsersList();
+    }
+}, [status, selectedDate, search, page, deletedSuccessfully, role]);
 
   useEffect(() => {
     refetchLocationsList();

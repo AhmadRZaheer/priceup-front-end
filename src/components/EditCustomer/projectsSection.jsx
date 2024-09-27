@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { backendURL, debounce } from "@/utilities/common";
+import { backendURL } from "@/utilities/common";
 import {
   useDeleteDocument,
   useFetchAllDocuments,
@@ -29,6 +29,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { ProjectsColumns } from "@/utilities/DataGridColumns";
 import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
+import { debounce } from "lodash";
 
 export default function ProjectsSection() {
   const [searchParams] = useSearchParams();
@@ -86,24 +87,33 @@ export default function ProjectsSection() {
     navigate(`/projects/${item?._id}`);
   };
 
-  useEffect(() => {
-    refetchProjectsList();
-  }, [page, search, selectedDate, status,deletedSuccessfully]);
-
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchProjectsList();
-      } else {
-        setPage(1);
-      }
+        // Always refetch when page is 1, else reset page to 1 to trigger refetch
+        if (page !== 1) {
+            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
+        } else {
+          refetchProjectsList();  // If already on page 1, just refetch directly
+        }
     }, 700),
-    [page]
-  );
+    [page, refetchProjectsList]  // Ensure refetchProjectsList is included in dependencies
+);
 
-  useEffect(() => {
-    debouncedRefetch();
-  }, [search]);
+useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    if (status || selectedDate || search) {
+        setPage(1);
+    }
+    if (search) {
+        debouncedRefetch();
+        return () => {
+            debouncedRefetch.cancel();
+        };
+    } else {
+      refetchProjectsList();
+    }
+}, [status, selectedDate, search, page, deletedSuccessfully]);
+
   const dropdownActions = [
     {
       title: "Detail",
