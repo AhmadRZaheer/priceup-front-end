@@ -67,7 +67,7 @@ const getStatusUpdateType = (role) => {
     default:
       return "";
   }
-}
+};
 
 const routePrefix = `${backendURL}/admins`;
 
@@ -80,6 +80,7 @@ const SuperAdminTeam = () => {
   const [recordToModify, setRecordToModify] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [isLoadingState, setIsLoadingState] = useState(true);
   const itemsPerPage = 10;
   const fetchAllUsersUrl = useMemo(() => {
     let url = `${routePrefix}/all-users?page=${page}&limit=${itemsPerPage}`;
@@ -102,6 +103,7 @@ const SuperAdminTeam = () => {
     data: usersList,
     refetch: refetchUsersList,
     isFetching: usersListFetching,
+    isFetched,
     isLoading,
   } = useFetchAllDocuments(fetchAllUsersUrl);
   const { mutateAsync: deleteUser, isSuccess: deletedSuccessfully } =
@@ -160,8 +162,7 @@ const SuperAdminTeam = () => {
   };
 
   const handleOpenModifyModal = (record) => (
-    setRecordToModify(record),
-    setOpenModifyModal(true)
+    setRecordToModify(record), setOpenModifyModal(true)
   );
   const handleCloseModifyModal = () => {
     setOpenModifyModal(false);
@@ -195,6 +196,11 @@ const SuperAdminTeam = () => {
     };
   }, [search]);
 
+  useEffect(() => {
+    if (isFetched && filteredData) {
+      setIsLoadingState(false);
+    }
+  }, [isFetched, filteredData]);
   useEffect(() => {
     refetchLocationsList();
   }, []);
@@ -300,60 +306,60 @@ const SuperAdminTeam = () => {
 
   return (
     <>
-      <Box sx={{  overflow: "auto", }}>
-      <div className="page-title-location">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            // width: "98%",
-            margin: "auto",
-          }}
-        >
-          <Box>
-            <Typography
-              sx={{
-                fontSize: 24,
-                fontWeight: 600,
-                lineHeight: '32.78px'
-              }}
-            >
-              User Management
-            </Typography>
-            <Typography
-              sx={{
-                color: "#212528",
-                fontSize: "16px",
-                fontWeight: 600,
-                lineHeight: '21.86px',
-                opacity: '70%'
-              }}
-            >
-              Add, edit and manage your Users.
-            </Typography>
+      <Box sx={{ overflow: "auto" }}>
+        <div className="page-title-location">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              // width: "98%",
+              margin: "auto",
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: 24,
+                  fontWeight: 600,
+                  lineHeight: "32.78px",
+                }}
+              >
+                User Management
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#212528",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  lineHeight: "21.86px",
+                  opacity: "70%",
+                }}
+              >
+                Add, edit and manage your Users.
+              </Typography>
+            </Box>
+            <Box sx={{ alignSelf: "center" }}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleCreateUser}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  letterSpacing: "0px",
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  gap: "10px",
+                }}
+              >
+                <Add color="white" />
+                Add New User
+              </Button>
+            </Box>
           </Box>
-          <Box sx={{alignSelf:'center'}}>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={handleCreateUser}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                letterSpacing: '0px',
-                color: "white",
-                fontSize: 16,
-                fontWeight: 600,
-                gap: '10px'
-              }}
-            >
-              <Add color="white" />
-              Add New User
-            </Button>
-          </Box>
-        </Box>
         </div>
-        <Grid container sx={{ }} spacing={2}>
+        <Grid container sx={{}} spacing={2}>
           {[
             {
               title: "Total Users",
@@ -436,7 +442,7 @@ const SuperAdminTeam = () => {
               <DesktopDatePicker
                 value={selectedDate}
                 onChange={handleDateChange}
-                inputFormat="MM/DD/YYYY"  // Format for the selected date
+                inputFormat="MM/DD/YYYY" // Format for the selected date
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -446,11 +452,11 @@ const SuperAdminTeam = () => {
                       ...params.InputProps,
                       inputProps: {
                         ...params.inputProps,
-                        placeholder: "Date Added",  // Set placeholder explicitly here
+                        placeholder: "Date Added", // Set placeholder explicitly here
                       },
                     }}
                     InputLabelProps={{
-                      shrink: true,  // Ensure the label stays above the input
+                      shrink: true, // Ensure the label stays above the input
                     }}
                   />
                 )}
@@ -477,8 +483,6 @@ const SuperAdminTeam = () => {
                   },
                 }}
               />
-
-
             </Box>
             <Box>
               <FormControl
@@ -492,14 +496,19 @@ const SuperAdminTeam = () => {
                   displayEmpty
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                        sx={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          // lineHeight: '16.41px',
-                          color: '#000000',
-                          fontFamily: '"Roboto",sans-serif !important'
-                        }}>Role</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Role
+                        </Typography>
+                      );
                     }
                     return (
                       <Typography
@@ -509,10 +518,10 @@ const SuperAdminTeam = () => {
                         {userRoles.SUPER_ADMIN === selected
                           ? " Super Admin"
                           : userRoles.CUSTOM_ADMIN === selected
-                            ? " Admin"
-                            : userRoles.STAFF === selected
-                              ? " Staff"
-                              : ""}
+                          ? " Admin"
+                          : userRoles.STAFF === selected
+                          ? " Staff"
+                          : ""}
                       </Typography>
                     );
                   }}
@@ -566,14 +575,19 @@ const SuperAdminTeam = () => {
                   onChange={(event) => setStatus(event.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                        sx={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          // lineHeight: '16.41px',
-                          color: '#000000',
-                          fontFamily: '"Roboto",sans-serif !important'
-                        }}>Status</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Status
+                        </Typography>
+                      );
                     }
 
                     return selected ? (
@@ -597,7 +611,7 @@ const SuperAdminTeam = () => {
                     {" "}
                     <Typography
                       className=" status-active"
-                      sx={{ padding: 0, px: 2,width: "fit-content" }}
+                      sx={{ padding: 0, px: 2, width: "fit-content" }}
                     >
                       Active
                     </Typography>
@@ -614,7 +628,14 @@ const SuperAdminTeam = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Button variant="text" onClick={handleResetFilter} sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
+            <Button
+              variant="text"
+              onClick={handleResetFilter}
+              sx={{
+                p: "6px 8px !important",
+                fontFamily: '"Roboto",sans-serif !important',
+              }}
+            >
               Clear Filter
             </Button>
           </Box>
@@ -623,14 +644,14 @@ const SuperAdminTeam = () => {
         <Box
           sx={{
             border: "1px solid #D0D5DD",
-            background:'#FFFFFF',
+            background: "#FFFFFF",
             borderRadius: "8px",
             overflow: "hidden",
             // width: "99.88%",
             m: "auto",
           }}
         >
-          {isLoading ? (
+          {isLoadingState ? (
             <Box
               sx={{
                 width: "100%",
@@ -644,12 +665,8 @@ const SuperAdminTeam = () => {
             >
               <CircularProgress sx={{ color: "#8477DA" }} />
             </Box>
-          ) : filteredData?.length === 0 && !usersListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-              No User Found
-            </Typography>
-          ) : (
-            <div >
+          ) : filteredData?.length > 0 ? (
+            <div>
               <DataGrid
                 loading={usersListFetching}
                 style={{
@@ -663,12 +680,12 @@ const SuperAdminTeam = () => {
                 rowCount={usersList?.totalRecords ? usersList?.totalRecords : 0}
                 sx={{
                   width: "100%",
-                  '& .MuiDataGrid-columnHeader': {
-                    borderRight: 'none', // Remove the right border between header cells
-                    '&:hover': {
-                      borderRight: 'none', // Ensure no border on hover
+                  "& .MuiDataGrid-columnHeader": {
+                    borderRight: "none", // Remove the right border between header cells
+                    "&:hover": {
+                      borderRight: "none", // Ensure no border on hover
                     },
-                  }
+                  },
                 }}
                 hideFooter
                 disableColumnMenu
@@ -685,6 +702,17 @@ const SuperAdminTeam = () => {
                 />
               </Box>
             </div>
+          ) : (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No User Found
+            </Typography>
           )}
         </Box>
         <DeleteModal
