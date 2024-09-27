@@ -59,6 +59,7 @@ export const backendURL =
 // };
 
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
+  console.log(selectedContent,'selectedContentselectedContent')
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(
@@ -369,6 +370,7 @@ export const calculateAreaAndPerimeter = (
   glassThickness = thicknessTypes.THREEBYEIGHT,
   layoutConfigs = null
 ) => {
+  console.log(measurementSides,variant,glassThickness,'dfdfdeercsf')
   let measurements =
     variant !== layoutVariants.CUSTOM
       ? convertArrayKeysToObject(measurementSides)

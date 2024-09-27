@@ -10,8 +10,8 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { layoutVariants } from "@/utilities/constants";
-import { renderMeasurementSides } from "@/utilities/estimates";
+import { layoutVariants,quoteState as quotestate, } from "@/utilities/constants";
+import { generateObjectForPDFRuntime, renderMeasurementSides } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
@@ -38,7 +38,10 @@ import {
   selectedItem,
   setUserProfitPercentage,
 } from "@/redux/wineCellarEstimateSlice";
-import { getEstimateState } from "@/redux/estimateSlice";
+import { getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
+import { getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
+import { calculateTotal } from "@/utilities/common";
 
 const Summary = ({ setStep }) => {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -61,6 +64,9 @@ const Summary = ({ setStep }) => {
   const quoteState = useSelector(getEstimateState);
   const sqftArea = useSelector(getLayoutArea);
   const [anchorEl, setAnchorEl] = useState(null);
+  const projectId = useSelector(getProjectId);
+  const selectedCategory = useSelector(getEstimateCategory);
+  const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -68,6 +74,37 @@ const Summary = ({ setStep }) => {
     { title: "Pricing Subcategories", active: true },
     { title: "Gross Profit Margin", active: true },
   ]);
+  const wineCallerEstimateState = useSelector(
+    (state) => state.wineCellarsEstimate
+  );
+
+  const drawerHandleClick = () => {
+    const item = generateObjectForPDFRuntime(
+      { quoteState, projectId, selectedCategory },
+      wineCallerEstimateState,
+      wineCallerLocationSettings
+    );
+    const pricing = calculateTotal(
+      item,
+      item?.sqftArea,
+      wineCallerLocationSettings
+    );
+    const measurementString = renderMeasurementSides(
+      quotestate.EDIT,
+      item?.measurements,
+      item?.layout_id
+    );
+    const id = quoteState === quotestate.CREATE ? "--" : selectedData._id;
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...item,
+        measurements: measurementString,
+        pricing,
+        id,
+      })
+    );
+  };
 
   // Toggle handler function
   const handleToggle = (index) => {
@@ -827,6 +864,8 @@ const Summary = ({ setStep }) => {
                       >
                         Reset
                       </Button>
+                      <Divider sx={{ borderColor: "#D4DBDF" }} />
+                      <PDFPreviewDrawer handleClick={drawerHandleClick} />
                     </Stack>
                   </Grid>
                 )}

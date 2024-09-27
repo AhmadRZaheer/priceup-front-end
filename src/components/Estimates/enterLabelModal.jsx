@@ -173,7 +173,7 @@ const EnterLabelModal = ({
                 }}
                 variant="contained"
               >
-                {estimateCreateLoading ? <CircularProgress /> : "Save Estimate"}
+                {estimateCreateLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Estimate"}
               </Button>
             </Box>
           </form>

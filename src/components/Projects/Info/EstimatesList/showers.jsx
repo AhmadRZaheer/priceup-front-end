@@ -1,22 +1,44 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import { Box, Button, CircularProgress, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
-import { backendURL, calculateTotal } from "@/utilities/common";
-import { Edit } from "@mui/icons-material";
-import { getListData } from "@/redux/estimateCalculations";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  calculateTotal,
+} from "@/utilities/common";
+import { Add, Edit, Search } from "@mui/icons-material";
+// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import {
+  getListData,
+  resetState,
+  setShowerProjectId,
+} from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { generateObjectForPDFPreview, renderMeasurementSides, setStateForShowerEstimate } from "@/utilities/estimates";
+import {
+    generateObjectForPDFPreview,
+    renderMeasurementSides,
+    setStateForShowerEstimate,
+} from "@/utilities/estimates";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
-const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common")
+const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 const routePrefix = `${backendURL}/estimates`;
 
@@ -118,7 +140,7 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
         }, 700),
         [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
     );
-    
+
     useEffect(() => {
         // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
         if (statusValue || dateValue || searchValue) {
@@ -138,15 +160,11 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
         {isLoading ? (
             <Box
                 sx={{
-                    width: 40,
-                    m: "auto",
                     display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    maxHeight: "70vh",
-                    minHeight: "20vh",
-                    background: '#FFFF',
-                    pb: 3
+                    justifyContent: "space-between",
+                    paddingY: 2,
+                    borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                    background: "#FFFF",
                 }}
             >
                 <CircularProgress sx={{ color: "#8477DA" }} />
@@ -284,7 +302,9 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                     handleDelete={handleDeleteEstimate}
                 />
             </Box>
-        )}</>);
-}
+        )}
+    </>
+    );
+};
 
 export default ShowerEstimatesList;

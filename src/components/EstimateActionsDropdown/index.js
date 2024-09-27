@@ -64,7 +64,7 @@ const EstimateActionsDropdown = ({
           />
           {/* </Link> */}
         </MenuItem>
-        {params?.row?.category === EstimateCategory.SHOWERS && (
+        {/* {params?.row?.category === EstimateCategory.SHOWERS && ( */}
           <MenuItem>
             {" "}
             <CustomIconButton
@@ -78,7 +78,7 @@ const EstimateActionsDropdown = ({
               }
             />
           </MenuItem>
-        )}
+        {/* )} */}
         <MenuItem>
           {" "}
           <CustomIconButton

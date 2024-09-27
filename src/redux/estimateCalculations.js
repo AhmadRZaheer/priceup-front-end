@@ -35,7 +35,6 @@ export const getAdditionalFieldsTotal = (state) =>
   state.estimateCalculations.additionalFieldsPrice;
 export const getisCustomizedDoorWidth = (state) =>
   state.estimateCalculations.isCustomizedDoorWidth;
-
 export const getUserProfitPercentage = (state) =>
   state.estimateCalculations.content.userProfitPercentage;
 export const getMeasurementSide = (state) =>

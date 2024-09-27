@@ -468,3 +468,76 @@ export const generateNotificationsForCurrentEstimate = (
     }
  return notifications;
 }
+
+export const generateObjectForPDFPreview = (
+  listData,
+  estimateData,
+  mirrorMiscPricing
+) => {
+  let estimateInfoObject;
+
+  let glassTypee = null;
+  glassTypee = listData?.glassTypes?.find(
+    (item) => item._id === estimateData?.config?.glassType?.type
+  );
+
+  let edgeWork = null;
+  edgeWork = listData?.edgeWorks?.find(
+    (item) => item._id === estimateData?.config?.edgeWork?.type
+  );
+
+  let glassAddons = [];
+  glassAddons = estimateData?.config?.glassAddons?.map((item) => {
+    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    return record;
+  });
+
+  let hardwares = [];
+  hardwares = estimateData?.config?.hardwares?.map((item) => {
+    const record = listData?.hardwares.find((addon) => addon._id === item);
+    return record;
+  });
+
+  estimateInfoObject = {
+    name: estimateData?.name,
+    projectId: estimateData?.project_id,
+    category: estimateData?.category,
+    cost: estimateData?.cost,
+    creatorData: estimateData?.creatorData,
+    creator_type: estimateData?.creator_type,
+    customerData: estimateData?.customerData,
+    settings: estimateData?.settings,
+    status: estimateData?.status,
+    updatedAt: estimateData?.updatedAt,
+    additionalFields: estimateData?.config?.additionalFields,
+    glassType: {
+      item: glassTypee,
+      thickness: estimateData?.config?.glassType?.thickness,
+    },
+    edgeWork: {
+      item: edgeWork,
+      thickness: estimateData?.config?.edgeWork?.thickness
+    },
+    glassAddons: glassAddons?.length ? [...glassAddons] : [],
+    hardwares: hardwares?.length ? [...hardwares] : [],
+    simpleHoles: estimateData?.config?.simpleHoles,
+    lightHoles: estimateData?.config?.lightHoles,
+    singleOutletCutout: estimateData?.config?.singleOutletCutout,
+    doubleOutletCutout: estimateData?.config?.doubleOutletCutout,
+    tripleOutletCutout: estimateData?.config?.tripleOutletCutout,
+    quadOutletCutout: estimateData?.config?.quadOutletCutout,
+    notch: estimateData?.config?.notch,
+    people: estimateData?.config?.people,
+    hours: estimateData?.config?.hours,
+    perimeter: estimateData?.config?.perimeter,
+    sqftArea: estimateData?.config?.sqftArea,
+    userProfitPercentage: estimateData?.config?.userProfitPercentage,
+    label: estimateData?.config?.label,
+    layout_id: estimateData?.config?.layout_id,
+    measurements: estimateData?.config?.measurements,
+    pricingFactor: mirrorMiscPricing?.pricingFactorStatus
+      ? mirrorMiscPricing?.pricingFactor
+      : 1,
+  };
+  return estimateInfoObject;
+};
