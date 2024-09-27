@@ -40,7 +40,7 @@ import {
   getLayoutPerimeter,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { backendURL, calculateTotal } from "@/utilities/common";
+import { backendURL, calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import {
   layoutVariants,
@@ -107,27 +107,25 @@ const Summary = ({ setStep }) => {
   ]);
 
   //drawerHandleClick
-  const drawerHandleClick = () => {
-    console.log("clclcclcllcl", selectedData);
-
-    const item = generateObjectForPDFRuntime(
+  const drawerHandleClick = () => {  
+  const item = generateObjectForPDFRuntime(
       { estimateState, projectId, selectedCategory },
       showerEstimateState,
       showersLocationSettings
     );
-
-    console.log("formattedDataformattedData", item);
     const pricing = calculateTotal(
       item,
       item?.sqftArea,
       showersLocationSettings
     );
+
     const measurementString = renderMeasurementSides(
       quotestate.EDIT,
       item?.measurements,
       item?.layout_id
-    );
-    const id = estimateState === quoteState.CREATE ? "--" : selectedData._id;
+    ); 
+
+    const id = estimateState === quotestate.CREATE ? "--" : selectedData._id;
     localStorage.setItem(
       "pdf-estimate",
       JSON.stringify({

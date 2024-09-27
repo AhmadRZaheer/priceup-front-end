@@ -71,7 +71,6 @@ const commaFn = (index, arrLength) => index < arrLength - 1 ? ", " : "";
 
 const PDFFile = ({controls,data}) => {
   const [loading,setLoading] = useState(true);
-  console.log(data?.quote?.hardwareAddons,'loadingloading');
   return (<Document onRender={()=>{console.log('pdf rendered');setLoading(false)}}>
     {loading ? "Loading..." : <Page size="A4" style={styles.page} wrap>
       {/** Section 1 */}
@@ -319,7 +318,7 @@ const PDFFile = ({controls,data}) => {
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
             <Text style={{fontSize:'12px'}}>
-            {data?.quote?.glassAddons?.map((item) => (item?.name))}
+            {data?.quote?.glassAddons?.map((item,index) => (`${item?.name}${commaFn(index, data?.quote?.glassAddons?.length)}`))}
             </Text>
           </View>
           ) : (
@@ -329,7 +328,7 @@ const PDFFile = ({controls,data}) => {
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Hardwares:</Text>
             <Text style={{fontSize:'12px'}}>
-            {data?.quote?.hardwares?.map((item) => (item?.name))}
+            {data?.quote?.hardwares?.map((item,index) => (`${item?.name}${commaFn(index, data?.quote?.hardwares?.length)}`))}
             </Text>
           </View>
           ) : (
@@ -338,8 +337,8 @@ const PDFFile = ({controls,data}) => {
           {summarySection[data?.quote?.category]?.includes(pdfFields.HARDWAREADDONS) && data?.quote?.hardwareAddons?.length ? (
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Hardware Addons:</Text>
-            {data?.quote?.hardwareAddons?.map((record) => (
-              <Text style={{fontSize:'12px'}}>{`${record?.item?.name} - (${record?.count}), `}</Text>))}
+            {data?.quote?.hardwareAddons?.map((record,index) => (
+              <Text style={{fontSize:'12px'}}>{`${record?.item?.name} - (${record?.count})${commaFn(index, data?.quote?.hardwareAddons?.length)} `}</Text>))}
           </View>
           ) : (
             ""

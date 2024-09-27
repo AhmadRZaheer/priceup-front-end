@@ -52,6 +52,7 @@ export const dimensionsSection = {
     "sqftArea",
     "panelWeight",
     "returnWeight",
+    "doorWeight",
   ],
   mirrors: ["measurements", "sqftArea"],
   wineCellars: [

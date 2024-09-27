@@ -370,6 +370,7 @@ export const calculateAreaAndPerimeter = (
   glassThickness = thicknessTypes.THREEBYEIGHT,
   layoutConfigs = null
 ) => {
+  console.log(measurementSides,variant,glassThickness,'dfdfdeercsf')
   let measurements =
     variant !== layoutVariants.CUSTOM
       ? convertArrayKeysToObject(measurementSides)

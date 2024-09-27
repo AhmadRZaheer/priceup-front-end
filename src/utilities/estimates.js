@@ -595,9 +595,11 @@ export const generateObjectForPDFPreview = (
       glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
     },
     cornerClamps: {
-      cornerWallClamp:cornerWallClampArray ? [...cornerWallClampArray]: [],
-      cornerSleeveOver: cornerSleeveOverArray ? [...cornerSleeveOverArray]:[],
-      cornerGlassToGlass: cornerGlassToGlassArray ?[...cornerGlassToGlassArray] :[],
+      cornerWallClamp: cornerWallClampArray ? [...cornerWallClampArray] : [],
+      cornerSleeveOver: cornerSleeveOverArray ? [...cornerSleeveOverArray] : [],
+      cornerGlassToGlass: cornerGlassToGlassArray
+        ? [...cornerGlassToGlassArray]
+        : [],
     },
     mountingChannel: {
       item: channelItem || null,
@@ -716,61 +718,101 @@ export const showEditButtonForEstimateStatus = (decryptedToken) => {
   }
 };
 
-export const generateObjectForPDFRuntime=(state,showerState,showersLocationSettings)=>{
-  console.log(state,showerState,showersLocationSettings,'sdsdsdsdsdsdsdsdsdsdsd')
-  // const projectId = useSelector(getProjectId);
-  // const perimeter = useSelector(getLayoutPerimeter);
-  // const estimateState = useSelector(getEstimateState);
-  // const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
-  // const selectedCategory = useSelector(getEstimateCategory);
-  // const doorWidth = useSelector(getDoorWidth);
-  // const selectedContent = useSelector(getContent);
-  return {
+export const generateObjectForPDFRuntime = (
+  state,
+  showerState,
+  showersLocationSettings
+) => {
+  console.log(showerState,state,'showerStateshowerState')
+  return {   
     category: state.selectedCategory,
     companyData: {},
     cost: showerState.totalPrice,
     customerData: { name: "--", phone: "--", email: "--" },
     project_id: state.projectId,
     settings: {
-      name:  state === quoteState.CREATE ?  showerState?.selectedItem?.name :showerState?.selectedItem?.settings?.name,
-      image: state === quoteState.CREATE ? showerState?.selectedItem?.image : showerState?.selectedItem?.settings?.image,
+      name:
+        state.estimateState === quoteState.CREATE
+          ? showerState?.selectedItem?.name
+          : showerState?.selectedItem?.settings?.name,
+      image:
+        state.estimateState === quoteState.CREATE
+          ? showerState?.selectedItem?.image
+          : showerState?.selectedItem?.settings?.image,
     },
-    // config: {
-      additionalFields: showerState?.content?.additionalFields,
-      clampCut: showerState?.content?.clampCut,
-      cornerClamps: showerState?.content?.cornerClamps,
-      doorWidth:showerState?.doorWidth,
-      glassType: showerState?.content?.glassType,
-      glassAddons :showerState?.content?.glassAddons,
-      handles: showerState?.content?.handles,
-      doorLock: showerState?.content?.doorLock,
-      hardwareAddons: showerState?.content?.hardwareAddons,
-      hardwareFinishes: showerState?.content?.hardwareFinishes,
-      header: showerState?.content?.header,
-      hingeCut: showerState?.content?.hingeCut,
-      hinges: showerState?.content?.hinges,
-      hours: showerState?.content?.hours,
-      people: showerState?.content?.people,
-      mitre: showerState?.content?.mitre,
-      mountingChannel: showerState?.content?.mountingChannel,
-      mountingClamps: showerState?.content?.mountingClamps,
-      mountingState: showerState?.content?.mountingState,
-      outages: showerState?.content?.outages,
-      slidingDoorSystem: showerState?.content?.slidingDoorSystem,
-      userProfitPercentage: showerState?.content?.userProfitPercentage,
-      sqftArea: showerState?.sqftArea,
-      polish: showerState?.content?.polish,
-      oneInchHoles: showerState?.content?.oneInchHoles,
-      notch: showerState?.content?.notch,
-      oneInchHoles: showerState?.content?.oneInchHoles,
-      slidingDoorSystem: showerState?.content?.slidingDoorSystem,
-      isCustomizedDoorWidth:showerState?.isCustomizedDoorWidth,
-      layout_id: state === quoteState.CREATE ? showerState?.selectedItem?._id:showerState?.selectedItem?.settings?._id,
-      perimeter:showerState?.perimeter,
-      measurements:showerState?.measurements,
-      updatedAt: new Date(),
-      pricingFactor:
-        showersLocationSettings?.miscPricing?.pricingFactor,
-    // },
+    additionalFields: showerState?.content?.additionalFields,
+    clampCut: showerState?.content?.clampCut,
+    cornerClamps: showerState?.content?.cornerClamps,
+    doorWidth: showerState?.doorWidth,
+    glassType: showerState?.content?.glassType,
+    glassAddons: showerState?.content?.glassAddons,
+    handles: showerState?.content?.handles,
+    doorLock: showerState?.content?.doorLock,
+    hardwareAddons: showerState?.content?.hardwareAddons,
+    hardwareFinishes: showerState?.content?.hardwareFinishes,
+    header: showerState?.content?.header,
+    hingeCut: showerState?.content?.hingeCut,
+    hinges: showerState?.content?.hinges,
+    hours: showerState?.content?.hours,
+    people: showerState?.content?.people,
+    mitre: showerState?.content?.mitre,
+    mountingChannel: showerState?.content?.mountingChannel,
+    mountingClamps: showerState?.content?.mountingClamps,
+    mountingState: showerState?.content?.mountingState,
+    outages: showerState?.content?.outages,
+    slidingDoorSystem: showerState?.content?.slidingDoorSystem,
+    userProfitPercentage: showerState?.content?.userProfitPercentage,
+    sqftArea: showerState?.sqftArea,
+    polish: showerState?.content?.polish,
+    oneInchHoles: showerState?.content?.oneInchHoles,
+    notch: showerState?.content?.notch,
+    oneInchHoles: showerState?.content?.oneInchHoles,
+    slidingDoorSystem: showerState?.content?.slidingDoorSystem,
+    isCustomizedDoorWidth: showerState?.isCustomizedDoorWidth,
+    layout_id:
+      state.estimateState === quoteState.CREATE
+        ? showerState?.selectedItem?._id
+        : showerState?.selectedItem?.settings?._id,
+    perimeter: showerState?.perimeter,
+    measurements: showerState?.measurements,
+    updatedAt: new Date(),
+    pricingFactor: showersLocationSettings?.miscPricing?.pricingFactor,
+    panelWeight:showerState.panelWeight,
+    doorWeight:showerState.doorWeight,
+    returnWeight:showerState.returnWeight,
   };
-}
+};
+
+export const generateObjForMirrorPDFRuntime = (
+  state,
+  mirrorState,
+  mirrorsLocationSettings
+) => {
+  return {
+    additionalFields: mirrorState?.content?.additionalFields,
+    category: state.selectedCategory,
+    cost: mirrorState?.pricing?.total,
+    creatorData: {},
+    customerData: { name: "--", phone: "--", email: "--" },
+    doubleOutletCutout: mirrorState?.content?.doubleOutletCutout,
+    edgeWork: mirrorState?.content?.edgeWork,
+    glassType: mirrorState?.content?.glassType,
+    glassAddons: mirrorState?.content?.glassAddons,
+    hardwares: mirrorState?.content?.hardwares,
+    hours: mirrorState?.content?.hours,
+    layout_id: null,
+    lightHoles: mirrorState?.content?.lightHoles,
+    measurements: mirrorState?.measurements,
+    notch: mirrorState?.content?.notch,
+    people: mirrorState?.content?.people,
+    pricingFactor: mirrorsLocationSettings?.miscPricing?.pricingFactor,
+    project_id: state.projectId,
+    quadOutletCutout: mirrorState?.content?.quadOutletCutout,
+    settings: {},
+    simpleHoles: mirrorState?.content?.simpleHoles,
+    singleOutletCutout: mirrorState?.content?.singleOutletCutout,
+    sqftArea: mirrorState?.sqftArea,
+    tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
+    updatedAt: new Date(),
+  };
+};
