@@ -80,7 +80,7 @@ const Summary = ({ setStep }) => {
 
   const drawerHandleClick = () => {
     const item = generateObjectForPDFRuntime(
-      { quoteState, projectId, selectedCategory },
+      { estimateState:quoteState, projectId, selectedCategory },
       wineCallerEstimateState,
       wineCallerLocationSettings
     );
@@ -94,6 +94,7 @@ const Summary = ({ setStep }) => {
       item?.measurements,
       item?.layout_id
     );
+    console.log(item,measurementString,'dfdererererasas',wineCallerEstimateState)
     const id = quoteState === quotestate.CREATE ? "--" : selectedData._id;
     localStorage.setItem(
       "pdf-estimate",

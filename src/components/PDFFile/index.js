@@ -107,11 +107,11 @@ const PDFFile = ({controls,data}) => {
         <View style={{flexGrow:1}}>
           <Text style={{padding:'5px 10px',backgroundColor:'#ccc',borderRadius:'5px',fontSize:'15px',fontWeight:'semibold'}}>Job Info</Text>
           <View style={{padding:'5px'}}>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.settings?.name ?? 'Custom'} Layout - Estimate</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.settings?.name ?? 'Custom'}  Layout - Estimate</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.label}</Text>
           </View>
         </View>
-        <View style={{flexGrow:1}}>
+        <View style={{ width:'175px'}}>
           <Text style={{padding:'5px 10px',backgroundColor:'#ccc',borderRadius:'5px',fontSize:'15px',fontWeight:'semibold'}}>{data?.location?.name}</Text>
           <View style={{padding:'5px'}}>
           <Text style={{fontSize:'12px'}}>{data?.location?.street}</Text>
@@ -123,11 +123,11 @@ const PDFFile = ({controls,data}) => {
       {/** Section 3 */}
       <View style={{borderTop:'1px sloid #ccc',paddingTop:'10px'}}>
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-        <View style={{}} wrap>
-           <Text style={{fontSize:'18px',fontWeight:'extrabold'}}>{data?.quote?.settings?.name ?? 'Custom'} Layout  - Estimate</Text>
+        <View style={{width:'357px'}} wrap>
+           <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'357px'}}>{data?.quote?.settings?.name ?? 'Custom'} Layout - Estimate</Text>
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
             <Text style={{fontSize:'14px'}}>Dimensions:</Text>
-            <Text style={{fontSize:'12px',wordWrap: "break-word",width:'300px',textAlign:'right'}} wrap>{data?.quote?.measurements}</Text>
+            <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{data?.quote?.measurements}</Text>
            </View>}
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.DOORWIDTH) && data?.quote?.doorWidth && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Door Width:</Text>
@@ -148,6 +148,10 @@ const PDFFile = ({controls,data}) => {
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.RETURNWEIGHT) && data?.quote?.returnWeight && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Return Weight:</Text>
             <Text style={{fontSize:'12px'}}>{data?.quote?.returnWeight}</Text>
+           </View>}
+           {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+            <Text style={{fontSize:'14px'}}>Total:</Text>
+            <Text style={{fontSize:'12px'}}> ${data?.quote?.cost?.toFixed(2) || 0}</Text>
            </View>}
                   {/** undefined is used for custom layout  */}
                   {/* {![undefined].includes(data?.quote?.settings?.variant) && (
@@ -177,10 +181,12 @@ const PDFFile = ({controls,data}) => {
                     </Typography>
                   )} */}
         </View>
-        <Text style={{fontSize:'18px'}}>Total: ${data?.quote?.cost?.toFixed(2) || 0}</Text>
+        {controls?.viewLayoutImage && <Image style={styles.logo2} src={ data?.quote?.layout_id ? `${backendURL}/${data?.quote?.settings?.image}` : CustomImage} alt="logo" />}
+        {/* <Text style={{fontSize:'18px'}}>Total: ${data?.quote?.cost?.toFixed(2) || 0}</Text> */}
        </View>
-       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
-        {controls?.viewPricingSubCategory && <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
+       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
+        {controls?.viewPricingSubCategory &&
+         <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Pricing Sub Categories:</Text>
           {pricingSection[data?.quote?.category]?.includes(pdfFields.HARDWAREPRICE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px',fontWeight:'bold'}}>Hardware Price:</Text>
@@ -211,7 +217,8 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.additionalFieldPrice?.toFixed(2) || 0}</Text>
           </View>}
         </View>}
-        {controls?.viewGrossProfit && <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
+        {controls?.viewGrossProfit && 
+        <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Gross Profit:</Text>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Gross Total:</Text>
@@ -228,8 +235,9 @@ const PDFFile = ({controls,data}) => {
         </View>}
        </View>
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
-       {controls?.viewLayoutImage && <Image style={styles.logo2} src={ data?.quote?.layout_id ? `${backendURL}/${data?.quote?.settings?.image}` : CustomImage} alt="logo" />}
-        {controls?.viewSummary && <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
+     
+        {controls?.viewSummary && 
+        <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Summary:</Text>
         {summarySection[data?.quote?.category]?.includes(pdfFields.HARDWAREFINISHES) && data?.quote?.hardwareFinishes && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Finish:</Text>
@@ -276,7 +284,9 @@ const PDFFile = ({controls,data}) => {
              (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.mountingClamps?.glassToGlass.length)}`))}
          </Text>
          </View> : ''}
-         {summarySection[data?.quote?.category]?.includes(pdfFields.CORNERWALLCLAMP) && data?.quote?.cornerClamps?.cornerWallClamp?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+        
+          </View>}
+          {summarySection[data?.quote?.category]?.includes(pdfFields.CORNERWALLCLAMP) && data?.quote?.cornerClamps?.cornerWallClamp?.length ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
          <Text style={{fontSize:'14px'}}>Corner WallClamp:</Text>
          <Text style={{fontSize:'12px'}}>
           {data?.quote?.cornerClamps?.cornerWallClamp?.map(
@@ -297,7 +307,7 @@ const PDFFile = ({controls,data}) => {
              (row,index) => (`${row.item.name} (${row.count})${commaFn(index, data?.quote?.cornerClamps?.cornerGlassToGlass.length)}`))}
          </Text>
          </View> : ''}
-          </View>}
+
         {summarySection[data?.quote?.category]?.includes(pdfFields.GLASSTYPE) && data?.quote?.glassType?.item ? <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Glass Type:</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.glassType?.item?.name} - ({data?.quote?.glassType?.thickness})</Text>
@@ -353,8 +363,9 @@ const PDFFile = ({controls,data}) => {
           </View>
         </View>}
        </View>
-       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
-       {controls?.viewFabrication && <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
+       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+       {controls?.viewFabrication && 
+       <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.ONEINCHHOLES) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>1" Holes:</Text>
@@ -409,7 +420,8 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'12px'}}>{data?.quote?.quadOutletCutout}</Text>
           </View>}
         </View>}
-        {controls?.viewAdditionalFields && <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
+        {controls?.viewAdditionalFields &&
+         <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Additional Fields:</Text>
           {data?.quote?.additionalFields?.map(
             (item) =>

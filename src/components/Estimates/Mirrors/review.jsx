@@ -224,7 +224,7 @@ export const MirrorReview = ({ setStep }) => {
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       if (projectId) {
-        navigate(`projects/${projectId}`);
+        navigate(`/projects/${projectId}`);
       } else {
         navigate("/estimates");
       }
