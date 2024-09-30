@@ -300,9 +300,6 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
               }
               sx={{
                 width: "100%",
-                ".MuiDataGrid-main": {
-                  borderRadius: "8px !important",
-                },
               }}
               rowHeight={70}
               hideFooter

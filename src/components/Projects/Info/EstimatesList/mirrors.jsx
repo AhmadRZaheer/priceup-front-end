@@ -288,9 +288,7 @@ useEffect(() => {
               rowCount={
                 estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
               }
-              sx={{ width: "100%",'.MuiDataGrid-main':{
-                borderRadius:'8px !important',
-              } }}
+              sx={{ width: "100%" }}
               rowHeight={70}
               hideFooter
               disableColumnMenu
