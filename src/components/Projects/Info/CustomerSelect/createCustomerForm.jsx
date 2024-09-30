@@ -297,7 +297,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     variant="contained"
                     disabled={createLoading}
                 >
-                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Customer"}
+                    {createLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Customer"}
                 </Button>
             </Box>
             <Box

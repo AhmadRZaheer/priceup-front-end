@@ -442,7 +442,9 @@ useEffect(() => {
                         : 0
                     }
                     rowHeight={70.75}
-                    sx={{ width: "100%" }}
+                    sx={{ width: "100%",'.MuiDataGrid-main': {
+                                borderRadius: '8px !important',
+                            } }}
                     hideFooter
                     disableColumnMenu
                   />

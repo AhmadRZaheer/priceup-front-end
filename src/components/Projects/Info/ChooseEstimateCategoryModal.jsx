@@ -100,7 +100,10 @@ export default function ChooseEstimateCategoryModal({
     <>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={()=>{
+          handleClose();
+          setCategory('');
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
@@ -247,7 +250,10 @@ export default function ChooseEstimateCategoryModal({
           <Box sx={{ display: "flex", justifyContent: "end", gap: "10px" }}>
             <Button
               variant="outlined"
-              onClick={handleClose}
+              onClick={()=>{
+                handleClose();
+                setCategory('')
+              }}
               sx={{
                 mr: 1,
                 backgroundColor: "#FFFFFF",

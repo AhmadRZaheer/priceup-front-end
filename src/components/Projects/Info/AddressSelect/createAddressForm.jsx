@@ -302,7 +302,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     variant="contained"
                     disabled={createLoading}
                 >
-                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Address"}
+                    {createLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Address"}
                 </Button>
             </Box>
             <Box
