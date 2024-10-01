@@ -175,8 +175,8 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
         {data.resourceInfoWithFullObjects?.doorLock?.item && (
         <Typography className="summaryData">
         <Box className="heading-txt">Door Lock</Box>&nbsp; :{" "}
-        {data.resourceInfoWithFullObjects?.type?.item?.name} (
-        {data.resourceInfoWithFullObjects?.type?.count})
+        {data.resourceInfoWithFullObjects?.doorLock?.item?.name} (
+        {data.resourceInfoWithFullObjects?.doorLock?.count})
       </Typography>
         )}
         {/* <Typography className="summaryData">
