@@ -42,6 +42,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { debounce } from "lodash";
 import { backendURL } from "@/utilities/common";
 import { getAssignedLocationName } from "@/utilities/users";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const getUserRoleText = (role) => {
   switch (role) {
@@ -175,30 +176,30 @@ const SuperAdminTeam = () => {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-        // Always refetch when page is 1, else reset page to 1 to trigger refetch
-        if (page !== 1) {
-            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
-        } else {
-          refetchUsersList();  // If already on page 1, just refetch directly
-        }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      if (page !== 1) {
+        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      } else {
+        refetchUsersList(); // If already on page 1, just refetch directly
+      }
     }, 700),
-    [page, refetchUsersList]  // Ensure refetchUsersList is included in dependencies
-);
+    [page, refetchUsersList] // Ensure refetchUsersList is included in dependencies
+  );
 
-useEffect(() => {
+  useEffect(() => {
     // Reset page to 1 if filters (status, selectedDate, role or search) change
     if (status || selectedDate || search || role) {
-        setPage(1);
+      setPage(1);
     }
     if (search) {
-        debouncedRefetch();
-        return () => {
-            debouncedRefetch.cancel();
-        };
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
     } else {
       refetchUsersList();
     }
-}, [status, selectedDate, search, page, deletedSuccessfully, role]);
+  }, [status, selectedDate, search, page, deletedSuccessfully, role]);
 
   useEffect(() => {
     if (isFetched && filteredData) {
@@ -307,6 +308,16 @@ useEffect(() => {
       },
     },
   ];
+  const ColumnsGenerated = GenrateColumns([
+    "User Name",
+    "Email address",
+    "Date Added",
+    "Location",
+    "User Role",
+    "Status",
+    "Actions",
+  ]);
+  const RowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   return (
     <>
@@ -656,41 +667,30 @@ useEffect(() => {
           }}
         >
           {isLoadingState ? (
-            <Box
-              sx={{
-                width: "100%",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                height: "300px",
-                alignItems: "center",
-                background: "#FFFF",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
+            <Box>
+              <DataGrid
+                getRowId={(row) => row._id}
+                rows={RowsGenerated}
+                columns={ColumnsGenerated}
+                page={1}
+                pageSize={10}
+                className="table"
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
             </Box>
           ) : filteredData?.length > 0 ? (
-            <div>
+            <Box>
               <DataGrid
                 loading={usersListFetching}
-                style={{
-                  border: "none",
-                }}
                 getRowId={(row) => row._id}
                 rows={filteredData}
                 columns={AdminColumns?.concat(actionColumn)}
                 page={page}
                 pageSize={itemsPerPage}
                 rowCount={usersList?.totalRecords ? usersList?.totalRecords : 0}
-                sx={{
-                  width: "100%",
-                  "& .MuiDataGrid-columnHeader": {
-                    borderRight: "none", // Remove the right border between header cells
-                    "&:hover": {
-                      borderRight: "none", // Ensure no border on hover
-                    },
-                  },
-                }}
+                className="table"
                 hideFooter
                 disableColumnMenu
                 pagination={false}
@@ -705,7 +705,7 @@ useEffect(() => {
                   setPage={setPage}
                 />
               </Box>
-            </div>
+            </Box>
           ) : (
             <Typography
               sx={{
