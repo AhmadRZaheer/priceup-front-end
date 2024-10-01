@@ -279,9 +279,7 @@ const ShowerEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
                             estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
                         }
                         sx={{
-                            width: "100%", '.MuiDataGrid-main': {
-                                borderRadius: '8px !important',
-                            }
+                            width: "100%",
                         }}
                         rowHeight={70}
                         hideFooter

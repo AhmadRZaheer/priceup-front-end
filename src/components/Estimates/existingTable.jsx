@@ -107,7 +107,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     fetchAllEstimatesUrl += `&status=${statusValue}`;
   }
   if (dateValue) {
-    fetchAllEstimatesUrl += `&date=${dateValue}`
+    fetchAllEstimatesUrl += `&date=${dateValue}`;
   }
   const {
     data: estimatesList,
@@ -186,30 +186,30 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-        // Always refetch when page is 1, else reset page to 1 to trigger refetch
-        if (page !== 1) {
-            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
-        } else {
-          refetchEstimatesList();  // If already on page 1, just refetch directly
-        }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      if (page !== 1) {
+        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      } else {
+        refetchEstimatesList(); // If already on page 1, just refetch directly
+      }
     }, 700),
-    [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
-);
+    [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
+  );
 
-useEffect(() => {
+  useEffect(() => {
     // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
     if (statusValue || dateValue || searchValue) {
-        setPage(1);
+      setPage(1);
     }
     if (searchValue) {
-        debouncedRefetch();
-        return () => {
-            debouncedRefetch.cancel();
-        };
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
     } else {
       refetchEstimatesList();
     }
-}, [statusValue, dateValue, searchValue, page, refetchEstimatesCounter]);
+  }, [statusValue, dateValue, searchValue, page, refetchEstimatesCounter]);
 
   const dropdownActions = [
     {
@@ -218,16 +218,20 @@ useEffect(() => {
       icon: <Edit />,
     },
     {
-      title: "PDF",
-      handleClickItem: handlePreviewPDFClick,
-      icon: <RemoveRedEyeOutlined />,
-    },
-    {
       title: "Delete",
       handleClickItem: handleOpenDeleteModal,
       icon: <DeleteOutline sx={{ color: "white", fontSize: 18, mr: 0.4 }} />,
       severity: "error",
     },
+    ...(isMobile
+      ? []
+      : [
+          {
+            title: "PDF",
+            handleClickItem: handlePreviewPDFClick,
+            icon: <RemoveRedEyeOutlined />,
+          },
+        ]), // This part needs to be placed inside the array
   ];
 
   return (
@@ -252,94 +256,97 @@ useEffect(() => {
         </Typography>
       ) : (
         <Box>
-        {isMobile ? (
-          filteredData?.map((item) => (
-            <Box
-              key={item._id}
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
-                px:{sm:0,xs:0.8}
-              }}
-            >
-              <Box sx={{ display: "flex", gap: 1 }}>
-                <Box
-                  sx={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: "100%",
-                    overflow: "hidden",
-                  }}
-                >
-                  <DefaultImage
-                    image={item?.creatorData?.image}
-                    name={item?.creatorData?.name}
-                  />
-                </Box>
-
-                <Box>
-                  <Box sx={{ display: "flex", gap: 0.6 }}>
-                    <Typography className={classes.overflowText}>
-                      {item?.creatorData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 16, fontWeight: "Medium" }}>
-                      {" "}
-                      - Creator
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: "flex", gap: 0.6 }}>
-                    <Typography sx={{ fontSize: 14 }}>
-                      {item?.customerData?.name}
-                    </Typography>
-                    <Typography sx={{ fontSize: 14 }}> - Customer</Typography>
-                  </Box>
-                </Box>
-              </Box>
+          {isMobile ? (
+            filteredData?.map((item) => (
               <Box
+                key={item._id}
                 sx={{
                   display: "flex",
-                  flexDirection: "column",
-                  textAlign: "center",
-                  width: 100,
-                  alignItems: "center",
+                  justifyContent: "space-between",
+                  paddingY: 2,
+                  borderBottom: "1px solid rgba(102, 112, 133, 0.5)",
+                  px: { sm: 0, xs: 0.8 },
                 }}
               >
-                <ActionsDropdown item={item} actions={dropdownActions} />
-                <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
-                  {new Date(item?.updatedAt).toDateString()}
-                </Typography>
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: "100%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <DefaultImage
+                      image={item?.creatorData?.image}
+                      name={item?.creatorData?.name}
+                    />
+                  </Box>
+
+                  <Box>
+                    <Box sx={{ display: "flex", gap: 0.6 }}>
+                      <Typography className={classes.overflowText}>
+                        {item?.creatorData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 16, fontWeight: "Medium" }}>
+                        {" "}
+                        - Creator
+                      </Typography>
+                    </Box>
+                    <Box sx={{ display: "flex", gap: 0.6 }}>
+                      <Typography sx={{ fontSize: 14 }}>
+                        {item?.customerData?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 14 }}> - Customer</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    textAlign: "center",
+                    width: 100,
+                    alignItems: "center",
+                  }}
+                >
+                  <ActionsDropdown item={item} actions={dropdownActions} />
+                  <Typography sx={{ fontWeight: "Medium", fontSize: 12 }}>
+                    {new Date(item?.updatedAt).toDateString()}
+                  </Typography>
+                </Box>
               </Box>
-            </Box>
-          ))
-        ) : (
-         <DataGrid
-            loading={estimatesListFetching}
-            style={{
-              border: "none",
-            }}
-            getRowId={(row) => row._id}
-            rows={filteredData}
-            columns={EstimatesColumns(
-              handleOpenDeleteModal,
-              handleIconButtonClick,
-              handlePreviewPDFClick
-            )}
-            page={page}
-            pageSize={itemsPerPage}
-            rowCount={
-              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-            }
-            sx={{ width: "100%",'.MuiDataGrid-main':{
-              borderRadius:'8px !important',
-            } }}
-            rowHeight={70.75}
-            hideFooter
-            disableColumnMenu
-          />
-        )}
-         <Pagination
+            ))
+          ) : (
+            <DataGrid
+              loading={estimatesListFetching}
+              style={{
+                border: "none",
+              }}
+              getRowId={(row) => row._id}
+              rows={filteredData}
+              columns={EstimatesColumns(
+                handleOpenDeleteModal,
+                handleIconButtonClick,
+                handlePreviewPDFClick
+              )}
+              page={page}
+              pageSize={itemsPerPage}
+              rowCount={
+                estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+              }
+              sx={{
+                width: "100%",
+                ".MuiDataGrid-main": {
+                  borderRadius: "8px !important",
+                },
+              }}
+              rowHeight={70.75}
+              hideFooter
+              disableColumnMenu
+            />
+          )}
+          <Pagination
             totalRecords={
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
@@ -347,7 +354,7 @@ useEffect(() => {
             page={page}
             setPage={setPage}
           />
-         <DeleteModal
+          <DeleteModal
             open={deleteModalOpen}
             text={"Estimates"}
             close={() => {
@@ -356,51 +363,48 @@ useEffect(() => {
             isLoading={LoadingForDelete}
             handleDelete={handleDeleteEstimate}
           />
-      </Box>
+        </Box>
 
-        
-
-        
         // <Box >
-          // <DataGrid
-          //   loading={estimatesListFetching}
-          //   style={{
-          //     border: "none",
-          //   }}
-          //   getRowId={(row) => row._id}
-          //   rows={filteredData}
-          //   columns={EstimatesColumns(
-          //     handleOpenDeleteModal,
-          //     handleIconButtonClick,
-          //     handlePreviewPDFClick
-          //   )}
-          //   page={page}
-          //   pageSize={itemsPerPage}
-          //   rowCount={
-          //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-          //   }
-          //   sx={{ width: "100%" }}
-          //   rowHeight={70.75}
-          //   hideFooter
-          //   disableColumnMenu
-          // />
-          // <Pagination
-          //   totalRecords={
-          //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-          //   }
-          //   itemsPerPage={itemsPerPage}
-          //   page={page}
-          //   setPage={setPage}
-          // />
-          // <DeleteModal
-          //   open={deleteModalOpen}
-          //   text={"Estimates"}
-          //   close={() => {
-          //     setDeleteModalOpen(false);
-          //   }}
-          //   isLoading={LoadingForDelete}
-          //   handleDelete={handleDeleteEstimate}
-          // />
+        // <DataGrid
+        //   loading={estimatesListFetching}
+        //   style={{
+        //     border: "none",
+        //   }}
+        //   getRowId={(row) => row._id}
+        //   rows={filteredData}
+        //   columns={EstimatesColumns(
+        //     handleOpenDeleteModal,
+        //     handleIconButtonClick,
+        //     handlePreviewPDFClick
+        //   )}
+        //   page={page}
+        //   pageSize={itemsPerPage}
+        //   rowCount={
+        //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+        //   }
+        //   sx={{ width: "100%" }}
+        //   rowHeight={70.75}
+        //   hideFooter
+        //   disableColumnMenu
+        // />
+        // <Pagination
+        //   totalRecords={
+        //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
+        //   }
+        //   itemsPerPage={itemsPerPage}
+        //   page={page}
+        //   setPage={setPage}
+        // />
+        // <DeleteModal
+        //   open={deleteModalOpen}
+        //   text={"Estimates"}
+        //   close={() => {
+        //     setDeleteModalOpen(false);
+        //   }}
+        //   isLoading={LoadingForDelete}
+        //   handleDelete={handleDeleteEstimate}
+        // />
         // </Box>
       )}
     </Box>

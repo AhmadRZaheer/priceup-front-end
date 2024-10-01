@@ -723,7 +723,7 @@ export const generateObjectForPDFRuntime = (
   showerState,
   showersLocationSettings
 ) => {
-  console.log(showerState,state,'showerStateshowerState')
+  console.log(showerState,state.estimateState,'showerStateshowerState')
   return {   
     category: state.selectedCategory,
     companyData: {},

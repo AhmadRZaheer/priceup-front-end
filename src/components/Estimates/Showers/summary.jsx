@@ -109,7 +109,7 @@ const Summary = ({ setStep }) => {
   //drawerHandleClick
   const drawerHandleClick = () => {  
   const item = generateObjectForPDFRuntime(
-      { estimateState, projectId, selectedCategory },
+      { estimateState, projectId, selectedCategory }, 
       showerEstimateState,
       showersLocationSettings
     );

@@ -1175,7 +1175,7 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography className="projectRowTxt">{params.row.email}</Typography>
+          <Typography className="projectRowTxt">{params.row.email=== "" ? "---" :params.row.email}</Typography>
         </>
       );
     },
@@ -1206,7 +1206,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.address}
+            {params.row.address=== "" ? "---" : params.row.address}
           </Typography>
         </>
       );
@@ -1222,7 +1222,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.lastQuotedOn}
+            {params.row.lastQuotedOn=== "" ? "---" :params.row.lastQuotedOn}
           </Typography>
         </>
       );
