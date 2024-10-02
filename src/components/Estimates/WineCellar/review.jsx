@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
@@ -51,6 +52,7 @@ import {
   setProfit,
   setTotal,
   getDoorQuantity,
+  setDoorLaborPrice,
 } from "@/redux/wineCellarEstimateSlice";
 import ChannelOrClamp from "./channelorClamp";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
@@ -131,6 +133,7 @@ const Review = ({ setStep }) => {
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
+    isLoading:EditEstimateLoading,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -252,6 +255,7 @@ const Review = ({ setStep }) => {
     dispatch(setGlassPrice(prices.glassPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
     dispatch(setLaborPrice(prices.laborPrice));
+    dispatch(setDoorLaborPrice(prices.doorLaborPrice));
     dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
     dispatch(setTotal(prices.total));
     dispatch(setCost(prices.cost));
@@ -962,7 +966,7 @@ const Review = ({ setStep }) => {
                     fullWidth
                     disabled={
                       selectedContent?.hardwareFinishes === null ||
-                      projectId === null
+                      projectId === null || EditEstimateLoading
                     }
                     variant="contained"
                     onClick={handleEstimateSubmit}
@@ -979,7 +983,7 @@ const Review = ({ setStep }) => {
                       fontWeight: 600,
                     }}
                   >
-                    Save Estimate
+                 { EditEstimateLoading ?  <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : 'Save Estimate'}
                   </Button>
                 </Box>
               </Box>

@@ -11,6 +11,7 @@ export const pdfFields = {
   FABRICATIONPRICE: "fabricationPrice",
   HARDWAREADDONSPRICE: "hardwareAddonsPrice",
   LABORPRICE: "laborPrice",
+  DOORLABORPRICE: "doorLaborPrice",
   ADDITIONALFIELDSPRICE: "additionalFieldPrice",
   ONEINCHHOLES: "oneInchHoles",
   HINGECUT: "hingeCut",
@@ -86,6 +87,7 @@ export const pricingSection = {
     "glassPrice",
     "fabricationPrice",
     "laborPrice",
+    "doorLaborPrice",
     "additionalFieldPrice",
   ],
 };
