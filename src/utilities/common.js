@@ -251,13 +251,13 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   )?.cost || 0;
 
   //labor price
-  let singleDoorPrice = 0;
+  let doorLaborPrice = 0;
   if(typeof selectedContent?.laborHoursForDoor === 'number' &&  selectedContent?.laborHoursForDoor > 0 ){
-    singleDoorPrice = selectedContent?.laborHoursForDoor;
+    doorLaborPrice =(selectedContent?.people * selectedContent?.laborHoursForDoor)*(estimatesData?.miscPricing?.hourlyRate);
   }
   const laborPrice =
    ( selectedContent?.people *
-    (selectedContent?.hours + singleDoorPrice)) *
+    selectedContent?.hours) *
     estimatesData?.miscPricing?.hourlyRate;
   
   //additionalField price
@@ -280,7 +280,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       (estimatesData?.miscPricing?.pricingFactorStatus
         ? estimatesData?.miscPricing?.pricingFactor
         : 1) +
-    laborPrice;
+    (laborPrice + doorLaborPrice);
     // + additionalFieldPrice;
   // additonal fields sum
   if (selectedContent.additionalFields.length > 0) {
@@ -333,6 +333,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     miscPricing: 0,
     hardwareAddonsPrice: hardwareAddons,
     laborPrice: laborPrice,
+    doorLaborPrice: doorLaborPrice,
     additionalFieldPrice: additionalFieldPrice,
     total: total,
     cost: cost,

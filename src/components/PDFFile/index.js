@@ -209,8 +209,12 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.hardwareAddonsPrice?.toFixed(2) || 0}</Text>
           </View>}
           {pricingSection[data?.quote?.category]?.includes(pdfFields.LABORPRICE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-          <Text style={{fontSize:'14px'}}>Labor Price:</Text>
+          <Text style={{fontSize:'14px'}}>{data?.quote?.category === EstimateCategory.WINECELLARS ? 'Layout Labor Price:' : 'Labor Price:' }</Text>
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.laborPrice?.toFixed(2) || 0}</Text>
+          </View>}
+          {pricingSection[data?.quote?.category]?.includes(pdfFields.DOORLABORPRICE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+          <Text style={{fontSize:'14px'}}>Door Labor Price:</Text>
+          <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.doorLaborPrice?.toFixed(2) || 0}</Text>
           </View>}
           {pricingSection[data?.quote?.category]?.includes(pdfFields.ADDITIONALFIELDSPRICE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Additional Fields Price:</Text>
@@ -358,9 +362,15 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'12px'}}>{data?.quote?.people}</Text>
           </View>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-          <Text style={{fontSize:'14px'}}>Hours:</Text>
+          <Text style={{fontSize:'14px'}}>{data?.quote?.category === EstimateCategory.WINECELLARS ? 'Hours for layout:' : 'Hours'}</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.hours}</Text>
           </View>
+          {pricingSection[data?.quote?.category]?.includes(pdfFields.DOORLABORPRICE) &&
+          <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+          <Text style={{fontSize:'14px'}}>Hours for door:</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.laborHoursForDoor ?? 0}</Text>
+          </View>
+          }          
         </View>}
        </View>
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>

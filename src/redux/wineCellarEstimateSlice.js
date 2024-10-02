@@ -25,6 +25,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
   export const getFabricationTotal = (state) =>
     state.wineCellarsEstimate.fabricationPrice;
   export const getLaborTotal = (state) => state.wineCellarsEstimate.laborPrice;
+  export const getDoorLaborTotal = (state) => state.wineCellarsEstimate.doorLaborPrice;
   export const getAdditionalFieldsTotal = (state) =>
     state.wineCellarsEstimate.additionalFieldsPrice;
   export const getUserProfitPercentage = (state) =>
@@ -63,6 +64,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
     fabricationPrice: 0,
     miscPrice: 0,
     laborPrice: 0,
+    doorLaborPrice:0,
     additionalFieldsPrice: 0,
     isCustomizedDoorWidth: false,
     selectedItem: null,
@@ -305,7 +307,6 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
   
       initializeStateForEditQuote: (state, action) => {
         const { estimateData, quotesId, hardwaresList } = action.payload;
-  
         state.quoteId = quotesId;
   
         let hardwareFinishes = null;
@@ -423,6 +424,9 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
       },
       setLaborPrice: (state, action) => {
         state.laborPrice = action.payload;
+      },
+      setDoorLaborPrice: (state, action) => {
+        state.doorLaborPrice = action.payload;
       },
       setCost: (state, action) => {
         state.actualCost = action.payload;
@@ -694,6 +698,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
     setGlassPrice,
     setFabricationPrice,
     setLaborPrice,
+    setDoorLaborPrice,
     setCost,
     setProfit,  
     setAdditionalFieldsPrice,
