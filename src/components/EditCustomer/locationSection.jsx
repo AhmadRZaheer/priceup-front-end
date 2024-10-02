@@ -1,41 +1,47 @@
 import {
   Box,
-  Button,
-  CircularProgress,
-  FormControl,
+  // Button,
+  // CircularProgress,
+  // FormControl,
   InputAdornment,
-  MenuItem,
-  Select,
-  TextField,
+  // MenuItem,
+  // Select,
+  // TextField,
   Typography,
-  useMediaQuery,
+  // useMediaQuery,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { backendURL, debounce } from "@/utilities/common";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import { ManageSearch } from "@mui/icons-material";
-import { useNavigate, useSearchParams } from "react-router-dom";
+// import { ManageSearch } from "@mui/icons-material";
+import { useSearchParams } from "react-router-dom";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
-import StatusChip from "../common/StatusChip";
-import { DesktopDatePicker } from "@mui/x-date-pickers";
-import dayjs from "dayjs";
-import DefaultImage from "../ui-components/defaultImage";
-import ActionsDropdown from "../common/ActionsDropdown";
+// import StatusChip from "../common/StatusChip";
+// import { DesktopDatePicker } from "@mui/x-date-pickers";
+// import dayjs from "dayjs";
+// import DefaultImage from "../ui-components/defaultImage";
+// import ActionsDropdown from "../common/ActionsDropdown";
 import { DataGrid } from "@mui/x-data-grid";
-import { LocationColumns, ProjectsColumns } from "@/utilities/DataGridColumns";
+import { LocationColumns, 
+  // ProjectsColumns 
+} from "@/utilities/DataGridColumns";
 import Pagination from "../Pagination";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 export default function LocationSection() {
   const [searchParams] = useSearchParams();
   const CustomerId = searchParams.get("id");
   const routePrefix = `${backendURL}/addresses/by-customer`;
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
+
   const itemsPerPage = 10;
+
   let fetchAllProjectUrl = `${routePrefix}/${CustomerId}?page=${page}&limit=${itemsPerPage}`;
   if (search && search.length) {
     fetchAllProjectUrl += `&search=${search}`;
@@ -48,7 +54,7 @@ export default function LocationSection() {
   }
   const {
     data: locationList,
-    isLoading,
+    isFetched,
     isFetching: locationListFetching,
     refetch: refetchlocationList,
   } = useFetchAllDocuments(fetchAllProjectUrl);
@@ -67,6 +73,22 @@ export default function LocationSection() {
   useEffect(() => {
     refetchlocationList();
   }, [page, search, selectedDate]);
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Name",
+    "Street",
+    "City",
+    "Postal Code",
+    "Country",
+    "State",
+  ]);
+
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
@@ -82,19 +104,19 @@ export default function LocationSection() {
   useEffect(() => {
     debouncedRefetch();
   }, [search]);
-  const handleDateChange = (newDate) => {
-    if (newDate) {
-      // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate)
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
-      setSelectedDate(adjustedDate);
-    } else {
-      setSelectedDate(null);
-    }
-  };
+  // const handleDateChange = (newDate) => {
+  //   if (newDate) {
+  //     // Set time to noon (12:00) to avoid time zone issues
+  //     const adjustedDate = dayjs(newDate)
+  //       .hour(12)
+  //       .minute(0)
+  //       .second(0)
+  //       .millisecond(0);
+  //     setSelectedDate(adjustedDate);
+  //   } else {
+  //     setSelectedDate(null);
+  //   }
+  // };
   //   const handleCreateProject = () => {
   //     navigate("/location/create");
   //   };
@@ -107,11 +129,11 @@ export default function LocationSection() {
     setSearch(e.target.value);
   };
 
-  const handleResetFilter = () => {
-    setSearch("");
-    setStatus(null);
-    setSelectedDate(null);
-  };
+  // const handleResetFilter = () => {
+  //   setSearch("");
+  //   setStatus(null);
+  //   setSelectedDate(null);
+  // };
 
   return (
     <>
@@ -180,24 +202,20 @@ export default function LocationSection() {
         >
           <Box>
             {isLoading ? (
-              <Box
-                sx={{
-                  width: 40,
-                  m: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  maxHeight: "70vh",
-                  minHeight: "20vh",
-                }}
-              >
-                <CircularProgress sx={{ color: "#8477DA" }} />
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
               </Box>
-            ) : filteredData?.length === 0 && !locationListFetching ? (
-              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Location Found
-              </Typography>
-            ) : (
+            ) : filteredData?.length > 0 ? (
               <Box>
                 <DataGrid
                   loading={locationListFetching}
@@ -213,9 +231,12 @@ export default function LocationSection() {
                     locationList?.totalRecords ? locationList?.totalRecords : 0
                   }
                   rowHeight={70.75}
-                  sx={{ width: "100%",'.MuiDataGrid-main': {
-                    borderRadius: '8px !important',
-                } }}
+                  sx={{
+                    width: "100%",
+                    ".MuiDataGrid-main": {
+                      borderRadius: "8px !important",
+                    },
+                  }}
                   hideFooter
                   disableColumnMenu
                   disableColumnFilter
@@ -230,6 +251,10 @@ export default function LocationSection() {
                   setPage={setPage}
                 />
               </Box>
+            ) : (
+              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+                No Location Found
+              </Typography>
             )}
           </Box>
         </Box>

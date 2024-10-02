@@ -4,29 +4,40 @@ import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
   Box,
   Button,
-  CircularProgress,
+  // CircularProgress,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
+import { EstimateCategory } from "@/utilities/constants";
 import { backendURL } from "@/utilities/common";
 import { Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { calculateTotal, generateObjectForPDFPreview, renderMeasurementSides, setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import {
+  calculateTotal,
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+  setStateForMirrorEstimate,
+} from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getLocationMirrorSettings } from "@/redux/locationSlice";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
 const routePrefix = `${backendURL}/estimates`;
 
-const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
+const MirrorEstimatesList = ({
+  projectId,
+  statusValue,
+  dateValue,
+  searchValue,
+}) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
@@ -45,18 +56,18 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   const classes = useStyles();
   const itemsPerPage = 10;
   let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.MIRRORS}`;
-    if (searchValue && searchValue.length) {
-        fetchAllEstimatesUrl += `&search=${searchValue}`;
-    }
-    if (statusValue) {
-      fetchAllEstimatesUrl += `&status=${statusValue}`;
-    }
-    if (dateValue) {
-      fetchAllEstimatesUrl += `&date=${dateValue}`
-    }
+  if (searchValue && searchValue.length) {
+    fetchAllEstimatesUrl += `&search=${searchValue}`;
+  }
+  if (statusValue) {
+    fetchAllEstimatesUrl += `&status=${statusValue}`;
+  }
+  if (dateValue) {
+    fetchAllEstimatesUrl += `&date=${dateValue}`;
+  }
   const {
     data: estimatesList,
-    isLoading,
+    isFetched,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
   } = useFetchAllDocuments(fetchAllEstimatesUrl);
@@ -67,6 +78,8 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   } = useDeleteEstimates();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
@@ -81,46 +94,45 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
       mirrorsHardwareList,
       item,
       mirrorsLocationSettings?.miscPricing
-  );
-  console.log(formattedData?.measurements,'data');
-  const pricingMirror = calculateTotal(
+    );
+    console.log(formattedData?.measurements, "data");
+    const pricingMirror = calculateTotal(
       formattedData,
       formattedData?.sqftArea,
       mirrorsLocationSettings,
       formattedData.measurements
-  );
-  
-  const pricing = {
-    glassPrice:pricingMirror.glass,
-    fabricationPrice: pricingMirror.fabrication,
-    laborPrice:pricingMirror.labor,
-    additionalFieldPrice:pricingMirror.additionalFields,
-    cost:pricingMirror.cost,
-    total:pricingMirror.total,
-    profit:pricingMirror.profitPercentage
-  }
-  const measurementString = renderMeasurementSides(
+    );
+
+    const pricing = {
+      glassPrice: pricingMirror.glass,
+      fabricationPrice: pricingMirror.fabrication,
+      laborPrice: pricingMirror.labor,
+      additionalFieldPrice: pricingMirror.additionalFields,
+      cost: pricingMirror.cost,
+      total: pricingMirror.total,
+      profit: pricingMirror.profitPercentage,
+    };
+    const measurementString = renderMeasurementSides(
       formattedData?.measurements
-  );
-  console.log(measurementString,'string ');
-  const id = item?._id;
+    );
+    console.log(measurementString, "string ");
+    const id = item?._id;
     localStorage.setItem(
-        "pdf-estimate",
-        JSON.stringify({
-            ...formattedData,
-            measurements: measurementString,
-            pricing,
-            id
-        })
+      "pdf-estimate",
+      JSON.stringify({
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        id,
+      })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);
-
   };
 
   const handleIconButtonClick = (item) => {
     setStateForMirrorEstimate(item, dispatch, navigate);
   };
-  
+
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
@@ -129,65 +141,75 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
     }
   }, [estimatesList, searchValue]);
 
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Creator",
+    "Customer",
+    "Estimate Category",
+    "Layout",
+    "Date quoted",
+    "Estimate total",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
+
   const debouncedRefetch = useCallback(
     debounce(() => {
-        // Always refetch when page is 1, else reset page to 1 to trigger refetch
-        if (page !== 1) {
-            setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
-        } else {
-            refetchEstimatesList();  // If already on page 1, just refetch directly
-        }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      if (page !== 1) {
+        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      } else {
+        refetchEstimatesList(); // If already on page 1, just refetch directly
+      }
     }, 700),
-    [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
-);
+    [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
+  );
 
-useEffect(() => {
+  useEffect(() => {
     // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
     if (statusValue || dateValue || searchValue) {
-        setPage(1);
+      setPage(1);
     }
     if (searchValue) {
-        debouncedRefetch();
-        return () => {
-            debouncedRefetch.cancel();
-        };
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
     } else {
-        refetchEstimatesList();
+      refetchEstimatesList();
     }
-}, [statusValue, dateValue, searchValue, page, deletedSuccessfully, projectId]);
-  
+  }, [
+    statusValue,
+    dateValue,
+    searchValue,
+    page,
+    deletedSuccessfully,
+    projectId,
+  ]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   return (
     <>
       {isLoading ? (
-        <Box
-          sx={{
-            width: 40,
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            maxHeight: "70vh",
-            minHeight: "20vh",
-            background: "#FFFF",
-            pb: 3,
-          }}
-        >
-          <CircularProgress sx={{ color: "#8477DA" }} />
+        <Box>
+          <DataGrid
+            getRowId={(row) => row._id}
+            rows={SkeletonRowsGenerated}
+            columns={SkeletonColumnsGenerated}
+            page={1}
+            pageSize={10}
+            className="table"
+            hideFooter
+            disableColumnMenu
+            pagination={false}
+          />
         </Box>
-      ) : filteredData?.length === 0 && !estimatesListFetching ? (
-        <Typography
-          sx={{
-            color: "#667085",
-            p: 2,
-            textAlign: "center",
-            background: "#FFFF",
-            borderRadius:'12px'
-          }}
-        >
-          No Estimate Found
-        </Typography>
-      ) : (
-        <Box sx={{ background: "#FFFF", pb: 3,borderRadius:'8px' }}>
+      ) : filteredData?.length > 0 ? (
+        <Box sx={{ background: "#FFFF", pb: 3, borderRadius: "8px" }}>
           {isMobile ? (
             filteredData?.map((item) => (
               <Box
@@ -311,6 +333,18 @@ useEffect(() => {
             handleDelete={handleDeleteEstimate}
           />
         </Box>
+      ) : (
+        <Typography
+          sx={{
+            color: "#667085",
+            p: 2,
+            textAlign: "center",
+            background: "#FFFF",
+            borderRadius: "12px",
+          }}
+        >
+          No Estimate Found
+        </Typography>
       )}
     </>
   );

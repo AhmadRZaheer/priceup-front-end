@@ -7,7 +7,7 @@ export const GenrateColumns = (columns) => {
       headerName: item,
       headerClassName: "customHeaderClass-admin-team",
       sortable: false,
-      flex: 0.8,
+      flex: 1,
       renderCell: (params) => {
         return <Skeleton width={"100%"} height={"32px"} />;
       },

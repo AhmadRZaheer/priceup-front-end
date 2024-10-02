@@ -69,6 +69,7 @@ import {
   // ManageSearch,
   RemoveRedEyeOutlined,
 } from "@mui/icons-material";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 // const debounce = (func, delay) => {
 //   let timeout;
@@ -86,6 +87,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   const routePrefix = `${backendURL}/estimates`;
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
   // const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const useStyles = makeStyles({
     overflowText: {
@@ -111,7 +113,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   }
   const {
     data: estimatesList,
-    isLoading,
+    isFetched,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
   } = useFetchAllDocuments(fetchAllEstimatesUrl);
@@ -211,6 +213,12 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     }
   }, [statusValue, dateValue, searchValue, page, refetchEstimatesCounter]);
 
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
+
   const dropdownActions = [
     {
       title: "Edit",
@@ -233,28 +241,35 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
           },
         ]), // This part needs to be placed inside the array
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Creator",
+    "Customers",
+    "Estimate Category",
+    "Layout",
+    "Data quoted",
+    "Estimated total",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   return (
     <Box>
       {isLoading ? (
-        <Box
-          sx={{
-            width: 40,
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            maxHeight: "70vh",
-            minHeight: "20vh",
-          }}
-        >
-          <CircularProgress sx={{ color: "#8477DA" }} />
+        <Box>
+          <DataGrid
+            getRowId={(row) => row._id}
+            rows={SkeletonRowsGenerated}
+            columns={SkeletonColumnsGenerated}
+            page={1}
+            pageSize={10}
+            className="table"
+            hideFooter
+            disableColumnMenu
+            pagination={false}
+          />
         </Box>
-      ) : filteredData?.length === 0 && !estimatesListFetching ? (
-        <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-          No Estimate Found
-        </Typography>
-      ) : (
+      ) : filteredData?.length > 0 ? (
         <Box>
           {isMobile ? (
             filteredData?.map((item) => (
@@ -364,48 +379,10 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
             handleDelete={handleDeleteEstimate}
           />
         </Box>
-
-        // <Box >
-        // <DataGrid
-        //   loading={estimatesListFetching}
-        //   style={{
-        //     border: "none",
-        //   }}
-        //   getRowId={(row) => row._id}
-        //   rows={filteredData}
-        //   columns={EstimatesColumns(
-        //     handleOpenDeleteModal,
-        //     handleIconButtonClick,
-        //     handlePreviewPDFClick
-        //   )}
-        //   page={page}
-        //   pageSize={itemsPerPage}
-        //   rowCount={
-        //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-        //   }
-        //   sx={{ width: "100%" }}
-        //   rowHeight={70.75}
-        //   hideFooter
-        //   disableColumnMenu
-        // />
-        // <Pagination
-        //   totalRecords={
-        //     estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-        //   }
-        //   itemsPerPage={itemsPerPage}
-        //   page={page}
-        //   setPage={setPage}
-        // />
-        // <DeleteModal
-        //   open={deleteModalOpen}
-        //   text={"Estimates"}
-        //   close={() => {
-        //     setDeleteModalOpen(false);
-        //   }}
-        //   isLoading={LoadingForDelete}
-        //   handleDelete={handleDeleteEstimate}
-        // />
-        // </Box>
+      ) : (
+        <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+          No Estimate Found
+        </Typography>
       )}
     </Box>
   );

@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
-  CircularProgress,
+  // CircularProgress,
   IconButton,
   Menu,
   MenuItem,
   Typography,
-  useMediaQuery,
+  // useMediaQuery,
 } from "@mui/material";
-import { Add, ArrowForward } from "@mui/icons-material";
-import CustomIconButton from "@/components/ui-components/CustomButton";
+import { ArrowForward } from "@mui/icons-material";
+// import CustomIconButton from "@/components/ui-components/CustomButton";
 import {
   useCreateDocument,
   useDeleteDocument,
@@ -19,7 +19,7 @@ import {
   useFetchAllDocuments,
 } from "@/utilities/ApiHooks/common";
 import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
-import HardwareItem from "@/components/common/HardwareItem";
+// import HardwareItem from "@/components/common/HardwareItem";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
@@ -28,10 +28,11 @@ import { useDispatch } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { MirrorsGlassType } from "@/utilities/DataGridColumns";
 import CustomInputField from "@/components/ui-components/CustomInput";
-import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+// import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const MirrorsGlassTypeComponent = () => {
   const dispatch = useDispatch();
@@ -39,7 +40,7 @@ const MirrorsGlassTypeComponent = () => {
   const decodedToken = getDecryptedToken();
   const {
     data: glassTypesList,
-    isLoading,
+    isFetched,
     refetch: refetchGlassTypesList,
     isFetching: fetchingGlassTypesList,
   } = useFetchAllDocuments(routePrefix);
@@ -49,8 +50,8 @@ const MirrorsGlassTypeComponent = () => {
     isSuccess: deleteSuccess,
   } = useDeleteDocument();
   const {
-    mutate: deleteGlassTypeOption,
-    isLoading: deleteGlassTypeOptionLoading,
+    // mutate: deleteGlassTypeOption,
+    // isLoading: deleteGlassTypeOptionLoading,
     isSuccess: deleteOptionSuccess,
   } = useDeleteDocumentProp();
   const {
@@ -73,6 +74,7 @@ const MirrorsGlassTypeComponent = () => {
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassTypeLoad, setEditGlassTypeLoad] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -82,9 +84,9 @@ const MirrorsGlassTypeComponent = () => {
     deleteGlassType({ apiRoute: `${routePrefix}/${itemToModify?._id}` });
   };
 
-  const handleHardwareOptionDelete = (itemId, optionId) => {
-    deleteGlassTypeOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
-  };
+  // const handleHardwareOptionDelete = (itemId, optionId) => {
+  //   deleteGlassTypeOption({ apiRoute: `${routePrefix}/${itemId}/${optionId}` });
+  // };
 
   const handleOpenUpdateModal = () => {
     setUpdateModalOpen(true);
@@ -133,7 +135,7 @@ const MirrorsGlassTypeComponent = () => {
     createGlassType({ data: formData, apiRoute: `${routePrefix}/save` });
   };
 
-  const miniTab = useMediaQuery("(max-width: 1280px)");
+  // const miniTab = useMediaQuery("(max-width: 1280px)");
   // Data Grid
 
   const handleClickAction = (event, row) => {
@@ -210,6 +212,12 @@ const MirrorsGlassTypeComponent = () => {
       dispatch(setMirrorsHardwareRefetch());
     }
   }, [editSuccess]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   const thicknessOptions = [
     { id: "1/4", name: "Thickness 1/4" },
@@ -509,6 +517,17 @@ const MirrorsGlassTypeComponent = () => {
       },
     },
   ];
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Glass Type",
+    "Cost (Thickness 1/4)",
+    "Cost (Thickness 1/8)",
+    "Status (Thickness 1/4)",
+    "Status (Thickness 1/8)",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
   const columns = MirrorsGlassType().concat(actionColumn);
 
   console.log(glassTypesList, "glassTypesListglassTypesList");
@@ -575,31 +594,20 @@ const MirrorsGlassTypeComponent = () => {
           }}
         >
           {isLoading ? (
-            <Box
-              sx={{
-                width: 40,
-                m: "auto",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                maxHeight: "70vh",
-                minHeight: "20vh",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
+            <Box>
+              <DataGrid
+                getRowId={(row) => row._id}
+                rows={SkeletonRowsGenerated}
+                columns={SkeletonColumnsGenerated}
+                page={1}
+                pageSize={10}
+                className="table"
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
             </Box>
-          ) : glassTypesList?.length === 0 && !fetchingGlassTypesList ? (
-            <Typography
-              sx={{
-                color: "#667085",
-                p: 2,
-                textAlign: "center",
-                background: "#FFFF",
-              }}
-            >
-              No Glass Type Found
-            </Typography>
-          ) : (
+          ) : glassTypesList?.length > 0 ? (
             <Box>
               <DataGrid
                 loading={fetchingGlassTypesList}
@@ -620,6 +628,17 @@ const MirrorsGlassTypeComponent = () => {
                 disableColumnMenu
               />
             </Box>
+          ) : (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No Glass Type Found
+            </Typography>
           )}
         </Box>
         <DeleteModal

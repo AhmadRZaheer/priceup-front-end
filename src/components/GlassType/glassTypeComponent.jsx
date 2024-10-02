@@ -30,6 +30,7 @@ import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const GlassTypeComponent = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -38,7 +39,7 @@ const GlassTypeComponent = ({ type }) => {
     data: GlassTypeData,
     refetch: GlassTypeRefetch,
     isFetching: GlassTypeFetching,
-    isLoading,
+    isFetched,
   } = useFetchDataGlassType(type);
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
     useEditFullGlassType();
@@ -57,6 +58,7 @@ const GlassTypeComponent = ({ type }) => {
   const [updateRefetch, setUpdateRefetch] = useState(false);
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassTypeLoading, setEditGlassTypeLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -133,6 +135,11 @@ const GlassTypeComponent = ({ type }) => {
     setUpdateRefetch(true);
   };
 
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   const actionColumn = [
     {
       field: "cost (Thickness 3/8)",
@@ -463,6 +470,15 @@ const GlassTypeComponent = ({ type }) => {
       },
     },
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Glass Type",
+    "Cost (Thickness 3/8)",
+    "Cost (Thickness 1/2)",
+    "Status (Thickness 3/8)",
+    "Status (Thickness 1/2)",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   useEffect(() => {
     if (refetchData) {
@@ -587,30 +603,27 @@ const GlassTypeComponent = ({ type }) => {
         }}
       >
         {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-              alignItems: "center",
-              background: "#FFFF",
-              height: "56vh",
-            }}
-          >
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+          <Box>
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={SkeletonRowsGenerated}
+              columns={SkeletonColumnsGenerated}
+              page={1}
+              pageSize={10}
+              className="table"
+              hideFooter
+              disableColumnMenu
+              pagination={false}
+            />
           </Box>
         ) : (
-          <div className="CustomerTable-1">
-            {GlassTypeData.length >= 1 ? (
+          <Box className="CustomerTable-1">
+            {GlassTypeData.length > 0 ? (
               <>
                 <DataGrid
                   loading={GlassTypeFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  // rows={filteredData.slice(
-                  //   (page - 1) * itemsPerPage,
-                  //   page * itemsPerPage
-                  // )}
                   disableColumnFilter
                   disableColumnMenu
                   rows={GlassTypeData}
@@ -621,21 +634,10 @@ const GlassTypeComponent = ({ type }) => {
                       ? GlassTypeData?.totalRecords
                       : 0
                   }
-                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                   rowHeight={70}
                 />
-
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </>
             ) : (
               <Typography
@@ -644,7 +646,7 @@ const GlassTypeComponent = ({ type }) => {
                 No Glass Type Found
               </Typography>
             )}
-          </div>
+          </Box>
         )}
       </Box>
 

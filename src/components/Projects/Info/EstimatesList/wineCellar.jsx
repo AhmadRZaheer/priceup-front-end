@@ -4,7 +4,7 @@ import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
   Box,
   Button,
-  CircularProgress,
+  // CircularProgress,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -14,8 +14,8 @@ import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import {
-  backendURL,  
-  calculateAreaAndPerimeter,  
+  backendURL,
+  calculateAreaAndPerimeter,
   calculateTotal,
 } from "@/utilities/common";
 import { Edit } from "@mui/icons-material";
@@ -30,167 +30,184 @@ import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
 } from "@/utilities/estimates";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 const routePrefix = `${backendURL}/estimates`;
 
-const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
-    const isMobile = useMediaQuery("(max-width:600px)");
-    const [page, setPage] = useState(1);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const wineCellarHardwareList = useSelector(getWineCellarsHardware);
-    const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-    const useStyles = makeStyles({
-        overflowText: {
-            maxWidth: "115px",
-            whiteSpace: "nowrap",
-            textOverflow: "ellipsis",
-            overflow: "hidden",
-        },
-    });
-    const classes = useStyles();
-    const itemsPerPage = 10;
-    let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.WINECELLARS}`;
-    if (searchValue && searchValue.length) {
-        fetchAllEstimatesUrl += `&search=${searchValue}`;
-    }
-    if (statusValue) {
-        fetchAllEstimatesUrl += `&status=${statusValue}`;
-    }
-    if (dateValue) {
-        fetchAllEstimatesUrl += `&date=${dateValue}`
-    }
-    const {
-        data: estimatesList,
-        isLoading,
-        isFetching: estimatesListFetching,
-        refetch: refetchEstimatesList,
-    } = useFetchAllDocuments(fetchAllEstimatesUrl);
-    const {
-        mutate: deleteEstimates,
-        isSuccess: deletedSuccessfully,
-        isLoading: LoadingForDelete,
-    } = useDeleteEstimates();
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [deleteRecord, setDeleteRecord] = useState(null);
-    const handleOpenDeleteModal = (id) => {
-        setDeleteRecord(id);
-        setDeleteModalOpen(true);
-    };
-    const handleDeleteEstimate = () => {
-        deleteEstimates(deleteRecord);
-        setDeleteModalOpen(false);
-    };
-    const handlePreviewPDFClick = (item) => {
-        const formattedData = generateObjectForPDFPreview(
-          wineCellarHardwareList,
-          item,
-          wineCellarLocationSettings?.miscPricing
-        );
-        const pricing = calculateTotal(
-          formattedData,
-          formattedData?.sqftArea,
-          wineCellarLocationSettings
-        );
-        const measurementString = renderMeasurementSides(
-          quoteState.EDIT,
-          formattedData?.measurements,
-          formattedData?.layout_id
-        );
-    
-        const { doorWeight, panelWeight, returnWeight } = calculateAreaAndPerimeter(
-          item.config.measurements,
-          item?.settings?.variant,
-          item?.config?.glassType?.thickness,
-          {doorQuantity:item.config.doorQuantity}
-        );
-    
-        const id = item?._id;
-        localStorage.setItem(
-          "pdf-estimate",
-          JSON.stringify({
-            ...formattedData,
-            measurements: measurementString,
-            pricing,
-            id,
-            doorWeight,
-            panelWeight,
-            returnWeight,
-          })
-        );
-        navigate(`/estimates/${item?._id}/pdf-preview`);
-      };
+const WineCellarEstimatesList = ({
+  projectId,
+  statusValue,
+  dateValue,
+  searchValue,
+}) => {
+  const isMobile = useMediaQuery("(max-width:600px)");
+  const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const wineCellarHardwareList = useSelector(getWineCellarsHardware);
+  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const useStyles = makeStyles({
+    overflowText: {
+      maxWidth: "115px",
+      whiteSpace: "nowrap",
+      textOverflow: "ellipsis",
+      overflow: "hidden",
+    },
+  });
+  const classes = useStyles();
+  const itemsPerPage = 10;
+  let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.WINECELLARS}`;
+  if (searchValue && searchValue.length) {
+    fetchAllEstimatesUrl += `&search=${searchValue}`;
+  }
+  if (statusValue) {
+    fetchAllEstimatesUrl += `&status=${statusValue}`;
+  }
+  if (dateValue) {
+    fetchAllEstimatesUrl += `&date=${dateValue}`;
+  }
+  const {
+    data: estimatesList,
+    isFetched,
+    isFetching: estimatesListFetching,
+    refetch: refetchEstimatesList,
+  } = useFetchAllDocuments(fetchAllEstimatesUrl);
+  const {
+    mutate: deleteEstimates,
+    isSuccess: deletedSuccessfully,
+    isLoading: LoadingForDelete,
+  } = useDeleteEstimates();
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [deleteRecord, setDeleteRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    const handleIconButtonClick = (item) => {
-        setStateForWineCellarEstimate(item, dispatch, navigate);
-    };
-    const filteredData = useMemo(() => {
-        if (estimatesList && estimatesList?.estimates?.length) {
-            return estimatesList?.estimates;
-        } else {
-            return [];
-        }
-    }, [estimatesList, searchValue]);
-
-    const debouncedRefetch = useCallback(
-        debounce(() => {
-            // Always refetch when page is 1, else reset page to 1 to trigger refetch
-            if (page !== 1) {
-                setPage(1);  // This will trigger a refetch due to the useEffect watching `page`
-            } else {
-                refetchEstimatesList();  // If already on page 1, just refetch directly
-            }
-        }, 700),
-        [page, refetchEstimatesList]  // Ensure refetchEstimatesList is included in dependencies
+  const handleOpenDeleteModal = (id) => {
+    setDeleteRecord(id);
+    setDeleteModalOpen(true);
+  };
+  const handleDeleteEstimate = () => {
+    deleteEstimates(deleteRecord);
+    setDeleteModalOpen(false);
+  };
+  const handlePreviewPDFClick = (item) => {
+    const formattedData = generateObjectForPDFPreview(
+      wineCellarHardwareList,
+      item,
+      wineCellarLocationSettings?.miscPricing
     );
-    
-    useEffect(() => {
-        // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
-        if (statusValue || dateValue || searchValue) {
-            setPage(1);
-        }
-        if (searchValue) {
-            debouncedRefetch();
-            return () => {
-                debouncedRefetch.cancel();
-            };
-        } else {
-            refetchEstimatesList();
-        }
-    }, [statusValue, dateValue, searchValue, page, deletedSuccessfully, projectId]);
+    const pricing = calculateTotal(
+      formattedData,
+      formattedData?.sqftArea,
+      wineCellarLocationSettings
+    );
+    const measurementString = renderMeasurementSides(
+      quoteState.EDIT,
+      formattedData?.measurements,
+      formattedData?.layout_id
+    );
+
+    const { doorWeight, panelWeight, returnWeight } = calculateAreaAndPerimeter(
+      item.config.measurements,
+      item?.settings?.variant,
+      item?.config?.glassType?.thickness,
+      { doorQuantity: item.config.doorQuantity }
+    );
+
+    const id = item?._id;
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        id,
+        doorWeight,
+        panelWeight,
+        returnWeight,
+      })
+    );
+    navigate(`/estimates/${item?._id}/pdf-preview`);
+  };
+
+  const handleIconButtonClick = (item) => {
+    setStateForWineCellarEstimate(item, dispatch, navigate);
+  };
+  const filteredData = useMemo(() => {
+    if (estimatesList && estimatesList?.estimates?.length) {
+      return estimatesList?.estimates;
+    } else {
+      return [];
+    }
+  }, [estimatesList, searchValue]);
+
+  const debouncedRefetch = useCallback(
+    debounce(() => {
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      if (page !== 1) {
+        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      } else {
+        refetchEstimatesList(); // If already on page 1, just refetch directly
+      }
+    }, 700),
+    [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
+  );
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Creator",
+    "Customer",
+    "Estimate Category",
+    "Layout",
+    "Date quoted",
+    "Estimate total",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
+  useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+      setPage(1);
+    }
+    if (searchValue) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchEstimatesList();
+    }
+  }, [
+    statusValue,
+    dateValue,
+    searchValue,
+    page,
+    deletedSuccessfully,
+    projectId,
+  ]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   return (
     <>
       {isLoading ? (
-        <Box
-          sx={{
-            width: 40,
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            maxHeight: "70vh",
-            minHeight: "20vh",
-            background: "#FFFF",
-            pb: 3,
-          }}
-        >
-          <CircularProgress sx={{ color: "#8477DA" }} />
+        <Box>
+          <DataGrid
+            getRowId={(row) => row._id}
+            rows={SkeletonRowsGenerated}
+            columns={SkeletonColumnsGenerated}
+            page={1}
+            pageSize={10}
+            className="table"
+            hideFooter
+            disableColumnMenu
+            pagination={false}
+          />
         </Box>
-      ) : filteredData?.length === 0 && !estimatesListFetching ? (
-        <Typography
-          sx={{
-            color: "#667085",
-            p: 2,
-            textAlign: "center",
-            background: "#FFFF",
-            borderRadius: "12px",
-          }}
-        >
-          No Estimate Found
-        </Typography>
-      ) : (
+      ) : filteredData?.length > 0 ? (
         <Box
           sx={{
             background: "#FFFF",
@@ -323,6 +340,18 @@ const WineCellarEstimatesList = ({ projectId, statusValue, dateValue, searchValu
             handleDelete={handleDeleteEstimate}
           />
         </Box>
+      ) : (
+        <Typography
+          sx={{
+            color: "#667085",
+            p: 2,
+            textAlign: "center",
+            background: "#FFFF",
+            borderRadius: "12px",
+          }}
+        >
+          No Estimate Found
+        </Typography>
       )}
     </>
   );

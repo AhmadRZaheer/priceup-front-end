@@ -29,6 +29,7 @@ import CustomInputField from "../ui-components/CustomInput";
 import CustomToggle from "../ui-components/Toggle";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -37,7 +38,7 @@ const GlassAddonGrid = ({ type }) => {
     data: glassAddons,
     refetch: glassAddonRefetch,
     isFetching: glassAddonFetching,
-    isLoading,
+    isFetched,
   } = useFetchGlassAddons(type);
   const {
     mutate: deleteGlassAddon,
@@ -55,7 +56,7 @@ const GlassAddonGrid = ({ type }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
   const [rowStatus, setRowStatus] = useState({});
-
+  const [isLoading, setIsLoading] = useState(true);
   const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
@@ -329,6 +330,19 @@ const GlassAddonGrid = ({ type }) => {
       },
     },
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Addons Type",
+    "Cost per square inch",
+    "status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   useEffect(() => {
     if (refetchData) {
@@ -401,30 +415,27 @@ const GlassAddonGrid = ({ type }) => {
         }}
       >
         {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-              alignItems: "center",
-              background: "#FFFF",
-              height: "56vh",
-            }}
-          >
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+          <Box>
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={SkeletonRowsGenerated}
+              columns={SkeletonColumnsGenerated}
+              page={1}
+              pageSize={10}
+              className="table"
+              hideFooter
+              disableColumnMenu
+              pagination={false}
+            />
           </Box>
         ) : (
-          <div className="CustomerTable-1">
+          <Box className="CustomerTable-1">
             {glassAddons.length >= 1 ? (
               <>
                 <DataGrid
                   loading={glassAddonFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  // rows={filteredData.slice(
-                  //   (page - 1) * itemsPerPage,
-                  //   page * itemsPerPage
-                  // )}
                   disableColumnFilter
                   disableColumnMenu
                   rows={glassAddons}
@@ -433,21 +444,10 @@ const GlassAddonGrid = ({ type }) => {
                   rowCount={
                     glassAddons?.totalRecords ? glassAddons?.totalRecords : 0
                   }
-                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                   rowHeight={70}
                 />
-
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </>
             ) : (
               <Typography
@@ -456,7 +456,7 @@ const GlassAddonGrid = ({ type }) => {
                 No Glass Addons Found
               </Typography>
             )}
-          </div>
+          </Box>
         )}
       </Box>
 
