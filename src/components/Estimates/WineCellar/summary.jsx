@@ -20,6 +20,7 @@ import {
   getAdditionalFieldsTotal,
   getContent,
   getCost,
+  getDoorLaborTotal,
   getDoorWeight,
   getDoorWidth,
   getFabricationTotal,
@@ -49,6 +50,7 @@ const Summary = ({ setStep }) => {
   const glassPrice = useSelector(getGlassTotal);
   const fabricationPrice = useSelector(getFabricationTotal);
   const laborPrice = useSelector(getLaborTotal);
+  const doorLaborPrice = useSelector(getDoorLaborTotal);
   const additionalFieldsPrice = useSelector(getAdditionalFieldsTotal);
   const userProfitPercentage = useSelector(getUserProfitPercentage);
   const doorWidth = useSelector(getDoorWidth);
@@ -673,10 +675,24 @@ const Summary = ({ setStep }) => {
                         }}
                       >
                         <Typography className="text-xs-ragular-bold">
-                          Hours:{" "}
+                        Hours for layout:{" "}
                         </Typography>
                         <Typography className="text-xs-ragular">
                           {selectedContent?.hours}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          textAlign: "baseline",
+                          gap: 0.6,
+                        }}
+                      >
+                        <Typography className="text-xs-ragular-bold">
+                        Hours for door:{" "}
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          {selectedContent?.laborHoursForDoor ?? 0}
                         </Typography>
                       </Box>
                       <Box>
@@ -758,10 +774,18 @@ const Summary = ({ setStep }) => {
                       </Box> */}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
-                          Labor Price:
+                          Layout Labor Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${laborPrice?.toFixed(2) || 0}
+                        </Typography>
+                      </Box>
+                      <Box>
+                        <Typography className="text-xs-ragular-bold">
+                         Door Labor Price:
+                        </Typography>
+                        <Typography className="text-xs-ragular">
+                          ${doorLaborPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
                       <Box>

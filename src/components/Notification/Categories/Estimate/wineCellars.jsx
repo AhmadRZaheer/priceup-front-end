@@ -192,7 +192,10 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
           {data.config?.people}
         </Typography>
         <Typography className="summaryData">
-          <Box className="heading-txt">Hours</Box>&nbsp; : {data.config?.hours}
+          <Box className="heading-txt">Hours for layout</Box>&nbsp; : {data.config?.hours}
+        </Typography>
+        <Typography className="summaryData">
+          <Box className="heading-txt">Hours for door:</Box>&nbsp; : {data.config?.laborHoursForDoor ?? 0}
         </Typography>
         <Typography className="twTxt" sx={{ py: 1 }}>
           Additional Fields
