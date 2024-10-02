@@ -30,6 +30,7 @@ import CustomToggle from "../ui-components/Toggle";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -131,6 +132,7 @@ const GlassAddonGrid = ({ type }) => {
               type="number"
               inputProps={{
                 min: 0,
+                max: inputMaxValue,
               }}
               name="cost"
               placeholder="Cost"
@@ -139,12 +141,14 @@ const GlassAddonGrid = ({ type }) => {
                   ? rowCosts[params.row._id]
                   : params.row.options[0]?.cost
               }
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: e.target.value,
+                  });
+                }
+              }}
             />
           </Box>
         );

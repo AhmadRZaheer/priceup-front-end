@@ -127,3 +127,6 @@ export const statusTypes = {
   VOIDED: "voided",
   APPROVED: "approved",
 };
+
+export const inputLength = 6;
+export const inputMaxValue = 999999;
