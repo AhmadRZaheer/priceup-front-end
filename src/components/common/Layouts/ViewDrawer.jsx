@@ -367,9 +367,20 @@ const ViewDrawer = ({ open, handleClose, data ,variant }) => {
                 className="cardTitleContainer"
                 sx={{ py: 1, height: "fit-content" }}
               >
-                <Typography className="drawerTitle">Hours</Typography>
+                <Typography className="drawerTitle">Hours (Per Person)</Typography>
                 <Typography className="drawerBoldTitle">
                   {`${data.settings?.other?.hours ?? 0}`}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={5.5}
+                className="cardTitleContainer"
+                sx={{ py: 1, height: "fit-content" }}
+              >
+                <Typography className="drawerTitle">Sinlgle Door Hours (Per Person)</Typography>
+                <Typography className="drawerBoldTitle">
+                  {`${data.settings?.noOfHoursToCompleteSingleDoor ?? 0}`}
                 </Typography>
               </Grid>
             </Grid>
@@ -380,7 +391,8 @@ const ViewDrawer = ({ open, handleClose, data ,variant }) => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            paddingBottom: 5,
+            pt:1,
+            pb: 5,
             gap: "12px",
           }}
         >

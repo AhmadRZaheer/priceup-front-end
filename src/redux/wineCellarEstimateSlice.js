@@ -143,6 +143,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
       hingeCut: 0,
       people: 0,
       hours: 0,
+      laborHoursForDoor: 0,
       mountingState: "channel",
       userProfitPercentage: 0,
     },
@@ -226,7 +227,6 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
   
       initializeStateForCreateQuote: (state, action) => {
         const { layoutData, hardwaresList } = action.payload;
-        console.log(layoutData,'layoutDatalayoutDatalayoutData');
         let notifications = state.notifications;
         let hardwareFinishes = null;
         hardwareFinishes = hardwaresList?.hardwareFinishes?.find(
@@ -296,6 +296,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
           mountingState: "channel",
           people: layoutData?.settings?.other?.people,
           hours: layoutData?.settings?.other?.hours,
+          laborHoursForDoor: layoutData?.settings?.noOfHoursToCompleteSingleDoor,
           // glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],
           hingeCut: layoutData?.settings?.hinges?.count,
           oneInchHoles: layoutData?.settings?.handles?.count * 2,
@@ -376,6 +377,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
           hingeCut: estimateData?.config?.hingeCut,
           people: estimateData?.config?.people,
           hours: estimateData?.config?.hours,
+          laborHoursForDoor:  estimateData?.config?.laborHoursForDoor ?? 0,
           // glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
           oneInchHoles: estimateData?.config?.oneInchHoles,
           // polish: estimateData?.config?.polish,
@@ -388,6 +390,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
         state.sqftArea = estimateData.config.sqftArea;
         state.selectedItem = estimateData;
         state.doorWidth = estimateData?.config?.doorWidth || 0;
+        state.doorQuantity = estimateData?.config?.doorQuantity || 1;
       },
   
       setInputContent: (state, action) => {
@@ -423,6 +426,9 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
       },
       setCost: (state, action) => {
         state.actualCost = action.payload;
+      },
+      sethoursForSingleDoor: (state, action) => {
+        state.content.laborHoursForDoor = action.payload;
       },
       setProfit: (state, action) => {
         state.grossProfit = action.payload;
@@ -695,6 +701,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
     setThickness,
     setCounters,
     setActiveMounting,
+    sethoursForSingleDoor
   } = wineCellarsEstimateSlice.actions;
   
   export default wineCellarsEstimateSlice.reducer;

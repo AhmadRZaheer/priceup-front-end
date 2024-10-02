@@ -43,8 +43,8 @@ import {
   setAdditionalFieldsPrice,
   setContent,
   setCost,
-  setFabricationPrice,  
-  setGlassPrice,  
+  setFabricationPrice,
+  setGlassPrice,
   setHardwarePrice,
   setInputContent,
   setLaborPrice,
@@ -112,9 +112,11 @@ export const generateEstimatePayload = (
       thickness: selectedContent?.glassType?.thickness,
     },
     oneInchHoles: selectedContent?.oneInchHoles,
-    hingeCut: selectedContent?.hingeCut,   
+    hingeCut: selectedContent?.hingeCut,
     people: selectedContent?.people,
     hours: selectedContent?.hours,
+    laborHoursForDoor:
+      selectedContent?.laborHoursForDoor,
     userProfitPercentage: selectedContent?.userProfitPercentage,
     // towelBarsCount: selectedContent?.sleeveOverCount,
     measurements: measurementsArray,
@@ -286,6 +288,21 @@ const Review = ({ setStep }) => {
       window.removeEventListener("resize", updateWindowWidth);
     };
   }, []);
+
+  const handleChangeLabor = (event, type) => {
+    let rate = 0
+    if(event.target.value === ''){
+      rate = 0;
+    }else{
+      rate = event.target.value;
+    }
+    dispatch(
+      setInputContent({
+        type: type,
+        value: Number(rate) ,
+      })
+    );
+  };
 
   return (
     <>
@@ -493,7 +510,7 @@ const Review = ({ setStep }) => {
                       }}
                     >
                       <ChannelOrClamp
-                        menuOptions={'Channel'}
+                        menuOptions={"Channel"}
                         title={"Channel"}
                         type={"mounting"}
                         listData={listData}
@@ -693,14 +710,7 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.people}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "people",
-                              value: event.target.value,
-                            })
-                          )
-                        }
+                        onChange={(event) =>handleChangeLabor(event,"people")}
                       />
                     </Box>
                   </Box>
@@ -718,7 +728,7 @@ const Review = ({ setStep }) => {
                     }}
                   >
                     <Typography className="estimate-modifcation">
-                      Hours:
+                      Hours for layout:
                     </Typography>
                     <Box
                       sx={{
@@ -753,14 +763,76 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.hours}
+                        onChange={(event) =>handleChangeLabor(event,"hours")}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Hours for door:
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield-purple-disabled"
+                        disabled={true}
+                        InputProps={{
+                          inputProps: { min: 0 },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={
+                          selectedContent.laborHoursForDoor || 0
+                        }
                         onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "hours",
-                              value: event.target.value,
-                            })
+                          handleChangeLabor(
+                            event,
+                            "laborHoursForDoor"
                           )
                         }
+                        // onChange={(event) =>
+                        //   dispatch(
+                        //     setInputContent({
+                        //       type: "laborHoursForDoor",
+                        //       value: event.target.value,
+                        //     })
+                        //   )
+                        // }
                       />
                     </Box>
                   </Box>

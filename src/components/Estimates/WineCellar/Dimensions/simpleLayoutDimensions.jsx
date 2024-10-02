@@ -57,6 +57,7 @@ import {
   getDoorQuantity,
   setDoorQuantity,
   setBackWallGlassWeight,
+  sethoursForSingleDoor,
 } from "@/redux/wineCellarEstimateSlice";
 import AlertsAndWarnings from "../AlertsAndWarnings";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
@@ -246,8 +247,11 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   };
 
   const handleChangeDoorQuantity = (event) => {
+    const value = selectedData?.settings?.noOfHoursToCompleteSingleDoor;
+   const  targetValue = Number(event.target.value);
     // setDebouncedValueDoorQuantity(event.target.value);
-    dispatch(setDoorQuantity(event.target.value));
+    dispatch(setDoorQuantity(targetValue));
+    dispatch(sethoursForSingleDoor(targetValue*value));
   }
 
   useEffect(() => {

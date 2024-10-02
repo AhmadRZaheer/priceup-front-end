@@ -251,9 +251,13 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   )?.cost || 0;
 
   //labor price
+  let singleDoorPrice = 0;
+  if(typeof selectedContent?.laborHoursForDoor === 'number' &&  selectedContent?.laborHoursForDoor > 0 ){
+    singleDoorPrice = selectedContent?.laborHoursForDoor;
+  }
   const laborPrice =
-    selectedContent?.people *
-    selectedContent?.hours *
+   ( selectedContent?.people *
+    (selectedContent?.hours + singleDoorPrice)) *
     estimatesData?.miscPricing?.hourlyRate;
   
   //additionalField price

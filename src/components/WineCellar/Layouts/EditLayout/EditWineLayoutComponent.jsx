@@ -102,6 +102,9 @@ const EditWineLayoutComponent = () => {
       thickness: singleLayout?.layoutData?.settings?.glassType?.thickness,
     },
 
+    noOfHoursToCompleteSingleDoor:
+      singleLayout?.layoutData?.settings?.noOfHoursToCompleteSingleDoor,
+
     other: {
       people: singleLayout?.layoutData?.settings?.other?.people,
       hours: singleLayout?.layoutData?.settings?.other?.hours,
@@ -149,6 +152,8 @@ const EditWineLayoutComponent = () => {
           type: values.settings?.doorLock?.type,
           count: values.settings?.doorLock?.count,
         },
+        noOfHoursToCompleteSingleDoor:
+          values?.settings?.noOfHoursToCompleteSingleDoor,
         other: {
           people: values.settings?.other?.people,
           hours: values.settings?.other?.hours,
@@ -935,7 +940,7 @@ const EditWineLayoutComponent = () => {
                               className="modificationTitle"
                               sx={{ fontSize: 16 }}
                             >
-                              Hours
+                              Hours (Per Person)
                             </Typography>
                             <CustomInputField
                               color={"purple"}
@@ -952,6 +957,53 @@ const EditWineLayoutComponent = () => {
                               onBlur={formik.handleBlur}
                             />
                           </Box>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: "16px",
+                            width: "100%",
+                          }}
+                        >
+                          <Box
+                            sx={{
+                              width: "50%",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "8px",
+                            }}
+                          >
+                            <Typography
+                              className="modificationTitle"
+                              sx={{ fontSize: 16 }}
+                            >
+                              Sinlgle Door Hours (Per Person)
+                            </Typography>
+                            <CustomInputField
+                              color={"purple"}
+                              size="small"
+                              type="number"
+                              InputProps={{
+                                inputProps: { min: 0 },
+                              }}
+                              variant="outlined"
+                              name="noOfHoursToCompleteSingleDoor"
+                              fullWidth={true}
+                              value={
+                                formik.values.noOfHoursToCompleteSingleDoor || 0
+                              }
+                              onChange={formik.handleChange}
+                              onBlur={formik.handleBlur}
+                            />
+                          </Box>
+                          <Box
+                            sx={{
+                              width: "50%",
+                              display: "flex",
+                              flexDirection: "column",
+                              gap: "8px",
+                            }}
+                        />
                         </Box>
                       </Box>
                     </Grid>
