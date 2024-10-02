@@ -32,6 +32,7 @@ import MountingSection from "../MountingSection";
 import { useFetchAllDocuments, useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import AddMoreItems from "./addMoreItems";
 import { setItemsStatusAfterFirstLoad } from "@/utilities/layouts";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const routePrefix = `${backendURL}/layouts`;
 
@@ -557,7 +558,7 @@ const EditShowerLayout = () => {
                         <CustomInputField
                           type="number"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0,max: inputMaxValue },
                           }}
                           size="small"
                           variant="outlined"
@@ -569,7 +570,11 @@ const EditShowerLayout = () => {
                               ? formik.values.handles.count
                               : 0
                           }
-                          onChange={formik.handleChange}
+                          onChange={(e)=>{
+                            if (e.target.value.length <= inputLength) {
+                              formik.handleChange(e)
+                            }
+                          }}
                           onBlur={formik.handleBlur}
                         />
                       </Box>
@@ -621,7 +626,7 @@ const EditShowerLayout = () => {
                             color={"purple"}
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             size="small"
                             variant="outlined"
@@ -632,7 +637,11 @@ const EditShowerLayout = () => {
                                 ? formik.values.pivotHingeOption.count
                                 : 0
                             }
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -741,7 +750,7 @@ const EditShowerLayout = () => {
                           color={"purple"}
                           type="number"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0,max: inputMaxValue },
                           }}
                           size="small"
                           variant="outlined"
@@ -752,7 +761,11 @@ const EditShowerLayout = () => {
                               ? formik.values.hinges.count
                               : 0
                           }
-                          onChange={formik.handleChange}
+                          onChange={(e)=>{
+                            if (e.target.value.length <= inputLength) {
+                              formik.handleChange(e)
+                            }
+                          }}
                           onBlur={formik.handleBlur}
                         />
                       </Box>
@@ -809,7 +822,7 @@ const EditShowerLayout = () => {
                             color={"purple"}
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             size="small"
                             variant="outlined"
@@ -821,7 +834,11 @@ const EditShowerLayout = () => {
                                 ? formik.values.heavyDutyOption.height
                                 : null
                             }
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -920,7 +937,7 @@ const EditShowerLayout = () => {
                               color={"purple"}
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue },
                               }}
                               size="small"
                               variant="outlined"
@@ -933,14 +950,18 @@ const EditShowerLayout = () => {
                                   ? formik.values.heavyPivotOption.threshold
                                   : 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                             <CustomInputField
                               color={"purple"}
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue },
                               }}
                               size="small"
                               variant="outlined"
@@ -953,7 +974,11 @@ const EditShowerLayout = () => {
                                   ? formik.values.heavyPivotOption.height
                                   : 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -1006,7 +1031,7 @@ const EditShowerLayout = () => {
                             color={"purple"}
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             size="small"
                             fullWidth={true}
@@ -1017,7 +1042,11 @@ const EditShowerLayout = () => {
                                 ? formik.values.slidingDoorSystem.count
                                 : 0 // Set the default value to 0
                             }
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -1050,11 +1079,15 @@ const EditShowerLayout = () => {
                             name="outages"
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             fullWidth={true}
                             value={formik.values.outages}
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -1189,11 +1222,15 @@ const EditShowerLayout = () => {
                             name="notch"
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             fullWidth={true}
                             value={formik.values.notch}
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -1234,11 +1271,15 @@ const EditShowerLayout = () => {
                             name="other.people"
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue },
                             }}
                             fullWidth={true}
                             value={formik.values.other.people}
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>
@@ -1255,13 +1296,17 @@ const EditShowerLayout = () => {
                             size="small"
                             type="number"
                             InputProps={{
-                              inputProps: { min: 0 },
+                              inputProps: { min: 0,max: inputMaxValue,step: "any", },
                             }}
                             variant="outlined"
                             name="other.hours"
                             fullWidth={true}
                             value={formik.values.other.hours}
-                            onChange={formik.handleChange}
+                            onChange={(e)=>{
+                              if (e.target.value.length <= inputLength) {
+                                formik.handleChange(e)
+                              }
+                            }}
                             onBlur={formik.handleBlur}
                           />
                         </Box>

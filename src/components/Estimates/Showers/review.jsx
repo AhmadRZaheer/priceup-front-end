@@ -47,6 +47,8 @@ import { calculateTotal } from "@/utilities/common";
 import { Link, useNavigate } from "react-router-dom";
 import {
   EstimateCategory,
+  inputLength,
+  inputMaxValue,
   layoutVariants,
   quoteState,
 } from "@/utilities/constants";
@@ -812,7 +814,7 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0 ,max: inputMaxValue,},
                           style: {
                             height: '38px',
                           }
@@ -833,13 +835,16 @@ export const ShowerReview = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.oneInchHoles}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "oneInchHoles",
-                              value: event.target.value,
-                            })
-                          )
+                        onChange={(event) =>{
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "oneInchHoles",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        }                          
                         }
                       />
                     </Box>

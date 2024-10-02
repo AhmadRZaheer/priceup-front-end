@@ -19,7 +19,7 @@ import { useFormik } from "formik";
 import { setWineItemsStatusAfterFirstLoad } from "@/utilities/layouts";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import AddMoreItems from "@/components/ShowerLayout/EditLayout/addMoreItems";
-import { thicknessTypes } from "@/utilities/constants";
+import { inputLength, inputMaxValue, thicknessTypes } from "@/utilities/constants";
 import {
   useEditDocument,
   useFetchAllDocuments,
@@ -519,7 +519,6 @@ const EditWineLayoutComponent = () => {
                               value={formik.values.handles.handleType || ""}
                               onChange={(e) => {
                                 formik.handleChange(e);
-
                                 if (e.target.value === null) {
                                   formik.setFieldValue("handles.count", 0);
                                 }
@@ -530,7 +529,7 @@ const EditWineLayoutComponent = () => {
                             <CustomInputField
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0 , max: inputMaxValue },
                               }}
                               size="small"
                               variant="outlined"
@@ -542,7 +541,11 @@ const EditWineLayoutComponent = () => {
                                   ? formik.values.handles.count
                                   : 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -657,7 +660,7 @@ const EditWineLayoutComponent = () => {
                               color={"purple"}
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue },
                               }}
                               size="small"
                               variant="outlined"
@@ -668,7 +671,12 @@ const EditWineLayoutComponent = () => {
                                   ? formik.values.hinges.count
                                   : 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                 }
+                              }                                 
+                              }
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -704,7 +712,6 @@ const EditWineLayoutComponent = () => {
                               value={formik.values.doorLock.type || ""}
                               onChange={(e) => {
                                 formik.handleChange(e);
-
                                 if (e.target.value === null) {
                                   formik.setFieldValue("doorLock.type", 0);
                                 }
@@ -715,7 +722,7 @@ const EditWineLayoutComponent = () => {
                             <CustomInputField
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue },
                               }}
                               size="small"
                               variant="outlined"
@@ -727,7 +734,11 @@ const EditWineLayoutComponent = () => {
                                   ? formik.values.doorLock.count
                                   : 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -786,7 +797,7 @@ const EditWineLayoutComponent = () => {
                               color={"purple"}
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0 ,max: inputMaxValue},
                               }}
                               size="small"
                               variant="outlined"
@@ -799,7 +810,11 @@ const EditWineLayoutComponent = () => {
                                   ? formik.values.heavyDutyOption.height
                                   : null
                               }
-                              onChange={formik.handleChange}
+                               onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -919,11 +934,15 @@ const EditWineLayoutComponent = () => {
                               name="other.people"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue },
                               }}
                               fullWidth={true}
                               value={formik.values.other.people}
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -947,13 +966,17 @@ const EditWineLayoutComponent = () => {
                               size="small"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue,step: "any", },
                               }}
                               variant="outlined"
                               name="other.hours"
                               fullWidth={true}
                               value={formik.values.other.hours}
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>
@@ -984,7 +1007,7 @@ const EditWineLayoutComponent = () => {
                               size="small"
                               type="number"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,max: inputMaxValue , step: "any",},
                               }}
                               variant="outlined"
                               name="noOfHoursToCompleteSingleDoor"
@@ -992,7 +1015,11 @@ const EditWineLayoutComponent = () => {
                               value={
                                 formik.values.noOfHoursToCompleteSingleDoor || 0
                               }
-                              onChange={formik.handleChange}
+                              onChange={(e)=>{
+                                if (e.target.value.length <= inputLength) {
+                                  formik.handleChange(e)
+                                }
+                              }}
                               onBlur={formik.handleBlur}
                             />
                           </Box>

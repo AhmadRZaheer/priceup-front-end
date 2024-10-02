@@ -29,6 +29,7 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const WineGlassTypeComponent = () => {
   const dispatch = useDispatch();
@@ -224,7 +225,7 @@ const WineGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0, max: inputMaxValue }}
             name={`cost-${params.row._id}-3/8`}
             placeholder="Cost"
             value={
@@ -232,12 +233,14 @@ const WineGlassTypeComponent = () => {
               params.row.options.find((o) => o.thickness === "3/8")?.cost ??
               0
             }
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [`${params.row._id}-3/8`]: e.target.value,
-              })
-            }
+            onChange={(e) => {
+              if (e.target.value.length <= inputLength) {
+                setRowCosts({
+                  ...rowCosts,
+                  [`${params.row._id}-3/8`]: e.target.value,
+                });
+              }
+            }}
           />
         </Box>
       ),
@@ -255,7 +258,7 @@ const WineGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0, max: inputMaxValue }}
             name={`cost-${params.row._id}-1/2`}
             placeholder="Cost"
             value={
@@ -263,12 +266,14 @@ const WineGlassTypeComponent = () => {
               params.row.options.find((o) => o.thickness === "1/2")?.cost ??
               0
             }
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [`${params.row._id}-1/2`]: e.target.value,
-              })
-            }
+            onChange={(e) => {
+              if (e.target.value.length <= inputLength) {
+                setRowCosts({
+                  ...rowCosts,
+                  [`${params.row._id}-1/2`]: e.target.value,
+                });
+              }
+            }}
           />
         </Box>
       ),

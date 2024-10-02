@@ -31,6 +31,7 @@ import CustomInputField from "../ui-components/CustomInput";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const GlassTypeComponent = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -159,16 +160,22 @@ const GlassTypeComponent = ({ type }) => {
           <Box sx={{ width: "101px" }}>
             <CustomInputField
               type="number"
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
               value={rowCosts[params.row._id]?.["3/8"] ?? thickness3by8?.cost}
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: {
-                    ...rowCosts[params.row._id],
-                    "3/8": e.target.value,
-                  },
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: {
+                      ...rowCosts[params.row._id],
+                      "3/8": e.target.value,
+                    },
+                  });
+                }
+              }}
             />
           </Box>
         );
@@ -191,16 +198,22 @@ const GlassTypeComponent = ({ type }) => {
           <Box sx={{ width: "101px" }}>
             <CustomInputField
               type="number"
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
               value={rowCosts[params.row._id]?.["1/2"] ?? thickness1by2?.cost}
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: {
-                    ...rowCosts[params.row._id],
-                    "1/2": e.target.value,
-                  },
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: {
+                      ...rowCosts[params.row._id],
+                      "1/2": e.target.value,
+                    },
+                  });
+                }
+              }}
             />
           </Box>
         );

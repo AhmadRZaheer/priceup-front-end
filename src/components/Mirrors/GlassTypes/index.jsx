@@ -33,6 +33,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const MirrorsGlassTypeComponent = () => {
   const dispatch = useDispatch();
@@ -238,18 +239,21 @@ const MirrorsGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0 ,max: inputMaxValue,}}
             name={`cost-${params.row._id}-1/4`}
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-1/4`] ??
               params.row.options.find((o) => o.thickness === "1/4")?.cost
             }
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [`${params.row._id}-1/4`]: e.target.value,
-              })
+            onChange={(e) =>{
+              if (e.target.value.length <= inputLength) {
+                setRowCosts({
+                  ...rowCosts,
+                  [`${params.row._id}-1/4`]: e.target.value,
+                })
+              }
+            }           
             }
           />
         </Box>
@@ -268,18 +272,21 @@ const MirrorsGlassTypeComponent = () => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0 ,max: inputMaxValue,}}
             name={`cost-${params.row._id}-1/8`}
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-1/8`] ??
               params.row.options.find((o) => o.thickness === "1/8")?.cost
             }
-            onChange={(e) =>
-              setRowCosts({
-                ...rowCosts,
-                [`${params.row._id}-1/8`]: e.target.value,
-              })
+            onChange={(e) =>{
+              if (e.target.value.length <= inputLength) {
+                setRowCosts({
+                  ...rowCosts,
+                  [`${params.row._id}-1/8`]: e.target.value,
+                })
+              }
+            }              
             }
           />
         </Box>

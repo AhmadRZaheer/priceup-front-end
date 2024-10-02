@@ -26,6 +26,7 @@ import {
 import { backendURL } from "@/utilities/common";
 import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   const routePrefix = `${backendURL}/wineCellars/hardwares`;
@@ -97,11 +98,14 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
   };
   const handleCostChange = useCallback((event, id) => {
     const value = event.target.value;
-    setFinishes((prevFinishes) =>
-      prevFinishes.map((item) =>
-        item._id === id ? { ...item, cost: value } : item
-      )
-    );
+    if (value.length <= inputLength) {
+      setFinishes((prevFinishes) =>
+        prevFinishes.map((item) =>
+          item._id === id ? { ...item, cost: value } : item
+        )
+      );
+    }
+    
   }, []);
   const actionColumns = [
     {
@@ -117,7 +121,7 @@ const WineHardwareTable = ({ data, refetchData, selectedSlug }) => {
             size="small"
             variant="outlined"
             type="number"
-            inputProps={{ min: 0 }}
+            inputProps={{ min: 0 ,max: inputMaxValue}}
             name="cost"
             placeholder="Cost"
             value={params?.row?.cost}

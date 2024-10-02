@@ -33,6 +33,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const MirrorsGlassAddonComponent = () => {
   const dispatch = useDispatch();
@@ -233,6 +234,7 @@ const MirrorsGlassAddonComponent = () => {
                 type="number"
                 inputProps={{
                   min: 0,
+                  max: inputMaxValue,
                 }}
                 name="cost"
                 placeholder="Cost"
@@ -241,12 +243,14 @@ const MirrorsGlassAddonComponent = () => {
                     ? rowCosts[params.row._id]
                     : params.row.options[0].cost
                 }
-                onChange={(e) =>
-                  setRowCosts({
-                    ...rowCosts,
-                    [params.row._id]: e.target.value,
-                  })
-                }
+                onChange={(e) => {
+                  if (e.target.value.length <= inputLength) {
+                    setRowCosts({
+                      ...rowCosts,
+                      [params.row._id]: e.target.value,
+                    });
+                  }
+                }}
               />
             </Box>
           </>

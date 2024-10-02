@@ -37,6 +37,7 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
 import { ArrowForward } from "@mui/icons-material";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const MirrorsHardwareComponent = () => {
   const dispatch = useDispatch();
@@ -245,6 +246,7 @@ const MirrorsHardwareComponent = () => {
                 type="number"
                 inputProps={{
                   min: 0,
+                  max: inputMaxValue,
                 }}
                 name="cost"
                 placeholder="Cost"
@@ -253,11 +255,14 @@ const MirrorsHardwareComponent = () => {
                     ? rowCosts[params.row._id]
                     : params.row.options[0].cost
                 }
-                onChange={(e) =>
-                  setRowCosts({
-                    ...rowCosts,
-                    [params.row._id]: e.target.value,
-                  })
+                onChange={(e) =>{
+                  if (e.target.value.length <= inputLength) {
+                    setRowCosts({
+                      ...rowCosts,
+                      [params.row._id]: e.target.value,
+                    })
+                  }
+                }                 
                 }
               />
             </Box>
