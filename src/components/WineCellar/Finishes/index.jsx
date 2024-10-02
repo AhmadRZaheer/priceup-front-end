@@ -3,7 +3,7 @@ import { WineFinishesColumns } from "@/utilities/DataGridColumns";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
-  CircularProgress,
+  // CircularProgress,
   Typography,
   Button,
   IconButton,
@@ -27,6 +27,7 @@ import {
 import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
 import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
 import { useDispatch } from "react-redux";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const WineFinishComponent = () => {
   const apiUrl = `${backendURL}/wineCellars/finishes/`;
@@ -41,12 +42,13 @@ const WineFinishComponent = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeRow, setActiveRow] = useState(null);
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
   //Fetch All Documents
   const {
     data: WineFinishesData,
     refetch: finishesWineRefetch,
     isFetching,
-    isLoading,
+    isFetched,
   } = useFetchAllDocuments(apiUrl);
   // Create New Finish
   const {
@@ -87,9 +89,9 @@ const WineFinishComponent = () => {
 
   const handleClose = () => setOpen(false);
 
-  const handleOpenEdit = (data) => {
-    setOpen(true);
-  };
+  // const handleOpenEdit = (data) => {
+  //   setOpen(true);
+  // };
 
   const handleFinishDelete = () => {
     deleteWineFinishType({ apiRoute: `${apiUrl}/${deleteRecord}` });
@@ -136,6 +138,12 @@ const WineFinishComponent = () => {
       dispatch(setWineCellarsHardwareRefetch());
     }
   }, [createWineFinishSuccess, deleteWineFinishSuccess, editWineFinishSuccess]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   const actionColumn = [
     {
@@ -242,6 +250,9 @@ const WineFinishComponent = () => {
     },
   ];
 
+  const SkeletonColumnsGenerated = GenrateColumns(["Finish Type", "Actions"]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
   return (
     <>
       <Box
@@ -294,23 +305,21 @@ const WineFinishComponent = () => {
         >
           <Box>
             {isLoading ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "20px",
-                  alignItems: "center",
-                  height: "200px",
-                }}
-              >
-                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
               </Box>
-            ) : WineFinishesData.length === 0 ? (
-              <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
-                No Finishe Found
-              </Typography>
-            ) : (
-              <div className="hardwareTable">
+            ) : WineFinishesData.length > 0 ? (
+              <Box className="hardwareTable">
                 <DataGrid
                   loading={isFetching}
                   style={{
@@ -327,7 +336,11 @@ const WineFinishComponent = () => {
                   disableColumnFilter
                   disableColumnMenu
                 />
-              </div>
+              </Box>
+            ) : (
+              <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
+                No Finishe Found
+              </Typography>
             )}
           </Box>
         </Box>

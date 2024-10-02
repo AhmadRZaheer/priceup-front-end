@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, CircularProgress, IconButton, Menu, MenuItem, Typography, useMediaQuery } from "@mui/material";
+import {
+  Box,
+  Button,
+  // CircularProgress,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  useMediaQuery,
+} from "@mui/material";
 import { Add, ArrowForward } from "@mui/icons-material";
-import CustomIconButton from "@/components/ui-components/CustomButton";
+// import CustomIconButton from "@/components/ui-components/CustomButton";
 import {
   useCreateDocument,
   useDeleteDocument,
@@ -10,7 +19,7 @@ import {
   useFetchAllDocuments,
 } from "@/utilities/ApiHooks/common";
 import { backendURL, createSlug, getDecryptedToken } from "@/utilities/common";
-import HardwareItem from "@/components/common/HardwareItem";
+// import HardwareItem from "@/components/common/HardwareItem";
 import DeleteModal from "@/components/Modal/deleteModal";
 import HardwareEditModal from "@/components/common/HardwareEditModal";
 import HardwareCreateModal from "@/components/common/HardwareCreateModal";
@@ -19,21 +28,22 @@ import { useDispatch } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import { MirrorsGlassAddons } from "@/utilities/DataGridColumns";
 import CustomInputField from "@/components/ui-components/CustomInput";
-import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+// import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { CustomSmallSwtich } from "@/components/common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const MirrorsGlassAddonComponent = () => {
   const dispatch = useDispatch();
   const routePrefix = `${backendURL}/mirrors/glassAddons`;
-  
+
   const decodedToken = getDecryptedToken();
   const {
     data: glassAddonsList,
     refetch: refetchGlassAddonsList,
     isFetching: fetchingGlassAddonsList,
-    isLoading
+    isFetched,
   } = useFetchAllDocuments(routePrefix);
   const {
     mutate: deleteGlassAddon,
@@ -41,8 +51,8 @@ const MirrorsGlassAddonComponent = () => {
     isSuccess: deleteSuccess,
   } = useDeleteDocument();
   const {
-    mutate: deleteGlassAddonOption,
-    isLoading: deleteGlassAddonOptionLoading,
+    // mutate: deleteGlassAddonOption,
+    // isLoading: deleteGlassAddonOptionLoading,
     isSuccess: deleteOptionSuccess,
   } = useDeleteDocumentProp();
   const {
@@ -64,6 +74,7 @@ const MirrorsGlassAddonComponent = () => {
   const [activeRow, setActiveRow] = useState(null);
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -145,20 +156,26 @@ const MirrorsGlassAddonComponent = () => {
           : option.cost,
     }));
     setUpdateRefetch(false);
-    editGlassAddon({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${data._id}` });
+    editGlassAddon({
+      data: { options: updatedOptions },
+      apiRoute: `${routePrefix}/${data._id}`,
+    });
   };
 
   const handleStatusChange = (row) => {
     setRowStatus({
       ...rowStatus,
       [row._id]: !row.options[0].status,
-    })
+    });
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
     }));
     // Update the backend with the new status
-    editGlassAddon({ data: { options: updatedOptions }, apiRoute: `${routePrefix}/${row._id}` });
+    editGlassAddon({
+      data: { options: updatedOptions },
+      apiRoute: `${routePrefix}/${row._id}`,
+    });
     setUpdateRefetch(true);
   };
 
@@ -168,12 +185,12 @@ const MirrorsGlassAddonComponent = () => {
     if (createSuccess) {
       setCreateModalOpen(false);
       dispatch(setMirrorsHardwareRefetch());
-      setRowCosts({})
+      setRowCosts({});
     }
     if (deleteSuccess) {
       setDeleteModalOpen(false);
       dispatch(setMirrorsHardwareRefetch());
-      setRowCosts({})
+      setRowCosts({});
     }
   }, [deleteSuccess, createSuccess, deleteOptionSuccess]);
 
@@ -186,18 +203,20 @@ const MirrorsGlassAddonComponent = () => {
       dispatch(setMirrorsHardwareRefetch());
       // setRowCosts({})
     }
-  }, [editSuccess])
+  }, [editSuccess]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   const actionColumn = [
     {
       field: "Cost",
       headerName: "Cost",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 1.6,
       sortable: false,
       renderCell: (params) => {
@@ -238,11 +257,7 @@ const MirrorsGlassAddonComponent = () => {
       field: "Status",
       headerName: "Status",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 2.5,
       sortable: false,
       renderCell: (params) => {
@@ -251,11 +266,14 @@ const MirrorsGlassAddonComponent = () => {
             <Box
               sx={{
                 // height: "21px",
-                bgcolor: params?.row?.options[0]?.status === true ? "#EFECFF" : '#F3F5F6',
+                bgcolor:
+                  params?.row?.options[0]?.status === true
+                    ? "#EFECFF"
+                    : "#F3F5F6",
                 borderRadius: "70px",
                 p: "6px 8px",
                 display: "grid",
-                gap: '7px',
+                gap: "7px",
               }}
             >
               <Typography
@@ -263,10 +281,15 @@ const MirrorsGlassAddonComponent = () => {
                   fontSize: 14,
                   fontWeight: 500,
                   lineHeight: "21px",
-                  color: params?.row?.options[0]?.status === true ? '#8477DA' : '#5D6164',
+                  color:
+                    params?.row?.options[0]?.status === true
+                      ? "#8477DA"
+                      : "#5D6164",
                 }}
               >
-                {params?.row?.options[0]?.status === true ? 'Active' : 'Inactive'}
+                {params?.row?.options[0]?.status === true
+                  ? "Active"
+                  : "Inactive"}
               </Typography>
             </Box>
           </>
@@ -277,11 +300,7 @@ const MirrorsGlassAddonComponent = () => {
       field: "Actions",
       headerName: "Actions",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 0.7,
       sortable: false,
       renderCell: (params) => {
@@ -289,10 +308,14 @@ const MirrorsGlassAddonComponent = () => {
         const data = params.row;
         return (
           <>
-            <IconButton aria-haspopup="true"
-              onClick={(event) => { handleClickAction(event, data); setItemToModify(data) }}>
+            <IconButton
+              aria-haspopup="true"
+              onClick={(event) => {
+                handleClickAction(event, data);
+                setItemToModify(data);
+              }}
+            >
               <ArrowForward sx={{ color: "#8477DA" }} />
-
             </IconButton>
             <Menu
               // id={params.row._id}
@@ -327,11 +350,21 @@ const MirrorsGlassAddonComponent = () => {
                 },
               }}
             >
-              <MenuItem onClick={() => handleUpdateCost(data)} className='mirror-meun-item'><Typography className='dropTxt'>Update</Typography></MenuItem>
+              <MenuItem
+                onClick={() => handleUpdateCost(data)}
+                className="mirror-meun-item"
+              >
+                <Typography className="dropTxt">Update</Typography>
+              </MenuItem>
 
               <MenuItem
-                onClick={() => { setItemToModify(params?.row); handleOpenUpdateModal(); handleClose() }}
-                className='mirror-meun-item'>
+                onClick={() => {
+                  setItemToModify(params?.row);
+                  handleOpenUpdateModal();
+                  handleClose();
+                }}
+                className="mirror-meun-item"
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -339,11 +372,16 @@ const MirrorsGlassAddonComponent = () => {
                     width: "100%",
                   }}
                 >
-                  <Typography className='dropTxt'>Edit</Typography>
-                  <EditOutlinedIcon sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+                  <Typography className="dropTxt">Edit</Typography>
+                  <EditOutlinedIcon
+                    sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
-              <MenuItem className='mirror-meun-item' onClick={() => handleStatusChange(params.row)}>
+              <MenuItem
+                className="mirror-meun-item"
+                onClick={() => handleStatusChange(params.row)}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -351,18 +389,31 @@ const MirrorsGlassAddonComponent = () => {
                     width: "100%",
                   }}
                 >
-                  <Typography className='dropTxt'>Change Status</Typography>
-                  <CustomSmallSwtich checked={rowStatus[params.row._id] !== undefined
-                    ? rowStatus[params.row._id] : params?.row?.options[0]?.status}
-                    // onChange={() => handleStatusChange(params.row)} 
-                    inputProps={{ 'aria-label': 'ant design' }} />
+                  <Typography className="dropTxt">Change Status</Typography>
+                  <CustomSmallSwtich
+                    checked={
+                      rowStatus[params.row._id] !== undefined
+                        ? rowStatus[params.row._id]
+                        : params?.row?.options[0]?.status
+                    }
+                    // onChange={() => handleStatusChange(params.row)}
+                    inputProps={{ "aria-label": "ant design" }}
+                  />
                 </Box>
               </MenuItem>
-              <MenuItem onClick={() => { setItemToModify(params?.row); handleOpenDeleteModal(); handleClose() }} sx={{
-                p: '12px', ':hover': {
-                  background: '#EDEBFA'
-                }
-              }}>
+              <MenuItem
+                onClick={() => {
+                  setItemToModify(params?.row);
+                  handleOpenDeleteModal();
+                  handleClose();
+                }}
+                sx={{
+                  p: "12px",
+                  ":hover": {
+                    background: "#EDEBFA",
+                  },
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -370,17 +421,26 @@ const MirrorsGlassAddonComponent = () => {
                     width: "100%",
                   }}
                 >
-                  <Typography className='dropTxt'>Delete</Typography>
-                  <DeleteOutlineOutlinedIcon sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                  <Typography className="dropTxt">Delete</Typography>
+                  <DeleteOutlineOutlinedIcon
+                    sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                  />
                 </Box>
               </MenuItem>
             </Menu>
-
           </>
         );
       },
     },
   ];
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Addon Type",
+    "Cost",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   const columns = MirrorsGlassAddons().concat(actionColumn);
 
@@ -400,16 +460,16 @@ const MirrorsGlassAddonComponent = () => {
           }}
         >
           <Typography
-            className='headingTxt'
+            className="headingTxt"
             sx={{
               color: "#5D6164",
-              display: 'flex',
-              alignSelf: 'center'
+              display: "flex",
+              alignSelf: "center",
             }}
           >
             Mirror &nbsp;
             <Box
-              className='headingTxt'
+              className="headingTxt"
               sx={{
                 color: "#000000",
               }}
@@ -425,46 +485,43 @@ const MirrorsGlassAddonComponent = () => {
               color: "#FFFFFF",
               fontWeight: 600,
               fontSize: 16,
-              letterSpacing: '0px',
-              ':hover': {
+              letterSpacing: "0px",
+              ":hover": {
                 background: "#8477DA",
-              }
+              },
             }}
           >
             Add New
           </Button>
         </Box>
 
-        <Box sx={{
-          border: "1px solid #D0D5DD",
-          borderRadius: "8px",
-          overflow: "hidden",
-          width: "99.88%",
-          m: "auto",
-          mt: 1.5,
-          background: '#FFFF'
-        }}>
-
+        <Box
+          sx={{
+            border: "1px solid #D0D5DD",
+            borderRadius: "8px",
+            overflow: "hidden",
+            width: "99.88%",
+            m: "auto",
+            mt: 1.5,
+            background: "#FFFF",
+          }}
+        >
           {isLoading ? (
-            <Box
-              sx={{
-                width: 40,
-                m: "auto",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                maxHeight: "70vh",
-                minHeight: "20vh",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
+            <Box>
+              <DataGrid
+                getRowId={(row) => row._id}
+                rows={SkeletonRowsGenerated}
+                columns={SkeletonColumnsGenerated}
+                page={1}
+                pageSize={10}
+                className="table"
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
             </Box>
-          ) :
-            glassAddonsList?.length === 0 && !fetchingGlassAddonsList ? (
-              <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-                No Glass Addons Found
-              </Typography>
-            ) : (
+          ) : glassAddonsList?.length > 0 ? (
+            <Box>
               <DataGrid
                 loading={fetchingGlassAddonsList}
                 style={{
@@ -475,14 +532,27 @@ const MirrorsGlassAddonComponent = () => {
                 columns={columns}
                 rowHeight={70.75}
                 sx={{
-                  width: "100%", '.MuiDataGrid-virtualScroller': {
+                  width: "100%",
+                  ".MuiDataGrid-virtualScroller": {
                     overflow: "hidden !important",
-                  }
+                  },
                 }}
                 hideFooter
                 disableColumnMenu
               />
-            )}
+            </Box>
+          ) : (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No Glass Addons Found
+            </Typography>
+          )}
         </Box>
         <DeleteModal
           open={deleteModalOpen}

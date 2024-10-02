@@ -28,13 +28,14 @@ import {
   useFetchAllDocuments,
 } from "@/utilities/ApiHooks/common";
 import { setWineCellarsHardwareRefetch } from "@/redux/refetch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const WineGlassTypeComponent = () => {
   const dispatch = useDispatch();
   const routePrefix = `${backendURL}/wineCellars/glassTypes`;
   const {
     data: wineGlassTypesList,
-    isLoading,
+    isFetched,
     refetch: refetchGlassTypesList,
     isFetching: fetchingGlassTypesList,
   } = useFetchAllDocuments(routePrefix);
@@ -66,6 +67,7 @@ const WineGlassTypeComponent = () => {
   const [rowCosts, setRowCosts] = useState({});
   const [rowStatus, setRowStatus] = useState({});
   const [editGlassType, setEditGlassType] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleOpenDeleteModal = () => {
     setDeleteModalOpen(true);
@@ -185,6 +187,12 @@ const WineGlassTypeComponent = () => {
   }, [createWineGlassSuccess, deleteWineSuccess]);
 
   useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
+
+  useEffect(() => {
     if (editSuccess) {
       if (updateRefetch) {
         refetchGlassTypesList();
@@ -221,7 +229,8 @@ const WineGlassTypeComponent = () => {
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-3/8`] ??
-              (params.row.options.find((o) => o.thickness === "3/8")?.cost ?? 0)
+              params.row.options.find((o) => o.thickness === "3/8")?.cost ??
+              0
             }
             onChange={(e) =>
               setRowCosts({
@@ -251,7 +260,8 @@ const WineGlassTypeComponent = () => {
             placeholder="Cost"
             value={
               rowCosts[`${params.row._id}-1/2`] ??
-              (params.row.options.find((o) => o.thickness === "1/2")?.cost ?? 0 ) 
+              params.row.options.find((o) => o.thickness === "1/2")?.cost ??
+              0
             }
             onChange={(e) =>
               setRowCosts({
@@ -486,6 +496,17 @@ const WineGlassTypeComponent = () => {
     },
   ];
   const columns = WineMirrorsGlassType().concat(actionColumn);
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Glass Type",
+    "Cost (Thickness 3/8)",
+    "Cost (Thickness 1/2)",
+    "Status (Thickness 3/8)",
+    "Status (Thickness 1/2)",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
   return (
     <>
       <Box
@@ -548,31 +569,20 @@ const WineGlassTypeComponent = () => {
           }}
         >
           {isLoading ? (
-            <Box
-              sx={{
-                width: 40,
-                m: "auto",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                maxHeight: "70vh",
-                minHeight: "20vh",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
+            <Box>
+              <DataGrid
+                getRowId={(row) => row._id}
+                rows={SkeletonRowsGenerated}
+                columns={SkeletonColumnsGenerated}
+                page={1}
+                pageSize={10}
+                className="table"
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
             </Box>
-          ) : wineGlassTypesList?.length === 0 && !fetchingGlassTypesList ? (
-            <Typography
-              sx={{
-                color: "#667085",
-                p: 2,
-                textAlign: "center",
-                background: "#FFFF",
-              }}
-            >
-              No Glass Type Found
-            </Typography>
-          ) : (
+          ) : wineGlassTypesList?.length > 0 ? (
             <Box>
               <DataGrid
                 loading={fetchingGlassTypesList}
@@ -593,6 +603,17 @@ const WineGlassTypeComponent = () => {
                 disableColumnMenu
               />
             </Box>
+          ) : (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No Glass Type Found
+            </Typography>
           )}
         </Box>
         <DeleteModal
