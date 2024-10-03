@@ -342,7 +342,7 @@ const PDFFile = ({controls,data}) => {
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
             <Text style={{fontSize:'14px'}}>Hardwares:</Text>
             <Text style={{fontSize:'12px'}}>
-            {data?.quote?.hardwares?.map((item,index) => (`${item?.name}${commaFn(index, data?.quote?.hardwares?.length)}`))}
+            {data?.quote?.hardwares?.map((record,index) => (`${record?.item?.name} - (${record?.count})${commaFn(index, data?.quote?.hardwares?.length)}`))}
             </Text>
           </View>
           ) : (
