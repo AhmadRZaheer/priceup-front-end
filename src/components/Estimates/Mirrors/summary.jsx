@@ -389,9 +389,10 @@ const Summary = ({ setStep }) => {
                           <Typography className="text-xs-ragular-bold">
                             Hardwares:
                           </Typography>
-                          {selectedContent?.hardwares?.map((item, index) => (
+                          {selectedContent?.hardwares?.map((row, index) => (
                             <Typography className="text-xs-ragular">
-                              {item?.name}
+                              {row?.item?.name}
+                              {' ('+row?.count+')'}
                               {selectedContent?.hardwares?.length - 1 !== index
                                 ? ", "
                                 : ""}

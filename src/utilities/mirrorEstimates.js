@@ -153,24 +153,31 @@ export const calculateTotal = (
   //     // }
   //   });
   // }
-  //hardwares
-  let hardwaresPrice = 0;
+  
   const measurementsArray = Object.values(measurements);
-  console.log(measurementsArray, "mm", selectedContent?.hardwares);
-
-  selectedContent?.hardwares?.forEach((item) => {
-    let price = 0;
-    console.log(item, "item");
-    if (item?.options?.length && measurementsArray?.length) {
-      console.log(item?.options?.length, measurementsArray?.length, "eeee");
-      price =
-        (item?.options[0]?.cost || 0) *
-        ((Number(measurementsArray[0]?.width ?? 0) +
-          Number(measurementsArray[0]?.height ?? 0)) *
-          2);
+  //hardwares
+   let hardwaresPrice = 0;
+  selectedContent?.hardwares?.forEach((row) => {
+    if(row?.item?.options?.length && measurementsArray?.length){
+      const price = row?.item?.options[0]?.cost || 0;
+      hardwaresPrice = hardwaresPrice + price * row?.count;
     }
-    hardwaresPrice = hardwaresPrice + price;
+    //  * priceBySqft;  // hardwares are not calculated by price by sqft
   });
+
+  // selectedContent?.hardwares?.forEach((item) => {
+  //   let price = 0;
+  //   console.log(item, "item");
+  //   if (item?.options?.length && measurementsArray?.length) {
+  //     console.log(item?.options?.length, measurementsArray?.length, "eeee");
+  //     price =
+  //       (item?.options[0]?.cost || 0) *
+  //       ((Number(measurementsArray[0]?.width ?? 0) +
+  //         Number(measurementsArray[0]?.height ?? 0)) *
+  //         2);
+  //   }
+  //   hardwaresPrice = hardwaresPrice + price;
+  // });
 
   console.log(hardwaresPrice, "hardwares price");
 
@@ -330,10 +337,10 @@ export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type
      return false;
     }
    }
-   if (selectedContent.hardwares.length) {
+   if (selectedContent.hardwares?.length) {
     let noSelectedDisableFound = true;
     selectedContent.hardwares.forEach(element => {
-      if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
+      if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
         noSelectedDisableFound = false;
         return;
       }
@@ -388,11 +395,11 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
     }
   }
   }
-  if(selectedContent.hardwares.length){
+  if(selectedContent.hardwares?.length){
     let selectedDisableNames = '';
   selectedContent.hardwares.forEach(element => {
-    if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
-      selectedDisableNames += `${element.name}, `;
+    if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
+      selectedDisableNames += `${element.item.name}, `;
     }
   });
   if(selectedDisableNames.length){
@@ -400,7 +407,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       ...errors,
       hardwares:{
         status:false,
-        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available.`
+        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available".`
       }
     }
   }
@@ -451,14 +458,14 @@ export const generateNotificationsForCurrentEstimate = (
         notifications.glassAddonsNotAvailable = glassAddonsNotAvailable;
       }
     }
-    if(selectedContent.hardwares.length){
+    if(selectedContent.hardwares?.length){
       let hardwaresNotAvailable = [];
       selectedContent.hardwares.forEach(element => {
-        if(!getActiveStatus(element,null,mirrorHardwareTypes.HARDWARES)){
+        if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
           hardwaresNotAvailable.push({
           status: true,
           variant: notificationsVariant.WARNING,
-          message: `Hardware "${element.name}" is not available.`,
+          message: `Hardware "${element.item?.name}" is not available.`,
           });
         }
       });
@@ -493,9 +500,9 @@ export const generateObjectForPDFPreview = (
   });
 
   let hardwares = [];
-  hardwares = estimateData?.config?.hardwares?.map((item) => {
-    const record = listData?.hardwares.find((addon) => addon._id === item);
-    return record;
+  hardwares = estimateData?.config?.hardwares?.map((row) => {
+    const record = listData?.hardwares.find((addon) => addon?._id === row?.type);
+    return {item:record,count:row?.count};
   });
 
   estimateInfoObject = {

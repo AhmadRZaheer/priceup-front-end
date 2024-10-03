@@ -105,6 +105,28 @@ const mirrorsEstimateSlice = createSlice({
         },
       };
     },
+    setCounters: (state, action) => {
+      const { type, value, item } = action.payload;
+      if (["hardwares"].includes(type)) {
+      let existing = state.content.hardwares;
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value });
+        }
+        state.content = {
+          ...state.content,
+          hardwares: [...existing],
+        };
+      }
+    },
     setSelectedItem: (state, action) => {
       const { payload } = action;
       state.selectedItem = payload;
@@ -214,13 +236,12 @@ const mirrorsEstimateSlice = createSlice({
         );
         return record;
       });
-
       let hardwares = [];
-      hardwares = estimateData?.config?.hardwares?.map((item) => {
-        const record = hardwaresList?.hardwares.find(
-          (addon) => addon._id === item
+      hardwares = estimateData?.config?.hardwares?.map((row) => {
+        const found = hardwaresList?.hardwares?.find(
+          (item) => item?._id === row.type
         );
-        return record;
+        return { item: found, count: row.count };
       });
 
       state.estimateId = estimateData._id;
@@ -281,7 +302,8 @@ export const {
   setModifiedProfitPercentage,
   setMultipleNotifications,
   resetNotifications,
-  setMirrorProjectId
+  setMirrorProjectId,
+  setCounters
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;

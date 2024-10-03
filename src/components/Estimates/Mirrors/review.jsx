@@ -68,8 +68,12 @@ export const generateEstimatePayload = (
     (item) => item?._id
   );
 
-  const hardwaresArray = selectedContent?.hardwares?.map((item) => item?._id);
-
+  const hardwaresArray = selectedContent?.hardwares?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
   const filteredFields = selectedContent.additionalFields?.filter(
     (item) => item.label !== "" && item.cost !== 0
   );
@@ -495,7 +499,7 @@ export const MirrorReview = ({ setStep }) => {
                       <Box sx={{ width: "100%" }}>
                         <MenuList
                           menuOptions={hardwaresList?.hardwares}
-                          title={"Hardwares"}
+                          title={"Hardware"}
                           type={mirrorHardwareTypes.HARDWARES}
                         // currentItem={selectedContent.hardwares.item}
                         />
