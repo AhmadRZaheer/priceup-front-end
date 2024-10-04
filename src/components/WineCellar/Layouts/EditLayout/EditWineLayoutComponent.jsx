@@ -1013,7 +1013,7 @@ const EditWineLayoutComponent = () => {
                               name="noOfHoursToCompleteSingleDoor"
                               fullWidth={true}
                               value={
-                                formik.values.noOfHoursToCompleteSingleDoor || 0
+                                formik.values.noOfHoursToCompleteSingleDoor ?? 0
                               }
                               onChange={(e)=>{
                                 if (e.target.value.length <= inputLength) {

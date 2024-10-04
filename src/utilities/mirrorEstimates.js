@@ -89,7 +89,7 @@ export const calculateTotal = (
   sqftArea,
   mirrorLocationSettings,
   measurements
-) => {
+) => { 
   //glass
   let glassPrice = 0;
   if (selectedContent.glassType?.item) {
@@ -480,7 +480,7 @@ export const generateObjectForPDFPreview = (
   listData,
   estimateData,
   mirrorMiscPricing
-) => {
+) => { 
   let estimateInfoObject;
 
   let glassTypee = null;
@@ -538,7 +538,7 @@ export const generateObjectForPDFPreview = (
     hours: estimateData?.config?.hours,
     perimeter: estimateData?.config?.perimeter,
     sqftArea: estimateData?.config?.sqftArea,
-    userProfitPercentage: estimateData?.config?.userProfitPercentage,
+    modifiedProfitPercentage: estimateData?.config?.modifiedProfitPercentage,
     label: estimateData?.config?.label,
     layout_id: estimateData?.config?.layout_id,
     measurements: estimateData?.config?.measurements,

@@ -812,6 +812,7 @@ export const generateObjForMirrorPDFRuntime = (
     quadOutletCutout: mirrorState?.content?.quadOutletCutout,
     settings: {},
     simpleHoles: mirrorState?.content?.simpleHoles,
+    modifiedProfitPercentage:mirrorState?.content?.modifiedProfitPercentage,
     singleOutletCutout: mirrorState?.content?.singleOutletCutout,
     sqftArea: mirrorState?.sqftArea,
     tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
