@@ -9,7 +9,7 @@ const OptionWithCounter = ({ counter = 0, type, item, status }) => {
     const [count, setCount] = useState(counter);
     const handleCountSet = (newVal, event) => {
         event.stopPropagation();
-        if (newVal >= 0 && status) {
+        if (newVal >= 0 && newVal <=100 && status) {
             setCount(newVal)
             disaptch(setCounters({ item: item, type: type, value: newVal }));
         }
@@ -19,7 +19,7 @@ const OptionWithCounter = ({ counter = 0, type, item, status }) => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-around",
-            gap: 2,
+            gap: 1,
             color: { md: "#000000  ", xs: "white" },
             alignSelf: "flex-end",
         }}
@@ -30,7 +30,7 @@ const OptionWithCounter = ({ counter = 0, type, item, status }) => {
             }
             sx={{ color: "#5D6164" }}
         />
-        <Typography>{count}</Typography>
+        <Typography className='counter-txt'>{count}</Typography>
         <RemoveCircleOutline
             onClick={(event) =>
                 handleCountSet(count - 1, event)

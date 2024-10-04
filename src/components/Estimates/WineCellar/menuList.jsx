@@ -52,7 +52,7 @@ const MenuList = ({
     setSelectedItem(item);
   };
   const handleCountSet = (value) => {
-    if (value >= 0) {
+    if (value >= 0 && value <= 100) {
       setCountVal(value);
       dispatch(setCounters({ item: selectedItem, type: type, value: value }));
     }
@@ -140,15 +140,18 @@ const MenuList = ({
             sx={{
               display: "flex",
               alignItems: "center",
-              gap: 2,
+              gap: 1,
               color: { sm: "#000000  ", xs: "white" },
             }}
           >
             <AddCircleOutline
-              onClick={() => handleCountSet(countVal + 1)}
-              sx={{ color: "#5D6164" }}
+              onClick={() =>{
+                  handleCountSet(countVal + 1)
+              }}
+              sx={{ color: "#5D6164",cursor:'pointer' }}
             />
             <Typography
+            className='counter-txt'
               sx={{
                 fontWeight: 500,
                 fontSize: "14px",
@@ -159,7 +162,7 @@ const MenuList = ({
             </Typography>
             <RemoveCircleOutline
               onClick={() => handleCountSet(countVal - 1)}
-              sx={{ color: "#5D6164" }}
+              sx={{ color: "#5D6164",cursor:'pointer' }}
             />
           </Box>
         )}

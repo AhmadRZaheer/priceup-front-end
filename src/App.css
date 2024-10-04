@@ -386,3 +386,8 @@ input {
 .MuiDataGrid-columnHeader:hover {
   border-radius: none !important;
 }
+.counter-txt{
+  width:24px;
+  display:flex;
+  justify-content:center;
+}
