@@ -17,6 +17,8 @@ import { calculateTotal } from "@/utilities/common";
 import { useNavigate } from "react-router-dom";
 import {
   EstimateCategory,
+  inputLength,
+  inputMaxValue,
   layoutVariants,
   quoteState,
 } from "@/utilities/constants";
@@ -572,7 +574,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue, },
                           style: {
                             height: "38px",
                           },
@@ -593,13 +595,16 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.oneInchHoles}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "oneInchHoles",
-                              value: event.target.value,
-                            })
-                          )
+                        onChange={(event) =>{
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "oneInchHoles",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        }
                         }
                       />
                     </Box>
@@ -633,7 +638,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue, },
                           style: {
                             height: "38px",
                           },
@@ -653,13 +658,16 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.hingeCut}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "hingeCut",
-                              value: event.target.value,
-                            })
-                          )
+                        onChange={(event) =>{
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "hingeCut",
+                                value: event.target.value,
+                              })
+                            )
+                          }
+                        }
                         }
                       />
                     </Box>
@@ -694,7 +702,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue, },
                           style: {
                             height: "38px",
                           },
@@ -714,7 +722,12 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.people}
-                        onChange={(event) =>handleChangeLabor(event,"people")}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            handleChangeLabor(event,"people")
+                          }
+                        }
+                        }
                       />
                     </Box>
                   </Box>
@@ -747,7 +760,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue,step:'any' },
                           style: {
                             height: "38px",
                           },
@@ -767,7 +780,12 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.hours}
-                        onChange={(event) =>handleChangeLabor(event,"hours")}
+                        onChange={(event) =>  {
+                          if (event.target.value.length <= inputLength) {
+                            handleChangeLabor(event,"hours")
+                          }
+                        }                        
+                        }
                       />
                     </Box>
                   </Box>
@@ -801,7 +819,7 @@ const Review = ({ setStep }) => {
                         className="custom-textfield-purple-disabled"
                         disabled={true}
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue,step:'any' },
                           style: {
                             height: "38px",
                           },
@@ -823,11 +841,14 @@ const Review = ({ setStep }) => {
                         value={
                           selectedContent.laborHoursForDoor || 0
                         }
-                        onChange={(event) =>
-                          handleChangeLabor(
-                            event,
-                            "laborHoursForDoor"
-                          )
+                        onChange={(event) =>{
+                          if (event.target.value.length <= inputLength) {
+                            handleChangeLabor(
+                              event,
+                              "laborHoursForDoor"
+                            )
+                          }
+                        }
                         }
                         // onChange={(event) =>
                         //   dispatch(

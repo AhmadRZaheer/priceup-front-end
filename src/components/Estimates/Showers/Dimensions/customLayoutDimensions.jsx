@@ -31,7 +31,7 @@ import {
   updateMeasurements,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { layoutVariants, quoteState } from "@/utilities/constants";
+import { inputLength, layoutVariants, quoteState } from "@/utilities/constants";
 import { calculateAreaAndPerimeter } from "@/utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
@@ -382,13 +382,15 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                             )?.width || ""
                           }
                           onChange={(e) => {
-                            setValues((vals) => ({
-                              ...vals,
-                              [index]: {
-                                ...vals[index],
-                                width: e.target.value,
-                              },
-                            }));
+                            if (e.target.value.length <= inputLength) {
+                              setValues((vals) => ({
+                                ...vals,
+                                [index]: {
+                                  ...vals[index],
+                                  width: e.target.value,
+                                },
+                              }));
+                            }
                           }}
                         />
                       </Grid>
@@ -427,13 +429,15 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                             )?.height || ""
                           }
                           onChange={(e) => {
-                            setValues((vals) => ({
-                              ...vals,
-                              [index]: {
-                                ...vals[index],
-                                height: e.target.value,
-                              },
-                            }));
+                            if (e.target.value.length <= inputLength) {
+                              setValues((vals) => ({
+                                ...vals,
+                                [index]: {
+                                  ...vals[index],
+                                  height: e.target.value,
+                                },
+                              }));
+                            }
                           }}
                         />
                       </Grid>
@@ -466,13 +470,15 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                               value={values[index]?.count || ""}
                               placeholder="quantity"
                               onChange={(e) => {
-                                setValues((vals) => ({
-                                  ...vals,
-                                  [index]: {
-                                    ...vals[index],
-                                    count: parseInt(e.target.value),
-                                  },
-                                }));
+                                if (e.target.value.length <= inputLength) {
+                                  setValues((vals) => ({
+                                    ...vals,
+                                    [index]: {
+                                      ...vals[index],
+                                      count: parseInt(e.target.value),
+                                    },
+                                  }));
+                                }
                               }}
                             />
                           </Grid>

@@ -50,6 +50,8 @@ import {
   getGlassThickness,
 } from "@/utilities/common";
 import {
+  inputLength,
+  inputMaxValue,
   layoutVariants,
   panelOverWeightAmount,
   quoteState,
@@ -481,12 +483,14 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           }}
                           value={formik.values[String.fromCharCode(97 + index)]}
                           onChange={(e) => {
-                            formik.handleChange(e);
-                            // doorandPanel(e);
+                            if (e.target.value.length <= inputLength) {
+                              formik.handleChange(e);
+                              // doorandPanel(e);
+                            }                      
                           }}
                           onBlur={formik.handleBlur}
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue, },
                           }}
                         />
                       </Box>
@@ -576,7 +580,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                       <TextField
                         fullWidth
                         InputProps={{
-                          inputProps: { min: 1 },
+                          inputProps: { min: 1,max: inputMaxValue},
                         }}
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorWidthFromredux}
@@ -594,7 +598,12 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           // maxWidth: {},
                         }}
                         name="door"
-                        onChange={(e) => handleInputChange(e)}
+                        onChange={(e) => {
+                          if (e.target.value.length <= inputLength) {
+                            handleInputChange(e)
+                          }
+                        } 
+                      }
                       />
                     </Box>
                   </Box>

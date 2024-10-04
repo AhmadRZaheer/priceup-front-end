@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
@@ -212,6 +213,7 @@ export const ShowerReview = ({ setStep }) => {
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
+    isLoading:EditEstimateLoading,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -254,7 +256,7 @@ export const ShowerReview = ({ setStep }) => {
       status = arraylength > 0 ? false : true;
     }
     return status;
-  }, [measurements])
+  }, [measurements]);
 
   const dispatch = useDispatch();
   const handleEditEstimate = () => {
@@ -302,9 +304,9 @@ export const ShowerReview = ({ setStep }) => {
     if (projectId) {
       navigate(`/projects/${projectId}`);
     } else {
-      navigate("/estimates")
+      navigate("/estimates");
     }
-  }
+  };
 
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
@@ -509,7 +511,13 @@ export const ShowerReview = ({ setStep }) => {
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
               Modifications
             </Typography>
           </Box>
@@ -520,7 +528,7 @@ export const ShowerReview = ({ setStep }) => {
               margin: "auto",
 
               paddingX: { sm: 2, xs: 0 },
-              py: '0px !important',
+              py: "0px !important",
               // rowGap: 4,
               background: { sm: "white", xs: "#08061B" },
               display: "flex",
@@ -586,7 +594,7 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "black", xs: "white" },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -608,7 +616,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -630,7 +638,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -648,34 +656,34 @@ export const ShowerReview = ({ setStep }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(selectedItemVariant) && (
-                      <Box
-                        sx={{
-                          alignItems: "center",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                          py: '6px'
-                        }}
-                      >
-                        <Box sx={{ width: "100%", display: "flex" }}>
-                          <Box
-                            sx={{
-                              width: "100%",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <ChannelTypeDesktop
-                              menuOptions={listData?.channelOrClamps}
-                              title={"Mounting"}
-                              type={"mounting"}
-                              listData={listData}
-                            />
-                          </Box>
+                    <Box
+                      sx={{
+                        alignItems: "center",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                        py: "6px",
+                      }}
+                    >
+                      <Box sx={{ width: "100%", display: "flex" }}>
+                        <Box
+                          sx={{
+                            width: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                          }}
+                        >
+                          <ChannelTypeDesktop
+                            menuOptions={listData?.channelOrClamps}
+                            title={"Mounting"}
+                            type={"mounting"}
+                            listData={listData}
+                          />
                         </Box>
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -685,7 +693,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -707,7 +715,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -729,7 +737,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -751,7 +759,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -759,7 +767,7 @@ export const ShowerReview = ({ setStep }) => {
                         menuOptions={listData?.glassAddons}
                         title={"Glass Addons"}
                         type={"glassAddons"}
-                      // currentItem={selectedContent?.glassAddons}
+                        // currentItem={selectedContent?.glassAddons}
                       />
                     </Box>
                   </Box>
@@ -772,7 +780,7 @@ export const ShowerReview = ({ setStep }) => {
                         sm: "2px solid #D0D5DD",
                         xs: "2px solid #423f57",
                       },
-                      py: '6px'
+                      py: "6px",
                     }}
                   >
                     <Box sx={{ width: "100%" }}>
@@ -793,12 +801,10 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
-                      py: 2
+                      py: 2,
                     }}
                   >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
+                    <Typography className="estimate-modifcation">
                       1" Holes
                     </Typography>
                     <Box
@@ -814,10 +820,10 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 ,max: inputMaxValue,},
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
-                            height: '38px',
-                          }
+                            height: "38px",
+                          },
                         }}
                         InputLabelProps={{
                           style: {
@@ -830,22 +836,21 @@ export const ShowerReview = ({ setStep }) => {
 
                           "& input[type=number]": {
                             textAlign: "right",
-                          }
+                          },
                         }}
                         variant="outlined"
                         size="small"
                         value={selectedContent.oneInchHoles}
-                        onChange={(event) =>{
+                        onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
                             dispatch(
                               setInputContent({
                                 type: "oneInchHoles",
                                 value: event.target.value,
                               })
-                            )
+                            );
                           }
-                        }                          
-                        }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -859,12 +864,10 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
-                      py: 2
+                      py: 2,
                     }}
                   >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
+                    <Typography className="estimate-modifcation">
                       Hinge Cut Out
                     </Typography>
                     <Box
@@ -880,10 +883,10 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
-                            height: '38px',
-                          }
+                            height: "38px",
+                          },
                         }}
                         InputLabelProps={{
                           style: {
@@ -895,19 +898,21 @@ export const ShowerReview = ({ setStep }) => {
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
-                          }
+                          },
                         }}
                         variant="outlined"
                         size="small"
                         value={selectedContent.hingeCut}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "hingeCut",
-                              value: event.target.value,
-                            })
-                          )
-                        }
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "hingeCut",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -916,70 +921,70 @@ export const ShowerReview = ({ setStep }) => {
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
                   ].includes(selectedItemVariant) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        borderBottom: {
+                          sm: "2px solid #D0D5DD",
+                          xs: "2px solid #423f57",
+                        },
+                        color: { sm: "#000000  ", xs: "white" },
+                        py: 2,
+                      }}
+                    >
+                      <Typography className="estimate-modifcation">
+                        {" "}
+                        Clamp Cut Out
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
                           alignItems: "center",
-                          justifyContent: "space-between",
-                          borderBottom: {
-                            sm: "2px solid #D0D5DD",
-                            xs: "2px solid #423f57",
-                          },
-                          color: { sm: "#000000  ", xs: "white" },
-                          py: 2
+                          gap: 2,
+                          width: "120px",
+                          padddingY: 4,
                         }}
                       >
-                        <Typography
-                          className='estimate-modifcation'
-                        >
-                          {" "}
-                          Clamp Cut Out
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            width: "120px",
-                            padddingY: 4,
+                        <TextField
+                          type="number"
+                          className="custom-textfield"
+                          InputProps={{
+                            inputProps: { min: 0 },
+                            style: {
+                              height: "38px",
+                            },
                           }}
-                        >
-                          <TextField
-                            type="number"
-                            className="custom-textfield"
-                            InputProps={{
-                              inputProps: { min: 0 },
-                              style: {
-                                height: '38px',
-                              }
-                            }}
-                            InputLabelProps={{
-                              style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                              "& input[type=number]": {
-                                textAlign: "right",
-                              }
-                            }}
-                            variant="outlined"
-                            size="small"
-                            value={selectedContent.clampCut}
-                            onChange={(event) =>
+                          InputLabelProps={{
+                            style: {
+                              color: "rgba(255, 255, 255, 0.5)",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                            "& input[type=number]": {
+                              textAlign: "right",
+                            },
+                          }}
+                          variant="outlined"
+                          size="small"
+                          value={selectedContent.clampCut}
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
                               dispatch(
                                 setInputContent({
                                   type: "clampCut",
                                   value: event.target.value,
                                 })
-                              )
+                              );
                             }
-                          />
-                        </Box>
+                          }}
+                        />
                       </Box>
-                    )}
+                    </Box>
+                  )}
                   <Box
                     sx={{
                       display: "flex",
@@ -990,12 +995,10 @@ export const ShowerReview = ({ setStep }) => {
                         xs: "2px solid #423f57",
                       },
                       color: { sm: "#000000  ", xs: "white" },
-                      py: 2
+                      py: 2,
                     }}
                   >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
+                    <Typography className="estimate-modifcation">
                       Notch
                     </Typography>
                     <Box
@@ -1011,10 +1014,10 @@ export const ShowerReview = ({ setStep }) => {
                         className="custom-textfield"
                         type="number"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
-                            height: '38px',
-                          }
+                            height: "38px",
+                          },
                         }}
                         InputLabelProps={{
                           style: {
@@ -1026,206 +1029,15 @@ export const ShowerReview = ({ setStep }) => {
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
-                          }
+                          },
                         }}
                         variant="outlined"
                         size="small"
                         value={selectedContent.notch}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "notch",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      // paddingLeft: 3,
-                      // paddingBottom: 1,
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2
-                    }}
-                  >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
-                      Outages
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: '38px',
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.outages}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "outages",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2
-                    }}
-                  >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
-                      Mitre
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: '38px',
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.mitre}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "mitre",
-                              value: event.target.value,
-                            })
-                          )
-                        }
-                      />
-                    </Box>
-                  </Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      borderBottom: {
-                        sm: "2px solid #D0D5DD",
-                        xs: "2px solid #423f57",
-                      },
-                      // paddingLeft: 3,
-                      // paddingBottom: 1,
-                      color: { sm: "#000000  ", xs: "white" },
-                      py: 2
-                    }}
-                  >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
-                      Polish
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 2,
-                        width: "120px",
-                        padddingY: 4,
-                      }}
-                    >
-                      <TextField
-                        type="number"
-                        className="custom-textfield"
-                        InputProps={{
-                          inputProps: { min: 0 },
-                          style: {
-                            height: '38px',
-                          }
-                        }}
-                        InputLabelProps={{
-                          style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                          "& input[type=number]": {
-                            textAlign: "right",
-                          }
-                        }}
-                        variant="outlined"
-                        size="small"
-                        value={selectedContent.polish}
                         onChange={(event) => {
                           dispatch(
                             setInputContent({
-                              type: "polish",
+                              type: "notch",
                               value: event.target.value,
                             })
                           );
@@ -1245,13 +1057,11 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
-                      py: 2
+                      py: 2,
                     }}
                   >
-                    <Typography
-                      className='estimate-modifcation'
-                    >
-                      People:
+                    <Typography className="estimate-modifcation">
+                      Outages
                     </Typography>
                     <Box
                       sx={{
@@ -1266,10 +1076,10 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
-                            height: '38px',
-                          }
+                            height: "38px",
+                          },
                         }}
                         InputLabelProps={{
                           style: {
@@ -1281,19 +1091,84 @@ export const ShowerReview = ({ setStep }) => {
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
-                          }
+                          },
                         }}
                         variant="outlined"
                         size="small"
-                        value={selectedContent.people}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "people",
-                              value: event.target.value,
-                            })
-                          )
-                        }
+                        value={selectedContent.outages}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "outages",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Mitre
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.mitre}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "mitre",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -1309,12 +1184,138 @@ export const ShowerReview = ({ setStep }) => {
                       // paddingLeft: 3,
                       // paddingBottom: 1,
                       color: { sm: "#000000  ", xs: "white" },
-                      py: 2
+                      py: 2,
                     }}
                   >
-                    <Typography
-                      className='estimate-modifcation'
+                    <Typography className="estimate-modifcation">
+                      Polish
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
                     >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.polish}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "polish",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      People:
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.people}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "people",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
                       Hours:
                     </Typography>
                     <Box
@@ -1330,10 +1331,14 @@ export const ShowerReview = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0 },
+                          inputProps: {
+                            min: 0,
+                            max: inputMaxValue,
+                            step: "any",
+                          },
                           style: {
-                            height: '38px',
-                          }
+                            height: "38px",
+                          },
                         }}
                         InputLabelProps={{
                           style: {
@@ -1345,19 +1350,21 @@ export const ShowerReview = ({ setStep }) => {
                           width: "100%",
                           "& input[type=number]": {
                             textAlign: "right",
-                          }
+                          },
                         }}
                         variant="outlined"
                         size="small"
                         value={selectedContent.hours}
-                        onChange={(event) =>
-                          dispatch(
-                            setInputContent({
-                              type: "hours",
-                              value: event.target.value,
-                            })
-                          )
-                        }
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "hours",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -1385,9 +1392,9 @@ export const ShowerReview = ({ setStep }) => {
                         width: "fit-content",
                         textTransform: "capitalize",
                         color: "#8477DA",
-                        fontSize: '16px',
+                        fontSize: "16px",
                         fontWeight: 600,
-                        p: '10px !important',
+                        p: "10px !important",
                         // backgroundColor: "#8477da",
                         "&:hover": {
                           // backgroundColor: "#8477da",
@@ -1395,7 +1402,7 @@ export const ShowerReview = ({ setStep }) => {
                         mt: 2,
                       }}
                       variant="text"
-                      startIcon={<Add sx={{ mr: '2px' }} />}
+                      startIcon={<Add sx={{ mr: "2px" }} />}
                     >
                       Add Additional Field
                     </Button>
@@ -1539,7 +1546,6 @@ export const ShowerReview = ({ setStep }) => {
                   }}
                 >
                   {currentQuoteState === quoteState.EDIT && (
-
                     <Button
                       onClick={handleCancel}
                       fullWidth
@@ -1553,14 +1559,13 @@ export const ShowerReview = ({ setStep }) => {
                     >
                       Cancel
                     </Button>
-
                   )}
 
                   <Button
                     fullWidth
                     disabled={
                       selectedContent?.hardwareFinishes === null ||
-                      projectId === null
+                      projectId === null || EditEstimateLoading
                     }
                     variant="contained"
                     onClick={handleEstimateSubmit}
@@ -1577,7 +1582,7 @@ export const ShowerReview = ({ setStep }) => {
                       fontWeight: 600,
                     }}
                   >
-                    Save Estimate
+                  { EditEstimateLoading ?  <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : 'Save Estimate'}
                   </Button>
                 </Box>
               </Box>

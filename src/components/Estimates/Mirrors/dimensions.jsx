@@ -9,7 +9,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 
 import { useDispatch, useSelector } from "react-redux";
-import { quoteState } from "@/utilities/constants";
+import { inputLength, inputMaxValue, quoteState } from "@/utilities/constants";
 import { NavLink, useNavigate } from "react-router-dom";
 import { getEstimateState } from "@/redux/estimateSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -374,13 +374,15 @@ export const MirrorDimensions = () => {
                                 )?.width || ""
                               }
                               onChange={(e) => {
-                                setValues((vals) => ({
-                                  ...vals,
-                                  [index]: {
-                                    ...vals[index],
-                                    width: e.target.value,
-                                  },
-                                }));
+                                if (e.target.value.length <= inputLength) {
+                                  setValues((vals) => ({
+                                    ...vals,
+                                    [index]: {
+                                      ...vals[index],
+                                      width: e.target.value,
+                                    },
+                                  }));
+                                }                                
                               }}
                             />
                           </Box>
@@ -403,7 +405,7 @@ export const MirrorDimensions = () => {
                               name={`aHeight${index}`}
                               className="custom-textfield-purple"
                               InputProps={{
-                                inputProps: { min: 0 },
+                                inputProps: { min: 0,},
                               }}
                               placeholder="0"
                               style={{
@@ -422,13 +424,15 @@ export const MirrorDimensions = () => {
                                 )?.height || ""
                               }
                               onChange={(e) => {
-                                setValues((vals) => ({
-                                  ...vals,
-                                  [index]: {
-                                    ...vals[index],
-                                    height: e.target.value,
-                                  },
-                                }));
+                                if (e.target.value.length <= inputLength) {
+                                  setValues((vals) => ({
+                                    ...vals,
+                                    [index]: {
+                                      ...vals[index],
+                                      height: e.target.value,
+                                    },
+                                  }));
+                                }                              
                               }}
                             />
                           </Box>
@@ -456,7 +460,7 @@ export const MirrorDimensions = () => {
                                   className="custom-textfield-purple"
                                   name={`Count${index}`}
                                   InputProps={{
-                                    inputProps: { min: 1 },
+                                    inputProps: { min: 1}
                                   }}
                                   value={values[index]?.count || ""}
                                   placeholder="quantity"
@@ -464,13 +468,15 @@ export const MirrorDimensions = () => {
                                     width: { md: "15%", xs: "20%" },
                                   }}
                                   onChange={(e) => {
-                                    setValues((vals) => ({
-                                      ...vals,
-                                      [index]: {
-                                        ...vals[index],
-                                        count: parseInt(e.target.value),
-                                      },
-                                    }));
+                                    if (e.target.value.length <= inputLength) {
+                                      setValues((vals) => ({
+                                        ...vals,
+                                        [index]: {
+                                          ...vals[index],
+                                          count: parseInt(e.target.value),
+                                        },
+                                      }));
+                                    }                                   
                                   }}
                                 />
                               </Box>

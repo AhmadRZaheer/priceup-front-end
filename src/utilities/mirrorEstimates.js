@@ -399,7 +399,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
     let selectedDisableNames = '';
   selectedContent.hardwares.forEach(element => {
     if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
-      selectedDisableNames += `${element.item.name}, `;
+      selectedDisableNames += `${element?.item?.name}, `;
     }
   });
   if(selectedDisableNames.length){

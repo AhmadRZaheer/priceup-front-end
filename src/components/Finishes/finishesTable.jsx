@@ -117,6 +117,7 @@ const FinishesTable = () => {
       headerClassName: "showerHardwareHeader",
       flex: 0.5,
       headerName: "Actions",
+      sortable: false,
       renderHeader: (params) => params.colDef.headerName,
 
       renderCell: (params) => {

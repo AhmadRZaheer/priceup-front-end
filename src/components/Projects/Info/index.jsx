@@ -799,7 +799,7 @@ const ProjectInfoComponent = ({
                   disabled={
                     !selectedCustomer ||
                     !selectedAddress ||
-                    projectName?.length < 4
+                    projectName?.length < 4 || updateLoading || createLoading
                   }
                   variant="contained"
                 >
