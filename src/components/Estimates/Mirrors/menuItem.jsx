@@ -23,7 +23,7 @@ const MenuItem = ({
   const status = getActiveStatus(item, activeFinishOrThickness, type);
   const [showToolTip, setShowTooltip] = useState(false);
   const handleItemClick = () => {
-    if (status) {
+    if (status && type !== mirrorHardwareTypes.HARDWARES) {
       handleItemSelect(item);
     }
   };
