@@ -107,7 +107,7 @@ const PDFFile = ({controls,data}) => {
         <View style={{flexGrow:1}}>
           <Text style={{padding:'5px 10px',backgroundColor:'#ccc',borderRadius:'5px',fontSize:'15px',fontWeight:'semibold'}}>Job Info</Text>
           <View style={{padding:'5px'}}>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.settings?.name ?? 'Custom'}  Layout - Estimate</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.label}</Text>
           </View>
         </View>
@@ -124,7 +124,7 @@ const PDFFile = ({controls,data}) => {
       <View style={{borderTop:'1px sloid #ccc',paddingTop:'10px'}}>
        <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
         <View style={{width:'357px'}} wrap>
-           <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'357px'}}>{data?.quote?.settings?.name ?? 'Custom'} Layout - Estimate</Text>
+           <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'357px'}}>{data?.quote?.settings?.name ? data?.quote?.settings?.name : data?.quote?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'} Layout - Estimate</Text>
            {dimensionsSection[data?.quote?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
             <Text style={{fontSize:'14px'}}>Dimensions:</Text>
             <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{data?.quote?.measurements}</Text>

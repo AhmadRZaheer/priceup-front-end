@@ -37,6 +37,7 @@ import { useState } from "react";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import { generateObjForMirrorPDFRuntime } from "@/utilities/estimates";
 import {
+  getCustomerDetail,
   getEstimateCategory,
   getEstimateState,
   getProjectId,
@@ -59,6 +60,7 @@ const Summary = ({ setStep }) => {
   const projectId = useSelector(getProjectId);
   const selectedCategory = useSelector(getEstimateCategory);
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const customerData = useSelector(getCustomerDetail);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -71,7 +73,7 @@ const Summary = ({ setStep }) => {
 
   const drawerHandleClick = () => {
     const item = generateObjForMirrorPDFRuntime(
-      { estimateState, projectId, selectedCategory },
+      { estimateState, projectId, selectedCategory,customerData },
       mirrorEstimateState,
       mirrorsLocationSettings
     );
@@ -303,7 +305,7 @@ const Summary = ({ setStep }) => {
                           Layout:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          Custom
+                          Mirror
                         </Typography>
                       </Box>
                       <Box>

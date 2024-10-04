@@ -39,7 +39,7 @@ import {
   selectedItem,
   setUserProfitPercentage,
 } from "@/redux/wineCellarEstimateSlice";
-import { getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import { getCustomerDetail, getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import { getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
 import { calculateTotal } from "@/utilities/common";
@@ -69,6 +69,7 @@ const Summary = ({ setStep }) => {
   const projectId = useSelector(getProjectId);
   const selectedCategory = useSelector(getEstimateCategory);
   const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
+  const customerData = useSelector(getCustomerDetail);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -82,7 +83,7 @@ const Summary = ({ setStep }) => {
 
   const drawerHandleClick = () => {
     const item = generateObjectForPDFRuntime(
-      { estimateState:quoteState, projectId, selectedCategory },
+      { estimateState:quoteState, projectId, selectedCategory,customerData },
       wineCallerEstimateState,
       wineCallerLocationSettings
     );

@@ -724,12 +724,12 @@ export const generateObjectForPDFRuntime = (
   showerState,
   showersLocationSettings
 ) => {
-  console.log(showerState,state.estimateState,'showerStateshowerState')
+  console.log(showerState,state,'showerStateshowerState')
   return {   
     category: state.selectedCategory,
     companyData: {},
     cost: showerState.totalPrice,
-    customerData: { name: "--", phone: "--", email: "--" },
+    customerData: state?.customerData,
     project_id: state.projectId,
     settings: {
       name:
@@ -795,7 +795,7 @@ export const generateObjForMirrorPDFRuntime = (
     category: state.selectedCategory,
     cost: mirrorState?.pricing?.total,
     creatorData: {},
-    customerData: { name: "--", phone: "--", email: "--" },
+    customerData: state.customerData,
     doubleOutletCutout: mirrorState?.content?.doubleOutletCutout,
     edgeWork: mirrorState?.content?.edgeWork,
     glassType: mirrorState?.content?.glassType,

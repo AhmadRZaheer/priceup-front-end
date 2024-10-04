@@ -264,12 +264,12 @@ export const EstimatesColumns = (
           <>
             <Tooltip
               placement="top-start"
-              title={params?.row?.settings?.name ?? "Custom"}
+              title={params?.row?.settings?.name ?? "Mirror"}
             >
               <Typography
                 sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
               >
-                {params?.row?.settings?.name ?? "Custom"}
+                {params?.row?.settings?.name ?? "Mirror"}
               </Typography>
             </Tooltip>
           </>

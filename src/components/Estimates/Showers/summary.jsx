@@ -58,6 +58,7 @@ import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import {
+  getCustomerDetail,
   getEstimateCategory,
   getEstimateState,
   getProjectId,
@@ -96,6 +97,7 @@ const Summary = ({ setStep }) => {
   const showerEstimateState = useSelector(
     (state) => state.estimateCalculations
   );
+  const customerData = useSelector(getCustomerDetail);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [Columns, setColumns] = useState([
@@ -109,7 +111,7 @@ const Summary = ({ setStep }) => {
   //drawerHandleClick
   const drawerHandleClick = () => {  
   const item = generateObjectForPDFRuntime(
-      { estimateState, projectId, selectedCategory }, 
+      { estimateState, projectId, selectedCategory,customerData }, 
       showerEstimateState,
       showersLocationSettings
     );

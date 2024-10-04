@@ -2,11 +2,13 @@ import { createSlice } from "@reduxjs/toolkit";
 export const getEstimateCategory = (state) => state.estimate.estimateCategory;
 export const getEstimateState = (state) => state.estimate.estimateState;
 export const getProjectId = (state) => state.estimate.projectId;
+export const getCustomerDetail = (state) => state.estimate.customerDetail;
 
 const initialState = {
   estimateCategory: "", // 'showers' || 'mirrors'
   estimateState: "", // 'create' || 'edit'
-  projectId: ""
+  projectId: "",
+  customerDetail : null,
 };
 
 const estimateSlice = createSlice({
@@ -16,6 +18,7 @@ const estimateSlice = createSlice({
     resetEstimateState: (state) => {
       return {
         ...initialState,
+       customerDetail: state.customerDetail
       };
     },
     setEstimateCategory: (state, actions) => {
@@ -30,10 +33,13 @@ const estimateSlice = createSlice({
       const { payload } = actions;
       state.projectId = payload;
     },
+    setCustomerDetail: (state, actions) => {
+      state.customerDetail = actions.payload;
+    },
   },
 });
 
-export const { setEstimateCategory, setEstimateState, resetEstimateState, setProjectId } =
+export const { setEstimateCategory, setEstimateState, resetEstimateState, setProjectId,setCustomerDetail } =
   estimateSlice.actions;
 
 export default estimateSlice.reducer;
