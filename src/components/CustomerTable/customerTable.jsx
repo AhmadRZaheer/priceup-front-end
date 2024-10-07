@@ -117,6 +117,7 @@ const CustomerTable = () => {
       align: "left",
       headerClassName: "customHeaderClass",
       flex: 1,
+      sortable:false,
       renderCell: (params) => {
         console.log(params.row, "params.row");
         return (

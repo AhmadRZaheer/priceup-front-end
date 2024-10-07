@@ -157,6 +157,7 @@ const AdminSideBar = () => {
     if (
       [
         "/layouts",
+        '/layouts/edit',
         "/glass-addons",
         "/glass-types",
         "/finishes",
@@ -171,6 +172,7 @@ const AdminSideBar = () => {
         "/wine-cellar/finishes",
         "/wine-cellar/hardwares",
         "/wine-cellar/layouts",
+        '/wine-cellar/layouts/edit',
       ].includes(location.pathname)
     ) {
       setExpandWineAccordian(true);
@@ -419,7 +421,7 @@ const AdminSideBar = () => {
                 <DescriptionOutlinedIcon sx={{}} />
                 <span>Old Estimates</span>
               </MenuSigleItem>
-              <MenuSigleItem link="/customers">
+              <MenuSigleItem link="/customers" secondLink='/customers/edit'>
                 <PeopleAltOutlinedIcon sx={{}} />
                 <span>Customers</span>
               </MenuSigleItem>
@@ -520,7 +522,7 @@ const AdminSideBar = () => {
                     <InnerMenuItem link="/glass-addons">
                       <span>Glass Addons</span>
                     </InnerMenuItem>
-                    <InnerMenuItem link="/layouts">
+                    <InnerMenuItem link="/layouts" secondLink='/layouts/edit'>
                       <span>Layouts</span>
                     </InnerMenuItem>
                   </ul>
@@ -674,7 +676,7 @@ const AdminSideBar = () => {
                     <InnerMenuItem link="/wine-cellar/glass-types">
                       <span>Glass Types</span>
                     </InnerMenuItem>
-                    <InnerMenuItem link="/wine-cellar/layouts">
+                    <InnerMenuItem link="/wine-cellar/layouts" secondLink='/wine-cellar/layouts/edit'>
                       <span>Layouts</span>
                     </InnerMenuItem>
                   </ul>
