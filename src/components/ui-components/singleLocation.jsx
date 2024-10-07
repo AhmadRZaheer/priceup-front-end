@@ -102,6 +102,7 @@ const SingleLocation = ({
                     {data?.staffs?.slice(0, 3).map((user, index) => {
                       return (
                         <Box
+                          key={index}
                           sx={{
                             ml: index > 0 ? -2 : 0,
                             border: "2px solid white",

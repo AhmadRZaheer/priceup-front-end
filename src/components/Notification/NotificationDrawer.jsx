@@ -49,7 +49,6 @@ export default function NotificationDrawer({ state, toggleDrawer }) {
   const sideBarWidth = getSidebarWidthAccordingToUserRole(decodedToken);
   const { mutateAsync: markAllAsRead, isLoading: editLoading, isSuccess: editSuccess } =
     useEditDocument();
-  console.log(notificationsList, 'list');
   const readList = useMemo(() => {
     const nitification = notificationsList?.filter((data) => data?.isRead === true);
     return notificationsList ? nitification : [];

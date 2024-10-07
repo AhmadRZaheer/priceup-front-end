@@ -45,7 +45,5 @@ export const Notifications = () => {
       socketClient.off(socketIoChannel.NOTIFICATIONS, handleNotification);
     };
   }, [decryptedToken, socketClient]);
-
-  console.log(data, "notifi");
   return null;
 };
