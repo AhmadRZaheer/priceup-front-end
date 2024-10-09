@@ -597,8 +597,14 @@ export const generateNotificationsForCurrentEstimate = (
           variant: notificationsVariant.WARNING,
           message: `Mounting Channel "${selectedContent.mountingChannel.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
-       } 
-    }
+       }else{
+         //Generate Warning if channel is selected 
+        notifications.calculateChannelWarning  = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: 'Current channel price is being calculated according to 1 channel stick',
+        }
+       }}
 
     if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length && selectedContent.hardwareFinishes){
       let wallClampNotAvailable = [];

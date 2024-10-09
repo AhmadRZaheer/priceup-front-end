@@ -126,6 +126,11 @@ const initialState = {
       variant: notificationsVariant.DEFAULT,
       message: "",
     },
+    calculateChannelWarning: {
+      status: false,
+      variant: notificationsVariant.DEFAULT,
+      message: "",
+    },
     glassAddonsNotAvailable: [],
     hardwareAddonsNotAvailable: [],
     wallClampNotAvailable: [],
@@ -296,6 +301,12 @@ const estimateCalcSlice = createSlice({
             item: selectedSameItem ? null : item,
             count: selectedSameItem ? 0 : 1,
           };
+          // Generate / remove Channel calculate warning upon selecting or unselecting channel
+          state.notifications.calculateChannelWarning = {
+            status: selectedSameItem ? false : true,
+            variant:  selectedSameItem ? notificationsVariant.DEFAULT : notificationsVariant.WARNING ,
+            message: selectedSameItem ? '' : 'Current channel price is being calculated according to 1 channel stick',
+          }
         } else {
           currentHardware = {
             item: state.content?.[type]?.item,
@@ -841,6 +852,13 @@ const estimateCalcSlice = createSlice({
               { item: defaultItem, count: defaultItem ? 1 : 0 }
             );
             fabricationsCount = { ...hardwareFabrication };
+            //Generating channel calculate warning on shifting to layout default
+            state.notifications.calculateChannelWarning = {
+              status: true,
+              variant: notificationsVariant.WARNING,
+              message: 'Current channel price is being calculated according to 1 channel stick'       
+            }
+
             // set mounting channel
             state.content = {
               ...state.content,
@@ -946,6 +964,13 @@ const estimateCalcSlice = createSlice({
           }
 
           /** end */
+
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: '',
+          }
 
           state.content = {
             ...state.content,
@@ -1062,6 +1087,13 @@ const estimateCalcSlice = createSlice({
               { item: defaultItem, count: defaultItem ? 1 : 0 }
             );
             fabricationsCount = { ...hardwareFabrication };
+            //Generating channel calculate warning on shifting to layout default
+            state.notifications.calculateChannelWarning = {
+              status: true,
+              variant: notificationsVariant.WARNING,
+              message: 'Current channel price is being calculated according to 1 channel stick'       
+            }
+
             // set moutning channel
             state.content = {
               ...state.content,
@@ -1160,7 +1192,12 @@ const estimateCalcSlice = createSlice({
             );
             fabricationsCount = { ...hardwareFabrication };
           });
-
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: '',
+          }
           /** end */
           state.content = {
             ...state.content,
@@ -1247,7 +1284,12 @@ const estimateCalcSlice = createSlice({
             },
             { item: null, count: 0 }
           );
-
+          //Remove Channel calculate warning upon shifting channel to clamps
+          state.notifications.calculateChannelWarning = {
+            status: false,
+            variant: notificationsVariant.DEFAULT,
+            message: '',
+          }
           state.content = {
             ...state.content,
             mountingChannel: {
@@ -1638,6 +1680,15 @@ const estimateCalcSlice = createSlice({
       // const measurements = estimateData.config.measurements.map(
       //   ({ _id, ...rest }) => rest
       // );
+
+      // Generate Channel calculate warning if channel is selected 
+      if(channelItem){
+        state.notifications.calculateChannelWarning = {
+          status: true,
+          variant:  notificationsVariant.WARNING ,
+          message: 'Current channel price is being calculated according to 1 channel stick',
+        }
+      }
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,

@@ -116,6 +116,11 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
         variant: notificationsVariant.DEFAULT,
         message: "",
       },
+      calculateChannelWarning: {
+        status: false,
+        variant: notificationsVariant.DEFAULT,
+        message: "",
+      },
     },
     content: {
       additionalFields: [],
@@ -347,6 +352,15 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
         channelItem = hardwaresList?.mountingChannel?.find(
             (item) => item._id === estimateData?.config?.mountingChannel
         );
+
+        // Generate Channel calculate warning if channel is selected 
+        if(channelItem){
+          state.notifications.calculateChannelWarning = {
+            status: true,
+            variant:  notificationsVariant.WARNING ,
+            message: 'Current channel price is being calculated according to 1 channel stick',
+          }
+        }
         
         state.content = {
           ...state.content,
@@ -532,6 +546,12 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
               item: selectedSameItem ? null : item,
               count: selectedSameItem ? 0 : 1,
             };
+              // Generate / remove Channel calculate warning upon selecting or unselecting channel
+            state.notifications.calculateChannelWarning = {
+              status: selectedSameItem ? false : true,
+              variant:  selectedSameItem ? notificationsVariant.DEFAULT : notificationsVariant.WARNING ,
+              message: selectedSameItem ? '' : 'Current channel price is being calculated according to 1 channel stick',
+            }
           } else if ([hardwareTypes.DOORLOCK].includes(type)){
             const selectedSameItem =
               item?._id === state.content.doorLock.item?._id;
