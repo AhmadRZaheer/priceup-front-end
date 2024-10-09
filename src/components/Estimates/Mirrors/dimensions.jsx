@@ -23,11 +23,13 @@ import {
   resetNotifications,
   setEstimateMeasurements,
   setMultipleNotifications,
+  setPricing,
   setSandBlasting,
   setSelectedItem,
   setSqftArea,
 } from "@/redux/mirrorsEstimateSlice";
 import {
+  calculateTotal,
   generateNotificationsForCurrentEstimate,
   getAreaSqft,
   getSandBlasting,
@@ -54,7 +56,7 @@ export const MirrorDimensions = () => {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const estimateId = searchParams.get("estimateId");
-  // const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
+  const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
   const measurements = useSelector(getEstimateMeasurements);
   const isMobile = useMediaQuery("(max-width: 600px)");
   // const currentEstimateState = useSelector(getEstimateState);
@@ -163,6 +165,13 @@ export const MirrorDimensions = () => {
     dispatch(setEstimateMeasurements(values));
     const sqft = getAreaSqft(values);
     dispatch(setSqftArea(sqft.areaSqft));
+    const prices = calculateTotal(
+      selectedContent,
+      sqft.areaSqft,
+      mirrorLocationSettings,
+      values
+    );
+    dispatch(setPricing(prices));
     const notificationsResult = generateNotificationsForCurrentEstimate(
       selectedContent,
       notifications
