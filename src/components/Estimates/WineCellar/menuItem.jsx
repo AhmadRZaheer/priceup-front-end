@@ -104,7 +104,7 @@ const MenuItem = ({
       onMouseLeave={() => captureMouseInteraction("leave")}
     >
       <MuiMenuItem
-        key={item.id}
+        key={item?._id}
         onClick={handleItemClick}
         sx={{ cursor: status ? "pointer" : "default", p: 0 }}
       >

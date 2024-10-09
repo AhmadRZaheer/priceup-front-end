@@ -45,7 +45,7 @@ import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary_dep";
 import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "@/utilities/common";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   EstimateCategory,
   inputLength,
@@ -209,6 +209,7 @@ export const generateEstimatePayload = (
 };
 
 export const ShowerReview = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const {
     mutate: mutateEdit,
@@ -223,14 +224,16 @@ export const ShowerReview = ({ setStep }) => {
   const [estimateConfig, setEstimateConfig] = useState(null);
   const showerLocationSettings = useSelector(getLocationShowerSettings);
   const listData = useSelector(getListData);
-  const estimatesTotal = useSelector(getTotal);
-  const projectId = useSelector(getProjectId);
+  const estimatesTotal = useSelector(getTotal);  
+  const projectId = searchParams.get("projectId");
+  // const projectId = useSelector(getProjectId);
   const measurements = useSelector(getMeasurementSide);
   const perimeter = useSelector(getLayoutPerimeter);
   const doorWidthredux = useSelector(getDoorWidth);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
-  const currentQuoteState = useSelector(getQuoteState);
+  const currentQuoteState = searchParams.get("quoteState");
+  // const currentQuoteState = useSelector(getQuoteState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
   const notifications = useSelector(getNotifications);

@@ -32,7 +32,12 @@ import {
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import { NavLink } from "react-router-dom";
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { getLocationWineCellarSettings } from "@/redux/locationSlice";
 import {
   setSelectedItem,
@@ -62,26 +67,77 @@ import {
   sethoursForSingleDoor,
 } from "@/redux/wineCellarEstimateSlice";
 import AlertsAndWarnings from "../AlertsAndWarnings";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useFetchAllDocuments,
+  useFetchSingleDocument,
+} from "@/utilities/ApiHooks/common";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-
+import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
 
 export const SimpleLayoutDimensions = ({ setStep }) => {
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const location = useLocation();
   const estimateState = useSelector((state) => state.wineCellarsEstimate);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  const layoutId = searchParams.get("layoutId");
+  const estimateId = searchParams.get("estimateId");
+  const category = searchParams.get("category");
   const isCustomizedDoorWidthRedux = useSelector(getisCustomDoorWidth);
   const selectedData = useSelector(selectedItem);
   const doorWidthFromredux = useSelector(getDoorWidth);
   const doorQuantity = useSelector(getDoorQuantity);
   const measurementSides = useSelector(getMeasurements);
-  const currentQuoteState = useSelector(getEstimateState);
+  // const currentQuoteState = useSelector(getEstimateState);
+  const currentQuoteState = searchParams.get("estimateState");
   const reduxAdditionalFields = useSelector(getAdditionalFields);
   const wineCellarSettings = useSelector(getLocationWineCellarSettings);
   const wineCellarsHardware = useSelector(getWineCellarsHardware);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const { data: layouts, isLoading: loading, refetch } = useFetchAllDocuments(`${backendURL}/wineCellars/layouts/for-estimate`);
+  const {
+    data: layouts,
+    isLoading: loading,
+    refetch,
+  } = useFetchAllDocuments(`${backendURL}/wineCellars/layouts/for-estimate`);
+
+  const {
+    data: record,
+    refetch: refetchRecord,
+    isLoading: getLoading,
+  } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (estimateId && estimateId?.length) {
+        refetchRecord();
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [estimateId]);
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (record) {
+        setStateForWineCellarEstimate(record, dispatch);
+      } else {
+        if (record === null) {
+          if (projectId && projectId?.length) {
+            navigate(`/projects/${projectId}`);
+          } else {
+            navigate(`/estimates`);
+          }
+        }
+      }
+    }
+  }, [record]);
+
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
@@ -92,16 +148,47 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   }, {});
 
   const noOfSidesOFCurrentLayout = selectedData?.settings?.measurementSides;
-  // console.log(noOfSidesOFCurrentLayout, "side", measurementSides);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
   // const [debouncedValueDoorQuantity, setDebouncedValueDoorQuantity] =
   //   useState(doorQuantity);
   const [selectedLayout, setSelectedLayout] = useState(selectedData);
 
+  useEffect(() => {
+    if (
+      layouts &&
+      layouts.length &&
+      layoutId &&
+      layoutId.length &&
+      currentQuoteState === quoteState.CREATE
+    ) {
+      const layoutData = layouts?.find((item) => item._id === layoutId);
+      if (layoutData) {
+        if (selectedLayout === null) {
+          setSelectedLayout(layoutData);
+          dispatch(setSelectedItem(layoutData));
+        }
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [layouts, layoutId, selectedLayout]);
+
   const handleLayoutChange = (event) => {
     const id = event.target.value;
     const selectedItem = layouts?.find((item) => item._id === id);
+    if (selectedItem) {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set("layoutId", id);
+      navigate({
+        pathname: location.pathname,
+        search: searchParams.toString(),
+      });
+    }
     Object.keys(formik.values).forEach((key) => {
       // reset existing formik values
       formik.setFieldValue(key, "");
@@ -134,7 +221,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values, { resetForm }) => {
-      console.log('on submit');
+      console.log("on submit");
       dispatch(resetNotifications());
       const measurementsArray = Object.entries(values)
         .filter(([key, value]) => value !== "")
@@ -151,7 +238,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         measurementsArray,
         selectedData?.settings?.variant,
         glassThickness,
-        {doorQuantity:doorQuantity}
+        { doorQuantity: doorQuantity }
       );
       if (result?.doorWeight) {
         dispatch(setDoorWeight(result?.doorWeight));
@@ -172,7 +259,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       const notificationsResult = generateNotificationsForCurrentEstimate(
         {
           ...estimateState,
-          listData:wineCellarsHardware,
+          listData: wineCellarsHardware,
           measurements: measurementsArray,
           content: {
             ...estimateState.content,
@@ -233,7 +320,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         measurementsArray,
         selectedData?.settings?.variant,
         selectedData?.settings?.glassType?.thickness,
-        {doorQuantity:doorQuantity}
+        { doorQuantity: doorQuantity }
       );
       if (isCustomizedDoorWidthRedux) {
         dispatch(setDoorWidth(editDebouncedValue));
@@ -250,32 +337,47 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
 
   const handleChangeDoorQuantity = (event) => {
     const value = selectedData?.settings?.noOfHoursToCompleteSingleDoor;
-   const  targetValue = Number(event.target.value);
+    const targetValue = Number(event.target.value);
     // setDebouncedValueDoorQuantity(event.target.value);
     dispatch(setDoorQuantity(targetValue));
-    dispatch(sethoursForSingleDoor(targetValue*value));
-  }
+    dispatch(sethoursForSingleDoor(targetValue * value));
+  };
 
   useEffect(() => {
-    if (currentQuoteState === quoteState.CREATE) {
-      dispatch(initializeStateForCreateQuote({ layoutData: selectedData, hardwaresList:wineCellarsHardware }));
-    } else if (currentQuoteState === quoteState.EDIT) {
+    if (
+      currentQuoteState === quoteState.CREATE &&
+      selectedData &&
+      wineCellarsHardware
+    ) {
+      dispatch(
+        initializeStateForCreateQuote({
+          layoutData: selectedData,
+          hardwaresList: wineCellarsHardware,
+        })
+      );
+    } else if (
+      currentQuoteState === quoteState.EDIT &&
+      selectedData &&
+      wineCellarsHardware
+    ) {
       dispatch(
         initializeStateForEditQuote({
           estimateData: {
             ...selectedData,
-            additionalFields: reduxAdditionalFields.length
+            additionalFields: reduxAdditionalFields?.length
               ? reduxAdditionalFields
-              : selectedData.config.additionalFields,
+              : selectedData?.config?.additionalFields,
           },
-          quotesId: selectedData._id,
-          hardwaresList:wineCellarsHardware
+          quotesId: selectedData?._id,
+          hardwaresList: wineCellarsHardware,
         })
       );
     }
-    refetch();
-    return () => { };
-  }, [selectedLayout]);
+    if (currentQuoteState === quoteState.CREATE) {
+      refetch();
+    }
+    return () => {};
+  }, [selectedData, wineCellarsHardware]);
 
   return (
     <>
@@ -383,7 +485,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   pb: { sm: 0, xs: 12 },
                 }}
               >
-                {currentQuoteState === quoteState.CREATE && (
+                {currentQuoteState === quoteState.CREATE && selectedLayout && (
                   <Box
                     sx={{
                       mb: { sm: 2, xs: 0 },
@@ -400,9 +502,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         className="custom-textfield-purple"
                         onChange={handleLayoutChange}
                         renderValue={(value) => {
-                          const selectedItem = layouts?.find(
-                            (item) => item._id === value
-                          );
+                          // const selectedItem = layouts?.find(
+                          //   (item) => item._id === value
+                          // );
                           return (
                             <Typography
                               sx={{
@@ -412,7 +514,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                                 textWrap: "nowrap",
                               }}
                             >
-                              {selectedItem?.name}
+                              {selectedLayout?.name}
                             </Typography>
                           );
                         }}
@@ -519,7 +621,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           }}
                           onBlur={formik.handleBlur}
                           InputProps={{
-                            inputProps: { min: 0, max: inputMaxValue, },
+                            inputProps: { min: 0, max: inputMaxValue },
                           }}
                         />
                       </Box>
@@ -607,13 +709,14 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                       <TextField
                         fullWidth
                         InputProps={{
-                          inputProps: { min: 1, max: inputMaxValue, },
+                          inputProps: { min: 1, max: inputMaxValue },
                         }}
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorWidthFromredux}
                         type="number"
-                        className={`custom-textfield-purple${!isCustomizedDoorWidthRedux ? "-disabled" : ""
-                          }`}
+                        className={`custom-textfield-purple${
+                          !isCustomizedDoorWidthRedux ? "-disabled" : ""
+                        }`}
                         size="small"
                         variant="outlined"
                         value={doorWidthFromredux}
@@ -624,9 +727,8 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           "& input": { padding: "10px" },
                         }}
                         name="door"
-                        onChange={(e) =>   {
-                          if (e.target.value.length <= inputLength) 
-                          { 
+                        onChange={(e) => {
+                          if (e.target.value.length <= inputLength) {
                             handleInputChange(e);
                           }
                         }}
@@ -650,9 +752,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                       >
                         <Typography
                           className="text-sm-samibold"
-                        sx={{
-                          color: !isCustomizedDoorWidthRedux ? "#000000" : "",
-                        }}
+                          sx={{
+                            color: !isCustomizedDoorWidthRedux ? "#000000" : "",
+                          }}
                         >
                           Door Quantity
                         </Typography>
@@ -678,8 +780,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorQuantity}
                         type="number"
-                        className={`custom-textfield-purple${!isCustomizedDoorWidthRedux ? "-disabled" : ""
-                          }`}
+                        className={`custom-textfield-purple${
+                          !isCustomizedDoorWidthRedux ? "-disabled" : ""
+                        }`}
                         size="small"
                         variant="outlined"
                         value={doorQuantity}
@@ -690,7 +793,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           "& input": { padding: "10px" },
                         }}
                         name="doorQuantity"
-                        onChange={(e) =>{
+                        onChange={(e) => {
                           if (e.target.value.length <= 2) {
                             handleChangeDoorQuantity(e);
                           }
@@ -732,8 +835,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     <img
                       width={isMobile ? "134px" : "240px"}
                       height={isMobile ? "188px" : "300px"}
-                      src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                        }`}
+                      src={`${backendURL}/${
+                        selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                      }`}
                       alt="Selected"
                     />
                   </Box>
@@ -761,7 +865,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         ? projectId
                           ? `/projects/${projectId}`
                           : "/estimates"
-                        : "/estimates/layouts"
+                        : `/estimates/layouts?category=${category}&projectId=${projectId}`
                     }
                   >
                     <Button

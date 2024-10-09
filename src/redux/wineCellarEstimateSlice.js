@@ -387,9 +387,9 @@ import { getHardwareSpecificFabrication } from "@/utilities/hardwarefabrication"
         };
         // state.quoteState = quoteState.EDIT;
         // state.measurements = measurements;
-        state.perimeter = estimateData.config.perimeter;
-        state.sqftArea = estimateData.config.sqftArea;
-        state.selectedItem = estimateData;
+        state.perimeter = estimateData?.config?.perimeter;
+        state.sqftArea = estimateData?.config?.sqftArea;
+        // state.selectedItem = estimateData;
         state.doorWidth = estimateData?.config?.doorWidth || 0;
         state.doorQuantity = estimateData?.config?.doorQuantity || 1;
       },

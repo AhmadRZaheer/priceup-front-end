@@ -9,6 +9,7 @@ import ActionsDropdown from "@/components/common/ActionsDropdown";
 import StatusChip from "@/components/common/StatusChip";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import CustomToggle from "@/components/ui-components/Toggle";
+import { EstimateCategory } from "./constants";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
@@ -260,16 +261,17 @@ export const EstimatesColumns = (
       sortable: false,
       flex: 1,
       renderCell: (params) => {
+        const layoutName = params?.row?.category === EstimateCategory.MIRRORS ? 'Mirror'  : params?.row?.settings?.name ?? "Custom";
         return (
           <>
             <Tooltip
               placement="top-start"
-              title={params?.row?.settings?.name ?? "Mirror"}
+              title={layoutName}
             >
               <Typography
                 sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
               >
-                {params?.row?.settings?.name ?? "Mirror"}
+                {layoutName}
               </Typography>
             </Tooltip>
           </>

@@ -43,8 +43,10 @@ import {
   getProjectId,
 } from "@/redux/estimateSlice";
 import { quoteState } from "@/utilities/constants";
+import { useSearchParams } from "react-router-dom";
 
 const Summary = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const dispatch = useDispatch();
   const pricing = useSelector(getPricing);
@@ -56,9 +58,12 @@ const Summary = ({ setStep }) => {
   const selectedData = useSelector(getSelectedItem);
   const layoutImage = CustomImage;
   const [anchorEl, setAnchorEl] = useState(null);
-  const estimateState = useSelector(getEstimateState);
-  const projectId = useSelector(getProjectId);
-  const selectedCategory = useSelector(getEstimateCategory);
+  // const estimateState = useSelector(getEstimateState);
+  const estimateState = searchParams.get("estimateState");
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  // const selectedCategory = useSelector(getEstimateCategory);
+  const selectedCategory = searchParams.get("category");
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   const customerData = useSelector(getCustomerDetail);
   const [Columns, setColumns] = useState([
@@ -73,7 +78,7 @@ const Summary = ({ setStep }) => {
 
   const drawerHandleClick = () => {
     const item = generateObjForMirrorPDFRuntime(
-      { estimateState, projectId, selectedCategory,customerData },
+      { estimateState, projectId, selectedCategory:selectedData?.category ?? selectedCategory,customerData },
       mirrorEstimateState,
       mirrorsLocationSettings
     );

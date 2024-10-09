@@ -1,5 +1,10 @@
 import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import { EstimateCategory, mirrorHardwareTypes, notificationsVariant, quoteState } from "./constants";
+import {
+  EstimateCategory,
+  mirrorHardwareTypes,
+  notificationsVariant,
+  quoteState,
+} from "./constants";
 import {
   resetMirrorEstimateState,
   resetNotifications,
@@ -89,10 +94,10 @@ export const calculateTotal = (
   sqftArea,
   mirrorLocationSettings,
   measurements
-) => { 
+) => {
   //glass
   let glassPrice = 0;
-  if (selectedContent.glassType?.item) {
+  if (selectedContent?.glassType?.item) {
     glassPrice =
       (selectedContent?.glassType?.item?.options?.find(
         (glass) => glass.thickness === selectedContent?.glassType?.thickness
@@ -101,7 +106,7 @@ export const calculateTotal = (
 
   //edgeWork
   let edgeWorkPrice = 0;
-  if (selectedContent.edgeWork?.item) {
+  if (selectedContent?.edgeWork?.item) {
     const edgeWork =
       selectedContent?.edgeWork?.item?.options?.find(
         (polish) => polish.thickness === selectedContent?.edgeWork?.thickness
@@ -153,12 +158,12 @@ export const calculateTotal = (
   //     // }
   //   });
   // }
-  
+
   const measurementsArray = Object.values(measurements);
   //hardwares
-   let hardwaresPrice = 0;
+  let hardwaresPrice = 0;
   selectedContent?.hardwares?.forEach((row) => {
-    if(row?.item?.options?.length && measurementsArray?.length){
+    if (row?.item?.options?.length && measurementsArray?.length) {
       const price = row?.item?.options[0]?.cost || 0;
       hardwaresPrice = hardwaresPrice + price * row?.count;
     }
@@ -192,18 +197,18 @@ export const calculateTotal = (
 
   let fabricationPrice = 0;
   fabricationPrice =
-    selectedContent.simpleHoles * mirrorLocationSettings.holeMultiplier +
+    selectedContent.simpleHoles * (mirrorLocationSettings?.holeMultiplier ?? 0) +
     // selectedContent.outlets * mirrorLocationSettings.outletMultiplier +
-    selectedContent.lightHoles * mirrorLocationSettings.lightHoleMultiplier +
-    selectedContent.notch * mirrorLocationSettings.notchMultiplier +
+    selectedContent.lightHoles * (mirrorLocationSettings?.lightHoleMultiplier ?? 0) +
+    selectedContent.notch * (mirrorLocationSettings?.notchMultiplier ?? 0) +
     selectedContent.singleOutletCutout *
-      mirrorLocationSettings.singleOutletCutoutMultiplier +
+      (mirrorLocationSettings?.singleOutletCutoutMultiplier ?? 0) +
     selectedContent.doubleOutletCutout *
-      mirrorLocationSettings.doubleOutletCutoutMultiplier +
+      (mirrorLocationSettings?.doubleOutletCutoutMultiplier ?? 0) +
     selectedContent.tripleOutletCutout *
-      mirrorLocationSettings.tripleOutletCutoutMultiplier +
+      (mirrorLocationSettings?.tripleOutletCutoutMultiplier ?? 0) +
     selectedContent.quadOutletCutout *
-      mirrorLocationSettings.quadOutletCutoutMultiplier;
+      (mirrorLocationSettings?.quadOutletCutoutMultiplier ?? 0);
   // selectedContent.singleDuplex *
   //   mirrorLocationSettings.singleDuplexMultiplier +
   // selectedContent.doubleDuplex *
@@ -226,7 +231,7 @@ export const calculateTotal = (
   let additionalFieldPrice = 0;
   selectedContent?.additionalFields?.forEach((item) => {
     additionalFieldPrice += Number(
-      item.cost 
+      item.cost
       // *
       //   (mirrorLocationSettings.pricingFactorStatus
       //     ? mirrorLocationSettings.pricingFactor
@@ -238,7 +243,7 @@ export const calculateTotal = (
   const laborPrice =
     selectedContent?.people *
     selectedContent?.hours *
-    mirrorLocationSettings?.hourlyRate;
+    (mirrorLocationSettings?.hourlyRate ?? 0);   
 
   const misc = 0;
 
@@ -246,13 +251,13 @@ export const calculateTotal = (
 
   let totalPrice =
     (glassPrice + fabricationPrice + misc) *
-      (mirrorLocationSettings.pricingFactorStatus
-        ? mirrorLocationSettings.pricingFactor
+      (mirrorLocationSettings?.pricingFactorStatus
+        ? mirrorLocationSettings?.pricingFactor
         : 1) +
     laborPrice;
-    // + additionalFieldPrice;
-    // additonal fields sum
-  if (selectedContent.additionalFields.length > 0) {
+  // + additionalFieldPrice;
+  // additonal fields sum
+  if (selectedContent?.additionalFields?.length > 0) {
     totalPrice += selectedContent.additionalFields.reduce(
       (acc, item) =>
         acc +
@@ -267,8 +272,8 @@ export const calculateTotal = (
   }
 
   if (
-    selectedContent.modifiedProfitPercentage > 0 &&
-    selectedContent.modifiedProfitPercentage < 100
+    selectedContent?.modifiedProfitPercentage > 0 &&
+    selectedContent?.modifiedProfitPercentage < 100
   ) {
     totalPrice =
       ((cost * 100) / (selectedContent.modifiedProfitPercentage - 100)) * -1;
@@ -282,7 +287,7 @@ export const calculateTotal = (
     misc: misc,
     cost: cost,
     total: totalPrice,
-    profitPercentage: ((totalPrice - cost) * 100) / totalPrice,
+    profitPercentage: totalPrice > 0 ?  ((totalPrice - cost) * 100) / totalPrice : 0,
   };
 };
 
@@ -295,192 +300,232 @@ export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
   dispatch(setMirrorProjectId(item?.project_id));
   dispatch(setEstimateMeasurements(item.config.measurements));
   // console.log("mirror edit", item);
-  navigate("/estimates/dimensions");
+  navigate(
+    `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}`
+  );
 };
 
-
-export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
-  switch(type){
-     case mirrorHardwareTypes.HARDWARES:
-       return selectedItem?.options?.[0]?.status;
-     case mirrorHardwareTypes.GLASSADDONS:
-       return selectedItem?.options?.[0]?.status;
-     case mirrorHardwareTypes.GLASSTYPE:
-       return selectedItem?.options?.find((item)=>item.thickness===activeFinishOrThickness)?.status;
-     case mirrorHardwareTypes.EDGEWORK:
-       return selectedItem?.options?.find((item)=>item.thickness===activeFinishOrThickness)?.status;
-     default:
-       return true;
+export const getActiveStatus = (
+  selectedItem,
+  activeFinishOrThickness = null,
+  type
+) => {
+  switch (type) {
+    case mirrorHardwareTypes.HARDWARES:
+      return selectedItem?.options?.[0]?.status;
+    case mirrorHardwareTypes.GLASSADDONS:
+      return selectedItem?.options?.[0]?.status;
+    case mirrorHardwareTypes.GLASSTYPE:
+      return selectedItem?.options?.find(
+        (item) => item.thickness === activeFinishOrThickness
+      )?.status;
+    case mirrorHardwareTypes.EDGEWORK:
+      return selectedItem?.options?.find(
+        (item) => item.thickness === activeFinishOrThickness
+      )?.status;
+    default:
+      return true;
   }
- }
+};
 
- export const getEstimateErrorStatus = (selectedContent) => {
+export const getEstimateErrorStatus = (selectedContent) => {
   if (selectedContent.glassType?.item) {
-    if(!getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE)){
-     return false;
+    if (
+      !getActiveStatus(
+        selectedContent.glassType?.item,
+        selectedContent.glassType.thickness,
+        mirrorHardwareTypes.GLASSTYPE
+      )
+    ) {
+      return false;
     }
   }
   if (selectedContent.edgeWork?.item) {
-    if(!getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK)){
-     return false;
+    if (
+      !getActiveStatus(
+        selectedContent.edgeWork?.item,
+        selectedContent.edgeWork.thickness,
+        mirrorHardwareTypes.EDGEWORK
+      )
+    ) {
+      return false;
     }
   }
   if (selectedContent.glassAddons.length) {
     let noSelectedDisableFound = true;
-    selectedContent.glassAddons.forEach(element => {
-      if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
+    selectedContent.glassAddons.forEach((element) => {
+      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
         noSelectedDisableFound = false;
         return;
       }
     });
-    if(!noSelectedDisableFound){
-     return false;
+    if (!noSelectedDisableFound) {
+      return false;
     }
-   }
-   if (selectedContent.hardwares?.length) {
+  }
+  if (selectedContent.hardwares?.length) {
     let noSelectedDisableFound = true;
-    selectedContent.hardwares.forEach(element => {
-      if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
+    selectedContent.hardwares.forEach((element) => {
+      if (!getActiveStatus(element.item, null, mirrorHardwareTypes.HARDWARES)) {
         noSelectedDisableFound = false;
         return;
       }
     });
-    if(!noSelectedDisableFound){
-     return false;
+    if (!noSelectedDisableFound) {
+      return false;
     }
-   }
+  }
   return true;
-}
+};
 
 export const getSelectedContentErrorMsgs = (selectedContent) => {
   let errors = null;
   if (selectedContent.glassType?.item) {
-    const status = getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE);
-     if(status === false){
+    const status = getActiveStatus(
+      selectedContent.glassType?.item,
+      selectedContent.glassType.thickness,
+      mirrorHardwareTypes.GLASSTYPE
+    );
+    if (status === false) {
       errors = {
         ...errors,
-        glassType:{
-          status:false,
-          message:`"${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`
-        }
-      }
-     } 
+        glassType: {
+          status: false,
+          message: `"${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`,
+        },
+      };
+    }
   }
   if (selectedContent.edgeWork?.item) {
-    const status = getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK);
-     if(status === false){
+    const status = getActiveStatus(
+      selectedContent.edgeWork?.item,
+      selectedContent.edgeWork.thickness,
+      mirrorHardwareTypes.EDGEWORK
+    );
+    if (status === false) {
       errors = {
         ...errors,
-        edgeWork:{
-          status:false,
-          message:`"${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`
-        }
+        edgeWork: {
+          status: false,
+          message: `"${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`,
+        },
+      };
+    }
+  }
+  if (selectedContent.glassAddons.length) {
+    let selectedDisableNames = "";
+    selectedContent.glassAddons.forEach((element) => {
+      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
+        selectedDisableNames += `${element.name}, `;
       }
-     } 
-  }
-  if(selectedContent.glassAddons.length){
-    let selectedDisableNames = '';
-  selectedContent.glassAddons.forEach(element => {
-    if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
-      selectedDisableNames += `${element.name}, `;
+    });
+    if (selectedDisableNames.length) {
+      errors = {
+        ...errors,
+        glassAddons: {
+          status: false,
+          message: `"${selectedDisableNames
+            .trim()
+            .replace(/,\s*$/, "")}" are not available.`,
+        },
+      };
     }
-  });
-  if(selectedDisableNames.length){
-    errors = {
-      ...errors,
-      glassAddons:{
-        status:false,
-        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available.`
+  }
+  if (selectedContent.hardwares?.length) {
+    let selectedDisableNames = "";
+    selectedContent.hardwares.forEach((element) => {
+      if (!getActiveStatus(element.item, null, mirrorHardwareTypes.HARDWARES)) {
+        selectedDisableNames += `${element?.item?.name}, `;
       }
+    });
+    if (selectedDisableNames.length) {
+      errors = {
+        ...errors,
+        hardwares: {
+          status: false,
+          message: `"${selectedDisableNames
+            .trim()
+            .replace(/,\s*$/, "")}" are not available".`,
+        },
+      };
     }
   }
-  }
-  if(selectedContent.hardwares?.length){
-    let selectedDisableNames = '';
-  selectedContent.hardwares.forEach(element => {
-    if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
-      selectedDisableNames += `${element?.item?.name}, `;
-    }
-  });
-  if(selectedDisableNames.length){
-    errors = {
-      ...errors,
-      hardwares:{
-        status:false,
-        message:`"${selectedDisableNames.trim().replace(/,\s*$/, '')}" are not available".`
-      }
-    }
-  }
-  }
-return errors;
-}
+  return errors;
+};
 
 export const generateNotificationsForCurrentEstimate = (
   selectedContentFromRedux,
   notificationsFromRedux
 ) => {
-  
   let selectedContent = { ...selectedContentFromRedux };
   let notifications = { ...notificationsFromRedux };
 
-    if (selectedContent.glassType?.item) {
-      // generate glass type not available notification in current thickness
-      const status = getActiveStatus(selectedContent.glassType?.item,selectedContent.glassType.thickness,mirrorHardwareTypes.GLASSTYPE);
-      if (!status)
-        notifications.glassTypeNotAvailable = {
-          status: true,
-          variant: notificationsVariant.WARNING,
-          message: `Glass Type "${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`,
-        };
-    }
-    if (selectedContent.edgeWork?.item) {
-      // generate glass type not available notification in current thickness
-      const status = getActiveStatus(selectedContent.edgeWork?.item,selectedContent.edgeWork.thickness,mirrorHardwareTypes.EDGEWORK);
-      if (!status)
-        notifications.edgeWorkNotAvailable = {
-          status: true,
-          variant: notificationsVariant.WARNING,
-          message: `Edge Work "${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`,
-        };
-    }
-    if(selectedContent.glassAddons.length){
-      let glassAddonsNotAvailable = [];
-      selectedContent.glassAddons.forEach(element => {
-        if(!getActiveStatus(element,null,mirrorHardwareTypes.GLASSADDONS)){
-          glassAddonsNotAvailable.push({
+  if (selectedContent.glassType?.item) {
+    // generate glass type not available notification in current thickness
+    const status = getActiveStatus(
+      selectedContent.glassType?.item,
+      selectedContent.glassType.thickness,
+      mirrorHardwareTypes.GLASSTYPE
+    );
+    if (!status)
+      notifications.glassTypeNotAvailable = {
+        status: true,
+        variant: notificationsVariant.WARNING,
+        message: `Glass Type "${selectedContent.glassType.item?.name}" is not available in thickness "${selectedContent.glassType.thickness}".`,
+      };
+  }
+  if (selectedContent.edgeWork?.item) {
+    // generate glass type not available notification in current thickness
+    const status = getActiveStatus(
+      selectedContent.edgeWork?.item,
+      selectedContent.edgeWork.thickness,
+      mirrorHardwareTypes.EDGEWORK
+    );
+    if (!status)
+      notifications.edgeWorkNotAvailable = {
+        status: true,
+        variant: notificationsVariant.WARNING,
+        message: `Edge Work "${selectedContent.edgeWork.item?.name}" is not available in thickness "${selectedContent.edgeWork.thickness}".`,
+      };
+  }
+  if (selectedContent.glassAddons.length) {
+    let glassAddonsNotAvailable = [];
+    selectedContent.glassAddons.forEach((element) => {
+      if (!getActiveStatus(element, null, mirrorHardwareTypes.GLASSADDONS)) {
+        glassAddonsNotAvailable.push({
           status: true,
           variant: notificationsVariant.WARNING,
           message: `Glass Addon "${element.name}" is not available.`,
-          });
-        }
-      });
-      if(glassAddonsNotAvailable.length){
-        notifications.glassAddonsNotAvailable = glassAddonsNotAvailable;
+        });
       }
+    });
+    if (glassAddonsNotAvailable.length) {
+      notifications.glassAddonsNotAvailable = glassAddonsNotAvailable;
     }
-    if(selectedContent.hardwares?.length){
-      let hardwaresNotAvailable = [];
-      selectedContent.hardwares.forEach(element => {
-        if(!getActiveStatus(element.item,null,mirrorHardwareTypes.HARDWARES)){
-          hardwaresNotAvailable.push({
+  }
+  if (selectedContent.hardwares?.length) {
+    let hardwaresNotAvailable = [];
+    selectedContent.hardwares.forEach((element) => {
+      if (!getActiveStatus(element.item, null, mirrorHardwareTypes.HARDWARES)) {
+        hardwaresNotAvailable.push({
           status: true,
           variant: notificationsVariant.WARNING,
           message: `Hardware "${element.item?.name}" is not available.`,
-          });
-        }
-      });
-      if(hardwaresNotAvailable.length){
-        notifications.hardwaresNotAvailable = hardwaresNotAvailable;
+        });
       }
+    });
+    if (hardwaresNotAvailable.length) {
+      notifications.hardwaresNotAvailable = hardwaresNotAvailable;
     }
- return notifications;
-}
+  }
+  return notifications;
+};
 
 export const generateObjectForPDFPreview = (
   listData,
   estimateData,
   mirrorMiscPricing
-) => { 
+) => {
   let estimateInfoObject;
 
   let glassTypee = null;
@@ -501,8 +546,10 @@ export const generateObjectForPDFPreview = (
 
   let hardwares = [];
   hardwares = estimateData?.config?.hardwares?.map((row) => {
-    const record = listData?.hardwares.find((addon) => addon?._id === row?.type);
-    return {item:record,count:row?.count};
+    const record = listData?.hardwares.find(
+      (addon) => addon?._id === row?.type
+    );
+    return { item: record, count: row?.count };
   });
 
   estimateInfoObject = {
@@ -523,7 +570,7 @@ export const generateObjectForPDFPreview = (
     },
     edgeWork: {
       item: edgeWork,
-      thickness: estimateData?.config?.edgeWork?.thickness
+      thickness: estimateData?.config?.edgeWork?.thickness,
     },
     glassAddons: glassAddons?.length ? [...glassAddons] : [],
     hardwares: hardwares?.length ? [...hardwares] : [],

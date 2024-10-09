@@ -40,7 +40,11 @@ import {
   getLayoutPerimeter,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { backendURL, calculateAreaAndPerimeter, calculateTotal } from "@/utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  calculateTotal,
+} from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import {
   layoutVariants,
@@ -63,8 +67,10 @@ import {
   getEstimateState,
   getProjectId,
 } from "@/redux/estimateSlice";
+import { useSearchParams } from "react-router-dom";
 
 const Summary = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
@@ -86,13 +92,16 @@ const Summary = ({ setStep }) => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
-  const quoteState = useSelector(getQuoteState);
+  // const quoteState = useSelector(getQuoteState);
+  const quoteState = searchParams.get("quoteState");
   const sqftArea = useSelector(getLayoutArea);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const perimeter = useSelector(getLayoutPerimeter);
   const estimateState = useSelector(getEstimateState);
   const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
-  const selectedCategory = useSelector(getEstimateCategory);
+  // const selectedCategory = useSelector(getEstimateCategory);
+  const selectedCategory = searchParams.get("category");
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   const showerEstimateState = useSelector(
     (state) => state.estimateCalculations
@@ -109,9 +118,14 @@ const Summary = ({ setStep }) => {
   ]);
 
   //drawerHandleClick
-  const drawerHandleClick = () => {  
-  const item = generateObjectForPDFRuntime(
-      { estimateState, projectId, selectedCategory,customerData }, 
+  const drawerHandleClick = () => {
+    const item = generateObjectForPDFRuntime(
+      {
+        estimateState,
+        projectId,
+        selectedCategory: selectedData?.category ?? selectedCategory,
+        customerData,
+      },
       showerEstimateState,
       showersLocationSettings
     );
@@ -125,9 +139,9 @@ const Summary = ({ setStep }) => {
       quotestate.EDIT,
       item?.measurements,
       item?.layout_id
-    ); 
+    );
 
-    const id = estimateState === quotestate.CREATE ? "--" : selectedData._id;
+    const id = estimateState === quotestate.CREATE ? "--" : selectedData?._id;
     localStorage.setItem(
       "pdf-estimate",
       JSON.stringify({
@@ -720,7 +734,7 @@ const Summary = ({ setStep }) => {
                         <Typography className="text-xs-ragular-bold" mb={1}>
                           Additional Fields
                         </Typography>
-                        {selectedContent.additionalFields.map(
+                        {selectedContent?.additionalFields?.map(
                           (item) =>
                             item.label !== "" && (
                               <Box

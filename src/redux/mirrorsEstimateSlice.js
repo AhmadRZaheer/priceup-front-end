@@ -221,18 +221,18 @@ const mirrorsEstimateSlice = createSlice({
       const { estimateData, hardwaresList } = action.payload;
       let glassTypee = null;
       glassTypee = hardwaresList?.glassTypes?.find(
-        (item) => item._id === estimateData?.config?.glassType?.type
+        (item) => item?._id === estimateData?.config?.glassType?.type
       );
 
       let edgeWork = null;
       edgeWork = hardwaresList?.edgeWorks?.find(
-        (item) => item._id === estimateData?.config?.edgeWork?.type
+        (item) => item?._id === estimateData?.config?.edgeWork?.type
       );
 
       let glassAddons = [];
       glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = hardwaresList?.glassAddons.find(
-          (addon) => addon._id === item
+        const record = hardwaresList?.glassAddons?.find(
+          (addon) => addon?._id === item
         );
         return record;
       });
@@ -244,8 +244,8 @@ const mirrorsEstimateSlice = createSlice({
         return { item: found, count: row.count };
       });
 
-      state.estimateId = estimateData._id;
-      state.sqftArea = estimateData.config?.sqftArea;
+      state.estimateId = estimateData?._id;
+      state.sqftArea = estimateData?.config?.sqftArea;
       state.content = {
         ...state.content,
         glassType: {
@@ -256,8 +256,8 @@ const mirrorsEstimateSlice = createSlice({
           item: edgeWork,
           thickness: estimateData?.config?.edgeWork?.thickness,
         },
-        glassAddons: [...glassAddons],
-        hardwares: [...hardwares],
+        glassAddons: glassAddons ? [...glassAddons] : [], 
+        hardwares: hardwares ? [...hardwares] : [],
         modifiedProfitPercentage:
           estimateData?.config?.modifiedProfitPercentage,
         additionalFields: estimateData?.config?.additionalFields,

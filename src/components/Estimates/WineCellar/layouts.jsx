@@ -7,7 +7,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { backendURL } from "@/utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useMemo, useState } from "react";
@@ -17,9 +17,9 @@ import icon from "@/Assets/search-icon.svg";
 import { setSelectedItem, resetNotifications, selectedItem, setisCustomizedDoorWidth, setDoorWidth, updateMeasurements } from "@/redux/wineCellarEstimateSlice";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { getProjectId, setEstimateState } from "@/redux/estimateSlice";
+import { EstimateCategory, quoteState } from "@/utilities/constants";
 
-
-export const WineCallerLayouts = () => {
+export const WineCallerLayouts = () => {  
   const boxStyles = {
     minHeight: "182px",
     minWidth: "180px",
@@ -40,8 +40,10 @@ export const WineCallerLayouts = () => {
   const { data: layouts, isFetched, refetch } = useFetchAllDocuments(`${backendURL}/wineCellars/layouts/for-estimate`);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const selectedData = useSelector(selectedItem);
-  const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  // const projectId = useSelector(getProjectId);
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const [search, setSearch] = useState("");
@@ -65,7 +67,10 @@ export const WineCallerLayouts = () => {
     dispatch(resetNotifications());
     dispatch(updateMeasurements([])); // reset measurement array on shifting layout
     dispatch(setDoorWidth(0));
-    navigate("/estimates/dimensions");
+    // navigate("/estimates/dimensions");
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${projectId}&estimateState=${quoteState.CREATE}&layoutId=${selectedData?._id}`
+    );
   };
   useEffect(() => {
     refetch();

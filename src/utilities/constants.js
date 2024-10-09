@@ -130,3 +130,9 @@ export const statusTypes = {
 
 export const inputLength = 6;
 export const inputMaxValue = 999999;
+
+export const defaultNotificationState = {
+  status: false,
+  variant: notificationsVariant.DEFAULT,
+  message: ``,
+}

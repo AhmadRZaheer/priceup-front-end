@@ -26,19 +26,21 @@ const ChannelTypeDesktop = ({ menuOptions, title, type }) => {
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
     let active = null;
-    if (selectedContent?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
-      active = listData?.mountingChannel?.find(
-        (item) => item.slug === "u-channel-1-2"
-      );
-    } else if (
-      selectedContent?.glassType?.thickness === thicknessTypes.THREEBYEIGHT
-    ) {
-      active = listData?.mountingChannel?.find(
-        (item) => item.slug === "u-channel-3-8"
-      );
-    }
+    if(listData){
+      if (selectedContent?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
+        active = listData?.mountingChannel?.find(
+          (item) => item.slug === "u-channel-1-2"
+        );
+      } else if (
+        selectedContent?.glassType?.thickness === thicknessTypes.THREEBYEIGHT
+      ) {
+        active = listData?.mountingChannel?.find(
+          (item) => item.slug === "u-channel-3-8"
+        );
+      }
+    }    
     return active;
-  }, [selectedContent?.glassType?.thickness]);
+  }, [selectedContent?.glassType?.thickness,listData]);
   /** end */
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {

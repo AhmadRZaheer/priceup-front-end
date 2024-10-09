@@ -7,13 +7,14 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { backendURL } from "@/utilities/common";
 import { useDispatch, useSelector } from "react-redux";
 import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 import {
   addSelectedItem,
   getProjectId,
+  getQuoteState,
   resetNotifications,
   // initializeStateForCreateQuote,
   // initializeStateForCustomQuote,
@@ -30,6 +31,7 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import { CheckCircle, Close } from "@mui/icons-material";
 import icon from "../../../Assets/search-icon.svg";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { EstimateCategory } from "@/utilities/constants";
 
 export const ShowerLayouts = () => {
   const boxStyles = {
@@ -50,11 +52,18 @@ export const ShowerLayouts = () => {
     cursor: "pointer",
   };
 
-  const { data: layouts, isFetched, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
+  const {
+    data: layouts,
+    isFetched,
+    refetch,
+  } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
   const selectedData = useSelector(selectedItem);
-  const projectId = useSelector(getProjectId);
+  const quoteState = useSelector(getQuoteState);
+  const projectId = searchParams.get("projectId");
+  // const projectId = useSelector(getProjectId);
 
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
@@ -77,15 +86,6 @@ export const ShowerLayouts = () => {
     dispatch(setQuoteState("create"));
     setselectCustom(false);
   };
-  const setStorePage = () => {
-    dispatch(resetNotifications());
-    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
-    dispatch(setDoorWidth(0));
-    navigate("/estimates/dimensions");
-    // if (selectCustom) {
-    //     dispatch(setNavigationDesktop("custom"));
-    // } else dispatch(setNavigationDesktop("measurements"));
-  };
   const [selectCustom, setselectCustom] = useState(false);
   const handleselectcustom = () => {
     // dispatch(initializeStateForCustomQuote());
@@ -93,6 +93,22 @@ export const ShowerLayouts = () => {
     dispatch(setQuoteState("custom"));
     setselectCustom(true);
   };
+  const setStorePage = () => {
+    dispatch(resetNotifications());
+    dispatch(updateMeasurements([])); // reset measurement array on shifting layout
+    dispatch(setDoorWidth(0));
+    navigate(
+      `/estimates/dimensions?category=${
+        EstimateCategory.SHOWERS
+      }&projectId=${projectId}&quoteState=${quoteState}&layoutId=${
+        selectedData?._id ?? null
+      }`
+    );
+    // if (selectCustom) {
+    //     dispatch(setNavigationDesktop("custom"));
+    // } else dispatch(setNavigationDesktop("measurements"));
+  };
+
   // const handleBack = () => {
   //     dispatch(setNavigationDesktop("existing"));
   // };
@@ -143,7 +159,7 @@ export const ShowerLayouts = () => {
               fontSize: "24px",
               textAlign: { xs: "start", sm: "center" },
               fontWeight: 600,
-              mb: {sm: 1}
+              mb: { sm: 1 },
             }}
             // variant="h4"
           >

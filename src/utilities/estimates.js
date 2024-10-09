@@ -666,8 +666,8 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
   return result;
 };
 
-export const setStateForShowerEstimate = (item, dispatch, navigate) => {
-  // if (item?.category === EstimateCategory.SHOWERS) {
+export const setStateForShowerEstimate = (item, dispatch, navigate,flag=true) => {
+   // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -696,7 +696,12 @@ export const setStateForShowerEstimate = (item, dispatch, navigate) => {
   if (result?.returnWeight) {
     dispatch(setReturnWeight(result?.returnWeight));
   }
-  navigate("/estimates/dimensions");
+  // navigate(`/estimates/dimensions`);
+  if(flag){
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
+    );
+  }
   // }
 };
 

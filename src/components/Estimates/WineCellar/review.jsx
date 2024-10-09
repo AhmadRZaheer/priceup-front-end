@@ -14,7 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 // import ChannelTypeDesktop from "./channelorClamp";
 import { calculateTotal } from "@/utilities/common";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   EstimateCategory,
   inputLength,
@@ -132,6 +132,7 @@ export const generateEstimatePayload = (
 
 const Review = ({ setStep }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
@@ -145,14 +146,16 @@ const Review = ({ setStep }) => {
   const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
   const listData = useSelector(getWineCellarsHardware);
   const estimatesTotal = useSelector(getTotal);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const measurements = useSelector(getMeasurements);
   const perimeter = useSelector(getLayoutPerimeter);
   const doorWidthredux = useSelector(getDoorWidth);
   const doorQuantity = useSelector(getDoorQuantity);
   const quoteId = useSelector(getQuoteId);
   const sqftArea = useSelector(getLayoutArea);
-  const currentQuoteState = useSelector(getEstimateState);
+  const currentQuoteState = searchParams.get("estimateState");
+  // const currentQuoteState = useSelector(getEstimateState);
   const selectedContent = useSelector(getContent);
   const selectedData = useSelector(selectedItem);
   const addedFields = useSelector(getAdditionalFields);

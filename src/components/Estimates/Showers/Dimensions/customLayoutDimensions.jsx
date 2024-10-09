@@ -14,6 +14,7 @@ import CustomImage from "@/Assets/customlayoutimage.svg";
 import { KeyboardArrowLeft, NoEncryption } from "@mui/icons-material";
 import {
   getContent,
+  getListData,
   getMeasurementSide,
   getProjectId,
   getQuoteState,
@@ -32,13 +33,15 @@ import {
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import { inputLength, layoutVariants, quoteState } from "@/utilities/constants";
-import { calculateAreaAndPerimeter } from "@/utilities/common";
+import { backendURL, calculateAreaAndPerimeter } from "@/utilities/common";
 import DeleteIcon from "@mui/icons-material/Delete";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import AlertsAndWarnings from "../AlertsAndWarnings";
+import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
+import { setStateForShowerEstimate } from "@/utilities/estimates";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -54,13 +57,19 @@ const isThereHigherKeyAvailable = (values, iterator) => {
 };
 
 export const CustomLayoutDimensions = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get("projectId");
   const isMobile = useMediaQuery("(max-width: 600px)");
   const estimateState = useSelector((state) => state.estimateCalculations);
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
-  const currentQuoteState = useSelector(getQuoteState);
+  // const currentQuoteState = useSelector(getQuoteState);
+  const currentQuoteState = searchParams.get("quoteState");
+  const category = searchParams.get("category");
   const selectedData = useSelector(selectedItem);
-  const projectId = useSelector(getProjectId);
+  const estimateId = searchParams.get("estimateId");
+  const listData = useSelector(getListData)
+  // const projectId = useSelector(getProjectId);
   const customInitalValues = {
     [0]: {
       count: 1,
@@ -69,11 +78,13 @@ export const CustomLayoutDimensions = ({ setStep }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   console.log(measurements, "measurements");
-  const [values, setValues] = useState(
-    Object.keys(measurements)?.length
-      ? { ...measurements }
-      : { ...customInitalValues }
+  const [values, setValues] = useState({ ...customInitalValues }
   );
+  useEffect(() => {
+    if (Object.keys(measurements)?.length) {
+      setValues({ ...measurements });
+    }
+  }, [measurements]);
   console.log(values, "val");
   const rows = Object.keys(values).map((key) => parseInt(values[key]) || 1);
 
@@ -99,6 +110,45 @@ export const CustomLayoutDimensions = ({ setStep }) => {
   //         dispatch(setNavigationDesktop("existing"));
   //     }
   // };
+
+  const {
+    data: record,
+    refetch: refetchRecord,
+    isLoading: getLoading,
+  } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+  
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (estimateId && estimateId?.length) {
+        refetchRecord();
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [estimateId])
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (record) {
+        setStateForShowerEstimate(record,dispatch,navigate,false);        
+      } else {
+        if (record === null) {
+          if (projectId && projectId?.length) {
+            navigate(`/projects/${projectId}`);
+          } else {
+            navigate(`/estimates`);
+          }
+        }
+      }
+    }
+  }, [record]);
+
+
+
   const handleSubmit = () => {
     // const measurementsArray = Object.keys(values)
     //   .map((k) => values[k])
@@ -188,18 +238,18 @@ export const CustomLayoutDimensions = ({ setStep }) => {
   });
 
   useEffect(() => {
-    if (currentQuoteState === quoteState.CUSTOM) {
+    if (currentQuoteState === quoteState.CUSTOM && selectedData && listData) {
       dispatch(initializeStateForCustomQuote());
-    } else if (currentQuoteState === quoteState.EDIT) {
+    } else if (currentQuoteState === quoteState.EDIT && selectedData && listData) {
       dispatch(
         initializeStateForEditQuote({
           estimateData: selectedData,
-          quotesId: selectedData._id,
+          quotesId: selectedData?._id,
         })
       );
     }
     return () => {};
-  }, []);
+  }, [selectedData, listData]);
 
   return (
     <>
@@ -653,7 +703,7 @@ export const CustomLayoutDimensions = ({ setStep }) => {
                       ? projectId
                         ? `/projects/${projectId}`
                         : "/estimates"
-                      : "/estimates/layouts"
+                      : `/estimates/layouts?category=${category}&projectId=${projectId}`
                   }
                 >
                   <Button

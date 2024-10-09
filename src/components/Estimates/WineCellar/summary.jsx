@@ -43,8 +43,10 @@ import { getCustomerDetail, getEstimateCategory, getEstimateState, getProjectId 
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import { getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
 import { calculateTotal } from "@/utilities/common";
+import { useSearchParams } from "react-router-dom";
 
 const Summary = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
@@ -63,10 +65,12 @@ const Summary = ({ setStep }) => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurements);
   const selectedData = useSelector(selectedItem);
-  const quoteState = useSelector(getEstimateState);
+  // const quoteState = useSelector(getEstimateState);
+  const quoteState = searchParams.get("estimateState");
   const sqftArea = useSelector(getLayoutArea);
   const [anchorEl, setAnchorEl] = useState(null);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const selectedCategory = useSelector(getEstimateCategory);
   const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
   const customerData = useSelector(getCustomerDetail);
@@ -700,7 +704,7 @@ const Summary = ({ setStep }) => {
                         <Typography className="text-xs-ragular-bold" mb={1}>
                           Additional Fields
                         </Typography>
-                        {selectedContent.additionalFields.map(
+                        {selectedContent?.additionalFields?.map(
                           (item) =>
                             item.label !== "" && (
                               <Box

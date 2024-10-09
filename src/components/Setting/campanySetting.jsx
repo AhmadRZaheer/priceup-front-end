@@ -137,18 +137,18 @@ const CampanySetting = () => {
         // sandBlastingMultiplier: settingData?.mirrors?.sandBlastingMultiplier,
         // bevelStrip: settingData?.mirrors?.bevelStrip,
         // safetyBacking: settingData?.mirrors?.safetyBacking,
-        holeMultiplier: settingData?.mirrors?.holeMultiplier,
+        holeMultiplier: settingData?.mirrors?.holeMultiplier ?? 0,
         // outletMultiplier: settingData?.mirrors?.outletMultiplier,
-        lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier,
-        notchMultiplier: settingData?.mirrors?.notchMultiplier,
+        lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier ?? 0,
+        notchMultiplier: settingData?.mirrors?.notchMultiplier ?? 0,
         singleOutletCutoutMultiplier:
-          settingData?.mirrors?.singleOutletCutoutMultiplier,
+          settingData?.mirrors?.singleOutletCutoutMultiplier ?? 0,
         doubleOutletCutoutMultiplier:
-          settingData?.mirrors?.doubleOutletCutoutMultiplier,
+          settingData?.mirrors?.doubleOutletCutoutMultiplier ?? 0,
         tripleOutletCutoutMultiplier:
-          settingData?.mirrors?.tripleOutletCutoutMultiplier,
+          settingData?.mirrors?.tripleOutletCutoutMultiplier ?? 0,
         quadOutletCutoutMultiplier:
-          settingData?.mirrors?.quadOutletCutoutMultiplier,
+          settingData?.mirrors?.quadOutletCutoutMultiplier ?? 0,
         // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,

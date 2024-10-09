@@ -10,7 +10,7 @@ import CustomImage from "@/Assets/customlayoutimage.svg";
 
 import { useDispatch, useSelector } from "react-redux";
 import { inputLength, inputMaxValue, quoteState } from "@/utilities/constants";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { getEstimateState } from "@/redux/estimateSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
@@ -24,6 +24,7 @@ import {
   setEstimateMeasurements,
   setMultipleNotifications,
   setSandBlasting,
+  setSelectedItem,
   setSqftArea,
 } from "@/redux/mirrorsEstimateSlice";
 import {
@@ -36,6 +37,8 @@ import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { MirrorReview } from "./review";
 import Summary from "./summary";
 import AlertsAndWarnings from "./AlertsAndWarnings";
+import { useFetchSingleDocument } from "@/utilities/ApiHooks/common";
+import { backendURL } from "@/utilities/common";
 
 const getNearestSmallerKeyWithValues = (values, itrator) => {
   let itr = itrator;
@@ -49,19 +52,67 @@ const getNearestSmallerKeyWithValues = (values, itrator) => {
 export const MirrorDimensions = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const estimateId = searchParams.get("estimateId");
   // const mirrorLocationSettings = useSelector(getLocationMirrorSettings);
   const measurements = useSelector(getEstimateMeasurements);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const currentEstimateState = useSelector(getEstimateState);
+  // const currentEstimateState = useSelector(getEstimateState);
+  const currentEstimateState = searchParams.get("estimateState");
   const selectedItem = useSelector(getSelectedItem);
   const selectedContent = useSelector(getSelectedContent);
   const notifications = useSelector(getNotifications);
   const mirrorsHardware = useSelector(getMirrorsHardware);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
   // console.log(measurements, "measurements");
+
+  const {
+    data: record,
+    refetch: refetchRecord,
+    isLoading: getLoading,
+  } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+  console.log(estimateId, "estimateIdestimateId");
+
+  useEffect(() => {
+    if (currentEstimateState === quoteState.EDIT) {
+      if (estimateId && estimateId?.length) {
+        refetchRecord();
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [estimateId]);
+  useEffect(() => {
+    if (currentEstimateState === quoteState.EDIT) {
+      if (record) {
+        dispatch(setSelectedItem(record));
+        dispatch(setEstimateMeasurements(record?.config?.measurements));
+        dispatch(
+          initializeStateForEditQuote({
+            estimateData: record,
+            hardwaresList: mirrorsHardware,
+          })
+        );
+      } else {
+        if (record === null) {
+          if (projectId && projectId?.length) {
+            navigate(`/projects/${projectId}`);
+          } else {
+            navigate(`/estimates`);
+          }
+        }
+      }
+    }
+  }, [record]);
+
   const customInitalValues = {
     [0]: {
       count: 1,
@@ -69,12 +120,17 @@ export const MirrorDimensions = () => {
   };
 
   const [values, setValues] = useState(
-    Object.keys(measurements)?.length
-      ? { ...measurements }
-      : { ...customInitalValues }
+    // Object.keys(measurements)?.length
+    //   ? { ...measurements }
+    //   :
+    { ...customInitalValues }
   );
+  useEffect(() => {
+    if (Object.keys(measurements)?.length) {
+      setValues({ ...measurements });
+    }
+  }, [measurements]);
 
-  console.log(values, "val");
   const rows = Object.keys(values).map((key) => parseInt(values[key]) || 1);
 
   const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
@@ -117,18 +173,6 @@ export const MirrorDimensions = () => {
     }
     // navigate("/estimates/review");
   };
-
-  useEffect(() => {
-    if (currentEstimateState === quoteState.EDIT) {
-      dispatch(
-        initializeStateForEditQuote({
-          estimateData: selectedItem,
-          hardwaresList: mirrorsHardware,
-        })
-      );
-    }
-    return () => {};
-  }, []);
 
   return (
     <Box
@@ -183,7 +227,7 @@ export const MirrorDimensions = () => {
                   ? projectId
                     ? `/projects/${projectId}`
                     : "/estimates"
-                  : "/estimates/layouts"
+                  : `/projects/${projectId}`
               }
               style={{
                 textDecoration: "none",
@@ -243,7 +287,13 @@ export const MirrorDimensions = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  <Typography sx={{fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important'  }}>
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 700,
+                      fontFamily: '"Roboto", sans-serif !important',
+                    }}
+                  >
                     Layout & Measurement
                   </Typography>
                   <AlertsAndWarnings />
@@ -382,7 +432,7 @@ export const MirrorDimensions = () => {
                                       width: e.target.value,
                                     },
                                   }));
-                                }                                
+                                }
                               }}
                             />
                           </Box>
@@ -405,7 +455,7 @@ export const MirrorDimensions = () => {
                               name={`aHeight${index}`}
                               className="custom-textfield-purple"
                               InputProps={{
-                                inputProps: { min: 0,},
+                                inputProps: { min: 0 },
                               }}
                               placeholder="0"
                               style={{
@@ -432,7 +482,7 @@ export const MirrorDimensions = () => {
                                       height: e.target.value,
                                     },
                                   }));
-                                }                              
+                                }
                               }}
                             />
                           </Box>
@@ -460,7 +510,7 @@ export const MirrorDimensions = () => {
                                   className="custom-textfield-purple"
                                   name={`Count${index}`}
                                   InputProps={{
-                                    inputProps: { min: 1}
+                                    inputProps: { min: 1 },
                                   }}
                                   value={values[index]?.count || ""}
                                   placeholder="quantity"
@@ -476,7 +526,7 @@ export const MirrorDimensions = () => {
                                           count: parseInt(e.target.value),
                                         },
                                       }));
-                                    }                                   
+                                    }
                                   }}
                                 />
                               </Box>
@@ -652,7 +702,7 @@ export const MirrorDimensions = () => {
             sx={{
               // flexGrow: 1
               width: { lg: "40%", md: "50%" },
-              pr:'1px'
+              pr: "1px",
             }}
           >
             <MirrorReview />
@@ -986,32 +1036,35 @@ export const MirrorDimensions = () => {
                       gap: 1,
                     }}
                   >
-                   {(currentEstimateState === quoteState.CREATE || isMobile) && <NavLink
-                      to={
-                        currentEstimateState === quoteState.EDIT
-                          ? projectId
-                            ? `/projects/${projectId}`
-                            : "/estimates"
-                          : `/projects/${projectId}`
-                      }
-                    >
-                      <Button
-                        sx={{
-                          width: { xs: 120, sm: 180 },
-                          color: "black",
-                          border: "1px solid black",
-                          fontSize: 18,
-                          // ml: 2,
-                          backgroundColor: "white",
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        // onClick={handleBack}
+                    {(currentEstimateState === quoteState.CREATE ||
+                      isMobile) && (
+                      <NavLink
+                        to={
+                          currentEstimateState === quoteState.EDIT
+                            ? projectId
+                              ? `/projects/${projectId}`
+                              : "/estimates"
+                            : `/projects/${projectId}`
+                        }
                       >
-                        {" "}
-                        Back
-                      </Button>
-                    </NavLink>}
+                        <Button
+                          sx={{
+                            width: { xs: 120, sm: 180 },
+                            color: "black",
+                            border: "1px solid black",
+                            fontSize: 18,
+                            // ml: 2,
+                            backgroundColor: "white",
+                          }}
+                          fullWidth
+                          variant="outlined"
+                          // onClick={handleBack}
+                        >
+                          {" "}
+                          Back
+                        </Button>
+                      </NavLink>
+                    )}
                     <Button
                       onClick={handleSubmit}
                       type="button"

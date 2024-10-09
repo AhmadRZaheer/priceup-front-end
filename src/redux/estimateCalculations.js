@@ -13,6 +13,7 @@ import {
   // getHardwareFabricationQuantity,
   getHardwareSpecificFabrication,
 } from "../utilities/hardwarefabrication";
+import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
 export const getContent = (state) => state.estimateCalculations.content;
 export const getAdditionalFields = (state) =>
   state.estimateCalculations.content.additionalFields;
@@ -369,6 +370,17 @@ const estimateCalcSlice = createSlice({
         //     (finish) => finish.finish_id === item._id
         //   )?.status;
         // }
+        const notificationsResult = generateNotificationsForCurrentEstimate(
+          {
+            ...state,
+            content: {
+              ...state.content,
+              hardwareFinishes:item,
+            },
+          },
+          state.content.glassType.thickness
+        );       
+        state.notifications = notificationsResult.notifications;
         state.content = {
           ...state.content,
           [type]: item,
@@ -1254,14 +1266,14 @@ const estimateCalcSlice = createSlice({
     initializeStateForCustomQuote: (state, action) => {
       let notifications = state.notifications;
       let hardwareFinishes = null;
-      hardwareFinishes = state.listData?.hardwareFinishes?.find(
-        (item) => item.slug === "polished-chrome"
-      );
+      // hardwareFinishes = state.listData?.hardwareFinishes?.find(
+      //   (item) => item.slug === "polished-chrome"
+      // );
 
       let glassType = null;
-      glassType = state.listData?.glassType?.find(
-        (item) => item.slug === "clear"
-      );
+      // glassType = state.listData?.glassType?.find(
+      //   (item) => item.slug === "clear"
+      // );
 
       let glassAddons = null;
       glassAddons = state.listData?.glassAddons?.find(
@@ -1395,7 +1407,7 @@ const estimateCalcSlice = createSlice({
       //     channelItem = state.listData?.mountingChannel?.find((item)=>item.slug === 'u-channel-1-2');
       //   }
       // }
-      const noGlassAddon = state.listData.glassAddons?.find(
+      const noGlassAddon = state?.listData?.glassAddons?.find(
         (item) => item.slug === "no-treatment"
       );
 
@@ -1499,8 +1511,8 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
+      
       const { estimateData, quotesId } = action.payload;
-
       state.quoteId = quotesId;
 
       let hardwareFinishes = null;
@@ -1620,12 +1632,12 @@ const estimateCalcSlice = createSlice({
         );
         return { item: found, count: row.count };
       });
-      const noGlassAddon = state.listData.glassAddons?.find(
+      const noGlassAddon = state.listData?.glassAddons?.find(
         (item) => item.slug === "no-treatment"
       );
-      const measurements = estimateData.config.measurements.map(
-        ({ _id, ...rest }) => rest
-      );
+      // const measurements = estimateData.config.measurements.map(
+      //   ({ _id, ...rest }) => rest
+      // );
       state.content = {
         ...state.content,
         hardwareFinishes: hardwareFinishes,
@@ -1653,14 +1665,14 @@ const estimateCalcSlice = createSlice({
         },
 
         mountingClamps: {
-          wallClamp: [...wallClampArray],
-          sleeveOver: [...sleeveOverArray],
-          glassToGlass: [...glassToGlassArray],
+          wallClamp: wallClampArray ? [...wallClampArray] : [],
+          sleeveOver: sleeveOverArray ? [...sleeveOverArray] :[],
+          glassToGlass: glassToGlassArray? [...glassToGlassArray] :[],
         },
         cornerClamps: {
-          cornerWallClamp: [...cornerWallClampArray],
-          cornerSleeveOver: [...cornerSleeveOverArray],
-          cornerGlassToGlass: [...cornerGlassToGlassArray],
+          cornerWallClamp: cornerWallClampArray ? [...cornerWallClampArray] : [],
+          cornerSleeveOver: cornerSleeveOverArray? [...cornerSleeveOverArray]: [],
+          cornerGlassToGlass: cornerGlassToGlassArray?  [...cornerGlassToGlassArray] : [],
         },
         mountingChannel: {
           item: channelItem || null,
@@ -1684,15 +1696,15 @@ const estimateCalcSlice = createSlice({
         polish: estimateData?.config?.polish,
         // sleeveOverCount: estimateData?.sleeveOverCount,
         // towelBarsCount: estimateData?.towelBarsCount,
-        hardwareAddons: [...hardwareAddons],
+        hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
         userProfitPercentage: estimateData?.config?.userProfitPercentage,
         additionalFields: estimateData?.config?.additionalFields,
       };
       state.quoteState = quoteState.EDIT;
       // state.measurements = measurements;
-      state.perimeter = estimateData.config.perimeter;
-      state.sqftArea = estimateData.config.sqftArea;
-      state.selectedItem = estimateData;
+      state.perimeter = estimateData?.config?.perimeter;
+      state.sqftArea = estimateData?.config?.sqftArea;
+      // state.selectedItem = estimateData;
       state.doorWidth = estimateData?.config?.doorWidth || 0;
     },
   },

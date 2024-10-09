@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   EstimateCategory,
   inputLength,
@@ -126,6 +126,7 @@ export const generateEstimatePayload = (
 
 export const MirrorReview = ({ setStep }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
@@ -140,9 +141,11 @@ export const MirrorReview = ({ setStep }) => {
   const hardwaresList = useSelector(getMirrorsHardware);
   const measurements = useSelector(getEstimateMeasurements);
   const estimateId = useSelector(getEstimateId);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const sqftArea = useSelector(getSqftArea);
-  const currentEstimateState = useSelector(getEstimateState);
+  // const currentEstimateState = useSelector(getEstimateState);
+  const currentEstimateState = searchParams.get("estimateState");
   const notifications = useSelector(getNotifications);
   const selectedContent = useSelector(getSelectedContent);
   const pricing = useSelector(getPricing);

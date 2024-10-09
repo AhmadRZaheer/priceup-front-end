@@ -2,7 +2,7 @@ import { quoteState } from "@/utilities/constants";
 import { useSelector } from "react-redux";
 // import { CustomLayoutDimensions } from "./Dimensions/customLayoutDimensions";
 import { Box, useMediaQuery } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import {
   // getWineProjectId,
@@ -14,10 +14,15 @@ import Review from "./review";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
 import { SimpleLayoutDimensions } from "./Dimensions/simpleLayoutDimensions";
 
-export const WineCellarDimensions = () => {
-  const activeQuoteState = useSelector(getEstimateState);
+export const WineCellarDimensions = () => {  
+  const [searchParams] = useSearchParams();
+  const activeQuoteState = searchParams.get("estimateState");
+  // const activeQuoteState = useSelector(getEstimateState);
   const item = useSelector(selectedItem);
-  const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  const layoutId = searchParams.get("layoutId");  
+  const category = searchParams.get("category");
+  // const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
 
@@ -48,7 +53,7 @@ export const WineCellarDimensions = () => {
                   ? projectId
                     ? `/projects/${projectId}`
                     : "/estimates"
-                  : "/estimates/layouts"
+                  : `/estimates/layouts?category=${category}&projectId=${projectId}`
               }
             >
               <Box
@@ -76,7 +81,7 @@ export const WineCellarDimensions = () => {
                     ? projectId
                       ? `/projects/${projectId}`
                       : "/estimates"
-                    : "/estimates/layouts"
+                    : `/estimates/layouts?category=${category}&projectId=${projectId}`
                 }
                 style={{
                   textDecoration: "none",
@@ -112,7 +117,7 @@ export const WineCellarDimensions = () => {
             >
               {activeQuoteState === quoteState.CREATE ||
               (activeQuoteState === quoteState.EDIT &&
-                item?.config?.layout_id) ? (
+                layoutId && layoutId !== 'null') ? (
                 <SimpleLayoutDimensions />
               ) : //  activeQuoteState === quoteState.CUSTOM ||
               //   (activeQuoteState === quoteState.EDIT &&
@@ -135,7 +140,7 @@ export const WineCellarDimensions = () => {
             {step === 0 &&
               (activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT &&
-                  item?.config?.layout_id)) && (
+                  layoutId && layoutId !== 'null')) && (
                 <SimpleLayoutDimensions setStep={setStep} />
               )}
             {/* {step === 0 &&

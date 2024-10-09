@@ -258,7 +258,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   const laborPrice =
    ( selectedContent?.people *
     selectedContent?.hours) *
-    estimatesData?.miscPricing?.hourlyRate;
+    (estimatesData?.miscPricing?.hourlyRate ?? 0);
   
   //additionalField price
   let additionalFieldPrice = 0;
@@ -283,7 +283,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     (laborPrice + doorLaborPrice);
     // + additionalFieldPrice;
   // additonal fields sum
-  if (selectedContent.additionalFields.length > 0) {
+  if (selectedContent?.additionalFields?.length > 0) {
     total += selectedContent.additionalFields.reduce(
       (acc, item) =>
         acc +
@@ -337,7 +337,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     additionalFieldPrice: additionalFieldPrice,
     total: total,
     cost: cost,
-    profit: ((total - cost) * 100) / total,
+    profit:total > 0 ?  ((total - cost) * 100) / total : 0,
   };
 };
 

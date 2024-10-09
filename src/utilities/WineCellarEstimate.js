@@ -266,7 +266,10 @@ export const setStateForWineCellarEstimate = (item, dispatch, navigate) => {
   if (result?.backWallGlassWeight) {
     dispatch(setBackWallGlassWeight(result?.backWallGlassWeight));
   }
-  navigate("/estimates/dimensions");
+  if(navigate){
+    // navigate("/estimates/dimensions");
+    navigate(`/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`)
+  }
 };
 
 export const showEditButtonForWineEstimateStatus = (decryptedToken) => {

@@ -8,20 +8,23 @@ import {
   selectedItem,
 } from "@/redux/estimateCalculations";
 import { Box, Typography, useMediaQuery } from "@mui/material";
-import { NavLink } from "react-router-dom";
+import { NavLink, useSearchParams } from "react-router-dom";
 import { ShowerReview } from "./review";
 // import Summary from "./summary_dep";
 import { useState } from "react";
 import Summary from "./summary";
 
 export const ShowerDimensions = () => {
-  const activeQuoteState = useSelector(getQuoteState);
-  const item = useSelector(selectedItem);
-  const projectId = useSelector(getProjectId);
-  // const currentQuoteState = useSelector(getQuoteState);
+  const [searchParams] = useSearchParams();
+  const activeQuoteState = searchParams.get("quoteState");
+  // const activeQuoteState = useSelector(getQuoteState);
+  // const item = useSelector(selectedItem);
+  const layoutId = searchParams.get("layoutId");
+  const projectId = searchParams.get("projectId");
+  const category = searchParams.get("category");
+  // const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
-  console.log(step, "step");
   return (
     <Box>
       <Box
@@ -51,7 +54,7 @@ export const ShowerDimensions = () => {
                   ? projectId
                     ? `/projects/${projectId}`
                     : "/estimates"
-                  : "/estimates/layouts"
+                  : `/estimates/layouts?category=${category}&projectId=${projectId}`
               }
             >
               <Box
@@ -81,7 +84,7 @@ export const ShowerDimensions = () => {
                     ? projectId
                       ? `/projects/${projectId}`
                       : "/estimates"
-                    : "/estimates/layouts"
+                    : `/estimates/layouts?category=${category}&projectId=${projectId}`
                 }
                 style={{
                   textDecoration: "none",
@@ -120,11 +123,11 @@ export const ShowerDimensions = () => {
             >
               {activeQuoteState === quoteState.CREATE ||
               (activeQuoteState === quoteState.EDIT &&
-                item?.config?.layout_id) ? (
+                layoutId && layoutId !== 'null') ? (
                 <SimpleLayoutDimensions />
               ) : activeQuoteState === quoteState.CUSTOM ||
                 (activeQuoteState === quoteState.EDIT &&
-                  !item?.config?.layout_id) ? (
+                  layoutId === 'null') ? (
                 <CustomLayoutDimensions />
               ) : null}
               <Summary />
@@ -143,13 +146,13 @@ export const ShowerDimensions = () => {
             {step === 0 &&
               (activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT &&
-                  item?.config?.layout_id)) && (
+                  layoutId && layoutId !== 'null')) && (
                 <SimpleLayoutDimensions setStep={setStep} />
               )}
             {step === 0 &&
               (activeQuoteState === quoteState.CUSTOM ||
                 (activeQuoteState === quoteState.EDIT &&
-                  !item?.config?.layout_id)) && (
+                  layoutId === 'null')) && (
                 <CustomLayoutDimensions setStep={setStep} />
               )}
             {step === 1 && <ShowerReview setStep={setStep} />}

@@ -21,8 +21,16 @@ import {
   setMirrorProjectId,
 } from "@/redux/mirrorsEstimateSlice";
 import DefaultIcon from "@/Assets/columns.svg";
-import { resetNotifications as resetNotificationsShower, resetState, setShowerProjectId } from "@/redux/estimateCalculations";
-import { resetNotifications as resetNotificationsWineCaller, resetWineCellarEstimateState, setWineCellarProjectId } from "@/redux/wineCellarEstimateSlice";
+import {
+  resetNotifications as resetNotificationsShower,
+  resetState,
+  setShowerProjectId,
+} from "@/redux/estimateCalculations";
+import {
+  resetNotifications as resetNotificationsWineCaller,
+  resetWineCellarEstimateState,
+  setWineCellarProjectId,
+} from "@/redux/wineCellarEstimateSlice";
 
 const style = {
   position: "absolute",
@@ -80,19 +88,25 @@ export default function ChooseEstimateCategoryModal({
       dispatch(resetNotificationsShower());
       dispatch(setShowerProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
-      navigate("/estimates/layouts");
-    } else if(category === EstimateCategory.WINECELLARS){
+      navigate(
+        `/estimates/layouts?category=${EstimateCategory.SHOWERS}&projectId=${projectId}`
+      );
+    } else if (category === EstimateCategory.WINECELLARS) {
       dispatch(resetNotificationsWineCaller());
       // dispatch(setWineCellarProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.WINECELLARS));
-      navigate("/estimates/layouts");
-    }
-    else {
+      navigate(
+        `/estimates/layouts?category=${EstimateCategory.WINECELLARS}&projectId=${projectId}`
+      );
+    } else {
       // mirrors
       dispatch(resetNotificationsMirror());
       dispatch(setMirrorProjectId(projectId));
       dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-      navigate("/estimates/dimensions");
+      // navigate(`/estimates/dimensions`);
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${projectId}&estimateState=create`
+      );
     }
   };
 
@@ -100,9 +114,9 @@ export default function ChooseEstimateCategoryModal({
     <>
       <Modal
         open={open}
-        onClose={()=>{
+        onClose={() => {
           handleClose();
-          setCategory('');
+          setCategory("");
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -113,7 +127,7 @@ export default function ChooseEstimateCategoryModal({
         }}
       >
         <Box sx={style}>
-          <Stack direction='column' gap='4px'>
+          <Stack direction="column" gap="4px">
             <Box
               sx={{
                 display: "flex",
@@ -125,7 +139,7 @@ export default function ChooseEstimateCategoryModal({
                   fontSize: "18px",
                   fontWeight: 700,
                   lineHeight: "21.09px",
-                  fontFamily: '"Roboto",sans-serif !important'
+                  fontFamily: '"Roboto",sans-serif !important',
                 }}
               >
                 Create Estimate
@@ -142,7 +156,7 @@ export default function ChooseEstimateCategoryModal({
                 fontWeight: 600,
                 lineHeight: "21.86px",
                 color: "#212528",
-                opacity: '70%',
+                opacity: "70%",
                 // pt: 0.5,
               }}
             >
@@ -183,7 +197,13 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    color: "#FFFFFF",
+                    lineHeight: "21.86px",
+                  }}
+                >
                   Showers
                 </Typography>
               </Box>
@@ -212,7 +232,13 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    color: "#FFFFFF",
+                    lineHeight: "21.86px",
+                  }}
+                >
                   Mirrors
                 </Typography>
               </Box>
@@ -225,7 +251,9 @@ export default function ChooseEstimateCategoryModal({
                       ? "rgba(184, 184, 185, 1)"
                       : "#8477DA",
                   color:
-                    category !== EstimateCategory.WINECELLARS ? "black" : "white",
+                    category !== EstimateCategory.WINECELLARS
+                      ? "black"
+                      : "white",
                   width: "213px",
                   height: "243px",
                 }}
@@ -241,7 +269,13 @@ export default function ChooseEstimateCategoryModal({
                   src={DefaultIcon}
                   alt="Selected"
                 />
-                <Typography sx={{ fontSize: "16px", color: "#FFFFFF", lineHeight: '21.86px' }}>
+                <Typography
+                  sx={{
+                    fontSize: "16px",
+                    color: "#FFFFFF",
+                    lineHeight: "21.86px",
+                  }}
+                >
                   Wine Cellar
                 </Typography>
               </Box>
@@ -250,9 +284,9 @@ export default function ChooseEstimateCategoryModal({
           <Box sx={{ display: "flex", justifyContent: "end", gap: "10px" }}>
             <Button
               variant="outlined"
-              onClick={()=>{
+              onClick={() => {
                 handleClose();
-                setCategory('')
+                setCategory("");
               }}
               sx={{
                 mr: 1,
