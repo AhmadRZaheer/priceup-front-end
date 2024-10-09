@@ -135,11 +135,16 @@ export const calculateTotal = (
   //glassAddons
   let glassAddonsPrice = 0;
   selectedContent?.glassAddons?.forEach((item) => {
+    console.log(item)
     let price = 0;
     if (item?.options?.length) {
       price = item?.options[0]?.cost || 0;
     }
-    glassAddonsPrice = glassAddonsPrice + price * sqftArea;
+    glassAddonsPrice = glassAddonsPrice + price;
+    if(!['floating-small','floating-large','floating-medium'].includes(item?.slug)){
+      glassAddonsPrice *= sqftArea;
+    }
+    // glassAddonsPrice = glassAddonsPrice + price * sqftArea;
   });
 
   console.log(glassAddonsPrice, "glass Addons price");
