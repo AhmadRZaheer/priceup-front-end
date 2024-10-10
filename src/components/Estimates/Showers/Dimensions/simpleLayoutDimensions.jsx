@@ -75,8 +75,10 @@ import {
 import AlertsAndWarnings from "../AlertsAndWarnings";
 import { Flag } from "@mui/icons-material";
 import { setStateForShowerEstimate } from "@/utilities/estimates";
+import { getSkeltonState } from "@/redux/estimateSlice";
+import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
 
-export const SimpleLayoutDimensions = ({ setStep }) => {
+export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -84,18 +86,19 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const layoutId = searchParams.get("layoutId");
   const estimateId = searchParams.get("estimateId");
   const [selectedLayout, setSelectedLayout] = useState(null);
-  const estimateState = useSelector((state) => state.estimateCalculations);
+  const estimateState = useSelector((state) => state.estimateCalculations);  
+  const skeltonState = useSelector(getSkeltonState);
   const listData = useSelector(getListData);
   // const projectId = useSelector(getProjectId);
   const projectId = searchParams.get("projectId");
     const category = searchParams.get("category");
   // const currentQuoteState = useSelector(getQuoteState);
   const currentQuoteState = searchParams.get("quoteState");
-  const {
-    data: layouts,
-    isLoading: loading,
-    refetch,
-  } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
+  // const {
+  //   data: layouts,
+  //   isLoading: loading,
+  //   refetch,
+  // } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   // const setHandleEstimatesPages = (item) => {
   //   dispatch(setNavigationDesktop(item));
   // };
@@ -103,19 +106,19 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
 
-  const {
-    data: record,
-    refetch: refetchRecord,
-    isLoading: getLoading,
-  } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+  // const {
+  //   data: record,
+  //   refetch: refetchRecord,
+  //   isLoading: getLoading,
+  // } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
 
   useEffect(() => {
     if (currentQuoteState === quoteState.EDIT) {
       if (estimateId && estimateId?.length) {
-        refetchRecord();
+        recordData.refetchRecord();
       } else {
         if (projectId && projectId?.length) {
-          navigate(`/projects/${projectId}`);
+          navigate(`/projects/${projectId}?category=${category}`);
         } else {
           navigate(`/estimates`);
         }
@@ -125,44 +128,44 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
 
   useEffect(() => {
     if (currentQuoteState === quoteState.EDIT) {
-      if (record) {
-        setStateForShowerEstimate(record, dispatch, navigate, false);
+      if (recordData?.record) {
+        setStateForShowerEstimate(recordData?.record, dispatch, navigate, false);
       } else {
-        if (record === null) {
+        if (recordData?.record === null) {
           if (projectId && projectId?.length) {
-            navigate(`/projects/${projectId}`);
+            navigate(`/projects/${projectId}?category=${category}`);
           } else {
             navigate(`/estimates`);
           }
         }
       }
     }
-  }, [record]);
+  }, [recordData?.record]);
 
   useEffect(() => {
     if (
-      layouts &&
-      layouts.length &&
+      layoutData?.layouts &&
+      layoutData?.layouts.length &&
       layoutId &&
       layoutId.length &&
       currentQuoteState === quoteState.CREATE
     ) {
       console.log("WEEERTWEEE");
-      const layoutData = layouts?.find((item) => item._id === layoutId);
-      if (layoutData) {
+      const layoutsData = layoutData?.layouts?.find((item) => item._id === layoutId);
+      if (layoutsData) {
         if (selectedLayout === null) {
-          setSelectedLayout(layoutData);
-          dispatch(addSelectedItem(layoutData));
+          setSelectedLayout(layoutsData);
+          dispatch(addSelectedItem(layoutsData));
         }
       } else {
         if (projectId && projectId?.length) {
-          navigate(`/projects/${projectId}`);
+          navigate(`/projects/${projectId}?category=${category}`);
         } else {
           navigate(`/estimates`);
         }
       }
     }
-  }, [layouts, layoutId, selectedLayout]);
+  }, [layoutData?.layouts, layoutId, selectedLayout]);
 
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSides = useSelector(getMeasurementSide);
@@ -187,7 +190,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     useState(doorWidthFromredux);
   const handleLayoutChange = (event) => {
     const id = event.target.value;
-    const selectedItem = layouts?.find((item) => item._id === id);
+    const selectedItem = layoutData?.layouts?.find((item) => item._id === id);
     if (selectedItem) {
       const searchParams = new URLSearchParams(location.search);
       searchParams.set("layoutId", id);
@@ -354,14 +357,22 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         })
       );
     }
-    if (currentQuoteState === quoteState.CREATE) {
-      refetch();
-    }
+    // if (currentQuoteState === quoteState.CREATE) {
+    //   layoutData.refetch();
+    // }
     return () => {};
   }, [selectedData, listData]);
 
+  useEffect(()=>{
+    if (currentQuoteState === quoteState.CREATE) {
+      layoutData.refetch();
+    }
+  },[])
+
   return (
     <>
+    { skeltonState || recordData.estimateFetcing  ||  layoutData.isFetching ?  <LayoutMeasurementSkeleton /> : 
+    (  <>
       <form onSubmit={formik.handleSubmit}>
         <Box
           sx={{
@@ -520,7 +531,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           },
                         }}
                       >
-                        {layouts?.map((item) => (
+                        {layoutData?.layouts?.map((item) => (
                           <MenuItem
                             key={`key-${item.name}`}
                             value={item._id}
@@ -813,7 +824,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     to={
                       currentQuoteState === quoteState.EDIT
                         ? projectId
-                          ? `/projects/${projectId}`
+                          ? `/projects/${projectId}?category=${category}`
                           : "/estimates"
                         : `/estimates/layouts?category=${category}&projectId=${projectId}`
                     }
@@ -872,6 +883,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
           </Box>
         </Box>
       </form>
+    </> )}
     </>
   );
 };

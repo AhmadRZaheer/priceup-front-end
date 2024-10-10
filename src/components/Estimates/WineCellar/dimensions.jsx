@@ -1,9 +1,9 @@
 import { quoteState } from "@/utilities/constants";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { CustomLayoutDimensions } from "./Dimensions/customLayoutDimensions";
 import { Box, useMediaQuery } from "@mui/material";
 import { NavLink, useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   // getWineProjectId,
   // getWineQuoteState,
@@ -11,20 +11,55 @@ import {
 } from "@/redux/wineCellarEstimateSlice";
 import Summary from "./summary";
 import Review from "./review";
-import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import {
+  getEstimateState,
+  getProjectId,
+  getSkeltonState,
+  setSkeltonState,
+} from "@/redux/estimateSlice";
 import { SimpleLayoutDimensions } from "./Dimensions/simpleLayoutDimensions";
+import {
+  useFetchAllDocuments,
+  useFetchSingleDocument,
+} from "@/utilities/ApiHooks/common";
+import { backendURL } from "@/utilities/common";
+import ModificationSkeleton from "@/components/estimateSkelton/ModificationSkeleton";
+import EstimateDetailSkeleton from "@/components/estimateSkelton/EstimateDetailSkeleton";
 
-export const WineCellarDimensions = () => {  
+export const WineCellarDimensions = () => {
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const activeQuoteState = searchParams.get("estimateState");
   // const activeQuoteState = useSelector(getEstimateState);
   const item = useSelector(selectedItem);
   const projectId = searchParams.get("projectId");
-  const layoutId = searchParams.get("layoutId");  
+  const layoutId = searchParams.get("layoutId");
   const category = searchParams.get("category");
   // const projectId = useSelector(getProjectId);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
+  const estimateId = searchParams.get("estimateId");
+  const skeltonState = useSelector(getSkeltonState);
+
+  const {
+    data: layouts,
+    refetch,
+    isSuccess: layoutSuccess,
+    isFetching,
+  } = useFetchAllDocuments(`${backendURL}/wineCellars/layouts/for-estimate`);
+
+  const {
+    data: record,
+    refetch: refetchRecord,
+    isSuccess: estimateSuccess,
+    isFetching: estimateFetcing,
+  } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+
+  useEffect(() => {
+    if (estimateSuccess || layoutSuccess) {
+      dispatch(setSkeltonState());
+    }
+  }, [estimateSuccess, layoutSuccess]);
 
   return (
     <Box>
@@ -51,7 +86,7 @@ export const WineCellarDimensions = () => {
               to={
                 activeQuoteState === quoteState.EDIT
                   ? projectId
-                    ? `/projects/${projectId}`
+                    ? `/projects/${projectId}?category=${category}`
                     : "/estimates"
                   : `/estimates/layouts?category=${category}&projectId=${projectId}`
               }
@@ -117,22 +152,35 @@ export const WineCellarDimensions = () => {
             >
               {activeQuoteState === quoteState.CREATE ||
               (activeQuoteState === quoteState.EDIT &&
-                layoutId && layoutId !== 'null') ? (
-                <SimpleLayoutDimensions />
+                layoutId &&
+                layoutId !== "null") ? (
+                <SimpleLayoutDimensions
+                  layoutData={{ layouts, refetch, isFetching }}
+                  recordData={{ record, refetchRecord, estimateFetcing }}
+                />
               ) : //  activeQuoteState === quoteState.CUSTOM ||
               //   (activeQuoteState === quoteState.EDIT &&
               //     !item?.config?.layout_id) ? (
               //   <CustomLayoutDimensions />
               // ) :
               null}
-              <Summary />
+              {skeltonState || estimateFetcing || isFetching
+              ? (
+                <EstimateDetailSkeleton />
+              ) : (
+                <Summary />
+              )}
             </Box>
             <Box
               sx={{
                 width: { lg: "40%", md: "50%" },
               }}
             >
-              <Review />
+              {skeltonState || estimateFetcing || isFetching ? (
+                <ModificationSkeleton />
+              ) : (
+                <Review />
+              )}
             </Box>
           </Box>
         ) : (
@@ -140,8 +188,13 @@ export const WineCellarDimensions = () => {
             {step === 0 &&
               (activeQuoteState === quoteState.CREATE ||
                 (activeQuoteState === quoteState.EDIT &&
-                  layoutId && layoutId !== 'null')) && (
-                <SimpleLayoutDimensions setStep={setStep} />
+                  layoutId &&
+                  layoutId !== "null")) && (
+                <SimpleLayoutDimensions
+                  setStep={setStep}
+                  layoutData={{ layouts, refetch, isFetching }}
+                  recordData={{ record, refetchRecord, estimateFetcing }}
+                />
               )}
             {/* {step === 0 &&
               (activeQuoteState === quoteState.CUSTOM ||

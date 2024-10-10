@@ -43,6 +43,7 @@ export const WineCallerLayouts = () => {
   const [searchParams] = useSearchParams();
   const selectedData = useSelector(selectedItem);
   const projectId = searchParams.get("projectId");
+  const category = searchParams.get("category");
   // const projectId = useSelector(getProjectId);
   const iphoneSe = useMediaQuery("(max-width: 375px)");
   const iphone14Pro = useMediaQuery("(max-width: 430px)");
@@ -94,7 +95,7 @@ export const WineCallerLayouts = () => {
             marginTop: { sm: 0, xs: 8 },
           }}
         >
-          <NavLink to={`/projects/${projectId}`}>
+          <NavLink to={`/projects/${projectId}?category=${category}`}>
             <Box
               sx={{
                 display: { xs: "block", sm: "none" },
@@ -309,7 +310,7 @@ export const WineCallerLayouts = () => {
             bgcolor: { sm: "white", xs: "#08061B" },
           }}
         >
-          <NavLink to={`/projects/${projectId}`}>
+          <NavLink to={`/projects/${projectId}?category=${category}`}>
             <Button
               sx={{
                 width: { xs: 120, sm: 260 },

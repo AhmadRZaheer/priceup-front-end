@@ -3,12 +3,14 @@ export const getEstimateCategory = (state) => state.estimate.estimateCategory;
 export const getEstimateState = (state) => state.estimate.estimateState;
 export const getProjectId = (state) => state.estimate.projectId;
 export const getCustomerDetail = (state) => state.estimate.customerDetail;
+export const getSkeltonState = (state) => state.estimate.skeltonState;
 
 const initialState = {
   estimateCategory: "", // 'showers' || 'mirrors'
   estimateState: "", // 'create' || 'edit'
   projectId: "",
-  customerDetail : null,
+  customerDetail: null,
+  skeltonState: true,
 };
 
 const estimateSlice = createSlice({
@@ -18,7 +20,7 @@ const estimateSlice = createSlice({
     resetEstimateState: (state) => {
       return {
         ...initialState,
-       customerDetail: state.customerDetail
+        customerDetail: state.customerDetail,
       };
     },
     setEstimateCategory: (state, actions) => {
@@ -36,10 +38,19 @@ const estimateSlice = createSlice({
     setCustomerDetail: (state, actions) => {
       state.customerDetail = actions.payload;
     },
+    setSkeltonState: (state) => {
+      state.skeltonState = false;
+    },
   },
 });
 
-export const { setEstimateCategory, setEstimateState, resetEstimateState, setProjectId,setCustomerDetail } =
-  estimateSlice.actions;
+export const {
+  setEstimateCategory,
+  setEstimateState,
+  resetEstimateState,
+  setProjectId,
+  setCustomerDetail,
+  setSkeltonState,
+} = estimateSlice.actions;
 
 export default estimateSlice.reducer;

@@ -63,6 +63,7 @@ export const ShowerLayouts = () => {
   const selectedData = useSelector(selectedItem);
   const quoteState = useSelector(getQuoteState);
   const projectId = searchParams.get("projectId");
+  const category = searchParams.get("category");
   // const projectId = useSelector(getProjectId);
 
   const iphoneSe = useMediaQuery("(max-width: 375px)");
@@ -139,7 +140,7 @@ export const ShowerLayouts = () => {
             marginTop: { sm: 0, xs: 8 },
           }}
         >
-          <NavLink to={`/projects/${projectId}`}>
+          <NavLink to={`/projects/${projectId}?category=${category}`}>
             <Box
               // onClick={handleBack}
               sx={{
