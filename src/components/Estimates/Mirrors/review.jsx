@@ -150,6 +150,7 @@ export const MirrorReview = ({ setStep }) => {
   const selectedContent = useSelector(getSelectedContent);
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
+  const category = searchParams.get("category");
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
@@ -195,7 +196,7 @@ export const MirrorReview = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}`);
+      navigate(`/projects/${projectId}?category=${category}`);
     } else {
       navigate("/estimates");
     }

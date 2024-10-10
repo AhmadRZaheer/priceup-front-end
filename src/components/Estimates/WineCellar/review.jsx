@@ -160,6 +160,7 @@ const Review = ({ setStep }) => {
   const selectedData = useSelector(selectedItem);
   const addedFields = useSelector(getAdditionalFields);
   const isCustomizedDoorWidth = useSelector(getisCustomDoorWidth);
+  const category = searchParams.get("category");
 
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -216,7 +217,7 @@ const Review = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}`);
+      navigate(`/projects/${projectId}?category=${category}`);
     } else {
       navigate("/estimates");
     }
@@ -224,7 +225,6 @@ const Review = ({ setStep }) => {
 
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
-    console.log(allGoodStatus, "Estimate Status");
     if (allGoodStatus) {
       if ([quoteState.CREATE, quoteState.CUSTOM].includes(currentQuoteState)) {
         const estimateConfig = generateEstimatePayload(

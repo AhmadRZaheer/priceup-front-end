@@ -239,6 +239,7 @@ export const ShowerReview = ({ setStep }) => {
   const notifications = useSelector(getNotifications);
   const addedFields = useSelector(getAdditionalFields);
   const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
+  const category = searchParams.get("category");
   const { enqueueSnackbar } = useSnackbar();
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -359,7 +360,7 @@ export const ShowerReview = ({ setStep }) => {
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       if (projectId) {
-        navigate(`/projects/${projectId}`);
+        navigate(`/projects/${projectId}?category=${category}`);
       } else {
         navigate("/estimates");
       }

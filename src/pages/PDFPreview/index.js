@@ -31,7 +31,7 @@ const PDFPreview = ({ handleClickClose }) => {
       handleClickClose();
     } else {
       if (quote?.projectId) {
-        navigate(`/projects/${quote?.projectId}`);
+        navigate(`/projects/${quote?.projectId}?category=${quote?.category}`);
       } else {
         navigate("/estimates");
       }

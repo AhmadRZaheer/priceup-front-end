@@ -24,12 +24,12 @@ import {
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Add, Close } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
-import { projectStatus } from "@/utilities/constants";
+import { EstimateCategory, projectStatus } from "@/utilities/constants";
 import AddressSelect from "./AddressSelect";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
@@ -52,6 +52,9 @@ const ProjectInfoComponent = ({
   projectState = "create",
   projectData = null,
 }) => {
+  const [searchParams] = useSearchParams();
+  const selectedTab = searchParams.get('category');
+  const tabValue = selectedTab === null ? EstimateCategory.SHOWERS : selectedTab ;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -85,17 +88,17 @@ const ProjectInfoComponent = ({
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const navigate = useNavigate();
-  const [activeTabNumber, setActiveTabNumber] = useState(0); // 0 for showers, 1 for mirrors
+  const [activeTabNumber, setActiveTabNumber] = useState(EstimateCategory.SHOWERS); // 0 for showers, 1 for mirrors
   const handleChange = (event, newValue) => {
     console.log(newValue, "sdsdsdsdsd");
-    setActiveTabNumber(newValue);
+    navigate(`/projects/${projectData?._id}?category=${newValue}`)
+    // setActiveTabNumber(newValue);
   };
   // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
   // const handleChange = (event, newValue) => {
   //   localStorage.setItem("activeTab", newValue);
   //   setActiveTabNumber(newValue); // Update the state to force re-render
   // };
-
   const formik = useFormik({
     initialValues: {
       name: projectName,
@@ -799,7 +802,9 @@ const ProjectInfoComponent = ({
                   disabled={
                     !selectedCustomer ||
                     !selectedAddress ||
-                    projectName?.length < 4 || updateLoading || createLoading
+                    projectName?.length < 4 ||
+                    updateLoading ||
+                    createLoading
                   }
                   variant="contained"
                 >
@@ -972,7 +977,7 @@ const ProjectInfoComponent = ({
             {/** Tabs Switch */}
             <Grid sx={{ px: 1, pb: 1 }}>
               <Tabs
-                value={activeTabNumber}
+                value={tabValue}
                 onChange={handleChange}
                 aria-label="basic tabs example"
                 sx={{
@@ -988,7 +993,6 @@ const ProjectInfoComponent = ({
                     background: "#FFFF",
                     borderRadius: "4px",
                     p: "7px 12px",
-                    // minWidth:'79px',
                     height: "40px",
                     minHeight: "36px",
                   },
@@ -1001,33 +1005,33 @@ const ProjectInfoComponent = ({
                 <Tab
                   className="categoryTab"
                   label="Showers"
-                  sx={{
-                    minWidth: "70px",
-                  }}
-                  {...a11yProps(0)}
+                  value={EstimateCategory.SHOWERS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.SHOWERS)}
                 />
                 <Tab
                   className="categoryTab"
                   label="Mirrors"
-                  sx={{
-                    minWidth: "70px",
-                  }}
-                  {...a11yProps(1)}
+                  value={EstimateCategory.MIRRORS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.MIRRORS)}
                 />
                 <Tab
                   className="categoryTab"
                   label="Wine Cellar"
-                  sx={{
-                    minWidth: "70px",
-                  }}
-                  {...a11yProps(2)}
+                  value={EstimateCategory.WINECELLARS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.WINECELLARS)}
                 />
               </Tabs>
             </Grid>
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <CustomTabPanel value={activeTabNumber} index={0}>
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.SHOWERS}
+            >
               <ShowerEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1036,7 +1040,10 @@ const ProjectInfoComponent = ({
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
-            <CustomTabPanel value={activeTabNumber} index={1}>
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.MIRRORS}
+            >
               <MirrorEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1045,7 +1052,10 @@ const ProjectInfoComponent = ({
               />
             </CustomTabPanel>
             {/** Wine Cellar tab */}
-            <CustomTabPanel value={activeTabNumber} index={2}>
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.WINECELLARS}
+            >
               <WineCellarEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
