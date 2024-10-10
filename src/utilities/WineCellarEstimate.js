@@ -1,6 +1,7 @@
 import { setEstimateCategory, setEstimateState, setProjectId } from "@/redux/estimateSlice";
 import {
   EstimateCategory,
+  hardwareTypes,
   layoutVariants,
   // notificationsVariant,
   // panelOverWeightAmount,
@@ -289,4 +290,94 @@ export const showEditButtonForWineEstimateStatus = (decryptedToken) => {
     default:
       return false;
   }
+};
+
+
+// Wine Cellar Fab
+
+export const getHardwareFabricationQuantity = (
+  selectedContent
+) => {
+  let oneInchHoles = 0;
+  let hingeCut = 0;
+  // for handles
+  if (selectedContent.handles?.item) {
+    const handleResult = getHandleFabrication(
+      selectedContent.handles?.item,
+      selectedContent.handles?.count
+    );
+    oneInchHoles += handleResult.oneInchHoles;
+    hingeCut += handleResult.hingeCut;
+  }
+  // for hinges
+  if (selectedContent.hinges?.item) {
+    const hingeResult = getHingeFabrication(
+      selectedContent.hinges?.item,
+      selectedContent.hinges?.count
+    );
+    oneInchHoles += hingeResult.oneInchHoles;
+    hingeCut += hingeResult.hingeCut;
+  }
+  // for door lock
+  if (selectedContent.doorLock?.item) {
+    const doorLockResult = getGenericFabrication(
+      selectedContent.doorLock?.item,
+      selectedContent.doorLock?.count
+    );
+    oneInchHoles += doorLockResult.oneInchHoles;
+    hingeCut += doorLockResult.hingeCut;
+  }
+  // for mounting channel
+  if (
+    selectedContent.mountingState === hardwareTypes.CHANNEL &&
+    selectedContent.mountingChannel?.item
+  ) {
+    const mountingChannelResult = getGenericFabrication(
+      selectedContent.mountingChannel.item,
+      selectedContent.mountingChannel.count
+    );
+    oneInchHoles += mountingChannelResult.oneInchHoles;
+    hingeCut += mountingChannelResult.hingeCut;
+  } 
+
+  return { oneInchHoles, hingeCut};
+};
+
+
+export const getHandleFabrication = (item, count) => {
+  let oneInchHoles = 0;
+  let hingeCut = 0;
+  let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 2;
+
+  oneInchHoles = count * selectedItemHoles;
+  let selectedItemhingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 0;
+
+  hingeCut = count * selectedItemhingeCut;
+  return { oneInchHoles, hingeCut };
+};
+
+export const getHingeFabrication = (item, count) => {
+  let oneInchHoles = 0;
+  let hingeCut = 0;
+  let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 0;
+
+  oneInchHoles = count * selectedItemHoles;
+  let selectedItemHingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 1;
+
+  hingeCut = count * selectedItemHingeCut;
+
+  return { oneInchHoles, hingeCut};
+};
+
+export const getGenericFabrication = (item, count) => {
+  let oneInchHoles = 0;
+  let hingeCut = 0;
+
+  let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 0;
+
+  oneInchHoles = count * selectedItemHoles;
+  let selectedItemHingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 0;
+
+  hingeCut = count * selectedItemHingeCut;
+   return { oneInchHoles, hingeCut, };
 };

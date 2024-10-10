@@ -30,7 +30,6 @@ import {
   thicknessTypes,
 } from "@/utilities/constants";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
 import {
   NavLink,
@@ -77,7 +76,7 @@ import {
   getSkeltonState,
 } from "@/redux/estimateSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
+import { getHardwareFabricationQuantity, setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
 import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
 
 export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
@@ -282,16 +281,14 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
         result?.panelWeight && result?.panelWeight > panelOverWeightAmount
           ? thicknessTypes.ONEBYTWO
           : glassThickness
-      );
+      );     
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-      if (currentQuoteState === quoteState.CREATE) {
+       if (currentQuoteState === quoteState.CREATE) {        
         const fabricationValues = getHardwareFabricationQuantity(
-          { ...notificationsResult.selectedContent, glassThickness },
-          currentQuoteState,
-          selectedData
-        );
+          { ...notificationsResult.selectedContent, glassType:{...notificationsResult.selectedContent.glassType,thickness:glassThickness}  },
+          );      
         dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
-      }
+      }      
       if (isMobile) {
         setStep(1);
       }
