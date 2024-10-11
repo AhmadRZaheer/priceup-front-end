@@ -102,6 +102,16 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
   const wineCellarsHardware = useSelector(getWineCellarsHardware);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const skeltonState = useSelector(getSkeltonState);
+
+  const handleBack = () => {
+    dispatch(setisCustomizedDoorWidth(false));
+    dispatch(setDoorQuantity(1));
+    navigate( currentQuoteState === quoteState.EDIT
+      ? projectId
+        ? `/projects/${projectId}?category=${category}`
+        : "/estimates"
+      : `/estimates/layouts?category=${category}&projectId=${projectId}`)
+  }
   // const {
   //   data: layouts,
   //   isLoading: loading,
@@ -657,11 +667,13 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                           // ].includes(selectedData?.settings?.variant)}
                           type="checkbox"
                           onChange={() =>
-                            dispatch(
+                            {dispatch(
                               setisCustomizedDoorWidth(
                                 !isCustomizedDoorWidthRedux
                               )
-                            )
+                            );
+                            dispatch(setDoorQuantity(1));
+                          }
                           }
                           checked={isCustomizedDoorWidthRedux}
                           style={{
@@ -884,16 +896,17 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                 >
                   <Box sx={{ display: "block" }}>
                     {(currentQuoteState === quoteState.CREATE || isMobile) && (
-                      <NavLink
-                        to={
-                          currentQuoteState === quoteState.EDIT
-                            ? projectId
-                              ? `/projects/${projectId}?category=${category}`
-                              : "/estimates"
-                            : `/estimates/layouts?category=${category}&projectId=${projectId}`
-                        }
-                      >
+                      // <NavLink
+                      //   to={
+                      //     currentQuoteState === quoteState.EDIT
+                      //       ? projectId
+                      //         ? `/projects/${projectId}?category=${category}`
+                      //         : "/estimates"
+                      //       : `/estimates/layouts?category=${category}&projectId=${projectId}`
+                      //   }
+                      // >
                         <Button
+                          onClick = {handleBack}
                           sx={{
                             width: { xs: 120, sm: 150 },
                             color: "black",
@@ -911,7 +924,7 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                         >
                           Back
                         </Button>
-                      </NavLink>
+                      // </NavLink>
                     )}
                   </Box>
                   <Button

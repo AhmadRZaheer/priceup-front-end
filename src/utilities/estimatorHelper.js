@@ -799,7 +799,7 @@ const getGlassThicknessShiftNotification = (
     //set notification
     const glassThicknessSwitch = {
       status: true,
-      variant: notificationsVariant.INFO,
+      variant: notificationsVariant.WARNING,
       message: `Glass thickness switched from ${thicknessTypes.THREEBYEIGHT} to ${thicknessTypes.ONEBYTWO}`,
     };
     // set glass thickness
