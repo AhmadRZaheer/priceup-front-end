@@ -770,7 +770,7 @@ const getSwitchHingeNotification = (
         // set Notification
       const hingesSwitch = {
         status: true,
-        variant: notificationsVariant.WARNING,
+        variant: notificationsVariant.INFO,
         message: `Hinges switched from heavy to standard`,
       };
       // Unselect content from slice
