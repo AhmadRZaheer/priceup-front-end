@@ -60,7 +60,7 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
 import {
   getCustomerDetail,
   getEstimateCategory,
@@ -103,6 +103,7 @@ const Summary = ({ setStep }) => {
   // const selectedCategory = useSelector(getEstimateCategory);
   const selectedCategory = searchParams.get("category");
   const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const showerEstimateState = useSelector(
     (state) => state.estimateCalculations
   );
@@ -149,6 +150,7 @@ const Summary = ({ setStep }) => {
         measurements: measurementString,
         pricing,
         id,
+        pdfSettings,
       })
     );
   };

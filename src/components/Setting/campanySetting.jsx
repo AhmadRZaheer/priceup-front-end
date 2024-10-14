@@ -178,6 +178,13 @@ const CampanySetting = () => {
               ?.hingeCutoutThreeByEightInch || 0,
         },
       },
+      pdfSettings: {
+        cost: settingData?.pdfSettings?.cost,       
+        hours: settingData?.pdfSettings?.hours,       
+        labor: settingData?.pdfSettings?.labor,       
+        people: settingData?.pdfSettings?.people,       
+        profit: settingData?.pdfSettings?.profit,       
+      },
     },
     enableReinitialize: true,
     validationSchema: validationSchema,
@@ -429,6 +436,22 @@ const CampanySetting = () => {
               onClick={() => handleChange(2)}
             >
               Wine Cellar
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 3 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(3)}
+            >
+              Pdf Settings
             </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -1787,6 +1810,250 @@ const CampanySetting = () => {
                     }
                   }}
                 />
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        {/** Pdf Setting tab */}
+        <CustomTabPanel value={value} index={3}>
+          {/* <Box
+            sx={{
+              // borderTop: "1px solid #EAECF0",
+              // borderBottom: "1px solid #EAECF0",
+              // paddingTop: 0,
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          > */}
+            {/* <Typography variant="h6">Max Door Width</Typography> */}
+            {/* <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Max Door Width</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">
+                  Door width value must be in range between 1-39{" "}
+                </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.doorWidth"
+                  size="small"
+                  value={formik.values?.wineCellars?.doorWidth}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 2) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                  inputProps={{
+                    min: 1,
+                    max: 39,
+                    step: "any",
+                    style: { width: "200px" },
+                  }}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    Boolean(formik.errors?.wineCellars?.doorWidth)
+                  }
+                  helperText={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    formik.errors?.wineCellars?.doorWidth
+                  }
+                />
+              </Box>
+            </Box> */}
+          {/* </Box> */}
+          {/* <Box
+            sx={{
+              borderTop: "1px solid #EAECF0",
+              borderBottom: "1px solid #EAECF0",
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="h6">Misc. Pricing</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Pricing factor</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">Factor to multiply price </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.pricingFactor"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.pricingFactor}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+
+                <Box sx={{ ml: 2 }}>
+                  <CustomToggle
+                    name="wineCellars.miscPricing.pricingFactorStatus"
+                    checked={
+                      formik.values?.wineCellars?.miscPricing
+                        ?.pricingFactorStatus || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Default Hourly rate</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.hourlyRate"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.hourlyRate}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+                <FormControlLabel
+                  sx={{ visibility: "hidden" }}
+                  control={<Switch color="success" />}
+                  label={"active"}
+                />
+              </Box>
+            </Box>
+          </Box> */}
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Pdf Settings
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              // maxHeight: "38vh",
+              // overflowY: "scroll",
+              pt: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>People</Typography>
+              <Box mr={19}>
+                  <CustomToggle
+                    name="pdfSettings.people"
+                    checked={
+                      formik.values?.pdfSettings?.people || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hours</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.hours"
+                    checked={
+                      formik.values?.pdfSettings?.hours || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Labor Price</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.labor"
+                    checked={
+                      formik.values?.pdfSettings?.labor || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Profit</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.profit"
+                    checked={
+                      formik.values?.pdfSettings?.profit || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Actual Cost</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.cost"
+                    checked={
+                      formik.values?.pdfSettings?.cost || false
+                    }
+                    onChange={formik.handleChange}
+                  />
               </Box>
             </Box>
           </Box>

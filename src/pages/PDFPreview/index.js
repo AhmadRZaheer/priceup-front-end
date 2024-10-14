@@ -47,8 +47,7 @@ const PDFPreview = ({ handleClickClose }) => {
   console.log(
     quote,
     "quote",
-    new Date(quote?.updatedAt)?.toLocaleDateString(),
-    quote?.glassType?.item?.name
+    location
   );
   return (
     <Box

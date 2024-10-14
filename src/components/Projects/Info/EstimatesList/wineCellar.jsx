@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
-import { getLocationWineCellarSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import {
@@ -47,6 +47,7 @@ const WineCellarEstimatesList = ({
   const navigate = useNavigate();
   const wineCellarHardwareList = useSelector(getWineCellarsHardware);
   const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const useStyles = makeStyles({
     overflowText: {
       maxWidth: "115px",
@@ -125,6 +126,7 @@ const WineCellarEstimatesList = ({
         doorWeight,
         panelWeight,
         returnWeight,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);

@@ -26,7 +26,7 @@ import {
 } from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getLocationMirrorSettings } from "@/redux/locationSlice";
+import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
@@ -43,6 +43,7 @@ const MirrorEstimatesList = ({
   const [page, setPage] = useState(1);
   const mirrorsHardwareList = useSelector(getMirrorsHardware);
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const useStyles = makeStyles({
@@ -124,6 +125,7 @@ const MirrorEstimatesList = ({
         measurements: measurementString,
         pricing,
         id,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);

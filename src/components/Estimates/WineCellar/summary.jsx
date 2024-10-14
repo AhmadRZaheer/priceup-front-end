@@ -41,7 +41,7 @@ import {
 } from "@/redux/wineCellarEstimateSlice";
 import { getCustomerDetail, getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
 import { calculateTotal } from "@/utilities/common";
 import { useSearchParams } from "react-router-dom";
 
@@ -73,6 +73,7 @@ const Summary = ({ setStep }) => {
   const projectId = searchParams.get("projectId");
   const selectedCategory = useSelector(getEstimateCategory);
   const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const customerData = useSelector(getCustomerDetail);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
@@ -110,6 +111,7 @@ const Summary = ({ setStep }) => {
         measurements: measurementString,
         pricing,
         id,
+        pdfSettings,
       })
     );
   };

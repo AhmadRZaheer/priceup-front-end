@@ -30,7 +30,7 @@ import {
   getSqftArea,
   setModifiedProfitPercentage,
 } from "@/redux/mirrorsEstimateSlice";
-import { getLocationMirrorSettings } from "@/redux/locationSlice";
+import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useState } from "react";
@@ -66,6 +66,7 @@ const Summary = ({ setStep }) => {
   const selectedCategory = searchParams.get("category");
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   const customerData = useSelector(getCustomerDetail);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -108,6 +109,7 @@ const Summary = ({ setStep }) => {
         measurements: measurementString,
         pricing,
         id,
+        pdfSettings,
       })
     );
   };

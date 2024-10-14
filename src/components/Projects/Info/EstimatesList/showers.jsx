@@ -40,7 +40,7 @@ import {
   renderMeasurementSides,
   setStateForShowerEstimate,
 } from "@/utilities/estimates";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
@@ -59,6 +59,7 @@ const ShowerEstimatesList = ({
   const navigate = useNavigate();
   const showersHardwareList = useSelector(getListData);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const useStyles = makeStyles({
     overflowText: {
       maxWidth: "115px",
@@ -124,6 +125,7 @@ const ShowerEstimatesList = ({
         ...formattedData,
         measurements: measurementString,
         pricing,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);
