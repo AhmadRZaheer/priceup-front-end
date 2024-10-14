@@ -1,26 +1,24 @@
 import AlertMessage from "@/components/ui-components/AlertMessage";
 import { Badge, Box, Button, Popover, Typography } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import AlertIcon from "@/Assets/alert-circle.svg";
 import { useSelector } from "react-redux";
 import "./alertAnimation.scss";
 import { severityColor } from "@/utilities/constants";
 import { getNotifications } from "@/redux/wineCellarEstimateSlice";
 
-const AlertsAndWarnings = () => {
-  const [anchorEl, setAnchorEl] = useState(null);
+const AlertsAndWarnings = ({openPopoverExternally,setOpenPopover}) => {
   const notifications = useSelector(getNotifications);
+  // const [anchorEl, setAnchorEl] = useState(null);
+  // const handleClickPopover = (event) => {
+  //   setAnchorEl(event.currentTarget);
+  // };
+  // const handleClosePopover = () => {
+  //   setAnchorEl(null);
+  // };
+  // const alertPopoverOpen = Boolean(anchorEl);
+  // const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
 
-  const handleClickPopover = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClosePopover = () => {
-    setAnchorEl(null);
-  };
-
-  const alertPopoverOpen = Boolean(anchorEl);
-  const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
   const notificationsAvailableStatus = useMemo(() => {
     let response = { status: false, count: 0 };
     for (const [key, value] of Object.entries(notifications)) {
@@ -41,10 +39,28 @@ const AlertsAndWarnings = () => {
     return response;
   }, [notifications]);
 
+  const buttonRef = useRef(null); // Ref for the button in the child
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false)
+
+  const togglePopover = () => {
+      setIsPopoverOpen((prev) => !prev);
+    };
+  
+    // Open popover when triggered externally from the parent
+    useEffect(() => {
+      if (openPopoverExternally && notificationsAvailableStatus?.count > 0) {
+          setIsPopoverOpen(true); 
+          setTimeout(() => {
+              setIsPopoverOpen(false)
+              setOpenPopover(false)
+          }, 3000);
+      }    
+    }, [openPopoverExternally,notificationsAvailableStatus]);
+
   return (
     <>
       <Badge
-        badgeContent={notificationsAvailableStatus?.count}
+        badgeContent={notificationsAvailableStatus?.count} 
         color="primary"
         sx={{
           "& .MuiBadge-badge": {
@@ -59,6 +75,7 @@ const AlertsAndWarnings = () => {
         }}
       >
         <Button
+          ref={buttonRef}
           variant="outlined"
           className={
             notificationsAvailableStatus?.status
@@ -90,8 +107,8 @@ const AlertsAndWarnings = () => {
               }`,
             },
           }}
-          aria-describedby={alertPopoverid}
-          onClick={handleClickPopover}
+          // aria-describedby={alertPopoverid}
+          onClick={togglePopover}
         >
           <img
             width={20}
@@ -111,10 +128,9 @@ const AlertsAndWarnings = () => {
         </Button>
       </Badge>
       <Popover
-        id={alertPopoverid}
-        open={alertPopoverOpen}
-        anchorEl={anchorEl}
-        onClose={handleClosePopover}
+       open={isPopoverOpen }
+       anchorEl={buttonRef.current}
+        onClose={togglePopover}
         anchorOrigin={{
           vertical: "bottom",
           horizontal: "right",

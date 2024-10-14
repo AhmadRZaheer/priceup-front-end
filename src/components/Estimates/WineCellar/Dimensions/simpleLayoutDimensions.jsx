@@ -234,6 +234,9 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
     ),
   });
   // console.log(initialValues, "initialValuesinitialValues");
+
+  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
+ 
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -298,7 +301,9 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
           { ...notificationsResult.selectedContent, glassType:{...notificationsResult.selectedContent.glassType,thickness:glassThickness}  },
           );      
         dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
-      }      
+      }  
+
+        setOpenPopover(true) 
       if (isMobile) {
         setStep(1);
       }
@@ -440,7 +445,7 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                 >
                   Layout & Measurement
                 </Typography>
-                <AlertsAndWarnings />
+                <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover}  />
               </Box>
               <Box
                 sx={{

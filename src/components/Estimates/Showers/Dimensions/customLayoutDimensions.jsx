@@ -154,6 +154,8 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
     }
   }, [recordData?.record]);
 
+  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
+
   const handleSubmit = () => {
     // const measurementsArray = Object.keys(values)
     //   .map((k) => values[k])
@@ -212,6 +214,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
     if (isMobile) {
       setStep(1);
     }
+      setOpenPopover(true)
     // navigate("/estimates/review");
     // dispatch(setNavigation("review"));
     // dispatch(setNavigationDesktop("review"));
@@ -293,7 +296,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                 <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
                   Layout & Measurement
                 </Typography>
-                <AlertsAndWarnings />
+                <AlertsAndWarnings  openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
               </Box>
               <Box
                 sx={{

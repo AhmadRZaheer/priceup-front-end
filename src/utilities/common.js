@@ -1224,3 +1224,33 @@ export const getLocaleDateTimeFromMongoTimestamp = (timestamp) => {
   // Format the date and time
   return date.toLocaleString('en-US', options);
 }
+export const notificationsAvailable = (notifications)=>{
+  let response = { status: false, count: 0 };
+  for (const [key, value] of Object.entries(notifications)) {
+      if (
+          [
+              "glassAddonsNotAvailable",
+              "hardwareAddonsNotAvailable",
+              "wallClampNotAvailable",
+              "sleeveOverNotAvailable",
+              "glassToGlassNotAvailable",
+              "cornerWallClampNotAvailable",
+              "cornerSleeveOverNotAvailable",
+              "cornerGlassToGlassNotAvailable",
+          ].includes(key)
+      ) {
+          for (const item of value) {
+              if (item.status) {
+                  response.status = true;
+                  response.count += 1;
+              }
+          }
+      } else {
+          if (value.status) {
+              response.status = true;
+              response.count += 1;
+          }
+      }
+  }
+  return response;
+}

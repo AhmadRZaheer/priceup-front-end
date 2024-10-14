@@ -5,7 +5,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -170,6 +170,8 @@ export const MirrorDimensions = () => {
     // setNumRows(customInitalValues.count);
   };
 
+  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
+ 
   const handleSubmit = () => {
     dispatch(resetNotifications());
     dispatch(setEstimateMeasurements(values));
@@ -186,7 +188,8 @@ export const MirrorDimensions = () => {
       selectedContent,
       notifications
     );
-    dispatch(setMultipleNotifications(notificationsResult));
+    dispatch(setMultipleNotifications(notificationsResult));   
+      setOpenPopover(true);
     if (isMobile) {
       setStep(1);
     }
@@ -322,7 +325,7 @@ export const MirrorDimensions = () => {
                       >
                         Layout & Measurement
                       </Typography>
-                      <AlertsAndWarnings />
+                      <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
                     </Box>
                     <Box
                       sx={{

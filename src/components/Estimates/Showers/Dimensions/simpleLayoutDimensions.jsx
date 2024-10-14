@@ -38,13 +38,14 @@ import {
   getProjectId,
   addSelectedItem,
   resetNotifications,
-  getListData,
+  getListData,  
 } from "@/redux/estimateCalculations";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   backendURL,
   calculateAreaAndPerimeter,
   getGlassThickness,
+  notificationsAvailable,
 } from "@/utilities/common";
 import {
   inputLength,
@@ -224,8 +225,11 @@ export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
       },
       {}
     ),
-  });
-  const formik = useFormik({
+  }); 
+
+  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
+
+   const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
@@ -289,6 +293,9 @@ export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
       if (isMobile) {
         setStep(1);
       }
+      //open Child Popover
+        setOpenPopover(true)
+      // dispatch(setnotificationStatus(buttonRef.current))
       // navigate("/estimates/review");
       // resetForm();
     },
@@ -368,7 +375,7 @@ export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
       layoutData.refetch();
     }
   },[])
-
+  
   return (
     <>
     { skeltonState || recordData.estimateFetcing  ||  layoutData.isFetching ?  <LayoutMeasurementSkeleton /> : 
@@ -409,7 +416,7 @@ export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
             >
               Layout & Measurement
             </Typography>
-            <AlertsAndWarnings />
+            <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
           </Box>
           <Box
             sx={{
