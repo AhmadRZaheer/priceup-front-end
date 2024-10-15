@@ -381,3 +381,98 @@ export const getGenericFabrication = (item, count) => {
   hingeCut = count * selectedItemHingeCut;
    return { oneInchHoles, hingeCut, };
 };
+
+export const getHardwareSpecificFabrication = (
+  type,
+  fabricationValues,
+  currentHardware,
+  newSelectedHardware
+) => {
+  let existingFabricationValues = {
+    oneInchHoles: Number(fabricationValues.oneInchHoles),
+    hingeCut: Number(fabricationValues.hingeCut),
+  };
+  let currentHardwareFabrication = null;
+
+  if (currentHardware?.item) {
+    if ([hardwareTypes.HANDLES].includes(type))
+      currentHardwareFabrication = getHandleFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    else if ([hardwareTypes.HINGES].includes(type))
+      currentHardwareFabrication = getHingeFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    else if ([hardwareTypes.DOORLOCK].includes(type))
+        currentHardwareFabrication = getGenericFabrication(
+          currentHardware?.item,
+          currentHardware?.count
+    );
+    else if ([hardwareTypes.CHANNEL].includes(type))
+      currentHardwareFabrication = getGenericFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+    else
+      currentHardwareFabrication = getGenericFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
+  }
+
+  if (currentHardwareFabrication) {
+    existingFabricationValues.oneInchHoles -=
+      currentHardwareFabrication.oneInchHoles;
+    existingFabricationValues.hingeCut -= currentHardwareFabrication.hingeCut;
+    }
+
+  /* check to avoid negative value **/
+  if (existingFabricationValues.oneInchHoles < 0)
+    existingFabricationValues.oneInchHoles = 0;
+  if (existingFabricationValues.hingeCut < 0)
+    existingFabricationValues.hingeCut = 0;
+   /* end **/
+
+  if (newSelectedHardware) {
+    let newSelectedHardwareFabrication = null;
+
+    if (newSelectedHardware?.item) {
+      if ([hardwareTypes.HANDLES].includes(type))
+        newSelectedHardwareFabrication = getHandleFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      else if ([hardwareTypes.HINGES].includes(type))
+        newSelectedHardwareFabrication = getHingeFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      else if ([hardwareTypes.DOORLOCK].includes(type))
+        newSelectedHardwareFabrication = getGenericFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+        else if ([hardwareTypes.CHANNEL].includes(type))
+        newSelectedHardwareFabrication = getGenericFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+      else
+        newSelectedHardwareFabrication = getGenericFabrication(
+          newSelectedHardware?.item,
+          newSelectedHardware?.count
+        );
+    }
+
+    if (newSelectedHardwareFabrication) {
+      existingFabricationValues.oneInchHoles +=
+        newSelectedHardwareFabrication.oneInchHoles;
+      existingFabricationValues.hingeCut +=
+        newSelectedHardwareFabrication.hingeCut;
+      }
+  }
+
+  return existingFabricationValues;
+};

@@ -114,9 +114,12 @@ const ProjectInfoComponent = ({
         name: values.name,
         notes: values.notes,
         status: values.status,
-        address_id: selectedAddress?._id,
+        // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
+      if(selectedAddress?._id){
+        data.address_id=  selectedAddress?._id
+      }
       try {
         if (projectState === "create") {
           const resp = await createProject({
@@ -801,7 +804,7 @@ const ProjectInfoComponent = ({
                   }}
                   disabled={
                     !selectedCustomer ||
-                    !selectedAddress ||
+                    // !selectedAddress ||
                     projectName?.length < 4 ||
                     updateLoading ||
                     createLoading

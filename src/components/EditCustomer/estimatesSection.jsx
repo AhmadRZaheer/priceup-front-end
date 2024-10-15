@@ -42,7 +42,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getEstimatesListRefetch } from "@/redux/refetch";
 import { useDispatch, useSelector } from "react-redux";
 import { getListData } from "@/redux/estimateCalculations";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 // import { DeleteOutline, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
@@ -63,6 +63,7 @@ export default function Estimates() {
   const navigate = useNavigate();
   const routePrefix = `${backendURL}/estimates/by-customer`;
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
@@ -142,6 +143,7 @@ export default function Estimates() {
         ...formattedData,
         measurements: measurementString,
         pricing,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);

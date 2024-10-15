@@ -45,7 +45,7 @@ import {
   setStateForShowerEstimate,
 } from "@/utilities/estimates";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
 // import {
 //   resetEstimateState,
 //   setEstimateCategory,
@@ -132,6 +132,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
   const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
@@ -173,6 +174,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
         ...formattedData,
         measurements: measurementString,
         pricing,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);

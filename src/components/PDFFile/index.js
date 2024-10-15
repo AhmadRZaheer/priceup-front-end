@@ -392,62 +392,62 @@ const PDFFile = ({controls,data}) => {
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.ONEINCHHOLES) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>1" Holes:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.oneInchHoles}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.oneInchHoles ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.HINGECUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Hinge Cut Out:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.hingeCut}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.hingeCut ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.ClAMPCUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Clamp Cut:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.clampCut}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.clampCut ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.NOTCH) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Notch:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.notch}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.notch ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.OUTAGES) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Outages:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.outages}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.outages ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.MITRE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Mitre:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.mitre}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.mitre ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.POLISH) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Polish:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.polish}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.polish ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.SIMPLEHOLES) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Holes:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.simpleHoles}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.simpleHoles ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.LIGHTHOLES) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Light Holes:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.lightHoles}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.lightHoles ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.SINGLEOUTLETCUTOUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Single Outlet Cutout:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.singleOutletCutout}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.singleOutletCutout ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.DOUBLEOUTLETCUTOUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Double Outlet Cutout:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.doubleOutletCutout}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.doubleOutletCutout ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.TRIPLEOUTLETCUTOUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Triple Outlet Cutout:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.tripleOutletCutout}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.tripleOutletCutout ?? 0}</Text>
           </View>}
           {fabricationSection[data?.quote?.category]?.includes(pdfFields.QUADOUTLETCUTOUT) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Quad Outlet Cutout:</Text>
-          <Text style={{fontSize:'12px'}}>{data?.quote?.quadOutletCutout}</Text>
+          <Text style={{fontSize:'12px'}}>{data?.quote?.quadOutletCutout ?? 0}</Text>
           </View>}
         </View>}
         {controls?.viewAdditionalFields &&
          <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Additional Fields:</Text>
           {data?.quote?.additionalFields?.map(
-            (item) =>
+            (item) => 
               item.label !== "" && (
                 <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                   <Text style={{fontSize:'14px'}}>{item.label}:</Text>
