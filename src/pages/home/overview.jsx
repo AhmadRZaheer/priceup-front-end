@@ -9,6 +9,7 @@ import { Box } from "@mui/material";
 import TopBar from "@/components/TopBar";
 import CommonSideBar from "@/components/CommonSideBar";
 import CommonLayout from "@/components/CommonLayout";
+import Dashboard from "@/components/dashboard";
 
 const Overview = () => {
   const { data, refetch } = useFetchDataEstimateCard();
@@ -40,7 +41,7 @@ const Overview = () => {
           <Widget value={data?.staff || 0} type="invoice" />
         </div> */}
         <Box>
-        <Estimates />
+        <Dashboard />
         </Box>
       </Box>
       </CommonLayout>
