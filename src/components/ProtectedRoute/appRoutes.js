@@ -50,6 +50,12 @@ import ProjectCreate from "@/pages/Projects/Create";
 import ProjectDetail from "@/pages/Projects/Detail";
 import EditLayout from "../ShowerLayout/EditLayout";
 import EidtCustomersPage from "@/pages/EditCustomer/editCustomer";
+import WineCellarHardware from "@/pages/WineCellar/Hardware";
+import WineCellarGlassType from "@/pages/WineCellar/GlassType";
+import WineCellarFinishes from "@/pages/WineCellar/Finishes";
+import WineCellarLayouts from "@/pages/WineCellar/Layouts";
+import EditWineLayout from "../WineCellar/Layouts/EditLayout";
+
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -82,7 +88,7 @@ const AppRoutes = () => {
         }
       />
       {isAdmin(decodedToken) ||
-      (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
+        (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="projects/">
@@ -127,6 +133,18 @@ const AppRoutes = () => {
             <Route path="glass-types" element={<MirrorsGlassType />} />
             <Route path="glass-addons" element={<MirrorsGlassAddon />} />
             <Route path="*" element={<MirrorsHardware />} />
+          </Route>
+          {/** Wine Cellar */}
+          <Route path="wine-cellar/">
+            <Route index element={<WineCellarHardware />} />
+            <Route path="hardwares" element={<WineCellarHardware />} />
+            <Route path="glass-types" element={<WineCellarGlassType />} />
+            <Route path="finishes" element={<WineCellarFinishes />} />
+            <Route path="layouts/">
+              <Route index element={<WineCellarLayouts />} />
+              <Route path="edit" element={<EditWineLayout />} />
+            </Route>
+            <Route path="*" element={<WineCellarHardware />} />
           </Route>
           {/** End */}
           <Route path="*" element={<Overview />}></Route>
@@ -176,9 +194,9 @@ const AppRoutes = () => {
       )}
       {/** Notification */}
       {isAdmin(decodedToken) ||
-      isCustomAdmin(decodedToken) ||
-      isStaff(decodedToken) ||
-      isSuperAdmin(decodedToken) ? (
+        isCustomAdmin(decodedToken) ||
+        isStaff(decodedToken) ||
+        isSuperAdmin(decodedToken) ? (
         <Route path="/notification" element={<Notification />} />
       ) : (
         ""

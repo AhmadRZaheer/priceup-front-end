@@ -36,22 +36,41 @@ import {
   getHardwareAddonsTotal,
   getAdditionalFieldsTotal,
   getListData,
+  getisCustomizedDoorWidth,
+  getLayoutPerimeter,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
-import { backendURL } from "@/utilities/common";
+import {
+  backendURL,
+  calculateAreaAndPerimeter,
+  calculateTotal,
+} from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { layoutVariants } from "@/utilities/constants";
-import { renderMeasurementSides } from "@/utilities/estimates";
+import {
+  layoutVariants,
+  quoteState as quotestate,
+} from "@/utilities/constants";
+import {
+  generateObjectForPDFPreview,
+  generateObjectForPDFRuntime,
+  renderMeasurementSides,
+} from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
+import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
+import {
+  getCustomerDetail,
+  getEstimateCategory,
+  getEstimateState,
+  getProjectId,
+} from "@/redux/estimateSlice";
+import { useSearchParams } from "react-router-dom";
 
 const Summary = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const hardwarePrice = useSelector(getHardwareTotal);
   const glassPrice = useSelector(getGlassTotal);
@@ -73,8 +92,23 @@ const Summary = ({ setStep }) => {
   const selectedContent = useSelector(getContent);
   const measurements = useSelector(getMeasurementSide);
   const selectedData = useSelector(selectedItem);
-  const quoteState = useSelector(getQuoteState);
+  // const quoteState = useSelector(getQuoteState);
+  const quoteState = searchParams.get("quoteState");
   const sqftArea = useSelector(getLayoutArea);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  const perimeter = useSelector(getLayoutPerimeter);
+  const estimateState = useSelector(getEstimateState);
+  const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
+  // const selectedCategory = useSelector(getEstimateCategory);
+  const selectedCategory = searchParams.get("category");
+  const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
+  const showerEstimateState = useSelector(
+    (state) => state.estimateCalculations
+  );
+  const customerData = useSelector(getCustomerDetail);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
@@ -83,6 +117,43 @@ const Summary = ({ setStep }) => {
     { title: "Pricing Subcategories", active: true },
     { title: "Gross Profit Margin", active: true },
   ]);
+
+  //drawerHandleClick
+  const drawerHandleClick = () => {
+    const item = generateObjectForPDFRuntime(
+      {
+        estimateState,
+        projectId,
+        selectedCategory: selectedData?.category ?? selectedCategory,
+        customerData,
+      },
+      showerEstimateState,
+      showersLocationSettings
+    );
+    const pricing = calculateTotal(
+      item,
+      item?.sqftArea,
+      showersLocationSettings
+    );
+
+    const measurementString = renderMeasurementSides(
+      quotestate.EDIT,
+      item?.measurements,
+      item?.layout_id
+    );
+
+    const id = estimateState === quotestate.CREATE ? "--" : selectedData?._id;
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...item,
+        measurements: measurementString,
+        pricing,
+        id,
+        pdfSettings,
+      })
+    );
+  };
 
   // Toggle handler function
   const handleToggle = (index) => {
@@ -101,7 +172,7 @@ const Summary = ({ setStep }) => {
 
   const alertPopoverOpen = Boolean(anchorEl);
   const alertPopoverid = alertPopoverOpen ? "simple-popover" : undefined;
-  const disable_com = useMemo(()=>{
+  const disable_com = useMemo(() => {
     let status = false;
     if (quoteState === "create") {
       status = !selectedData || !measurements?.length;
@@ -117,14 +188,14 @@ const Summary = ({ setStep }) => {
       status = arraylength > 0 ? false : true;
     }
     return status;
-  },[measurements])
-  
+  }, [measurements]);
+
   const layoutImage =
     quoteState === "create"
       ? `${backendURL}/${selectedData?.image}`
       : quoteState === "edit" && selectedData?.settings?.image
-        ? `${backendURL}/${selectedData?.settings?.image}`
-        : CustomImage;
+      ? `${backendURL}/${selectedData?.settings?.image}`
+      : CustomImage;
   // const layoutImage = selectedData?.image ? `${backendURL}/${selectedData?.image}` : CustomImage;
   const dispatch = useDispatch();
   const handleSetUserProfit = (event) => {
@@ -163,7 +234,12 @@ const Summary = ({ setStep }) => {
             }}
           >
             <Typography
-              sx={{ fontSize: "14px", fontWeight: 700, lineHeight: "16.41px", fontFamily: '"Roboto", sans-serif !important' }}
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: "16.41px",
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
             >
               Estimate Details
             </Typography>
@@ -185,8 +261,8 @@ const Summary = ({ setStep }) => {
                   padding: "5px 8px 5px 8px !important",
                   border: "1px solid #D0D5DD",
                   color: "black",
-                  fontSize: '12px',
-                  lineHeight: '14.06px',
+                  fontSize: "12px",
+                  lineHeight: "14.06px",
                   borderRadius: "4px !important",
                   fontFamily: '"Roboto", sans-serif !important',
                   width: "fit-content",
@@ -235,7 +311,14 @@ const Summary = ({ setStep }) => {
                           px: 3,
                         }}
                       >
-                        <Typography sx={{ color: "#5D6164", fontSize: "16px", alignSelf: "center", fontFamily: '"Roboto", sans-serif !important' }}>
+                        <Typography
+                          sx={{
+                            color: "#5D6164",
+                            fontSize: "16px",
+                            alignSelf: "center",
+                            fontFamily: '"Roboto", sans-serif !important',
+                          }}
+                        >
                           {item.title}
                         </Typography>
                         <Box sx={{ height: "46px" }}>
@@ -280,10 +363,10 @@ const Summary = ({ setStep }) => {
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
             {Columns[0].active === false &&
-              Columns[1].active === false &&
-              Columns[2].active === false &&
-              Columns[3].active === false &&
-              Columns[4].active === false ? (
+            Columns[1].active === false &&
+            Columns[2].active === false &&
+            Columns[3].active === false &&
+            Columns[4].active === false ? (
               <Typography>No Estimate Detail</Typography>
             ) : (
               <Grid container spacing={2}>
@@ -316,7 +399,7 @@ const Summary = ({ setStep }) => {
                             "Custom"}
                         </Typography>
                       </Box>
-                      {doorWidth && doorWidth > 0 ?  (
+                      {doorWidth && doorWidth > 0 ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Door Width:
@@ -325,7 +408,9 @@ const Summary = ({ setStep }) => {
                             {doorWidth}
                           </Typography>
                         </Box>
-                      ) : ''}
+                      ) : (
+                        ""
+                      )}
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Square Foot:
@@ -337,42 +422,42 @@ const Summary = ({ setStep }) => {
                       {![undefined].includes(
                         selectedData?.settings?.variant
                       ) && (
-                          <Box>
-                            <Typography className="text-xs-ragular-bold">
-                              Door Weight:
-                            </Typography>
-                            <Typography className="text-xs-ragular">
-                              {doorWeight}
-                            </Typography>
-                          </Box>
-                        )}
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Door Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {doorWeight}
+                          </Typography>
+                        </Box>
+                      )}
                       {![
                         layoutVariants.DOOR,
                         layoutVariants.DOUBLEBARN,
                         layoutVariants.DOUBLEDOOR,
                       ].includes(selectedData?.settings?.variant) && (
-                          <Box>
-                            <Typography className="text-xs-ragular-bold">
-                              Panel Weight:
-                            </Typography>
-                            <Typography className="text-xs-ragular">
-                              {panelWeight}
-                            </Typography>
-                          </Box>
-                        )}
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Panel Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {panelWeight}
+                          </Typography>
+                        </Box>
+                      )}
                       {[
                         layoutVariants.DOORNOTCHEDPANELANDRETURN,
                         layoutVariants.DOORPANELANDRETURN,
                       ].includes(selectedData?.settings?.variant) && (
-                          <Box>
-                            <Typography className="text-xs-ragular-bold">
-                              Return Weight:
-                            </Typography>
-                            <Typography className="text-xs-ragular">
-                              {returnWeight}
-                            </Typography>
-                          </Box>
-                        )}
+                        <Box>
+                          <Typography className="text-xs-ragular-bold">
+                            Return Weight:
+                          </Typography>
+                          <Typography className="text-xs-ragular">
+                            {returnWeight}
+                          </Typography>
+                        </Box>
+                      )}
                       {Columns[2].active && (
                         <Box sx={{ width: "60%" }}>
                           <Divider sx={{ borderColor: "#D4DBDF" }} />
@@ -651,7 +736,7 @@ const Summary = ({ setStep }) => {
                         <Typography className="text-xs-ragular-bold" mb={1}>
                           Additional Fields
                         </Typography>
-                        {selectedContent.additionalFields.map(
+                        {selectedContent?.additionalFields?.map(
                           (item) =>
                             item.label !== "" && (
                               <Box
@@ -797,12 +882,13 @@ const Summary = ({ setStep }) => {
                           sx={{
                             "& input": {
                               p: "10px 0px 10px 10px !important",
-                            }
+                            },
                           }}
                           type="number"
                           InputProps={{
                             style: {
-                              color: "black", paddingRight: '10px !important'
+                              color: "black",
+                              paddingRight: "10px !important",
                             },
                             inputProps: { min: 0, max: 100 },
                             endAdornment: <> %</>,
@@ -835,6 +921,8 @@ const Summary = ({ setStep }) => {
                       >
                         Reset
                       </Button>
+                      <Divider sx={{ borderColor: "#D4DBDF" }} />
+                      <PDFPreviewDrawer handleClick={drawerHandleClick} />
                     </Stack>
                   </Grid>
                 )}

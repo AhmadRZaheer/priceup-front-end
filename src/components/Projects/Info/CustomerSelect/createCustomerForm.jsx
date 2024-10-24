@@ -47,6 +47,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                         flexDirection: "column",
                         gap: 1,
                         paddingY: { sm: 0, xs: 2 },
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -54,27 +55,28 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     </Box>
 
                     <TextField
+                    className="custom-textfield"
                         id="firstName"
                         name="firstName"
                         placeholder="Enter First Name"
                         size="small"
                         variant="outlined"
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         border: "1px solid #cccccc",
+                        //         backgroundColor: "white",
+                        //     },
+                        //     inputProps: { min: 0, max: 50 },
+                        // }}
+                        // InputLabelProps={{
+                        //     style: {
+                        //         color: "rgba(255, 255, 255, 0.5)",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         value={formik.values.firstName}
@@ -94,6 +96,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                         flexDirection: "column",
                         gap: 1,
                         paddingY: { sm: 0, xs: 2 },
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -101,6 +104,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                         <label htmlFor="lastName">Last Name</label><span style={{ color: 'red' }}>*</span>
                     </Box>
                     <TextField
+                        className="custom-textfield"
                         id="lastName"
                         name="lastName"
                         placeholder="Enter Last Name"
@@ -108,22 +112,22 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                         variant="outlined"
                         value={formik.values.lastName}
                         onChange={formik.handleChange}
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                border: "1px solid #cccccc",
-                                backgroundColor: "white",
-                            },
-                            inputProps: { min: 0, max: 50 },
-                        }}
-                        InputLabelProps={{
-                            style: {
-                                color: "rgba(255, 255, 255, 0.5)",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         border: "1px solid #cccccc",
+                        //         backgroundColor: "white",
+                        //     },
+                        //     inputProps: { min: 0, max: 50 },
+                        // }}
+                        // InputLabelProps={{
+                        //     style: {
+                        //         color: "rgba(255, 255, 255, 0.5)",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         onBlur={formik.handleBlur}
@@ -154,23 +158,24 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     placeholder="Enter Email address"
                     size="small"
                     variant="outlined"
+                     className="custom-textfield"
                     value={formik.values.email}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            border: "1px solid #cccccc",
-                            backgroundColor: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                    }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                        },
-                    }}
+                    // InputProps={{
+                    //     style: {
+                    //         color: "black",
+                    //         borderRadius: 4,
+                    //         border: "1px solid #cccccc",
+                    //         backgroundColor: "white",
+                    //     },
+                    //     inputProps: { min: 0, max: 50 },
+                    // }}
+                    // InputLabelProps={{
+                    //     style: {
+                    //         color: "rgba(255, 255, 255, 0.5)",
+                    //     },
+                    // }}
                     sx={{
-                        color: { sm: "black", xs: "white" },
+                        // color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
@@ -197,23 +202,24 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     placeholder="Enter Phone Number"
                     size="small"
                     variant="outlined"
+                     className="custom-textfield"
                     value={formik.values.phone}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            border: "1px solid #cccccc",
-                            backgroundColor: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                    }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                        },
-                    }}
+                    // InputProps={{
+                    //     style: {
+                    //         color: "black",
+                    //         borderRadius: 4,
+                    //         border: "1px solid #cccccc",
+                    //         backgroundColor: "white",
+                    //     },
+                    //     inputProps: { min: 0, max: 50 },
+                    // }}
+                    // InputLabelProps={{
+                    //     style: {
+                    //         color: "rgba(255, 255, 255, 0.5)",
+                    //     },
+                    // }}
                     sx={{
-                        color: { sm: "black", xs: "white" },
+                        // color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
@@ -240,23 +246,24 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     placeholder="Enter Address"
                     size="small"
                     variant="outlined"
+                     className="custom-textfield"
                     value={formik.values.address}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            border: "1px solid #cccccc",
-                            backgroundColor: "white",
-                        },
-                        inputProps: { min: 0, max: 50 },
-                    }}
-                    InputLabelProps={{
-                        style: {
-                            color: "rgba(255, 255, 255, 0.5)",
-                        },
-                    }}
+                    // InputProps={{
+                    //     style: {
+                    //         color: "black",
+                    //         borderRadius: 4,
+                    //         border: "1px solid #cccccc",
+                    //         backgroundColor: "white",
+                    //     },
+                    //     inputProps: { min: 0, max: 50 },
+                    // }}
+                    // InputLabelProps={{
+                    //     style: {
+                    //         color: "rgba(255, 255, 255, 0.5)",
+                    //     },
+                    // }}
                     sx={{
-                        color: { sm: "black", xs: "white" },
+                        // color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
@@ -290,7 +297,7 @@ const CreateCustomerForm = ({ setSelectedCustomer, handleStepChange }) => {
                     variant="contained"
                     disabled={createLoading}
                 >
-                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Customer"}
+                    {createLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Customer"}
                 </Button>
             </Box>
             <Box

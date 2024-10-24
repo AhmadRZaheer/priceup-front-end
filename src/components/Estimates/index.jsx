@@ -26,11 +26,31 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
 import dayjs from "dayjs";
 
+const dateSx = {
+  "& .MuiInputBase-root": {
+    height: 40,
+    width: 150,
+    backgroundColor: "white",
+  },
+  "& .MuiInputBase-input": {
+    fontSize: "0.875rem", 
+    padding: "8px 14px",
+  },
+  "& .MuiInputLabel-root": {
+    fontSize: "14px",
+    fontWeight: 400,
+    fontFamily: '"Roboto",sans-serif !important',
+    top: "-5px", 
+    color: "#000000",
+  },
+};
+
 export default function Estimates() {
   const decodedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const currentDate = dayjs();
   const {
     data: estimatesStats,
     // isLoading: estimatesStatsFetching,
@@ -56,7 +76,7 @@ export default function Estimates() {
   };
   useEffect(() => {
     refetchEstimatesStats();
-  }, []);
+  }, []);  
   return (
     <>
       <Box
@@ -292,22 +312,7 @@ export default function Estimates() {
                   value={selectedDate}
                   onChange={handleDateChange}
                   sx={{
-                    "& .MuiInputBase-root": {
-                      height: 40,
-                      width: 150,
-                      backgroundColor: "white", // Adjust height
-                    },
-                    "& .MuiInputBase-input": {
-                      fontSize: "0.875rem", // Adjust font size
-                      padding: "8px 14px", // Adjust padding
-                    },
-                    "& .MuiInputLabel-root": {
-                      fontSize: "14px",
-                      fontWeight: 400,
-                      fontFamily: '"Roboto",sans-serif !important',
-                      top: "-5px", // Adjust label size
-                      color: "#000000",
-                    },
+                    ...dateSx,
                   }}
                   renderInput={(params) => (
                     <TextField {...params} size="small" />

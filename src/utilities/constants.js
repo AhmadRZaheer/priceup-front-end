@@ -12,6 +12,10 @@ export const layoutVariants = {
   SINGLEBARN: "singlebarn",
   DOUBLEBARN: "doublebarn",
   CUSTOM: "custom",
+  INLINE: "inline",
+  NINTYDEGREE: "90-degree",
+  THREESIDEDGLASS: "3-sided-glass",
+  GLASSCUBE: "glass-cube"
 };
 
 export const notificationTypes = {
@@ -57,6 +61,7 @@ export const userRoles = {
 
 export const hardwareTypes = {
   HANDLES: "handles",
+  DOORLOCK: "doorLock",
   HINGES: "hinges",
   SLIDINGDOORSYSTEM: "slidingDoorSystem",
   HEADER: "header",
@@ -91,6 +96,7 @@ export const severity = {
 export const EstimateCategory = {
   SHOWERS: "showers",
   MIRRORS: "mirrors",
+  WINECELLARS: "wineCellars"
 };
 
 export const mirrorHardwareTypes = {
@@ -121,3 +127,12 @@ export const statusTypes = {
   VOIDED: "voided",
   APPROVED: "approved",
 };
+
+export const inputLength = 6;
+export const inputMaxValue = 999999;
+
+export const defaultNotificationState = {
+  status: false,
+  variant: notificationsVariant.DEFAULT,
+  message: ``,
+}

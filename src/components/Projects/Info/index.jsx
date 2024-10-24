@@ -24,12 +24,12 @@ import {
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Add, Close } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
-import { projectStatus } from "@/utilities/constants";
+import { EstimateCategory, projectStatus } from "@/utilities/constants";
 import AddressSelect from "./AddressSelect";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import icon from "../../../Assets/search-icon.svg";
@@ -37,9 +37,13 @@ import ChooseEstimateCategoryModal from "./ChooseEstimateCategoryModal";
 import StatusChip from "@/components/common/StatusChip";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
+import WineCellarEstimatesList from "./EstimatesList/wineCellar";
 
 const validationSchema = yup.object({
-  name: yup.string().required("Project Name is required").min(4, 'Must be at least 4 characters'),
+  name: yup
+    .string()
+    .required("Project Name is required")
+    .min(4, "Must be at least 4 characters"),
   status: yup.string().required("Project Status is required"),
 });
 const routePrefix = `${backendURL}/projects`;
@@ -48,6 +52,9 @@ const ProjectInfoComponent = ({
   projectState = "create",
   projectData = null,
 }) => {
+  const [searchParams] = useSearchParams();
+  const selectedTab = searchParams.get('category');
+  const tabValue = selectedTab === null ? EstimateCategory.SHOWERS : selectedTab ;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -80,13 +87,18 @@ const ProjectInfoComponent = ({
   const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
-  const [activeTabNumber, setActiveTabNumber] = useState(0); // 0 for showers, 1 for mirrors
   const navigate = useNavigate();
-
+  const [activeTabNumber, setActiveTabNumber] = useState(EstimateCategory.SHOWERS); // 0 for showers, 1 for mirrors
   const handleChange = (event, newValue) => {
-    setActiveTabNumber(newValue);
+    console.log(newValue, "sdsdsdsdsd");
+    navigate(`/projects/${projectData?._id}?category=${newValue}`)
+    // setActiveTabNumber(newValue);
   };
-
+  // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
+  // const handleChange = (event, newValue) => {
+  //   localStorage.setItem("activeTab", newValue);
+  //   setActiveTabNumber(newValue); // Update the state to force re-render
+  // };
   const formik = useFormik({
     initialValues: {
       name: projectName,
@@ -102,9 +114,12 @@ const ProjectInfoComponent = ({
         name: values.name,
         notes: values.notes,
         status: values.status,
-        address_id: selectedAddress?._id,
+        // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
+      if(selectedAddress?._id){
+        data.address_id=  selectedAddress?._id
+      }
       try {
         if (projectState === "create") {
           const resp = await createProject({
@@ -178,7 +193,7 @@ const ProjectInfoComponent = ({
   };
   const handleClearProjectName = () => {
     formik.setFieldValue("name", "");
-  }
+  };
 
   //Craete Model
   const [openCategoryModal, setOpenCategoryModal] = useState(false);
@@ -187,11 +202,11 @@ const ProjectInfoComponent = ({
 
   useEffect(() => {
     setProjectName(formik.values.name);
-  }, [formik.values.name])
+  }, [formik.values.name]);
 
   useEffect(() => {
     setProjectNotes(formik.values.notes);
-  }, [formik.values.notes])
+  }, [formik.values.notes]);
 
   return (
     <Box
@@ -215,7 +230,7 @@ const ProjectInfoComponent = ({
               fontWeight: 600,
               color: "#000000",
               display: "flex",
-              lineHeight: '32.78px',
+              lineHeight: "32.78px",
               gap: 1,
             }}
           >
@@ -229,15 +244,15 @@ const ProjectInfoComponent = ({
               color: "#212528",
               fontSize: { lg: 16, md: 14 },
               fontWeight: 600,
-              lineHeight: '21.86px',
-              opacity: '70%'
+              lineHeight: "21.86px",
+              opacity: "70%",
             }}
           >
             Create, edit and manage your Projects.
           </Typography>
         </Box>
         {projectState !== "create" ? (
-          <Box sx={{alignSelf:'center'}}>
+          <Box sx={{ alignSelf: "center" }}>
             <Button
               fullWidth
               variant="contained"
@@ -404,7 +419,7 @@ const ProjectInfoComponent = ({
                           className="disabled-text "
                           sx={{ fontSize: "14px" }}
                         >
-                          {creatorName ?? 'N/A'}
+                          {creatorName ?? "N/A"}
                         </Typography>
                         {/* <TextField
                         disabled="true"
@@ -479,7 +494,7 @@ const ProjectInfoComponent = ({
                               width: "100%",
                             }}
                             value={formik.values.customer}
-                            onChange={() => { }}
+                            onChange={() => {}}
                           />
                         </Box>
                         <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
@@ -713,7 +728,6 @@ const ProjectInfoComponent = ({
                           </Typography>
                         </Box>
                       </Box>
-
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
@@ -788,7 +802,13 @@ const ProjectInfoComponent = ({
                       backgroundColor: "#8477da",
                     },
                   }}
-                  disabled={!selectedCustomer || !selectedAddress || projectName?.length < 4}
+                  disabled={
+                    !selectedCustomer ||
+                    // !selectedAddress ||
+                    projectName?.length < 4 ||
+                    updateLoading ||
+                    createLoading
+                  }
                   variant="contained"
                 >
                   {updateLoading || createLoading ? (
@@ -864,7 +884,7 @@ const ProjectInfoComponent = ({
                       fontWeight: 400,
                       fontFamily: '"Roboto",sans-serif !important',
                       top: "-5px", // Adjust label size
-                      color: '#000000'
+                      color: "#000000",
                     },
                   }}
                   renderInput={(params) => (
@@ -875,7 +895,7 @@ const ProjectInfoComponent = ({
               <FormControl
                 sx={{ width: "152px" }}
                 size="small"
-              // className="custom-textfield"
+                // className="custom-textfield"
               >
                 <Select
                   value={status}
@@ -887,14 +907,19 @@ const ProjectInfoComponent = ({
                   onChange={(e) => setStatus(e.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                        sx={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          // lineHeight: '16.41px',
-                          color: '#000000',
-                          fontFamily: '"Roboto",sans-serif !important'
-                        }}>Status</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Status
+                        </Typography>
+                      );
                     }
 
                     return (
@@ -928,8 +953,11 @@ const ProjectInfoComponent = ({
               <Button
                 variant="text"
                 onClick={handleResetFilter}
-                sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}
-              // sx={{ lineHeight: "21.86px" }}
+                sx={{
+                  p: "6px 8px !important",
+                  fontFamily: '"Roboto",sans-serif !important',
+                }}
+                // sx={{ lineHeight: "21.86px" }}
               >
                 Clear Filter
               </Button>
@@ -946,31 +974,30 @@ const ProjectInfoComponent = ({
               pt: { md: 2, xs: 1 },
               // width: "99.5%",
               background: "#FFFF",
-              border: '1px solid #D0D5DD'
+              border: "1px solid #D0D5DD",
             }}
           >
             {/** Tabs Switch */}
             <Grid sx={{ px: 1, pb: 1 }}>
               <Tabs
-                value={activeTabNumber}
+                value={tabValue}
                 onChange={handleChange}
                 aria-label="basic tabs example"
                 sx={{
                   border: "1px solid #D0D5DD",
                   borderRadius: "6px",
                   background: "#F3F5F6",
-                  width: "151px",
-                  minHeight: '40px',
-                  height: '40px',
-                  p: '2px',
+                  width: "252.5px",
+                  minHeight: "40px",
+                  height: "40px",
+                  p: "2px",
                   "& .MuiTab-root.Mui-selected": {
                     color: "#000000",
                     background: "#FFFF",
                     borderRadius: "4px",
-                    p: '7px 12px',
-                    // minWidth:'79px',
-                    height: '40px',
-                    minHeight: '36px'
+                    p: "7px 12px",
+                    height: "40px",
+                    minHeight: "36px",
                   },
                   "& .MuiTabs-indicator": {
                     backgroundColor: "#8477DA",
@@ -981,30 +1008,33 @@ const ProjectInfoComponent = ({
                 <Tab
                   className="categoryTab"
                   label="Showers"
-                  sx={{
-                    // fontSize: "14px",
-                    // fontWeight: 600,
-                    // color: "#000000",
-                    // textTransform: "capitalize",
-                    minWidth: '70px',
-                    // p:'7px 12px',
-                  }}
-                  {...a11yProps(0)}
+                  value={EstimateCategory.SHOWERS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.SHOWERS)}
                 />
                 <Tab
                   className="categoryTab"
                   label="Mirrors"
-                  sx={{
-                    minWidth: '70px',
-                  }}
-                  {...a11yProps(1)}
+                  value={EstimateCategory.MIRRORS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.MIRRORS)}
+                />
+                <Tab
+                  className="categoryTab"
+                  label="Wine Cellar"
+                  value={EstimateCategory.WINECELLARS}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps(EstimateCategory.WINECELLARS)}
                 />
               </Tabs>
             </Grid>
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <CustomTabPanel value={activeTabNumber} index={0}>
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.SHOWERS}
+            >
               <ShowerEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1013,8 +1043,23 @@ const ProjectInfoComponent = ({
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
-            <CustomTabPanel value={activeTabNumber} index={1}>
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.MIRRORS}
+            >
               <MirrorEstimatesList
+                projectId={projectData?._id}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
+              />
+            </CustomTabPanel>
+            {/** Wine Cellar tab */}
+            <CustomTabPanel
+              value={tabValue}
+              index={EstimateCategory.WINECELLARS}
+            >
+              <WineCellarEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
                 statusValue={status}

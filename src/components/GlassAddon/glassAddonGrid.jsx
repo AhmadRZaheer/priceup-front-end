@@ -8,7 +8,11 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { ArrowForward, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
+import {
+  ArrowForward,
+  DeleteOutlineOutlined,
+  EditOutlined,
+} from "@mui/icons-material";
 import {
   useDeleteGlassAddon,
   useEditFullGlassAddon,
@@ -25,6 +29,8 @@ import CustomInputField from "../ui-components/CustomInput";
 import CustomToggle from "../ui-components/Toggle";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const GlassAddonGrid = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -33,7 +39,7 @@ const GlassAddonGrid = ({ type }) => {
     data: glassAddons,
     refetch: glassAddonRefetch,
     isFetching: glassAddonFetching,
-    isLoading
+    isFetched,
   } = useFetchGlassAddons(type);
   const {
     mutate: deleteGlassAddon,
@@ -51,6 +57,7 @@ const GlassAddonGrid = ({ type }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
   const [rowStatus, setRowStatus] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [updateRefetch, setUpdateRefetch] = useState(false);
 
   const handleClickAction = (event, row) => {
@@ -96,7 +103,7 @@ const GlassAddonGrid = ({ type }) => {
     setRowStatus({
       ...rowStatus,
       [row._id]: !row.options[0].status,
-    })
+    });
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: !option.status, // Toggle the status
@@ -111,11 +118,7 @@ const GlassAddonGrid = ({ type }) => {
       field: "cost",
       headerName: "Cost per square inch",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
       flex: 4,
 
@@ -123,20 +126,29 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <Box sx={{ width: "101px" }}>
             <CustomInputField
-              disabled={params.row.slug === 'no-treatment'}
-              inputProps={{ min: 0 }}
-              type={"number"}
+              disabled={params.row.slug === "no-treatment"}
+              size="small"
+              variant="outlined"
+              type="number"
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
+              name="cost"
+              placeholder="Cost"
               value={
-                (rowCosts[params.row._id] !== undefined
+                rowCosts[params.row._id] !== undefined
                   ? rowCosts[params.row._id]
-                  : params.row.options[0]?.cost) || 0
+                  : params.row.options[0]?.cost
               }
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: e.target.value,
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: e.target.value,
+                  });
+                }
+              }}
             />
           </Box>
         );
@@ -146,27 +158,18 @@ const GlassAddonGrid = ({ type }) => {
       field: "status",
       headerName: "Status",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
       flex: 4,
 
       renderCell: (params) => {
-        return params.row.options[0]?.status || params.row.slug === 'no-treatment' ? (
-          <Typography
-            className="status-active"
-            sx={{ width: "fit-content" }}
-          >
+        return params.row.options[0]?.status ||
+          params.row.slug === "no-treatment" ? (
+          <Typography className="status-active" sx={{ width: "fit-content" }}>
             Active
           </Typography>
         ) : (
-          <Typography
-            className="status-inActive"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-inActive" sx={{ width: "fit-content" }}>
             Inactive
           </Typography>
         );
@@ -176,11 +179,7 @@ const GlassAddonGrid = ({ type }) => {
       field: "Actions",
       align: "left",
       headerClassName: "showerHardwareHeader",
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 2,
       renderCell: (params) => {
         // const id = params.row._id;
@@ -188,11 +187,15 @@ const GlassAddonGrid = ({ type }) => {
         return (
           <>
             <IconButton
-              disabled={params.row.slug === 'no-treatment'}
+              disabled={params.row.slug === "no-treatment"}
               aria-haspopup="true"
               onClick={(event) => handleClickAction(event, data)}
             >
-              <ArrowForward sx={{ color: params.row.slug === 'no-treatment' ? '' : "#8477DA" }} />
+              <ArrowForward
+                sx={{
+                  color: params.row.slug === "no-treatment" ? "" : "#8477DA",
+                }}
+              />
             </IconButton>
             <Menu
               anchorEl={anchorEl}
@@ -263,8 +266,9 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Edit</p>
-                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
-
+                <EditOutlined
+                  sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                />
               </MenuItem>
               <MenuItem
                 sx={{
@@ -286,9 +290,12 @@ const GlassAddonGrid = ({ type }) => {
                 <p>Change Status</p>
                 {/* <Box sx={{ width: "59px", height: "39px" }}> */}
                 <CustomSmallSwtich
-                  inputProps={{ 'aria-label': 'ant design' }}
-                  checked={rowStatus[params.row._id] !== undefined
-                    ? rowStatus[params.row._id] : data.options[0]?.status}
+                  inputProps={{ "aria-label": "ant design" }}
+                  checked={
+                    rowStatus[params.row._id] !== undefined
+                      ? rowStatus[params.row._id]
+                      : data.options[0]?.status
+                  }
                   // onChange={() => handleStatusChange(data)}
                   text={""}
                 />
@@ -317,7 +324,9 @@ const GlassAddonGrid = ({ type }) => {
                 }}
               >
                 <p>Delete</p>
-                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                <DeleteOutlineOutlined
+                  sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                />
               </MenuItem>
             </Menu>
           </>
@@ -325,6 +334,19 @@ const GlassAddonGrid = ({ type }) => {
       },
     },
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Addons Type",
+    "Cost per square inch",
+    "status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   useEffect(() => {
     if (refetchData) {
@@ -397,30 +419,27 @@ const GlassAddonGrid = ({ type }) => {
         }}
       >
         {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-              alignItems: "center",
-              background: "#FFFF",
-              height: "56vh",
-            }}
-          >
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+          <Box>
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={SkeletonRowsGenerated}
+              columns={SkeletonColumnsGenerated}
+              page={1}
+              pageSize={10}
+              className="table"
+              hideFooter
+              disableColumnMenu
+              pagination={false}
+            />
           </Box>
         ) : (
-          <div className="CustomerTable-1">
+          <Box className="CustomerTable-1">
             {glassAddons.length >= 1 ? (
               <>
                 <DataGrid
                   loading={glassAddonFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  // rows={filteredData.slice(
-                  //   (page - 1) * itemsPerPage,
-                  //   page * itemsPerPage
-                  // )}
                   disableColumnFilter
                   disableColumnMenu
                   rows={glassAddons}
@@ -429,21 +448,10 @@ const GlassAddonGrid = ({ type }) => {
                   rowCount={
                     glassAddons?.totalRecords ? glassAddons?.totalRecords : 0
                   }
-                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                   rowHeight={70}
                 />
-
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </>
             ) : (
               <Typography
@@ -452,7 +460,7 @@ const GlassAddonGrid = ({ type }) => {
                 No Glass Addons Found
               </Typography>
             )}
-          </div>
+          </Box>
         )}
       </Box>
 

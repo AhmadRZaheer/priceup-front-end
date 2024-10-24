@@ -1,11 +1,13 @@
 import { convertArrayKeysToObject } from "./common";
-import { hardwareTypes, notificationsVariant, panelOverWeightAmount, standardDoorWidth, thicknessTypes } from "./constants";
+import { defaultNotificationState, hardwareTypes, notificationsVariant, panelOverWeightAmount, standardDoorWidth, thicknessTypes } from "./constants";
 
 export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type) => {
  switch(type){
     case hardwareTypes.HANDLES:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.HINGES:
+      return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
+    case hardwareTypes.DOORLOCK:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
     case hardwareTypes.SLIDINGDOORSYSTEM:
       return selectedItem?.finishes?.find((item)=>item.finish_id===activeFinishOrThickness?._id)?.status;
@@ -37,6 +39,9 @@ export const getActiveStatus = (selectedItem,activeFinishOrThickness = null,type
 }
 
 export const getEstimateErrorStatus = (selectedContent) => {
+  if (!selectedContent.hardwareFinishes) {
+     return false;
+  }
    if (selectedContent.handles?.item) {
      if(!getActiveStatus(selectedContent.handles?.item,selectedContent.hardwareFinishes,hardwareTypes.HANDLES)){
       return false;
@@ -47,6 +52,11 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
      }
    }
+   if (selectedContent.doorLock?.item) {
+    if(!getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK)){
+     return false;
+    }
+  }
    if (selectedContent.slidingDoorSystem?.item) {
     if(!getActiveStatus(selectedContent.slidingDoorSystem?.item,selectedContent.hardwareFinishes,hardwareTypes.SLIDINGDOORSYSTEM)){
       return false;
@@ -57,7 +67,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.hardwareAddons.length) {
+   if (selectedContent.hardwareAddons?.length) {
     let noSelectedDisableFound = true;
     selectedContent.hardwareAddons.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -74,7 +84,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.glassAddons.length) {
+   if (selectedContent.glassAddons?.length) {
     let noSelectedDisableFound = true;
     selectedContent.glassAddons.forEach(element => {
       if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -91,7 +101,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
       return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.wallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -103,7 +113,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.sleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -115,7 +125,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length) {
+   if (selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length) {
     let noSelectedDisableFound = true;
     selectedContent.mountingClamps.glassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -127,7 +137,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerWallClamp.length) {
+   if (selectedContent.cornerClamps?.cornerWallClamp?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -139,7 +149,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerSleeveOver.length) {
+   if (selectedContent.cornerClamps?.cornerSleeveOver?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -151,7 +161,7 @@ export const getEstimateErrorStatus = (selectedContent) => {
      return false;
     }
    }
-   if (selectedContent.cornerClamps.cornerGlassToGlass.length) {
+   if (selectedContent.cornerClamps?.cornerGlassToGlass?.length) {
     let noSelectedDisableFound = true;
     selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){
@@ -178,7 +188,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
           }
         }
     }
-    if (selectedContent.handles?.item) {
+    if (selectedContent.handles?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.handles?.item,selectedContent.hardwareFinishes,hardwareTypes.HANDLES);
        if(status === false){
         errors = {
@@ -190,7 +200,19 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if (selectedContent.hinges?.item) {
+    if (selectedContent.doorLock?.item && selectedContent.hardwareFinishes) {
+      const status = getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK);
+       if(status === false){
+        errors = {
+          ...errors,
+          doorLock:{
+            status:false,
+            message:`"${selectedContent.doorLock.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`
+          }
+        }
+       } 
+    }
+    if (selectedContent.hinges?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.hinges?.item,selectedContent.hardwareFinishes,hardwareTypes.HINGES);
        if(status === false){
         errors = {
@@ -202,7 +224,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if (selectedContent.slidingDoorSystem?.item) {
+    if (selectedContent.slidingDoorSystem?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.slidingDoorSystem?.item,selectedContent.hardwareFinishes,hardwareTypes.SLIDINGDOORSYSTEM);
        if(status === false){
         errors = {
@@ -214,7 +236,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if (selectedContent.header?.item) {
+    if (selectedContent.header?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.header?.item,selectedContent.hardwareFinishes,hardwareTypes.HEADER);
        if(status === false){
         errors = {
@@ -226,7 +248,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.hardwareAddons.length){
+    if(selectedContent.hardwareAddons?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.hardwareAddons.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -255,7 +277,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.glassAddons.length){
+    if(selectedContent.glassAddons?.length){
       let selectedDisableNames = '';
     selectedContent.glassAddons.forEach(element => {
       if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -272,7 +294,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if (selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item) {
+    if (selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.mountingChannel?.item,selectedContent.hardwareFinishes,hardwareTypes.CHANNEL);
        if(status === false){
         errors = {
@@ -284,7 +306,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
         }
        } 
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.wallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -301,7 +323,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.sleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -318,7 +340,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.mountingClamps.glassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -335,7 +357,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerWallClamp.length){
+    if(selectedContent.cornerClamps?.cornerWallClamp?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -352,7 +374,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerSleeveOver.length){
+    if(selectedContent.cornerClamps?.cornerSleeveOver?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -369,7 +391,7 @@ export const getSelectedContentErrorMsgs = (selectedContent) => {
       }
     }
     }
-    if(selectedContent.cornerClamps.cornerGlassToGlass.length){
+    if(selectedContent.cornerClamps?.cornerGlassToGlass?.length && selectedContent.hardwareFinishes){
       let selectedDisableNames = '';
     selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
       if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){
@@ -410,9 +432,11 @@ export const generateNotificationsForCurrentEstimate = (
           variant: notificationsVariant.WARNING,
           message: `No hardware finish is selected.`,
         };
+    }else if (selectedContent.hardwareFinishes && notifications.finishNotSelected.status === true){
+      notifications.finishNotSelected = defaultNotificationState;
     }
 
-    if (selectedContent.handles?.item) {
+    if (selectedContent.handles?.item && selectedContent.hardwareFinishes) {
       // generate handle not available notification in current finish
       const status = getActiveStatus(selectedContent.handles?.item,selectedContent.hardwareFinishes,hardwareTypes.HANDLES);
       if (!status)
@@ -420,6 +444,16 @@ export const generateNotificationsForCurrentEstimate = (
           status: true,
           variant: notificationsVariant.WARNING,
           message: `Handle "${selectedContent.handles.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
+        };
+    }
+    if (selectedContent.doorLock?.item && selectedContent.hardwareFinishes) {
+      // generate handle not available notification in current finish
+      const status = getActiveStatus(selectedContent.doorLock?.item,selectedContent.hardwareFinishes,hardwareTypes.DOORLOCK);
+      if (!status)
+        notifications.doorLockNotAvailable = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: `Door Lock "${selectedContent.doorLock.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
     }
      /** switch hinges if width increases layout defaults only for layouts which have variant */
@@ -438,7 +472,7 @@ export const generateNotificationsForCurrentEstimate = (
       selectedContent.hinges = switchHingeResult.hinges;
     }
     /** end */
-    if (selectedContent.hinges?.item) {
+    if (selectedContent.hinges?.item && selectedContent.hardwareFinishes) {
       // generate hinges not available notification in current finish
       const status = getActiveStatus(selectedContent.hinges?.item,selectedContent.hardwareFinishes,hardwareTypes.HINGES);
       if (!status){
@@ -449,7 +483,7 @@ export const generateNotificationsForCurrentEstimate = (
         };
       }
     }
-    if (selectedContent.slidingDoorSystem?.item) {
+    if (selectedContent.slidingDoorSystem?.item && selectedContent.hardwareFinishes) {
       // generate sliding door system not available notification in current finish
       const status = getActiveStatus(selectedContent.slidingDoorSystem?.item,selectedContent.hardwareFinishes,hardwareTypes.SLIDINGDOORSYSTEM);
       if (!status){
@@ -460,7 +494,7 @@ export const generateNotificationsForCurrentEstimate = (
         };
       }
     }
-    if (selectedContent.header?.item) {
+    if (selectedContent.header?.item && selectedContent.hardwareFinishes) {
       // generate header type not available notification in current finish
       const status = getActiveStatus(selectedContent.header?.item,selectedContent.hardwareFinishes,hardwareTypes.HEADER);
       if (!status){
@@ -523,7 +557,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.glassAddons.length){
+    if(selectedContent.glassAddons?.length){
       let glassAddonsNotAvailable = [];
       selectedContent.glassAddons.forEach(element => {
         if(!getActiveStatus(element,null,hardwareTypes.GLASSADDONS)){
@@ -539,7 +573,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.hardwareAddons.length){
+    if(selectedContent.hardwareAddons?.length && selectedContent.hardwareFinishes){
       let hardwareAddonsNotAvailable = [];
       selectedContent.hardwareAddons.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.HARDWAREADDONS)){
@@ -555,7 +589,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if (selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item) {
+    if (selectedContent.mountingState === 'channel' && selectedContent.mountingChannel?.item && selectedContent.hardwareFinishes) {
       const status = getActiveStatus(selectedContent.mountingChannel?.item,selectedContent.hardwareFinishes,hardwareTypes.CHANNEL);
        if(!status){
         notifications.channelNotAvailable = {
@@ -563,10 +597,16 @@ export const generateNotificationsForCurrentEstimate = (
           variant: notificationsVariant.WARNING,
           message: `Mounting Channel "${selectedContent.mountingChannel.item?.name}" is not available in finish "${selectedContent.hardwareFinishes?.name}".`,
         };
-       } 
-    }
+       }else{
+         //Generate Warning if channel is selected 
+        notifications.calculateChannelWarning  = {
+          status: true,
+          variant: notificationsVariant.WARNING,
+          message: 'Current channel price is being calculated according to 1 channel stick',
+        }
+       }}
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.wallClamp.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.wallClamp?.length && selectedContent.hardwareFinishes){
       let wallClampNotAvailable = [];
       selectedContent.mountingClamps.wallClamp.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.WALLCLAMP)){
@@ -582,7 +622,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.sleeveOver.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.sleeveOver?.length && selectedContent.hardwareFinishes){
       let sleeveOverNotAvailable = [];
       selectedContent.mountingClamps.sleeveOver.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.SLEEVEOVER)){
@@ -598,7 +638,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps.glassToGlass.length){
+    if(selectedContent.mountingState === 'clamps' && selectedContent.mountingClamps?.glassToGlass?.length && selectedContent.hardwareFinishes){
       let glassToGlassNotAvailable = [];
       selectedContent.mountingClamps.glassToGlass.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.GLASSTOGLASS)){
@@ -614,7 +654,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerWallClamp.length){
+    if(selectedContent.cornerClamps?.cornerWallClamp?.length && selectedContent.hardwareFinishes){
       let cornerWallClampNotAvailable = [];
       selectedContent.cornerClamps.cornerWallClamp.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERWALLCLAMP)){
@@ -630,7 +670,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerSleeveOver.length){
+    if(selectedContent.cornerClamps?.cornerSleeveOver?.length && selectedContent.hardwareFinishes){
       let cornerSleeveOverNotAvailable = [];
       selectedContent.cornerClamps.cornerSleeveOver.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERSLEEVEOVER)){
@@ -646,7 +686,7 @@ export const generateNotificationsForCurrentEstimate = (
       }
     }
 
-    if(selectedContent.cornerClamps.cornerGlassToGlass.length){
+    if(selectedContent.cornerClamps?.cornerGlassToGlass?.length && selectedContent.hardwareFinishes){
       let cornerGlassToGlassNotAvailable = [];
       selectedContent.cornerClamps.cornerGlassToGlass.forEach(element => {
         if(!getActiveStatus(element.item,selectedContent.hardwareFinishes,hardwareTypes.CORNERGLASSTOGLASS)){
@@ -730,7 +770,7 @@ const getSwitchHingeNotification = (
         // set Notification
       const hingesSwitch = {
         status: true,
-        variant: notificationsVariant.WARNING,
+        variant: notificationsVariant.INFO,
         message: `Hinges switched from heavy to standard`,
       };
       // Unselect content from slice
@@ -759,7 +799,7 @@ const getGlassThicknessShiftNotification = (
     //set notification
     const glassThicknessSwitch = {
       status: true,
-      variant: notificationsVariant.INFO,
+      variant: notificationsVariant.WARNING,
       message: `Glass thickness switched from ${thicknessTypes.THREEBYEIGHT} to ${thicknessTypes.ONEBYTWO}`,
     };
     // set glass thickness

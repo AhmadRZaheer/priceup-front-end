@@ -45,7 +45,7 @@ export const ShowerSummarySection = ({ data, handleEditEstimate }) => {
                 <Stack direction="column">
                     <Typography className="twTxt">{measurementSides}</Typography>
                     <Typography className="summaryData" ><Box className='heading-txt'>Square Foot</Box>&nbsp;: {sqftArea}</Typography>
-                    <Typography className="summaryData"><Box className='heading-txt'>Total Price</Box>&nbsp; : {data.cost}</Typography>
+                    <Typography className="summaryData"><Box className='heading-txt'>Total Price</Box>&nbsp; : {data.cost?.toFixed(2)}</Typography>
                 </Stack>
                 {showEditButtonForEstimate ? <Button
                     onClick={handleEditEstimate}

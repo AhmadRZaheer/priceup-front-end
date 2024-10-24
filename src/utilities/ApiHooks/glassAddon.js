@@ -27,6 +27,7 @@ export const useFetchGlassAddons = () => {
     queryFn: fetchData,
     enabled: false,
     placeholderData: [],
+    keepPreviousData: true,
   });
 };
 

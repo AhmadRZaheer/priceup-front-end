@@ -29,22 +29,24 @@ import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const CustomerTable = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 10;
   const {
     data: customersList,
     refetch: customersRefetch,
     isFetching,
+    isFetched,
   } = useFetchDataCustomer(page, itemsPerPage, search);
   // const refetchData = useSelector(getDataRefetch);
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [selectedRowData, setSelectedRowData] = useState(null);
-
 
   // pagination state:
   // const [inputPage, setInputPage] = useState("");
@@ -104,49 +106,44 @@ const CustomerTable = () => {
   //   setSelectedRowData(item);
   //   setOpenEditModal(true);
   // };
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   const actionColumn = [
     {
       field: "Actions",
       align: "left",
       headerClassName: "customHeaderClass",
       flex: 1,
+      sortable:false,
       renderCell: (params) => {
         console.log(params.row, "params.row");
         return (
           <>
-            {/* <CustomIconButton
-              handleClick={() => handleViewQuotes(params)}
-              icon={
-                <img
-                  width={"20px"}
-                  height={"20px"}
-                  src={EyeIcon}
-                  alt="eye icon"
-                  style={{ marginRight: 8 }}
-                />
-              }
-              buttonText="View Quotes"
-            /> */}
             <IconButton
               sx={{ marginLeft: "10px" }}
               className="viewButton"
-              // onClick={() => handleOpenEdit(params.row)}
               onClick={() => navigate(`/customers/edit?id=${params.row._id}`)}
             >
               <ArrowForward sx={{ fontSize: "20px", color: "#8477DA" }} />
-              {/* <CustomIconButton
-                handleClick={() => handleOpenEdit(params.row)}
-                icon={
-                  <ModeIcon sx={{ color: "white", fontSize: 18, pr: 0.4 }} />
-                }
-                buttonText="Edit"
-              /> */}
             </IconButton>
           </>
         );
       },
     },
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "User Name",
+    "Email address",
+    "Date Added",
+    "Location",
+    "User Role",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   return (
     <>
@@ -222,16 +219,26 @@ const CustomerTable = () => {
           }}
         >
           <div className="CustomerTable-1">
-            {filteredData.length >= 1 ? (
-              <>
+            {isLoading ? (
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
+              </Box>
+            ) : filteredData.length > 0 ? (
+              <Box>
                 <DataGrid
                   loading={isFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  // rows={filteredData.slice(
-                  //   (page - 1) * itemsPerPage,
-                  //   page * itemsPerPage
-                  // )}
                   disableColumnFilter
                   disableColumnMenu
                   rows={filteredData}
@@ -242,13 +249,11 @@ const CustomerTable = () => {
                       ? customersList?.totalRecords
                       : 0
                   }
-                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                   rowHeight={70}
                 />
                 <Pagination
-                  // totalRecords={filteredData.length ? filteredData.length : 0}
                   totalRecords={
                     customersList?.totalRecords
                       ? customersList?.totalRecords
@@ -258,16 +263,7 @@ const CustomerTable = () => {
                   page={page}
                   setPage={setPage}
                 />
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
-              </>
+              </Box>
             ) : (
               <Typography
                 sx={{ textAlign: "center", fontSize: 20, color: "gray", py: 2 }}

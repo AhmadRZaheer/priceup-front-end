@@ -31,21 +31,21 @@ import Pagination from "../Pagination";
 import EditIcon from "../../Assets/d.svg";
 import CustomInputField from "../ui-components/CustomInput";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
-import { useDeleteDocument, useEditDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useDeleteDocument,
+  useEditDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
 import { debounce } from "lodash";
 import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { getAssignedLocationName } from "@/utilities/users";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const routePrefix = `${backendURL}/staffs`;
 const itemsPerPage = 10;
 
 const TeamTable = () => {
-  // const {
-  //   data: stafData,
-  //   refetch: teamMemberRefetch,
-  //   isFetching,
-  // } = useFetchDataTeam();
   const decryptedToken = getDecryptedToken();
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -54,6 +54,7 @@ const TeamTable = () => {
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openModifyModal, setOpenModifyModal] = useState(false);
   const [recordToModify, setRecordToModify] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const fetchAllStaffUrl = useMemo(() => {
     let url = `${routePrefix}?page=${page}&limit=${itemsPerPage}`;
     if (search && search.length) {
@@ -63,20 +64,29 @@ const TeamTable = () => {
       url += `&status=${status}`;
     }
     if (selectedDate) {
-      url += `&date=${selectedDate}`
+      url += `&date=${selectedDate}`;
     }
     return url;
-  }, [page, itemsPerPage, search, status, selectedDate])
+  }, [page, itemsPerPage, search, status, selectedDate]);
 
   const {
     data: staffsList,
     refetch: refetchStaffsList,
     isFetching: staffsListFetching,
-    isLoading
+    isFetched,
   } = useFetchAllDocuments(fetchAllStaffUrl);
-  const { mutateAsync: deleteStaff, isLoading: deleteStaffLoading, isSuccess: deletedSuccessfully } = useDeleteDocument();
-  const { mutateAsync: updateStaff, isLoading: updateStaffLoading, isSuccess: updateStaffSuccess } = useEditDocument();
-  const { data: locations, refetch: refetchLocationsList } = useFetchAllDocuments(`${backendURL}/companies`);
+  const {
+    mutateAsync: deleteStaff,
+    isLoading: deleteStaffLoading,
+    isSuccess: deletedSuccessfully,
+  } = useDeleteDocument();
+  const {
+    mutateAsync: updateStaff,
+    isLoading: updateStaffLoading,
+    isSuccess: updateStaffSuccess,
+  } = useEditDocument();
+  const { data: locations, refetch: refetchLocationsList } =
+    useFetchAllDocuments(`${backendURL}/companies`);
   // console.log("team", staffsList);
 
   const filteredData = useMemo(() => {
@@ -90,7 +100,11 @@ const TeamTable = () => {
   const handleDateChange = (newDate) => {
     if (newDate) {
       // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate).hour(12).minute(0).second(0).millisecond(0);
+      const adjustedDate = dayjs(newDate)
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0);
       setSelectedDate(adjustedDate);
     } else {
       setSelectedDate(null);
@@ -102,7 +116,6 @@ const TeamTable = () => {
     setStatus(null);
     setSelectedDate(null);
   };
-
 
   const handleCloseModifyModal = () => setOpenModifyModal(false);
   const handleOpenModifyModal = (data) => {
@@ -124,49 +137,66 @@ const TeamTable = () => {
   };
   const handleStaffDelete = async () => {
     try {
-
       if (recordToModify?.company_id !== decryptedToken.company_id) {
         const haveAccessToArray = recordToModify.haveAccessTo.filter(
           (item) => item !== decryptedToken.company_id
         );
         await updateStaff({
-          apiRoute: `${routePrefix}/${recordToModify?._id}`, data: {
-            haveAccessTo: haveAccessToArray
-          }
+          apiRoute: `${routePrefix}/${recordToModify?._id}`,
+          data: {
+            haveAccessTo: haveAccessToArray,
+          },
         });
       } else {
-        await deleteStaff({ apiRoute: `${routePrefix}/${recordToModify?._id}` });
+        await deleteStaff({
+          apiRoute: `${routePrefix}/${recordToModify?._id}`,
+        });
       }
       setOpenDeleteModal(false);
       refetchStaffsList();
-    }
-    catch (err) {
-      console.log(err, 'error while deleting');
+    } catch (err) {
+      console.log(err, "error while deleting");
     }
   };
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchStaffsList();
-      } else {
-        setPage(1);
-      }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
+        refetchStaffsList(); // If already on page 1, just refetch directly
+      // }
     }, 700),
-    [page]
+    [page, refetchStaffsList] // Ensure refetchStaffsList is included in dependencies
   );
 
   useEffect(() => {
-    refetchStaffsList();
-  }, [page, deletedSuccessfully, status, selectedDate]);
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    // if (status || selectedDate || search) {
+    //   setPage(1);
+    // }
+    if (search) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchStaffsList();
+    }
+  }, [status, selectedDate, search, page, deletedSuccessfully]);
+
+  useEffect(()=>{
+    if (status || selectedDate || search) {
+          setPage(1);
+    }
+  },[status, selectedDate, search, deletedSuccessfully])
 
   useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [search]);
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
 
   useEffect(() => {
     refetchLocationsList();
@@ -218,12 +248,24 @@ const TeamTable = () => {
     },
   ];
 
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Name",
+    "Email address",
+    "Date Added",
+    "Last quote",
+    "Total quoted",
+    "Status",
+    "Access",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+
   return (
     <>
       <Box
         sx={{
           width: "100%",
-          backgroundColor: { sm: "#F6F5FF", xs: '#FFFFFF' },
+          backgroundColor: { sm: "#F6F5FF", xs: "#FFFFFF" },
           // height: "98.2vh",
         }}
       >
@@ -240,7 +282,7 @@ const TeamTable = () => {
               sx={{
                 fontSize: 24,
                 fontWeight: 600,
-                lineHeight: '32.78px'
+                lineHeight: "32.78px",
               }}
             >
               User Management
@@ -250,14 +292,14 @@ const TeamTable = () => {
                 color: "#212528",
                 fontSize: "16px",
                 fontWeight: 600,
-                lineHeight: '21.86px',
-                opacity: '70%'
+                lineHeight: "21.86px",
+                opacity: "70%",
               }}
             >
               Add, edit and manage your Users.
             </Typography>
           </Box>
-          <Box sx={{ alignSelf: 'center' }}>
+          <Box sx={{ alignSelf: "center" }}>
             <Button
               variant="contained"
               sx={{
@@ -266,7 +308,7 @@ const TeamTable = () => {
                 color: "white",
                 fontSize: 16,
                 fontWeight: 600,
-                gap: '10px'
+                gap: "10px",
               }}
               onClick={handleCreateStaff}
             >
@@ -283,9 +325,7 @@ const TeamTable = () => {
             my: 2,
           }}
         >
-          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>
-            Users
-          </Typography>
+          <Typography sx={{ fontSize: 24, fontWeight: 600 }}>Users</Typography>
 
           <Box sx={{ display: "flex", gap: 2 }}>
             <Box>
@@ -326,7 +366,7 @@ const TeamTable = () => {
                     fontWeight: 400,
                     fontFamily: '"Roboto",sans-serif !important',
                     top: "-5px", // Adjust label size
-                    color: '#000000'
+                    color: "#000000",
                   },
                 }}
                 renderInput={(params) => <TextField {...params} size="small" />}
@@ -338,7 +378,10 @@ const TeamTable = () => {
                 size="small"
                 className="custom-textfield"
               >
-                <InputLabel id="demo-select-small-label" className="input-label">
+                <InputLabel
+                  id="demo-select-small-label"
+                  className="input-label"
+                >
                   Status
                 </InputLabel>
                 <Select
@@ -351,7 +394,7 @@ const TeamTable = () => {
                   sx={{ height: "40px" }}
                   onChange={(event) => setStatus(event.target.value)}
                 >
-                  <MenuItem value={'active'}>
+                  <MenuItem value={"active"}>
                     {" "}
                     <Typography
                       className=" status-active"
@@ -360,7 +403,7 @@ const TeamTable = () => {
                       Active
                     </Typography>
                   </MenuItem>
-                  <MenuItem value={'inactive'}>
+                  <MenuItem value={"inactive"}>
                     {" "}
                     <Typography
                       className=" status-inActive"
@@ -373,7 +416,14 @@ const TeamTable = () => {
               </FormControl>
             </Box>
 
-            <Button variant="text" onClick={handleResetFilter} sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
+            <Button
+              variant="text"
+              onClick={handleResetFilter}
+              sx={{
+                p: "6px 8px !important",
+                fontFamily: '"Roboto",sans-serif !important',
+              }}
+            >
               Clear Filter
             </Button>
           </Box>
@@ -388,62 +438,78 @@ const TeamTable = () => {
             m: "auto",
           }}
         >
-        <div className="CustomerTable-team">
-          {filteredData.length >= 1 ? (
-            <>
-              <DataGrid
-                loading={staffsListFetching}
-                style={{
-                  border: "none",
+          <div className="CustomerTable-team">
+            {isLoading ? (
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
+              </Box>
+            ) : filteredData.length > 0 ? (
+              <Box>
+                <DataGrid
+                  loading={staffsListFetching}
+                  style={{
+                    border: "none",
+                  }}
+                  getRowId={(row) => row._id}
+                  rows={filteredData}
+                  columns={teamColumns.concat(actionColumn)}
+                  page={page}
+                  pageSize={itemsPerPage}
+                  rowCount={
+                    staffsList?.totalRecords ? staffsList?.totalRecords : 0
+                  }
+                  sx={{ width: "100%" }}
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
+                <Pagination
+                  totalRecords={
+                    staffsList?.totalRecords ? staffsList?.totalRecords : 0
+                  }
+                  itemsPerPage={itemsPerPage}
+                  page={page}
+                  setPage={setPage}
+                />
+              </Box>
+            ) : (
+              <Typography
+                sx={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "#667085",
+                  py: 2,
                 }}
-                getRowId={(row) => row._id}
-                rows={filteredData}
-                columns={teamColumns.concat(actionColumn)}
-                page={page}
-                pageSize={itemsPerPage}
-                rowCount={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
-                // rowCount={filteredData.length}
-                // pageSizeOptions={[1, , 25]}
-                sx={{ width: "100%" }}
-                hideFooter
-                disableColumnMenu
-                pagination={false}
-              />
-              <Pagination
-                totalRecords={staffsList?.totalRecords ? staffsList?.totalRecords : 0}
-                itemsPerPage={itemsPerPage}
-                page={page}
-                setPage={setPage}
-              />
-            </>
-          ) : (
-            <Typography
-              sx={{
-                textAlign: "center",
-                fontSize: 20,
-                color: "#667085",
-                py: 2,
-              }}
-            >
-              No User found
-            </Typography>
-          )}
-        </div>
+              >
+                No User found
+              </Typography>
+            )}
+          </div>
+        </Box>
+        <DeleteModal
+          open={openDeleteModal}
+          close={handleCloseDeleteModal}
+          isLoading={deleteStaffLoading}
+          handleDelete={handleStaffDelete}
+        />
+        <AddTeamMembers
+          open={openModifyModal}
+          close={handleCloseModifyModal}
+          recordToModify={recordToModify}
+          refetchUsers={refetchStaffsList}
+          locationsList={[]}
+        />
       </Box>
-      <DeleteModal
-        open={openDeleteModal}
-        close={handleCloseDeleteModal}
-        isLoading={deleteStaffLoading}
-        handleDelete={handleStaffDelete}
-      />
-      <AddTeamMembers
-        open={openModifyModal}
-        close={handleCloseModifyModal}
-        recordToModify={recordToModify}
-        refetchUsers={refetchStaffsList}
-        locationsList={[]}
-      />
-    </Box >
     </>
   );
 };

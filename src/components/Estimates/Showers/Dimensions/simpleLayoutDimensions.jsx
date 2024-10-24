@@ -4,10 +4,7 @@ import {
   CircularProgress,
   FormControl,
   Grid,
-  IconButton,
-  InputLabel,
   MenuItem,
-  Popover,
   Select,
   TextField,
   Tooltip,
@@ -15,7 +12,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
-
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,15 +37,19 @@ import {
   setisCustomizedDoorWidth,
   getProjectId,
   addSelectedItem,
-  resetNotifications
+  resetNotifications,
+  getListData,  
 } from "@/redux/estimateCalculations";
 import CheckIcon from "@mui/icons-material/Check";
 import {
   backendURL,
   calculateAreaAndPerimeter,
   getGlassThickness,
+  notificationsAvailable,
 } from "@/utilities/common";
 import {
+  inputLength,
+  inputMaxValue,
   layoutVariants,
   panelOverWeightAmount,
   quoteState,
@@ -60,33 +60,122 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 // import { generateNotificationsForCurrentItem } from "../../utilities/estimates";
 import { getHardwareFabricationQuantity } from "@/utilities/hardwarefabrication";
 import { generateNotificationsForCurrentEstimate } from "@/utilities/estimatorHelper";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+  NavLink,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 // import { useFetchDataDefault } from "@/utilities/ApiHooks/defaultLayouts";
 // import AlertMessage from "@/components/ui-components/AlertMessage";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useFetchAllDocuments,
+  useFetchSingleDocument,
+} from "@/utilities/ApiHooks/common";
 import AlertsAndWarnings from "../AlertsAndWarnings";
+import { Flag } from "@mui/icons-material";
+import { setStateForShowerEstimate } from "@/utilities/estimates";
+import { getSkeltonState } from "@/redux/estimateSlice";
+import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
 
-export const SimpleLayoutDimensions = ({ setStep }) => {
-  // const navigate = useNavigate();
+export const SimpleLayoutDimensions = ({ setStep ,layoutData,recordData }) => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const estimateState = useSelector((state) => state.estimateCalculations);
-  const projectId = useSelector(getProjectId);
-  const { data: layouts, isLoading: loading, refetch } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
+  const location = useLocation();
+  const layoutId = searchParams.get("layoutId");
+  const estimateId = searchParams.get("estimateId");
+  const [selectedLayout, setSelectedLayout] = useState(null);
+  const estimateState = useSelector((state) => state.estimateCalculations);  
+  const skeltonState = useSelector(getSkeltonState);
+  const listData = useSelector(getListData);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+    const category = searchParams.get("category");
+  // const currentQuoteState = useSelector(getQuoteState);
+  const currentQuoteState = searchParams.get("quoteState");
+  // const {
+  //   data: layouts,
+  //   isLoading: loading,
+  //   refetch,
+  // } = useFetchAllDocuments(`${backendURL}/layouts/for-estimate`);
   // const setHandleEstimatesPages = (item) => {
   //   dispatch(setNavigationDesktop(item));
   // };
   // const [editField, setEditField] = useState(true);
   const isCustomizedDoorWidthRedux = useSelector(getisCustomizedDoorWidth);
   const selectedData = useSelector(selectedItem);
+
+  // const {
+  //   data: record,
+  //   refetch: refetchRecord,
+  //   isLoading: getLoading,
+  // } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (estimateId && estimateId?.length) {
+        recordData.refetchRecord();
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}?category=${category}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [estimateId]);
+
+  useEffect(() => {
+    if (currentQuoteState === quoteState.EDIT) {
+      if (recordData?.record) {
+        setStateForShowerEstimate(recordData?.record, dispatch, navigate, false);
+      } else {
+        if (recordData?.record === null) {
+          if (projectId && projectId?.length) {
+            navigate(`/projects/${projectId}?category=${category}`);
+          } else {
+            navigate(`/estimates`);
+          }
+        }
+      }
+    }
+  }, [recordData?.record]);
+
+  useEffect(() => {
+    if (
+      layoutData?.layouts &&
+      layoutData?.layouts.length &&
+      layoutId &&
+      layoutId.length &&
+      currentQuoteState === quoteState.CREATE
+    ) {
+      console.log("WEEERTWEEE");
+      const layoutsData = layoutData?.layouts?.find((item) => item._id === layoutId);
+      if (layoutsData) {
+        if (selectedLayout === null) {
+          setSelectedLayout(layoutsData);
+          dispatch(addSelectedItem(layoutsData));
+        }
+      } else {
+        if (projectId && projectId?.length) {
+          navigate(`/projects/${projectId}?category=${category}`);
+        } else {
+          navigate(`/estimates`);
+        }
+      }
+    }
+  }, [layoutData?.layouts, layoutId, selectedLayout]);
+
   const doorWidthFromredux = useSelector(getDoorWidth);
   const measurementSides = useSelector(getMeasurementSide);
-  const currentQuoteState = useSelector(getQuoteState);
+
   const reduxAdditionalFields = useSelector(getAdditionalFields);
   const showerSettings = useSelector(getLocationShowerSettings);
   const isMobile = useMediaQuery("(max-width: 600px)");
-  const iphoneSe = useMediaQuery("(max-width: 375px)");
-  const iphone14Pro = useMediaQuery("(max-width: 430px)");
+  // const iphoneSe = useMediaQuery("(max-width: 375px)");
+  // const iphone14Pro = useMediaQuery("(max-width: 430px)");
   const initialValues = measurementSides.reduce((acc, item) => {
     if (item?.value) {
       acc[item.key] = item.value;
@@ -95,20 +184,26 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
     }
     return acc;
   }, {});
-
   const noOfSidesOFCurrentLayout = selectedData?.settings?.measurementSides;
   console.log(noOfSidesOFCurrentLayout, "side", measurementSides);
   const [debouncedValue, setDebouncedValue] = useState(0);
   const [editDebouncedValue, setEditDebouncedValue] =
     useState(doorWidthFromredux);
-  const [selectedLayout, setSelectedLayout] = useState(selectedData);
-
   const handleLayoutChange = (event) => {
     const id = event.target.value;
-    const selectedItem = layouts?.find((item) => item._id === id);
-    Object.keys(formik.values).forEach((key) => { // reset existing formik values
-      formik.setFieldValue(key, '');
-    })
+    const selectedItem = layoutData?.layouts?.find((item) => item._id === id);
+    if (selectedItem) {
+      const searchParams = new URLSearchParams(location.search);
+      searchParams.set("layoutId", id);
+      navigate({
+        pathname: location.pathname,
+        search: searchParams.toString(),
+      });
+    }
+    Object.keys(formik.values).forEach((key) => {
+      // reset existing formik values
+      formik.setFieldValue(key, "");
+    });
     dispatch(setisCustomizedDoorWidth(false));
     dispatch(resetNotifications());
     dispatch(updateMeasurements([])); // reset measurement array on shifting layout
@@ -130,8 +225,11 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       },
       {}
     ),
-  });
-  const formik = useFormik({
+  }); 
+
+  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
+
+   const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
@@ -195,6 +293,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
       if (isMobile) {
         setStep(1);
       }
+      //open Child Popover
+        setOpenPopover(true)
+      // dispatch(setnotificationStatus(buttonRef.current))
       // navigate("/estimates/review");
       // resetForm();
     },
@@ -244,9 +345,13 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
   };
 
   useEffect(() => {
-    if (currentQuoteState === quoteState.CREATE) {
+    if (currentQuoteState === quoteState.CREATE && selectedData && listData) {
       dispatch(initializeStateForCreateQuote({ layoutData: selectedData }));
-    } else if (currentQuoteState === quoteState.EDIT) {
+    } else if (
+      currentQuoteState === quoteState.EDIT &&
+      selectedData &&
+      listData
+    ) {
       dispatch(
         initializeStateForEditQuote({
           estimateData: {
@@ -259,12 +364,22 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
         })
       );
     }
-    refetch();
-    return () => { };
-  }, [selectedLayout]);
+    // if (currentQuoteState === quoteState.CREATE) {
+    //   layoutData.refetch();
+    // }
+    return () => {};
+  }, [selectedData, listData]);
 
+  useEffect(()=>{
+    if (currentQuoteState === quoteState.CREATE) {
+      layoutData.refetch();
+    }
+  },[])
+  
   return (
     <>
+    { skeltonState || recordData.estimateFetcing  ||  layoutData.isFetching ?  <LayoutMeasurementSkeleton /> : 
+    (  <>
       <form onSubmit={formik.handleSubmit}>
         <Box
           sx={{
@@ -289,13 +404,19 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               display: { sm: "flex", xs: "none" },
               borderBottom: "1px solid rgba(212, 219, 223, 1)",
               justifyContent: "space-between",
-              alignItems: "center"
+              alignItems: "center",
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
               Layout & Measurement
             </Typography>
-            <AlertsAndWarnings />
+            <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
           </Box>
           <Box
             sx={{
@@ -346,7 +467,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                 paddingX: { sm: 2, xs: 0 },
                 height: "100%",
                 // background: { sm: "#D9D9D9" },
-                gap: { lg: '84px', xs: 4 },
+                gap: { lg: "84px", xs: 4 },
                 borderRadius: "8px",
               }}
             >
@@ -375,7 +496,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                   pb: { sm: 0, xs: 12 },
                 }}
               >
-                {currentQuoteState === quoteState.CREATE && (
+                {currentQuoteState === quoteState.CREATE && selectedLayout && (
                   <Box
                     sx={{
                       mb: { sm: 2, xs: 0 },
@@ -391,28 +512,44 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         size="small"
                         className="custom-textfield-purple"
                         onChange={handleLayoutChange}
-                        renderValue={(value) => {
-                          const selectedItem = layouts?.find(item => item._id === value);
-                          return <Typography sx={{ fontSize: "14px", textOverflow: 'ellipsis', overflow: 'hidden', textWrap: 'nowrap' }}>{selectedItem?.name}</Typography>;
+                        renderValue={(value) => {                         
+                          // const selectedItem = layouts?.find(item => item._id === value);
+                          return (
+                            <Typography
+                              sx={{
+                                fontSize: "14px",
+                                textOverflow: "ellipsis",
+                                overflow: "hidden",
+                                textWrap: "nowrap",
+                              }}
+                            >
+                              {selectedLayout?.name}
+                            </Typography>
+                          );
                         }}
                         style={{
                           background: "#F6F5FF",
                           borderRadius: "4px",
                         }}
                         sx={{
-                          p: '0px', '&.MuiMenu-list': {
-                            p: '0px'
-                          }
+                          p: "0px",
+                          "&.MuiMenu-list": {
+                            p: "0px",
+                          },
                         }}
                       >
-                        {layouts?.map((item) => (
-                          <MenuItem key={`key-${item.name}`} value={item._id} sx={{ p: '10px 12px !important' }}>
+                        {layoutData?.layouts?.map((item) => (
+                          <MenuItem
+                            key={`key-${item.name}`}
+                            value={item._id}
+                            sx={{ p: "10px 12px !important" }}
+                          >
                             <Box
                               sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
                                 width: "100%",
-                                gap: '10px'
+                                gap: "10px",
                               }}
                             >
                               <Typography sx={{ fontSize: "14px" }}>
@@ -422,7 +559,6 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                                 <CheckIcon sx={{ color: "#8477DA" }} />
                               ) : null}
                             </Box>
-
                           </MenuItem>
                         ))}
                       </Select>
@@ -440,7 +576,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           display: "flex",
                           alignItems: { sm: "start", xs: "center" },
                           flexDirection: { sm: "column", xs: "row" },
-                          gap: { sm: '10px', xs: 1 },
+                          gap: { sm: "10px", xs: 1 },
                         }}
                       >
                         <Box
@@ -452,7 +588,14 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                             lineHeight: "21.86px",
                           }}
                         >
-                          <Typography sx={{ mr: 0.5, fontSize: '16px', fontWeight: 600, lineHeight: '21.86px' }}>
+                          <Typography
+                            sx={{
+                              mr: 0.5,
+                              fontSize: "16px",
+                              fontWeight: 600,
+                              lineHeight: "21.86px",
+                            }}
+                          >
                             {String.fromCharCode(97 + index)}
                           </Typography>
                           <Tooltip title={""}>
@@ -481,12 +624,14 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           }}
                           value={formik.values[String.fromCharCode(97 + index)]}
                           onChange={(e) => {
-                            formik.handleChange(e);
-                            // doorandPanel(e);
+                            if (e.target.value.length <= inputLength) {
+                              formik.handleChange(e);
+                              // doorandPanel(e);
+                            }
                           }}
                           onBlur={formik.handleBlur}
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                           }}
                         />
                       </Box>
@@ -540,7 +685,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                         alignItems: { sm: "start", xs: "center" },
                         flexDirection: { sm: "column", xs: "row" },
                         width: { md: "48.6%", xs: "100%" },
-                        gap: '10px',
+                        gap: "10px",
                       }}
                     >
                       <Box
@@ -576,13 +721,14 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                       <TextField
                         fullWidth
                         InputProps={{
-                          inputProps: { min: 1 },
+                          inputProps: { min: 1, max: inputMaxValue },
                         }}
                         disabled={!isCustomizedDoorWidthRedux}
                         placeholder={doorWidthFromredux}
                         type="number"
-                        className={`custom-textfield-purple${!isCustomizedDoorWidthRedux ? "-disabled" : ""
-                          }`}
+                        className={`custom-textfield-purple${
+                          !isCustomizedDoorWidthRedux ? "-disabled" : ""
+                        }`}
                         size="small"
                         variant="outlined"
                         value={doorWidthFromredux}
@@ -594,12 +740,16 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                           // maxWidth: {},
                         }}
                         name="door"
-                        onChange={(e) => handleInputChange(e)}
+                        onChange={(e) => {
+                          if (e.target.value.length <= inputLength) {
+                            handleInputChange(e);
+                          }
+                        }}
                       />
                     </Box>
                   </Box>
                   {doorWidthFromredux > showerSettings?.doorWidth ||
-                    doorWidthFromredux < 1 ? (
+                  doorWidthFromredux < 1 ? (
                     <Box
                       sx={{
                         display: "flex",
@@ -653,8 +803,9 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
                     <img
                       width={isMobile ? "134px" : "240px"}
                       height={isMobile ? "188px" : "300px"}
-                      src={`${backendURL}/${selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
-                        }`}
+                      src={`${backendURL}/${
+                        selectedData?.image ?? selectedData?.settings?.image // first option is while creating and second option is while editing
+                      }`}
                       alt="Selected"
                     />
                   </Box>
@@ -675,37 +826,39 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
               }}
             >
               <Box sx={{ display: "block" }}>
-                {(currentQuoteState === quoteState.CREATE || isMobile) && <NavLink
-                  to={
-                    currentQuoteState === quoteState.EDIT
-                      ? projectId
-                        ? `/projects/${projectId}`
-                        : "/estimates"
-                      : "/estimates/layouts"
-                  }
-                >
-                  <Button
-                    sx={{
-                      width: { xs: 120, sm: 150 },
-                      color: "black",
-                      border: "1px solid #D0D5DD",
-                      ":hover": {
-                        border: "1px solid #8477DA",
-                      },
-                      fontSize: 18,
-                      // ml: 2,
-                      backgroundColor: "white",
-                      height: 42,
-                      fontWeight: 600,
-                    }}
-                    fullWidth
-                    variant="outlined"
-                  // onClick={handleBack}
+                {(currentQuoteState === quoteState.CREATE || isMobile) && (
+                  <NavLink
+                    to={
+                      currentQuoteState === quoteState.EDIT
+                        ? projectId
+                          ? `/projects/${projectId}?category=${category}`
+                          : "/estimates"
+                        : `/estimates/layouts?category=${category}&projectId=${projectId}`
+                    }
                   >
-                    {" "}
-                    Back
-                  </Button>
-                </NavLink>}
+                    <Button
+                      sx={{
+                        width: { xs: 120, sm: 150 },
+                        color: "black",
+                        border: "1px solid #D0D5DD",
+                        ":hover": {
+                          border: "1px solid #8477DA",
+                        },
+                        fontSize: 18,
+                        // ml: 2,
+                        backgroundColor: "white",
+                        height: 42,
+                        fontWeight: 600,
+                      }}
+                      fullWidth
+                      variant="outlined"
+                      // onClick={handleBack}
+                    >
+                      {" "}
+                      Back
+                    </Button>
+                  </NavLink>
+                )}
               </Box>
               <Button
                 type="submit"
@@ -737,6 +890,7 @@ export const SimpleLayoutDimensions = ({ setStep }) => {
           </Box>
         </Box>
       </form>
+    </> )}
     </>
   );
 };

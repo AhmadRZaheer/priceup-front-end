@@ -10,6 +10,7 @@ import { useDeleteHardwares, useEditFullHardware } from '@/utilities/ApiHooks/ha
 // import AddEditHardware from '../Modal/addEditHardware'
 import AddEditModelHardware from '../Modal/AddEditModelHardware'
 import DefaultImage from '../ui-components/defaultImage'
+import { inputLength, inputMaxValue } from '@/utilities/constants'
 
 const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -82,9 +83,11 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const handleCostChange = useCallback(
     (event, id) => {
       const value = event.target.value;
+      if(value.length <= inputLength) {      
       setFinishes((prevFinishes) =>
         prevFinishes.map((item) => (item._id === id ? { ...item, cost: value } : item))
       );
+    }
     },
     []
   );
@@ -92,21 +95,22 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
   const actionColumns = useMemo(
     () => [
       {
-        field: 'Cost',
+        field: "Cost",
         headerName: "Cost",
-        headerClassName: 'showerHardwareHeader',
+        headerClassName: "showerHardwareHeader",
         flex: 1.6,
         sortable: false,
-        renderHeader: (params) => (
-          params.colDef.headerName
-        ),
+        renderHeader: (params) => params.colDef.headerName,
         renderCell: (params) => (
-          <Box sx={{ width: '101px' }}>
+          <Box sx={{ width: "101px" }}>
             <CustomInputField
               size="small"
               variant="outlined"
               type="number"
-              inputProps={{ min: 0 }}
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
               name="cost"
               placeholder="Cost"
               value={params?.row?.cost}
@@ -116,40 +120,38 @@ const HardwareTable = React.memo(({ data, refetchData, selectedSlug }) => {
         ),
       },
       {
-        field: 'Status',
+        field: "Status",
         headerName: "Status",
-        headerClassName: 'showerHardwareHeader',
+        headerClassName: "showerHardwareHeader",
         flex: 2.5,
         sortable: false,
-        renderHeader: (params) => (
-          params.colDef.headerName
-        ),
+        renderHeader: (params) => params.colDef.headerName,
         renderCell: (params) => (
           <Box
             sx={{
-              bgcolor: params.row?.status ? '#EFECFF' : '#F3F5F6',
-              borderRadius: '70px',
-              p: '6px 8px',
-              display: 'grid',
-              gap: '7px',
+              bgcolor: params.row?.status ? "#EFECFF" : "#F3F5F6",
+              borderRadius: "70px",
+              p: "6px 8px",
+              display: "grid",
+              gap: "7px",
             }}
           >
             <Typography
               sx={{
                 fontSize: 14,
                 fontWeight: 500,
-                lineHeight: '21px',
-                color: params?.row.status ? '#8477DA' : '#5D6164',
+                lineHeight: "21px",
+                color: params?.row.status ? "#8477DA" : "#5D6164",
               }}
             >
-              {params?.row.status ? 'Active' : 'Inactive'}
+              {params?.row.status ? "Active" : "Inactive"}
             </Typography>
           </Box>
         ),
       },
       {
-        field: '',
-        headerClassName: 'showerHardwareHeader',
+        field: "",
+        headerClassName: "showerHardwareHeader",
         flex: 0.7,
         sortable: false,
         renderCell: (params) => (

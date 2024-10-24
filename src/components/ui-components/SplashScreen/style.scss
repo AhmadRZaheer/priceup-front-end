@@ -1,31 +1,29 @@
 .splash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #fff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+@keyframes zoomInOut {
+  0% {
+    transform: scale(1);
   }
-  
-  .zoom-in-out {
-    animation: zoomInOut 1s infinite alternate;
+  50% {
+    transform: scale(1.2);
   }
-  
-  @keyframes zoomInOut {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.2);
-    }
-    100% {
-      transform: scale(1);
-    }
+  100% {
+    transform: scale(1);
   }
-  
-  
+}
+
+.zoom-in-out {
+  animation: zoomInOut 1s infinite alternate;
+}

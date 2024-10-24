@@ -9,6 +9,7 @@ import ActionsDropdown from "@/components/common/ActionsDropdown";
 import StatusChip from "@/components/common/StatusChip";
 import CustomInputField from "@/components/ui-components/CustomInput";
 import CustomToggle from "@/components/ui-components/Toggle";
+import { EstimateCategory } from "./constants";
 
 export const EstimatesColumns = (
   handleDeleteEstimate,
@@ -260,16 +261,17 @@ export const EstimatesColumns = (
       sortable: false,
       flex: 1,
       renderCell: (params) => {
+        const layoutName = params?.row?.category === EstimateCategory.MIRRORS ? 'Mirror'  : params?.row?.settings?.name ?? "Custom";
         return (
           <>
             <Tooltip
               placement="top-start"
-              title={params?.row?.settings?.name ?? "Custom"}
+              title={layoutName}
             >
               <Typography
                 sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
               >
-                {params?.row?.settings?.name ?? "Custom"}
+                {layoutName}
               </Typography>
             </Tooltip>
           </>
@@ -1175,7 +1177,7 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography className="projectRowTxt">{params.row.email}</Typography>
+          <Typography className="projectRowTxt">{params.row.email=== "" ? "---" :params.row.email}</Typography>
         </>
       );
     },
@@ -1206,7 +1208,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.address}
+            {params.row.address=== "" ? "---" : params.row.address}
           </Typography>
         </>
       );
@@ -1222,7 +1224,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.lastQuotedOn}
+            {params.row.lastQuotedOn=== "" ? "---" :params.row.lastQuotedOn}
           </Typography>
         </>
       );
@@ -1457,6 +1459,37 @@ export const userColumnsHardware = [
     },
   },
 ];
+export const WineFinishesColumns = [
+  {
+    field: "name",
+    headerName: "Finish Type",
+    headerClassName: "showerHardwareHeader",
+    sortable: false,
+    flex: 6,
+    renderHeader: (params) => (
+      <Box sx={{ pl: '14px' }}>
+        {params.colDef.headerName}
+      </Box>
+    ),
+
+    renderCell: (params) => {
+      return (
+        <Box sx={{ pl: '14px'}}>
+        <div className="user-cellWrap">
+          <div className="customerImg">
+            <DefaultImage
+              image={params.row.image}
+              name={params.row.name}
+              type={5}
+            />
+          </div>
+          <div className="new-customerNameTable">{params.row.name}</div>
+        </div>
+        </Box>
+      );
+    },
+  },
+];
 
 export const GlassAddonsColumn = [
   {
@@ -1587,6 +1620,30 @@ export const rowsHardwareHandle = [
 ];
 
 export const HardWareColumns =[
+    {
+      field: "name",
+      headerName: "Finish Type",
+      headerClassName: "showerHardwareHeader",
+      flex: 1.6,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '14px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '14px' }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+
+  ];
+export const WineHardWareColumns =[
     {
       field: "name",
       headerName: "Finish Type",
@@ -1789,6 +1846,60 @@ export const MirrorsEdgeWork = () => {
   ];
 };
 export const MirrorsGlassType = () => {
+  return [
+    {
+      field: "glassType",
+      headerName: "Glass Type",
+      headerClassName: "showerHardwareHeader",
+      flex: 1.3,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '14px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box  sx={{ pl: '14px', }}>          
+          <Box
+            className="project-cellWrap"
+          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+          </Box>
+        );
+      },
+    },
+
+  ];
+};
+export const WineMirrorsGlassType = () => {
   return [
     {
       field: "glassType",

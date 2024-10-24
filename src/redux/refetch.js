@@ -6,6 +6,8 @@ export const getMirrorsHardwareRefetch = (state) =>
   state.refetch.mirrorsHardwareRefetch;
 export const getShowersHardwareRefetch = (state) =>
   state.refetch.showersHardwareRefetch;
+export const getWineCellarsHardwareRefetch = (state) =>
+  state.refetch.wineCellarsHardwareRefetch;
 export const getNotificationsRefetch = (state) =>
   state.refetch.notificationsRefetch;
 export const getLocationsRefetch = (state) =>
@@ -21,6 +23,7 @@ const refetchSlice = createSlice({
     locationSettingsRefetch: 0,
     mirrorsHardwareRefetch: 0,
     showersHardwareRefetch: 0,
+    wineCellarsHardwareRefetch: 0,
     notificationsRefetch: 0,
     locationsRefetch: 0,
     locationsChange: 0,
@@ -37,6 +40,9 @@ const refetchSlice = createSlice({
     },
     setShowersHardwareRefetch: (state) => {
       state.showersHardwareRefetch += 1;
+    },
+    setWineCellarsHardwareRefetch: (state) => {
+      state.wineCellarsHardwareRefetch += 1;
     },
     setNotificationsRefetch: (state) => {
       state.notificationsRefetch += 1;
@@ -55,6 +61,7 @@ export const {
   setLocationSettingsRefetch,
   setMirrorsHardwareRefetch,
   setShowersHardwareRefetch,
+  setWineCellarsHardwareRefetch,
   setNotificationsRefetch,
   setLocationsRefetch,
   setChangeLocation

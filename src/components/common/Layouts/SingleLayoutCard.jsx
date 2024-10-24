@@ -8,7 +8,7 @@ import { backendURL } from "@/utilities/common";
 import { useDispatch } from "react-redux";
 // import { setDefaultId } from "@/redux/defaultSlice";
 
-const SingleShowerCard = ({ data }) => {
+const SingleShowerCard = ({ data, variant = 'shower' }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [openDrawer, setOpenDrawer] = useState(false);
@@ -21,6 +21,9 @@ const SingleShowerCard = ({ data }) => {
     setSelectedLayout(null);
     setOpenDrawer(false);
   };
+  const targetUrl = variant === 'shower'
+    ? `/layouts/edit?id=${data?._id}`
+    : `/wine-cellar/layouts/edit?id=${data?._id}`;
 
   return (
     <>
@@ -107,7 +110,7 @@ const SingleShowerCard = ({ data }) => {
             <Button
               onClick={() => {
                 // dispatch(setDefaultId(data._id));
-                navigate(`/layouts/edit?id=${data._id}`);
+                navigate(targetUrl);
               }}
               variant="contained"
               className="cardBtn"
@@ -126,6 +129,7 @@ const SingleShowerCard = ({ data }) => {
         open={openDrawer}
         handleClose={handleCloseDrawer}
         data={selectedLayout}
+        variant={variant}
       />
     </>
   );

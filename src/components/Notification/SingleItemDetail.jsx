@@ -22,6 +22,7 @@ import { setStateForShowerEstimate } from "@/utilities/estimates";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
 import { useNavigate } from "react-router-dom";
 import { EstimateSummary } from "./Categories/Estimate";
+import { setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
 
 const CustomTypo = ({ title, sx }) => {
     return (
@@ -56,15 +57,17 @@ const SingleItemDetail = ({ selectedId, handleMoveToArchive, editLoading }) => {
         markAsRead();
     }, [record]);
     const formattedDate = getLocaleDateTimeFromMongoTimestamp(record?.createdAt);
-    const layoutImage = record?.resourceInfo?.config?.layout_id ? `${backendURL}/${record?.resourceInfo?.settings?.image}` : CustomImage;
+    const layoutImage = record?.resourceInfo?.config?.layout_id && record?.resourceInfo?.settings?.image ? `${backendURL}/${record?.resourceInfo?.settings?.image}` : CustomImage;
     const handleEditEstimate = () => {
         if (record.resourceInfo?.category === EstimateCategory.SHOWERS) {
             setStateForShowerEstimate(record.resourceInfo, dispatch, navigate);
         } else if (record.resourceInfo?.category === EstimateCategory.MIRRORS) {
             setStateForMirrorEstimate(record.resourceInfo, dispatch, navigate);
+        }else if (record.resourceInfo?.category === EstimateCategory.WINECELLARS) {
+            setStateForWineCellarEstimate(record.resourceInfo, dispatch, navigate);
         }
     };
-    // console.log(record.resourceInfo?.customerData?.email, 'record1');
+    console.log(record, 'record134343');
     return (
         <Box className='notification' sx={{ height: "78.5vh", overflowY: "auto" }}>
             {getFetching ? <Box sx={{ display: 'flex', height: 'inherit', width: '100%', justifyContent: 'center', alignItems: 'center' }}>

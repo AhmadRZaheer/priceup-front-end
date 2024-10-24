@@ -42,6 +42,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { debounce } from "lodash";
 import { backendURL } from "@/utilities/common";
 import { getAssignedLocationName } from "@/utilities/users";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const getUserRoleText = (role) => {
   switch (role) {
@@ -67,7 +68,7 @@ const getStatusUpdateType = (role) => {
     default:
       return "";
   }
-}
+};
 
 const routePrefix = `${backendURL}/admins`;
 
@@ -80,6 +81,7 @@ const SuperAdminTeam = () => {
   const [recordToModify, setRecordToModify] = useState(null);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openModifyModal, setOpenModifyModal] = useState(false);
+  const [isLoadingState, setIsLoadingState] = useState(true);
   const itemsPerPage = 10;
   const fetchAllUsersUrl = useMemo(() => {
     let url = `${routePrefix}/all-users?page=${page}&limit=${itemsPerPage}`;
@@ -102,6 +104,7 @@ const SuperAdminTeam = () => {
     data: usersList,
     refetch: refetchUsersList,
     isFetching: usersListFetching,
+    isFetched,
     isLoading,
   } = useFetchAllDocuments(fetchAllUsersUrl);
   const { mutateAsync: deleteUser, isSuccess: deletedSuccessfully } =
@@ -160,8 +163,7 @@ const SuperAdminTeam = () => {
   };
 
   const handleOpenModifyModal = (record) => (
-    setRecordToModify(record),
-    setOpenModifyModal(true)
+    setRecordToModify(record), setOpenModifyModal(true)
   );
   const handleCloseModifyModal = () => {
     setOpenModifyModal(false);
@@ -174,27 +176,42 @@ const SuperAdminTeam = () => {
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchUsersList();
-      } else {
-        setPage(1);
-      }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
+        refetchUsersList(); // If already on page 1, just refetch directly
+      // }
     }, 700),
-    [page]
+    [page, refetchUsersList] // Ensure refetchUsersList is included in dependencies
   );
 
   useEffect(() => {
-    refetchUsersList();
-  }, [page, deletedSuccessfully, status, selectedDate, role]);
+    // Reset page to 1 if filters (status, selectedDate, role or search) change
+    // if (status || selectedDate || search || role) {
+    //   setPage(1);
+    // }
+    if (search) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchUsersList();
+    }
+  }, [status, selectedDate, search, page, deletedSuccessfully, role]);
+  useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, role or search) change
+    if (status || selectedDate || search || role) {
+      setPage(1);
+    }  
+  }, [status, selectedDate, search, deletedSuccessfully, role]);
 
   useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [search]);
-
+    if (isFetched && filteredData) {
+      setIsLoadingState(false);
+    }
+  }, [isFetched, filteredData]);
   useEffect(() => {
     refetchLocationsList();
   }, []);
@@ -297,63 +314,73 @@ const SuperAdminTeam = () => {
       },
     },
   ];
+  const ColumnsGenerated = GenrateColumns([
+    "User Name",
+    "Email address",
+    "Date Added",
+    "Location",
+    "User Role",
+    "Status",
+    "Actions",
+  ]);
+  const RowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   return (
     <>
-      <Box sx={{  overflow: "auto", }}>
-      <div className="page-title-location">
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            // width: "98%",
-            margin: "auto",
-          }}
-        >
-          <Box>
-            <Typography
-              sx={{
-                fontSize: 24,
-                fontWeight: 600,
-                lineHeight: '32.78px'
-              }}
-            >
-              User Management
-            </Typography>
-            <Typography
-              sx={{
-                color: "#212528",
-                fontSize: "16px",
-                fontWeight: 600,
-                lineHeight: '21.86px',
-                opacity: '70%'
-              }}
-            >
-              Add, edit and manage your Users.
-            </Typography>
+      <Box sx={{ overflow: "auto" }}>
+        <div className="page-title-location">
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              // width: "98%",
+              margin: "auto",
+            }}
+          >
+            <Box>
+              <Typography
+                sx={{
+                  fontSize: 24,
+                  fontWeight: 600,
+                  lineHeight: "32.78px",
+                }}
+              >
+                User Management
+              </Typography>
+              <Typography
+                sx={{
+                  color: "#212528",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  lineHeight: "21.86px",
+                  opacity: "70%",
+                }}
+              >
+                Add, edit and manage your Users.
+              </Typography>
+            </Box>
+            <Box sx={{ alignSelf: "center" }}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleCreateUser}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  letterSpacing: "0px",
+                  color: "white",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  gap: "10px",
+                }}
+              >
+                <Add color="white" />
+                Add New User
+              </Button>
+            </Box>
           </Box>
-          <Box sx={{alignSelf:'center'}}>
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={handleCreateUser}
-              sx={{
-                backgroundColor: "#8477DA",
-                "&:hover": { backgroundColor: "#8477DA" },
-                letterSpacing: '0px',
-                color: "white",
-                fontSize: 16,
-                fontWeight: 600,
-                gap: '10px'
-              }}
-            >
-              <Add color="white" />
-              Add New User
-            </Button>
-          </Box>
-        </Box>
         </div>
-        <Grid container sx={{ }} spacing={2}>
+        <Grid container sx={{}} spacing={2}>
           {[
             {
               title: "Total Users",
@@ -436,7 +463,7 @@ const SuperAdminTeam = () => {
               <DesktopDatePicker
                 value={selectedDate}
                 onChange={handleDateChange}
-                inputFormat="MM/DD/YYYY"  // Format for the selected date
+                inputFormat="MM/DD/YYYY" // Format for the selected date
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -446,11 +473,11 @@ const SuperAdminTeam = () => {
                       ...params.InputProps,
                       inputProps: {
                         ...params.inputProps,
-                        placeholder: "Date Added",  // Set placeholder explicitly here
+                        placeholder: "Date Added", // Set placeholder explicitly here
                       },
                     }}
                     InputLabelProps={{
-                      shrink: true,  // Ensure the label stays above the input
+                      shrink: true, // Ensure the label stays above the input
                     }}
                   />
                 )}
@@ -477,8 +504,6 @@ const SuperAdminTeam = () => {
                   },
                 }}
               />
-
-
             </Box>
             <Box>
               <FormControl
@@ -492,14 +517,19 @@ const SuperAdminTeam = () => {
                   displayEmpty
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                        sx={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          // lineHeight: '16.41px',
-                          color: '#000000',
-                          fontFamily: '"Roboto",sans-serif !important'
-                        }}>Role</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Role
+                        </Typography>
+                      );
                     }
                     return (
                       <Typography
@@ -509,10 +539,10 @@ const SuperAdminTeam = () => {
                         {userRoles.SUPER_ADMIN === selected
                           ? " Super Admin"
                           : userRoles.CUSTOM_ADMIN === selected
-                            ? " Admin"
-                            : userRoles.STAFF === selected
-                              ? " Staff"
-                              : ""}
+                          ? " Admin"
+                          : userRoles.STAFF === selected
+                          ? " Staff"
+                          : ""}
                       </Typography>
                     );
                   }}
@@ -566,14 +596,19 @@ const SuperAdminTeam = () => {
                   onChange={(event) => setStatus(event.target.value)}
                   renderValue={(selected) => {
                     if (selected === null) {
-                      return <Typography
-                        sx={{
-                          fontSize: '14px',
-                          fontWeight: 400,
-                          // lineHeight: '16.41px',
-                          color: '#000000',
-                          fontFamily: '"Roboto",sans-serif !important'
-                        }}>Status</Typography>;
+                      return (
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: 400,
+                            // lineHeight: '16.41px',
+                            color: "#000000",
+                            fontFamily: '"Roboto",sans-serif !important',
+                          }}
+                        >
+                          Status
+                        </Typography>
+                      );
                     }
 
                     return selected ? (
@@ -597,7 +632,7 @@ const SuperAdminTeam = () => {
                     {" "}
                     <Typography
                       className=" status-active"
-                      sx={{ padding: 0, px: 2,width: "fit-content" }}
+                      sx={{ padding: 0, px: 2, width: "fit-content" }}
                     >
                       Active
                     </Typography>
@@ -614,7 +649,14 @@ const SuperAdminTeam = () => {
                 </Select>
               </FormControl>
             </Box>
-            <Button variant="text" onClick={handleResetFilter} sx={{ p: '6px 8px !important', fontFamily: '"Roboto",sans-serif !important' }}>
+            <Button
+              variant="text"
+              onClick={handleResetFilter}
+              sx={{
+                p: "6px 8px !important",
+                fontFamily: '"Roboto",sans-serif !important',
+              }}
+            >
               Clear Filter
             </Button>
           </Box>
@@ -623,53 +665,38 @@ const SuperAdminTeam = () => {
         <Box
           sx={{
             border: "1px solid #D0D5DD",
-            background:'#FFFFFF',
+            background: "#FFFFFF",
             borderRadius: "8px",
             overflow: "hidden",
             // width: "99.88%",
             m: "auto",
           }}
         >
-          {isLoading ? (
-            <Box
-              sx={{
-                width: "100%",
-                textAlign: "center",
-                display: "flex",
-                justifyContent: "center",
-                height: "300px",
-                alignItems: "center",
-                background: "#FFFF",
-              }}
-            >
-              <CircularProgress sx={{ color: "#8477DA" }} />
+          {isLoadingState ? (
+            <Box>
+              <DataGrid
+                getRowId={(row) => row._id}
+                rows={RowsGenerated}
+                columns={ColumnsGenerated}
+                page={1}
+                pageSize={10}
+                className="table"
+                hideFooter
+                disableColumnMenu
+                pagination={false}
+              />
             </Box>
-          ) : filteredData?.length === 0 && !usersListFetching ? (
-            <Typography sx={{ color: "#667085", p: 2, textAlign: "center", background: '#FFFF' }}>
-              No User Found
-            </Typography>
-          ) : (
-            <div >
+          ) : filteredData?.length > 0 ? (
+            <Box>
               <DataGrid
                 loading={usersListFetching}
-                style={{
-                  border: "none",
-                }}
                 getRowId={(row) => row._id}
                 rows={filteredData}
                 columns={AdminColumns?.concat(actionColumn)}
                 page={page}
                 pageSize={itemsPerPage}
                 rowCount={usersList?.totalRecords ? usersList?.totalRecords : 0}
-                sx={{
-                  width: "100%",
-                  '& .MuiDataGrid-columnHeader': {
-                    borderRight: 'none', // Remove the right border between header cells
-                    '&:hover': {
-                      borderRight: 'none', // Ensure no border on hover
-                    },
-                  }
-                }}
+                className="table"
                 hideFooter
                 disableColumnMenu
                 pagination={false}
@@ -684,7 +711,18 @@ const SuperAdminTeam = () => {
                   setPage={setPage}
                 />
               </Box>
-            </div>
+            </Box>
+          ) : (
+            <Typography
+              sx={{
+                color: "#667085",
+                p: 2,
+                textAlign: "center",
+                background: "#FFFF",
+              }}
+            >
+              No User Found
+            </Typography>
           )}
         </Box>
         <DeleteModal

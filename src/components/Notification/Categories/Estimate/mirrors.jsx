@@ -66,8 +66,8 @@ export const MirrorSummarySection = ({ data, handleEditEstimate }) => {
                 {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"><Box className='heading-txt'> Glass Addons</Box>&nbsp;: {data.resourceInfoWithFullObjects?.glassAddons?.map((item, index) => (
                     <Typography sx={{fontSize: '17.25px !important', fontWeight: 500,  color: '#344054' }}>{item?.name}{data.resourceInfoWithFullObjects?.glassAddons?.length - 1 !== index ? ', ' : ''}</Typography>
                 ))}</Typography> : ''}
-                {data.resourceInfoWithFullObjects?.hardwares?.length ? <Typography className="summaryData"><Box className='heading-txt'> Hardwares</Box>&nbsp;: {data.resourceInfoWithFullObjects?.hardwares?.map((item, index) => (
-                    <Typography sx={{fontSize: '17.25px !important', fontWeight: 500,  color: '#344054' }}>{item?.name}{data.resourceInfoWithFullObjects?.hardwares?.length - 1 !== index ? ', ' : ''}</Typography>
+                {data.resourceInfoWithFullObjects?.hardwares?.length ? <Typography className="summaryData"><Box className='heading-txt'> Hardwares</Box>&nbsp;: {data.resourceInfoWithFullObjects?.hardwares?.map((record, index) => (
+                    <Typography sx={{fontSize: '17.25px !important', fontWeight: 500,  color: '#344054' }}>{record?.item?.name} {'('+record?.count+')'} {data.resourceInfoWithFullObjects?.hardwares?.length - 1 !== index ? ', ' : ''}</Typography>
                 ))}</Typography> : ''}
                 <Typography className="summaryData"><Box className='heading-txt'>People</Box>&nbsp; : {data.config?.people}</Typography>
                 <Typography className="summaryData"><Box className='heading-txt'>Hours</Box>&nbsp; : {data.config?.hours}</Typography>

@@ -16,7 +16,7 @@ label {
   font-size: 14px;
   line-height: 20px;
   font-weight: 500;
-  color: #344054
+  color: #344054;
 }
 
 input {
@@ -47,7 +47,6 @@ input {
   font-weight: 600 !important;
   font-size: 16px !important;
   line-height: 24px !important;
-  
 }
 
 .logo-img {
@@ -131,15 +130,13 @@ input {
   line-height: 21px;
   font-family: "Roboto", sans-serif !important;
 }
-.showerHardwareHeader{
-  background-color: #F3F5F6;
+.showerHardwareHeader {
+  background-color: #f3f5f6;
   color: #000000;
   font-size: 14px;
   font-weight: 600 !important;
   line-height: 19.12px;
 }
-
-
 
 .projectRowTxt {
   color: #000000 !important;
@@ -298,22 +295,21 @@ input {
 
 /* table boder color  */
 .MuiDataGrid-withBorderColor {
-  border-color: #D4DBDF !important;
+  border-color: #d4dbdf !important;
 }
 
 /* border Radius */
 /* .MuiDataGrid-main{
   border-radius: 8px !important;
 } */
-.MuiDataGrid-virtualScroller{
+.MuiDataGrid-virtualScroller {
   overflow: hidden !important;
 }
-
 
 .model-field {
   display: flex;
   flex-direction: column !important;
-  gap: 8px
+  gap: 8px;
 }
 
 .categoryTab {
@@ -334,7 +330,7 @@ input {
   font-weight: 500 !important;
   line-height: 16.41px !important;
   color: #000000 !important;
-  background: #FFFF !important;
+  background: #ffff !important;
   border-radius: 4px !important;
   padding: 7px 12px !important;
   font-family: "Roboto", sans-serif !important;
@@ -369,14 +365,29 @@ input {
 
 .mirror-meun-item {
   padding: 12px !important;
-  border-bottom: 0.2px solid #D0D5DD !important;
+  border-bottom: 0.2px solid #d0d5dd !important;
 }
 
 .mirror-meun-item:hover {
-  background: #EDEBFA !important;
+  background: #edebfa !important;
 }
 
 /* input field padding */
-.MuiOutlinedInput-input{
-  padding: 10px !important
+.MuiOutlinedInput-input {
+  padding: 10px !important;
+}
+.table {
+  width: 100%;
+  border: none !important;
+}
+.MuiDataGrid-columnHeader {
+  border-radius: none !important;
+}
+.MuiDataGrid-columnHeader:hover {
+  border-radius: none !important;
+}
+.counter-txt{
+  width:24px;
+  display:flex;
+  justify-content:center;
 }

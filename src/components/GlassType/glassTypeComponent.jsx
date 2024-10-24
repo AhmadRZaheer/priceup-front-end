@@ -9,7 +9,11 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material";
-import { ArrowForward, DeleteOutlineOutlined, EditOutlined } from "@mui/icons-material";
+import {
+  ArrowForward,
+  DeleteOutlineOutlined,
+  EditOutlined,
+} from "@mui/icons-material";
 import {
   useDeleteGlassTypeFull,
   useEditFullGlassType,
@@ -26,6 +30,8 @@ import CustomToggle from "../ui-components/Toggle";
 import CustomInputField from "../ui-components/CustomInput";
 import DeleteModal from "../Modal/deleteModal";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const GlassTypeComponent = ({ type }) => {
   const refetchData = useSelector(getDataRefetch);
@@ -34,7 +40,7 @@ const GlassTypeComponent = ({ type }) => {
     data: GlassTypeData,
     refetch: GlassTypeRefetch,
     isFetching: GlassTypeFetching,
-    isLoading
+    isFetched,
   } = useFetchDataGlassType(type);
   const { mutate: editGlassType, isSuccess: GlassTypeEditSuccess } =
     useEditFullGlassType();
@@ -52,6 +58,8 @@ const GlassTypeComponent = ({ type }) => {
   const [rowCosts, setRowCosts] = useState({}); // State for individual row costs
   const [updateRefetch, setUpdateRefetch] = useState(false);
   const [rowStatus, setRowStatus] = useState({});
+  const [editGlassTypeLoading, setEditGlassTypeLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClickAction = (event, row) => {
     setAnchorEl(event.currentTarget);
@@ -107,6 +115,7 @@ const GlassTypeComponent = ({ type }) => {
   // };
 
   const handleStatusChange = (row, thickness) => {
+    setEditGlassTypeLoading(true);
     const updatedOptions = row.options.map((option) => ({
       ...option,
       status: option.thickness === thickness ? !option.status : option.status,
@@ -117,25 +126,28 @@ const GlassTypeComponent = ({ type }) => {
       ...prevStatus,
       [row._id]: {
         ...prevStatus[row._id],
-        [thickness]: !row.options.find(option => option.thickness === thickness).status,
-      }
+        [thickness]: !row.options.find(
+          (option) => option.thickness === thickness
+        ).status,
+      },
     }));
     // Perform the mutation to update the server
     editGlassType({ optionsData: updatedOptions, id: row._id });
     setUpdateRefetch(true);
   };
 
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   const actionColumn = [
     {
       field: "cost (Thickness 3/8)",
       headerName: "Cost (Thickness 3/8)",
       headerClassName: "showerHardwareHeader",
       sortable: false,
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 4,
 
       renderCell: (params) => {
@@ -148,16 +160,22 @@ const GlassTypeComponent = ({ type }) => {
           <Box sx={{ width: "101px" }}>
             <CustomInputField
               type="number"
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
               value={rowCosts[params.row._id]?.["3/8"] ?? thickness3by8?.cost}
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: {
-                    ...rowCosts[params.row._id],
-                    "3/8": e.target.value,
-                  },
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: {
+                      ...rowCosts[params.row._id],
+                      "3/8": e.target.value,
+                    },
+                  });
+                }
+              }}
             />
           </Box>
         );
@@ -168,11 +186,7 @@ const GlassTypeComponent = ({ type }) => {
       headerName: "Cost (Thickness 1/2)",
       headerClassName: "showerHardwareHeader",
       sortable: false,
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 4,
       renderCell: (params) => {
         // Target the correct option for "Thickness 1/2"
@@ -184,16 +198,22 @@ const GlassTypeComponent = ({ type }) => {
           <Box sx={{ width: "101px" }}>
             <CustomInputField
               type="number"
+              inputProps={{
+                min: 0,
+                max: inputMaxValue,
+              }}
               value={rowCosts[params.row._id]?.["1/2"] ?? thickness1by2?.cost}
-              onChange={(e) =>
-                setRowCosts({
-                  ...rowCosts,
-                  [params.row._id]: {
-                    ...rowCosts[params.row._id],
-                    "1/2": e.target.value,
-                  },
-                })
-              }
+              onChange={(e) => {
+                if (e.target.value.length <= inputLength) {
+                  setRowCosts({
+                    ...rowCosts,
+                    [params.row._id]: {
+                      ...rowCosts[params.row._id],
+                      "1/2": e.target.value,
+                    },
+                  });
+                }
+              }}
             />
           </Box>
         );
@@ -204,11 +224,7 @@ const GlassTypeComponent = ({ type }) => {
       headerName: "Status (Thickness 3/8)",
       headerClassName: "showerHardwareHeader",
       sortable: false,
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 4,
       renderCell: (params) => {
         const thickness3by8 = params.row.options.find(
@@ -216,17 +232,11 @@ const GlassTypeComponent = ({ type }) => {
         );
 
         return thickness3by8?.status ? (
-          <Typography
-            className="status-active"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-active" sx={{ width: "fit-content" }}>
             Active
           </Typography>
         ) : (
-          <Typography
-            className="status-inActive"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-inActive" sx={{ width: "fit-content" }}>
             Inactive
           </Typography>
         );
@@ -237,11 +247,7 @@ const GlassTypeComponent = ({ type }) => {
       headerName: "Status (Thickness 1/2)",
       headerClassName: "showerHardwareHeader",
       sortable: false,
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       flex: 4,
       renderCell: (params) => {
         const thickness1by2 = params.row.options.find(
@@ -249,17 +255,11 @@ const GlassTypeComponent = ({ type }) => {
         );
 
         return thickness1by2?.status ? (
-          <Typography
-            className="status-active"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-active" sx={{ width: "fit-content" }}>
             Active
           </Typography>
         ) : (
-          <Typography
-            className="status-inActive"
-            sx={{ width: "fit-content" }}
-          >
+          <Typography className="status-inActive" sx={{ width: "fit-content" }}>
             Inactive
           </Typography>
         );
@@ -270,11 +270,7 @@ const GlassTypeComponent = ({ type }) => {
       align: "left",
       headerClassName: "showerHardwareHeader",
       flex: 2,
-      renderHeader: (params) => (
-        <Box>
-          {params.colDef.headerName}
-        </Box>
-      ),
+      renderHeader: (params) => <Box>{params.colDef.headerName}</Box>,
       sortable: false,
       renderCell: (params) => {
         const data = params.row;
@@ -355,7 +351,9 @@ const GlassTypeComponent = ({ type }) => {
                 }}
               >
                 <p>Edit</p>
-                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
+                <EditOutlined
+                  sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                />
               </MenuItem>
 
               {/* Toggle status for Thickness 3/8 */}
@@ -390,6 +388,7 @@ const GlassTypeComponent = ({ type }) => {
               {/* </MenuItem> */}
 
               <MenuItem
+                disabled={editGlassTypeLoading}
                 sx={{
                   padding: "12px",
                   m: 0,
@@ -408,17 +407,21 @@ const GlassTypeComponent = ({ type }) => {
               >
                 <p>Thickness 3/8</p>
                 <CustomSmallSwtich
-                  inputProps={{ 'aria-label': 'ant design' }}
-                  checked={rowStatus[data._id]?.["3/8"] !== undefined
-                    ? rowStatus[data._id]["3/8"]
-                    : data.options.some(option => option.thickness === "3/8" && option.status)
+                  inputProps={{ "aria-label": "ant design" }}
+                  checked={
+                    rowStatus[data._id]?.["3/8"] !== undefined
+                      ? rowStatus[data._id]["3/8"]
+                      : data.options.some(
+                          (option) =>
+                            option.thickness === "3/8" && option.status
+                        )
                   }
                 />
               </MenuItem>
 
-
               {/* Toggle status for Thickness 1/2 */}
               <MenuItem
+                disabled={editGlassTypeLoading}
                 sx={{
                   padding: "12px",
                   m: 0,
@@ -437,10 +440,14 @@ const GlassTypeComponent = ({ type }) => {
               >
                 <p>Thickness 1/2</p>
                 <CustomSmallSwtich
-                  inputProps={{ 'aria-label': 'ant design' }}
-                  checked={rowStatus[data._id]?.["1/2"] !== undefined
-                    ? rowStatus[data._id]["1/2"]
-                    : data.options.some(option => option.thickness === "1/2" && option.status)
+                  inputProps={{ "aria-label": "ant design" }}
+                  checked={
+                    rowStatus[data._id]?.["1/2"] !== undefined
+                      ? rowStatus[data._id]["1/2"]
+                      : data.options.some(
+                          (option) =>
+                            option.thickness === "1/2" && option.status
+                        )
                   }
                 />
               </MenuItem>
@@ -466,7 +473,9 @@ const GlassTypeComponent = ({ type }) => {
               >
                 <p>Delete</p>
 
-                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
+                <DeleteOutlineOutlined
+                  sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                />
               </MenuItem>
             </Menu>
           </>
@@ -474,6 +483,15 @@ const GlassTypeComponent = ({ type }) => {
       },
     },
   ];
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Glass Type",
+    "Cost (Thickness 3/8)",
+    "Cost (Thickness 1/2)",
+    "Status (Thickness 3/8)",
+    "Status (Thickness 1/2)",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
   useEffect(() => {
     if (refetchData) {
@@ -488,6 +506,9 @@ const GlassTypeComponent = ({ type }) => {
       if (updateRefetch) {
         GlassTypeRefetch();
       }
+      setTimeout(() => {
+        setEditGlassTypeLoading(false);
+      }, 600);
     }
     if (deleteSuccess) {
       setDeleteModalOpen(false);
@@ -595,30 +616,27 @@ const GlassTypeComponent = ({ type }) => {
         }}
       >
         {isLoading ? (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "20px",
-              alignItems: "center",
-              background: "#FFFF",
-              height: "56vh",
-            }}
-          >
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+          <Box>
+            <DataGrid
+              getRowId={(row) => row._id}
+              rows={SkeletonRowsGenerated}
+              columns={SkeletonColumnsGenerated}
+              page={1}
+              pageSize={10}
+              className="table"
+              hideFooter
+              disableColumnMenu
+              pagination={false}
+            />
           </Box>
         ) : (
-          <div className="CustomerTable-1">
-            {GlassTypeData.length >= 1 ? (
+          <Box className="CustomerTable-1">
+            {GlassTypeData.length > 0 ? (
               <>
                 <DataGrid
                   loading={GlassTypeFetching}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
-                  // rows={filteredData.slice(
-                  //   (page - 1) * itemsPerPage,
-                  //   page * itemsPerPage
-                  // )}
                   disableColumnFilter
                   disableColumnMenu
                   rows={GlassTypeData}
@@ -629,21 +647,10 @@ const GlassTypeComponent = ({ type }) => {
                       ? GlassTypeData?.totalRecords
                       : 0
                   }
-                  // rowCount={filteredData.length}
                   sx={{ width: "100%" }}
                   hideFooter
                   rowHeight={70}
                 />
-
-                {/* <NewPagination
-                  totalRecords={filteredData.length ? filteredData.length : 0}
-                  setIsShowInput={setIsShowInput}
-                  isShowInput={isShowInput}
-                  setInputPage={setInputPage}
-                  inputPage={inputPage}
-                  page={page}
-                  setPage={setPage}
-                /> */}
               </>
             ) : (
               <Typography
@@ -652,7 +659,7 @@ const GlassTypeComponent = ({ type }) => {
                 No Glass Type Found
               </Typography>
             )}
-          </div>
+          </Box>
         )}
       </Box>
 

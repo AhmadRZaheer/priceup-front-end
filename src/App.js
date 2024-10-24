@@ -33,7 +33,6 @@ function App() {
 
   const [showSplash, setShowSplash] = useState(true);
   const LocationsRefetch = useSelector(getChangeLocation);
-console.log(splashLoading,'splashLoading');
 
 useEffect(()=>{
   if (splashLoading === 'true') {

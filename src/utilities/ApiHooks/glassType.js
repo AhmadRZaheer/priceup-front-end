@@ -27,6 +27,7 @@ export const useFetchDataGlassType = () => {
     queryFn: fetchData,
     enabled: false,
     placeholderData: [],
+    keepPreviousData: true,
   });
 };
 
@@ -55,7 +56,10 @@ export const useDeleteGlassType = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" });
+      showSnackbar({
+        message: `${error.response?.data?.message}`,
+        severity: "error",
+      });
     }
   };
 
@@ -85,7 +89,12 @@ export const useDeleteGlassTypeFull = () => {
         throw new Error("An error occurred while fetching the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw `${error.response?.data?.message}`;
     }
   };
@@ -188,7 +197,12 @@ export const useEditGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };
@@ -228,7 +242,12 @@ export const useEditFullGlassType = () => {
         throw new Error("An error occurred while updating the data.");
       }
     } catch (error) {
-      dispatch(showSnackbar({ message: `${error.response?.data?.message}`, severity: "error" }));
+      dispatch(
+        showSnackbar({
+          message: `${error.response?.data?.message}`,
+          severity: "error",
+        })
+      );
       throw new Error("An error occurred while updating the data.");
     }
   };

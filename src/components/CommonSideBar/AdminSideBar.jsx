@@ -74,6 +74,7 @@ const AdminSideBar = () => {
   // const [open, setOpen] = useState(false);
   const [expandShowerAccordian, setExpandShowerAccordian] = useState(false);
   const [expandMirrorAccordian, setExpandMirrorAccordian] = useState(false);
+  const [expandWineAccordian, setExpandWineAccordian] = useState(false);
   const [CustomActiveUser, setCustomActiveUser] = useState(""); // State for search query
   const [anchorEl, setAnchorEl] = useState(null);
   const location = useLocation();
@@ -156,6 +157,7 @@ const AdminSideBar = () => {
     if (
       [
         "/layouts",
+        '/layouts/edit',
         "/glass-addons",
         "/glass-types",
         "/finishes",
@@ -163,6 +165,17 @@ const AdminSideBar = () => {
       ].includes(location.pathname)
     ) {
       setExpandShowerAccordian(true);
+    }
+    if (
+      [
+        "/wine-cellar/glass-types",
+        "/wine-cellar/finishes",
+        "/wine-cellar/hardwares",
+        "/wine-cellar/layouts",
+        '/wine-cellar/layouts/edit',
+      ].includes(location.pathname)
+    ) {
+      setExpandWineAccordian(true);
     }
   }, []);
   useEffect(() => {
@@ -179,7 +192,7 @@ const AdminSideBar = () => {
     if (switchedSuperAdmin) {
       localStorage.setItem('splashLoading', 'true')
       dispatch(setChangeLocation());
-      if (decodedToken.role === userRoles.SUPER_ADMIN) {       
+      if (decodedToken.role === userRoles.SUPER_ADMIN) {
         localStorage.setItem("userReference", decodedToken.id);
       }
       localStorage.setItem("token", useTokenSuperAdmin);
@@ -369,7 +382,7 @@ const AdminSideBar = () => {
             <div className="center">
               <ul>
                 <MenuSigleItem link="/">
-                  <HomeOutlinedIcon sx={{   }} />
+                  <HomeOutlinedIcon sx={{}} />
                   <span>Dashboard</span>
                 </MenuSigleItem>
               </ul>
@@ -401,19 +414,19 @@ const AdminSideBar = () => {
           <div className="center">
             <ul>
               <MenuSigleItem link="/projects">
-                <DescriptionOutlinedIcon sx={{   }} />
+                <DescriptionOutlinedIcon sx={{}} />
                 <span>Projects</span>
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
-                <DescriptionOutlinedIcon sx={{   }} />
+                <DescriptionOutlinedIcon sx={{}} />
                 <span>Old Estimates</span>
               </MenuSigleItem>
-              <MenuSigleItem link="/customers">
-                <PeopleAltOutlinedIcon sx={{   }} />
+              <MenuSigleItem link="/customers" secondLink='/customers/edit'>
+                <PeopleAltOutlinedIcon sx={{}} />
                 <span>Customers</span>
               </MenuSigleItem>
               <MenuSigleItem link="/team">
-                <PeopleAltOutlinedIcon sx={{   }} />
+                <PeopleAltOutlinedIcon sx={{}} />
                 <span>Users</span>
               </MenuSigleItem>
             </ul>
@@ -454,7 +467,7 @@ const AdminSideBar = () => {
                 sx={{
                   p: "0px 12px",
                   color: "#5D6164",
-                
+
                   ":hover": {
                     background: "#8477DA",
                     color: "#FFFF",
@@ -483,9 +496,9 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                 <DevicesFoldOutlinedIcon sx={{  mr:'12px' }} />
+                <DevicesFoldOutlinedIcon sx={{ mr: '12px' }} />
                 {/* <ViewStreamOutlined sx={{  ,transform: "rotate(90deg)" }} /> */}
-                <Typography sx={{  fontWeight: 600 }}>Shower</Typography>
+                <Typography sx={{ fontWeight: 600 }}>Shower</Typography>
               </AccordionSummary>
               <AccordionDetails
                 style={{
@@ -509,7 +522,7 @@ const AdminSideBar = () => {
                     <InnerMenuItem link="/glass-addons">
                       <span>Glass Addons</span>
                     </InnerMenuItem>
-                    <InnerMenuItem link="/layouts">
+                    <InnerMenuItem link="/layouts" secondLink='/layouts/edit'>
                       <span>Layouts</span>
                     </InnerMenuItem>
                   </ul>
@@ -571,8 +584,8 @@ const AdminSideBar = () => {
                   },
                 }}
               >
-                <ViewStreamOutlined sx={{ mr:'12px',transform: "rotate(90deg)" }} />
-                <Typography sx={{  fontWeight: 600 }}>Mirror</Typography>
+                <ViewStreamOutlined sx={{ mr: '12px', transform: "rotate(90deg)" }} />
+                <Typography sx={{ fontWeight: 600 }}>Mirror</Typography>
               </AccordionSummary>
               <AccordionDetails style={{ padding: "0px 0px" }}>
                 <div className="center">
@@ -593,6 +606,83 @@ const AdminSideBar = () => {
                 </div>
               </AccordionDetails>
             </Accordion>
+            <Accordion
+              expanded={expandWineAccordian}
+              onChange={() => {
+                setExpandWineAccordian(!expandWineAccordian);
+              }}
+              sx={{
+                margin: "12px 0px !important",
+                border: "none",
+                background: "none",
+                boxShadow: "none",
+                ":before": {
+                  backgroundColor: "white !important",
+                },
+              }}
+            >
+              <AccordionSummary
+                expandIcon={
+                  <ExpandMoreIcon
+                    className="expand2"
+                    sx={{ color: "#5D6164" }}
+                  />
+                }
+                aria-controls="panel1-content"
+                id="panel1-header"
+                sx={{
+                  color: "#5D6164",
+                  p: "0px 12px",
+                  ":hover": {
+                    background: "#8477DA",
+                    color: "#FFFF",
+                    borderRadius: "6px",
+                    ".expand2": {
+                      color: "#FFFF",
+                    },
+                  },
+                  "&.Mui-expanded": {
+                    minHeight: "40px",
+                    background: "#8477DA",
+                    color: "#FFFF",
+                    borderRadius: "6px",
+                    ".expand2": {
+                      color: "#FFFF",
+                    },
+                  },
+                  "& .MuiAccordionSummary-content": {
+                    margin: "12px 0px !important", // Ensure no margin in content
+                  },
+                  "& .MuiAccordionSummary-content.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin in content when expanded
+                  },
+                  "& .MuiAccordionSummary-expandIconWrapper.Mui-expanded": {
+                    margin: "12px 0px !important", // Ensure no margin around the expand icon
+                  },
+                }}
+              >
+                <ViewStreamOutlined sx={{ mr: '12px', transform: "rotate(90deg)" }} />
+                <Typography sx={{ fontWeight: 600 }}>Wine Cellar</Typography>
+              </AccordionSummary>
+              <AccordionDetails style={{ padding: "0px 0px" }}>
+                <div className="center">
+                  <ul>
+                    <InnerMenuItem link="/wine-cellar/hardwares">
+                      <span>Hardware</span>
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/finishes">
+                      <span>Finishes</span>
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/glass-types">
+                      <span>Glass Types</span>
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/layouts" secondLink='/wine-cellar/layouts/edit'>
+                      <span>Layouts</span>
+                    </InnerMenuItem>
+                  </ul>
+                </div>
+              </AccordionDetails>
+            </Accordion>
           </Box>
           <hr style={{ border: "1px solid #D1D4DB" }} />
         </Box>
@@ -603,7 +693,7 @@ const AdminSideBar = () => {
         <div className="center">
           <ul>
             <MenuSigleItem link="/settings">
-              <SettingsOutlinedIcon sx={{   }} />
+              <SettingsOutlinedIcon sx={{}} />
               <span>Settings</span>
             </MenuSigleItem>
           </ul>

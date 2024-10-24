@@ -1,4 +1,4 @@
-import { selectedItem } from "@/redux/estimateCalculations";
+// import { selectedItem } from "@/redux/estimateCalculations";
 import { useCreateEstimates } from "@/utilities/ApiHooks/estimate";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -22,11 +22,12 @@ const EnterLabelModal = ({
   estimateCategory,
   estimatesTotal,
   projectId,
+  selectedLayout = null
 }) => {
   const { mutateAsync, isLoading: estimateCreateLoading } =
     useCreateEstimates();
   const navigate = useNavigate();
-  const estimatesLayout = useSelector(selectedItem);
+  // const estimatesLayout = useSelector(selectedItem);
   const formik = useFormik({
     initialValues: {
       label: "",
@@ -41,7 +42,7 @@ const EnterLabelModal = ({
       await mutateAsync({
         estimateData: {
           ...estimateConfig,
-          layout_id: estimatesLayout?._id || null,
+          layout_id: selectedLayout?._id || null,
         },
         label: label,
         category: estimateCategory,
@@ -172,7 +173,7 @@ const EnterLabelModal = ({
                 }}
                 variant="contained"
               >
-                {estimateCreateLoading ? <CircularProgress /> : "Save Estimate"}
+                {estimateCreateLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Estimate"}
               </Button>
             </Box>
           </form>

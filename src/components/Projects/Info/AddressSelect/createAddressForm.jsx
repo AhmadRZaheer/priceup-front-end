@@ -43,6 +43,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         flexDirection: "column",
                         gap: 1,
                         paddingY: { sm: 0, xs: 2 },
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -50,20 +51,21 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     </Box>
 
                     <TextField
+                        className="custom-textfield"
                         id="name"
                         name="name"
                         placeholder="Enter Address Reference"
                         size="small"
                         variant="outlined"
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         backgroundColor: "white",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         value={formik.values.name}
@@ -83,6 +85,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         flexDirection: "column",
                         gap: 1,
                         paddingY: { sm: 0, xs: 2 },
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -95,17 +98,18 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         placeholder="Enter city name"
                         size="small"
                         variant="outlined"
+                        className="custom-textfield"
                         value={formik.values.city}
                         onChange={formik.handleChange}
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         backgroundColor: "white",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         onBlur={formik.handleBlur}
@@ -136,16 +140,17 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     placeholder="Enter state name"
                     size="small"
                     variant="outlined"
+                    className="custom-textfield"
                     value={formik.values.state}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            backgroundColor: "white",
-                        },
-                    }}
+                    // InputProps={{
+                    //     style: {
+                    //         color: "black",
+                    //         borderRadius: 4,
+                    //         backgroundColor: "white",
+                    //     },
+                    // }}
                     sx={{
-                        color: { sm: "black", xs: "white" },
+                        // color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
@@ -172,17 +177,18 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     placeholder="Enter street number"
                     size="small"
                     variant="outlined"
+                    className="custom-textfield"
                     value={formik.values.street}
-                    InputProps={{
-                        style: {
-                            color: "black",
-                            borderRadius: 4,
-                            backgroundColor: "white",
-                        },
-                    }}
+                    // InputProps={{
+                    //     style: {
+                    //         color: "black",
+                    //         borderRadius: 4,
+                    //         backgroundColor: "white",
+                    //     },
+                    // }}
 
                     sx={{
-                        color: { sm: "black", xs: "white" },
+                        // color: { sm: "black", xs: "white" },
                         width: "100%",
                     }}
                     onChange={formik.handleChange}
@@ -197,6 +203,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -209,16 +216,17 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         placeholder="Enter postal code"
                         size="small"
                         variant="outlined"
+                        className="custom-textfield"
                         value={formik.values.postalCode}
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         backgroundColor: "white",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         onChange={formik.handleChange}
@@ -234,6 +242,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         display: "flex",
                         flexDirection: "column",
                         gap: 1,
+                        width:'50%'
                     }}
                 >
                     <Box sx={{ display: { sm: "block", xs: "none" } }}>
@@ -247,16 +256,17 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                         placeholder="Enter country name"
                         size="small"
                         variant="outlined"
+                        className="custom-textfield"
                         value={formik.values.country}
-                        InputProps={{
-                            style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                            },
-                        }}
+                        // InputProps={{
+                        //     style: {
+                        //         color: "black",
+                        //         borderRadius: 4,
+                        //         backgroundColor: "white",
+                        //     },
+                        // }}
                         sx={{
-                            color: { sm: "black", xs: "white" },
+                            // color: { sm: "black", xs: "white" },
                             width: "100%",
                         }}
                         onChange={formik.handleChange}
@@ -292,7 +302,7 @@ const CreateAddressForm = ({ setSelectedAddress, handleStepChange, selectedCusto
                     variant="contained"
                     disabled={createLoading}
                 >
-                    {createLoading ? <CircularProgress sx={{ color: "#8477da" }} /> : "Save Address"}
+                    {createLoading ? <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : "Save Address"}
                 </Button>
             </Box>
             <Box

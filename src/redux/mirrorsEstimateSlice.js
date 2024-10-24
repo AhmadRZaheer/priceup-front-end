@@ -105,6 +105,28 @@ const mirrorsEstimateSlice = createSlice({
         },
       };
     },
+    setCounters: (state, action) => {
+      const { type, value, item } = action.payload;
+      if (["hardwares"].includes(type)) {
+      let existing = state.content.hardwares;
+        const foundIndex = existing.findIndex(
+          (row) => row?.item?.slug === item.slug
+        );
+        if (foundIndex !== -1) {
+          if (value <= 0) {
+            existing.splice(foundIndex, 1);
+          } else {
+            existing[foundIndex].count = value;
+          }
+        } else {
+          existing.push({ item: item, count: value });
+        }
+        state.content = {
+          ...state.content,
+          hardwares: [...existing],
+        };
+      }
+    },
     setSelectedItem: (state, action) => {
       const { payload } = action;
       state.selectedItem = payload;
@@ -199,32 +221,31 @@ const mirrorsEstimateSlice = createSlice({
       const { estimateData, hardwaresList } = action.payload;
       let glassTypee = null;
       glassTypee = hardwaresList?.glassTypes?.find(
-        (item) => item._id === estimateData?.config?.glassType?.type
+        (item) => item?._id === estimateData?.config?.glassType?.type
       );
 
       let edgeWork = null;
       edgeWork = hardwaresList?.edgeWorks?.find(
-        (item) => item._id === estimateData?.config?.edgeWork?.type
+        (item) => item?._id === estimateData?.config?.edgeWork?.type
       );
 
       let glassAddons = [];
       glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-        const record = hardwaresList?.glassAddons.find(
-          (addon) => addon._id === item
+        const record = hardwaresList?.glassAddons?.find(
+          (addon) => addon?._id === item
         );
         return record;
       });
-
       let hardwares = [];
-      hardwares = estimateData?.config?.hardwares?.map((item) => {
-        const record = hardwaresList?.hardwares.find(
-          (addon) => addon._id === item
+      hardwares = estimateData?.config?.hardwares?.map((row) => {
+        const found = hardwaresList?.hardwares?.find(
+          (item) => item?._id === row.type
         );
-        return record;
+        return { item: found, count: row.count };
       });
 
-      state.estimateId = estimateData._id;
-      state.sqftArea = estimateData.config?.sqftArea;
+      state.estimateId = estimateData?._id;
+      state.sqftArea = estimateData?.config?.sqftArea;
       state.content = {
         ...state.content,
         glassType: {
@@ -235,8 +256,8 @@ const mirrorsEstimateSlice = createSlice({
           item: edgeWork,
           thickness: estimateData?.config?.edgeWork?.thickness,
         },
-        glassAddons: [...glassAddons],
-        hardwares: [...hardwares],
+        glassAddons: glassAddons ? [...glassAddons] : [], 
+        hardwares: hardwares ? [...hardwares] : [],
         modifiedProfitPercentage:
           estimateData?.config?.modifiedProfitPercentage,
         additionalFields: estimateData?.config?.additionalFields,
@@ -281,7 +302,8 @@ export const {
   setModifiedProfitPercentage,
   setMultipleNotifications,
   resetNotifications,
-  setMirrorProjectId
+  setMirrorProjectId,
+  setCounters
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;

@@ -24,6 +24,7 @@ export const useFetchAllDocuments = (apiRoute) => {
     queryFn: fetch,
     enabled: false,
     placeholderData: [],
+    keepPreviousData: true,
   });
 };
 

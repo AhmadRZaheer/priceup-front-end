@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 export const getLocationMirrorSettings = (state) => state.location.mirrors;
 export const getLocationShowerSettings = (state) => state.location.showers;
+export const getLocationWineCellarSettings = (state) => state.location.wineCellars;
+export const getLocationPdfSettings = (state) => state.location.pdfSettings;
 
 const locationSlice = createSlice({
   name: "location",
@@ -10,6 +12,8 @@ const locationSlice = createSlice({
     address: "",
     mirrors: null,
     showers: null,
+    wineCellars: null,
+    pdfSettings: null,
   },
   reducers: {
     setLocationInfo: (state, actions) => {
@@ -19,6 +23,8 @@ const locationSlice = createSlice({
       state.address = payload?.address ?? "";
       state.showers = payload?.showers ?? null;
       state.mirrors = payload?.mirrors ?? null;
+      state.wineCellars = payload?.wineCellars ?? null;
+      state.pdfSettings = payload?.pdfSettings ?? null;
     },
   },
 });

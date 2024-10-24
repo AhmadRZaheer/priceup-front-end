@@ -215,8 +215,8 @@ const SuperAdminTable = () => {
             text: locationsData?.globalCounts?.inactiveLocations ?? 0,
             variant: "red",
           },
-        ].map((item) => (
-          <Grid item lg={3} md={6} xs={6}>
+        ].map((item,index) => (
+          <Grid item lg={3} md={6} xs={6} key={index}>
             <WidgetCard
               text={item.text}
               title={item.title}

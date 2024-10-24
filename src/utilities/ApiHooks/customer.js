@@ -53,6 +53,7 @@ export const useFetchDataCustomer = (
     queryFn: fetchData,
     enabled: false,
     placeholderData: [],
+    keepPreviousData: true,
   });
 };
 export const useGetQuote = () => {

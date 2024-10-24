@@ -3,33 +3,33 @@ import {
   Button,
   CircularProgress,
   FormControl,
-  Grid,
+  // Grid,
   InputAdornment,
-  InputLabel,
+  // InputLabel,
   MenuItem,
   Select,
   TextField,
   Typography,
-  useMediaQuery,
+  // useMediaQuery,
 } from "@mui/material";
-import image1 from "@/Assets/test.png";
-import image2 from "@/Assets/ok.png";
-import image3 from "@/Assets/cancel.png";
-import image4 from "@/Assets/calculator.svg";
+// import image1 from "@/Assets/test.png";
+// import image2 from "@/Assets/ok.png";
+// import image3 from "@/Assets/cancel.png";
+// import image4 from "@/Assets/calculator.svg";
 import {
   useDeleteEstimates,
-  useGetEstimatesStats,
+  // useGetEstimatesStats,
 } from "@/utilities/ApiHooks/estimate";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   backendURL,
   calculateTotal,
-  getDecryptedToken,
+  // getDecryptedToken,
 } from "@/utilities/common";
 import { EstimateCategory, quoteState } from "@/utilities/constants";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "../../Assets/search-icon.svg";
-import WidgetCard from "../ui-components/widgetCard";
+// import WidgetCard from "../ui-components/widgetCard";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
 import dayjs from "dayjs";
@@ -37,21 +37,22 @@ import DeleteModal from "../Modal/deleteModal";
 import Pagination from "../Pagination";
 import { DataGrid } from "@mui/x-data-grid";
 import { EstimatesColumns } from "@/utilities/DataGridColumns";
-import ActionsDropdown from "../common/ActionsDropdown";
+// import ActionsDropdown from "../common/ActionsDropdown";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getEstimatesListRefetch } from "@/redux/refetch";
 import { useDispatch, useSelector } from "react-redux";
 import { getListData } from "@/redux/estimateCalculations";
-import { getLocationShowerSettings } from "@/redux/locationSlice";
+import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
 import { debounce } from "lodash";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
-import { DeleteOutline, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
+// import { DeleteOutline, Edit, RemoveRedEyeOutlined } from "@mui/icons-material";
 import {
   generateObjectForPDFPreview,
   renderMeasurementSides,
   setStateForShowerEstimate,
 } from "@/utilities/estimates";
 import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 export default function Estimates() {
   const [searchParams] = useSearchParams();
@@ -62,6 +63,7 @@ export default function Estimates() {
   const navigate = useNavigate();
   const routePrefix = `${backendURL}/estimates/by-customer`;
   const refetchEstimatesCounter = useSelector(getEstimatesListRefetch);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   // const [inputPage, setInputPage] = useState("");
@@ -79,7 +81,7 @@ export default function Estimates() {
   }
   const {
     data: estimatesList,
-    isLoading,
+    isFetched,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
   } = useFetchAllDocuments(fetchAllEstimatesUrl);
@@ -98,6 +100,8 @@ export default function Estimates() {
   const dispatch = useDispatch();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
@@ -139,6 +143,7 @@ export default function Estimates() {
         ...formattedData,
         measurements: measurementString,
         pricing,
+        pdfSettings,
       })
     );
     navigate(`/estimates/${item?._id}/pdf-preview`);
@@ -152,31 +157,69 @@ export default function Estimates() {
     }
   };
 
-  useEffect(() => {
-    refetchEstimatesList();
-  }, [
-    refetchEstimatesCounter,
-    page,
-    status,
-    selectedDate,
-    deletedSuccessfully,
-  ]);
-
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchEstimatesList();
-      } else {
-        setPage(1);
-      }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
+        refetchEstimatesList(); // If already on page 1, just refetch directly
+      // }
     }, 700),
-    [page]
+    [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
   );
 
   useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-  }, [search]);
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    // if (status || selectedDate || search) {
+    //   setPage(1);
+    // }
+    if (search) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchEstimatesList();
+    }
+  }, [
+    status,
+    selectedDate,
+    search,
+    page,
+    deletedSuccessfully,
+    refetchEstimatesCounter,
+  ]);
+  useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    if (status || selectedDate || search) {
+      setPage(1);
+    }
+  }, [
+    status,
+    selectedDate,
+    search,
+    deletedSuccessfully,
+    refetchEstimatesCounter,
+  ]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Creator",
+    "Customer",
+    "Estimate Category",
+    "Layout",
+    "Date quoted",
+    "Estimate total",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
 
   const handleDateChange = (newDate) => {
     if (newDate) {
@@ -234,7 +277,9 @@ export default function Estimates() {
               pt: { sm: 0, xs: 1 },
             }}
           >
-            <Box sx={{ display: "flex", gap: "10px", mr: { sm: 0, xs: "26px" } }}>
+            <Box
+              sx={{ display: "flex", gap: "10px", mr: { sm: 0, xs: "26px" } }}
+            >
               <Box>
                 <CustomInputField
                   id="input-with-icon-textfield"
@@ -416,24 +461,20 @@ export default function Estimates() {
       </Box> */}
 
             {isLoading ? (
-              <Box
-                sx={{
-                  width: 40,
-                  m: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  maxHeight: "70vh",
-                  minHeight: "20vh",
-                }}
-              >
-                <CircularProgress sx={{ color: "#8477DA" }} />
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
               </Box>
-            ) : filteredData?.length === 0 && !estimatesListFetching ? (
-              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Estimate Found
-              </Typography>
-            ) : (
+            ) : filteredData?.length > 0 ? (
               <Box>
                 <DataGrid
                   loading={estimatesListFetching}
@@ -454,7 +495,12 @@ export default function Estimates() {
                       ? estimatesList?.totalRecords
                       : 0
                   }
-                  sx={{ width: "100%" }}
+                  sx={{
+                    width: "100%",
+                    ".MuiDataGrid-main": {
+                      borderRadius: "8px !important",
+                    },
+                  }}
                   rowHeight={70.75}
                   hideFooter
                   disableColumnMenu
@@ -480,6 +526,10 @@ export default function Estimates() {
                   handleDelete={handleDeleteEstimate}
                 />
               </Box>
+            ) : (
+              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+                No Estimate Found
+              </Typography>
             )}
           </Box>
         </Box>

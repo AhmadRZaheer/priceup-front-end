@@ -16,22 +16,37 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { renderMeasurementSides } from "@/utilities/mirrorEstimates";
+import {
+  calculateTotal,
+  renderMeasurementSides,
+} from "@/utilities/mirrorEstimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import {
   getEstimateMeasurements,
   getModifiedProfitPercentage,
   getPricing,
   getSelectedContent,
+  getSelectedItem,
   getSqftArea,
   setModifiedProfitPercentage,
 } from "@/redux/mirrorsEstimateSlice";
-import { getLocationMirrorSettings } from "@/redux/locationSlice";
+import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useState } from "react";
+import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
+import { generateObjForMirrorPDFRuntime } from "@/utilities/estimates";
+import {
+  getCustomerDetail,
+  getEstimateCategory,
+  getEstimateState,
+  getProjectId,
+} from "@/redux/estimateSlice";
+import { quoteState } from "@/utilities/constants";
+import { useSearchParams } from "react-router-dom";
 
 const Summary = ({ setStep }) => {
+  const [searchParams] = useSearchParams();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const dispatch = useDispatch();
   const pricing = useSelector(getPricing);
@@ -40,8 +55,18 @@ const Summary = ({ setStep }) => {
   const selectedContent = useSelector(getSelectedContent);
   const measurements = useSelector(getEstimateMeasurements);
   const sqftArea = useSelector(getSqftArea);
+  const selectedData = useSelector(getSelectedItem);
   const layoutImage = CustomImage;
   const [anchorEl, setAnchorEl] = useState(null);
+  // const estimateState = useSelector(getEstimateState);
+  const estimateState = searchParams.get("estimateState");
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
+  // const selectedCategory = useSelector(getEstimateCategory);
+  const selectedCategory = searchParams.get("category");
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const customerData = useSelector(getCustomerDetail);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -49,7 +74,45 @@ const Summary = ({ setStep }) => {
     { title: "Pricing Subcategories", active: true },
     { title: "Gross Profit Margin", active: true },
   ]);
+  const mirrorEstimateState = useSelector((state) => state.mirrorsEstimate);
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
+
+  const drawerHandleClick = () => {
+    const item = generateObjForMirrorPDFRuntime(
+      { estimateState, projectId, selectedCategory:selectedData?.category ?? selectedCategory,customerData },
+      mirrorEstimateState,
+      mirrorsLocationSettings
+    );
+    const pricingMirror = calculateTotal(
+      item,
+      item?.sqftArea,
+      mirrorsLocationSettings,
+      item.measurements
+    );
+
+    const pricing = {
+      glassPrice: pricingMirror.glass,
+      fabricationPrice: pricingMirror.fabrication,
+      laborPrice: pricingMirror.labor,
+      additionalFieldPrice: pricingMirror.additionalFields,
+      cost: pricingMirror.cost,
+      total: pricingMirror.total,
+      profit: pricingMirror.profitPercentage,
+    };
+    const measurementString = renderMeasurementSides(item?.measurements);
+    // const id = item?._id;
+    const id = estimateState === quoteState.CREATE ? "--" : selectedData._id;
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...item,
+        measurements: measurementString,
+        pricing,
+        id,
+        pdfSettings,
+      })
+    );
+  };
 
   // Toggle handler function
   const handleToggle = (index) => {
@@ -125,8 +188,8 @@ const Summary = ({ setStep }) => {
                   padding: "5px 8px 5px 8px !important",
                   border: "1px solid #D0D5DD",
                   color: "black",
-                  fontSize: '12px',
-                  lineHeight: '14.06px',
+                  fontSize: "12px",
+                  lineHeight: "14.06px",
                   borderRadius: "4px !important",
                   fontFamily: '"Roboto", sans-serif !important',
                   width: "fit-content",
@@ -174,7 +237,13 @@ const Summary = ({ setStep }) => {
                         px: 3,
                       }}
                     >
-                      <Typography sx={{ color: "#5D6164", fontSize: "16px", fontFamily: '"Roboto", sans-serif !important' }}>
+                      <Typography
+                        sx={{
+                          color: "#5D6164",
+                          fontSize: "16px",
+                          fontFamily: '"Roboto", sans-serif !important',
+                        }}
+                      >
                         {item.title}
                       </Typography>
                       <Box sx={{ height: "46px" }}>
@@ -243,7 +312,7 @@ const Summary = ({ setStep }) => {
                           Layout:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          Custom
+                          Mirror
                         </Typography>
                       </Box>
                       <Box>
@@ -329,9 +398,10 @@ const Summary = ({ setStep }) => {
                           <Typography className="text-xs-ragular-bold">
                             Hardwares:
                           </Typography>
-                          {selectedContent?.hardwares?.map((item, index) => (
+                          {selectedContent?.hardwares?.map((row, index) => (
                             <Typography className="text-xs-ragular">
-                              {item?.name}
+                              {row?.item?.name}
+                              {' ('+row?.count+')'}
                               {selectedContent?.hardwares?.length - 1 !== index
                                 ? ", "
                                 : ""}
@@ -492,7 +562,7 @@ const Summary = ({ setStep }) => {
                           className="custom-textfield-purple"
                           InputProps={{
                             style: {
-                               paddingRight: '10px'
+                              paddingRight: "10px",
                             },
                             inputProps: { min: 0, max: 100 },
                             endAdornment: <> %</>,
@@ -507,7 +577,7 @@ const Summary = ({ setStep }) => {
                             width: "100%",
                             "& input": {
                               p: "10px 0px 10px 10px !important",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
@@ -539,6 +609,8 @@ const Summary = ({ setStep }) => {
                       >
                         Reset
                       </Button>
+                      <Divider sx={{ borderColor: "#D4DBDF" }} />
+                      <PDFPreviewDrawer handleClick={drawerHandleClick} />
                     </Stack>
                   </Grid>
                 )}

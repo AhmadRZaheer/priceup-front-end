@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // import { getDefaultId } from "@/redux/defaultSlice";
 // import { useFetchSingleDefault } from "@/utilities/ApiHooks/defaultLayouts";
 import { backendURL } from "@/utilities/common";
-import image from "../../Assets/dummy.png";
+import image from "@/Assets/dummy.png";
 import "./style.scss";
 
 // const modification = [
@@ -14,8 +14,11 @@ import "./style.scss";
 //   // Add other modifications as necessary
 // ];
 
-const ViewDrawer = ({ open, handleClose, data }) => {
+const ViewDrawer = ({ open, handleClose, data ,variant }) => {
   const navigate = useNavigate();
+  const targetUrl = variant === 'shower'
+  ? `/layouts/edit?id=${data?._id}`
+  : `/wine-cellar/layouts/edit?id=${data?._id}`;
 
   return (
     <SwipeableDrawer
@@ -86,6 +89,19 @@ const ViewDrawer = ({ open, handleClose, data }) => {
                   }
                 </Typography>
               </Grid>
+              {variant === 'wineCellar' &&  <Grid
+                item
+                xs={5.5}
+                className="cardTitleContainer"
+                sx={{ py: 1, height: "fit-content" }}
+              >
+                <Typography className="drawerTitle">Door Lock</Typography>
+                <Typography className="drawerBoldTitle">
+                  {data.settings?.doorLock?.type?.name ? `${data.settings?.doorLock?.type?.name}(
+                  ${data.settings?.doorLock?.count})` : '---'
+                  }
+                </Typography>
+              </Grid>}
               <Grid
                 item
                 xs={5.5}
@@ -351,9 +367,20 @@ const ViewDrawer = ({ open, handleClose, data }) => {
                 className="cardTitleContainer"
                 sx={{ py: 1, height: "fit-content" }}
               >
-                <Typography className="drawerTitle">Hours</Typography>
+                <Typography className="drawerTitle">Hours (Per Person)</Typography>
                 <Typography className="drawerBoldTitle">
                   {`${data.settings?.other?.hours ?? 0}`}
+                </Typography>
+              </Grid>
+              <Grid
+                item
+                xs={5.5}
+                className="cardTitleContainer"
+                sx={{ py: 1, height: "fit-content" }}
+              >
+                <Typography className="drawerTitle">Sinlgle Door Hours (Per Person)</Typography>
+                <Typography className="drawerBoldTitle">
+                  {`${data.settings?.noOfHoursToCompleteSingleDoor ?? 0}`}
                 </Typography>
               </Grid>
             </Grid>
@@ -364,7 +391,8 @@ const ViewDrawer = ({ open, handleClose, data }) => {
           sx={{
             display: "flex",
             justifyContent: "space-between",
-            paddingBottom: 5,
+            pt:1,
+            pb: 5,
             gap: "12px",
           }}
         >
@@ -377,7 +405,7 @@ const ViewDrawer = ({ open, handleClose, data }) => {
             Close
           </Button>
           <Button
-            onClick={() => navigate(`/layouts/edit?id=${data._id}`)}
+            onClick={() => navigate(targetUrl)}
             variant="contained"
             className="drawerBtn"
             sx={{

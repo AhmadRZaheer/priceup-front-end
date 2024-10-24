@@ -79,15 +79,63 @@ export const setItemsStatusAfterFirstLoad = (layout) => {
     items.notch = { name: "Notch", status: false };
   }
   // mounting
-  if(layout?.settings?.mountingChannel){
-  items.mounting = { name: "Mounting", status: true };
-  } else if (layout?.settings?.wallClamp?.wallClampType || layout?.settings?.sleeveOver?.sleeveOverType || layout?.settings?.glassToGlass?.glassToGlassType){
-  items.mounting = { name: "Mounting", status: true };
+  if (layout?.settings?.mountingChannel) {
+    items.mounting = { name: "Mounting", status: true };
+  } else if (layout?.settings?.wallClamp?.wallClampType || layout?.settings?.sleeveOver?.sleeveOverType || layout?.settings?.glassToGlass?.glassToGlassType) {
+    items.mounting = { name: "Mounting", status: true };
   } else if (layout?.settings?.cornerWallClamp?.wallClampType || layout?.settings?.cornerSleeveOver?.sleeveOverType || layout?.settings?.cornerGlassToGlass?.glassToGlassType) {
     items.mounting = { name: "Mounting", status: true };
   } else {
     items.mounting = { name: "Mounting", status: false };
   }
-  
+
+  return items;
+};
+
+// Wine Cellar
+export const setWineItemsStatusAfterFirstLoad = (layout) => {
+  const items = {};
+  // hardware finish
+  if (layout?.settings?.hardwareFinishes) {
+    items.hardwareFinishes = { name: "Hardware Finish", status: true };
+  } else {
+    items.hardwareFinishes = { name: "Hardware Finish", status: false };
+  }
+  // handles
+  if (layout?.settings?.handles?.handleType) {
+    items.handles = { name: "Handles", status: true };
+  } else {
+    items.handles = { name: "Handles", status: false };
+  }
+  // doorLock
+  if (layout?.settings?.doorLock?.type) {
+    items.doorLock = { name: "Door Lock", status: true };
+  } else {
+    items.doorLock = { name: "Door Lock", status: false };
+  }
+  //Heavy Duty Type
+  if (layout?.settings?.heavyDutyOption?.heavyDutyType) {
+    items.heavyDutyOption = { name: "Heavy Duty Option", status: true };
+  } else {
+    items.heavyDutyOption = { name: "Heavy Duty Option", status: false };
+  }
+  // hinges
+  if (layout?.settings?.hinges?.hingesType) {
+    items.hinges = { name: "Hinges", status: true };
+  } else {
+    items.hinges = { name: "Hinges", status: false };
+  }
+  // glass type
+  if (layout?.settings?.glassType?.type) {
+    items.glassType = { name: "Glass Type", status: true };
+  } else {
+    items.glassType = { name: "Glass Type", status: false };
+  }
+  // Channel
+  if (layout?.settings?.mountingChannel) {
+    items.channel = { name: "Channel", status: true };
+  } else {
+    items.channel = { name: "Channel", status: false };
+  }
   return items;
 };

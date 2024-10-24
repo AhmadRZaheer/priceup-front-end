@@ -5,6 +5,7 @@ import * as Yup from "yup";
 import {
   Box,
   Button,
+  CircularProgress,
   FormControlLabel,
   Switch,
   Tab,
@@ -27,12 +28,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { getDataRefetch } from "@/redux/staff";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import { setLocationSettingsRefetch } from "@/redux/refetch";
+import { inputLength, inputMaxValue } from "@/utilities/constants";
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
-  const { mutate: editSetting, isSuccess: SuccessForEdit } = useEditSetting();
+  const {
+    mutate: editSetting,
+    isLoading: editLoading,
+    isSuccess: SuccessForEdit,
+  } = useEditSetting();
   const [selectedImage, setSelectedImage] = useState(null);
   const CustomerU_change = useSelector(getDataRefetch);
   const [value, setValue] = React.useState(0);
@@ -57,6 +63,13 @@ const CampanySetting = () => {
   const validationSchema = Yup.object().shape({
     name: Yup.string().required("Name is required"),
     showers: Yup.object().shape({
+      doorWidth: Yup.number()
+        .required("Max door width is required")
+        .min(1, "Door width must be at least 1")
+        .max(39, "Door width cannot exceed 39"),
+      // add validation for other nested fields if necessary
+    }),
+    wineCellars: Yup.object().shape({
       doorWidth: Yup.number()
         .required("Max door width is required")
         .min(1, "Door width must be at least 1")
@@ -94,9 +107,9 @@ const CampanySetting = () => {
           hingeCutoutThreeByEightInch:
             settingData?.showers?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch,
-            miterOneByTwoInch:
+          miterOneByTwoInch:
             settingData?.showers?.fabricatingPricing?.miterOneByTwoInch,
-            miterThreeByEightInch:
+          miterThreeByEightInch:
             settingData?.showers?.fabricatingPricing?.miterThreeByEightInch,
           notchOneByTwoInch:
             settingData?.showers?.fabricatingPricing?.notchOneByTwoInch,
@@ -124,21 +137,53 @@ const CampanySetting = () => {
         // sandBlastingMultiplier: settingData?.mirrors?.sandBlastingMultiplier,
         // bevelStrip: settingData?.mirrors?.bevelStrip,
         // safetyBacking: settingData?.mirrors?.safetyBacking,
-        holeMultiplier: settingData?.mirrors?.holeMultiplier,
+        holeMultiplier: settingData?.mirrors?.holeMultiplier ?? 0,
         // outletMultiplier: settingData?.mirrors?.outletMultiplier,
-        lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier,
-        notchMultiplier: settingData?.mirrors?.notchMultiplier,
+        lightHoleMultiplier: settingData?.mirrors?.lightHoleMultiplier ?? 0,
+        notchMultiplier: settingData?.mirrors?.notchMultiplier ?? 0,
         singleOutletCutoutMultiplier:
-          settingData?.mirrors?.singleOutletCutoutMultiplier,
+          settingData?.mirrors?.singleOutletCutoutMultiplier ?? 0,
         doubleOutletCutoutMultiplier:
-          settingData?.mirrors?.doubleOutletCutoutMultiplier,
+          settingData?.mirrors?.doubleOutletCutoutMultiplier ?? 0,
         tripleOutletCutoutMultiplier:
-          settingData?.mirrors?.tripleOutletCutoutMultiplier,
+          settingData?.mirrors?.tripleOutletCutoutMultiplier ?? 0,
         quadOutletCutoutMultiplier:
-          settingData?.mirrors?.quadOutletCutoutMultiplier,
+          settingData?.mirrors?.quadOutletCutoutMultiplier ?? 0,
         // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
+      },
+      // Wine Caller
+      wineCellars: {
+        doorWidth: settingData?.wineCellars?.doorWidth || 0,
+        miscPricing: {
+          pricingFactor:
+            settingData?.wineCellars?.miscPricing?.pricingFactor || 0,
+          hourlyRate: settingData?.wineCellars?.miscPricing?.hourlyRate || 0,
+          pricingFactorStatus:
+            settingData?.wineCellars?.miscPricing?.pricingFactorStatus,
+        },
+        fabricatingPricing: {
+          oneHoleOneByTwoInchGlass:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.oneHoleOneByTwoInchGlass || 0,
+          oneHoleThreeByEightInchGlass:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.oneHoleThreeByEightInchGlass || 0,
+          hingeCutoutOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.hingeCutoutOneByTwoInch || 0,
+          hingeCutoutThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.hingeCutoutThreeByEightInch || 0,
+        },
+      },
+      pdfSettings: {
+        cost: settingData?.pdfSettings?.cost,       
+        hours: settingData?.pdfSettings?.hours,       
+        labor: settingData?.pdfSettings?.labor,       
+        people: settingData?.pdfSettings?.people,       
+        profit: settingData?.pdfSettings?.profit,       
       },
     },
     enableReinitialize: true,
@@ -187,6 +232,7 @@ const CampanySetting = () => {
           <Typography variant="h4">Setting</Typography>
           <Box sx={{ width: "200px" }}>
             <Button
+              disabled={editLoading}
               sx={{
                 backgroundColor: "#8477DA",
                 boxShadow: 0,
@@ -196,7 +242,11 @@ const CampanySetting = () => {
               variant="contained"
               onClick={formik.handleSubmit}
             >
-              Update
+              {editLoading ? (
+                <CircularProgress size={20} sx={{ color: "#8477DA" }} />
+              ) : (
+                "Update"
+              )}
             </Button>
           </Box>
         </Box>
@@ -371,6 +421,38 @@ const CampanySetting = () => {
             >
               Mirrors
             </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 2 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(2)}
+            >
+              Wine Cellar
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 3 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(3)}
+            >
+              Pdf Settings
+            </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
             "& .MuiTab-root.Mui-selected": {
@@ -418,7 +500,11 @@ const CampanySetting = () => {
                   name="showers.doorWidth"
                   size="small"
                   value={formik.values?.showers?.doorWidth}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 2) {
+                      formik.handleChange(e);
+                    }
+                  }}
                   inputProps={{ min: 1, max: 39, style: { width: "200px" } }}
                   onBlur={formik.handleBlur}
                   error={
@@ -458,8 +544,15 @@ const CampanySetting = () => {
                   type="number"
                   name="showers.miscPricing.pricingFactor"
                   size="small"
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
                   value={formik.values?.showers?.miscPricing?.pricingFactor}
-                  onChange={formik.handleChange}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
 
                 <Box sx={{ ml: 2 }}>
@@ -489,13 +582,17 @@ const CampanySetting = () => {
                 </Typography>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
-                  name="miscPricing.hourlyRate"
+                  name="showers.miscPricing.hourlyRate"
                   size="small"
                   value={formik.values?.showers?.miscPricing?.hourlyRate}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
                 <FormControlLabel
                   sx={{ visibility: "hidden" }}
@@ -529,16 +626,20 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.oneHoleOneByTwoInchGlass"
                   size="small"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.oneHoleOneByTwoInchGlass
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -553,16 +654,20 @@ const CampanySetting = () => {
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.oneHoleThreeByEightInchGlass"
                   size="small"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.oneHoleThreeByEightInchGlass
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -578,16 +683,20 @@ const CampanySetting = () => {
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.clampCutoutOneByTwoInch"
                   size="small"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.clampCutoutOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -603,16 +712,20 @@ const CampanySetting = () => {
               <Box sx={{ paddingRight: 19 }}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.clampCutoutThreeByEightInch"
                   size="small"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.clampCutoutThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -629,15 +742,19 @@ const CampanySetting = () => {
                 <CustomInputField
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.hingeCutoutOneByTwoInch"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.hingeCutoutOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -653,15 +770,19 @@ const CampanySetting = () => {
                 <CustomInputField
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="showers.fabricatingPricing.hingeCutoutThreeByEightInch"
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.hingeCutoutThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -679,14 +800,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.miterOneByTwoInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.miterOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -704,14 +829,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.miterThreeByEightInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.miterThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -729,14 +858,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.notchOneByTwoInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.notchOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -754,14 +887,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.notchThreeByEightInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.notchThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -778,14 +915,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.outageOneByTwoInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.outageOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -803,14 +944,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.outageThreeByEightInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.outageThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -827,14 +972,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.polishPricePerOneByTwoInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.polishPricePerOneByTwoInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -852,14 +1001,18 @@ const CampanySetting = () => {
                   name="showers.fabricatingPricing.polishPricePerThreeByEightInch"
                   size="small"
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   value={
                     formik.values?.showers?.fabricatingPricing
                       ?.polishPricePerThreeByEightInch
                   }
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -894,7 +1047,14 @@ const CampanySetting = () => {
                   name="mirrors.pricingFactor"
                   size="small"
                   value={formik.values?.mirrors?.pricingFactor}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
 
                 <Box sx={{ ml: 2 }}>
@@ -923,13 +1083,17 @@ const CampanySetting = () => {
                 </Typography>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.hourlyRate"
                   size="small"
                   value={formik.values?.mirrors?.hourlyRate}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
                 <FormControlLabel
                   sx={{ visibility: "hidden" }}
@@ -1124,13 +1288,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.holeMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.holeMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1168,13 +1336,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.lightHoleMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.lightHoleMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1189,13 +1361,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.notchMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.notchMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1210,13 +1386,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.singleOutletCutoutMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.singleOutletCutoutMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1231,13 +1411,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.doubleOutletCutoutMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.doubleOutletCutoutMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1252,13 +1436,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.tripleOutletCutoutMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.tripleOutletCutoutMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1273,13 +1461,17 @@ const CampanySetting = () => {
               <Box mr={19}>
                 <CustomInputField
                   type="number"
-                  inputProps={{
-                    min: 0,
-                  }}
                   name="mirrors.quadOutletCutoutMultiplier"
                   size="small"
                   value={formik.values?.mirrors?.quadOutletCutoutMultiplier}
-                  onChange={formik.handleChange}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
                 />
               </Box>
             </Box>
@@ -1352,6 +1544,518 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box> */}
+          </Box>
+        </CustomTabPanel>
+        {/** end */}
+
+        {/** Wine Caller tab */}
+        <CustomTabPanel value={value} index={2}>
+          <Box
+            sx={{
+              // borderTop: "1px solid #EAECF0",
+              // borderBottom: "1px solid #EAECF0",
+              // paddingTop: 0,
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            {/* <Typography variant="h6">Max Door Width</Typography> */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Max Door Width</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">
+                  Door width value must be in range between 1-39{" "}
+                </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.doorWidth"
+                  size="small"
+                  value={formik.values?.wineCellars?.doorWidth}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 2) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                  inputProps={{
+                    min: 1,
+                    max: 39,
+                    step: "any",
+                    style: { width: "200px" },
+                  }}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    Boolean(formik.errors?.wineCellars?.doorWidth)
+                  }
+                  helperText={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    formik.errors?.wineCellars?.doorWidth
+                  }
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              borderTop: "1px solid #EAECF0",
+              borderBottom: "1px solid #EAECF0",
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="h6">Misc. Pricing</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Pricing factor</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">Factor to multiply price </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.pricingFactor"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.pricingFactor}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+
+                <Box sx={{ ml: 2 }}>
+                  <CustomToggle
+                    name="wineCellars.miscPricing.pricingFactorStatus"
+                    checked={
+                      formik.values?.wineCellars?.miscPricing
+                        ?.pricingFactorStatus || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Default Hourly rate</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.hourlyRate"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.hourlyRate}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+                <FormControlLabel
+                  sx={{ visibility: "hidden" }}
+                  control={<Switch color="success" />}
+                  label={"active"}
+                />
+              </Box>
+            </Box>
+          </Box>
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Fabrication Pricing
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              // maxHeight: "38vh",
+              // overflowY: "scroll",
+              pt: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>1" Hole (1/2in Glass)</Typography>
+              <Box mr={19}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.oneHoleOneByTwoInchGlass"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.oneHoleOneByTwoInchGlass
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>1" Hole (3/8in Glass)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.oneHoleThreeByEightInchGlass"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.oneHoleThreeByEightInchGlass
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hinge Cutout (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  size="small"
+                  type="number"
+                  name="wineCellars.fabricatingPricing.hingeCutoutOneByTwoInch"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.hingeCutoutOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hinge Cutout (3/8in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  size="small"
+                  type="number"
+                  name="wineCellars.fabricatingPricing.hingeCutoutThreeByEightInch"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.hingeCutoutThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        {/** Pdf Setting tab */}
+        <CustomTabPanel value={value} index={3}>
+          {/* <Box
+            sx={{
+              // borderTop: "1px solid #EAECF0",
+              // borderBottom: "1px solid #EAECF0",
+              // paddingTop: 0,
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          > */}
+            {/* <Typography variant="h6">Max Door Width</Typography> */}
+            {/* <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Max Door Width</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">
+                  Door width value must be in range between 1-39{" "}
+                </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.doorWidth"
+                  size="small"
+                  value={formik.values?.wineCellars?.doorWidth}
+                  onChange={(e) => {
+                    if (e.target.value.length <= 2) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                  inputProps={{
+                    min: 1,
+                    max: 39,
+                    step: "any",
+                    style: { width: "200px" },
+                  }}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    Boolean(formik.errors?.wineCellars?.doorWidth)
+                  }
+                  helperText={
+                    formik.touched?.wineCellars?.doorWidth &&
+                    formik.errors?.wineCellars?.doorWidth
+                  }
+                />
+              </Box>
+            </Box> */}
+          {/* </Box> */}
+          {/* <Box
+            sx={{
+              borderTop: "1px solid #EAECF0",
+              borderBottom: "1px solid #EAECF0",
+              paddingY: 1,
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <Typography variant="h6">Misc. Pricing</Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Pricing factor</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <p className="explain">Factor to multiply price </p>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.pricingFactor"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.pricingFactor}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+
+                <Box sx={{ ml: 2 }}>
+                  <CustomToggle
+                    name="wineCellars.miscPricing.pricingFactorStatus"
+                    checked={
+                      formik.values?.wineCellars?.miscPricing
+                        ?.pricingFactorStatus || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Default Hourly rate</Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                <Typography>
+                  Hourly rates to be used for labour price
+                </Typography>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.miscPricing.hourlyRate"
+                  size="small"
+                  value={formik.values?.wineCellars?.miscPricing?.hourlyRate}
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+                <FormControlLabel
+                  sx={{ visibility: "hidden" }}
+                  control={<Switch color="success" />}
+                  label={"active"}
+                />
+              </Box>
+            </Box>
+          </Box> */}
+          <Typography variant="h6" sx={{ paddingTop: 1 }}>
+            Pdf Settings
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+              // maxHeight: "38vh",
+              // overflowY: "scroll",
+              pt: 1,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>People</Typography>
+              <Box mr={19}>
+                  <CustomToggle
+                    name="pdfSettings.people"
+                    checked={
+                      formik.values?.pdfSettings?.people || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Hours</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.hours"
+                    checked={
+                      formik.values?.pdfSettings?.hours || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Labor Price</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.labor"
+                    checked={
+                      formik.values?.pdfSettings?.labor || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Profit</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.profit"
+                    checked={
+                      formik.values?.pdfSettings?.profit || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Actual Cost</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                  <CustomToggle
+                    name="pdfSettings.cost"
+                    checked={
+                      formik.values?.pdfSettings?.cost || false
+                    }
+                    onChange={formik.handleChange}
+                  />
+              </Box>
+            </Box>
           </Box>
         </CustomTabPanel>
         {/** end */}

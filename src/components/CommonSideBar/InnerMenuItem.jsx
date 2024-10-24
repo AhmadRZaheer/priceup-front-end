@@ -12,7 +12,14 @@ const InnerMenuItem = ({ link, secondLink, children }) => {
         className="ineerlink"
         style={{ textDecoration: "none" }}
       >
-        <li className={`${location.pathname === link ? "innerActive" : ""}`}>
+        <li
+          className={` ${
+            location.pathname === link
+              ? "innerActive"
+              : location.pathname === secondLink
+              ? "innerActive"
+              : ""
+          }`}>
           <Button
             fullWidth
             className="innerItem"

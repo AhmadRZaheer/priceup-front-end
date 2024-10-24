@@ -4,10 +4,7 @@ import { EstimatesColumns } from "@/utilities/DataGridColumns";
 import {
   Box,
   Button,
-  CircularProgress,
-  IconButton,
-  InputAdornment,
-  TextField,
+  // CircularProgress,
   Typography,
   useMediaQuery,
 } from "@mui/material";
@@ -16,32 +13,37 @@ import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
 import { EstimateCategory } from "@/utilities/constants";
 import { backendURL } from "@/utilities/common";
-import { Add, Edit, Search } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-// import { resetMirrorEstimateState, setMirrorProjectId } from "@/redux/mirrorsEstimateSlice";
-// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { makeStyles } from "@material-ui/core";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import { setStateForMirrorEstimate } from "@/utilities/mirrorEstimates";
+import {
+  calculateTotal,
+  generateObjectForPDFPreview,
+  renderMeasurementSides,
+  setStateForMirrorEstimate,
+} from "@/utilities/mirrorEstimates";
 import { debounce } from "lodash";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
 
-// const debounce = (func, delay) => {
-//   let timeout;
-//   return (...args) => {
-//     clearTimeout(timeout);
-//     timeout = setTimeout(() => {
-//       func(...args);
-//     }, delay);
-//   };
-// };
 const routePrefix = `${backendURL}/estimates`;
 
-const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue }) => {
+const MirrorEstimatesList = ({
+  projectId,
+  statusValue,
+  dateValue,
+  searchValue,
+}) => {
   const isMobile = useMediaQuery("(max-width:600px)");
   // const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const mirrorsHardwareList = useSelector(getMirrorsHardware);
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const useStyles = makeStyles({
@@ -55,18 +57,18 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   const classes = useStyles();
   const itemsPerPage = 10;
   let fetchAllEstimatesUrl = `${routePrefix}/by-project/${projectId}?page=${page}&limit=${itemsPerPage}&category=${EstimateCategory.MIRRORS}`;
-    if (searchValue && searchValue.length) {
-        fetchAllEstimatesUrl += `&search=${searchValue}`;
-    }
-    if (statusValue) {
-      fetchAllEstimatesUrl += `&status=${statusValue}`;
-    }
-    if (dateValue) {
-      fetchAllEstimatesUrl += `&date=${dateValue}`
-    }
+  if (searchValue && searchValue.length) {
+    fetchAllEstimatesUrl += `&search=${searchValue}`;
+  }
+  if (statusValue) {
+    fetchAllEstimatesUrl += `&status=${statusValue}`;
+  }
+  if (dateValue) {
+    fetchAllEstimatesUrl += `&date=${dateValue}`;
+  }
   const {
     data: estimatesList,
-    isLoading,
+    isFetched,
     isFetching: estimatesListFetching,
     refetch: refetchEstimatesList,
   } = useFetchAllDocuments(fetchAllEstimatesUrl);
@@ -77,6 +79,8 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   } = useDeleteEstimates();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleOpenDeleteModal = (id) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
@@ -87,20 +91,50 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
   };
   const handlePreviewPDFClick = (item) => {
     console.log(item, "item");
+    const formattedData = generateObjectForPDFPreview(
+      mirrorsHardwareList,
+      item,
+      mirrorsLocationSettings?.miscPricing
+    );
+    console.log(formattedData?.measurements, "data");
+    const pricingMirror = calculateTotal(
+      formattedData,
+      formattedData?.sqftArea,
+      mirrorsLocationSettings,
+      formattedData.measurements
+    );
+
+    const pricing = {
+      glassPrice: pricingMirror.glass,
+      fabricationPrice: pricingMirror.fabrication,
+      laborPrice: pricingMirror.labor,
+      additionalFieldPrice: pricingMirror.additionalFields,
+      cost: pricingMirror.cost,
+      total: pricingMirror.total,
+      profit: pricingMirror.profitPercentage,
+    };
+    const measurementString = renderMeasurementSides(
+      formattedData?.measurements
+    );
+    console.log(measurementString, "string ");
+    const id = item?._id;
+    localStorage.setItem(
+      "pdf-estimate",
+      JSON.stringify({
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        id,
+        pdfSettings,
+      })
+    );
+    navigate(`/estimates/${item?._id}/pdf-preview`);
   };
 
   const handleIconButtonClick = (item) => {
     setStateForMirrorEstimate(item, dispatch, navigate);
   };
-  // const handleCreateQuote = () => {
-  //     console.log('create quote');
-  //     dispatch(resetMirrorEstimateState());
-  //     dispatch(resetEstimateState());
-  //     dispatch(setMirrorProjectId(projectId));
-  //     dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
-  //     dispatch(setEstimateState("create"));
-  //     navigate("/estimates/dimensions");
-  // };
+
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
@@ -108,112 +142,88 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
       return [];
     }
   }, [estimatesList, searchValue]);
-  useEffect(() => {
-    refetchEstimatesList();
-  }, [page, deletedSuccessfully, projectId, statusValue, dateValue]);
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Creator",
+    "Customer",
+    "Estimate Category",
+    "Layout",
+    "Date quoted",
+    "Estimate total",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchEstimatesList();
-      } else {
-        setPage(1);
-      }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
+        refetchEstimatesList(); // If already on page 1, just refetch directly
+      // }
     }, 700),
-    [page]
+    [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
   );
+
   useEffect(() => {
-    debouncedRefetch();
-    // Cleanup function to cancel debounce if component unmounts
-    return () => {
-      debouncedRefetch.cancel();
-    };
-  }, [searchValue]);
-  // const handleChange = (e) => {
-  //   setSearch(e.target.value);
-  //   debouncedRefetch();
-  // };
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    // if (statusValue || dateValue || searchValue) {
+    //   setPage(1);
+    // }
+    if (searchValue) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchEstimatesList();
+    }
+  }, [
+    statusValue,
+    dateValue,
+    searchValue,
+    page,
+    deletedSuccessfully,
+    projectId,
+  ]);
+  useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+      setPage(1);
+    }   
+  }, [
+    statusValue,
+    dateValue,
+    searchValue,
+    deletedSuccessfully,
+    projectId,
+  ]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   return (
     <>
-      {/* <Box
-            sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                paddingY: 2,
-                paddingX: isMobile ? 0.5 : 2,
-            }}
-        >
-            <Typography sx={{ fontSize: isMobile ? 18 : 20, fontWeight: "bold", color: "#101828" }}>
-                Estimates
-            </Typography>
-            Search input field */}
-      {/*  <TextField
-                placeholder="Search by Customer Name"
-                value={search}
-                variant="standard"
-                onChange={(e) => handleChange(e)}
-                sx={{
-                    mb: 2,
-                    ".MuiInputBase-root:after": {
-                        border: "1px solid #8477DA",
-                    },
-                    width: isMobile ? '150px' : 'auto'
-                }}
-                InputProps={{
-                    endAdornment: (
-                        <InputAdornment position="end">
-                            <Search sx={{ color: "#8477DA" }} />
-                        </InputAdornment>
-                    ),
-                }}
-            />
-            <IconButton
-                onClick={handleCreateQuote}
-                disabled={estimatesListFetching}
-                sx={{
-                    backgroundColor: "#8477DA",
-                    color: "white",
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    borderRadius: 1,
-                    padding: 1,
-                    fontSize: 16,
-                    height: 35,
-                }}
-            >
-                <Add sx={{ color: "white" }} />
-                Add
-            </IconButton>
-        </Box> */}
       {isLoading ? (
-        <Box
-          sx={{
-            width: 40,
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            maxHeight: "70vh",
-            minHeight: "20vh",
-            background: "#FFFF",
-            pb: 3,
-          }}
-        >
-          <CircularProgress sx={{ color: "#8477DA" }} />
+        <Box>
+          <DataGrid
+            getRowId={(row) => row._id}
+            rows={SkeletonRowsGenerated}
+            columns={SkeletonColumnsGenerated}
+            page={1}
+            pageSize={10}
+            className="table"
+            hideFooter
+            disableColumnMenu
+            pagination={false}
+          />
         </Box>
-      ) : filteredData?.length === 0 && !estimatesListFetching ? (
-        <Typography
-          sx={{
-            color: "#667085",
-            p: 2,
-            textAlign: "center",
-            background: "#FFFF",
-            borderRadius:'12px'
-          }}
-        >
-          No Estimate Found
-        </Typography>
-      ) : (
-        <Box sx={{ background: "#FFFF", pb: 3,borderRadius:'8px' }}>
+      ) : filteredData?.length > 0 ? (
+        <Box sx={{ background: "#FFFF", pb: 3, borderRadius: "8px" }}>
           {isMobile ? (
             filteredData?.map((item) => (
               <Box
@@ -314,9 +324,7 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
               rowCount={
                 estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
               }
-              sx={{ width: "100%",'.MuiDataGrid-main':{
-                borderRadius:'8px !important',
-              } }}
+              sx={{ width: "100%" }}
               rowHeight={70}
               hideFooter
               disableColumnMenu
@@ -339,6 +347,18 @@ const MirrorEstimatesList = ({ projectId, statusValue, dateValue, searchValue })
             handleDelete={handleDeleteEstimate}
           />
         </Box>
+      ) : (
+        <Typography
+          sx={{
+            color: "#667085",
+            p: 2,
+            textAlign: "center",
+            background: "#FFFF",
+            borderRadius: "12px",
+          }}
+        >
+          No Estimate Found
+        </Typography>
       )}
     </>
   );

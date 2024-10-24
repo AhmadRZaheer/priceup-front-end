@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { backendURL, debounce } from "@/utilities/common";
+import { backendURL } from "@/utilities/common";
 import {
   useDeleteDocument,
   useFetchAllDocuments,
@@ -29,6 +29,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { ProjectsColumns } from "@/utilities/DataGridColumns";
 import Pagination from "../Pagination";
 import DeleteModal from "../Modal/deleteModal";
+import { debounce } from "lodash";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 export default function ProjectsSection() {
   const [searchParams] = useSearchParams();
@@ -55,7 +57,7 @@ export default function ProjectsSection() {
   }
   const {
     data: projectsList,
-    isLoading,
+    isFetched,
     isFetching: projectsListFetching,
     refetch: refetchProjectsList,
   } = useFetchAllDocuments(fetchAllProjectUrl);
@@ -66,6 +68,8 @@ export default function ProjectsSection() {
   } = useDeleteDocument();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
   const handleOpenDeleteModal = (item) => {
     setDeleteRecord(item._id);
     setDeleteModalOpen(true);
@@ -86,24 +90,57 @@ export default function ProjectsSection() {
     navigate(`/projects/${item?._id}`);
   };
 
-  useEffect(() => {
-    refetchProjectsList();
-  }, [page, search, selectedDate, status,deletedSuccessfully]);
-
   const debouncedRefetch = useCallback(
     debounce(() => {
-      if (page === 1) {
-        refetchProjectsList();
-      } else {
-        setPage(1);
-      }
+      // Always refetch when page is 1, else reset page to 1 to trigger refetch
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
+        refetchProjectsList(); // If already on page 1, just refetch directly
+      // }
     }, 700),
-    [page]
+    [refetchProjectsList] // Ensure refetchProjectsList is included in dependencies
   );
 
   useEffect(() => {
-    debouncedRefetch();
-  }, [search]);
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    // if (status || selectedDate || search) {
+    //   setPage(1);
+    // }
+    if (search) {
+      debouncedRefetch();
+      return () => {
+        debouncedRefetch.cancel();
+      };
+    } else {
+      refetchProjectsList();
+    }
+  }, [status, selectedDate, search, page, deletedSuccessfully]);
+  useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    if (status || selectedDate || search) {
+      setPage(1);
+    }
+  }, [status, selectedDate, search, deletedSuccessfully]);
+
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
+
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Project Name",
+    "Creator",
+    "Customer",
+    "Location",
+    "Created Date",
+    "Amount quoted",
+    "Status",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5]);
+
   const dropdownActions = [
     {
       title: "Detail",
@@ -320,24 +357,20 @@ export default function ProjectsSection() {
         >
           <Box>
             {isLoading ? (
-              <Box
-                sx={{
-                  width: 40,
-                  m: "auto",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  maxHeight: "70vh",
-                  minHeight: "20vh",
-                }}
-              >
-                <CircularProgress sx={{ color: "#8477DA" }} />
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
               </Box>
-            ) : filteredData?.length === 0 && !projectsListFetching ? (
-              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
-                No Project Found
-              </Typography>
-            ) : (
+            ) : filteredData?.length > 0 ? (
               <Box>
                 {isMobile ? (
                   filteredData?.map((item) => (
@@ -432,7 +465,12 @@ export default function ProjectsSection() {
                         : 0
                     }
                     rowHeight={70.75}
-                    sx={{ width: "100%" }}
+                    sx={{
+                      width: "100%",
+                      ".MuiDataGrid-main": {
+                        borderRadius: "8px !important",
+                      },
+                    }}
                     hideFooter
                     disableColumnMenu
                   />
@@ -455,6 +493,10 @@ export default function ProjectsSection() {
                   handleDelete={handleDeleteProject}
                 />
               </Box>
+            ) : (
+              <Typography sx={{ color: "#667085", p: 2, textAlign: "center" }}>
+                No Project Found
+              </Typography>
             )}
           </Box>
         </Box>

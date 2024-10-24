@@ -25,8 +25,14 @@ import { getDataRefetch } from "../../redux/staff";
 import DeleteModal from "../Modal/deleteModal";
 import { itemsPerPage } from "@/utilities/constants";
 import Pagination from "../Pagination";
-import { ArrowForward, DeleteOutlineOutlined, EditOutlined, MoreHoriz } from "@mui/icons-material";
+import {
+  ArrowForward,
+  DeleteOutlineOutlined,
+  EditOutlined,
+  MoreHoriz,
+} from "@mui/icons-material";
 import EditIcon from "@/Assets/d.svg";
+import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 
 const FinishesTable = () => {
   const refetchData = useSelector(getDataRefetch);
@@ -34,13 +40,15 @@ const FinishesTable = () => {
     data: finishesData,
     refetch: finishesRefetch,
     isFetching,
-    isLoading,
+    isFetched,
   } = useFetchDataFinishes();
   const {
     mutate: deleteFinish,
     isSuccess: deleteSuccess,
     isLoading: loaderForDelete,
   } = useDeleteFinishes();
+  const [isLoading, setIsLoading] = useState(true);
+
   const [open, setOpen] = React.useState(false);
   const [edit, setEdit] = React.useState(null);
   const [isEdit, setIsEdit] = React.useState(false);
@@ -98,16 +106,19 @@ const FinishesTable = () => {
       finishesRefetch();
     }
   }, [deleteSuccess]);
-
+  useEffect(() => {
+    if (isFetched) {
+      setIsLoading(false);
+    }
+  }, [isFetched]);
   const actionColumn = [
     {
       field: "Actions",
       headerClassName: "showerHardwareHeader",
       flex: 0.5,
       headerName: "Actions",
-      renderHeader: (params) => (
-        params.colDef.headerName
-      ),
+      sortable: false,
+      renderHeader: (params) => params.colDef.headerName,
 
       renderCell: (params) => {
         const id = params.row._id;
@@ -167,8 +178,9 @@ const FinishesTable = () => {
                 }}
               >
                 <p>Edit</p>
-                <EditOutlined sx={{ color: "#5D6164", height: '20px', width: '20px' }} />
-
+                <EditOutlined
+                  sx={{ color: "#5D6164", height: "20px", width: "20px" }}
+                />
               </MenuItem>
               <MenuItem
                 onClick={() => {
@@ -191,8 +203,9 @@ const FinishesTable = () => {
                 }}
               >
                 <p>Delete</p>
-                <DeleteOutlineOutlined sx={{ color: "#E22A2D", height: '20px', width: '20px' }} />
-
+                <DeleteOutlineOutlined
+                  sx={{ color: "#E22A2D", height: "20px", width: "20px" }}
+                />
               </MenuItem>
             </Menu>
           </div>
@@ -200,7 +213,11 @@ const FinishesTable = () => {
       },
     },
   ];
-
+  const SkeletonColumnsGenerated = GenrateColumns([
+    "Finish Type",
+    "Actions",
+  ]);
+  const SkeletonRowsGenerated = GenrateRows([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
   // Filter the finishesData based on the search input
   // const filteredData = finishesData?.filter((finish) =>
   //   finish.name.toLowerCase().includes(search.toLowerCase())
@@ -295,23 +312,21 @@ const FinishesTable = () => {
 
           <Box>
             {isLoading ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  padding: "20px",
-                  alignItems: "center",
-                  height: "200px",
-                }}
-              >
-                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+              <Box>
+                <DataGrid
+                  getRowId={(row) => row._id}
+                  rows={SkeletonRowsGenerated}
+                  columns={SkeletonColumnsGenerated}
+                  page={1}
+                  pageSize={10}
+                  className="table"
+                  hideFooter
+                  disableColumnMenu
+                  pagination={false}
+                />
               </Box>
-            ) : finishesData.length === 0 ? (
-              <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
-                No Finishes Found
-              </Typography>
-            ) : (
-              <div className="hardwareTable">
+            ) : finishesData.length > 0 ? (
+              <Box className="hardwareTable">
                 <DataGrid
                   loading={isFetching}
                   style={{
@@ -338,7 +353,11 @@ const FinishesTable = () => {
                   page={page}
                   setPage={setPage}
                 />
-              </div>
+              </Box>
+            ) : (
+              <Typography sx={{ color: "#667085", textAlign: "center", p: 1 }}>
+                No Finishe Found
+              </Typography>
             )}
           </Box>
         </Box>

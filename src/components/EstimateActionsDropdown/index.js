@@ -33,10 +33,10 @@ const EstimateActionsDropdown = ({
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
-        sx={{ borderRadius: 2, fontSize: "20px",color:'#8477DA', }}
+        sx={{ borderRadius: 2, fontSize: "20px", color: '#8477DA', }}
       >
         {/* <ManageSearch /> View */}
-        <ArrowForwardIcon/>
+        <ArrowForwardIcon />
       </IconButton>
       <Menu
         id="basic-menu"
@@ -56,15 +56,15 @@ const EstimateActionsDropdown = ({
             to="/estimates/steps"
             style={{ marginLeft: 2, marginRight: 1, marginTop: 0 }}
           > */}
-            <CustomIconButton
-              handleClick={() => handleIconButtonClick(params?.row)}
-              // disable={estimateDataFetching}
-              buttonText="Edit"
-              icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
-            />
+          <CustomIconButton
+            handleClick={() => handleIconButtonClick(params?.row)}
+            // disable={estimateDataFetching}
+            buttonText="Edit"
+            icon={<Edit sx={{ color: "white", fontSize: 18, mr: 0.4 }} />}
+          />
           {/* </Link> */}
         </MenuItem>
-        {params?.row?.category === EstimateCategory.SHOWERS && (
+        {/* {params?.row?.category === EstimateCategory.SHOWERS && ( */}
           <MenuItem>
             {" "}
             <CustomIconButton
@@ -78,11 +78,11 @@ const EstimateActionsDropdown = ({
               }
             />
           </MenuItem>
-        )}
+        {/* )} */}
         <MenuItem>
           {" "}
           <CustomIconButton
-            handleClick={() => handleDeleteEstimate(params?.row._id)}
+            handleClick={() => { handleDeleteEstimate(params?.row._id); setAnchorEl(null) }}
             // disable={estimateDataFetching}
             buttonText="Delete"
             severity={"error"}

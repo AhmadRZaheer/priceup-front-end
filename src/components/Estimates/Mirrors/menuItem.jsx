@@ -5,6 +5,7 @@ import { mirrorHardwareTypes } from "@/utilities/constants";
 import { getActiveStatus } from "@/utilities/mirrorEstimates";
 import { useState } from "react";
 import { CheckCircle } from "@mui/icons-material";
+import OptionWithCounter from "./optionWithCounter";
 
 const MenuItem = ({
   item,
@@ -22,7 +23,7 @@ const MenuItem = ({
   const status = getActiveStatus(item, activeFinishOrThickness, type);
   const [showToolTip, setShowTooltip] = useState(false);
   const handleItemClick = () => {
-    if (status) {
+    if (status && type !== mirrorHardwareTypes.HARDWARES) {
       handleItemSelect(item);
     }
   };
@@ -47,7 +48,8 @@ const MenuItem = ({
         )
       : type === "hardwares"
       ? selectedContent?.hardwares.some(
-          (selectedItem) => selectedItem?._id === item?._id
+          // (selectedItem) => selectedItem?._id === item?._id
+          (row) => row?.item?._id === item?._id
         )
       : item === selectedItem;
   return (
@@ -108,7 +110,19 @@ const MenuItem = ({
             <Typography sx={{fontWeight: 500, fontSize: '14px', fontFamily: '"Roboto", sans-serif !important' }}>{item?.name}</Typography>
           </Box>
           <Box>
-            {isSelected && (
+          {type === "hardwares" ? (
+              <OptionWithCounter
+                status={status}
+                key={`${type}-${item.slug}`}
+                item={item}
+                type={type}
+                counter={
+                  selectedContent?.hardwares?.find(
+                    (row) => row?.item?.slug === item.slug
+                  )?.count
+                }
+              /> ) : (
+            isSelected && (
               <CheckCircle
                 sx={{
                   color: "rgba(132, 119, 218, 1)",
@@ -117,7 +131,7 @@ const MenuItem = ({
                   mb: "-3.9px",
                 }}
               />
-            )}
+            ))}
           </Box>
         </Box>
       </MuiMenuItem>

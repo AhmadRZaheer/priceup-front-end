@@ -1,4 +1,11 @@
-import { setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
+import {
+  getEstimateCategory,
+  getEstimateState,
+  getProjectId,
+  setEstimateCategory,
+  setEstimateState,
+  setProjectId,
+} from "@/redux/estimateSlice";
 import {
   EstimateCategory,
   layoutVariants,
@@ -10,6 +17,10 @@ import {
 } from "./constants";
 import {
   addSelectedItem,
+  getContent,
+  getDoorWidth,
+  getLayoutPerimeter,
+  getisCustomizedDoorWidth,
   resetNotifications,
   resetState,
   setDoorWeight,
@@ -417,6 +428,10 @@ export const generateObjectForPDFPreview = (
   handleType = listData?.handles?.find(
     (item) => item._id === estimateData?.config?.handles?.type
   );
+  let doorLock = null;
+  doorLock = listData?.doorLocks?.find(
+    (item) => item._id === estimateData?.config?.doorLock?.type
+  );
   let hingesType = null;
   hingesType = listData?.hinges?.find(
     (item) => item._id === estimateData?.config?.hinges?.type
@@ -553,6 +568,10 @@ export const generateObjectForPDFPreview = (
       item: handleType,
       count: estimateData?.config?.handles?.count,
     },
+    doorLock: {
+      item: doorLock,
+      count: estimateData?.config?.doorLock?.count,
+    },
     hinges: {
       item: hingesType,
       count: estimateData?.config?.hinges?.count,
@@ -571,14 +590,16 @@ export const generateObjectForPDFPreview = (
     },
 
     mountingClamps: {
-      wallClamp: [...wallClampArray],
-      sleeveOver: [...sleeveOverArray],
-      glassToGlass: [...glassToGlassArray],
+      wallClamp: wallClampArray ? [...wallClampArray] : [],
+      sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
+      glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
     },
     cornerClamps: {
-      cornerWallClamp: [...cornerWallClampArray],
-      cornerSleeveOver: [...cornerSleeveOverArray],
-      cornerGlassToGlass: [...cornerGlassToGlassArray],
+      cornerWallClamp: cornerWallClampArray ? [...cornerWallClampArray] : [],
+      cornerSleeveOver: cornerSleeveOverArray ? [...cornerSleeveOverArray] : [],
+      cornerGlassToGlass: cornerGlassToGlassArray
+        ? [...cornerGlassToGlassArray]
+        : [],
     },
     mountingChannel: {
       item: channelItem || null,
@@ -591,7 +612,7 @@ export const generateObjectForPDFPreview = (
         ? "clamps"
         : "channel",
     glassAddons: glassAddons?.length ? [...glassAddons] : [noGlassAddon],
-    hardwareAddons: [...hardwareAddons],
+    hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
     oneInchHoles: estimateData?.config?.oneInchHoles,
     hingeCut: estimateData?.config?.hingeCut,
     clampCut: estimateData?.config?.clampCut,
@@ -601,6 +622,7 @@ export const generateObjectForPDFPreview = (
     polish: estimateData?.config?.polish,
     people: estimateData?.config?.people,
     hours: estimateData?.config?.hours,
+    laborHoursForDoor: estimateData?.config?.laborHoursForDoor ?? 0,
     perimeter: estimateData?.config?.perimeter,
     sqftArea: estimateData?.config?.sqftArea,
     userProfitPercentage: estimateData?.config?.userProfitPercentage,
@@ -644,8 +666,8 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
   return result;
 };
 
-export const setStateForShowerEstimate = (item, dispatch, navigate) => {
-  // if (item?.category === EstimateCategory.SHOWERS) {
+export const setStateForShowerEstimate = (item, dispatch, navigate,flag=true) => {
+   // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -674,7 +696,12 @@ export const setStateForShowerEstimate = (item, dispatch, navigate) => {
   if (result?.returnWeight) {
     dispatch(setReturnWeight(result?.returnWeight));
   }
-  navigate("/estimates/dimensions");
+  // navigate(`/estimates/dimensions`);
+  if(flag){
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
+    );
+  }
   // }
 };
 
@@ -695,4 +722,105 @@ export const showEditButtonForEstimateStatus = (decryptedToken) => {
     default:
       return false;
   }
+};
+
+export const generateObjectForPDFRuntime = (
+  state,
+  showerState,
+  showersLocationSettings
+) => {
+  console.log(showerState,state,'showerStateshowerState')
+  return {   
+    category: state.selectedCategory,
+    companyData: {},
+    cost: showerState.totalPrice,
+    customerData: state?.customerData,
+    project_id: state.projectId,
+    settings: {
+      name:
+        state.estimateState === quoteState.CREATE
+          ? showerState?.selectedItem?.name
+          : showerState?.selectedItem?.settings?.name,
+      image:
+        state.estimateState === quoteState.CREATE
+          ? showerState?.selectedItem?.image
+          : showerState?.selectedItem?.settings?.image,
+    },
+    additionalFields: showerState?.content?.additionalFields,
+    clampCut: showerState?.content?.clampCut,
+    cornerClamps: showerState?.content?.cornerClamps,
+    doorWidth: showerState?.doorWidth,
+    glassType: showerState?.content?.glassType,
+    glassAddons: showerState?.content?.glassAddons,
+    handles: showerState?.content?.handles,
+    doorLock: showerState?.content?.doorLock,
+    hardwareAddons: showerState?.content?.hardwareAddons,
+    hardwareFinishes: showerState?.content?.hardwareFinishes,
+    header: showerState?.content?.header,
+    hingeCut: showerState?.content?.hingeCut,
+    hinges: showerState?.content?.hinges,
+    hours: showerState?.content?.hours,
+    laborHoursForDoor: showerState?.content?.laborHoursForDoor ?? 0,
+    people: showerState?.content?.people,
+    mitre: showerState?.content?.mitre,
+    mountingChannel: showerState?.content?.mountingChannel,
+    mountingClamps: showerState?.content?.mountingClamps,
+    mountingState: showerState?.content?.mountingState,
+    outages: showerState?.content?.outages,
+    slidingDoorSystem: showerState?.content?.slidingDoorSystem,
+    userProfitPercentage: showerState?.content?.userProfitPercentage,
+    sqftArea: showerState?.sqftArea,
+    polish: showerState?.content?.polish,
+    oneInchHoles: showerState?.content?.oneInchHoles,
+    notch: showerState?.content?.notch,
+    oneInchHoles: showerState?.content?.oneInchHoles,
+    slidingDoorSystem: showerState?.content?.slidingDoorSystem,
+    isCustomizedDoorWidth: showerState?.isCustomizedDoorWidth,
+    layout_id:
+      state.estimateState === quoteState.CREATE
+        ? showerState?.selectedItem?._id
+        : showerState?.selectedItem?.settings?._id,
+    perimeter: showerState?.perimeter,
+    measurements: showerState?.measurements,
+    updatedAt: new Date(),
+    pricingFactor: showersLocationSettings?.miscPricing?.pricingFactor,
+    panelWeight:showerState.panelWeight,
+    doorWeight:showerState.doorWeight,
+    returnWeight:showerState.returnWeight,
+  };
+};
+
+export const generateObjForMirrorPDFRuntime = (
+  state,
+  mirrorState,
+  mirrorsLocationSettings
+) => {
+  return {
+    additionalFields: mirrorState?.content?.additionalFields,
+    category: state.selectedCategory,
+    cost: mirrorState?.pricing?.total,
+    creatorData: {},
+    customerData: state.customerData,
+    doubleOutletCutout: mirrorState?.content?.doubleOutletCutout,
+    edgeWork: mirrorState?.content?.edgeWork,
+    glassType: mirrorState?.content?.glassType,
+    glassAddons: mirrorState?.content?.glassAddons,
+    hardwares: mirrorState?.content?.hardwares,
+    hours: mirrorState?.content?.hours,
+    layout_id: null,
+    lightHoles: mirrorState?.content?.lightHoles,
+    measurements: mirrorState?.measurements,
+    notch: mirrorState?.content?.notch,
+    people: mirrorState?.content?.people,
+    pricingFactor: mirrorsLocationSettings?.miscPricing?.pricingFactor,
+    project_id: state.projectId,
+    quadOutletCutout: mirrorState?.content?.quadOutletCutout,
+    settings: {},
+    simpleHoles: mirrorState?.content?.simpleHoles,
+    modifiedProfitPercentage:mirrorState?.content?.modifiedProfitPercentage,
+    singleOutletCutout: mirrorState?.content?.singleOutletCutout,
+    sqftArea: mirrorState?.sqftArea,
+    tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
+    updatedAt: new Date(),
+  };
 };

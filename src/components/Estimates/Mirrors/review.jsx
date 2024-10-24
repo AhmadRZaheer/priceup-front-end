@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import {
   Box,
   Button,
+  CircularProgress,
   Divider,
   TextField,
   Typography,
@@ -12,9 +13,11 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   EstimateCategory,
+  inputLength,
+  inputMaxValue,
   mirrorHardwareTypes,
   quoteState,
 } from "@/utilities/constants";
@@ -68,8 +71,12 @@ export const generateEstimatePayload = (
     (item) => item?._id
   );
 
-  const hardwaresArray = selectedContent?.hardwares?.map((item) => item?._id);
-
+  const hardwaresArray = selectedContent?.hardwares?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
   const filteredFields = selectedContent.additionalFields?.filter(
     (item) => item.label !== "" && item.cost !== 0
   );
@@ -119,9 +126,11 @@ export const generateEstimatePayload = (
 
 export const MirrorReview = ({ setStep }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
+    isLoading:EditEstimateLoading,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -132,13 +141,16 @@ export const MirrorReview = ({ setStep }) => {
   const hardwaresList = useSelector(getMirrorsHardware);
   const measurements = useSelector(getEstimateMeasurements);
   const estimateId = useSelector(getEstimateId);
-  const projectId = useSelector(getProjectId);
+  // const projectId = useSelector(getProjectId);
+  const projectId = searchParams.get("projectId");
   const sqftArea = useSelector(getSqftArea);
-  const currentEstimateState = useSelector(getEstimateState);
+  // const currentEstimateState = useSelector(getEstimateState);
+  const currentEstimateState = searchParams.get("estimateState");
   const notifications = useSelector(getNotifications);
   const selectedContent = useSelector(getSelectedContent);
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
+  const category = searchParams.get("category");
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
@@ -184,12 +196,11 @@ export const MirrorReview = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}`);
+      navigate(`/projects/${projectId}?category=${category}`);
+    } else {
+      navigate("/estimates");
     }
-    else {
-      navigate("/estimates")
-    }
-  }
+  };
 
   const handleEstimateSubmit = () => {
     const allGoodStatus = getEstimateErrorStatus(selectedContent);
@@ -224,7 +235,7 @@ export const MirrorReview = ({ setStep }) => {
   useEffect(() => {
     if (CreatedSuccessfullyEdit) {
       if (projectId) {
-        navigate(`projects/${projectId}`);
+        navigate(`/projects/${projectId}`);
       } else {
         navigate("/estimates");
       }
@@ -367,7 +378,13 @@ export const MirrorReview = ({ setStep }) => {
               display: { sm: "block", xs: "none" },
             }}
           >
-            <Typography sx={{ fontSize: "14px", fontWeight: 700, fontFamily: '"Roboto", sans-serif !important' }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
               Modifications
             </Typography>
           </Box>
@@ -495,9 +512,9 @@ export const MirrorReview = ({ setStep }) => {
                       <Box sx={{ width: "100%" }}>
                         <MenuList
                           menuOptions={hardwaresList?.hardwares}
-                          title={"Hardwares"}
+                          title={"Hardware"}
                           type={mirrorHardwareTypes.HARDWARES}
-                        // currentItem={selectedContent.hardwares.item}
+                          // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -517,7 +534,7 @@ export const MirrorReview = ({ setStep }) => {
                           menuOptions={hardwaresList?.glassAddons}
                           title={"Glass Addons"}
                           type={mirrorHardwareTypes.GLASSADDONS}
-                        // currentItem={selectedContent.hardwares.item}
+                          // currentItem={selectedContent.hardwares.item}
                         />
                       </Box>
                     </Box>
@@ -629,9 +646,7 @@ export const MirrorReview = ({ setStep }) => {
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Holes
                       </Typography>
                       <Box
@@ -647,10 +662,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -662,19 +677,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.simpleHoles}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "simpleHoles",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "simpleHoles",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -750,9 +767,7 @@ export const MirrorReview = ({ setStep }) => {
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Light Holes
                       </Typography>
                       <Box
@@ -768,10 +783,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -783,19 +798,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.lightHoles}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "lightHoles",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "lightHoles",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -813,9 +830,7 @@ export const MirrorReview = ({ setStep }) => {
                         color: { sm: "#000000  ", xs: "white" },
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Notch
                       </Typography>
                       <Box
@@ -831,10 +846,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -846,19 +861,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.notch}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "notch",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "notch",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -875,9 +892,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Single Outlet Cutout
                       </Typography>
                       <Box
@@ -893,10 +908,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -908,19 +923,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.singleOutletCutout}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "singleOutletCutout",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "singleOutletCutout",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -938,9 +955,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Double Outlet Cutout
                       </Typography>
                       <Box
@@ -956,10 +971,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -971,19 +986,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.doubleOutletCutout}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "doubleOutletCutout",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "doubleOutletCutout",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -1000,9 +1017,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Triple Outlet Cutout
                       </Typography>
                       <Box
@@ -1018,10 +1033,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -1033,19 +1048,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.tripleOutletCutout}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "tripleOutletCutout",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "tripleOutletCutout",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -1062,9 +1079,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Quad Outlet Cutout
                       </Typography>
                       <Box
@@ -1080,10 +1095,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -1095,19 +1110,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.quadOutletCutout}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "quadOutletCutout",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "quadOutletCutout",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -1299,9 +1316,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         People:
                       </Typography>
                       <Box
@@ -1317,10 +1332,10 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: { min: 0, max: inputMaxValue },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -1332,19 +1347,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.people}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "people",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "people",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -1361,9 +1378,7 @@ export const MirrorReview = ({ setStep }) => {
                         py: 2,
                       }}
                     >
-                      <Typography
-                        className='estimate-modifcation'
-                      >
+                      <Typography className="estimate-modifcation">
                         Hours:
                       </Typography>
                       <Box
@@ -1379,10 +1394,14 @@ export const MirrorReview = ({ setStep }) => {
                           type="number"
                           className="custom-textfield"
                           InputProps={{
-                            inputProps: { min: 0 },
+                            inputProps: {
+                              min: 0,
+                              max: inputMaxValue,
+                              step: "any",
+                            },
                             style: {
-                              height: '38px',
-                            }
+                              height: "38px",
+                            },
                           }}
                           InputLabelProps={{
                             style: {
@@ -1394,19 +1413,21 @@ export const MirrorReview = ({ setStep }) => {
                             width: "100%",
                             "& input[type=number]": {
                               textAlign: "right",
-                            }
+                            },
                           }}
                           variant="outlined"
                           size="small"
                           value={selectedContent.hours}
-                          onChange={(event) =>
-                            dispatch(
-                              setInputContent({
-                                type: "hours",
-                                value: event.target.value,
-                              })
-                            )
-                          }
+                          onChange={(event) => {
+                            if (event.target.value.length <= inputLength) {
+                              dispatch(
+                                setInputContent({
+                                  type: "hours",
+                                  value: event.target.value,
+                                })
+                              );
+                            }
+                          }}
                         />
                       </Box>
                     </Box>
@@ -1434,9 +1455,9 @@ export const MirrorReview = ({ setStep }) => {
                           width: "fit-content",
                           textTransform: "capitalize",
                           color: "#8477DA",
-                          fontSize: '16px',
+                          fontSize: "16px",
                           fontWeight: 600,
-                          p: '10px !important',
+                          p: "10px !important",
                           // backgroundColor: "#8477da",
                           "&:hover": {
                             // backgroundColor: "#8477da",
@@ -1444,7 +1465,7 @@ export const MirrorReview = ({ setStep }) => {
                           mt: 2,
                         }}
                         variant="text"
-                        startIcon={<Add sx={{ mr: '2px' }} />}
+                        startIcon={<Add sx={{ mr: "2px" }} />}
                       >
                         Add Additional Field
                       </Button>
@@ -1608,7 +1629,7 @@ export const MirrorReview = ({ setStep }) => {
                   <Button
                     fullWidth
                     // disabled={selectedContent?.hardwareFinishes === null}
-                    disabled={projectId === null}
+                    disabled={projectId === null || EditEstimateLoading}
                     variant="contained"
                     onClick={handleEstimateSubmit}
                     sx={{
@@ -1621,7 +1642,7 @@ export const MirrorReview = ({ setStep }) => {
                       },
                     }}
                   >
-                    Save Estimate
+                     { EditEstimateLoading ?  <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : 'Save Estimate'}
                   </Button>
                 </Box>
               </Box>
