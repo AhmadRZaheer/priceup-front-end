@@ -160,20 +160,20 @@ export default function Estimates() {
   const debouncedRefetch = useCallback(
     debounce(() => {
       // Always refetch when page is 1, else reset page to 1 to trigger refetch
-      if (page !== 1) {
-        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
-      } else {
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
         refetchEstimatesList(); // If already on page 1, just refetch directly
-      }
+      // }
     }, 700),
     [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
   );
 
   useEffect(() => {
     // Reset page to 1 if filters (status, selectedDate, or search) change
-    if (status || selectedDate || search) {
-      setPage(1);
-    }
+    // if (status || selectedDate || search) {
+    //   setPage(1);
+    // }
     if (search) {
       debouncedRefetch();
       return () => {
@@ -187,6 +187,18 @@ export default function Estimates() {
     selectedDate,
     search,
     page,
+    deletedSuccessfully,
+    refetchEstimatesCounter,
+  ]);
+  useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, or search) change
+    if (status || selectedDate || search) {
+      setPage(1);
+    }
+  }, [
+    status,
+    selectedDate,
+    search,
     deletedSuccessfully,
     refetchEstimatesCounter,
   ]);

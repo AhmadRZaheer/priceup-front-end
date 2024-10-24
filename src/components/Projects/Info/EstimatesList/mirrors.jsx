@@ -158,20 +158,20 @@ const MirrorEstimatesList = ({
   const debouncedRefetch = useCallback(
     debounce(() => {
       // Always refetch when page is 1, else reset page to 1 to trigger refetch
-      if (page !== 1) {
-        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
-      } else {
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
         refetchEstimatesList(); // If already on page 1, just refetch directly
-      }
+      // }
     }, 700),
-    [page, refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
+    [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
   );
 
   useEffect(() => {
     // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
-    if (statusValue || dateValue || searchValue) {
-      setPage(1);
-    }
+    // if (statusValue || dateValue || searchValue) {
+    //   setPage(1);
+    // }
     if (searchValue) {
       debouncedRefetch();
       return () => {
@@ -185,6 +185,18 @@ const MirrorEstimatesList = ({
     dateValue,
     searchValue,
     page,
+    deletedSuccessfully,
+    projectId,
+  ]);
+  useEffect(() => {
+    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
+    if (statusValue || dateValue || searchValue) {
+      setPage(1);
+    }   
+  }, [
+    statusValue,
+    dateValue,
+    searchValue,
     deletedSuccessfully,
     projectId,
   ]);

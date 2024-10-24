@@ -177,20 +177,20 @@ const SuperAdminTeam = () => {
   const debouncedRefetch = useCallback(
     debounce(() => {
       // Always refetch when page is 1, else reset page to 1 to trigger refetch
-      if (page !== 1) {
-        setPage(1); // This will trigger a refetch due to the useEffect watching `page`
-      } else {
+      // if (page !== 1) {
+      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
+      // } else {
         refetchUsersList(); // If already on page 1, just refetch directly
-      }
+      // }
     }, 700),
     [page, refetchUsersList] // Ensure refetchUsersList is included in dependencies
   );
 
   useEffect(() => {
     // Reset page to 1 if filters (status, selectedDate, role or search) change
-    if (status || selectedDate || search || role) {
-      setPage(1);
-    }
+    // if (status || selectedDate || search || role) {
+    //   setPage(1);
+    // }
     if (search) {
       debouncedRefetch();
       return () => {
@@ -200,6 +200,12 @@ const SuperAdminTeam = () => {
       refetchUsersList();
     }
   }, [status, selectedDate, search, page, deletedSuccessfully, role]);
+  useEffect(() => {
+    // Reset page to 1 if filters (status, selectedDate, role or search) change
+    if (status || selectedDate || search || role) {
+      setPage(1);
+    }  
+  }, [status, selectedDate, search, deletedSuccessfully, role]);
 
   useEffect(() => {
     if (isFetched && filteredData) {

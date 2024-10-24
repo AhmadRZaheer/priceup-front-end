@@ -25,8 +25,6 @@ import WidgetCard from "../ui-components/widgetCard";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
 import dayjs from "dayjs";
-import CustomBarChart from "../charts/CustomBarChart";
-import CustomPieChart from "../charts/CustomPieChart";
 
 const dateSx = {
   "& .MuiInputBase-root": {
@@ -46,15 +44,6 @@ const dateSx = {
     color: "#000000",
   },
 };
-const barData = [
-  { x: "2019/01/01", y: 400 },
-  { x: "2019/04/01", y: 430 },
-  { x: "2019/07/01", y: 448 },
-  { x: "2019/10/01", y: 470 },
-  { x: "2020/01/01", y: 540 },
-  { x: "2020/04/01", y: 580 },
-];
-const pieChartData = [55, 55, 55];
 
 export default function Estimates() {
   const decodedToken = getDecryptedToken();
@@ -62,10 +51,6 @@ export default function Estimates() {
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const currentDate = dayjs();
-  const [graphDate, setGraphDate] = useState({
-    start: currentDate.subtract(1, "month"),
-    end: currentDate,
-  });
   const {
     data: estimatesStats,
     // isLoading: estimatesStatsFetching,
@@ -84,29 +69,6 @@ export default function Estimates() {
       setSelectedDate(null);
     }
   };
-  const handleGraphDateChange = (newDate, isStartDate) => {
-    if (newDate) {
-      // Set time to noon (12:00) to avoid time zone issues
-      const adjustedDate = dayjs(newDate)
-        .hour(12)
-        .minute(0)
-        .second(0)
-        .millisecond(0);
-      setGraphDate((prev) => ({
-        ...prev,
-        [isStartDate ? "start" : "end"]: adjustedDate, 
-      }));
-    } else {
-      setGraphDate((prev) => ({
-        ...prev,
-        [isStartDate ? "start" : "end"]: null,
-      }));
-    }
-  };
-
-  const handleShowGraph = () => {
-    console.log(graphDate, "graphDate");
-  };
   const handleResetFilter = () => {
     setSearch("");
     setStatus(null);
@@ -114,7 +76,7 @@ export default function Estimates() {
   };
   useEffect(() => {
     refetchEstimatesStats();
-  }, []);
+  }, []);  
   return (
     <>
       <Box
