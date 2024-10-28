@@ -55,6 +55,7 @@ import WineCellarGlassType from "@/pages/WineCellar/GlassType";
 import WineCellarFinishes from "@/pages/WineCellar/Finishes";
 import WineCellarLayouts from "@/pages/WineCellar/Layouts";
 import EditWineLayout from "../WineCellar/Layouts/EditLayout";
+import EstimateForm from "@/pages/EstimateForm";
 
 
 const AppRoutes = () => {
@@ -203,6 +204,7 @@ const AppRoutes = () => {
       )}
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
+      <Route path="/estimate-form" element={<EstimateForm />} />
     </Routes>
   );
 };
