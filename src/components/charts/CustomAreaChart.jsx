@@ -96,7 +96,7 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const CustomLineChart = ({ dataType, data }) => {
+const CustomAreaChart = ({ dataType, data }) => {
   const uniqueBarData = Array.from(
     new Map(data.map((item) => [item.x, item])).values()
   );
@@ -148,4 +148,4 @@ const CustomLineChart = ({ dataType, data }) => {
   );
 };
 
-export default CustomLineChart;
+export default CustomAreaChart;

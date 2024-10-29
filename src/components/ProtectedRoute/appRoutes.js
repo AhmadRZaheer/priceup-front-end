@@ -56,6 +56,7 @@ import WineCellarFinishes from "@/pages/WineCellar/Finishes";
 import WineCellarLayouts from "@/pages/WineCellar/Layouts";
 import EditWineLayout from "../WineCellar/Layouts/EditLayout";
 import EstimateForm from "@/pages/EstimateForm";
+import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 
 
 const AppRoutes = () => {
@@ -177,13 +178,14 @@ const AppRoutes = () => {
         </Route>
       ) : isSuperAdmin(decodedToken) ? (
         <Route path="/">
-          <Route index element={<Admin />} />
+          <Route index element={<SuperAdminDashboard />} />
+          <Route path="/locations" element={<Admin />} />
           <Route path="/users" element={<AdminTeam />} />
           {/* <Route path="/user" element={<AdminUser />} /> */}
           {/* {superSuperAdminsList?.includes(decodedToken.email) && (
             <Route path="/superadmins" element={<Super_SuperAdmin />} />
           )} */}
-          <Route path="*" element={<Admin />} />
+          <Route path="*" element={<SuperAdminDashboard />} />
         </Route>
       ) : isCustomAdmin(decodedToken) && decodedToken?.company_id === "" ? (
         <Route path="/">

@@ -9,7 +9,7 @@ import { Box, Button, IconButton, Tooltip } from "@mui/material";
 import { parseJwt } from "../ProtectedRoute/authVerify";
 import TremIcon from "../../Assets/users.svg";
 import ExpandMoreOutlinedIcon from "@mui/icons-material/ExpandMoreOutlined";
-import { FmdGoodOutlined } from "@mui/icons-material";
+import { FmdGoodOutlined, HomeOutlined } from "@mui/icons-material";
 import {
   useFetchDataAdmin,
   useSwitchLocationSuperAdmin,
@@ -19,8 +19,8 @@ import SwitchLocationPopup from "../ui-components/switchLocationPopup";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import MenuSigleItem from "./MenuSigleItem";
-import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
-import { getLocationsRefetch, setChangeLocation, } from "@/redux/refetch";
+import AccessTimeOutlinedIcon from "@mui/icons-material/AccessTimeOutlined";
+import { getLocationsRefetch, setChangeLocation } from "@/redux/refetch";
 
 const SuperAdminSideBar = () => {
   const locationsRefetch = useSelector(getLocationsRefetch);
@@ -59,12 +59,12 @@ const SuperAdminSideBar = () => {
       company_id: admin._id,
       adminId: admin.user_id,
     });
-      setAnchorEl(null);
+    setAnchorEl(null);
   };
   useEffect(() => {
     if (switchedSuperAdmin) {
-      localStorage.setItem('splashLoading', 'true')
-      dispatch(setChangeLocation());       
+      localStorage.setItem("splashLoading", "true");
+      dispatch(setChangeLocation());
       localStorage.removeItem("token");
       localStorage.setItem("userReference", decodedToken.id);
       localStorage.setItem("token", useTokenSuperAdmin);
@@ -117,8 +117,7 @@ const SuperAdminSideBar = () => {
             className="setLocation"
             sx={{
               color: "#FFFF",
-              transform:
-                anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
+              transform: anchorEl !== null ? "rotate(270deg)" : "rotate(0deg)",
             }}
           />
         </Button>
@@ -140,7 +139,11 @@ const SuperAdminSideBar = () => {
               <span>See Locations</span>
             </Button>
           </li> */}
-          <MenuSigleItem link="/admin" secondLink="/">
+          <MenuSigleItem link="/dashboard" secondLink="/">
+            <HomeOutlined sx={{}} />
+            <span>Dashboard</span>
+          </MenuSigleItem>
+          <MenuSigleItem link="/locations" >
             <FmdGoodOutlined sx={{}} />
             <span>Location Management</span>
           </MenuSigleItem>
@@ -148,7 +151,10 @@ const SuperAdminSideBar = () => {
             <PeopleAltOutlinedIcon sx={{}} />
             <span>User Management</span>
           </MenuSigleItem>
-          <MenuSigleItem link="/notification?tab=Activity" secondLink='/notification'>
+          <MenuSigleItem
+            link="/notification?tab=Activity"
+            secondLink="/notification"
+          >
             <AccessTimeOutlinedIcon sx={{}} />
             <span>Activity Logs</span>
           </MenuSigleItem>

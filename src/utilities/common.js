@@ -58,6 +58,16 @@ export const backendURL =
 //   }
 // };
 
+export const convertDate = (isoDate) => {
+  const date = new Date(isoDate);
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   console.log(selectedContent,'selectedContentselectedContent')
   // hardware
