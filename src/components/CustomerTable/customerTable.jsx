@@ -199,7 +199,7 @@ const CustomerTable = () => {
         <Grid container spacing={2}>
           {[{ title: "Total Customer", text: data?.customerCount ?? 0, variant: "blue" }].map(
             (item) => (
-              <Grid item lg={3} md={6} sm={6} xs={6}>
+              <Grid item lg={4} md={6} sm={6} xs={6}>
                 <WidgetCard
                   type={2}
                   text={item.text}

@@ -18,6 +18,7 @@ function TopBar() {
   // const [state, setState] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const dispatch = useDispatch();
   const decodedToken = getDecryptedToken();
   //Notification Drawer
@@ -35,6 +36,7 @@ function TopBar() {
   };
   //logout
   const Logout = () => {
+    setLoading(true)
     dispatch(logoutHandler());
     window.location.href = "/adminlogin";
   };
@@ -130,7 +132,7 @@ function TopBar() {
           </Menu>
         </Box>
         {/* <NotificationDrawer state={state} toggleDrawer={toggleDrawer} /> */}
-        <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} />
+        <LagoutModal open={open} close={() => setOpen(!open)} logout={Logout} loading={loading} />
       </AppBar>
     </Box>
   );

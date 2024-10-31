@@ -7,6 +7,12 @@ const CustomPieChart = ({ data }) => {
     chart: {
       width: 380,
       type: "pie",
+      //  toolbar: {
+      //     show: true, // Enable or disable the toolbar completely
+      //     tools: {
+      //       download: true, // Disable the download option
+      //     },
+      //   },
     },
     labels: ["Showers", "Mirrors", "WineCallers"],
     colors: ["#8477DA", "#00A773", "#0156C7"], 

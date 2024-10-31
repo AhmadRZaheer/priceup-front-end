@@ -338,7 +338,7 @@ const TeamTable = () => {
                 variant: "blue",
               },
             ].map((item) => (
-              <Grid item lg={3} md={6} sm={6} xs={6}>
+              <Grid item lg={4} md={6} sm={6} xs={6}>
                 <WidgetCard
                   type={2}
                   text={item.text}

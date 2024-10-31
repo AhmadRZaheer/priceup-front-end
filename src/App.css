@@ -410,9 +410,6 @@ input {
 .swiper-button-next,
 .swiper-button-prev {
   color: white !important; /* Set your custom color */
-  font-size: 16px !important; /* Set the size of the arrow icon */
-  width: 25px !important; /* Adjust width to make button smaller */
-  height: 25px !important; /* Adjust height to make button smaller */
 }
 
 /* Adjust button's position if needed */
@@ -427,5 +424,8 @@ input {
 /* Optional: Change color on hover */
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  color: #ff8566 !important; /* Change color on hover if needed */
+  color: white !important;
+  /* background-color: #8477DA; */
+  /* padding: 10px; */
+  /* border-radius: 50%; */
 }

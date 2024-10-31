@@ -189,7 +189,8 @@ const SuperAdminDashboardPage = () => {
           sx={{
             background: "white",
             width: "66%",
-            pt: 1,
+            pt: '20px',
+            pl:'10px',
             borderRadius: 1,
             border: "1px solid #D0D5DD",
           }}
@@ -344,13 +345,15 @@ const SuperAdminDashboardPage = () => {
             display: "flex",
             justifyContent: "space-between",
             pt: 2,
+            gap:2
           }}
         >
           <Box
             sx={{
               background: "white",
               width: "49%",
-              pt: 1,
+              pt: '20px',
+              pl:'10px',
               border: "1px solid #D0D5DD",
               borderRadius: 1,
             }}
@@ -361,7 +364,8 @@ const SuperAdminDashboardPage = () => {
             sx={{
               background: "white",
               width: "49%",
-              pt: 1,
+              pt: '20px',
+              pl:'10px',
               border: "1px solid #D0D5DD",
               borderRadius: 1,
             }}
