@@ -419,7 +419,7 @@ const AdminSideBar = () => {
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
                 <DescriptionOutlinedIcon sx={{}} />
-                <span>Old Estimates</span>
+                <span>Estimates</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers" secondLink='/customers/edit'>
                 <PeopleAltOutlinedIcon sx={{}} />

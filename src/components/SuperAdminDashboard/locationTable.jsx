@@ -19,7 +19,7 @@ import CloneLocationModel from "../Modal/cloneLocationModal";
 import { useDeleteUser, useUserStatus } from "@/utilities/ApiHooks/superAdmin";
 import { CustomSmallSwtich } from "../common/CustomSmallSwitch";
 
-const LocationTable = () => {
+const LocationTable = ({ locationsData, refetchList, isFetching }) => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [recordToModify, setRecordToModify] = useState(null);
@@ -29,16 +29,17 @@ const LocationTable = () => {
   const [locationStatus, setLocationStatus] = useState({});
   const itemsPerPage = 10;
   const locationUrl = `${backendURL}/companies/by-role`;
-  const {
-    data: locationsData,
-    refetch: refetchList,
-    isFetching,
-  } = useFetchAllDocuments(locationUrl);
+  // const {
+  //   data: locationsData,
+  //   refetch: refetchList,
+  //   isFetching,
+  // } = useFetchAllDocuments(locationUrl);
   const { mutateAsync: deleteuserdata, isLoading: deleteisLoading } =
     useDeleteUser();
   const {
     mutate: updateLocationAdminStatus,
     isLoading: LoadingForEdit,
+    isSuccess: updateSuccess,
   } = useUserStatus();
   const handleDeleteUser = async () => {
     await deleteuserdata(recordToModify?.user);
@@ -56,20 +57,20 @@ const LocationTable = () => {
   const handleOpenModifyModal = (data) => {
     setRecordToModify(data);
     setOpenModifyLocModal(true);
-  };  
+  };
   const handleToggleLocationStatus = (rowId, currentStatus) => {
     setLocationStatus((prevStatus) => ({
       ...prevStatus,
       [rowId]: !currentStatus,
     }));
 
-    updateLocationAdminStatus({ status: !currentStatus, id: rowId })
+    updateLocationAdminStatus({ status: !currentStatus, id: rowId });
   };
 
   useEffect(() => {
     setLoading(false);
     refetchList();
-  }, []);
+  }, [updateSuccess]);
 
   const locationsList = useMemo(() => {
     return locationsData?.companies ? locationsData?.companies : [];
@@ -252,58 +253,65 @@ const LocationTable = () => {
       flex: 1.5,
       sortable: false,
       renderCell: (params) => {
-        const currentStatus = locationStatus[params.row.user._id] ?? params.row.user.status;
+        const currentStatus =
+          locationStatus[params.row.user._id] ?? params.row.user.status;
         return (
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            height: "40px",
-            gap: "12px",
-            pl: "14px",
-          }}
-        >
-           <Tooltip title={currentStatus ? "" : "This Location is not Active"}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              height: "40px",
+              gap: "12px",
+              pl: "14px",
+            }}
+          >
+            <Tooltip title={currentStatus ? "" : "This Location is not Active"}>
               <span>
                 <CustomSmallSwtich
                   checked={currentStatus}
-                  onChange={() => handleToggleLocationStatus(params.row.user._id, currentStatus)}
+                  onChange={() =>
+                    handleToggleLocationStatus(
+                      params.row.user._id,
+                      currentStatus
+                    )
+                  }
                 />
               </span>
             </Tooltip>
-          <IconButton
-            sx={{ width: 20, height: 20 }}
-            onClick={() => handleOpenCloneModal(params?.row)}
-          >
-            <img
-              src={cloneIcon}
-              alt="clone icon"
-              style={{ width: "20px", height: "20px" }}
-            />
-          </IconButton>
+            <IconButton
+              sx={{ width: 20, height: 20 }}
+              onClick={() => handleOpenCloneModal(params?.row)}
+            >
+              <img
+                src={cloneIcon}
+                alt="clone icon"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </IconButton>
 
-          <IconButton
-            sx={{ width: 20, height: 20 }}
-            onClick={() => handleOpenDeleteModal(params?.row)}
-          >
-            <img
-              src={DeleteIcon}
-              alt="delete icon"
-              style={{ width: "20px", height: "20px" }}
-            />
-          </IconButton>
-          <IconButton
-            sx={{ width: 20, height: 20 }}
-            onClick={() => handleOpenModifyModal(params?.row)}
-          >
-            <img
-              src={EditIcon}
-              alt="delete icon"
-              style={{ width: "20px", height: "20px" }}
-            />
-          </IconButton>
-        </Box>
-      )}
+            <IconButton
+              sx={{ width: 20, height: 20 }}
+              onClick={() => handleOpenDeleteModal(params?.row)}
+            >
+              <img
+                src={DeleteIcon}
+                alt="delete icon"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </IconButton>
+            <IconButton
+              sx={{ width: 20, height: 20 }}
+              onClick={() => handleOpenModifyModal(params?.row)}
+            >
+              <img
+                src={EditIcon}
+                alt="delete icon"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </IconButton>
+          </Box>
+        );
+      },
     },
   ];
 
@@ -376,9 +384,10 @@ const LocationTable = () => {
                 No Location Found
               </Typography>
             ) : (
-              <Box>
+              <Box sx={{
+                maxHeight:'1436px',overflow:'auto'}}>
                 <DataGrid
-                  loading={loading || LoadingForEdit}
+                  loading={LoadingForEdit}
                   style={{ border: "none" }}
                   getRowId={(row) => row._id}
                   rows={locationsList}
@@ -391,15 +400,15 @@ const LocationTable = () => {
                       borderRight: "1px solid red",
                     },
                   }}
-                  page={page}
-                  pageSize={itemsPerPage}
-                  rowCount={locationsList?.length ? locationsList?.length : 0}
+                  // page={page}
+                  // pageSize={itemsPerPage}
+                  // rowCount={locationsList?.length ? locationsList?.length : 0}
                   className="table"
                   hideFooter
                   disableColumnMenu
                   pagination={false}
                 />
-                <Box sx={{ width: "100%" }}>
+                {/* <Box sx={{ width: "100%" }}>
                   <Pagination
                     totalRecords={
                       locationsList?.length ? locationsList?.length : 0
@@ -408,7 +417,7 @@ const LocationTable = () => {
                     page={page}
                     setPage={setPage}
                   />
-                </Box>
+                </Box> */}
               </Box>
             )}
           </Box>

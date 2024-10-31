@@ -41,7 +41,7 @@ const Overview = () => {
           <Widget value={data?.staff || 0} type="invoice" />
         </div> */}
         <Box>
-        <Dashboard />
+        <Dashboard userData={data} />
         </Box>
       </Box>
       </CommonLayout>

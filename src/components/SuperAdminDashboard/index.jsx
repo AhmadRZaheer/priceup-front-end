@@ -39,14 +39,17 @@ const SuperAdminDashboardPage = () => {
   const [openModifyModal, setOpenModifyModal] = useState(false);
   const [openModifyLocModal, setOpenModifyLocModal] = useState(false);
   const locationUrl = `${backendURL}/companies/by-role`;
-  const usersUrl = `${backendURL}/admins/all-users`;
+  const dashboardUrl = `${backendURL}/admins/dashbaord-stats`;
   const {
     data: locationsData,
     refetch: refetchList,
     isFetching,
   } = useFetchAllDocuments(locationUrl);
-  const { data: usersList, refetch: refetchUsersList } =
-    useFetchAllDocuments(usersUrl);
+  const {
+    data: dahboardData,
+    refetch: refetchdahboardData,
+    isFetching: dahboardDataFetching,
+  } = useFetchAllDocuments(dashboardUrl);
 
   const handleCreateUser = async () => {
     setRecordToModify(null);
@@ -59,13 +62,12 @@ const SuperAdminDashboardPage = () => {
 
   useEffect(() => {
     refetchList();
-    refetchUsersList();
+    refetchdahboardData();
   }, []);
 
   const locationsList = useMemo(() => {
     return locationsData?.companies ? locationsData?.companies : [];
   }, [locationsData]);
-  console.log(locationsList);
 
   return (
     <Box
@@ -151,21 +153,26 @@ const SuperAdminDashboardPage = () => {
         {[
           {
             title: "Active Locations",
-            text: locationsData?.globalCounts?.activeLocations ?? 0,
+            text: dahboardData?.activeCompanyCount ?? 0,
             variant: "blue",
           },
           {
             title: "Non-Active Locations",
-            text: locationsData?.globalCounts?.inactiveLocations ?? 0,
+            text: dahboardData?.inactiveCompanyCount ?? 0,
             variant: "red",
           },
           {
+            title: "Total Locations",
+            text: locationsData?.companies?.length ?? 0,
+            variant: "purple",
+          },
+          {
             title: "Total Users",
-            text: usersList?.totalUserCount ?? 0,
+            text: dahboardData?.totalUsers ?? 0,
             variant: "green",
           },
         ].map((item, index) => (
-          <Grid item lg={4} md={6} xs={6} key={index}>
+          <Grid item lg={3} md={6} xs={6} key={index}>
             <WidgetCard
               text={item.text}
               title={item.title}
@@ -210,21 +217,21 @@ const SuperAdminDashboardPage = () => {
             Active Locations
           </Typography>
           <Box>
-            {isFetching ? (
+            {dahboardDataFetching ? (
               <Box
                 sx={{
                   width: "100%",
                   textAlign: "center",
                   display: "flex",
                   justifyContent: "center",
-                  height: "300px",
+                  height: "280px",
                   alignItems: "center",
                 }}
               >
                 <CircularProgress sx={{ color: "#8477DA" }} />
               </Box>
-            ) : locationsList?.length > 0 ? (
-              locationsList?.map((item, index) => (
+            ) : dahboardData?.topCompanies?.length > 0 ? (
+              dahboardData?.topCompanies?.map((item, index) => (
                 <Box key={index}>
                   <Box sx={{ display: "flex", py: "12px" }}>
                     <Box sx={{ display: "flex", gap: 1, width: "50%" }}>
@@ -268,7 +275,7 @@ const SuperAdminDashboardPage = () => {
                           color: "#101828",
                         }}
                       >
-                        {item.estimates ?? 0}
+                        {item.estimateCount ?? 0}
                       </Typography>
                     </Box>
                     <Box
@@ -295,11 +302,11 @@ const SuperAdminDashboardPage = () => {
                           color: "#101828",
                         }}
                       >
-                        {item.customers ?? 0}
+                        {item.customerCount ?? 0}
                       </Typography>
                     </Box>
                   </Box>
-                  {!(index + 1 === locationsList?.length) && (
+                  {!(index + 1 === dahboardData?.topCompanies?.length) && (
                     <Divider sx={{ color: "#D1D4DB" }} />
                   )}
                 </Box>
@@ -339,20 +346,40 @@ const SuperAdminDashboardPage = () => {
             pt: 2,
           }}
         >
-          <Box sx={{ background: "white", width: "49%", pt: 1, border: "1px solid #D0D5DD", borderRadius: 1, }}>
+          <Box
+            sx={{
+              background: "white",
+              width: "49%",
+              pt: 1,
+              border: "1px solid #D0D5DD",
+              borderRadius: 1,
+            }}
+          >
             <CustomLineChart dataType="Projects" data={chartData} />
           </Box>
-          <Box sx={{ background: "white", width: "49%", pt: 1 ,border: "1px solid #D0D5DD", borderRadius: 1,}}>
+          <Box
+            sx={{
+              background: "white",
+              width: "49%",
+              pt: 1,
+              border: "1px solid #D0D5DD",
+              borderRadius: 1,
+            }}
+          >
             <CustomAreaChart dataType="Customers" data={chartData} />
           </Box>
         </Box>
       )}
-      <LocationTable />
+      <LocationTable
+        locationsData={locationsData}
+        refetchList={refetchList}
+        isFetching={isFetching}
+      />
       <AddTeamMembers
         open={openModifyModal}
         close={() => setOpenModifyModal(false)}
         recordToModify={recordToModify}
-        refetchUsers={refetchUsersList}
+        refetchUsers={refetchdahboardData}
         locationsList={locationsList}
       />
       <AddEditLocationModal
