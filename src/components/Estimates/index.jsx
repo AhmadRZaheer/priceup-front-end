@@ -25,6 +25,10 @@ import WidgetCard from "../ui-components/widgetCard";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import StatusChip from "../common/StatusChip";
 import dayjs from "dayjs";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
 
 const dateSx = {
   "& .MuiInputBase-root": {
@@ -33,14 +37,14 @@ const dateSx = {
     backgroundColor: "white",
   },
   "& .MuiInputBase-input": {
-    fontSize: "0.875rem", 
+    fontSize: "0.875rem",
     padding: "8px 14px",
   },
   "& .MuiInputLabel-root": {
     fontSize: "14px",
     fontWeight: 400,
     fontFamily: '"Roboto",sans-serif !important',
-    top: "-5px", 
+    top: "-5px",
     color: "#000000",
   },
 };
@@ -76,7 +80,7 @@ export default function Estimates() {
   };
   useEffect(() => {
     refetchEstimatesStats();
-  }, []);  
+  }, []);
   return (
     <>
       <Box
@@ -117,7 +121,26 @@ export default function Estimates() {
             px: { sm: 0, xs: 1 },
           }}
         >
-          <Grid container spacing={2}>
+          <Swiper
+            modules={[Navigation]}
+            navigation
+            spaceBetween={10}
+            slidesPerView={1} // Adjust slides per view according to your needs
+            breakpoints={{
+              640: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 4,
+                spaceBetween: 20,
+              },
+            }}
+            style={{
+              "--swiper-navigation-color": "#000",
+              "--swiper-navigation-size": "25px",
+            }}
+          >
             {[
               {
                 title: "Pending",
@@ -135,20 +158,25 @@ export default function Estimates() {
                 variant: "red",
               },
               {
+                title: "Total Estimates",
+                text: estimatesStats?.etimateCount ?? 0,
+                variant: "blue",
+              },
+              {
                 title: "Invoice Total",
                 text: estimatesStats?.total?.toFixed(2),
                 variant: "purple",
               },
-            ].map((item) => (
-              <Grid item lg={3} md={4} xs={6}>
+            ].map((item, index) => (
+              <SwiperSlide key={index}>
                 <WidgetCard
                   text={item.text}
                   title={item.title}
                   varient={item.variant}
                 />
-              </Grid>
+              </SwiperSlide>
             ))}
-          </Grid>
+          </Swiper>
           {/* <Box
               sx={{
                 width: "50%",
