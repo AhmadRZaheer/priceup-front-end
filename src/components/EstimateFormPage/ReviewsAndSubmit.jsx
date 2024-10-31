@@ -1,4 +1,7 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Button,
   Grid,
@@ -6,11 +9,21 @@ import {
   TextareaAutosize,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CustomInputField from "../ui-components/CustomInput";
-import { KeyboardArrowRight } from "@mui/icons-material";
+import { ExpandMore, KeyboardArrowRight } from "@mui/icons-material";
 import { useFormik } from "formik";
 import * as yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getEstimates,
+  getProjectDetails,
+  getReviewDetail,
+  setEstimateCategory,
+  setEstimateDetail,
+  setEstimateLayout,
+  setReviewDetail,
+} from "@/redux/globalEstimateForm";
 
 const validationSchema = yup.object({
   fullName: yup.string().required("Full Name is required"),
@@ -24,20 +37,40 @@ const validationSchema = yup.object({
 });
 
 const ReviewsAndSubmit = ({ next, back }) => {
+  const dispatch = useDispatch();
+  const ProjectDetail = useSelector(getProjectDetails);
+  const ReviewDetails = useSelector(getReviewDetail);
+  const totalQuotes = useSelector(getEstimates);
+  const [expandAccordion, setExpandAccordion] = useState(
+    Array(totalQuotes.length).fill(false)
+  );
+
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      email: "",
-      phone: "",
-      postalCode: "",
-      additionalDetails: "",
+      fullName: ReviewDetails?.fullName ?? "",
+      email: ReviewDetails?.email ?? "",
+      phone: ReviewDetails?.phone ?? "",
+      postalCode: ReviewDetails?.postalCode ?? "",
+      additionalDetails: ReviewDetails?.additionalDetails ?? "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      // dispatch(setReviewDetail(values));
       console.log(values);
       next(values);
     },
   });
+
+  const handleChange = (e) => {
+    formik.handleChange(e); // Update formik state
+    dispatch(setReviewDetail(formik.values)); // Dispatch updated form values
+  };
+  const handleAnother = () => {
+    back(1);
+    dispatch(setEstimateDetail({}));
+    dispatch(setEstimateCategory(""));
+    dispatch(setEstimateLayout(""));
+  };
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -69,7 +102,13 @@ const ReviewsAndSubmit = ({ next, back }) => {
           </Box>
         </Stack>
 
-        <Box sx={{ display: "flex", overflow: "auto", height: "calc(100vh - 355px)" }}>
+        <Box
+          sx={{
+            display: "flex",
+            overflow: "auto",
+            height: "calc(100vh - 355px)",
+          }}
+        >
           <Box
             sx={{
               borderRight: "1px solid #CCCCCC",
@@ -80,21 +119,95 @@ const ReviewsAndSubmit = ({ next, back }) => {
               flexDirection: "column",
             }}
           >
-            <Typography variant="h6">Quote Type = Glass Showers</Typography>
-            <Typography variant="h6">
-              Product Type = Notched 90 Degree
+            <Typography variant="h6" sx={{ fontSize: "18px" }}>
+              Project Name: {ProjectDetail.name}
             </Typography>
-            <Typography variant="h6">Glass Type = Clear</Typography>
-            <Typography variant="h6">
-              Hardware Finish = Brushed Nickel
+            <Typography variant="h6" sx={{ fontSize: "18px" }}>
+              Location : {ProjectDetail.location}
             </Typography>
-            <Typography variant="h6">
-              Handle Type = 8" D-Pull Back to Back Handle
+            <Typography variant="h6" sx={{ fontSize: "18px" }}>
+              Customer Name : {ProjectDetail.customerDetail.firstName}
             </Typography>
-            <Typography variant="h6">Height = 2</Typography>
-            <Typography variant="h6">Width = 2</Typography>
-            <Typography variant="h6">Depth = 2</Typography>
-            <Typography variant="h6">Location = Phoenix, AZ</Typography>
+            <Typography variant="h6" sx={{ fontSize: "18px" }}>
+              Customer Email : {ProjectDetail.customerDetail.email}
+            </Typography>
+            {totalQuotes.map((data, index) => (
+              <Accordion
+                key={index} // Add a key to each Accordion
+                expanded={expandAccordion[index]}
+                onChange={() => {
+                  setExpandAccordion((prev) => {
+                    const newExpandState = [...prev];
+                    newExpandState[index] = !newExpandState[index];
+                    return newExpandState;
+                  });
+                }}
+                sx={{
+                  border: "none",
+                  background: "none",
+                  boxShadow: "none",
+                  ":before": {
+                    backgroundColor: "white !important",
+                  },
+                }}
+              >
+                <AccordionSummary
+                  expandIcon={<ExpandMore sx={{ color: "#8477DA" }} />}
+                  aria-controls={`panel${index}-content`}
+                  id={`panel${index}-header`}
+                  sx={{
+                    color: "#5D6164",
+                    p: 0,
+                    flexGrow: `0 !important`,
+                    // width: "200px",
+                    "&.Mui-expanded": {
+                      minHeight: "40px",
+                    },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "18px",
+                      fontWeight: 500,
+                      lineHeight: "21px",
+                      color: "#9088C0",
+                    }}
+                  >
+                  Estimate Quote {index + 1}
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails style={{ padding: "0px" }}>
+                 
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Category =  {data?.category}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Layout = {data?.layout.name}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Glass Type =  {data?.estimateDetail.glass}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Hardware Finish = {data?.estimateDetail.hardware}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Hinge Type = {data?.estimateDetail.hingeType}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Handle Type = {data?.estimateDetail.handleType}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Lock  = {data?.estimateDetail.lock}
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Height = 2
+                  </Typography>
+                  <Typography variant="h6" sx={{ fontSize: "18px" }}>
+                    Width = 2
+                  </Typography>                 
+                </AccordionDetails>
+              </Accordion>
+            ))}
           </Box>
           <Box sx={{ width: "50%", pl: 3 }}>
             <Box
@@ -115,7 +228,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
                 size="small"
                 variant="outlined"
                 value={formik.values.fullName}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.fullName && Boolean(formik.errors.fullName)
@@ -154,7 +267,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
                 size="small"
                 variant="outlined"
                 value={formik.values.email}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.email && Boolean(formik.errors.email)}
                 helperText={formik.touched.email && formik.errors.email}
@@ -191,7 +304,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
                 size="small"
                 variant="outlined"
                 value={formik.values.phone}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 error={formik.touched.phone && Boolean(formik.errors.phone)}
                 helperText={formik.touched.phone && formik.errors.phone}
@@ -228,7 +341,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
                 size="small"
                 variant="outlined"
                 value={formik.values.postalCode}
-                onChange={formik.handleChange}
+                onChange={handleChange}
                 onBlur={formik.handleBlur}
                 error={
                   formik.touched.postalCode && Boolean(formik.errors.postalCode)
@@ -278,7 +391,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
                     name="additionalDetails"
                     placeholder="Enter Additional Details"
                     value={formik.values.additionalDetails}
-                    onChange={formik.handleChange}
+                    onChange={handleChange}
                     onBlur={formik.handleBlur}
                   />
                 </Box>
@@ -301,9 +414,10 @@ const ReviewsAndSubmit = ({ next, back }) => {
               fontSize: "16px",
             }}
             variant="contained"
-            onClick={back}
+            onClick={handleAnother}
           >
-            <KeyboardArrowRight sx={{ transform: "rotate(180deg)" }} /> Back
+            <KeyboardArrowRight sx={{ transform: "rotate(180deg)" }} /> Another
+            Quote
           </Button>
           <Button
             sx={{
@@ -318,7 +432,7 @@ const ReviewsAndSubmit = ({ next, back }) => {
             variant="contained"
             type="submit"
           >
-            Submit
+            Save
           </Button>
         </Stack>
       </Box>

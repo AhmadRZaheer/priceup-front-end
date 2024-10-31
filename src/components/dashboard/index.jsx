@@ -117,7 +117,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Box
+      {/* <Box
         sx={{
           backgroundColor: "#F6F5FF",
           p: { sm: "0px 0px 20px 0px", xs: "70px 0px 20px 10px" },
@@ -132,12 +132,13 @@ export default function Dashboard() {
         >
           Estimates
         </Typography>
-      </Box>
+      </Box> */}
       <Box
         sx={{
           backgroundColor: "#F6F5FF",
           width: "100%",
           height: "auto",
+          pt:4
         }}
       >
         <Box

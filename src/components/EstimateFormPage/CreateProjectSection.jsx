@@ -13,10 +13,15 @@ import * as yup from "yup";
 import React from "react";
 import CustomInputField from "../ui-components/CustomInput";
 import { KeyboardArrowRight } from "@mui/icons-material";
+import {
+  getProjectDetails,
+  setProjectDetails,
+} from "@/redux/globalEstimateForm";
+import { useDispatch, useSelector } from "react-redux";
 
 const validationSchema = yup.object({
   name: yup.string().required("Project name is required"),
-  // location: yup.string().required("Location is required"),
+  location: yup.string().required("Location is required"),
   notes: yup.string(),
   customerDetail: yup.object({
     firstName: yup.string().required("First name is required"),
@@ -29,22 +34,25 @@ const validationSchema = yup.object({
 });
 
 const CreateProjectSection = ({ next, back }) => {
+  const dispatch = useDispatch();
+  const projectData = useSelector(getProjectDetails);
   const formik = useFormik({
     initialValues: {
-      name: "",
-      location: "",
+      name: projectData?.name ?? "",
+      location: projectData?.location ?? "",
       customerDetail: {
-        firstName: "",
-        lastName: "",
-        email: "",
-        phone: "",
-        address: "",
+        firstName: projectData?.customerDetail?.firstName ?? "",
+        lastName: projectData?.customerDetail?.lastName ?? "",
+        email: projectData?.customerDetail?.email ?? "",
+        phone: projectData?.customerDetail?.phone ?? "",
+        address: projectData?.customerDetail?.address ?? "",
       },
-      notes: "",
+      notes: projectData?.notes ?? "",
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       console.log(values);
+      dispatch(setProjectDetails(values));
       next(values);
     },
   });
@@ -137,7 +145,7 @@ const CreateProjectSection = ({ next, back }) => {
                             name="name"
                             size="small"
                             variant="outlined"
-                            placeholder='Ener Project Name'
+                            placeholder="Ener Project Name"
                             InputProps={{
                               style: {
                                 color: "black",
@@ -153,8 +161,12 @@ const CreateProjectSection = ({ next, back }) => {
                             value={formik.values.name}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.name && Boolean(formik.errors.name)}
-                            helperText={formik.touched.name && formik.errors.name}
+                            error={
+                              formik.touched.name && Boolean(formik.errors.name)
+                            }
+                            helperText={
+                              formik.touched.name && formik.errors.name
+                            }
                           />
                         </Box>
                       </Box>
@@ -192,8 +204,12 @@ const CreateProjectSection = ({ next, back }) => {
                             }}
                             onChange={formik.handleChange}
                             onBlur={formik.handleBlur}
-                            error={formik.touched.location && Boolean(formik.errors.location)}
+                            error={
+                              formik.touched.location &&
+                              Boolean(formik.errors.location)
+                            }
                             displayEmpty
+                            placeholder="Select Location"
                           >
                             <MenuItem value="">
                               <em>Select Location</em>
@@ -202,10 +218,21 @@ const CreateProjectSection = ({ next, back }) => {
                             <MenuItem value="Test Name 1">Test Name 1</MenuItem>
                           </Select>
                         </FormControl>
+                        {formik.touched.location && formik.errors.location && (
+                          <Typography
+                            sx={{
+                              color: "red",
+                              fontSize: "12px",
+                              mt: "4px",
+                            }}
+                          >
+                            {formik.errors.location}
+                          </Typography>
+                        )}
                       </Box>
                     </Box>
                   </Box>
-                  <Box sx={{ width: { sm: "50%", xs: "100%" }, pt: 2 }}>
+                  <Box sx={{ width: "100%", pt: 2 }}>
                     <Typography
                       sx={{ fontSize: "14px", fontWeight: 500, pb: 0.6 }}
                     >
@@ -217,7 +244,7 @@ const CreateProjectSection = ({ next, back }) => {
                           display: "flex",
                           flexDirection: "column",
                           gap: 1,
-                          paddingY: { sm: 0, xs: 1 },
+                          py: { sm: 0, xs: 1 },
                           width: "100%",
                         }}
                       >
@@ -276,7 +303,9 @@ const CreateProjectSection = ({ next, back }) => {
                       }}
                     >
                       <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                        <label htmlFor="customerDetail.firstName">First Name</label>
+                        <label htmlFor="customerDetail.firstName">
+                          First Name
+                        </label>
                       </Box>
                       <CustomInputField
                         id="customerDetail.firstName"
@@ -299,10 +328,12 @@ const CreateProjectSection = ({ next, back }) => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.customerDetail?.firstName && Boolean(formik.errors.customerDetail?.firstName)
+                          formik.touched.customerDetail?.firstName &&
+                          Boolean(formik.errors.customerDetail?.firstName)
                         }
                         helperText={
-                          formik.touched.customerDetail?.firstName && formik.errors.customerDetail?.firstName
+                          formik.touched.customerDetail?.firstName &&
+                          formik.errors.customerDetail?.firstName
                         }
                       />
                     </Box>
@@ -316,7 +347,9 @@ const CreateProjectSection = ({ next, back }) => {
                       }}
                     >
                       <Box sx={{ display: { sm: "block", xs: "none" } }}>
-                        <label htmlFor="customerDetail.lastName">Last Name</label>
+                        <label htmlFor="customerDetail.lastName">
+                          Last Name
+                        </label>
                       </Box>
                       <CustomInputField
                         id="customerDetail.lastName"
@@ -339,10 +372,12 @@ const CreateProjectSection = ({ next, back }) => {
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         error={
-                          formik.touched.customerDetail?.lastName && Boolean(formik.errors.customerDetail?.lastName)
+                          formik.touched.customerDetail?.lastName &&
+                          Boolean(formik.errors.customerDetail?.lastName)
                         }
                         helperText={
-                          formik.touched.customerDetail?.lastName && formik.errors.customerDetail?.lastName
+                          formik.touched.customerDetail?.lastName &&
+                          formik.errors.customerDetail?.lastName
                         }
                       />
                     </Box>
@@ -381,8 +416,14 @@ const CreateProjectSection = ({ next, back }) => {
                       }}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.customerDetail?.email && Boolean(formik.errors.customerDetail?.email)}
-                      helperText={formik.touched.customerDetail?.email && formik.errors.customerDetail?.email}
+                      error={
+                        formik.touched.customerDetail?.email &&
+                        Boolean(formik.errors.customerDetail?.email)
+                      }
+                      helperText={
+                        formik.touched.customerDetail?.email &&
+                        formik.errors.customerDetail?.email
+                      }
                     />
                   </Box>
 
@@ -419,8 +460,14 @@ const CreateProjectSection = ({ next, back }) => {
                       }}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.customerDetail?.phone && Boolean(formik.errors.customerDetail?.phone)}
-                      helperText={formik.touched.customerDetail?.phone && formik.errors.customerDetail?.phone}
+                      error={
+                        formik.touched.customerDetail?.phone &&
+                        Boolean(formik.errors.customerDetail?.phone)
+                      }
+                      helperText={
+                        formik.touched.customerDetail?.phone &&
+                        formik.errors.customerDetail?.phone
+                      }
                     />
                   </Box>
 
@@ -456,8 +503,14 @@ const CreateProjectSection = ({ next, back }) => {
                       }}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.customerDetail?.address && Boolean(formik.errors.customerDetail?.address)}
-                      helperText={formik.touched.customerDetail?.address && formik.errors.customerDetail?.address}
+                      error={
+                        formik.touched.customerDetail?.address &&
+                        Boolean(formik.errors.customerDetail?.address)
+                      }
+                      helperText={
+                        formik.touched.customerDetail?.address &&
+                        formik.errors.customerDetail?.address
+                      }
                     />
                   </Box>
                 </Box>

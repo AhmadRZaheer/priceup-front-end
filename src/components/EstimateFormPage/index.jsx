@@ -91,6 +91,9 @@ const EstimateFormPage = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+  const customStepBack = (step) => {
+    setActiveStep(step);
+  };
 
   const handleReset = () => {
     setActiveStep(0);
@@ -192,7 +195,7 @@ const EstimateFormPage = () => {
                 </Box>
               ) : activeStep === 4 ? (
                 <Box sx={{ mt: 2, mb: 1 }}>
-                  <ReviewsAndSubmit next={handleReset} back={handleBack} />
+                  <ReviewsAndSubmit next={handleReset} back={customStepBack} />
                   {/* <Button onClick={handleNext}>
                     {activeStep === steps.length - 1 ? "Finish" : "Next"}
                   </Button> */}

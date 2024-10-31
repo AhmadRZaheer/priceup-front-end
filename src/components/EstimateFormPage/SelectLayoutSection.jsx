@@ -13,6 +13,8 @@ import bgCustom from "@/Assets/customlayoutimage.svg";
 import { backendURL } from "@/utilities/common";
 import CustomInputField from "../ui-components/CustomInput";
 import icon from "@/Assets/search-icon.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getEstimateLayout, setEstimateLayout } from "@/redux/globalEstimateForm";
 
 const layouts = [
   {
@@ -210,9 +212,11 @@ const boxStyles = {
 };
 
 const SelectLayoutSection = ({ next, back }) => {
+  const dispatch = useDispatch();
+  const getSelectedLayout = useSelector(getEstimateLayout);
   const [selectCustom, setSelectCustom] = useState(false);
   const [search, setSearch] = useState("");
-  const [selectedData, setSelectedData] = useState("");
+  const [selectedData, setSelectedData] = useState(getSelectedLayout?._id ?? "");
 
   const filteredData = useMemo(() => {
     const data = [...layouts, { _id: "custom", name: "Custom" }];
@@ -222,6 +226,8 @@ const SelectLayoutSection = ({ next, back }) => {
   }, [search]);
 
   const handleBoxClick = (layout) => {
+    dispatch(setEstimateLayout(layout));
+    console.log(layout);
     if (layout._id === "custom") {
       setSelectCustom(true);
       setSelectedData("custom");

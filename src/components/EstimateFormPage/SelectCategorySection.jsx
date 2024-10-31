@@ -3,6 +3,8 @@ import { Box, Button, Stack, Typography, Grid } from "@mui/material";
 import React, { useState } from "react";
 import DefaultIcon from "@/Assets/columns.svg";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useDispatch, useSelector } from "react-redux";
+import { getEstimateCategory, setEstimateCategory } from "@/redux/globalEstimateForm";
 
 const boxStyles = {
   minHeight: "182px",
@@ -23,9 +25,13 @@ const boxStyles = {
 };
 
 const SelectCategorySection = ({ next, back }) => {
-  const [category, setCategory] = useState("");
+  const dispatch = useDispatch();
+  const getCategory = useSelector(getEstimateCategory)
+  const [category, setCategory] = useState(getCategory ?? "");
   const handleBoxClick = (category) => {
+    dispatch(setEstimateCategory(category))
     setCategory(category);
+    console.log(category)
   };
   return (
     <>

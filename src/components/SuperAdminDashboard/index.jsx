@@ -339,10 +339,10 @@ const SuperAdminDashboardPage = () => {
             pt: 2,
           }}
         >
-          <Box sx={{ background: "white", width: "49%", pt: 1 }}>
+          <Box sx={{ background: "white", width: "49%", pt: 1, border: "1px solid #D0D5DD", borderRadius: 1, }}>
             <CustomLineChart dataType="Projects" data={chartData} />
           </Box>
-          <Box sx={{ background: "white", width: "49%", pt: 1 }}>
+          <Box sx={{ background: "white", width: "49%", pt: 1 ,border: "1px solid #D0D5DD", borderRadius: 1,}}>
             <CustomAreaChart dataType="Customers" data={chartData} />
           </Box>
         </Box>
