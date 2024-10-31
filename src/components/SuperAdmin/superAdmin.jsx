@@ -221,7 +221,7 @@ const SuperAdminTable = () => {
             variant: "green",
           },
         ].map((item,index) => (
-          <Grid item lg={3} md={6} xs={6} key={index}>
+          <Grid item lg={4} md={6} xs={6} key={index}>
             <WidgetCard
               text={item.text}
               title={item.title}

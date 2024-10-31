@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { CircularProgress } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -19,7 +20,7 @@ const style = {
   p: 3,
 };
 
-export default function LagoutModal({ open, close, logout }) {
+export default function LagoutModal({ open, close, logout, loading = false }) {
   return (
     <div>
       <Modal
@@ -45,6 +46,7 @@ export default function LagoutModal({ open, close, logout }) {
             }}
           >
             <Button
+              disabled={loading}
               fullWidth
               sx={{
                 boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
@@ -57,19 +59,24 @@ export default function LagoutModal({ open, close, logout }) {
               Cancel
             </Button>
             <Button
+              disabled={loading}
               href="/login"
               onClick={logout}
               sx={{
                 textTransform: "initial",
                 backgroundColor: "#8477da",
                 "&:hover": {
-                  backgroundColor: "#8477da"
-                }
+                  backgroundColor: "#8477da",
+                },
               }}
               fullWidth
               variant="contained"
             >
-              Logout
+              {loading ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+              ) : (
+                "Logout"
+              )}
             </Button>
           </Box>
         </Box>
