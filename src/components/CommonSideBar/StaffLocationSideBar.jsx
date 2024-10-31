@@ -355,7 +355,7 @@ const StaffLocationSideBar = () => {
           </MenuSigleItem>
           <MenuSigleItem link="/estimates">
             <FmdGoodOutlined   />
-            <span>Old Estimates</span>
+            <span>Estimates</span>
           </MenuSigleItem>
           {/* <MenuSigleItem link="/customers">
             <FmdGoodOutlined   />

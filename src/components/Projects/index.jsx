@@ -146,10 +146,11 @@ export default function Projects() {
               { title: "Pending", text: stats?.pending, variant: "blue" },
               { title: "Approved", text: stats?.approved, variant: "green" },
               { title: "Voided", text: stats?.voided, variant: "red" },
+              { title: "Total", text: stats?.voided, variant: "purple" },
             ].map((item) => (
-              <Grid item lg={4} md={6} sm={6} xs={6}>
+              <Grid item lg={3} md={6} sm={6} xs={6}>
                 <WidgetCard
-                  type={2}
+                  // type={2}
                   text={item.text}
                   title={item.title}
                   varient={item.variant}

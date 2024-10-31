@@ -17,7 +17,7 @@ const ApexChart = () => {
     options: {
       chart: {
         type: 'bar',
-        height: 400,
+        height: 380,
         toolbar: {
             show: false 
           }
@@ -67,7 +67,7 @@ const ApexChart = () => {
           options={chartData.options}
           series={chartData.series}
           type="bar"
-          height={400}     
+          height={380}     
         />
       </Box>
       <div id="html-dist"></div>

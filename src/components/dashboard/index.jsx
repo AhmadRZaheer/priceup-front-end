@@ -32,18 +32,8 @@ const dateSx = {
     color: "#000000",
   },
 };
-const barData = [
-  { x: "2019/01/01", y: 400 },
-  { x: "2019/04/01", y: 430 },
-  { x: "2019/07/01", y: 448 },
-  { x: "2019/10/01", y: 470 },
-  { x: "2020/01/01", y: 540 },
-  { x: "2020/04/01", y: 580 },
-];
 
-const pieChartData = [55, 55, 55];
-
-export default function Dashboard() {
+export default function Dashboard({userData}) {
   const currentDate = dayjs();
   const [graphDate, setGraphDate] = useState({
     start: currentDate.subtract(1, "month"),
@@ -138,7 +128,7 @@ export default function Dashboard() {
           backgroundColor: "#F6F5FF",
           width: "100%",
           height: "auto",
-          pt:4
+          pt: 4,
         }}
       >
         <Box
@@ -163,11 +153,11 @@ export default function Dashboard() {
                 text: data?.customerCount,
                 variant: "red",
               },
-              //   {
-              //     title: "Invoice Total",
-              //     text: estimatesStats?.total?.toFixed(2),
-              //     variant: "purple",
-              //   },
+                {
+                  title: "Users",
+                  text: userData?.staff ?? 0,
+                  variant: "purple",
+                },
             ].map((item) => (
               <Grid item lg={3} md={4} xs={6}>
                 <WidgetCard
@@ -302,9 +292,10 @@ export default function Dashboard() {
                   >
                     <Typography
                       sx={{
-                        fontFamily: "Helvetica, Arial, sans-serif !important",
-                        fontSize: "14px",
-                        fontWeight: `${800} !important`,
+                        fontSize: "18px",
+                        fontWeight: 600,
+                        lineHeight: "24.59px",
+                        fontFamily: '"Manrope", sans-serif !important',
                         p: 1.3,
                       }}
                     >
