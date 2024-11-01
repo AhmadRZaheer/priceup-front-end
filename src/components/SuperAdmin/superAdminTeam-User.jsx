@@ -254,7 +254,7 @@ const SuperAdminTeam = () => {
       renderCell: (params) => {
         return (
           <>
-            <p className="new-table-text">
+            <p className="new-table-text" style={{paddingLeft:'14px'}}>
               {getUserRoleText(params.row?.role)}
             </p>
           </>
