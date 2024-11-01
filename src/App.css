@@ -396,6 +396,7 @@ input {
   font-weight: 600 !important;
   line-height: 24.59px !important;
   font-family: "Manrope", sans-serif !important;
+  fill: #000000 !important;
 }
 .locationManagement{
   background-color: #FAFCFF !important;
@@ -404,7 +405,7 @@ input {
   line-height: 21.89px !important;
   font-weight: 500 !important;
   padding-left: 24px !important;
-  border-right: 1px solid;
+  border-right: 1px solid #D6DAE3;
 }
 /* Customize Swiper navigation button size and color */
 .swiper-button-next,

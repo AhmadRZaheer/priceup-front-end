@@ -63,7 +63,7 @@ const SuperAdminDashboardPage = () => {
   useEffect(() => {
     refetchList();
     refetchdahboardData();
-  }, []);
+  }, [locationsData]);
 
   const locationsList = useMemo(() => {
     return locationsData?.companies ? locationsData?.companies : [];
@@ -73,6 +73,7 @@ const SuperAdminDashboardPage = () => {
     <Box
       sx={{
         overflow: "auto",
+        overflowX:'hidden'
       }}
     >
       <Box className="page-title-location">
@@ -116,13 +117,13 @@ const SuperAdminDashboardPage = () => {
                   backgroundColor: "#FFFFFF",
                   "&:hover": { backgroundColor: "#FFFFFF" },
                   letterSpacing: "0px",
-                  color: "#000000",
+                  color: "#212528",
                   fontSize: 16,
                   fontWeight: 600,
                   gap: "10px",
                 }}
               >
-                <Add color="#000000" />
+                <Add color="#212528" />
                 Add User
               </Button>
             </Box>
@@ -136,13 +137,13 @@ const SuperAdminDashboardPage = () => {
                   backgroundColor: "#FFFFFF",
                   "&:hover": { backgroundColor: "#FFFFFF" },
                   letterSpacing: "0px",
-                  color: "#000000",
+                  color: "#212528",
                   fontSize: 16,
                   fontWeight: 600,
                   gap: "10px",
                 }}
               >
-                <Add color="#000000" />
+                <Add color="#212528" />
                 Add Location
               </Button>
             </Box>
@@ -191,8 +192,9 @@ const SuperAdminDashboardPage = () => {
             width: "66%",
             pt: '20px',
             pl:'10px',
-            borderRadius: 1,
+            borderRadius: 2,
             border: "1px solid #D0D5DD",
+            boxShadow:'0 1px 2px 0 rgba(16, 24, 40, 0.05)'
           }}
         >
           <CustomDoubleLineChart />
@@ -201,10 +203,11 @@ const SuperAdminDashboardPage = () => {
           sx={{
             background: "white",
             width: "33%",
-            borderRadius: 1,
+            borderRadius: 2,
             border: "1px solid #D0D5DD",
             py: "20px",
             px: "22px",
+            boxShadow:'0 1px 2px 0 rgba(16, 24, 40, 0.05)'
           }}
         >
           <Typography
@@ -356,6 +359,7 @@ const SuperAdminDashboardPage = () => {
               pl:'10px',
               border: "1px solid #D0D5DD",
               borderRadius: 1,
+              boxShadow:'0 1px 2px 0 rgba(16, 24, 40, 0.05)'
             }}
           >
             <CustomLineChart dataType="Projects" data={chartData} />
@@ -368,6 +372,7 @@ const SuperAdminDashboardPage = () => {
               pl:'10px',
               border: "1px solid #D0D5DD",
               borderRadius: 1,
+              boxShadow:'0 1px 2px 0 rgba(16, 24, 40, 0.05)'
             }}
           >
             <CustomAreaChart dataType="Customers" data={chartData} />

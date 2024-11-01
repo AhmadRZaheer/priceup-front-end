@@ -317,7 +317,7 @@ const LocationTable = ({ locationsData, refetchList, isFetching }) => {
 
   return (
     <>
-      <Box>
+      <Box sx={{ boxShadow: "0 1px 2px 0 rgba(16, 24, 40, 0.05)" }}>
         <Box
           sx={{
             border: "1px solid #D0D5DD",
@@ -384,8 +384,12 @@ const LocationTable = ({ locationsData, refetchList, isFetching }) => {
                 No Location Found
               </Typography>
             ) : (
-              <Box sx={{
-                maxHeight:'1436px',overflow:'auto'}}>
+              <Box
+                sx={{
+                  maxHeight: "1436px",
+                  overflow: "auto",
+                }}
+              >
                 <DataGrid
                   loading={LoadingForEdit}
                   style={{ border: "none" }}
@@ -397,7 +401,7 @@ const LocationTable = ({ locationsData, refetchList, isFetching }) => {
                     width: "100%",
                     minHeight: "500px",
                     ".MuiDataGrid-cell": {
-                      borderRight: "1px solid red",
+                      borderRight: "1px solid #D6DAE3",
                     },
                   }}
                   // page={page}
