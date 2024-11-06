@@ -29,6 +29,8 @@ import { getDataRefetch } from "@/redux/staff";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import { setLocationSettingsRefetch } from "@/redux/refetch";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
@@ -179,11 +181,16 @@ const CampanySetting = () => {
         },
       },
       pdfSettings: {
-        cost: settingData?.pdfSettings?.cost,       
-        hours: settingData?.pdfSettings?.hours,       
-        labor: settingData?.pdfSettings?.labor,       
-        people: settingData?.pdfSettings?.people,       
-        profit: settingData?.pdfSettings?.profit,       
+        cost: settingData?.pdfSettings?.cost,
+        hours: settingData?.pdfSettings?.hours,
+        labor: settingData?.pdfSettings?.labor,
+        people: settingData?.pdfSettings?.people,
+        profit: settingData?.pdfSettings?.profit,
+      },
+      highlevelSettings: {
+        locationReference:
+          settingData?.highlevelSettings?.locationReference ?? "",
+        apiKey: settingData?.highlevelSettings?.apiKey ?? "",
       },
     },
     enableReinitialize: true,
@@ -208,6 +215,17 @@ const CampanySetting = () => {
     editSetting({ data: props, id: settingData._id });
     reFetchDataSetting();
   };
+  const handleCopy = (value) => {
+    navigator.clipboard
+      .writeText(value)
+      .then(() =>
+        dispatch(
+          showSnackbar({ message: "Copied to clipboard ", severity: "success" })
+        )
+      )
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
+
   return (
     <form>
       <Box
@@ -452,6 +470,22 @@ const CampanySetting = () => {
               onClick={() => handleChange(3)}
             >
               Pdf Settings
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 4 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(4)}
+            >
+              High Level Settings
             </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -1827,8 +1861,8 @@ const CampanySetting = () => {
               gap: 2,
             }}
           > */}
-            {/* <Typography variant="h6">Max Door Width</Typography> */}
-            {/* <Box
+          {/* <Typography variant="h6">Max Door Width</Typography> */}
+          {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1974,13 +2008,11 @@ const CampanySetting = () => {
             >
               <Typography>People</Typography>
               <Box mr={19}>
-                  <CustomToggle
-                    name="pdfSettings.people"
-                    checked={
-                      formik.values?.pdfSettings?.people || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.people"
+                  checked={formik.values?.pdfSettings?.people || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -1992,13 +2024,11 @@ const CampanySetting = () => {
             >
               <Typography>Hours</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.hours"
-                    checked={
-                      formik.values?.pdfSettings?.hours || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.hours"
+                  checked={formik.values?.pdfSettings?.hours || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2011,13 +2041,11 @@ const CampanySetting = () => {
               <Typography>Labor Price</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.labor"
-                    checked={
-                      formik.values?.pdfSettings?.labor || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.labor"
+                  checked={formik.values?.pdfSettings?.labor || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2029,13 +2057,11 @@ const CampanySetting = () => {
             >
               <Typography>Profit</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.profit"
-                    checked={
-                      formik.values?.pdfSettings?.profit || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.profit"
+                  checked={formik.values?.pdfSettings?.profit || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2047,13 +2073,97 @@ const CampanySetting = () => {
             >
               <Typography>Actual Cost</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.cost"
-                    checked={
-                      formik.values?.pdfSettings?.cost || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.cost"
+                  checked={formik.values?.pdfSettings?.cost || false}
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              width: "70%",
+              pt: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>Location Reference</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.locationReference"
+                  value={
+                    formik.values?.highlevelSettings?.locationReference ?? ""
+                  }
+                  placeholder={"Enter Location Reference"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(
+                      formik.values?.highlevelSettings?.locationReference ?? ""
+                    )
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "6px 8px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>API Key</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.apiKey"
+                  value={formik.values?.highlevelSettings?.apiKey ?? ""}
+                  placeholder={"Enter API Key"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(formik.values?.highlevelSettings?.apiKey ?? "")
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "4px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
               </Box>
             </Box>
           </Box>

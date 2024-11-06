@@ -57,6 +57,7 @@ import WineCellarLayouts from "@/pages/WineCellar/Layouts";
 import EditWineLayout from "../WineCellar/Layouts/EditLayout";
 import EstimateForm from "@/pages/EstimateForm";
 import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
+import CustomLandingPage from "@/pages/CustomLandingPage";
 
 
 const AppRoutes = () => {
@@ -207,6 +208,7 @@ const AppRoutes = () => {
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
+      <Route path="/custom-landing" element={<CustomLandingPage />} />
     </Routes>
   );
 };

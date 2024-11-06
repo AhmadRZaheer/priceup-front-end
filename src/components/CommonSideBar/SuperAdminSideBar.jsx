@@ -139,7 +139,7 @@ const SuperAdminSideBar = () => {
               <span>See Locations</span>
             </Button>
           </li> */}
-          <MenuSigleItem link="/dashboard" secondLink="/">
+          <MenuSigleItem link="/dashboard" secondLink="/admin">
             <HomeOutlined sx={{}} />
             <span>Dashboard</span>
           </MenuSigleItem>
