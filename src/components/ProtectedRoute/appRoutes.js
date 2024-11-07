@@ -58,6 +58,7 @@ import EditWineLayout from "../WineCellar/Layouts/EditLayout";
 import EstimateForm from "@/pages/EstimateForm";
 import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import CustomLandingPage from "@/pages/CustomLandingPage";
+import CustomerInvoicePreview from "@/pages/Projects/CustomerInvoicePreview";
 
 
 const AppRoutes = () => {
@@ -98,6 +99,7 @@ const AppRoutes = () => {
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
+            <Route path=":id/preview-invoice" element={<CustomerInvoicePreview />} />
           </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />

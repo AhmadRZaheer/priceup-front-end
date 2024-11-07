@@ -1,13 +1,13 @@
 import {
   Box,
-  Card,
-  CardContent,
+  Button,
+  Card,  
   CardMedia,
   Container,
-  Grid,
+  IconButton,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useRef } from "react";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import Img from "../../Assets/example.jpg";
 import right_headerimage from "../../Assets/header-right-image.svg";
@@ -18,24 +18,59 @@ import "swiper/css";
 import "swiper/css/navigation";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFFile from "../PDFFile";
+import { getDecryptedToken } from "@/utilities/common";
+import { Cancel, Close } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import { userRoles } from "@/utilities/constants";
+import {
+  getSelectedImages,
+  removeImage,
+  setSelectedImages,
+} from "@/redux/globalEstimateForm";
+
+const MAX_FILE_SIZE = 1 * 1024 * 1024;
 
 const CustomizeLandingPage = () => {
+  const decodedToken = getDecryptedToken();
+  const fileInputRef = useRef(null);
+  const dispatch = useDispatch();
+  const selectedImages = useSelector(getSelectedImages);
+
+  const handleClick = () => {
+    fileInputRef.current.click(); 
+  };
+
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files); 
+    const validFiles = files.filter((file) => {
+      if (file.size > MAX_FILE_SIZE) {
+        dispatch(
+          showSnackbar({
+            message: `${file.name} is larger than 1MB and will not be added.`,
+            severity: "error",
+          })
+        );
+        return false;
+      }
+      return true;
+    });
+
+    const fileUrls = validFiles.map((file) => URL.createObjectURL(file));
+    dispatch(setSelectedImages(fileUrls));
+  };
+
+  const handleDeleteImage = (index) => {
+    dispatch(removeImage(index));
+  };
+
+  const authUser =
+    decodedToken?.role === userRoles.ADMIN ||
+    decodedToken?.role === userRoles.CUSTOM_ADMIN;
+
   return (
     <>
       <Box sx={{ bgcolor: "black", width: "100%" }}>
-        {/* <Box
-          sx={{
-            width: "90%",
-            m: "auto",
-            display: "flex",
-            justifyContent: "center",
-            py: 1,
-          }}
-        >
-          <Box>
-            <img src={LogoNavBar} alt="logo nav bar" />
-          </Box>
-        </Box> */}
         {/* Navigation Bar */}
         <Box
           sx={{
@@ -49,23 +84,7 @@ const CustomizeLandingPage = () => {
           <Box>
             <img src={LogoNavBar} alt="logo nav bar" />
           </Box>
-          {/* <Link to="/login">
-            <Button
-              // size="medium"
-              sx={{
-                bgcolor: "#8477DA",
-                color: "white",
-                textTransform: "capitalize",
-                width: { md: "190px", xs: "120px" },
-                height: { md: "50px", xs: "40px" },
-                ":hover": {
-                  bgcolor: "#8477DA",
-                },
-              }}
-            >
-              Client Login
-            </Button>
-          </Link> */}
+         
         </Box>
         {/* Section Header */}
         <Box
@@ -156,12 +175,45 @@ const CustomizeLandingPage = () => {
             </Typography>
           </Box>
         </Box>
+        {authUser && (
+          <Box sx={{ textAlign: "center", pb: 1 }}>
+            <Button
+              variant="contained"
+              onClick={handleClick}
+              sx={{
+                backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "auto", xs: "187px" },
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: {
+                  sm: "10px 16px  !important",
+                  xs: "5px 5px !important",
+                },
+              }}
+            >
+              Upload Images
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+              accept="image/*"
+              capture={false}
+            />
+          </Box>
+        )}
+
         <Box sx={{ pb: 5, px: 4 }}>
           <Swiper
             modules={[Navigation]}
             navigation
             spaceBetween={10}
-            slidesPerView={1} // Adjust slides per view according to your needs
+            slidesPerView={1}
             breakpoints={{
               640: {
                 slidesPerView: 2,
@@ -175,21 +227,56 @@ const CustomizeLandingPage = () => {
             style={{
               "--swiper-navigation-color": "#000",
               "--swiper-navigation-size": "35px",
-              // '.swiper-button-prev' : { background :'red'}
             }}
           >
-            {Array.from({ length: 5 }).map((data) => (
-              <SwiperSlide>
-                <Card sx={{}}>
-                  <CardMedia
-                    component="img"
-                    alt="green iguana"
-                    height="320"
-                    image={Img}
-                  />
-                </Card>
-              </SwiperSlide>
-            ))}
+            {selectedImages.length > 0 ? (
+              selectedImages.map((data, index) => (
+                <SwiperSlide>
+                  <Card
+                    key={index}
+                    position="relative"
+                    width="150px"
+                    height="150px"
+                    overflow="hidden"
+                  >
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height="320"
+                      image={data}
+                    />
+                    {authUser && (
+                      <IconButton
+                        onClick={() => handleDeleteImage(index)}
+                        sx={{
+                          position: "absolute",
+                          top: "5px",
+                          right: "5px",
+                          backgroundColor: "rgba(0, 0, 0, 0.5)",
+                          color: "white",
+                          "&:hover": {
+                            backgroundColor: "rgba(0, 0, 0, 0.7)",
+                          },
+                        }}
+                      >
+                        <Close />
+                      </IconButton>
+                    )}
+                  </Card>
+                </SwiperSlide>
+              ))
+            ) : (
+              <Typography
+                sx={{
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  lineHeight: "54px",
+                  textAlign: "center",
+                }}
+              >
+                No Image Selected!
+              </Typography>
+            )}
           </Swiper>
         </Box>
         <Box sx={{ px: 4 }}>
@@ -199,15 +286,40 @@ const CustomizeLandingPage = () => {
                 fontSize: "40px",
                 fontWeight: 500,
                 lineHeight: "54px",
-                textAlign:'center'
+                textAlign: "center",
               }}
             >
-              Estimates Quotes
+              Quotation Pdfs
             </Typography>
           </Box>
-          <PDFViewer width={"100%"} height="1200px">
-            <PDFFile  data={{}} key={"pdfFile"} />
-          </PDFViewer>
+          <Swiper
+            modules={[Navigation]}
+            navigation
+            spaceBetween={10}
+            slidesPerView={1}
+            breakpoints={{
+              640: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+              1024: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+            }}
+            style={{
+              "--swiper-navigation-color": "#000",
+              "--swiper-navigation-size": "35px",
+            }}
+          >
+            {Array.from({ length: 5 }).map((data) => (
+              <SwiperSlide>
+                <PDFViewer width={"100%"} height="1200px">
+                  <PDFFile data={{}} key={"pdfFile"} />
+                </PDFViewer>
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </Box>
       </Container>
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
