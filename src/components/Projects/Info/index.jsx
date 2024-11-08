@@ -6,7 +6,6 @@ import {
   FormControl,
   Grid,
   InputAdornment,
-  InputLabel,
   MenuItem,
   Select,
   Tab,
@@ -53,8 +52,9 @@ const ProjectInfoComponent = ({
   projectData = null,
 }) => {
   const [searchParams] = useSearchParams();
-  const selectedTab = searchParams.get('category');
-  const tabValue = selectedTab === null ? EstimateCategory.SHOWERS : selectedTab ;
+  const selectedTab = searchParams.get("category");
+  const tabValue =
+    selectedTab === null ? EstimateCategory.SHOWERS : selectedTab;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -88,10 +88,12 @@ const ProjectInfoComponent = ({
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const navigate = useNavigate();
-  const [activeTabNumber, setActiveTabNumber] = useState(EstimateCategory.SHOWERS); // 0 for showers, 1 for mirrors
+  const [activeTabNumber, setActiveTabNumber] = useState(
+    EstimateCategory.SHOWERS
+  ); // 0 for showers, 1 for mirrors
   const handleChange = (event, newValue) => {
     console.log(newValue, "sdsdsdsdsd");
-    navigate(`/projects/${projectData?._id}?category=${newValue}`)
+    navigate(`/projects/${projectData?._id}?category=${newValue}`);
     // setActiveTabNumber(newValue);
   };
   // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
@@ -117,8 +119,8 @@ const ProjectInfoComponent = ({
         // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
-      if(selectedAddress?._id){
-        data.address_id=  selectedAddress?._id
+      if (selectedAddress?._id) {
+        data.address_id = selectedAddress?._id;
       }
       try {
         if (projectState === "create") {
@@ -252,7 +254,28 @@ const ProjectInfoComponent = ({
           </Typography>
         </Box>
         {projectState !== "create" ? (
-          <Box sx={{ alignSelf: "center" }}>
+          <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
+            <Button
+              fullWidth
+              variant="contained"
+              onClick={()=>navigate('preview-invoice')}
+              sx={{
+                backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "auto", xs: "187px" },
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: {
+                  sm: "10px 16px  !important",
+                  xs: "5px 5px !important",
+                },
+              }}
+            >
+              Customer Preview
+            </Button>
             <Button
               fullWidth
               variant="contained"
@@ -1031,10 +1054,7 @@ const ProjectInfoComponent = ({
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <CustomTabPanel
-              value={tabValue}
-              index={EstimateCategory.SHOWERS}
-            >
+            <CustomTabPanel value={tabValue} index={EstimateCategory.SHOWERS}>
               <ShowerEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1043,10 +1063,7 @@ const ProjectInfoComponent = ({
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
-            <CustomTabPanel
-              value={tabValue}
-              index={EstimateCategory.MIRRORS}
-            >
+            <CustomTabPanel value={tabValue} index={EstimateCategory.MIRRORS}>
               <MirrorEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}

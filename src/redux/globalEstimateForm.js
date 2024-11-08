@@ -8,6 +8,7 @@ export const getEstimateDetail = (state) =>
 export const getReviewDetail = (state) =>
   state.globalEstimateForm.reviewDetails;
 export const getEstimates = (state) => state.globalEstimateForm.estimates;
+export const getSelectedImages = (state) => state.globalEstimateForm.selectedImages;
 
 const globalEstimateForm = createSlice({
   name: "globalEstimateForm",
@@ -18,8 +19,15 @@ const globalEstimateForm = createSlice({
     estimateDetails: {},
     reviewDetails: {},
     estimates: [],
+    selectedImages : []
   },
   reducers: {
+    setSelectedImages: (state, action) => {
+      state.selectedImages =[...state.selectedImages, ...action.payload];;
+    },
+    removeImage: (state, action) => {
+      state.selectedImages = state.selectedImages.filter((_, i) => i !== action.payload);
+    },
     setProjectDetails: (state, action) => {
       state.projectDetails = action.payload;
     },
@@ -41,6 +49,8 @@ const globalEstimateForm = createSlice({
   },
 });
 export const {
+  setSelectedImages,
+  removeImage,
   setProjectDetails,
   setEstimateCategory,
   setEstimateLayout,
