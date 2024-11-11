@@ -419,6 +419,9 @@ export const generateObjectForPDFPreview = (
   estimateData,
   showerMiscPricing
 ) => {
+  console.log(listData,
+    estimateData,
+    showerMiscPricing,'sdsdsdsddd')
   let estimateInfoObject;
   let hardwareFinishes = null;
   hardwareFinishes = listData?.hardwareFinishes?.find(
