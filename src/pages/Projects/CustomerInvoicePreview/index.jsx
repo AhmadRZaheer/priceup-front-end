@@ -1,35 +1,42 @@
 import CommonLayout from "@/components/CommonLayout";
 import CustomLandingPage from "@/pages/CustomLandingPage";
-import { Box, Button, Typography } from "@mui/material";
-import React from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { getSelectedImages } from "@/redux/globalEstimateForm";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
+import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { useCreateDocument } from "@/utilities/ApiHooks/common";
+
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
+  const decodedToken = getDecryptedToken();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const selectedImages = useSelector(getSelectedImages);
+  const { mutate: generatePage, isLoading, isSuccess } = useCreateDocument();
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
   const options = { year: "numeric", month: "long", day: "numeric" };
   const futureDate = currentDate.toLocaleDateString(undefined, options);
 
-  const handleClick = ()=>{
-    if(selectedImages.length <= 0){
-      dispatch(
-        showSnackbar({ message: "Atleast 1 image required!", severity: "error" })
-      );
-    }else{
-      dispatch(
-        showSnackbar({ message: "Images Added Successfully!", severity: "success" })
-      );
+  const handleClick = () => {
+    const projectId = decodedToken?.company_id;
+    const data = {
+      company_id: projectId,
+      project_id: id,
+    };
+    generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      navigate(`/projects/${id}`);
     }
-  }
-
+  }, [isSuccess]);
   return (
     <CommonLayout>
       <Box className="econtent-wrapper">
@@ -43,9 +50,10 @@ const CustomerInvoicePreview = () => {
               alignItems: "center",
               justifyContent: "space-between",
               marginTop: { sm: 0, xs: 5 },
-              position :'fixed',
-              width:'80%',py:1.5,
-              zIndex:10000
+              position: "fixed",
+              width: "80%",
+              py: 1.5,
+              zIndex: 10000,
             }}
           >
             <Box sx={{ display: "flex" }}>
@@ -84,7 +92,8 @@ const CustomerInvoicePreview = () => {
               till {futureDate}.
             </Typography>
             <Button
-            onClick={handleClick}
+              disabled={isLoading}
+              onClick={handleClick}
               fullWidth
               variant="contained"
               sx={{
@@ -102,13 +111,19 @@ const CustomerInvoicePreview = () => {
                 },
               }}
             >
-              <EngineeringIcon sx={{ pr: 1 }} />
-              Generate
+              {isLoading ? (
+                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+              ) : (
+                <>
+                  <EngineeringIcon sx={{ pr: 1 }} />
+                  Generate
+                </>
+              )}
             </Button>
           </Box>
         </Box>
-        <Box sx={{mt:'60px'}}>
-        <CustomLandingPage />
+        <Box sx={{ mt: "60px" }}>
+          <CustomLandingPage />
         </Box>
       </Box>
     </CommonLayout>

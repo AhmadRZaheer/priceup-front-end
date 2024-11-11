@@ -4,9 +4,11 @@ import {
   Card,
   CardMedia,
   Container,
+  Grid,
   IconButton,
   Typography,
 } from "@mui/material";
+import "./style.scss";
 import React, { useEffect, useRef, useState } from "react";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import Img from "../../Assets/example.jpg";
@@ -19,6 +21,7 @@ import "swiper/css/navigation";
 import { PDFViewer } from "@react-pdf/renderer";
 import PDFFile from "../PDFFile";
 import {
+  backendURL,
   calculateAreaAndPerimeter,
   calculateTotal,
   getDecryptedToken,
@@ -50,6 +53,8 @@ import {
   getLocationShowerSettings,
   getLocationWineCellarSettings,
 } from "@/redux/locationSlice";
+import { useParams } from "react-router-dom";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 const pdfLocationData = {
   name: "GCS Glass & Mirror",
@@ -546,7 +551,13 @@ const controls = {
   viewAdditionalFields: true,
 };
 
-const CustomizeLandingPage = () => {
+const CustomizeLandingPage = ({
+  selectedData,
+  refetchData,
+  isFetched,
+  isFetching,
+}) => {
+  const { id } = useParams();
   const wineCellarHardwareList = useSelector(getWineCellarsHardware);
   const mirrorsHardwareList = useSelector(getMirrorsHardware);
   const showersHardwareList = useSelector(getListData);
@@ -568,16 +579,19 @@ const CustomizeLandingPage = () => {
         formattedData?.sqftArea,
         showersLocationSettings
       );
+      console.log(formattedData, pricing, "formattedData");
       const measurementString = renderMeasurementSides(
         quoteState.EDIT,
         formattedData?.measurements,
         formattedData?.layout_id
       );
+      const id = data?._id;
       return {
         ...formattedData,
         measurements: measurementString,
         pricing,
         pdfSettings,
+        id,
       };
     } else if (data?.category === EstimateCategory.MIRRORS) {
       const formattedData = generateObjectForMirrorPDFPreview(
@@ -655,20 +669,34 @@ const CustomizeLandingPage = () => {
   };
 
   const [estimatePdfs, setEstimatePdfs] = useState([]);
+  useEffect(() => {
+    refetchData();
+  }, []);
+
+  console.log(selectedData, "selectedData");
 
   useEffect(() => {
     const generatedPdfs = [];
-
-    DummyEstimates.forEach((data, index) => {
-      const singleEstimatePdf = generatePDF(data);
-      if (singleEstimatePdf) {
-        generatedPdfs.push(singleEstimatePdf);
-      }
-    });
-
-    setEstimatePdfs(generatedPdfs);
-  }, []);
-console.log(estimatePdfs,'ewsdsafdsferwer');
+    if (isFetched) {
+      selectedData?.forEach((data, index) => {
+        const singleEstimatePdf = generatePDF(data);
+        if (singleEstimatePdf) {
+          generatedPdfs.push(singleEstimatePdf);
+        }
+      });
+      setEstimatePdfs(generatedPdfs);
+    }
+  }, [
+    selectedData,
+    wineCellarHardwareList,
+    mirrorsHardwareList,
+    showersHardwareList,
+    wineCellarLocationSettings,
+    mirrorsLocationSettings,
+    showersLocationSettings,
+    pdfSettings,
+  ]);
+  console.log(estimatePdfs, "estimatePdfsestimatePdfs");
   const decodedToken = getDecryptedToken();
   const [estimatePdf, setEstimatePdf] = useState([]);
   const fileInputRef = useRef(null);
@@ -782,7 +810,7 @@ console.log(estimatePdfs,'ewsdsafdsferwer');
         </Box>
       </Box>
       <Container maxWidth="xl">
-        <Box
+        {/* <Box
           sx={{
             display: "flex",
             flexDirection: "column",
@@ -843,8 +871,8 @@ console.log(estimatePdfs,'ewsdsafdsferwer');
               capture={false}
             />
           </Box>
-        )}
-
+        )} */}
+        {/* 
         <Box sx={{ pb: 5, px: 4 }}>
           <Swiper
             modules={[Navigation]}
@@ -915,7 +943,8 @@ console.log(estimatePdfs,'ewsdsafdsferwer');
               </Typography>
             )}
           </Swiper>
-        </Box>
+        </Box> */}
+
         <Box sx={{ px: 4 }}>
           <Box sx={{ p: 5 }}>
             <Typography
@@ -949,22 +978,152 @@ console.log(estimatePdfs,'ewsdsafdsferwer');
               "--swiper-navigation-size": "35px",
             }}
           >
-            {estimatePdfs && estimatePdfs.map((data,index) => (
-              <SwiperSlide>
-                <PDFViewer width={"100%"} height="1200px">
-                  <PDFFile
-                    controls={{
-                      ...controls,
-                    }}
-                    data={{quote : data , location : pdfLocationData }}
-                    key={`pdfFile${index}`}
-                  />
-                </PDFViewer>
-              </SwiperSlide>
-            ))}
+            {isFetched
+              ? estimatePdfs.length > 0 &&
+                estimatePdfs.map((data, index) => (
+                  <SwiperSlide>
+                    <PDFViewer width={"100%"} height="1200px">
+                      <PDFFile
+                        controls={{
+                          ...controls,
+                        }}
+                        data={{ quote: data, location: pdfLocationData }}
+                        key={`pdfFile${index}`}
+                      />
+                    </PDFViewer>
+                  </SwiperSlide>
+                ))
+              : "Loading......."}
           </Swiper>
         </Box>
       </Container>
+      <Box sx={{ bgcolor: "#1E1B2F", py: 5, mt: 5 }}>
+        <Container maxWidth="xl">
+          <Box sx={{ pb: 8 }}>
+            <Typography
+              sx={{
+                fontSize: "48px",
+                fontWeight: 500,
+                lineHeight: "54px",
+                textAlign: "center",
+                color: "white",
+                textTransform: "uppercase",
+              }}
+            >
+              Our Process
+            </Typography>
+          </Box>
+          <Grid container spacing={3}>
+            <Grid
+              item
+              xs={6}
+              sx={{ display: "flex", borderRight: "1px solid white" }}
+            >
+              <Box sx={{ display: "flex", alignItems: "end" }}>
+                <Typography className="title">1</Typography>
+              </Box>
+              <Box className="desc-box">
+                <Typography className="heading">Discovery</Typography>
+                <Typography className="desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nostrum nemo cumque veritatis. Velit veniam quaerat atque
+                  eveniet, culpa est, porro quo nemo, consectetur saepe maxime
+                  libero nostrum? Officia, explicabo cumque. eveniet, culpa est,
+                  porro quo nemo, consectetur saepe maxime libero nostrum?
+                  Officia, explicabo cumque.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={6} sx={{ display: "flex", pl: "48px !important" }}>
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography className="title">2</Typography>
+              </Box>
+              <Box className="desc-box">
+                <Typography className="heading">Design</Typography>
+                <Typography className="desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nostrum nemo cumque veritatis. Velit veniam quaerat atque
+                  eveniet, culpa est, porro quo nemo, consectetur saepe maxime
+                  libero nostrum? Officia, explicabo cumque. eveniet, culpa est,
+                  porro quo nemo, consectetur saepe maxime libero nostrum?
+                  Officia, explicabo cumque.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} sx={{ mt: 2 }}>
+            <Grid
+              item
+              xs={6}
+              sx={{ display: "flex", borderRight: "1px solid white" }}
+            >
+              <Box sx={{ display: "flex", alignItems: "end" }}>
+                <Typography className="title">3</Typography>
+              </Box>
+              <Box className="desc-box">
+                <Typography className="heading">Sourcing</Typography>
+                <Typography className="desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nostrum nemo cumque veritatis. Velit veniam quaerat atque
+                  eveniet, culpa est, porro quo nemo, consectetur saepe maxime
+                  libero nostrum? Officia, explicabo cumque. eveniet, culpa est,
+                  porro quo nemo, consectetur saepe maxime libero nostrum?
+                  Officia, explicabo cumque.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                pl: "48px !important",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Typography className="title">4</Typography>
+              </Box>
+              <Box className="desc-box">
+                <Typography className="heading">Fabrication</Typography>
+                <Typography className="desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nostrum nemo cumque veritatis. Velit veniam quaerat atque
+                  eveniet, culpa est, porro quo nemo, consectetur saepe maxime
+                  libero nostrum? Officia, explicabo cumque. eveniet, culpa est,
+                  porro quo nemo, consectetur saepe maxime libero nostrum?
+                  Officia, explicabo cumque.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} sx={{ mt: 2 }}>
+            <Grid
+              item
+              xs={6}
+              sx={{
+                display: "flex",
+                pl: "48px !important",
+                borderRight: "1px solid white",
+              }}
+            >
+              <Box sx={{ display: "flex", alignItems: "end" }}>
+                <Typography className="title">5</Typography>
+              </Box>
+              <Box className="desc-box">
+                <Typography className="heading">Fabrication</Typography>
+                <Typography className="desc">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Nostrum nemo cumque veritatis. Velit veniam quaerat atque
+                  eveniet, culpa est, porro quo nemo, consectetur saepe maxime
+                  libero nostrum? Officia, explicabo cumque. eveniet, culpa est,
+                  porro quo nemo, consectetur saepe maxime libero nostrum?
+                  Officia, explicabo cumque.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
           sx={{

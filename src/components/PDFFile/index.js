@@ -208,7 +208,7 @@ const PDFFile = ({controls,data}) => {
           <Text style={{fontSize:'14px'}}>Hardware Addons Price:</Text>
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.hardwareAddonsPrice?.toFixed(2) || 0}</Text>
           </View>}
-          {data?.quote?.pdfSettings.labor &&
+          {data?.quote?.pdfSettings?.labor &&
           <>
           {pricingSection[data?.quote?.category]?.includes(pdfFields.LABORPRICE) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>{data?.quote?.category === EstimateCategory.WINECELLARS ? 'Layout Labor Price:' : 'Labor Price:' }</Text>
@@ -227,17 +227,17 @@ const PDFFile = ({controls,data}) => {
         </View>}
         {controls?.viewGrossProfit && 
         <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
-        <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Gross {data?.quote?.pdfSettings.profit ? 'Profit' : 'Total'}:</Text>
+        <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Gross {data?.quote?.pdfSettings?.profit ? 'Profit' : 'Total'}:</Text>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>Gross Total:</Text>
           <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.total?.toFixed(2) || 0}</Text>
           </View>
-          {data?.quote?.pdfSettings.cost && 
+          {data?.quote?.pdfSettings?.cost && 
            <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
            <Text style={{fontSize:'14px'}}>Actual Cost:</Text>
            <Text style={{fontSize:'12px'}}>$ {data?.quote?.pricing?.cost?.toFixed(2) || 0}</Text>
            </View> }   
-          {data?.quote?.pdfSettings.profit && 
+          {data?.quote?.pdfSettings?.profit && 
            <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
            <Text style={{fontSize:'14px'}}>Profit:</Text>
            <Text style={{fontSize:'12px'}}>{data?.quote?.pricing?.profit?.toFixed(2) || 0} %</Text>
@@ -364,13 +364,13 @@ const PDFFile = ({controls,data}) => {
           ) : (
             ""
           )}
-          {data?.quote?.pdfSettings.people && 
+          {data?.quote?.pdfSettings?.people && 
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>People:</Text>
           <Text style={{fontSize:'12px'}}>{data?.quote?.people}</Text>
           </View>}
           
-          {data?.quote?.pdfSettings.hours && 
+          {data?.quote?.pdfSettings?.hours && 
           <>
           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
           <Text style={{fontSize:'14px'}}>{data?.quote?.category === EstimateCategory.WINECELLARS ? 'Hours for layout:' : 'Hours'}</Text>
