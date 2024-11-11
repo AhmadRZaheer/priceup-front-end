@@ -739,13 +739,30 @@ export const ProjectsColumns = (dropdownActions) => {
       field: "Location",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 0.9,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
             <Tooltip title={params?.row?.addressData?.name} placement="top">
               <Typography className="projectRowTxt" sx={{ py: 1 }}>
                 {params?.row?.addressData?.name}
+              </Typography>
+            </Tooltip>
+          </>
+        );
+      },
+    },
+    {
+      field: "Source",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Tooltip title={params?.row?.created_source} placement="top">
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
+                {params?.row?.created_source ? params?.row?.created_source: 'Application' }
               </Typography>
             </Tooltip>
           </>

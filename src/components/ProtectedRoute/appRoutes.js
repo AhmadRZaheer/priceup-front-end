@@ -210,7 +210,7 @@ const AppRoutes = () => {
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
-      <Route path="/custom-landing" element={<CustomLandingPage />} />
+      <Route path="/custom-landing/:id" element={<CustomLandingPage />} />
     </Routes>
   );
 };
