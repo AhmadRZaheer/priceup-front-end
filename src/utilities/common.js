@@ -94,7 +94,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   let mountingWallClamps = 0;
   selectedContent?.mountingClamps?.wallClamp?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingWallClamps += price ? price * row.count : 0;
@@ -116,21 +116,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   let cornerWallClamps = 0;
   selectedContent?.cornerClamps?.cornerWallClamp?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
   selectedContent?.cornerClamps?.cornerSleeveOver?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
   selectedContent?.cornerClamps?.cornerGlassToGlass?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerGlassToGlass += price ? price * row.count : 0;
@@ -153,12 +153,12 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   : 0;
   const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
     ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.slidingDoorSystem.count
     : 0;
   const headerPrice = selectedContent?.header?.item
     ? (selectedContent?.header?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
 

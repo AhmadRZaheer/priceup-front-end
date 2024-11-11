@@ -2,17 +2,27 @@ import CommonLayout from "@/components/CommonLayout";
 import CustomLandingPage from "@/pages/CustomLandingPage";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import { getSelectedImages } from "@/redux/globalEstimateForm";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
-import { useCreateDocument } from "@/utilities/ApiHooks/common";
+import { useCreateDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import CustomizeLandingPage from "@/components/CustomizeLandingPage";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const customer_id = queryParams.get('customer_id');
+  const {
+    data: selectedData,
+    refetch: refetchData,
+    isFetching,
+    isFetched ,
+  } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +39,7 @@ const CustomerInvoicePreview = () => {
     const data = {
       company_id: projectId,
       project_id: id,
+      customer_id
     };
     generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
   };
@@ -123,7 +134,7 @@ const CustomerInvoicePreview = () => {
           </Box>
         </Box>
         <Box sx={{ mt: "60px" }}>
-          <CustomLandingPage />
+        <CustomizeLandingPage selectedData={selectedData} refetchData={refetchData}  isFetched={isFetched} isFetching={isFetching} />
         </Box>
       </Box>
     </CommonLayout>

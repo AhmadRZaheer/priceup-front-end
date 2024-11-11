@@ -258,7 +258,7 @@ const ProjectInfoComponent = ({
             <Button
               fullWidth
               variant="contained"
-              onClick={()=>navigate('preview-invoice')}
+              onClick={()=>navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)}
               sx={{
                 backgroundColor: "#8477DA",
                 height: "44px",

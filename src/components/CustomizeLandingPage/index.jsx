@@ -3,6 +3,7 @@ import {
   Button,
   Card,
   CardMedia,
+  CircularProgress,
   Container,
   Grid,
   IconButton,
@@ -54,7 +55,10 @@ import {
   getLocationWineCellarSettings,
 } from "@/redux/locationSlice";
 import { useParams } from "react-router-dom";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useCreateDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
 
 const pdfLocationData = {
   name: "GCS Glass & Mirror",
@@ -565,6 +569,7 @@ const CustomizeLandingPage = ({
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   const showersLocationSettings = useSelector(getLocationShowerSettings);
   const pdfSettings = useSelector(getLocationPdfSettings);
+  const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
   const generatePDF = (data) => {
     console.log("Call this function", data);
@@ -733,6 +738,20 @@ const CustomizeLandingPage = ({
   const authUser =
     decodedToken?.role === userRoles.ADMIN ||
     decodedToken?.role === userRoles.CUSTOM_ADMIN;
+
+  const { mutate: statusChange, isSuccess, isLoading } = useCreateDocument();
+
+  const handleChangeStatus = (value) => {
+    console.log(value);
+    const data = {
+      project_id: selectedData[0]?.project_id,
+      status: value,
+    };
+    statusChange({ data, apiRoute: `${backendURL}/form-request-update` });
+  };
+  useEffect(() => {
+    setInvoiceStatusBtn(false);
+  }, [isSuccess]);
 
   return (
     <>
@@ -978,23 +997,83 @@ const CustomizeLandingPage = ({
               "--swiper-navigation-size": "35px",
             }}
           >
-            {isFetched
-              ? estimatePdfs.length > 0 &&
-                estimatePdfs.map((data, index) => (
-                  <SwiperSlide>
-                    <PDFViewer width={"100%"} height="1200px">
-                      <PDFFile
-                        controls={{
-                          ...controls,
-                        }}
-                        data={{ quote: data, location: pdfLocationData }}
-                        key={`pdfFile${index}`}
-                      />
-                    </PDFViewer>
-                  </SwiperSlide>
-                ))
-              : "Loading......."}
+            {isFetched ? (
+              estimatePdfs.length > 0 &&
+              estimatePdfs.map((data, index) => (
+                <SwiperSlide>
+                  <PDFViewer width={"100%"} height="1200px">
+                    <PDFFile
+                      controls={{
+                        ...controls,
+                      }}
+                      data={{ quote: data, location: pdfLocationData }}
+                      key={`pdfFile${index}`}
+                    />
+                  </PDFViewer>
+                </SwiperSlide>
+              ))
+            ) : (
+              <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+            )}
           </Swiper>
+          {!authUser && invoiceStatusBtn && (
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button
+                disabled={isLoading}
+                onClick={() => handleChangeStatus(false)}
+                fullWidth
+                variant="contained"
+                sx={{
+                  backgroundColor: "#E22A2D",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#E22A2D" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                Disapproved
+                {/* {invoiceStatus === false ? (
+                  "Disapproved"
+                ) : (
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                )} */}
+              </Button>
+              <Button
+                disabled={isLoading}
+                onClick={() => handleChangeStatus(true)}
+                fullWidth
+                variant="contained"
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                Approved
+                {/* {invoiceStatus ? (
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                ) : (
+                  "Approved"
+                )} */}
+              </Button>
+            </Box>
+          )}
         </Box>
       </Container>
       <Box sx={{ bgcolor: "#1E1B2F", py: 5, mt: 5 }}>
