@@ -750,7 +750,9 @@ const CustomizeLandingPage = ({
     statusChange({ data, apiRoute: `${backendURL}/form-request-update` });
   };
   useEffect(() => {
-    setInvoiceStatusBtn(false);
+    if(isSuccess){
+      setInvoiceStatusBtn(false);
+    }    
   }, [isSuccess]);
 
   return (
