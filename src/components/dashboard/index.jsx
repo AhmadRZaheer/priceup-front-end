@@ -13,6 +13,7 @@ import { backendURL } from "@/utilities/common";
 import { useMemo } from "react";
 import { EstimateCategory } from "@/utilities/constants";
 import GraphSkeleton from "./GraphSkeleton";
+import DataNotFound from "./DataNotFound";
 
 const dateSx = {
   "& .MuiInputBase-root": {
@@ -33,7 +34,7 @@ const dateSx = {
   },
 };
 
-export default function Dashboard({userData}) {
+export default function Dashboard({ userData }) {
   const currentDate = dayjs();
   const [graphDate, setGraphDate] = useState({
     start: currentDate.subtract(1, "month"),
@@ -153,11 +154,11 @@ export default function Dashboard({userData}) {
                 text: data?.customerCount,
                 variant: "red",
               },
-                {
-                  title: "Users",
-                  text: userData?.staff ?? 0,
-                  variant: "purple",
-                },
+              {
+                title: "Users",
+                text: userData?.staff ?? 0,
+                variant: "purple",
+              },
             ].map((item) => (
               <Grid item lg={3} md={4} xs={6}>
                 <WidgetCard
@@ -279,10 +280,14 @@ export default function Dashboard({userData}) {
                   }}
                 >
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomBarChart
-                      dataType="Estimate"
-                      data={graphDataFormatted.estimateBarChart}
-                    />
+                    {graphDataFormatted.estimateBarChart.length > 0 ? (
+                      <CustomBarChart
+                        dataType="Estimate"
+                        data={graphDataFormatted.estimateBarChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Estimate" />
+                    )}
                   </Box>
                   <Box
                     sx={{
@@ -290,27 +295,33 @@ export default function Dashboard({userData}) {
                       width: "49%",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontSize: "18px",
-                        fontWeight: 600,
-                        lineHeight: "24.59px",
-                        fontFamily: '"Manrope", sans-serif !important',
-                        p: 1.3,
-                      }}
-                    >
-                      Estimate
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        height: "100%",
-                        alignItems: "center",
-                      }}
-                    >
-                      <CustomPieChart data={graphDataFormatted.pieChart} />
-                    </Box>
+                    {graphDataFormatted.pieChart.length > 0 ? (
+                      <>
+                        <Typography
+                          sx={{
+                            fontSize: "18px",
+                            fontWeight: 600,
+                            lineHeight: "24.59px",
+                            fontFamily: '"Manrope", sans-serif !important',
+                            p: 1.3,
+                          }}
+                        >
+                          Estimate
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            height: "100%",
+                            alignItems: "center",
+                          }}
+                        >
+                          <CustomPieChart data={graphDataFormatted.pieChart} />
+                        </Box>
+                      </>
+                    ) : (
+                      <DataNotFound title="Estimate" />
+                    )}
                   </Box>
                 </Box>
                 <Box
@@ -321,16 +332,24 @@ export default function Dashboard({userData}) {
                   }}
                 >
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomLineChart
-                      dataType="Projects"
-                      data={graphDataFormatted.projectChart}
-                    />
+                    {graphDataFormatted.projectChart.length > 0 ? (
+                      <CustomLineChart
+                        dataType="Projects"
+                        data={graphDataFormatted.projectChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Project" />
+                    )}
                   </Box>
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomAreaChart
-                      dataType="Customers"
-                      data={graphDataFormatted.customerChart}
-                    />
+                    {graphDataFormatted.customerChart.length > 0 ? (
+                      <CustomAreaChart
+                        dataType="Customers"
+                        data={graphDataFormatted.customerChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Customer" />
+                    )}
                   </Box>
                 </Box>
               </>

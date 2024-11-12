@@ -750,9 +750,9 @@ const CustomizeLandingPage = ({
     statusChange({ data, apiRoute: `${backendURL}/form-request-update` });
   };
   useEffect(() => {
-    if(isSuccess){
+    if (isSuccess) {
       setInvoiceStatusBtn(false);
-    }    
+    }
   }, [isSuccess]);
 
   return (
@@ -967,17 +967,81 @@ const CustomizeLandingPage = ({
         </Box> */}
 
         <Box sx={{ px: 4 }}>
-          <Box sx={{ p: 5 }}>
+          <Box
+            sx={{
+              pt: 5,
+              pb: 2,
+              display: "flex",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography
               sx={{
-                fontSize: "40px",
-                fontWeight: 500,
+                fontSize: "36px",
+                fontWeight: 600,
                 lineHeight: "54px",
-                textAlign: "center",
               }}
             >
               Quotation Pdfs
             </Typography>
+            {!authUser && invoiceStatusBtn && (
+              <Box sx={{ display: "flex", gap: 2 }}>
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handleChangeStatus(false)}
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#E22A2D",
+                    height: "44px",
+                    width: { sm: "auto", xs: "187px" },
+                    "&:hover": { backgroundColor: "#E22A2D" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 1,
+                    fontSize: { lg: 16, md: 15, xs: 12 },
+                    padding: {
+                      sm: "10px 16px  !important",
+                      xs: "5px 5px !important",
+                    },
+                  }}
+                >
+                  Disapproved
+                  {/* {invoiceStatus === false ? (
+                  "Disapproved"
+                ) : (
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                )} */}
+                </Button>
+                <Button
+                  disabled={isLoading}
+                  onClick={() => handleChangeStatus(true)}
+                  fullWidth
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    height: "44px",
+                    width: { sm: "auto", xs: "187px" },
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 1,
+                    fontSize: { lg: 16, md: 15, xs: 12 },
+                    padding: {
+                      sm: "10px 16px  !important",
+                      xs: "5px 5px !important",
+                    },
+                  }}
+                >
+                  Approved
+                  {/* {invoiceStatus ? (
+                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                ) : (
+                  "Approved"
+                )} */}
+                </Button>
+              </Box>
+            )}
           </Box>
           <Swiper
             modules={[Navigation]}
@@ -1018,64 +1082,6 @@ const CustomizeLandingPage = ({
               <CircularProgress size={24} sx={{ color: "#8477DA" }} />
             )}
           </Swiper>
-          {!authUser && invoiceStatusBtn && (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <Button
-                disabled={isLoading}
-                onClick={() => handleChangeStatus(false)}
-                fullWidth
-                variant="contained"
-                sx={{
-                  backgroundColor: "#E22A2D",
-                  height: "44px",
-                  width: { sm: "auto", xs: "187px" },
-                  "&:hover": { backgroundColor: "#E22A2D" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 1,
-                  fontSize: { lg: 16, md: 15, xs: 12 },
-                  padding: {
-                    sm: "10px 16px  !important",
-                    xs: "5px 5px !important",
-                  },
-                }}
-              >
-                Disapproved
-                {/* {invoiceStatus === false ? (
-                  "Disapproved"
-                ) : (
-                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-                )} */}
-              </Button>
-              <Button
-                disabled={isLoading}
-                onClick={() => handleChangeStatus(true)}
-                fullWidth
-                variant="contained"
-                sx={{
-                  backgroundColor: "#8477DA",
-                  height: "44px",
-                  width: { sm: "auto", xs: "187px" },
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
-                  textTransform: "capitalize",
-                  borderRadius: 1,
-                  fontSize: { lg: 16, md: 15, xs: 12 },
-                  padding: {
-                    sm: "10px 16px  !important",
-                    xs: "5px 5px !important",
-                  },
-                }}
-              >
-                Approved
-                {/* {invoiceStatus ? (
-                  <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-                ) : (
-                  "Approved"
-                )} */}
-              </Button>
-            </Box>
-          )}
         </Box>
       </Container>
       <Box sx={{ bgcolor: "#1E1B2F", py: 5, mt: 5 }}>

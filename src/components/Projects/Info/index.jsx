@@ -12,6 +12,7 @@ import {
   Tabs,
   TextareaAutosize,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
@@ -22,7 +23,7 @@ import {
   useCreateDocument,
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Add, Close } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
@@ -37,6 +38,10 @@ import StatusChip from "@/components/common/StatusChip";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import WineCellarEstimatesList from "./EstimatesList/wineCellar";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import { useDispatch } from "react-redux";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 
 const validationSchema = yup.object({
   name: yup
@@ -51,6 +56,7 @@ const ProjectInfoComponent = ({
   projectState = "create",
   projectData = null,
 }) => {
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const selectedTab = searchParams.get("category");
   const tabValue =
@@ -87,6 +93,7 @@ const ProjectInfoComponent = ({
   const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
+  const [copyLink,setCopyLink] = useState(false);
   const navigate = useNavigate();
   const [activeTabNumber, setActiveTabNumber] = useState(
     EstimateCategory.SHOWERS
@@ -209,6 +216,14 @@ const ProjectInfoComponent = ({
   useEffect(() => {
     setProjectNotes(formik.values.notes);
   }, [formik.values.notes]);
+  const handleCopyPreview = (value) => {
+    navigator.clipboard
+      .writeText(value ?? "")
+      .then(() =>
+        setCopyLink(true)
+      )
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
 
   return (
     <Box
@@ -255,10 +270,40 @@ const ProjectInfoComponent = ({
         </Box>
         {projectState !== "create" ? (
           <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
+            {projectData?.invoicePreview?._id ? (
+              <Box>
+                <div className="subscribe-box">
+                  <input
+                    type="email"
+                    className="email-input"
+                    placeholder="Customer Preview Link"
+                    value={`${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`}
+                    disabled
+                  />
+                  <Tooltip placement="top" title={copyLink ? 'Copied' :"Copy Customer Preview Link"}>
+                    <button
+                      className="subscribe-btn"
+                      onClick={() =>
+                        handleCopyPreview(
+                          `${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`
+                        )
+                      }
+                    >
+                     {copyLink ? <DoneOutlinedIcon/> : <ContentCopyIcon />} 
+                    </button>
+                  </Tooltip>
+                </div>
+              </Box>
+            ) : (
+              ""
+            )}
+
             <Button
               fullWidth
               variant="contained"
-              onClick={()=>navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)}
+              onClick={() =>
+                navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)
+              }
               sx={{
                 backgroundColor: "#8477DA",
                 height: "44px",
