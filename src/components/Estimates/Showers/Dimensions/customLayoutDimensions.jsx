@@ -246,7 +246,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
   });
 
   useEffect(() => {
-    if (currentQuoteState === quoteState.CUSTOM && selectedData && listData) {
+    if (currentQuoteState === quoteState.CUSTOM && listData) {
       dispatch(initializeStateForCustomQuote());
     } else if (
       currentQuoteState === quoteState.EDIT &&

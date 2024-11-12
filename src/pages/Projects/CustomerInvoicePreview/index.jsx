@@ -9,19 +9,22 @@ import { getSelectedImages } from "@/redux/globalEstimateForm";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { backendURL, getDecryptedToken } from "@/utilities/common";
-import { useCreateDocument, useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import {
+  useCreateDocument,
+  useFetchAllDocuments,
+} from "@/utilities/ApiHooks/common";
 import CustomizeLandingPage from "@/components/CustomizeLandingPage";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const customer_id = queryParams.get('customer_id');
+  const customer_id = queryParams.get("customer_id");
   const {
     data: selectedData,
     refetch: refetchData,
     isFetching,
-    isFetched ,
+    isFetched,
   } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
@@ -39,7 +42,7 @@ const CustomerInvoicePreview = () => {
     const data = {
       company_id: projectId,
       project_id: id,
-      customer_id
+      customer_id,
     };
     generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
   };
@@ -51,7 +54,7 @@ const CustomerInvoicePreview = () => {
   return (
     <CommonLayout>
       <Box className="econtent-wrapper">
-        <Box sx={{ pb: "15px" }}>
+        <Box sx={{ position: "fixed", width: "-webkit-fill-available",mr:'21px',top:'82px', zIndex: 10000 }}>
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
@@ -60,14 +63,11 @@ const CustomerInvoicePreview = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginTop: { sm: 0, xs: 5 },
-              position: "fixed",
-              width: "80%",
+              marginTop: { sm: 0, xs: 5 },             
               py: 1.5,
-              zIndex: 10000,
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex",alignItems:'center' }}>
               <NavLink
                 to={id ? `/projects/${id}` : "/projects"}
                 style={{ display: "flex", alignSelf: "center" }}
@@ -75,6 +75,7 @@ const CustomerInvoicePreview = () => {
                 <Box
                   sx={{
                     color: "black",
+                    display:'flex'
                   }}
                 >
                   <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
@@ -83,7 +84,7 @@ const CustomerInvoicePreview = () => {
               <Box
                 sx={{
                   color: { sm: "black", xs: "white" },
-                  fontSize: { xs: "24px", sm: "24px" },
+                  fontSize: { xs: "20px", sm: "20px" },
                   textAlign: { xs: "start", sm: "center" },
                   fontWeight: 600,
                 }}
@@ -94,7 +95,7 @@ const CustomerInvoicePreview = () => {
             <Typography
               sx={{
                 color: "#212528",
-                fontSize: "18px",
+                fontSize: "16px",
                 fontWeight: 600,
                 lineHeight: "21.86px",
               }}
@@ -134,7 +135,12 @@ const CustomerInvoicePreview = () => {
           </Box>
         </Box>
         <Box sx={{ mt: "60px" }}>
-        <CustomizeLandingPage selectedData={selectedData} refetchData={refetchData}  isFetched={isFetched} isFetching={isFetching} />
+          <CustomizeLandingPage
+            selectedData={selectedData}
+            refetchData={refetchData}
+            isFetched={isFetched}
+            isFetching={isFetching}
+          />
         </Box>
       </Box>
     </CommonLayout>
