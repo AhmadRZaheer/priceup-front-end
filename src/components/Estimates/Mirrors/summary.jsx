@@ -30,7 +30,10 @@ import {
   getSqftArea,
   setModifiedProfitPercentage,
 } from "@/redux/mirrorsEstimateSlice";
-import { getLocationMirrorSettings, getLocationPdfSettings } from "@/redux/locationSlice";
+import {
+  getLocationMirrorSettings,
+  getLocationPdfSettings,
+} from "@/redux/locationSlice";
 import CustomToggle from "@/components/ui-components/Toggle";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useState } from "react";
@@ -44,6 +47,8 @@ import {
 } from "@/redux/estimateSlice";
 import { quoteState } from "@/utilities/constants";
 import { useSearchParams } from "react-router-dom";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getGlassTypeDetailsByThickness } from "@/utilities/common";
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -67,6 +72,7 @@ const Summary = ({ setStep }) => {
   const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
   const customerData = useSelector(getCustomerDetail);
   const pdfSettings = useSelector(getLocationPdfSettings);
+  const MirrorsHardware = useSelector(getMirrorsHardware);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -77,9 +83,34 @@ const Summary = ({ setStep }) => {
   const mirrorEstimateState = useSelector((state) => state.mirrorsEstimate);
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
 
+  // const getGlassTypeDetailsByThickness = (
+  //   selectedIds,
+  //   originalArray,
+  //   selectedThickness
+  // ) => {
+  //   return originalArray
+  //     ?.filter((glass) => selectedIds?.includes(glass._id))
+  //     .map((glass) => {
+  //       // Find the option with the matching thickness
+  //       const matchingOption = glass.options.find(
+  //         (option) => option.thickness === selectedThickness
+  //       );
+  //       return {
+  //         name: glass.name,
+  //         price: matchingOption ? sqftArea*matchingOption.cost : "N/A", // Show cost or 'N/A' if not available
+  //         thickness: matchingOption ? matchingOption.thickness : "N/A", // Show thickness or 'N/A' if not available
+  //       };
+  //     });
+  // };
+
   const drawerHandleClick = () => {
     const item = generateObjForMirrorPDFRuntime(
-      { estimateState, projectId, selectedCategory:selectedData?.category ?? selectedCategory,customerData },
+      {
+        estimateState,
+        projectId,
+        selectedCategory: selectedData?.category ?? selectedCategory,
+        customerData,
+      },
       mirrorEstimateState,
       mirrorsLocationSettings
     );
@@ -139,6 +170,13 @@ const Summary = ({ setStep }) => {
   const resetUserProfit = () => {
     dispatch(setModifiedProfitPercentage(0));
   };
+
+  const glassDetails = getGlassTypeDetailsByThickness(
+    mirrorsLocationSettings?.glassTypesForComparison,
+    MirrorsHardware.glassTypes,
+    selectedContent?.glassType?.thickness
+  );
+
   return (
     <>
       <Box
@@ -401,7 +439,7 @@ const Summary = ({ setStep }) => {
                           {selectedContent?.hardwares?.map((row, index) => (
                             <Typography className="text-xs-ragular">
                               {row?.item?.name}
-                              {' ('+row?.count+')'}
+                              {" (" + row?.count + ")"}
                               {selectedContent?.hardwares?.length - 1 !== index
                                 ? ", "
                                 : ""}
@@ -616,6 +654,30 @@ const Summary = ({ setStep }) => {
                 )}
               </Grid>
             )}
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: "16.41px",
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
+              Note:
+            </Typography>
+            <Typography>
+              Selected glass type '{selectedContent?.glassType?.item?.name}' price
+              is '${pricing.glass?.toFixed(2) || 0}'.
+            </Typography>
+            {glassDetails.map((glass, index) => (
+              <Typography key={index}>
+                Available glass type '{glass.name}' 
+                {/* with thickness '{glass.thickness}' */}
+                has a price of '{(sqftArea*glass.price)?.toFixed(2) || 0}'
+              </Typography>
+            ))}
           </Box>
         </Box>
       </Box>

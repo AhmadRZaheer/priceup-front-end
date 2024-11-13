@@ -44,6 +44,7 @@ import {
   backendURL,
   calculateAreaAndPerimeter,
   calculateTotal,
+  getGlassTypeDetailsByThickness,
 } from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import {
@@ -60,7 +61,10 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from "@/redux/locationSlice";
 import {
   getCustomerDetail,
   getEstimateCategory,
@@ -206,6 +210,13 @@ const Summary = ({ setStep }) => {
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
   };
+
+  const glassDetails = getGlassTypeDetailsByThickness(
+    showersLocationSettings?.glassTypesForComparison,
+    listData.glassType,
+    selectedContent?.glassType?.thickness
+  );
+
   return (
     <>
       <Box
@@ -928,6 +939,27 @@ const Summary = ({ setStep }) => {
                 )}
               </Grid>
             )}
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: "16.41px",
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
+              Note:
+            </Typography>
+            <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography>
+            {glassDetails.map((glass, index) => (
+              <Typography key={index}>
+                Available glass type '{glass.name}' 
+                {/* with thickness '{glass.thickness}' */}
+                has a price of '${(sqftArea*glass.price)?.toFixed(2) || 0}'
+              </Typography>
+            ))}
           </Box>
         </Box>
         {isMobile ? (

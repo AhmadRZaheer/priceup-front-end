@@ -1266,3 +1266,23 @@ export const notificationsAvailable = (notifications)=>{
   }
   return response;
 }
+
+export const getGlassTypeDetailsByThickness = (
+  selectedIds,
+  originalArray,
+  selectedThickness
+) => {
+  return originalArray
+    ?.filter((glass) => selectedIds?.includes(glass._id))
+    .map((glass) => {
+      // Find the option with the matching thickness
+      const matchingOption = glass.options.find(
+        (option) => option.thickness === selectedThickness
+      );
+      return {
+        name: glass.name,
+        price: matchingOption ? matchingOption.cost : "N/A", // Show cost or 'N/A' if not available
+        thickness: matchingOption ? matchingOption.thickness : "N/A", // Show thickness or 'N/A' if not available
+      };
+    });
+};
