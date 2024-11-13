@@ -40,8 +40,9 @@ import dayjs from "dayjs";
 import WineCellarEstimatesList from "./EstimatesList/wineCellar";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { useDispatch } from "react-redux";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import CompanySelect from "./CompanyContactSelect";
 
 const validationSchema = yup.object({
   name: yup
@@ -89,11 +90,15 @@ const ProjectInfoComponent = ({
   const [selectedAddress, setSelectedAddress] = useState(
     projectData?.addressData || null
   );
+  const [companyContact, setCompanyContact] = useState(
+    projectData?.addressData || null
+  );
   const [projectName, setProjectName] = useState(projectData?.name || "");
   const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
-  const [copyLink,setCopyLink] = useState(false);
+  const [openCompanySelectModal, setOpenCompanySelectModal] = useState(false);
+  const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
   const [activeTabNumber, setActiveTabNumber] = useState(
     EstimateCategory.SHOWERS
@@ -115,6 +120,7 @@ const ProjectInfoComponent = ({
       customer: selectedCustomer?.name || "",
       address: selectedAddress?.name || "",
       notes: projectNotes,
+      companyContact: companyContact?.name || "",
     },
     validationSchema,
     enableReinitialize: true,
@@ -123,6 +129,7 @@ const ProjectInfoComponent = ({
         name: values.name,
         notes: values.notes,
         status: values.status,
+        companyContact:companyContact?._id,
         // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
@@ -167,14 +174,27 @@ const ProjectInfoComponent = ({
   const handleAddressSelect = () => {
     setOpenAddressSelectModal(true);
   };
+  const handleCompanySelect = () => {
+    setOpenCompanySelectModal(true);
+  };
   const handleAddressUnSelect = (event) => {
     event.stopPropagation();
     setSelectedAddress(null);
     formik.setFieldValue("address", "");
   };
+  const handleCompanyUnSelect = (event) => {
+    event.stopPropagation();
+    setCompanyContact(null);
+    formik.setFieldValue("companyContact", "");
+  };
   const handleAddressChange = (address) => {
     setSelectedAddress(address);
     setOpenAddressSelectModal(false);
+  };
+  const handleCompanyChange = (contact) => {
+    console.log(contact);
+    setCompanyContact(contact);
+    setOpenCompanySelectModal(false);
   };
 
   const handleDateChange = (newDate) => {
@@ -219,9 +239,7 @@ const ProjectInfoComponent = ({
   const handleCopyPreview = (value) => {
     navigator.clipboard
       .writeText(value ?? "")
-      .then(() =>
-        setCopyLink(true)
-      )
+      .then(() => setCopyLink(true))
       .catch((err) => console.error("Failed to copy text: ", err));
   };
 
@@ -280,7 +298,10 @@ const ProjectInfoComponent = ({
                     value={`${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`}
                     disabled
                   />
-                  <Tooltip placement="top" title={copyLink ? 'Copied' :"Copy Customer Preview Link"}>
+                  <Tooltip
+                    placement="top"
+                    title={copyLink ? "Copied" : "Copy Customer Preview Link"}
+                  >
                     <button
                       className="subscribe-btn"
                       onClick={() =>
@@ -289,7 +310,7 @@ const ProjectInfoComponent = ({
                         )
                       }
                     >
-                     {copyLink ? <DoneOutlinedIcon/> : <ContentCopyIcon />} 
+                      {copyLink ? <DoneOutlinedIcon /> : <ContentCopyIcon />}
                     </button>
                   </Tooltip>
                 </div>
@@ -839,6 +860,81 @@ const ProjectInfoComponent = ({
                         />
                       </Box>
                     </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        width: { sm: "50%", xs: "100%" },
+                        pt: "5px",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box mb={0.6}>
+                          <label htmlFor="name">Company Contact:</label>
+                          {/* <span style={{ color: "red" }}>*</span> */}
+                        </Box>
+                        <CustomInputField
+                          id="company"
+                          name="company"
+                          // label="Select an Address"
+                          size="small"
+                          variant="outlined"
+                          onClick={handleCompanySelect}
+                          InputProps={{
+                            endAdornment: companyContact ? (
+                              <InputAdornment
+                                position="end"
+                                sx={{ cursor: "pointer" }}
+                                onClick={(event) => {
+                                  handleCompanyUnSelect(event);
+                                }}
+                              >
+                                <Close sx={{}} />
+                              </InputAdornment>
+                            ) : (
+                              ""
+                            ),
+                            readOnly: true,
+                            style: {
+                              color: "black",
+                              borderRadius: 4,
+                              backgroundColor: "white",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          value={formik.values.companyContact}
+                        />
+                      </Box>
+                      <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {companyContact?._id}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 0.5,
+                          alignItems: "baseline",
+                          paddingX: 0.5,
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {companyContact?.name},
+                        </Typography>
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {companyContact?.phone}
+                        </Typography>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
               </Box>
@@ -1143,6 +1239,12 @@ const ProjectInfoComponent = ({
         selectedAddress={selectedAddress}
         setSelectedAddress={handleAddressChange}
         selectedCustomer={selectedCustomer}
+      />
+      <CompanySelect
+        open={openCompanySelectModal}
+        handleClose={() => setOpenCompanySelectModal(false)}
+        selectedContact={companyContact}
+        setSelectedContact={handleCompanyChange}
       />
       <ChooseEstimateCategoryModal
         open={openCategoryModal}
