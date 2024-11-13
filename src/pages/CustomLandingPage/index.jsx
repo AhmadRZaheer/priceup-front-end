@@ -1,14 +1,15 @@
-import CustomizeLandingPage from '@/components/CustomizeLandingPage'
-import { setListData } from '@/redux/estimateCalculations';
-import { setLocationInfo } from '@/redux/locationSlice';
-import { setMirrorsHardware } from '@/redux/mirrorsHardwareSlice';
-import { setWineCellarsHardware } from '@/redux/wineCellarsHardwareSlice';
-import { useFetchAllDocuments } from '@/utilities/ApiHooks/common';
-import { backendURL } from '@/utilities/common';
-import { Box } from '@mui/material'
-import React, { useEffect } from 'react'
-import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import CustomizeLandingPage from "@/components/CustomizeLandingPage";
+import { setListData } from "@/redux/estimateCalculations";
+import { setLocationInfo } from "@/redux/locationSlice";
+import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { backendURL, frontendURL } from "@/utilities/common";
+import { Box, Button, Container, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
 
 const CustomLandingPage = () => {
   const { id } = useParams();
@@ -17,21 +18,21 @@ const CustomLandingPage = () => {
     data,
     refetch: refetchData,
     isFetching,
-    isFetched ,
+    isFetched,
   } = useFetchAllDocuments(`${backendURL}/invoice-preview/${id}`);
 
-  useEffect(()=>{
-    if(id){
+  useEffect(() => {
+    if (id) {
       refetchData();
-    }   
-  },[id])
+    }
+  }, [id]);
 
   useEffect(() => {
     if (data?.location) {
       dispatch(setLocationInfo(data?.location));
     }
     if (data?.mirrorsHardware) {
-      dispatch(setMirrorsHardware(data?.mirrorsHardware ));
+      dispatch(setMirrorsHardware(data?.mirrorsHardware));
     }
     if (data?.showersHardware) {
       dispatch(setListData(data?.showersHardware));
@@ -39,16 +40,78 @@ const CustomLandingPage = () => {
     if (data?.wineCellarsHardware) {
       dispatch(setWineCellarsHardware(data?.wineCellarsHardware));
     }
-  }, [data?.location,data?.mirrorsHardware,data?.showersHardware,data?.wineCellarsHardware]);
+  }, [
+    data?.location,
+    data?.mirrorsHardware,
+    data?.showersHardware,
+    data?.wineCellarsHardware,
+  ]);
+  const handleBack = () => {
+    window.location.href = `${frontendURL}:3005`;
+  };
 
-  console.log(data,'selectedDataselectedData333')
-  return (
+  return data !== null || data !== undefined ? (
+    <Container maxWidth="xl" sx={{ pt: 2.5 }}>
+      <Box
+        sx={{
+          bgcolor: "#FFFFFF",
+          p: "24px 16px 24px 16px",
+          borderRadius: "12px",
+        }}
+      >
+        <Box
+          sx={{
+            p: "24px 16px",
+            height: "calc(100vh - 150px)",
+            alignContent: "center",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 1.5,
+            }}
+          >
+            <Typography variant="h3">Oops! This Link Has Expired</Typography>
+            <Typography variant="h5">
+              {" "}
+              The link you used to access this page has expired or is no longer
+              valid.
+            </Typography>
+            <Box>
+              <Button
+                sx={{
+                  backgroundColor: "#8477DA",
+                  "&:hover": {
+                    backgroundColor: "#8477da",
+                  },
+                  position: "relative",
+                  fontWeight: 600,
+                  fontSize: "16px",
+                }}
+                variant="contained"
+                onClick={handleBack}
+              >
+                generate another request
+                <ArrowRightAltIcon sx={{ pl: 1 }} />
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Container>
+  ) : (
     <Box sx={{ background: "#FFFFFF" }}>
-       <CustomizeLandingPage
-        selectedData={data?.estimatesList} refetchData={refetchData}  isFetched={isFetched} isFetching={isFetching} 
-        />
+      <CustomizeLandingPage
+        selectedData={data?.estimatesList}
+        refetchData={refetchData}
+        isFetched={isFetched}
+        isFetching={isFetching}
+      />
     </Box>
-  )
-}
+  );
+};
 
-export default CustomLandingPage
+export default CustomLandingPage;
