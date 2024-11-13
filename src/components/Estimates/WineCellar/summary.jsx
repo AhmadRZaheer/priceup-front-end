@@ -42,8 +42,9 @@ import {
 import { getCustomerDetail, getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import { getLocationPdfSettings, getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
-import { calculateTotal } from "@/utilities/common";
+import { calculateTotal, getGlassTypeDetailsByThickness } from "@/utilities/common";
 import { useSearchParams } from "react-router-dom";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -75,6 +76,7 @@ const Summary = ({ setStep }) => {
   const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
   const pdfSettings = useSelector(getLocationPdfSettings);
   const customerData = useSelector(getCustomerDetail);
+  const WineCellarHardware = useSelector(getWineCellarsHardware);
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -153,6 +155,13 @@ const Summary = ({ setStep }) => {
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
   };
+
+  const glassDetails = getGlassTypeDetailsByThickness(
+    wineCallerLocationSettings?.glassTypesForComparison,
+    WineCellarHardware.glassType,
+    selectedContent?.glassType?.thickness
+  );
+
   return (
     <>
       <Box
@@ -903,6 +912,27 @@ const Summary = ({ setStep }) => {
                 )}
               </Grid>
             )}
+          </Box>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+            <Typography
+              sx={{
+                fontSize: "14px",
+                fontWeight: 700,
+                lineHeight: "16.41px",
+                fontFamily: '"Roboto", sans-serif !important',
+              }}
+            >
+              Note:
+            </Typography>
+            <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography>
+            {glassDetails.map((glass, index) => (
+              <Typography key={index}>
+                Available glass type '{glass.name}' 
+                {/* with thickness '{glass.thickness}' */}
+                has a price of '${(sqftArea*glass.price)?.toFixed(2) || 0}'
+              </Typography>
+            ))}
           </Box>
         </Box>
         {isMobile ? (

@@ -3,10 +3,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import {
+  Autocomplete,
   Box,
   Button,
+  Checkbox,
+  Chip,
   CircularProgress,
+  FormControl,
   FormControlLabel,
+  FormGroup,
   Switch,
   Tab,
   Tabs,
@@ -31,9 +36,15 @@ import { setLocationSettingsRefetch } from "@/redux/refetch";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { getListData } from "@/redux/estimateCalculations";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
+  const showerGlassList = useSelector(getListData);
+  const mirrorGlassList = useSelector(getMirrorsHardware);
+  const wineCallerGlassList = useSelector(getWineCellarsHardware);
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const {
@@ -128,6 +139,7 @@ const CampanySetting = () => {
             settingData?.showers?.fabricatingPricing
               ?.polishPricePerThreeByEightInch,
         },
+        glassTypesForComparison: settingData?.showers?.glassTypesForComparison || [],
       },
       mirrors: {
         pricingFactor: settingData?.mirrors?.pricingFactor,
@@ -154,6 +166,7 @@ const CampanySetting = () => {
         // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
+        glassTypesForComparison: settingData?.mirrors?.glassTypesForComparison ||  [],
       },
       // Wine Caller
       wineCellars: {
@@ -179,6 +192,7 @@ const CampanySetting = () => {
             settingData?.wineCellars?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch || 0,
         },
+        glassTypesForComparison: settingData?.wineCellars?.glassTypesForComparison || [],
       },
       pdfSettings: {
         cost: settingData?.pdfSettings?.cost,
@@ -224,6 +238,45 @@ const CampanySetting = () => {
         )
       )
       .catch((err) => console.error("Failed to copy text: ", err));
+  };
+console.log(showerGlassList?.glassType,'Glererer')
+  const optionsData = showerGlassList?.glassType || [];
+  const mirrorGlass = mirrorGlassList?.glassTypes || [];
+  const wineCallerGlass = wineCallerGlassList?.glassType || [];
+  console.log(wineCallerGlass,'asasasasasasasa')
+  //  [
+  //   {
+  //     _id: "6724b1a8afad60e2f15e3822",
+  //     name: "Opti White",
+  //   },
+  //   {
+  //     _id: "6724b1a8afad60e2f15e3825",
+  //     name: "Grey",
+  //   },
+  //   {
+  //     _id: "6724b1a8afad60e2f15e382b",
+  //     name: "Starphire",
+  //   },
+  //   {
+  //     _id: "6724b1a8afad60e2f15e3828",
+  //     name: "Frosted",
+  //   },
+  //   {
+  //     _id: "6724b1a8afad60e2f15e382e",
+  //     name: "Clear",
+  //   },
+  //   {
+  //     _id: "6724b1a8afad60e2f15e381f",
+  //     name: "Rain",
+  //   },
+  // ];
+
+  const handleChangeGlass = (fieldName, newValue) => {
+    const selectedOptionIds = newValue.map((option) => option._id);
+    formik.setFieldValue(fieldName, {
+      ...formik.values[fieldName],
+      glassTypesForComparison: selectedOptionIds,
+    });
   };
 
   return (
@@ -1050,6 +1103,45 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multile comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={optionsData}
+                  getOptionLabel={(option) => option.name}
+                  value={optionsData?.filter((option) =>
+                    formik.values.showers.glassTypesForComparison?.includes(option._id)
+                  )}
+                  onChange={(event, newValue) => handleChangeGlass('showers', newValue)} // Pass 'showers' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{width:'400px','.MuiOutlinedInput-root':{p:'2px !important'}}}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder="Select Glass Type"
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
           </Box>
         </CustomTabPanel>
         {/** end */}
@@ -1509,6 +1601,45 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multile comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={mirrorGlass}
+                  getOptionLabel={(option) => option.name}
+                  value={mirrorGlass?.filter((option) =>
+                    formik.values.mirrors.glassTypesForComparison?.includes(option._id)
+                  )}
+                  onChange={(event, newValue) => handleChangeGlass('mirrors', newValue)} // Pass 'mirrors' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{width:'400px','.MuiOutlinedInput-root':{p:'2px !important'}}}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder="Select Glass Type"
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
             {/* <Box
               sx={{
                 display: "flex",
@@ -1843,6 +1974,45 @@ const CampanySetting = () => {
                       formik.handleChange(e);
                     }
                   }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multile comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={wineCallerGlass}
+                  getOptionLabel={(option) => option.name}
+                  value={wineCallerGlass?.filter((option) =>
+                    formik.values.wineCellars.glassTypesForComparison?.includes(option._id)
+                  )}
+                  onChange={(event, newValue) => handleChangeGlass('wineCellars', newValue)} // Pass 'wineCellars' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{width:'400px','.MuiOutlinedInput-root':{p:'2px !important'}}}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder="Select Glass Type"
+                    />
+                  )}
                 />
               </Box>
             </Box>

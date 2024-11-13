@@ -26,7 +26,7 @@ const CustomLandingPage = () => {
       refetchData();
     }
   }, [id]);
-
+console.log(data?.location,'data?.location');
   useEffect(() => {
     if (data?.location) {
       dispatch(setLocationInfo(data?.location));
@@ -50,7 +50,7 @@ const CustomLandingPage = () => {
     window.location.href = `${frontendURL}:3005`;
   };
 
-  return data !== null || data !== undefined ? (
+  return data === null || data === undefined ? (
     <Container maxWidth="xl" sx={{ pt: 2.5 }}>
       <Box
         sx={{
