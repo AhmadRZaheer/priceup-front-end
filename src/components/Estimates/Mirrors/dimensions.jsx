@@ -11,7 +11,11 @@ import CustomImage from "@/Assets/customlayoutimage.svg";
 import { useDispatch, useSelector } from "react-redux";
 import { inputLength, inputMaxValue, quoteState } from "@/utilities/constants";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
-import { getEstimateState, getSkeltonState, setSkeltonState } from "@/redux/estimateSlice";
+import {
+  getEstimateState,
+  getSkeltonState,
+  setSkeltonState,
+} from "@/redux/estimateSlice";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   getEstimateMeasurements,
@@ -75,25 +79,24 @@ export const MirrorDimensions = () => {
   const category = searchParams.get("category");
   const [step, setStep] = useState(0); // 0 for dimension, 1 for review, 2 for summary
   // console.log(measurements, "measurements");
-  const skeltonState = useSelector(getSkeltonState)
+  const skeltonState = useSelector(getSkeltonState);
 
   const {
     data: record,
     refetch: refetchRecord,
     isFetching,
-    isSuccess
+    isSuccess,
   } = useFetchSingleDocument(`${backendURL}/estimates/${estimateId}`);
 
-  useEffect(()=>{
-  dispatch(setSkeltonState())
-  },[isSuccess])
+  useEffect(() => {
+    dispatch(setSkeltonState());
+  }, [isSuccess]);
 
   useEffect(() => {
     if (currentEstimateState === quoteState.EDIT) {
       if (estimateId && estimateId?.length) {
         refetchRecord();
-      } 
-      else {
+      } else {
         if (projectId && projectId?.length) {
           navigate(`/projects/${projectId}?category=${category}`);
         } else {
@@ -148,6 +151,13 @@ export const MirrorDimensions = () => {
   const numRows = parseInt(rows.reduce((acc, val) => acc + val, 0));
   console.log(numRows, "log", rows);
 
+  const addRow = () => {
+    setValues((vals) => ({
+      ...vals,
+      [parseInt(numRows)]: { count: 1 },
+    }));
+  };
+
   let lockNext = false;
 
   Object.entries(values).forEach?.(([key, value]) => {
@@ -155,7 +165,7 @@ export const MirrorDimensions = () => {
     if (!width || !height) {
       lockNext = true;
     }
-  }); 
+  });
 
   // const handleback = () => {
   //     if (currentEstimateState === quoteState.EDIT) {
@@ -170,8 +180,8 @@ export const MirrorDimensions = () => {
     // setNumRows(customInitalValues.count);
   };
 
-  const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
- 
+  const [openPopover, setOpenPopover] = useState(false);
+
   const handleSubmit = () => {
     dispatch(resetNotifications());
     dispatch(setEstimateMeasurements(values));
@@ -188,8 +198,8 @@ export const MirrorDimensions = () => {
       selectedContent,
       notifications
     );
-    dispatch(setMultipleNotifications(notificationsResult));   
-      setOpenPopover(true);
+    dispatch(setMultipleNotifications(notificationsResult));
+    setOpenPopover(true);
     if (isMobile) {
       setStep(1);
     }
@@ -222,7 +232,13 @@ export const MirrorDimensions = () => {
             marginTop: { sm: 0, xs: 5 },
           }}
         >
-          <NavLink to={projectId ? `/projects/${projectId}?category=${category}` : "/estimates"}>
+          <NavLink
+            to={
+              projectId
+                ? `/projects/${projectId}?category=${category}`
+                : "/estimates"
+            }
+          >
             <Box
               sx={{
                 display: { xs: "block", sm: "none" },
@@ -285,7 +301,7 @@ export const MirrorDimensions = () => {
               width: { lg: "60%", md: "50%" },
             }}
           >
-            { skeltonState || isFetching ? (
+            {skeltonState || isFetching ? (
               <>
                 <LayoutMeasurementSkeleton />
                 <EstimateDetailSkeleton />
@@ -325,7 +341,10 @@ export const MirrorDimensions = () => {
                       >
                         Layout & Measurement
                       </Typography>
-                      <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
+                      <AlertsAndWarnings
+                        openPopoverExternally={openPopover}
+                        setOpenPopover={setOpenPopover}
+                      />
                     </Box>
                     <Box
                       sx={{
@@ -383,9 +402,10 @@ export const MirrorDimensions = () => {
                           sx={{
                             display: "flex",
                             width: { sm: "100%", xs: "92%" },
-                            maxHeight: "100%",
-                            // minHeight: 100,
+                            minHeight: "240px",
+                            maxHeight: { sm: 340, xs: "34vh" },
                             flexDirection: "column",
+                            overflowY: "auto",
                             gap: { sm: 2, xs: 2 },
                             color: { sm: "black", xs: "white" },
                             borderRadius: "34px 34px 0px 0px",
@@ -618,6 +638,27 @@ export const MirrorDimensions = () => {
                             />
                           </Box>
                         </Box>
+                        <Button
+                          fullWidth
+                          onClick={addRow}
+                          sx={{
+                            display:"flex",
+                            boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                            color: "white",
+                            textTransform: "initial",
+                            height: 40,
+                            fontSize: 20,
+                            marginX: "auto",
+                            backgroundColor: "#8477da",
+                            "&:hover": {
+                              backgroundColor: "#8477da",
+                            },
+                            // width: { md: 480, xs: "92%" },
+                            order: -2,
+                          }}
+                        >
+                          Add Row
+                        </Button>
                       </Box>
                       {/* Buttons */}
                       <Box
@@ -746,7 +787,7 @@ export const MirrorDimensions = () => {
               pr: "1px",
             }}
           >
-            {skeltonState  || isFetching ? (
+            {skeltonState || isFetching ? (
               <ModificationSkeleton />
             ) : (
               <MirrorReview />
