@@ -1,3 +1,4 @@
+import { useCreateDocument } from "@/utilities/ApiHooks/common";
 import { backendURL } from "@/utilities/common";
 import { Box, Button, CircularProgress, TextField } from "@mui/material";
 import { useFormik } from "formik";
@@ -7,7 +8,13 @@ const validationSchema = yup.object({
   name: yup.string().required("Comapany name is required"),
   phone: yup.string().required("Phone number is required"),
 });
-const CreateCompanyContactForm = ({ setSelectedContact, handleStepChange }) => {
+const CreateCompanyContactForm = ({
+  setSelectedContact,
+  handleStepChange,
+  selectedCustomer,
+}) => {
+  const { mutateAsync: companyCreaete, isLoading, isSuccess } = useCreateDocument();
+  const routePrefix = `${backendURL}/contacts`;
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -16,7 +23,12 @@ const CreateCompanyContactForm = ({ setSelectedContact, handleStepChange }) => {
     validationSchema,
     onSubmit: async (values) => {
       console.log(values);
-      //    setSelectedContact(response);
+      try {
+        const response = await companyCreaete({data:{ ...values,customer_id:selectedCustomer?._id }, apiRoute:`${routePrefix}/save`})
+        setSelectedContact(response);
+    } catch (err) {
+        console.error(err, 'error');
+    }
     },
   });
   return (
@@ -100,9 +112,9 @@ const CreateCompanyContactForm = ({ setSelectedContact, handleStepChange }) => {
               },
             }}
             variant="contained"
-            // disabled={createLoading}
+            disabled={isLoading}
           >
-            {false ? (
+            {isLoading ? (
               <CircularProgress size={24} sx={{ color: "#8477DA" }} />
             ) : (
               "Save Contact"

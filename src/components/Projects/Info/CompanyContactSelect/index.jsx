@@ -18,10 +18,11 @@ const style = {
 };
 
 const CompanySelect = ({
-  selectedContact,
+  selectedContact,   
   setSelectedContact,
   open,
   handleClose,
+  selectedCustomer
 }) => {
   const [steps, setSteps] = useState(0); // 0 for list, 1 for create
   const handleStepChange = (step) => {
@@ -66,12 +67,14 @@ const CompanySelect = ({
             selectedContact={selectedContact}
             setSelectedContact={setSelectedContact}
             key={"select-from-list-modal"}
+            selectedCustomer={selectedCustomer}
           />
         ) : steps === 1 ? (
           <CreateAddressForm
             setSelectedContact={setSelectedContact}
             key={"create-company-form"}
             handleStepChange={handleStepChange}
+            selectedCustomer={selectedCustomer}
           />
         ) : (
           ""

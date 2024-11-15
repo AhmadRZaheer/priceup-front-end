@@ -16,6 +16,7 @@ import CustomInputField from "../ui-components/CustomInput";
 import ProjectsSection from "./projectsSection";
 import EstimateSection from "./estimatesSection";
 import LocationSection from "./locationSection";
+import ContactSection from "./contactSection";
 
 const EditCustomer = () => {
   const [searchParams] = useSearchParams();
@@ -354,12 +355,30 @@ const EditCustomer = () => {
           >
             Estimates
           </Button>
+          <Button
+            sx={{
+              bgcolor: CurrentSection === "contacts" ? "white" : "transparent",
+              borderRadius: "4px !important",
+              padding: "7px 12px 7px 12px",
+              ":hover": {
+                bgcolor: "white",
+              },
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "black",
+            }}
+            onClick={() => setCurrentSection("contacts")}
+          >
+            Contacts
+          </Button>
         </Box>
         <Box sx={{ mt: 1 }}>
           {CurrentSection === "projects" ? (
             <ProjectsSection />
           ) : CurrentSection === "location" ? (
             <LocationSection />
+          )  : CurrentSection === "contacts" ? (
+            <ContactSection />
           ) : (
             <EstimateSection />
           )}

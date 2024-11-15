@@ -1,4 +1,5 @@
 import CustomInputField from "@/components/ui-components/CustomInput";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { backendURL } from "@/utilities/common";
 import { CheckCircle, Close } from "@mui/icons-material";
 import BusinessIcon from '@mui/icons-material/Business';
@@ -15,70 +16,18 @@ const SelectFromList = ({
   selectedContact,
   setSelectedContact,
   handleStepChange,
+  selectedCustomer
 }) => {
 
-  // const routePrefix = `${backendURL}/addresses`;
-  // const {
-  //   data: addressList,
-  //   refetch,
-  //   isFetching,
-  // } = useFetchAllDocuments(
-  //   `${routePrefix}/by-customer/${selectedCustomer?._id}`
-  // );
+  const routePrefix = `${backendURL}/contacts`;
+  const {
+    data: compayConactList,
+    refetch,
+    isFetching,
+  } = useFetchAllDocuments(
+    `${routePrefix}/by-customer/${selectedCustomer?._id}`
+  );
   
-const compayConactList = [
-  {
-      "_id": "673221a58647701db6eeec25",
-      "name": "Ahmad Raza",
-      "phone": "07435718585"
-  },
-  {
-      "_id": "672b0e61d5172d8d59775834",
-      "name": "sahil mubeen",
-      "phone": "123456789"
-  },
-  {
-      "_id": "6724aa49afad60e2f15e1ed1",
-      "name": "test maria",
-      "phone": "45555"
-  },
-  {
-      "_id": "671f3368af3268089326879d",
-      "name": "dfdf dfdfd",
-      "phone": ""
-  },
-  {
-      "_id": "6717882602ae6626d57eb2f1",
-      "name": "sahildddd mubeendddd",
-      "phone": "123456789"
-  },
-  {
-      "_id": "671787ef02ae6626d57eb2d6",
-      "name": "sahil eeee mubeenee",
-      "phone": "123456789"
-  },
-  {
-      "_id": "6717878b02ae6626d57eb0ea",
-      "name": "sahil tt mubeent",
-      "phone": "123456789"
-  },
-  {
-      "_id": "66fa592f29ce0c67c3a4dd49",
-      "name": "Test TEst",
-      "phone": ""
-  },
-  {
-      "_id": "66fa554429ce0c67c3a4d9ab",
-      "name": "sahil mubeen",
-      "phone": "123456789"
-  },
-  {
-      "_id": "66ed87db193295a1131cc732",
-      "name": "abc",
-      "phone": "567432989"
-  }
-]
-
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredContact, setFilteredContact] = useState([]);
   const [contact, setContact] = useState(selectedContact || null);
@@ -102,10 +51,10 @@ const compayConactList = [
     if (compayConactList && compayConactList?.length) {
       setFilteredContact(compayConactList);
     }
-    // if (selectedCustomer?._id) {
-    //   refetch();
-    // }
-  }, [compayConactList]);
+    if (selectedCustomer?._id) {
+      refetch();
+    }
+  }, [compayConactList,selectedCustomer?._id]);
   return (
     <Box>
       <Box sx={{ p: 1 }}>
@@ -160,7 +109,7 @@ const compayConactList = [
             overflowY: "auto",
           }}
         >
-          {false ? (
+          {isFetching ? (
             <CircularProgress
               size={28}
               color="primary"
@@ -209,9 +158,13 @@ const compayConactList = [
                     >
                       <BusinessIcon sx={{ color: "back", width: 30, height: 30 }} />
                     </Box>
-                    <Box sx={{alignContent:'center'}}>
+                    <Box>
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                         {option.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: "12px", fontWeight: 400 }}>
+                        {" "}
+                        {option.phone}
                       </Typography>
                     </Box>
                   </Box>
