@@ -91,7 +91,7 @@ const ProjectInfoComponent = ({
     projectData?.addressData || null
   );
   const [companyContact, setCompanyContact] = useState(
-    projectData?.addressData || null
+    projectData?.contactData || null
   );
   const [projectName, setProjectName] = useState(projectData?.name || "");
   const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
@@ -129,12 +129,14 @@ const ProjectInfoComponent = ({
         name: values.name,
         notes: values.notes,
         status: values.status,
-        companyContact:companyContact?._id,
         // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
       if (selectedAddress?._id) {
         data.address_id = selectedAddress?._id;
+      }
+      if(companyContact?._id){
+        data.contact_id = companyContact?._id
       }
       try {
         if (projectState === "create") {
@@ -192,7 +194,6 @@ const ProjectInfoComponent = ({
     setOpenAddressSelectModal(false);
   };
   const handleCompanyChange = (contact) => {
-    console.log(contact);
     setCompanyContact(contact);
     setOpenCompanySelectModal(false);
   };
@@ -310,7 +311,7 @@ const ProjectInfoComponent = ({
                         )
                       }
                     >
-                      {copyLink ? <DoneOutlinedIcon /> : <ContentCopyIcon />}
+                      {copyLink ? <DoneOutlinedIcon sx={{fontSize:'19px'}} /> : <ContentCopyIcon sx={{fontSize:'19px'}} />}
                     </button>
                   </Tooltip>
                 </div>
@@ -866,7 +867,7 @@ const ProjectInfoComponent = ({
                         flexDirection: "column",
                         gap: 1,
                         width: { sm: "50%", xs: "100%" },
-                        pt: "5px",
+                        pt: "12px",
                       }}
                     >
                       <Box
@@ -880,6 +881,7 @@ const ProjectInfoComponent = ({
                           {/* <span style={{ color: "red" }}>*</span> */}
                         </Box>
                         <CustomInputField
+                        disabled={!selectedCustomer}
                           id="company"
                           name="company"
                           // label="Select an Address"
@@ -916,7 +918,7 @@ const ProjectInfoComponent = ({
                       </Box>
                       <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
                         <Typography sx={{ fontSize: "14px" }}>
-                          {companyContact?._id}
+                        {companyContact?.name}
                         </Typography>
                       </Box>
                       <Box
@@ -927,9 +929,6 @@ const ProjectInfoComponent = ({
                           paddingX: 0.5,
                         }}
                       >
-                        <Typography sx={{ fontSize: "14px" }}>
-                          {companyContact?.name},
-                        </Typography>
                         <Typography sx={{ fontSize: "14px" }}>
                           {companyContact?.phone}
                         </Typography>
@@ -1245,6 +1244,7 @@ const ProjectInfoComponent = ({
         handleClose={() => setOpenCompanySelectModal(false)}
         selectedContact={companyContact}
         setSelectedContact={handleCompanyChange}
+        selectedCustomer={selectedCustomer}
       />
       <ChooseEstimateCategoryModal
         open={openCategoryModal}

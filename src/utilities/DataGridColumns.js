@@ -931,6 +931,40 @@ export const LocationColumns = () => {
     },
   ];
 };
+export const ContactColumns = () => {
+  return [
+    {
+      field: "Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Phone Number",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.phone}
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
 
 export const teamColumns = [
   {

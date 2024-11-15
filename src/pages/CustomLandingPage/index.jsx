@@ -5,7 +5,7 @@ import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL } from "@/utilities/common";
-import { Box, Button, Container, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, Container, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -26,7 +26,6 @@ const CustomLandingPage = () => {
       refetchData();
     }
   }, [id]);
-console.log(data?.location,'data?.location');
   useEffect(() => {
     if (data?.location) {
       dispatch(setLocationInfo(data?.location));
@@ -49,8 +48,16 @@ console.log(data?.location,'data?.location');
   const handleBack = () => {
     window.location.href = `${frontendURL}:3005`;
   };
-
-  return data === null || data === undefined ? (
+  return  !isFetched ? (
+    <Box
+      sx={{
+        p: "24px 16px",
+        height: "calc(100vh - 150px)",
+        alignContent: "center",
+        textAlign:'center'
+      }}
+    ><CircularProgress size={64} sx={{ color: "#8477DA" }} /></Box>
+  ) : data === null || data === undefined || data?.length <=0 ? (
     <Container maxWidth="xl" sx={{ pt: 2.5 }}>
       <Box
         sx={{
