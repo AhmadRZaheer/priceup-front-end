@@ -310,7 +310,7 @@ const ProjectInfoComponent = ({
                         )
                       }
                     >
-                      {copyLink ? <DoneOutlinedIcon /> : <ContentCopyIcon />}
+                      {copyLink ? <DoneOutlinedIcon sx={{fontSize:'19px'}} /> : <ContentCopyIcon sx={{fontSize:'19px'}} />}
                     </button>
                   </Tooltip>
                 </div>
