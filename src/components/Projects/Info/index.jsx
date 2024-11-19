@@ -135,8 +135,8 @@ const ProjectInfoComponent = ({
       if (selectedAddress?._id) {
         data.address_id = selectedAddress?._id;
       }
-      if(companyContact?._id){
-        data.contact_id = companyContact?._id
+      if (companyContact?._id) {
+        data.contact_id = companyContact?._id;
       }
       try {
         if (projectState === "create") {
@@ -311,7 +311,11 @@ const ProjectInfoComponent = ({
                         )
                       }
                     >
-                      {copyLink ? <DoneOutlinedIcon sx={{fontSize:'19px'}} /> : <ContentCopyIcon sx={{fontSize:'19px'}} />}
+                      {copyLink ? (
+                        <DoneOutlinedIcon sx={{ fontSize: "19px" }} />
+                      ) : (
+                        <ContentCopyIcon sx={{ fontSize: "19px" }} />
+                      )}
                     </button>
                   </Tooltip>
                 </div>
@@ -821,10 +825,10 @@ const ProjectInfoComponent = ({
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Add Notes:
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Add Notes:
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -867,7 +871,7 @@ const ProjectInfoComponent = ({
                         flexDirection: "column",
                         gap: 1,
                         width: { sm: "50%", xs: "100%" },
-                        pt: "12px",
+                        // pt: "12px",
                       }}
                     >
                       <Box
@@ -878,10 +882,9 @@ const ProjectInfoComponent = ({
                       >
                         <Box mb={0.6}>
                           <label htmlFor="name">Company Contact:</label>
-                          {/* <span style={{ color: "red" }}>*</span> */}
                         </Box>
                         <CustomInputField
-                        disabled={!selectedCustomer}
+                          disabled={!selectedCustomer}
                           id="company"
                           name="company"
                           // label="Select an Address"
@@ -918,7 +921,7 @@ const ProjectInfoComponent = ({
                       </Box>
                       <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
                         <Typography sx={{ fontSize: "14px" }}>
-                        {companyContact?.name}
+                          {companyContact?.name}
                         </Typography>
                       </Box>
                       <Box

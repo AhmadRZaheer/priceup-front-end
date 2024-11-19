@@ -1281,8 +1281,9 @@ export const getGlassTypeDetailsByThickness = (
       );
       return {
         name: glass.name,
-        price: matchingOption ? matchingOption.cost : "N/A", // Show cost or 'N/A' if not available
-        thickness: matchingOption ? matchingOption.thickness : "N/A", // Show thickness or 'N/A' if not available
+        price: matchingOption ? matchingOption.cost : "N/A",
+        thickness: matchingOption ? matchingOption.thickness : "N/A",
+        status : matchingOption ? matchingOption.status : "N/A",
       };
     });
 };
