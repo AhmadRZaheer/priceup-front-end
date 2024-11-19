@@ -573,7 +573,7 @@ const CustomizeLandingPage = ({
 
   const generatePDF = (data) => {
     console.log("Call this function", data);
-    if (data?.category === EstimateCategory.SHOWERS) {
+    if (data?.category === EstimateCategory.SHOWERS) {      
       const formattedData = generateObjectForPDFPreview(
         showersHardwareList,
         data,
@@ -583,8 +583,7 @@ const CustomizeLandingPage = ({
         formattedData,
         formattedData?.sqftArea,
         showersLocationSettings
-      );
-      console.log(formattedData, pricing, "formattedData");
+      );      
       const measurementString = renderMeasurementSides(
         quoteState.EDIT,
         formattedData?.measurements,
@@ -624,7 +623,6 @@ const CustomizeLandingPage = ({
       const measurementString = mirrorRenderSides(formattedData?.measurements);
       console.log(measurementString, "string ");
       const id = data?._id;
-
       return {
         ...formattedData,
         measurements: measurementString,
@@ -669,7 +667,7 @@ const CustomizeLandingPage = ({
         pdfSettings,
       };
     } else {
-      console.log("");
+      console.log("Not Selected Catetory Found!");
     }
   };
 

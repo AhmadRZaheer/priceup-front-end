@@ -672,10 +672,11 @@ const Summary = ({ setStep }) => {
               is '${pricing.glass?.toFixed(2) || 0}'.
             </Typography>
             {glassDetails.map((glass, index) => (
+              glass.status &&
               <Typography key={index}>
                 Available glass type '{glass.name}' 
                 {/* with thickness '{glass.thickness}' */}
-                has a price of '{(sqftArea*glass.price)?.toFixed(2) || 0}'
+                {' '}has a price of '{(sqftArea*glass.price)?.toFixed(2) || 0}'
               </Typography>
             ))}
           </Box>
