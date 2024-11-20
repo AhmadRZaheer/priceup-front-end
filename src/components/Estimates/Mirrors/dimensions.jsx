@@ -638,7 +638,7 @@ export const MirrorDimensions = () => {
                             />
                           </Box>
                         </Box>
-                        <Button
+                        {/* <Button
                           fullWidth
                           onClick={addRow}
                           sx={{
@@ -658,7 +658,7 @@ export const MirrorDimensions = () => {
                           }}
                         >
                           Add Row
-                        </Button>
+                        </Button> */}
                       </Box>
                       {/* Buttons */}
                       <Box
@@ -675,29 +675,52 @@ export const MirrorDimensions = () => {
                       >
                         <Box
                           sx={{
-                            width: { md: "160px", xs: "50%" },
-                            display: { md: "block", xs: "none" },
+                            // width: { md: "160px", xs: "50%" },
+                            display: { md: "flex", xs: "none" },
+                            gap:2
                           }}
                         >
+                        <Button
+                          // fullWidth
+                          onClick={handleReset}
+                          sx={{
+                            color: "black",
+                            textTransform: "initial",
+                            border: "1px solid #D0D5DD",
+                            backgroundColor: {
+                              md: "transparent",
+                              xs: "white",
+                            },
+                            ":hover": { border: "1px solid #8477DA" },
+                            height: 42,
+                            fontSize: 16,
+                            fontWeight: 600,
+                          }}
+                        >
+                          Reset
+                        </Button>
                           <Button
-                            fullWidth
-                            onClick={handleReset}
+                            // fullWidth
+                            onClick={addRow}
                             sx={{
-                              color: "black",
+                              display:"flex",
+                              boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                              color: "white",
                               textTransform: "initial",
-                              border: "1px solid #D0D5DD",
-                              backgroundColor: {
-                                md: "transparent",
-                                xs: "white",
-                              },
-                              ":hover": { border: "1px solid #8477DA" },
-                              height: 42,
+                              height: 40,
                               fontSize: 16,
                               fontWeight: 600,
+                              marginX: "auto",
+                              backgroundColor: "#8477da",
+                              "&:hover": {
+                                backgroundColor: "#8477da",
+                              },
+                              // width: { md: 480, xs: "92%" },
                             }}
                           >
-                            Reset
+                            Add Row
                           </Button>
+
                         </Box>
                         {/** Buttons */}
                         <Box
