@@ -1106,7 +1106,7 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Glass price multile comparison</Typography>
+              <Typography>Glass price multiple comparison</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
                 <Autocomplete
@@ -1616,7 +1616,7 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Glass price multile comparison</Typography>
+              <Typography>Glass price multiple comparison</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
                 <Autocomplete
@@ -2291,7 +2291,7 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Typography>Glass price multile comparison</Typography>
+              <Typography>Glass price multiple comparison</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
                 <Autocomplete
