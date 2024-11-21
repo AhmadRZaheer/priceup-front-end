@@ -296,10 +296,15 @@ export const showEditButtonForWineEstimateStatus = (decryptedToken) => {
 // Wine Cellar Fab
 
 export const getHardwareFabricationQuantity = (
-  selectedContent
+  selectedContent,
+  currentQuoteState,
+  selectedItem
 ) => {
   let oneInchHoles = 0;
   let hingeCut = 0;
+  let clampCut = 0;
+  let notch = 0;
+  let outages = 0;
   // for handles
   if (selectedContent.handles?.item) {
     const handleResult = getHandleFabrication(
@@ -308,6 +313,9 @@ export const getHardwareFabricationQuantity = (
     );
     oneInchHoles += handleResult.oneInchHoles;
     hingeCut += handleResult.hingeCut;
+    clampCut += handleResult.clampCut;
+    notch += handleResult.notch;
+    outages += handleResult.outages;
   }
   // for hinges
   if (selectedContent.hinges?.item) {
@@ -317,6 +325,9 @@ export const getHardwareFabricationQuantity = (
     );
     oneInchHoles += hingeResult.oneInchHoles;
     hingeCut += hingeResult.hingeCut;
+    clampCut += hingeResult.clampCut;
+    notch += hingeResult.notch;
+    outages += hingeResult.outages;
   }
   // for door lock
   if (selectedContent.doorLock?.item) {
@@ -326,6 +337,9 @@ export const getHardwareFabricationQuantity = (
     );
     oneInchHoles += doorLockResult.oneInchHoles;
     hingeCut += doorLockResult.hingeCut;
+    clampCut += doorLockResult.clampCut;
+    notch += doorLockResult.notch;
+    outages += doorLockResult.outages;
   }
   // for mounting channel
   if (
@@ -338,27 +352,179 @@ export const getHardwareFabricationQuantity = (
     );
     oneInchHoles += mountingChannelResult.oneInchHoles;
     hingeCut += mountingChannelResult.hingeCut;
-  } 
+    clampCut += mountingChannelResult.clampCut;
+    notch += mountingChannelResult.notch;
+    outages += mountingChannelResult.outages;
+  } else if (selectedContent.mountingState === "clamps") {
+    // for wall clamp
+    if (selectedContent.mountingClamps.wallClamp?.length) {
+      selectedContent.mountingClamps.wallClamp.forEach((record) => {
+        const wallClampResult = getGenericFabrication(
+          record.item,
+          record.count
+        );
 
-  return { oneInchHoles, hingeCut};
+        oneInchHoles += wallClampResult.oneInchHoles;
+        hingeCut += wallClampResult.hingeCut;
+        clampCut += wallClampResult.clampCut;
+        notch += wallClampResult.notch;
+        outages += wallClampResult.outages;
+      });
+    }
+    // for sleeve over
+    if (selectedContent.mountingClamps.sleeveOver?.length) {
+      selectedContent.mountingClamps.sleeveOver.forEach((record) => {
+        const sleeveOverResult = getGenericFabrication(
+          // use generic fabrication method for sleeve over to avoid default clamp cut count
+          record.item,
+          record.count
+        );
+        oneInchHoles += sleeveOverResult.oneInchHoles;
+        hingeCut += sleeveOverResult.hingeCut;
+        clampCut += sleeveOverResult.clampCut;
+        notch += sleeveOverResult.notch;
+        outages += sleeveOverResult.outages;
+      });
+    }
+    // for glass to glass
+    if (selectedContent.mountingClamps.glassToGlass?.length) {
+      selectedContent.mountingClamps.glassToGlass.forEach((record) => {
+        const glassToGlassResult = getGenericFabrication(
+          record.item,
+          record.count
+        );
+        oneInchHoles += glassToGlassResult.oneInchHoles;
+        hingeCut += glassToGlassResult.hingeCut;
+        clampCut += glassToGlassResult.clampCut;
+        notch += glassToGlassResult.notch;
+        outages += glassToGlassResult.outages;
+      });
+    }
+  }
+   // for corner wall clamps
+   if (selectedContent.cornerClamps.cornerWallClamp?.length) {
+    selectedContent.cornerClamps.cornerWallClamp.forEach((record) => {
+      const cornerWallClampResult = getGenericFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += cornerWallClampResult.oneInchHoles;
+      hingeCut += cornerWallClampResult.hingeCut;
+      clampCut += cornerWallClampResult.clampCut;
+      notch += cornerWallClampResult.notch;
+      outages += cornerWallClampResult.outages;
+    });
+  }
+  // for corner sleeve over
+  if (selectedContent.cornerClamps.cornerSleeveOver?.length) {
+    selectedContent.cornerClamps.cornerSleeveOver.forEach((record) => {
+      const cornerSleeveOverResult = getGenericFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += cornerSleeveOverResult.oneInchHoles;
+      hingeCut += cornerSleeveOverResult.hingeCut;
+      clampCut += cornerSleeveOverResult.clampCut;
+      notch += cornerSleeveOverResult.notch;
+      outages += cornerSleeveOverResult.outages;
+    });
+  }
+  // for corner glass to glass
+  if (selectedContent.cornerClamps.cornerGlassToGlass?.length) {
+    selectedContent.cornerClamps.cornerGlassToGlass.forEach((record) => {
+      const cornerGlassToGlassResult = getGenericFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += cornerGlassToGlassResult.oneInchHoles;
+      hingeCut += cornerGlassToGlassResult.hingeCut;
+      clampCut += cornerGlassToGlassResult.clampCut;
+      notch += cornerGlassToGlassResult.notch;
+      outages += cornerGlassToGlassResult.outages;
+    });
+  }
+  // for sliding door system
+  if (selectedContent.slidingDoorSystem?.item) {
+    const slidingDoorSystemResult = getGenericFabrication(
+      selectedContent.slidingDoorSystem?.item,
+      selectedContent.slidingDoorSystem?.count
+    );
+    oneInchHoles += slidingDoorSystemResult.oneInchHoles;
+    hingeCut += slidingDoorSystemResult.hingeCut;
+    clampCut += slidingDoorSystemResult.clampCut;
+    notch += slidingDoorSystemResult.notch;
+    outages += slidingDoorSystemResult.outages;
+  }
+  // for header
+  if (selectedContent.header?.item) {
+    const headerResult = getGenericFabrication(
+      selectedContent.header?.item,
+      selectedContent.header?.count
+    );
+    oneInchHoles += headerResult.oneInchHoles;
+    hingeCut += headerResult.hingeCut;
+    clampCut += headerResult.clampCut;
+    notch += headerResult.notch;
+    outages += headerResult.outages;
+  }
+  // for hardware addons
+  if (selectedContent.hardwareAddons.length) {
+    selectedContent.hardwareAddons.forEach((record) => {
+      const hardwareAddonResult = getGenericFabrication(
+        record.item,
+        record.count
+      );
+      oneInchHoles += hardwareAddonResult.oneInchHoles;
+      hingeCut += hardwareAddonResult.hingeCut;
+      clampCut += hardwareAddonResult.clampCut;
+      notch += hardwareAddonResult.notch;
+      outages += hardwareAddonResult.outages;
+    });
+  }
+  console.log(selectedItem,'123456selectedItem')
+  // for create quote
+  if (currentQuoteState === quoteState.CREATE) {
+    let layoutNotchValue = selectedItem?.settings?.notch ?? 0;
+    notch += layoutNotchValue;
+    let layoutOutageValue = selectedItem?.settings?.outages ?? 0;
+    outages += layoutOutageValue;
+  }
+
+  return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
 
 export const getHandleFabrication = (item, count) => {
   let oneInchHoles = 0;
   let hingeCut = 0;
+  let clampCut = 0;
+  let notch = 0;
+  let outages = 0;
   let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 2;
 
   oneInchHoles = count * selectedItemHoles;
   let selectedItemhingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 0;
 
   hingeCut = count * selectedItemhingeCut;
-  return { oneInchHoles, hingeCut };
+
+  let selectedItemClampCut = item?.fabrication?.clampCut > 0 ? item?.fabrication?.clampCut : 0;
+
+  clampCut = count * selectedItemClampCut;
+  let selectedItemNotch = item?.fabrication?.notch > 0 ? item?.fabrication?.notch : 0;
+
+  notch = count * selectedItemNotch;
+  let selectedItemOutages = item?.fabrication?.outages > 0 ? item?.fabrication?.outages : 0;
+
+  outages = count * selectedItemOutages;
+  return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
 export const getHingeFabrication = (item, count) => {
   let oneInchHoles = 0;
   let hingeCut = 0;
+  let clampCut = 0;
+  let notch = 0;
+  let outages = 0;
   let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 0;
 
   oneInchHoles = count * selectedItemHoles;
@@ -366,21 +532,44 @@ export const getHingeFabrication = (item, count) => {
 
   hingeCut = count * selectedItemHingeCut;
 
-  return { oneInchHoles, hingeCut};
+  let selectedItemClampCut = item?.fabrication?.clampCut > 0 ? item?.fabrication?.clampCut : 0;
+
+  clampCut = count * selectedItemClampCut;
+  let selectedItemNotch = item?.fabrication?.notch > 0 ? item?.fabrication?.notch : 0;
+
+  notch = count * selectedItemNotch;
+  let selectedItemOutages = item?.fabrication?.outages > 0 ? item?.fabrication?.outages : 0;
+
+  outages = count * selectedItemOutages;
+  return { oneInchHoles, hingeCut, clampCut, notch, outages };
 };
 
 export const getGenericFabrication = (item, count) => {
   let oneInchHoles = 0;
   let hingeCut = 0;
-
+  let clampCut = 0;
+  let notch = 0;
+  let outages = 0;
   let selectedItemHoles = item?.fabrication?.oneInchHoles > 0 ? item?.fabrication?.oneInchHoles : 0;
 
   oneInchHoles = count * selectedItemHoles;
   let selectedItemHingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 0;
 
   hingeCut = count * selectedItemHingeCut;
-   return { oneInchHoles, hingeCut, };
+  let selectedItemClampCut = item?.fabrication?.clampCut > 0 ? item?.fabrication?.clampCut : 1;
+
+  clampCut = count * selectedItemClampCut;
+  let selectedItemNotch = item?.fabrication?.notch > 0 ? item?.fabrication?.notch : 0;
+
+  notch = count * selectedItemNotch;
+  let selectedItemOutages = item?.fabrication?.outages > 0 ? item?.fabrication?.outages : 0;
+
+  outages = count * selectedItemOutages;
+
+   return { oneInchHoles, hingeCut, clampCut, notch, outages};
 };
+
+
 
 export const getHardwareSpecificFabrication = (
   type,
@@ -391,6 +580,9 @@ export const getHardwareSpecificFabrication = (
   let existingFabricationValues = {
     oneInchHoles: Number(fabricationValues.oneInchHoles),
     hingeCut: Number(fabricationValues.hingeCut),
+    clampCut: Number(fabricationValues.clampCut),
+    notch: Number(fabricationValues.notch),
+    outages: Number(fabricationValues.outages),
   };
   let currentHardwareFabrication = null;
 
@@ -410,6 +602,20 @@ export const getHardwareSpecificFabrication = (
           currentHardware?.item,
           currentHardware?.count
     );
+    else if (
+      [
+        hardwareTypes.WALLCLAMP,
+        // hardwareTypes.SLEEVEOVER,   // comment sleeve over here to use getGenericFabrication for calcluating its fabrication
+        hardwareTypes.GLASSTOGLASS,
+        hardwareTypes.CORNERWALLCLAMP,
+        hardwareTypes.CORNERSLEEVEOVER,
+        hardwareTypes.CORNERGLASSTOGLASS,
+      ].includes(type)
+    )
+      currentHardwareFabrication = getGenericFabrication(
+        currentHardware?.item,
+        currentHardware?.count
+      );
     else if ([hardwareTypes.CHANNEL].includes(type))
       currentHardwareFabrication = getGenericFabrication(
         currentHardware?.item,
@@ -426,13 +632,21 @@ export const getHardwareSpecificFabrication = (
     existingFabricationValues.oneInchHoles -=
       currentHardwareFabrication.oneInchHoles;
     existingFabricationValues.hingeCut -= currentHardwareFabrication.hingeCut;
-    }
+    existingFabricationValues.clampCut -= currentHardwareFabrication.clampCut;
+    existingFabricationValues.notch -= currentHardwareFabrication.notch;
+    existingFabricationValues.outages -= currentHardwareFabrication.outages; 
+  }
 
   /* check to avoid negative value **/
   if (existingFabricationValues.oneInchHoles < 0)
     existingFabricationValues.oneInchHoles = 0;
   if (existingFabricationValues.hingeCut < 0)
     existingFabricationValues.hingeCut = 0;
+  if (existingFabricationValues.clampCut < 0)
+    existingFabricationValues.clampCut = 0;
+  if (existingFabricationValues.notch < 0) existingFabricationValues.notch = 0;
+  if (existingFabricationValues.outages < 0)
+    existingFabricationValues.outages = 0;
    /* end **/
 
   if (newSelectedHardware) {
@@ -454,6 +668,20 @@ export const getHardwareSpecificFabrication = (
           newSelectedHardware?.item,
           newSelectedHardware?.count
         );
+        else if (
+          [
+            hardwareTypes.WALLCLAMP,
+            // hardwareTypes.SLEEVEOVER,   // comment sleeve over here to use getGenericFabrication for calcluating its fabrication
+            hardwareTypes.GLASSTOGLASS,
+            hardwareTypes.CORNERWALLCLAMP,
+            hardwareTypes.CORNERSLEEVEOVER,
+            hardwareTypes.CORNERGLASSTOGLASS,
+          ].includes(type)
+        )
+          newSelectedHardwareFabrication = getGenericFabrication(
+            newSelectedHardware?.item,
+            newSelectedHardware?.count
+          );
         else if ([hardwareTypes.CHANNEL].includes(type))
         newSelectedHardwareFabrication = getGenericFabrication(
           newSelectedHardware?.item,
@@ -468,9 +696,14 @@ export const getHardwareSpecificFabrication = (
 
     if (newSelectedHardwareFabrication) {
       existingFabricationValues.oneInchHoles +=
-        newSelectedHardwareFabrication.oneInchHoles;
-      existingFabricationValues.hingeCut +=
-        newSelectedHardwareFabrication.hingeCut;
+      newSelectedHardwareFabrication.oneInchHoles;
+    existingFabricationValues.hingeCut +=
+      newSelectedHardwareFabrication.hingeCut;
+    existingFabricationValues.clampCut +=
+      newSelectedHardwareFabrication.clampCut;
+    existingFabricationValues.notch += newSelectedHardwareFabrication.notch;
+    existingFabricationValues.outages +=
+      newSelectedHardwareFabrication.outages;
       }
   }
 

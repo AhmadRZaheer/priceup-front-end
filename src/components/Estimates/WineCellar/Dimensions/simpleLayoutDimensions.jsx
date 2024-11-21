@@ -299,7 +299,9 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
        if (currentQuoteState === quoteState.CREATE) {        
         const fabricationValues = getHardwareFabricationQuantity(
           { ...notificationsResult.selectedContent, glassType:{...notificationsResult.selectedContent.glassType,thickness:glassThickness}  },
-          );      
+          currentQuoteState,
+          selectedData  
+        );      
         dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
       }  
 

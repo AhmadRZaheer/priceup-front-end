@@ -24,8 +24,10 @@ import {
   getDoorWeight,
   getDoorWidth,
   getFabricationTotal,
+  getGlassAddonsTotal,
   // getWineGlassAddonsTotal,
   getGlassTotal,  
+  getHardwareAddonsTotal,  
   getHardwareTotal,
   getLaborTotal,
   getLayoutArea,
@@ -77,6 +79,9 @@ const Summary = ({ setStep }) => {
   const pdfSettings = useSelector(getLocationPdfSettings);
   const customerData = useSelector(getCustomerDetail);
   const WineCellarHardware = useSelector(getWineCellarsHardware);
+  const hardwareAddonsPrice = useSelector(getHardwareAddonsTotal);
+  const glassAddonsPrice = useSelector(getGlassAddonsTotal);
+
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -499,7 +504,7 @@ const Summary = ({ setStep }) => {
                         </>
                       ) : (
                         <>
-                          {/* {" "}
+                          {" "}
                           {selectedContent?.mountingClamps?.wallClamp
                             ?.length ? (
                             <Box>
@@ -533,8 +538,8 @@ const Summary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )} */}
-                          {/* {selectedContent?.mountingClamps?.glassToGlass
+                          )}
+                          {selectedContent?.mountingClamps?.glassToGlass
                             ?.length ? (
                             <Box>
                               <Typography className="text-xs-ragular-bold">
@@ -550,10 +555,10 @@ const Summary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )}{" "} */}
+                          )}{" "}
                         </>
                       )}
-                      {/* {selectedContent?.cornerClamps?.cornerWallClamp
+                      {selectedContent?.cornerClamps?.cornerWallClamp
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -569,8 +574,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.cornerClamps?.cornerSleeveOver
+                      )}
+                      {selectedContent?.cornerClamps?.cornerSleeveOver
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -586,8 +591,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.cornerClamps?.cornerGlassToGlass
+                      )}
+                      {selectedContent?.cornerClamps?.cornerGlassToGlass
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -603,7 +608,7 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
+                      )}
                       {selectedContent?.glassType?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -615,7 +620,7 @@ const Summary = ({ setStep }) => {
                           </Typography>
                         </Box>
                       )}
-                      {/* {selectedContent?.slidingDoorSystem?.item && (
+                      {selectedContent?.slidingDoorSystem?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Sliding Door System:
@@ -625,7 +630,7 @@ const Summary = ({ setStep }) => {
                             {selectedContent?.slidingDoorSystem?.count})
                           </Typography>
                         </Box>
-                      )} */}
+                      )}
                       {selectedContent?.transom && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -634,7 +639,7 @@ const Summary = ({ setStep }) => {
                           <Typography className="text-xs-ragular"></Typography>
                         </Box>
                       )}
-                      {/* {selectedContent?.header?.item && (
+                      {selectedContent?.header?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Header:
@@ -644,8 +649,8 @@ const Summary = ({ setStep }) => {
                             {selectedContent?.header?.count})
                           </Typography>
                         </Box>
-                      )} */}
-                      {/* {selectedContent?.glassAddons?.length ? (
+                      )}
+                      {selectedContent?.glassAddons?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Glass Addons:
@@ -656,8 +661,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.hardwareAddons?.length > 0 && (
+                      )}
+                      {selectedContent?.hardwareAddons?.length > 0 && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Add ons:{" "}
@@ -668,7 +673,7 @@ const Summary = ({ setStep }) => {
                             )}{" "}
                           </Typography>
                         </Box>
-                      )} */}
+                      )}
                       <Box
                         sx={{
                           display: "flex",
@@ -764,14 +769,14 @@ const Summary = ({ setStep }) => {
                           ${glassPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      {/* <Box>
+                      <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${glassAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box> */}
+                      </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Fabrication Price:
@@ -780,14 +785,14 @@ const Summary = ({ setStep }) => {
                           ${fabricationPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      {/* <Box>
+                      <Box>
                         <Typography className="text-xs-ragular-bold">
                           Hardware Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${hardwareAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box> */}
+                      </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Layout Labor Price:
