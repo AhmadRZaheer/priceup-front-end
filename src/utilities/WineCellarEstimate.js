@@ -556,7 +556,7 @@ export const getGenericFabrication = (item, count) => {
   let selectedItemHingeCut = item?.fabrication?.hingeCut > 0 ? item?.fabrication?.hingeCut : 0;
 
   hingeCut = count * selectedItemHingeCut;
-  let selectedItemClampCut = item?.fabrication?.clampCut > 0 ? item?.fabrication?.clampCut : 1;
+  let selectedItemClampCut = item?.fabrication?.clampCut > 0 ? item?.fabrication?.clampCut : 0;
 
   clampCut = count * selectedItemClampCut;
   let selectedItemNotch = item?.fabrication?.notch > 0 ? item?.fabrication?.notch : 0;

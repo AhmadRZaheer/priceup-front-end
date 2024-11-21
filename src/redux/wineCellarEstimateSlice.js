@@ -947,7 +947,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           },
           slidingDoorSystem: {
             item: slidingDoorSystemType || null,
-            count: layoutData?.settings?.slidingDoorSystem?.count,
+            count: layoutData?.settings?.slidingDoorSystem?.count ?? 0,
           },
           glassType: {
             item: glassType || null,

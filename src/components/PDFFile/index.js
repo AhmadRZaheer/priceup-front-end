@@ -386,7 +386,7 @@ const PDFFile = ({controls,data}) => {
                 
         </View>}
        </View>
-       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+       <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
        {controls?.viewFabrication && 
        <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
         <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
