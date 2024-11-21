@@ -182,17 +182,38 @@ const CampanySetting = () => {
         },
         fabricatingPricing: {
           oneHoleOneByTwoInchGlass:
-            settingData?.wineCellars?.fabricatingPricing
-              ?.oneHoleOneByTwoInchGlass || 0,
+            settingData?.wineCellars?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
           oneHoleThreeByEightInchGlass:
             settingData?.wineCellars?.fabricatingPricing
               ?.oneHoleThreeByEightInchGlass || 0,
-          hingeCutoutOneByTwoInch:
+          clampCutoutOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.clampCutoutOneByTwoInch || 0,
+          clampCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
-              ?.hingeCutoutOneByTwoInch || 0,
+              ?.clampCutoutThreeByEightInch || 0,
+          hingeCutoutOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
           hingeCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch || 0,
+          miterOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.miterOneByTwoInch || 0,
+          miterThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.miterThreeByEightInch || 0,
+          notchOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.notchOneByTwoInch || 0,
+          notchThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.notchThreeByEightInch || 0,
+          outageOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.outageOneByTwoInch || 0,
+          outageThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.outageThreeByEightInch || 0,
+          polishPricePerOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.polishPricePerOneByTwoInch || 0,
+          polishPricePerThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.polishPricePerThreeByEightInch || 0,
         },
         glassTypesForComparison:
           settingData?.wineCellars?.glassTypesForComparison || [],
@@ -1926,6 +1947,64 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
+              <Typography>Clamp Cutout (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.clampCutoutOneByTwoInch"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.clampCutoutOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Clamp Cutout (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.clampCutoutThreeByEightInch"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.clampCutoutThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <Typography>Hinge Cutout (1/2in)</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
@@ -1964,6 +2043,235 @@ const CampanySetting = () => {
                   value={
                     formik.values?.wineCellars?.fabricatingPricing
                       ?.hingeCutoutThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Miter (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.miterOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.miterOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Miter (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.miterThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.miterThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Notch (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.notchOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.notchOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Notch (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.notchThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.notchThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Outage (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.outageOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.outageOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Outage (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.outageThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.outageThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.polishPricePerOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.polishPricePerOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.polishPricePerThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.polishPricePerThreeByEightInch
                   }
                   InputProps={{
                     inputProps: { min: 0, max: inputMaxValue, step: "any" },

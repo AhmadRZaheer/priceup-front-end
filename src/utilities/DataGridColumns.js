@@ -2004,3 +2004,56 @@ export const WineMirrorsGlassType = () => {
 
   ];
 };
+export const WineMirrorsGlassAddon = () => {
+  return [
+    {
+      field: "glassAddon",
+      headerName: "Glass Addon",
+      headerClassName: "showerHardwareHeader",
+      flex: 1.3,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '14px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box  sx={{ pl: '14px', }}>          
+          <Box
+            className="project-cellWrap"
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+          </Box>
+        );
+      },
+    },
+
+  ];
+};

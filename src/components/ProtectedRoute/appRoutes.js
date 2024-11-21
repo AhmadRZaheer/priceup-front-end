@@ -59,6 +59,7 @@ import EstimateForm from "@/pages/EstimateForm";
 import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import CustomLandingPage from "@/pages/CustomLandingPage";
 import CustomerInvoicePreview from "@/pages/Projects/CustomerInvoicePreview";
+import WineCellarGlassAddon from "@/pages/WineCellar/GlassAddon";
 
 
 const AppRoutes = () => {
@@ -144,6 +145,7 @@ const AppRoutes = () => {
             <Route index element={<WineCellarHardware />} />
             <Route path="hardwares" element={<WineCellarHardware />} />
             <Route path="glass-types" element={<WineCellarGlassType />} />
+            <Route path="glass-addons" element={<WineCellarGlassAddon />} />
             <Route path="finishes" element={<WineCellarFinishes />} />
             <Route path="layouts/">
               <Route index element={<WineCellarLayouts />} />

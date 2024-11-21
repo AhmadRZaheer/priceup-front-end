@@ -676,6 +676,9 @@ const AdminSideBar = () => {
                     <InnerMenuItem link="/wine-cellar/glass-types">
                       <span>Glass Types</span>
                     </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/glass-addons">
+                      <span>Glass Addons</span>
+                    </InnerMenuItem>
                     <InnerMenuItem link="/wine-cellar/layouts" secondLink='/wine-cellar/layouts/edit'>
                       <span>Layouts</span>
                     </InnerMenuItem>
