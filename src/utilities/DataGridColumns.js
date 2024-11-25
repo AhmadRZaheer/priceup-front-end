@@ -966,6 +966,86 @@ export const ContactColumns = () => {
   ];
 };
 
+export const InvoiceDetailColumns = () => {
+  return [
+    {
+      field: "Estimaate ID",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.name} */} sdsd
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Estimate Category",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Layout",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Date quoted",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Estimated total",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
+
 export const teamColumns = [
   {
     field: "name",

@@ -60,6 +60,11 @@ import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import CustomLandingPage from "@/pages/CustomLandingPage";
 import CustomerInvoicePreview from "@/pages/Projects/CustomerInvoicePreview";
 import WineCellarGlassAddon from "@/pages/WineCellar/GlassAddon";
+import Invoices from "@/pages/Invoices";
+import ProjectInvoiceCreate from "@/pages/Invoices/Create";
+import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
+import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
+import CreateLandingInvoice from "../ProjectInvoices/CreateLandingInvoice";
 
 
 const AppRoutes = () => {
@@ -109,6 +114,12 @@ const AppRoutes = () => {
             <Route path="dimensions" element={<EstimateDimensions />} />
             <Route path="review" element={<EstimateReview />} />
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
+          </Route>
+          <Route path="/invoices/">
+            <Route index element={<Invoices />} />
+            <Route path="create" element={<ProjectInvoiceCreate />} />
+            <Route path="new-invoice" element={<CreateNewInvoice />} />
+            <Route path=":id" element={<ProjectInvoiceDetail />} />
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
@@ -213,6 +224,7 @@ const AppRoutes = () => {
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
       <Route path="/custom-landing/:id" element={<CustomLandingPage />} />
+      <Route path="/custom-landing-invoice" element={<CreateLandingInvoice />} />
     </Routes>
   );
 };
