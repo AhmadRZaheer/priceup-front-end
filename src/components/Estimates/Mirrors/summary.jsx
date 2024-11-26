@@ -29,6 +29,7 @@ import {
   getSelectedItem,
   getSqftArea,
   setModifiedProfitPercentage,
+  setSelectedContent,
 } from "@/redux/mirrorsEstimateSlice";
 import {
   getLocationMirrorSettings,
@@ -45,7 +46,7 @@ import {
   getEstimateState,
   getProjectId,
 } from "@/redux/estimateSlice";
-import { quoteState } from "@/utilities/constants";
+import { hardwareTypes, quoteState } from "@/utilities/constants";
 import { useSearchParams } from "react-router-dom";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getGlassTypeDetailsByThickness } from "@/utilities/common";
@@ -177,7 +178,6 @@ const Summary = ({ setStep }) => {
     selectedContent?.glassType?.thickness,
     selectedContent?.glassType?.item?._id
   );
- 
 
   return (
     <>
@@ -659,17 +659,18 @@ const Summary = ({ setStep }) => {
           </Box>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
-           {glassDetails?.length > 0 &&
-           <Typography
-           sx={{
-             fontSize: "14px",
-             fontWeight: 700,
-             lineHeight: "16.41px",
-             fontFamily: '"Roboto", sans-serif !important',
-           }}
-         >
-           Note:
-         </Typography>} 
+            {glassDetails?.length > 0 && (
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "16.41px",
+                  fontFamily: '"Roboto", sans-serif !important',
+                }}
+              >
+                Note:
+              </Typography>
+            )}
             {/* {selectedContent?.glassType?.item?.name && (
               <Typography>
                 Selected glass type '{selectedContent?.glassType?.item?.name}'
@@ -679,15 +680,33 @@ const Summary = ({ setStep }) => {
 
             {selectedContent?.glassType?.item?.name &&
               glassDetails.map((glass, index) => {
-                const actualPrice = (pricing.cost - pricing.glass) + sqftArea*glass.price;
-                const price = (actualPrice * mirrorsLocationSettings?.pricingFactor) + pricing.labor;
+                const actualPrice =
+                  pricing.cost - pricing.glass + sqftArea * glass.price;
+                const price =
+                  actualPrice * mirrorsLocationSettings?.pricingFactor +
+                  pricing.labor;
                 // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
                 return (
                   glass.status && (
                     <Typography key={index}>
-                      Available glass type '{glass.name}'
-                      {/* with thickness '{glass.thickness}' */} has a price of
-                      '{price?.toFixed(2) || 0}'
+                      Glass Option '{glass?.name || "Unknown"}' has a price of '
+                      {price?.toFixed(2) || "0.00"}' {"=>"} Want to
+                      <Box
+                        component="span"
+                        onClick={() =>
+                          dispatch(
+                            setSelectedContent({
+                              type: hardwareTypes.GLASSTYPE,
+                              item: glass?.selectedGlass,
+                            })
+                          )
+                        }
+                        sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+                      >
+                        {" "}
+                        apply
+                      </Box>
+                      ?
                     </Typography>
                   )
                 );

@@ -38,6 +38,7 @@ import {
   getListData,
   getisCustomizedDoorWidth,
   getLayoutPerimeter,
+  setContent,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -48,6 +49,7 @@ import {
 } from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import {
+  hardwareTypes,
   layoutVariants,
   quoteState as quotestate,
 } from "@/utilities/constants";
@@ -217,7 +219,7 @@ const Summary = ({ setStep }) => {
     selectedContent?.glassType?.thickness,
     selectedContent?.glassType?.item?._id
   );
-  
+
   return (
     <>
       <Box
@@ -972,8 +974,24 @@ const Summary = ({ setStep }) => {
                     <Typography key={index}>
                       Glass Option '{glass.name}'
                       {/* with thickness '{glass.thickness}' */} has a price of
-                      '${glassPricing?.toFixed(2) || 0}'
+                      '${glassPricing?.toFixed(2) || 0}' {"=>"} Want to
                       {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}
+                      <Box
+                        component="span"
+                        onClick={() =>
+                          dispatch(
+                            setContent({
+                              type: hardwareTypes.GLASSTYPE,
+                              item: glass?.selectedGlass,
+                            })
+                          )
+                        }
+                        sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+                      >
+                        {" "}
+                        apply
+                      </Box>
+                      ?
                     </Typography>
                   )
                 );
