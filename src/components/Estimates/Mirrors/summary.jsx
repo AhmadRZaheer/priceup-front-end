@@ -174,8 +174,10 @@ const Summary = ({ setStep }) => {
   const glassDetails = getGlassTypeDetailsByThickness(
     mirrorsLocationSettings?.glassTypesForComparison,
     MirrorsHardware.glassTypes,
-    selectedContent?.glassType?.thickness
+    selectedContent?.glassType?.thickness,
+    selectedContent?.glassType?.item?._id
   );
+ 
 
   return (
     <>
@@ -657,28 +659,39 @@ const Summary = ({ setStep }) => {
           </Box>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontWeight: 700,
-                lineHeight: "16.41px",
-                fontFamily: '"Roboto", sans-serif !important',
-              }}
-            >
-              Note:
-            </Typography>
-            <Typography>
-              Selected glass type '{selectedContent?.glassType?.item?.name}' price
-              is '${pricing.glass?.toFixed(2) || 0}'.
-            </Typography>
-            {glassDetails.map((glass, index) => (
-              glass.status &&
-              <Typography key={index}>
-                Available glass type '{glass.name}' 
-                {/* with thickness '{glass.thickness}' */}
-                {' '}has a price of '{(sqftArea*glass.price)?.toFixed(2) || 0}'
+           {glassDetails?.length > 0 &&
+           <Typography
+           sx={{
+             fontSize: "14px",
+             fontWeight: 700,
+             lineHeight: "16.41px",
+             fontFamily: '"Roboto", sans-serif !important',
+           }}
+         >
+           Note:
+         </Typography>} 
+            {/* {selectedContent?.glassType?.item?.name && (
+              <Typography>
+                Selected glass type '{selectedContent?.glassType?.item?.name}'
+                price is '${pricing.glass?.toFixed(2) || 0}'.
               </Typography>
-            ))}
+            )} */}
+
+            {selectedContent?.glassType?.item?.name &&
+              glassDetails.map((glass, index) => {
+                const actualPrice = (pricing.cost - pricing.glass) + sqftArea*glass.price;
+                const price = (actualPrice * mirrorsLocationSettings?.pricingFactor) + pricing.labor;
+                // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
+                return (
+                  glass.status && (
+                    <Typography key={index}>
+                      Available glass type '{glass.name}'
+                      {/* with thickness '{glass.thickness}' */} has a price of
+                      '{price?.toFixed(2) || 0}'
+                    </Typography>
+                  )
+                );
+              })}
           </Box>
         </Box>
       </Box>
