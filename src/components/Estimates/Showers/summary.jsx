@@ -213,10 +213,11 @@ const Summary = ({ setStep }) => {
 
   const glassDetails = getGlassTypeDetailsByThickness(
     showersLocationSettings?.glassTypesForComparison,
-    listData.glassType,
-    selectedContent?.glassType?.thickness
+    listData?.glassType,
+    selectedContent?.glassType?.thickness,
+    selectedContent?.glassType?.item?._id
   );
-
+  
   return (
     <>
       <Box
@@ -942,25 +943,41 @@ const Summary = ({ setStep }) => {
           </Box>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
-            <Typography
-              sx={{
-                fontSize: "14px",
-                fontWeight: 700,
-                lineHeight: "16.41px",
-                fontFamily: '"Roboto", sans-serif !important',
-              }}
-            >
-              Note:
-            </Typography>
-            <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography>
-            {glassDetails.map((glass, index) => (
-              glass.status && 
-              <Typography key={index}>
-                Available glass type '{glass.name}' 
-                {/* with thickness '{glass.thickness}' */}
-                {' '}has a price of '${(sqftArea*glass.price)?.toFixed(2) || 0}'
+            {glassDetails?.length > 0 && (
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "16.41px",
+                  fontFamily: '"Roboto", sans-serif !important',
+                }}
+              >
+                Note:
               </Typography>
-            ))}
+            )}
+            {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
+            {glassPrice !== 0 &&
+              glassDetails.map((glass, index) => {
+                const calc =
+                  (totalPrice - laborPrice) /
+                    showersLocationSettings?.miscPricing?.pricingFactor -
+                  glassPrice;
+                const glassPricing =
+                  (calc + sqftArea * glass.price) *
+                    showersLocationSettings?.miscPricing?.pricingFactor +
+                  laborPrice;
+                // const price = ((totalPrice - glassPrice) + (sqftArea*glass.price))
+                return (
+                  glass.status && (
+                    <Typography key={index}>
+                      Glass Option '{glass.name}'
+                      {/* with thickness '{glass.thickness}' */} has a price of
+                      '${glassPricing?.toFixed(2) || 0}'
+                      {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}
+                    </Typography>
+                  )
+                );
+              })}
           </Box>
         </Box>
         {isMobile ? (

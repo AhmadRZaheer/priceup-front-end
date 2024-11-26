@@ -71,7 +71,6 @@ export const convertDate = (isoDate) => {
 };
 
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
-  console.log(selectedContent,'selectedContentselectedContent')
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(
@@ -1270,10 +1269,11 @@ export const notificationsAvailable = (notifications)=>{
 export const getGlassTypeDetailsByThickness = (
   selectedIds,
   originalArray,
-  selectedThickness
+  selectedThickness,
+  selectedGlassId
 ) => {
   return originalArray
-    ?.filter((glass) => selectedIds?.includes(glass._id))
+    ?.filter((glass) => selectedIds?.includes(glass._id)  && glass._id !== selectedGlassId)
     .map((glass) => {
       // Find the option with the matching thickness
       const matchingOption = glass.options.find(
