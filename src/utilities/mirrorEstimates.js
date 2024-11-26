@@ -140,14 +140,14 @@ export const calculateTotal = (
     if (item?.options?.length) {
       price = item?.options[0]?.cost || 0;
     }
-    if(['floating-small','floating-large','floating-medium'].includes(item?.slug)){
-      Object.entries(measurements).forEach(([key, value]) => {
-        const count = value["count"];
-        glassAddonsPrice = glassAddonsPrice + price * count;
-      });
-    }else{
+    // if(['floating-small','floating-large','floating-medium'].includes(item?.slug)){
+    //   Object.entries(measurements).forEach(([key, value]) => {
+    //     const count = value["count"];
+    //     glassAddonsPrice = glassAddonsPrice + price * count;
+    //   });
+    // }else{
     glassAddonsPrice = glassAddonsPrice + price * sqftArea;
-    }
+    // }
   });
 
   console.log(glassAddonsPrice, "glass Addons price");
