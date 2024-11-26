@@ -3,7 +3,7 @@ import { Box, Typography, useMediaQuery } from "@mui/material";
 import { DeleteOutline, ManageSearch } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { DataGrid } from "@mui/x-data-grid";
-import { ProjectsColumns } from "@/utilities/DataGridColumns";
+import { ProjectsInvoiceColumns } from "@/utilities/DataGridColumns";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import {
@@ -124,12 +124,11 @@ export default function ProjectInvoiceList({
     },
   ];
   const SkeletonColumnsGenerated = GenrateColumns([
+    "Invoice Number",
+    "Customer Name",
     "Project Name",
-    "Creator",
-    "Customer",
-    "Location",
-    "Created Date",
-    "Amount Quoted",
+    "Amount",
+    "Due Date",
     "Status",
     "Actions",
   ]);
@@ -222,7 +221,7 @@ export default function ProjectInvoiceList({
               }}
               getRowId={(row) => row._id}
               rows={filteredData}
-              columns={ProjectsColumns(dropdownActions)}
+              columns={ProjectsInvoiceColumns(dropdownActions)}
               page={page}
               pageSize={itemsPerPage}
               rowCount={

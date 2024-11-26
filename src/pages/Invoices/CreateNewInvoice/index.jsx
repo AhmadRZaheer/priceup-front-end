@@ -8,7 +8,7 @@ const CreateNewInvoice = () => {
     <>
       <CommonLayout>
         <Box className="econtent-wrapper" sx={{ px: { sm: 0, xs: 1 } }}>
-          <CreateLandingInvoice />
+          <CreateLandingInvoice islanding={false}  />
         </Box>
       </CommonLayout>
     </>

@@ -8,6 +8,15 @@ import useScrollTrigger from "@mui/material/useScrollTrigger";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import HeaderSection from "./HeaderSection";
+import LogoNavBar from "../../../Assets/purplelogo.svg";
+import { Link, useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
+import FooterSection from "./FooterSection";
+
+const headerData = [
+  { title: "Home", url: "/custom-landing-invoice" },
+  { title: "Terms & Condition", url: "/terms" },
+];
 
 function ElevationScroll(props) {
   const { children, window } = props;
@@ -36,23 +45,80 @@ ElevationScroll.propTypes = {
   window: PropTypes.func,
 };
 
-const CreateLandingInvoice = (props) => {
+const CreateLandingInvoice = ({ islanding }) => {
+  const pathname = useLocation();
+  const handleButton = (data) => {
+    // route.push(data.url);
+  };
+
   return (
     <React.Fragment>
       <CssBaseline />
-      <ElevationScroll {...props}>
+      <ElevationScroll>
         <AppBar
           sx={{
             backgroundColor: "#f5f9f9",
             color: "#021323",
           }}
-          {...(false ? { position: "static" } : {})}
+          {...(islanding ? {} : { position: "static" })}
         >
           <Container maxWidth="xl">
-            <Toolbar>
-              <Typography variant="h6" component="div">
-                Scroll to elevate App bar
-              </Typography>
+            <Toolbar sx={{ display: "block", alignContent: "center" }}>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box sx={{ display: "flex", gap: 5 }}>
+                  <img src={LogoNavBar} alt="logo nav bar" />
+                  <Box sx={{ alignContent: "center" }}>
+                    {headerData.map((data, index) => (
+                      <Button
+                        key={index}
+                        onClick={() => handleButton(data)}
+                        variant="text"
+                        size="small"
+                        sx={{
+                          minWidth: "42px !important",
+                          height: "40px !important",
+                          px: "12px",
+                          color: data.url === pathname ? "#012332" : "#012332",
+                          backgroundColor:
+                            data.url === pathname
+                              ? "rgba(79, 53, 223, 0.1)"
+                              : "",
+                          borderRadius: "8px",
+                          mr: "8px",
+                          fontFamily: "Product Sans, sans-serif !important",
+                          fontSize: "16px !important",
+                          lineHeight: "24px !important",
+                          fontWeight:
+                            data.url === pathname
+                              ? "700 !important"
+                              : "600 !important",
+                          ":hover": {
+                            color: "#012332",
+                            backgroundColor: "rgba(79, 53, 223, 0.2)",
+                          },
+                        }}
+                      >
+                        {data.title}
+                      </Button>
+                    ))}
+                  </Box>
+                </Box>
+                <Link to="/login">
+                  <Button
+                    // size="medium"
+                    sx={{
+                      bgcolor: "#8477DA",
+                      color: "white",
+                      textTransform: "capitalize",
+                      ":hover": {
+                        bgcolor: "#8477DA",
+                      },
+                    }}
+                  >
+                    Login
+                  </Button>
+                </Link>
+              </Box>
             </Toolbar>
           </Container>
         </AppBar>
@@ -71,6 +137,7 @@ Praesent commodo cursus magna, vel scelerisque nisl consectetur et.`
             .join("\n")}
         </Box>
       </Container>
+      <FooterSection />
     </React.Fragment>
   );
 };

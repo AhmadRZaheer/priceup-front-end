@@ -224,7 +224,7 @@ const AppRoutes = () => {
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
       <Route path="/custom-landing/:id" element={<CustomLandingPage />} />
-      <Route path="/custom-landing-invoice" element={<CreateLandingInvoice />} />
+      <Route path="/custom-landing-invoice" element={<CreateLandingInvoice islanding={true} />} />
     </Routes>
   );
 };
