@@ -1284,6 +1284,7 @@ export const getGlassTypeDetailsByThickness = (
         price: matchingOption ? matchingOption.cost : "N/A",
         thickness: matchingOption ? matchingOption.thickness : "N/A",
         status : matchingOption ? matchingOption.status : "N/A",
+        selectedGlass:glass
       };
     });
 };

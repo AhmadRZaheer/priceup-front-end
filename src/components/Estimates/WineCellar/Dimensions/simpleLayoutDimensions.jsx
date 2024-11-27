@@ -64,6 +64,8 @@ import {
   setDoorQuantity,
   setBackWallGlassWeight,
   sethoursForSingleDoor,
+  getContent,
+  setCounters,
 } from "@/redux/wineCellarEstimateSlice";
 import AlertsAndWarnings from "../AlertsAndWarnings";
 import {
@@ -76,7 +78,10 @@ import {
   getSkeltonState,
 } from "@/redux/estimateSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getHardwareFabricationQuantity, setStateForWineCellarEstimate } from "@/utilities/WineCellarEstimate";
+import {
+  getHardwareFabricationQuantity,
+  setStateForWineCellarEstimate,
+} from "@/utilities/WineCellarEstimate";
 import LayoutMeasurementSkeleton from "@/components/estimateSkelton/LayoutMeasurementSkeleton";
 
 export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
@@ -102,16 +107,19 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
   const wineCellarsHardware = useSelector(getWineCellarsHardware);
   const isMobile = useMediaQuery("(max-width: 600px)");
   const skeltonState = useSelector(getSkeltonState);
+  const selectedContent = useSelector(getContent);
 
   const handleBack = () => {
     dispatch(setisCustomizedDoorWidth(false));
     dispatch(setDoorQuantity(1));
-    navigate( currentQuoteState === quoteState.EDIT
-      ? projectId
-        ? `/projects/${projectId}?category=${category}`
-        : "/estimates"
-      : `/estimates/layouts?category=${category}&projectId=${projectId}`)
-  }
+    navigate(
+      currentQuoteState === quoteState.EDIT
+        ? projectId
+          ? `/projects/${projectId}?category=${category}`
+          : "/estimates"
+        : `/estimates/layouts?category=${category}&projectId=${projectId}`
+    );
+  };
   // const {
   //   data: layouts,
   //   isLoading: loading,
@@ -236,7 +244,7 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
   // console.log(initialValues, "initialValuesinitialValues");
 
   const [openPopover, setOpenPopover] = useState(false); // State to control popover externally
- 
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -294,18 +302,24 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
         result?.panelWeight && result?.panelWeight > panelOverWeightAmount
           ? thicknessTypes.ONEBYTWO
           : glassThickness
-      );     
+      );
       dispatch(setMultipleNotifications({ ...notificationsResult }));
-       if (currentQuoteState === quoteState.CREATE) {        
+      if (currentQuoteState === quoteState.CREATE) {
         const fabricationValues = getHardwareFabricationQuantity(
-          { ...notificationsResult.selectedContent, glassType:{...notificationsResult.selectedContent.glassType,thickness:glassThickness}  },
+          {
+            ...notificationsResult.selectedContent,
+            glassType: {
+              ...notificationsResult.selectedContent.glassType,
+              thickness: glassThickness,
+            },
+          },
           currentQuoteState,
-          selectedData  
-        );      
+          selectedData
+        );
         dispatch(setHardwareFabricationQuantity({ ...fabricationValues }));
-      }  
+      }
 
-        setOpenPopover(true) 
+      setOpenPopover(true);
       if (isMobile) {
         setStep(1);
       }
@@ -363,7 +377,33 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
     const targetValue = Number(event.target.value);
     // setDebouncedValueDoorQuantity(event.target.value);
     dispatch(setDoorQuantity(targetValue));
-    dispatch(sethoursForSingleDoor(targetValue * value));
+    dispatch(sethoursForSingleDoor((targetValue - 1) * value));
+
+    [
+      {
+        type: "handles",
+        content: selectedContent?.handles,
+        settings: selectedData.settings.handles,
+      },
+      {
+        type: "hinges",
+        content: selectedContent?.hinges,
+        settings: selectedData.settings.hinges,
+      },
+      {
+        type: "doorLock",
+        content: selectedContent?.doorLock,
+        settings: selectedData.settings.doorLock,
+      },
+    ].forEach(({ type, content, settings }) => {
+      dispatch(
+        setCounters({
+          item: content?.item,
+          type,
+          value: settings.count * targetValue,
+        })
+      );
+    });
   };
 
   useEffect(() => {
@@ -447,7 +487,10 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                 >
                   Layout & Measurement
                 </Typography>
-                <AlertsAndWarnings openPopoverExternally={openPopover} setOpenPopover={setOpenPopover}  />
+                <AlertsAndWarnings
+                  openPopoverExternally={openPopover}
+                  setOpenPopover={setOpenPopover}
+                />
               </Box>
               <Box
                 sx={{
@@ -673,15 +716,14 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                           //   layoutVariants.DOUBLEBARN,
                           // ].includes(selectedData?.settings?.variant)}
                           type="checkbox"
-                          onChange={() =>
-                            {dispatch(
+                          onChange={() => {
+                            dispatch(
                               setisCustomizedDoorWidth(
                                 !isCustomizedDoorWidthRedux
                               )
                             );
                             dispatch(setDoorQuantity(1));
-                          }
-                          }
+                          }}
                           checked={isCustomizedDoorWidthRedux}
                           style={{
                             width: "20px",
@@ -912,25 +954,25 @@ export const SimpleLayoutDimensions = ({ setStep, layoutData, recordData }) => {
                       //       : `/estimates/layouts?category=${category}&projectId=${projectId}`
                       //   }
                       // >
-                        <Button
-                          onClick = {handleBack}
-                          sx={{
-                            width: { xs: 120, sm: 150 },
-                            color: "black",
-                            border: "1px solid #D0D5DD",
-                            ":hover": {
-                              border: "1px solid #8477DA",
-                            },
-                            fontSize: 18,
-                            backgroundColor: "white",
-                            height: 42,
-                            fontWeight: 600,
-                          }}
-                          fullWidth
-                          variant="outlined"
-                        >
-                          Back
-                        </Button>
+                      <Button
+                        onClick={handleBack}
+                        sx={{
+                          width: { xs: 120, sm: 150 },
+                          color: "black",
+                          border: "1px solid #D0D5DD",
+                          ":hover": {
+                            border: "1px solid #8477DA",
+                          },
+                          fontSize: 18,
+                          backgroundColor: "white",
+                          height: 42,
+                          fontWeight: 600,
+                        }}
+                        fullWidth
+                        variant="outlined"
+                      >
+                        Back
+                      </Button>
                       // </NavLink>
                     )}
                   </Box>
