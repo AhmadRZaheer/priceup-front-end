@@ -964,7 +964,9 @@ const Summary = ({ setStep }) => {
                 actualCost - glassPrice + sqftArea * glass.price;
               const price =
                 actualPrice *
-                  wineCallerLocationSettings?.miscPricing?.pricingFactor +
+                  (wineCallerLocationSettings?.miscPricing?.pricingFactorStatus
+                    ? wineCallerLocationSettings?.miscPricing?.pricingFactor
+                    : 1) +
                 (laborPrice + doorLaborPrice);
               // const price = ((totalPrice - glassPrice) + sqftArea*glass.price)
               return (
@@ -983,7 +985,7 @@ const Summary = ({ setStep }) => {
                           })
                         )
                       }
-                      sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+                      sx={{ cursor: "pointer", color: "blue" }}
                     >
                       {" "}
                       apply

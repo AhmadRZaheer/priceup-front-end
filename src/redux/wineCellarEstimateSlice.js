@@ -1015,7 +1015,7 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
             : "channel",
           people: layoutData?.settings?.other?.people,
           hours: layoutData?.settings?.other?.hours,
-          laborHoursForDoor: layoutData?.settings?.noOfHoursToCompleteSingleDoor,
+          laborHoursForDoor: state.doorQuantity > 1 ? layoutData?.settings?.noOfHoursToCompleteSingleDoor : 0,
           outages: layoutData?.settings?.outages,
           notch: layoutData?.settings?.notch,
           glassAddons: glassAddon ? [glassAddon] : [noGlassAddon],

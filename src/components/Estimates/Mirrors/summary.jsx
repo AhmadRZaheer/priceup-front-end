@@ -683,7 +683,7 @@ const Summary = ({ setStep }) => {
                 const actualPrice =
                   pricing.cost - pricing.glass + sqftArea * glass.price;
                 const price =
-                  actualPrice * mirrorsLocationSettings?.pricingFactor +
+                  actualPrice * (mirrorsLocationSettings?.pricingFactorStatus ? mirrorsLocationSettings?.pricingFactor : 1) +
                   pricing.labor;
                 // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
                 return (
@@ -701,7 +701,7 @@ const Summary = ({ setStep }) => {
                             })
                           )
                         }
-                        sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+                        sx={{ cursor: "pointer",  color: "blue"}}
                       >
                         {" "}
                         apply

@@ -966,7 +966,9 @@ const Summary = ({ setStep }) => {
                   glassPrice;
                 const glassPricing =
                   (calc + sqftArea * glass.price) *
-                    showersLocationSettings?.miscPricing?.pricingFactor +
+                    (showersLocationSettings?.miscPricing?.pricingFactorStatus
+                      ? showersLocationSettings?.miscPricing?.pricingFactor
+                      : 1) +
                   laborPrice;
                 // const price = ((totalPrice - glassPrice) + (sqftArea*glass.price))
                 return (
@@ -986,7 +988,7 @@ const Summary = ({ setStep }) => {
                             })
                           )
                         }
-                        sx={{ cursor: "pointer", ":hover": { color: "blue" } }}
+                        sx={{ cursor: "pointer", color: "blue" }}
                       >
                         {" "}
                         apply
