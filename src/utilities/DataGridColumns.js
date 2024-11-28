@@ -835,29 +835,29 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
         return (
           <Box>
             <Typography className="projectRowTxt" sx={{ py: 1 }}>
-              {params?.row?.name}
+              {params?.row?.invoiceId}
             </Typography>
           </Box>
         );
       },
     },
     {
-      field: "Customer Name",
+      field: "Customer",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 2.1,
+      flex: 1.1,
       renderCell: (params) => {
         return (
           <>
-            {params?.row?.creatorData ? (
+            {params?.row?.customer ? (
               <Box
                 className="project-cellWrap"
               // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
-                    image={params?.row?.creatorData?.image}
-                    name={params?.row?.creatorData?.name}
+                    image={params?.row?.customer?.image}
+                    name={params?.row?.customer?.name}
                     type={5}
                   />
                 </div>
@@ -865,10 +865,10 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
                   title={
                     <Grid>
                       <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                        {params?.row?.creatorData?.name}
+                        {params?.row?.customer?.name}
                       </Typography>
                       <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
-                        {params?.row?.creatorData?.email}
+                        {params?.row?.customer?.email}
                       </Typography>
                     </Grid>
                   }
@@ -890,7 +890,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
                           lineHeight: "19.12px",
                         }}
                       >
-                        {params?.row?.creatorData?.name}
+                        {params?.row?.customer?.name}
                       </Typography>
                       <Typography
                         sx={{
@@ -906,7 +906,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
                           width: { lg: "100%", xs: "93px" },
                         }}
                       >
-                        {params?.row?.creatorData?.email}
+                        {params?.row?.customer?.email}
                       </Typography>
                     </Box>
                   </div>
@@ -1029,9 +1029,9 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <>
-            <Tooltip title={params?.row?.addressData?.name} placement="top">
+            <Tooltip title={params?.row?.source?.name} placement="top">
               <Typography className="projectRowTxt" sx={{ py: 1 }}>
-                {params?.row?.addressData?.name}
+                {params?.row?.source?.name}
               </Typography>
             </Tooltip>
           </>
@@ -1064,7 +1064,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
         return (
           <>
             <Typography className="projectRowTxt" sx={{ width: 200, py: 1 }}>
-              ${params?.row?.totalAmountQuoted?.toFixed(2) || 0}
+              ${params?.row?.grandTotal?.toFixed(2) || 0}
             </Typography>
           </>
         );
@@ -1079,7 +1079,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
         return (
           <>
             <Typography className="projectRowTxt" sx={{ width: 190, py: 1 }}>
-              {new Date(params?.row?.createdAt).toLocaleDateString("en-US", {
+              {new Date(params?.row?.dueDate).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -1096,7 +1096,13 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       sortable: false,
       flex: 0.8,
       renderCell: (params) => {
-        return <StatusChip variant={params?.row?.status} />;
+        return (
+          <Typography
+          className={params.row.status === 'Paid' ? "status-active" : "status-inActive"}
+        >
+          {params.row.status}
+        </Typography>
+        );
       },
     },
     {

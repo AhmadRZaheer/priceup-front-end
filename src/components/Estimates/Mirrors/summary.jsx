@@ -657,9 +657,10 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
+          {glassDetails?.length > 0 && pricing.glass !== 0  && (
+            <>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
-            {glassDetails?.length > 0 && (
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -670,7 +671,6 @@ const Summary = ({ setStep }) => {
               >
                 Note:
               </Typography>
-            )}
             {/* {selectedContent?.glassType?.item?.name && (
               <Typography>
                 Selected glass type '{selectedContent?.glassType?.item?.name}'
@@ -712,6 +712,8 @@ const Summary = ({ setStep }) => {
                 );
               })}
           </Box>
+          </>
+          )}
         </Box>
       </Box>
     </>

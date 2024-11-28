@@ -328,7 +328,9 @@ const ProjectInfoComponent = ({
               fullWidth
               variant="contained"
               onClick={() =>
-                navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)
+                // navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)
+                navigate(`/invoices/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`)
+                
               }
               sx={{
                 backgroundColor: "#8477DA",
@@ -345,7 +347,8 @@ const ProjectInfoComponent = ({
                 },
               }}
             >
-              Customer Preview
+              Create Invoice
+              {/* Customer Preview */}
             </Button>
             <Button
               fullWidth

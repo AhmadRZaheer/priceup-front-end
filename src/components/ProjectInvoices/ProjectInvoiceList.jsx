@@ -24,7 +24,7 @@ export default function ProjectInvoiceList({
 }) {
   const isMobile = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
-  const routePrefix = `${backendURL}/projects`;
+  const routePrefix = `${backendURL}/invoices`;
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const useStyles = makeStyles({
@@ -53,6 +53,8 @@ export default function ProjectInvoiceList({
     isFetching: projectInvoicesFetching,
     refetch: refetchProjectInvoices,
   } = useFetchAllDocuments(fetchProjectInvoicesUrl);
+
+  console.log(projectInvoices,'projectInvoicesprojectInvoices')
   const {
     mutate: deleteProject,
     isSuccess: deletedSuccessfully,
@@ -66,8 +68,8 @@ export default function ProjectInvoiceList({
   };
 
   const filteredData = useMemo(() => {
-    if (projectInvoices && projectInvoices?.projects?.length) {
-      return projectInvoices?.projects;
+    if (projectInvoices && projectInvoices?.invoices?.length) {
+      return projectInvoices?.invoices;
     } else {
       return [];
     }
@@ -75,7 +77,6 @@ export default function ProjectInvoiceList({
 
   const handleDeleteProject = () => {
     deleteProject({ apiRoute: `${routePrefix}/${deleteRecord}` });
-    setDeleteModalOpen(false);
   };
 
   const handleViewDetail = (item) => {
@@ -102,6 +103,9 @@ export default function ProjectInvoiceList({
   useEffect(() => {
     if (statusValue || dateValue || searchValue) {
       setPage(1);
+    }
+    if(deletedSuccessfully){
+      setDeleteModalOpen(false);
     }
   }, [statusValue, dateValue, searchValue, deletedSuccessfully]);
 
