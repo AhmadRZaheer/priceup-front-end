@@ -419,9 +419,7 @@ export const generateObjectForPDFPreview = (
   estimateData,
   showerMiscPricing
 ) => {
-  console.log(listData,
-    estimateData,
-    showerMiscPricing,'sdsdsdsddd')
+  console.log(listData, estimateData, showerMiscPricing, "sdsdsdsddd");
   let estimateInfoObject;
   let hardwareFinishes = null;
   hardwareFinishes = listData?.hardwareFinishes?.find(
@@ -669,8 +667,13 @@ export const renderMeasurementSides = (quoteState, measurements, layoutID) => {
   return result;
 };
 
-export const setStateForShowerEstimate = (item, dispatch, navigate,flag=true) => {
-   // if (item?.category === EstimateCategory.SHOWERS) {
+export const setStateForShowerEstimate = (
+  item,
+  dispatch,
+  navigate,
+  flag = true
+) => {
+  // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.SHOWERS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -700,7 +703,7 @@ export const setStateForShowerEstimate = (item, dispatch, navigate,flag=true) =>
     dispatch(setReturnWeight(result?.returnWeight));
   }
   // navigate(`/estimates/dimensions`);
-  if(flag){
+  if (flag) {
     navigate(
       `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
     );
@@ -732,8 +735,8 @@ export const generateObjectForPDFRuntime = (
   showerState,
   showersLocationSettings
 ) => {
-  console.log(showerState,state,'showerStateshowerState')
-  return {   
+  console.log(showerState, state, "showerStateshowerState");
+  return {
     category: state.selectedCategory,
     companyData: {},
     cost: showerState.totalPrice,
@@ -787,9 +790,9 @@ export const generateObjectForPDFRuntime = (
     measurements: showerState?.measurements,
     updatedAt: new Date(),
     pricingFactor: showersLocationSettings?.miscPricing?.pricingFactor,
-    panelWeight:showerState.panelWeight,
-    doorWeight:showerState.doorWeight,
-    returnWeight:showerState.returnWeight,
+    panelWeight: showerState.panelWeight,
+    doorWeight: showerState.doorWeight,
+    returnWeight: showerState.returnWeight,
   };
 };
 
@@ -820,10 +823,822 @@ export const generateObjForMirrorPDFRuntime = (
     quadOutletCutout: mirrorState?.content?.quadOutletCutout,
     settings: {},
     simpleHoles: mirrorState?.content?.simpleHoles,
-    modifiedProfitPercentage:mirrorState?.content?.modifiedProfitPercentage,
+    modifiedProfitPercentage: mirrorState?.content?.modifiedProfitPercentage,
     singleOutletCutout: mirrorState?.content?.singleOutletCutout,
     sqftArea: mirrorState?.sqftArea,
     tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
     updatedAt: new Date(),
   };
+};
+
+export const generateInvoiceItemsFromEstimates = async (
+  estimatesList,
+  hardwaresList,
+  companySettings
+) => {
+  let items = [];
+  estimatesList.forEach(async (estimate) => {
+    switch (estimate.category) {
+      case EstimateCategory.SHOWERS:
+        const showerResp = await generateInvoiceItemForShowers(
+          estimate,
+          hardwaresList.showers,
+          companySettings.showers
+        );
+        items.push(showerResp);
+        break;
+      case EstimateCategory.MIRRORS:
+        const mirrorResp = await generateInvoiceItemForMirrors(
+          estimate,
+          hardwaresList.mirrors,
+          companySettings.mirrors
+        );
+        items.push(mirrorResp);
+        break;
+      case EstimateCategory.WINECELLARS:
+        const wineCellarResp = await generateInvoiceItemForWineCellars(
+          estimate,
+          hardwaresList.wineCellars,
+          companySettings.wineCellars
+        );
+        items.push(wineCellarResp);
+        break;
+      default:
+        break;
+    }
+  });
+  return items;
+};
+
+const generateInvoiceItemForShowers = async (
+  estimate,
+  hardwaresList,
+  companySettings
+) => {
+  let summaryObject = {};
+  let hardwarePrice = 0;
+  let glassPrice = 0;
+  let glassAddonPrice = 0;
+  const measurementString = renderMeasurementSides(
+    quoteState.EDIT,
+    estimate.config.measurements,
+    estimate.config.layout_id
+  );
+  summaryObject.measurement = measurementString;
+  summaryObject.doorWidth = estimate.config.doorWidth;
+  summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.sqftArea = estimate.config?.sqftArea;
+  summaryObject.perimeter = estimate.config?.perimeter;
+  summaryObject.oneInchHoles = estimate.config.oneInchHoles;
+  summaryObject.hingeCut = estimate.config.hingeCut;
+  summaryObject.clampCut = estimate.config.clampCut;
+  summaryObject.notch = estimate.config.notch;
+  summaryObject.outages = estimate.config.outages;
+  summaryObject.mitre = estimate.config.mitre;
+  summaryObject.polish = estimate.config.polish;
+  summaryObject.people = estimate.config.people;
+  summaryObject.hours = estimate.config.hours;
+  summaryObject.additionalFields = estimate.config.additionalFields;
+  // hardware finish
+  const hardwareFinish = hardwaresList.hardwareFinishes.find(
+    (item) => item._id === estimate.config.hardwareFinishes
+  );
+  if (hardwareFinish) {
+    summaryObject.hardwareFinish = hardwareFinish.name;
+  }
+  // handle
+  const handle = hardwaresList.handles.find(
+    (item) => item._id === estimate.config?.handles?.type
+  );
+  if (handle) {
+    summaryObject.handle = {
+      type: handle.name,
+      count: estimate.config?.handles?.count,
+    };
+    const handlePrice =
+      (handle?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.handles?.count || 0);
+    hardwarePrice += handlePrice;
+  }
+  // hinge
+  const hinge = hardwaresList.hinges.find(
+    (item) => item._id === estimate.config?.hinges?.type
+  );
+  if (hinge) {
+    summaryObject.hinge = {
+      type: handle.name,
+      count: estimate.config?.hinges?.count,
+    };
+    const hingePrice =
+      (hinge?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.hinges?.count || 0);
+    hardwarePrice += hingePrice;
+  }
+  // Mounting clamp wall clamp
+  if (estimate.config.mountingClamps?.wallClamp?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.wallClamp?.forEach((item) => {
+      const record = hardwaresList.wallClamp.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      wallClamp: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      wallClamp: [],
+    };
+  }
+  // Mounting clamp sleeve over
+  if (estimate.config.mountingClamps?.sleeveOver?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.sleeveOver?.forEach((item) => {
+      const record = hardwaresList.sleeveOver.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      sleeveOver: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      sleeveOver: [],
+    };
+  }
+  // Mounting clamp Glass to Glass
+  if (estimate.config.mountingClamps?.glassToGlass?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.glassToGlass?.forEach((item) => {
+      const record = hardwaresList.glassToGlass.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      glassToGlass: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      glassToGlass: [],
+    };
+  }
+  // Corner Wall clamp
+  if (estimate.config.cornerClamps?.wallClamp?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.wallClamp?.forEach((item) => {
+      const record = hardwaresList.cornerWallClamp.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      wallClamp: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      wallClamp: [],
+    };
+  }
+  // Corner Sleeve over
+  if (estimate.config.cornerClamps?.sleeveOver?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.sleeveOver?.forEach((item) => {
+      const record = hardwaresList.cornerSleeveOver.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      sleeveOver: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      sleeveOver: [],
+    };
+  }
+  // Corner Glass to Glass
+  if (estimate.config.cornerClamps?.glassToGlass?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.glassToGlass?.forEach((item) => {
+      const record = hardwaresList.cornerGlassToGlass.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      glassToGlass: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      glassToGlass: [],
+    };
+  }
+  // mounting channel
+  const mountingChannel = hardwaresList.mountingChannel.find(
+    (item) => item._id === estimate.config?.mountingChannel
+  );
+  if (mountingChannel) {
+    summaryObject.mountingChannel = mountingChannel.name;
+    const price =
+      (mountingChannel?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * 1;
+    hardwarePrice += price;
+  } else {
+    summaryObject.mountingChannel = null;
+  }
+  // glass Type
+  const glassType = hardwaresList.glassType.find(
+    (item) => item._id === estimate.config?.glassType?.type
+  );
+  if (glassType) {
+    summaryObject.glassType = {
+      type: glassType.name,
+      thickness: estimate.config?.glassType?.thickness,
+    };
+    const price =
+      (glassType?.options?.find(
+        (glass) => glass.thickness === estimate.config?.glassType?.thickness
+      )?.cost || 0) * estimate.config?.sqftArea;
+    glassPrice = price;
+  }
+  // glassAddons
+  let glassAddonsNameArray = [];
+  estimate.config?.glassAddons?.forEach((glassAddonId) => {
+    const item = hardwaresList.glassAddons.find(
+      (_item) => _item._id === glassAddonId
+    );
+    if (item) {
+      glassAddonsNameArray.push(item.name);
+      glassAddonPrice +=
+        (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
+    }
+  });
+  // sliding Door System
+  const slidingDoorSystem = hardwaresList.slidingDoorSystem.find(
+    (item) => item._id === estimate.config?.slidingDoorSystem?.type
+  );
+  if (slidingDoorSystem) {
+    summaryObject.slidingDoorSystem = {
+      type: slidingDoorSystem.name,
+      count: estimate.config?.slidingDoorSystem?.count,
+    };
+    const price =
+      (slidingDoorSystem?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.slidingDoorSystem?.count || 0);
+    hardwarePrice += price;
+  }
+  // header
+  const header = hardwaresList.header.find(
+    (item) => item._id === estimate.config?.header?.type
+  );
+  if (header) {
+    summaryObject.header = {
+      type: header.name,
+      count: estimate.config?.header?.count,
+    };
+    const price =
+      (header?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.header?.count || 0);
+    hardwarePrice += price;
+  }
+  //hardwareAddons
+  if (estimate.config?.hardwareAddons?.length) {
+    let data = [];
+    estimate.config?.hardwareAddons?.forEach((item) => {
+      const record = hardwaresList.hardwareAddons.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.hardwareAddons = data;
+  } else {
+    summaryObject.hardwareAddons = [];
+  }
+  // fabrication price
+  let fabricationPrice = 0;
+  if (estimate.config?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
+    fabricationPrice =
+      Number(estimate.config?.oneInchHoles ?? 0) *
+        (companySettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ?? 0) +
+      Number(estimate.config?.hingeCut ?? 0) *
+        (companySettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+      Number(estimate.config?.clampCut ?? 0) *
+        (companySettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+      Number(estimate.config?.notch ?? 0) *
+        (companySettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+      Number(estimate.config?.outages ?? 0) *
+        (companySettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+      Number(estimate.config?.mitre ?? 0) *
+        (companySettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+      Number(estimate.config?.polish ?? 0) *
+        (companySettings?.fabricatingPricing?.polishPricePerOneByTwoInch ?? 0);
+  } else if (
+    estimate.config?.glassType?.thickness === thicknessTypes.THREEBYEIGHT
+  ) {
+    fabricationPrice =
+      Number(estimate.config?.oneInchHoles ?? 0) *
+        (companySettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+          0) +
+      Number(estimate.config?.hingeCut ?? 0) *
+        (companySettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+          0) +
+      Number(estimate.config?.clampCut ?? 0) *
+        (companySettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+          0) +
+      Number(estimate.config?.notch ?? 0) *
+        (companySettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+      Number(estimate.config?.outages ?? 0) *
+        (companySettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+      Number(estimate.config?.mitre ?? 0) *
+        (companySettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+      Number(estimate.config?.polish ?? 0) *
+        (companySettings?.fabricatingPricing?.polishPricePerThreeByEightInch ??
+          0);
+  }
+  const laborPrice =
+    estimate.config?.people *
+    estimate.config?.hours *
+    (companySettings?.miscPricing?.hourlyRate ?? 0);
+  const totalPrice =
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+      (companySettings?.miscPricing?.pricingFactorStatus
+        ? companySettings?.miscPricing?.pricingFactor
+        : 1) +
+    laborPrice;
+  summaryObject.pricing = {
+    hardwarePrice,
+    fabricationPrice,
+    glassPrice,
+    glassAddonPrice,
+    laborPrice,
+    totalPrice,
+  };
+  return summaryObject;
+};
+
+const generateInvoiceItemForMirrors = async (
+  estimate,
+  hardwaresList,
+  companySettings
+) => {
+  
+};
+
+const generateInvoiceItemForWineCellars = async (
+  estimate,
+  hardwaresList,
+  companySettings
+) => {
+  let summaryObject = {};
+  let hardwarePrice = 0;
+  let glassPrice = 0;
+  let glassAddonPrice = 0;
+  const measurementString = renderMeasurementSides(
+    quoteState.EDIT,
+    estimate.config.measurements,
+    estimate.config.layout_id
+  );
+  summaryObject.measurement = measurementString;
+  summaryObject.doorWidth = estimate.config.doorWidth;
+  summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.sqftArea = estimate.config?.sqftArea;
+  summaryObject.perimeter = estimate.config?.perimeter;
+  summaryObject.oneInchHoles = estimate.config.oneInchHoles;
+  summaryObject.hingeCut = estimate.config.hingeCut;
+  summaryObject.clampCut = estimate.config.clampCut;
+  summaryObject.notch = estimate.config.notch;
+  summaryObject.outages = estimate.config.outages;
+  summaryObject.mitre = estimate.config.mitre;
+  summaryObject.polish = estimate.config.polish;
+  summaryObject.people = estimate.config.people;
+  summaryObject.hours = estimate.config.hours;
+  summaryObject.additionalFields = estimate.config.additionalFields;
+  // hardware finish
+  const hardwareFinish = hardwaresList.hardwareFinishes.find(
+    (item) => item._id === estimate.config.hardwareFinishes
+  );
+  if (hardwareFinish) {
+    summaryObject.hardwareFinish = hardwareFinish.name;
+  }
+  // handle
+  const handle = hardwaresList.handles.find(
+    (item) => item._id === estimate.config?.handles?.type
+  );
+  if (handle) {
+    summaryObject.handle = {
+      type: handle.name,
+      count: estimate.config?.handles?.count,
+    };
+    const handlePrice =
+      (handle?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.handles?.count || 0);
+    hardwarePrice += handlePrice;
+  }
+  // hinge
+  const hinge = hardwaresList.hinges.find(
+    (item) => item._id === estimate.config?.hinges?.type
+  );
+  if (hinge) {
+    summaryObject.hinge = {
+      type: handle.name,
+      count: estimate.config?.hinges?.count,
+    };
+    const hingePrice =
+      (hinge?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.hinges?.count || 0);
+    hardwarePrice += hingePrice;
+  }
+  // door lock
+  const doorLock = hardwaresList.doorLocks.find(
+    (item) => item._id === estimate.config?.doorLock?.type
+  );
+  if (doorLock) {
+    summaryObject.doorLock = {
+      type: doorLock.name,
+      count: estimate.config?.doorLock?.count,
+    };
+    const price =
+      (doorLock?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.doorLock?.count || 0);
+    hardwarePrice += price;
+  }
+  // Mounting clamp wall clamp
+  if (estimate.config.mountingClamps?.wallClamp?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.wallClamp?.forEach((item) => {
+      const record = hardwaresList.wallClamp.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      wallClamp: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      wallClamp: [],
+    };
+  }
+  // Mounting clamp sleeve over
+  if (estimate.config.mountingClamps?.sleeveOver?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.sleeveOver?.forEach((item) => {
+      const record = hardwaresList.sleeveOver.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      sleeveOver: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      sleeveOver: [],
+    };
+  }
+  // Mounting clamp Glass to Glass
+  if (estimate.config.mountingClamps?.glassToGlass?.length) {
+    let data = [];
+    estimate.config.mountingClamps?.glassToGlass?.forEach((item) => {
+      const record = hardwaresList.glassToGlass.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      glassToGlass: data,
+    };
+  } else {
+    summaryObject.mountingClamps = {
+      ...summaryObject.mountingClamps,
+      glassToGlass: [],
+    };
+  }
+  // Corner Wall clamp
+  if (estimate.config.cornerClamps?.wallClamp?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.wallClamp?.forEach((item) => {
+      const record = hardwaresList.cornerWallClamp.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      wallClamp: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      wallClamp: [],
+    };
+  }
+  // Corner Sleeve over
+  if (estimate.config.cornerClamps?.sleeveOver?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.sleeveOver?.forEach((item) => {
+      const record = hardwaresList.cornerSleeveOver.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      sleeveOver: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      sleeveOver: [],
+    };
+  }
+  // Corner Glass to Glass
+  if (estimate.config.cornerClamps?.glassToGlass?.length) {
+    let data = [];
+    estimate.config.cornerClamps?.glassToGlass?.forEach((item) => {
+      const record = hardwaresList.cornerGlassToGlass.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      glassToGlass: data,
+    };
+  } else {
+    summaryObject.cornerClamps = {
+      ...summaryObject.cornerClamps,
+      glassToGlass: [],
+    };
+  }
+  // mounting channel
+  const mountingChannel = hardwaresList.mountingChannel.find(
+    (item) => item._id === estimate.config?.mountingChannel
+  );
+  if (mountingChannel) {
+    summaryObject.mountingChannel = mountingChannel.name;
+    const price =
+      (mountingChannel?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * 1;
+    hardwarePrice += price;
+  } else {
+    summaryObject.mountingChannel = null;
+  }
+  // glass Type
+  const glassType = hardwaresList.glassType.find(
+    (item) => item._id === estimate.config?.glassType?.type
+  );
+  if (glassType) {
+    summaryObject.glassType = {
+      type: glassType.name,
+      thickness: estimate.config?.glassType?.thickness,
+    };
+    const price =
+      (glassType?.options?.find(
+        (glass) => glass.thickness === estimate.config?.glassType?.thickness
+      )?.cost || 0) * estimate.config?.sqftArea;
+    glassPrice = price;
+  }
+  // glassAddons
+  let glassAddonsNameArray = [];
+  estimate.config?.glassAddons?.forEach((glassAddonId) => {
+    const item = hardwaresList.glassAddons.find(
+      (_item) => _item._id === glassAddonId
+    );
+    if (item) {
+      glassAddonsNameArray.push(item.name);
+      glassAddonPrice +=
+        (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
+    }
+  });
+  // sliding Door System
+  const slidingDoorSystem = hardwaresList.slidingDoorSystem.find(
+    (item) => item._id === estimate.config?.slidingDoorSystem?.type
+  );
+  if (slidingDoorSystem) {
+    summaryObject.slidingDoorSystem = {
+      type: slidingDoorSystem.name,
+      count: estimate.config?.slidingDoorSystem?.count,
+    };
+    const price =
+      (slidingDoorSystem?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.slidingDoorSystem?.count || 0);
+    hardwarePrice += price;
+  }
+  // header
+  const header = hardwaresList.header.find(
+    (item) => item._id === estimate.config?.header?.type
+  );
+  if (header) {
+    summaryObject.header = {
+      type: header.name,
+      count: estimate.config?.header?.count,
+    };
+    const price =
+      (header?.finishes?.find(
+        (item) => item.finish_id === estimate.config.hardwareFinishes
+      )?.cost || 0) * (estimate.config?.header?.count || 0);
+    hardwarePrice += price;
+  }
+  //hardwareAddons
+  if (estimate.config?.hardwareAddons?.length) {
+    let data = [];
+    estimate.config?.hardwareAddons?.forEach((item) => {
+      const record = hardwaresList.hardwareAddons.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price =
+          (record?.finishes?.find(
+            (item) => item.finish_id === estimate.config.hardwareFinishes
+          )?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.hardwareAddons = data;
+  } else {
+    summaryObject.hardwareAddons = [];
+  }
+  // fabrication price
+  let fabricationPrice = 0;
+  if (estimate.config?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
+    fabricationPrice =
+      Number(estimate.config?.oneInchHoles ?? 0) *
+        (companySettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ?? 0) +
+      Number(estimate.config?.hingeCut ?? 0) *
+        (companySettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+      Number(estimate.config?.clampCut ?? 0) *
+        (companySettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+      Number(estimate.config?.notch ?? 0) *
+        (companySettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+      Number(estimate.config?.outages ?? 0) *
+        (companySettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+      Number(estimate.config?.mitre ?? 0) *
+        (companySettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+      Number(estimate.config?.polish ?? 0) *
+        (companySettings?.fabricatingPricing?.polishPricePerOneByTwoInch ?? 0);
+  } else if (
+    estimate.config?.glassType?.thickness === thicknessTypes.THREEBYEIGHT
+  ) {
+    fabricationPrice =
+      Number(estimate.config?.oneInchHoles ?? 0) *
+        (companySettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+          0) +
+      Number(estimate.config?.hingeCut ?? 0) *
+        (companySettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+          0) +
+      Number(estimate.config?.clampCut ?? 0) *
+        (companySettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+          0) +
+      Number(estimate.config?.notch ?? 0) *
+        (companySettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+      Number(estimate.config?.outages ?? 0) *
+        (companySettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+      Number(estimate.config?.mitre ?? 0) *
+        (companySettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+      Number(estimate.config?.polish ?? 0) *
+        (companySettings?.fabricatingPricing?.polishPricePerThreeByEightInch ??
+          0);
+  }
+  const laborPrice =
+    estimate.config?.people *
+    estimate.config?.hours *
+    (companySettings?.miscPricing?.hourlyRate ?? 0);
+  const totalPrice =
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+      (companySettings?.miscPricing?.pricingFactorStatus
+        ? companySettings?.miscPricing?.pricingFactor
+        : 1) +
+    laborPrice;
+  summaryObject.pricing = {
+    hardwarePrice,
+    fabricationPrice,
+    glassPrice,
+    glassAddonPrice,
+    laborPrice,
+    totalPrice,
+  };
+  return summaryObject;
 };
