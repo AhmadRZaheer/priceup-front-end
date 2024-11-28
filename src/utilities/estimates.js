@@ -1250,7 +1250,8 @@ const generateInvoiceItemForMirrors = async (
   hardwaresList,
   companySettings
 ) => {
-  
+  let summaryObject = {};
+  return summaryObject;
 };
 
 const generateInvoiceItemForWineCellars = async (
