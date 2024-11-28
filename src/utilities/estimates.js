@@ -33,7 +33,7 @@ import {
   updateMeasurements,
 } from "@/redux/estimateCalculations";
 import { calculateAreaAndPerimeter } from "./common";
-
+import { renderMeasurementSides as renderMeasurementSidesOfMirror } from "@/utilities/mirrorEstimates";
 export const generateNotificationsForCurrentItem = (
   estimateState,
   calculatedGlassThickness = ""
@@ -884,7 +884,7 @@ const generateInvoiceItemForShowers = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
-  summaryObject.measurement = measurementString;
+  summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
   summaryObject.sqftArea = estimate.config?.sqftArea;
@@ -1228,12 +1228,25 @@ const generateInvoiceItemForShowers = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
-  const totalPrice =
+  let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
     laborPrice;
+  if (estimate.config?.additionalFields?.length > 0) {
+    totalPrice += estimate.config.additionalFields.reduce(
+      (acc, item) =>
+        acc +
+        Number(
+          item.cost *
+            (companySettings?.miscPricing?.pricingFactorStatus
+              ? companySettings?.miscPricing?.pricingFactor
+              : 1)
+        ),
+      0
+    );
+  }
   summaryObject.pricing = {
     hardwarePrice,
     fabricationPrice,
@@ -1251,6 +1264,136 @@ const generateInvoiceItemForMirrors = async (
   companySettings
 ) => {
   let summaryObject = {};
+  let hardwarePrice = 0;
+  let glassPrice = 0;
+  let edgeWorkPrice = 0;
+  let glassAddonPrice = 0;
+  const measurementString = renderMeasurementSidesOfMirror(
+    estimate.config?.measurements
+  );
+  summaryObject.measurements = measurementString;
+  summaryObject.layout = "Mirror";
+  summaryObject.sqftArea = estimate.config?.sqftArea;
+  summaryObject.simpleHoles = estimate.config.simpleHoles;
+  summaryObject.lightHoles = estimate.config.lightHoles;
+  summaryObject.notch = estimate.config.notch;
+  summaryObject.singleOutletCutout = estimate.config.singleOutletCutout;
+  summaryObject.doubleOutletCutout = estimate.config.doubleOutletCutout;
+  summaryObject.tripleOutletCutout = estimate.config.tripleOutletCutout;
+  summaryObject.quadOutletCutout = estimate.config.quadOutletCutout;
+  summaryObject.people = estimate.config.people;
+  summaryObject.hours = estimate.config.hours;
+  summaryObject.additionalFields = estimate.config.additionalFields;
+
+  // glass Type
+  const glassType = hardwaresList.glassTypes.find(
+    (item) => item._id === estimate.config?.glassType?.type
+  );
+  if (glassType) {
+    summaryObject.glassType = {
+      type: glassType.name,
+      thickness: estimate.config?.glassType?.thickness,
+    };
+    const price =
+      (glassType?.options?.find(
+        (glass) => glass.thickness === estimate.config?.glassType?.thickness
+      )?.cost || 0) * estimate.config?.sqftArea;
+    glassPrice = price;
+  }
+  // edgeWork
+  const edgeWork = hardwaresList.edgeWorks.find(
+    (item) => item._id === estimate.config?.edgeWork?.type
+  );
+  if (edgeWork) {
+    summaryObject.edgeWork = {
+      type: edgeWork.name,
+      thickness: estimate.config?.edgeWork?.thickness,
+    };
+    const price =
+      (edgeWork?.options?.find(
+        (glass) => glass.thickness === estimate.config?.edgeWork?.thickness
+      )?.cost || 0) * estimate.config?.sqftArea;
+    edgeWorkPrice = price;
+  }
+  // glassAddons
+  let glassAddonsNameArray = [];
+  estimate.config?.glassAddons?.forEach((glassAddonId) => {
+    const item = hardwaresList.glassAddons.find(
+      (_item) => _item._id === glassAddonId
+    );
+    if (item) {
+      glassAddonsNameArray.push(item.name);
+      glassAddonPrice +=
+        (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
+    }
+  });
+
+  //hardwares
+  if (estimate.config?.hardwares?.length) {
+    let data = [];
+    estimate.config?.hardwares?.forEach((item) => {
+      const record = hardwaresList.hardwares.find(
+        (_item) => _item._id === item.type
+      );
+      if (record) {
+        data.push({ type: record.name, count: item.count });
+        const price = (record?.options[0]?.cost || 0) * (item.count || 0);
+        hardwarePrice += price;
+      }
+    });
+    summaryObject.hardwareAddons = data;
+  } else {
+    summaryObject.hardwareAddons = [];
+  }
+
+  // fabrication price
+  let fabricationPrice = 0;
+  fabricationPrice =
+    (estimate.config?.simpleHoles ?? 0) *
+      (companySettings?.holeMultiplier ?? 0) +
+    (estimate.config?.lightHoles ?? 0) *
+      (companySettings?.lightHoleMultiplier ?? 0) +
+    (estimate.config?.notch ?? 0) * (companySettings?.notchMultiplier ?? 0) +
+    (estimate.config?.singleOutletCutout ?? 0) *
+      (companySettings?.singleOutletCutoutMultiplier ?? 0) +
+    (estimate.config?.doubleOutletCutout ?? 0) *
+      (companySettings?.doubleOutletCutoutMultiplier ?? 0) +
+    (estimate.config?.tripleOutletCutout ?? 0) *
+      (companySettings?.tripleOutletCutoutMultiplier ?? 0) +
+    (estimate.config.quadOutletCutout ?? 0) *
+      (companySettings?.quadOutletCutoutMultiplier ?? 0);
+
+  const laborPrice =
+    estimate.config?.people *
+    estimate.config?.hours *
+    (companySettings?.hourlyRate ?? 0);
+  let totalPrice =
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+      (companySettings?.pricingFactorStatus
+        ? companySettings?.pricingFactor
+        : 1) +
+    laborPrice;
+  if (estimate.config?.additionalFields?.length > 0) {
+    totalPrice += estimate.config.additionalFields.reduce(
+      (acc, item) =>
+        acc +
+        Number(
+          item.cost *
+            (companySettings?.pricingFactorStatus
+              ? companySettings?.pricingFactor
+              : 1)
+        ),
+      0
+    );
+  }
+  summaryObject.pricing = {
+    hardwarePrice,
+    fabricationPrice,
+    glassPrice,
+    glassAddonPrice,
+    laborPrice,
+    totalPrice,
+  };
   return summaryObject;
 };
 
@@ -1268,7 +1411,7 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
-  summaryObject.measurement = measurementString;
+  summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
   summaryObject.sqftArea = estimate.config?.sqftArea;
@@ -1627,12 +1770,25 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
-  const totalPrice =
+  let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
     laborPrice;
+  if (estimate.config?.additionalFields?.length > 0) {
+    totalPrice += estimate.config.additionalFields.reduce(
+      (acc, item) =>
+        acc +
+        Number(
+          item.cost *
+            (companySettings?.miscPricing?.pricingFactorStatus
+              ? companySettings?.miscPricing?.pricingFactor
+              : 1)
+        ),
+      0
+    );
+  }
   summaryObject.pricing = {
     hardwarePrice,
     fabricationPrice,
