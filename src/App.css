@@ -418,22 +418,22 @@ input {
 /* Customize Swiper navigation button size and color */
 .swiper-button-next,
 .swiper-button-prev {
-  color: white !important; /* Set your custom color */
+  color: #8477DA !important; /* Set your custom color */
 }
 
 /* Adjust button's position if needed */
 .swiper-button-next {
-  right: 10px !important; /* Move closer to the edge if necessary */
+  right: 20px !important; /* Move closer to the edge if necessary */
 }
 
 .swiper-button-prev {
-  left: 10px !important; /* Move closer to the edge if necessary */
+  left: 20px !important; /* Move closer to the edge if necessary */
 }
 
 /* Optional: Change color on hover */
 .swiper-button-next:hover,
 .swiper-button-prev:hover {
-  color: white !important;
+  color: #8477DA !important;
   /* background-color: #8477DA; */
   /* padding: 10px; */
   /* border-radius: 50%; */

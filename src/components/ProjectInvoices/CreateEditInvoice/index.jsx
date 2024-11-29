@@ -53,7 +53,7 @@ const ProjectInvoiceComponent = ({
 
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
-  const { mutate: createInvoice, isSuccess, isLoading } = useCreateDocument();
+  const { mutateAsync: createInvoice, isSuccess, isLoading } = useCreateDocument();
   const formik = useFormik({
     initialValues: {
       customer: customerID || "",
@@ -131,7 +131,7 @@ const ProjectInvoiceComponent = ({
     "EstimateListDataEstimateListDataEstimateListDataEstimateListData"
   );
 
-  const handleCraete = (values) => {
+  const handleCraete = async (values) => {
     const customer = customerList?.find(
       (data) => data?._id === values.customer
     );
@@ -167,18 +167,25 @@ const ProjectInvoiceComponent = ({
       notes: values.notes,
       customer: customerObject,
       source: sourceObject,
-      items: EstimateListData.length > 0 ? EstimateListData : [],
+      items: EstimateListData?.length > 0 ? EstimateListData : [],
       subTotal: totalSum,
       grandTotal: totalSum,
     };
-    createInvoice({ data, apiRoute: `${backendURL}/invoices/save` });
+    try {
+      const response  = await createInvoice({ data, apiRoute: `${backendURL}/invoices/save` });
+      navigate(`/invoices/${response?._id}`);
+      console.log(response,'dfdfdfdf')
+    } catch (error) {
+      console.log(error);
+    }
+    
   };
 
-  useEffect(() => {
-    if (isSuccess) {
-      navigate("/invoices");
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     navigate("/invoices");
+  //   }
+  // }, [isSuccess]);
 
   const handleCopyPreview = (value) => {
     navigator.clipboard
@@ -356,7 +363,7 @@ const ProjectInvoiceComponent = ({
                         id="demo-select-small"
                         size="small"
                         sx={{ height: "40px" }}
-                        value={formik.values.customer}
+                        value={formik.values?.customer}
                         onChange={formik.handleChange}
                         fullWidth
                       >
@@ -528,7 +535,7 @@ const ProjectInvoiceComponent = ({
                       placeholder="Enter Additional Notes"
                       size="large"
                       variant="outlined"
-                      sx={{ padding: "10px", resize: "vertical" }}
+                      sx={{ padding: "10px",  }}
                       value={formik.values.notes}
                       onChange={formik.handleChange}
                     />

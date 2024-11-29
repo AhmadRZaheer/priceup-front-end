@@ -189,6 +189,7 @@ function InvoiceDetails() {
           )}
           {data?.customerPreview?.link ? (
             <Button
+            onClick={() => navigate(`customer-preview`)}
               variant="text"
               sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
               startIcon={<VisibilityIcon />}
@@ -618,7 +619,7 @@ function InvoiceDetails() {
               <Typography>${data?.grandTotal?.toLocaleString()}</Typography>
             </div>
           </div>
-        </div>2
+        </div>
       </Box>
     </Card>
   );

@@ -1136,6 +1136,9 @@ const generateInvoiceItemForShowers = async (
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
   });
+
+  summaryObject.glassAddons = glassAddonsNameArray;
+
   // sliding Door System
   const slidingDoorSystem = hardwaresList.slidingDoorSystem.find(
     (item) => item._id === estimate.config?.slidingDoorSystem?.type
@@ -1334,6 +1337,8 @@ const generateInvoiceItemForMirrors = async (
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
   });
+
+  summaryObject.glassAddons = glassAddonsNameArray;
 
   //hardwares
   if (estimate.config?.hardwares?.length) {
@@ -1686,6 +1691,9 @@ const generateInvoiceItemForWineCellars = async (
         (item?.options[0]?.cost || 0) * estimate.config?.sqftArea;
     }
   });
+
+  summaryObject.glassAddons = glassAddonsNameArray;
+
   // sliding Door System
   const slidingDoorSystem = hardwaresList.slidingDoorSystem.find(
     (item) => item._id === estimate.config?.slidingDoorSystem?.type

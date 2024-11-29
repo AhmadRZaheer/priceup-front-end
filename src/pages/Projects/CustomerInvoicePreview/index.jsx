@@ -8,9 +8,10 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { getSelectedImages } from "@/redux/globalEstimateForm";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import {
   useCreateDocument,
+  useEditDocument,
   useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
@@ -40,7 +41,7 @@ const CustomerInvoicePreview = () => {
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   // const selectedImages = useSelector(getSelectedImages);
-  const { mutate: generatePage, isLoading, isSuccess } = useCreateDocument();
+  const { mutate: generatePage, isLoading, isSuccess } = useEditDocument();
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
@@ -49,16 +50,22 @@ const CustomerInvoicePreview = () => {
 
   const handleClick = () => {
     const projectId = decodedToken?.company_id;
-    const data = {
-      company_id: projectId,
-      project_id: id,
-      // customer_id,
-    };
-    generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
+    // Aaj ki date lein
+    const currentDate = new Date();
+    // 15 din add karein
+    currentDate.setDate(currentDate.getDate() + 15);
+    // ISO format mein convert karein
+    const formattedDate = currentDate.toISOString();
+
+    const customerPayLoad = {
+      link: `${frontendURL}/customer-invoice-preview/${id}`,
+      expiresAt: formattedDate,
+    };    
+    generatePage({ data:{customerPreview:customerPayLoad}, apiRoute: `${backendURL}/invoices/${id}` });
   };
   useEffect(() => {
     if (isSuccess) {
-      navigate(`/projects/${id}`);
+      navigate(`/invoices/${id}`);
     }
   }, [isSuccess]);
   return (
@@ -87,7 +94,7 @@ const CustomerInvoicePreview = () => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <NavLink
-                to={id ? `/projects/${id}` : "/projects"}
+                to={id ? `/invoices/${id}` : "/invoices"}
                 style={{ display: "flex", alignSelf: "center" }}
               >
                 <Box
