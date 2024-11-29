@@ -944,9 +944,10 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
+          {glassDetails?.length > 0 && glassPrice !== 0  && (
+            <>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
-            {glassDetails?.length > 0 && (
               <Typography
                 sx={{
                   fontSize: "14px",
@@ -957,7 +958,6 @@ const Summary = ({ setStep }) => {
               >
                 Note:
               </Typography>
-            )}
             {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
             {glassDetails.map((glass, index) => {
               const actualPrice =
@@ -996,6 +996,8 @@ const Summary = ({ setStep }) => {
               );
             })}
           </Box>
+          </>
+          )}
         </Box>
         {isMobile ? (
           <Box

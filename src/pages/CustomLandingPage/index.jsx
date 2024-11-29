@@ -3,7 +3,7 @@ import { setListData } from "@/redux/estimateCalculations";
 import { setLocationInfo } from "@/redux/locationSlice";
 import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
+import { useFetchAllDocuments, useFetchSingleDocument } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL } from "@/utilities/common";
 import {
   Box,
@@ -25,32 +25,34 @@ const CustomLandingPage = () => {
     refetch: refetchData,
     isFetching,
     isFetched,
-  } = useFetchAllDocuments(`${backendURL}/invoice-preview/${id}`);
+  } = useFetchSingleDocument(`${backendURL}/invoices/${id}/customer-preview`);
 
   useEffect(() => {
     if (id) {
       refetchData();
     }
   }, [id]);
-  useEffect(() => {
-    if (data?.location) {
-      dispatch(setLocationInfo(data?.location));
-    }
-    if (data?.mirrorsHardware) {
-      dispatch(setMirrorsHardware(data?.mirrorsHardware));
-    }
-    if (data?.showersHardware) {
-      dispatch(setListData(data?.showersHardware));
-    }
-    if (data?.wineCellarsHardware) {
-      dispatch(setWineCellarsHardware(data?.wineCellarsHardware));
-    }
-  }, [
-    data?.location,
-    data?.mirrorsHardware,
-    data?.showersHardware,
-    data?.wineCellarsHardware,
-  ]);
+
+  // useEffect(() => {
+  //   if (data?.location) {
+  //     dispatch(setLocationInfo(data?.location));
+  //   }
+  //   if (data?.mirrorsHardware) {
+  //     dispatch(setMirrorsHardware(data?.mirrorsHardware));
+  //   }
+  //   if (data?.showersHardware) {
+  //     dispatch(setListData(data?.showersHardware));
+  //   }
+  //   if (data?.wineCellarsHardware) {
+  //     dispatch(setWineCellarsHardware(data?.wineCellarsHardware));
+  //   }
+  // }, [
+  //   data?.location,
+  //   data?.mirrorsHardware,
+  //   data?.showersHardware,
+  //   data?.wineCellarsHardware,
+  // ]);
+  
   const handleBack = () => {
     window.location.href = `${frontendURL}:3005`;
   };
@@ -65,7 +67,7 @@ const CustomLandingPage = () => {
     >
       <CircularProgress size={64} sx={{ color: "#8477DA" }} />
     </Box>
-  ) : data === null || data === undefined || data?.length <= 0 ? (
+  ) : data === null || data === undefined ? (
     <Container maxWidth="xl" sx={{ pt: 2.5 }}>
       <Box
         sx={{
@@ -120,7 +122,7 @@ const CustomLandingPage = () => {
   ) : (
     <Box sx={{ background: "#FFFFFF" }}>
       <CustomizeLandingPage
-        selectedData={data?.estimatesList?.estimates}
+        selectedData={data}
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}

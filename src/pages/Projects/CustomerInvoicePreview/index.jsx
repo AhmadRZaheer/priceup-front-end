@@ -8,29 +8,40 @@ import EngineeringIcon from "@mui/icons-material/Engineering";
 import { getSelectedImages } from "@/redux/globalEstimateForm";
 import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import {
   useCreateDocument,
+  useEditDocument,
   useFetchAllDocuments,
+  useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
 import CustomizeLandingPage from "@/components/CustomizeLandingPage";
+import { SaveOutlined } from "@mui/icons-material";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const customer_id = queryParams.get("customer_id");
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const customer_id = queryParams.get("customer_id");
+  // const {
+  //   data: selectedData,
+  //   refetch: refetchData,
+  //   isFetching,
+  //   isFetched,
+  // } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
+
   const {
     data: selectedData,
     refetch: refetchData,
-    isFetching,
     isFetched,
-  } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
+    isFetching,
+  } = useFetchSingleDocument(`${backendURL}/invoices/${id}`);
+
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const selectedImages = useSelector(getSelectedImages);
-  const { mutate: generatePage, isLoading, isSuccess } = useCreateDocument();
+  // const dispatch = useDispatch();
+  // const selectedImages = useSelector(getSelectedImages);
+  const { mutate: generatePage, isLoading, isSuccess } = useEditDocument();
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
@@ -39,22 +50,36 @@ const CustomerInvoicePreview = () => {
 
   const handleClick = () => {
     const projectId = decodedToken?.company_id;
-    const data = {
-      company_id: projectId,
-      project_id: id,
-      customer_id,
-    };
-    generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
+    // Aaj ki date lein
+    const currentDate = new Date();
+    // 15 din add karein
+    currentDate.setDate(currentDate.getDate() + 15);
+    // ISO format mein convert karein
+    const formattedDate = currentDate.toISOString();
+
+    const customerPayLoad = {
+      link: `${frontendURL}/customer-invoice-preview/${id}`,
+      expiresAt: formattedDate,
+    };    
+    generatePage({ data:{customerPreview:customerPayLoad}, apiRoute: `${backendURL}/invoices/${id}` });
   };
   useEffect(() => {
     if (isSuccess) {
-      navigate(`/projects/${id}`);
+      navigate(`/invoices/${id}`);
     }
   }, [isSuccess]);
   return (
     <CommonLayout>
       <Box className="econtent-wrapper">
-        <Box sx={{ position: "fixed", width: "-webkit-fill-available",mr:'21px',top:'82px', zIndex: 10000 }}>
+        <Box
+          sx={{
+            position: "fixed",
+            width: "-webkit-fill-available",
+            mr: "21px",
+            top: "82px",
+            zIndex: 10000,
+          }}
+        >
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
@@ -63,19 +88,19 @@ const CustomerInvoicePreview = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginTop: { sm: 0, xs: 5 },             
+              marginTop: { sm: 0, xs: 5 },
               py: 1.5,
             }}
           >
-            <Box sx={{ display: "flex",alignItems:'center' }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <NavLink
-                to={id ? `/projects/${id}` : "/projects"}
+                to={id ? `/invoices/${id}` : "/invoices"}
                 style={{ display: "flex", alignSelf: "center" }}
               >
                 <Box
                   sx={{
                     color: "black",
-                    display:'flex'
+                    display: "flex",
                   }}
                 >
                   <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
@@ -127,8 +152,8 @@ const CustomerInvoicePreview = () => {
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <>
-                  <EngineeringIcon sx={{ pr: 1 }} />
-                  Generate
+                  <SaveOutlined sx={{ pr: 1 }} />
+                  Save
                 </>
               )}
             </Button>

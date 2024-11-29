@@ -169,6 +169,7 @@ const AdminSideBar = () => {
     if (
       [
         "/wine-cellar/glass-types",
+        "/wine-cellar/glass-addons",
         "/wine-cellar/finishes",
         "/wine-cellar/hardwares",
         "/wine-cellar/layouts",
@@ -420,6 +421,10 @@ const AdminSideBar = () => {
               <MenuSigleItem link="/estimates">
                 <DescriptionOutlinedIcon sx={{}} />
                 <span>Estimates</span>
+              </MenuSigleItem>
+              <MenuSigleItem link="/invoices">
+                <DescriptionOutlinedIcon sx={{}} />
+                <span>Invoices</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers" secondLink='/customers/edit'>
                 <PeopleAltOutlinedIcon sx={{}} />

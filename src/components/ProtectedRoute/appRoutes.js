@@ -60,7 +60,11 @@ import SuperAdminDashboard from "@/pages/SuperAdminDashboard";
 import CustomLandingPage from "@/pages/CustomLandingPage";
 import CustomerInvoicePreview from "@/pages/Projects/CustomerInvoicePreview";
 import WineCellarGlassAddon from "@/pages/WineCellar/GlassAddon";
-
+import Invoices from "@/pages/Invoices";
+import ProjectInvoiceCreate from "@/pages/Invoices/Create";
+import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
+import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
+import CreateLandingInvoice from "../ProjectInvoices/CreateLandingInvoice";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -93,14 +97,13 @@ const AppRoutes = () => {
         }
       />
       {isAdmin(decodedToken) ||
-        (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
+      (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="projects/">
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            <Route path=":id/preview-invoice" element={<CustomerInvoicePreview />} />
           </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
@@ -109,6 +112,16 @@ const AppRoutes = () => {
             <Route path="dimensions" element={<EstimateDimensions />} />
             <Route path="review" element={<EstimateReview />} />
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
+          </Route>
+          <Route path="/invoices/">
+            <Route index element={<Invoices />} />
+            <Route path="create" element={<ProjectInvoiceCreate />} />
+            <Route path="new-invoice" element={<CreateNewInvoice />} />
+            <Route
+              path=":id/customer-preview"
+              element={<CustomerInvoicePreview />}
+            />
+            <Route path=":id" element={<ProjectInvoiceDetail />} />
           </Route>
           <Route path="/customers/">
             <Route index element={<Customers />} />
@@ -202,17 +215,22 @@ const AppRoutes = () => {
       )}
       {/** Notification */}
       {isAdmin(decodedToken) ||
-        isCustomAdmin(decodedToken) ||
-        isStaff(decodedToken) ||
-        isSuperAdmin(decodedToken) ? (
+      isCustomAdmin(decodedToken) ||
+      isStaff(decodedToken) ||
+      isSuperAdmin(decodedToken) ? (
         <Route path="/notification" element={<Notification />} />
       ) : (
         ""
       )}
+      
+      <Route path="/customer-invoice-preview/:id" element={<CustomLandingPage />} />
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
-      <Route path="/custom-landing/:id" element={<CustomLandingPage />} />
+      <Route
+        path="/custom-landing-invoice"
+        element={<CreateLandingInvoice islanding={true} />}
+      />
     </Routes>
   );
 };

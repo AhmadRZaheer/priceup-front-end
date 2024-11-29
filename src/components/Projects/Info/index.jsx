@@ -25,7 +25,7 @@ import {
 } from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Add, Close } from "@mui/icons-material";
+import { Add, Close, VisibilityOutlined } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
@@ -98,7 +98,6 @@ const ProjectInfoComponent = ({
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
   const [openCompanySelectModal, setOpenCompanySelectModal] = useState(false);
-  const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
   const [activeTabNumber, setActiveTabNumber] = useState(
     EstimateCategory.SHOWERS
@@ -237,12 +236,6 @@ const ProjectInfoComponent = ({
   useEffect(() => {
     setProjectNotes(formik.values.notes);
   }, [formik.values.notes]);
-  const handleCopyPreview = (value) => {
-    navigator.clipboard
-      .writeText(value ?? "")
-      .then(() => setCopyLink(true))
-      .catch((err) => console.error("Failed to copy text: ", err));
-  };
 
   return (
     <Box
@@ -289,64 +282,60 @@ const ProjectInfoComponent = ({
         </Box>
         {projectState !== "create" ? (
           <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
-            {projectData?.invoicePreview?._id ? (
-              <Box>
-                <div className="subscribe-box">
-                  <input
-                    type="email"
-                    className="email-input"
-                    placeholder="Customer Preview Link"
-                    value={`${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`}
-                    disabled
-                  />
-                  <Tooltip
-                    placement="top"
-                    title={copyLink ? "Copied" : "Copy Customer Preview Link"}
-                  >
-                    <button
-                      className="subscribe-btn"
-                      onClick={() =>
-                        handleCopyPreview(
-                          `${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`
-                        )
-                      }
-                    >
-                      {copyLink ? (
-                        <DoneOutlinedIcon sx={{ fontSize: "19px" }} />
-                      ) : (
-                        <ContentCopyIcon sx={{ fontSize: "19px" }} />
-                      )}
-                    </button>
-                  </Tooltip>
-                </div>
-              </Box>
+            {projectData?.invoice ? (
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  navigate(`/invoices/${projectData?.invoice?._id}`)
+                }
+                startIcon={<VisibilityOutlined />}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                View Invoice
+              </Button>
             ) : (
-              ""
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  navigate(
+                    `/invoices/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
+                  )
+                }
+                startIcon={<Add />}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                Create Invoice
+                {/* Customer Preview */}
+              </Button>
             )}
-
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() =>
-                navigate(`preview-invoice?customer_id=${selectedCustomer?._id}`)
-              }
-              sx={{
-                backgroundColor: "#8477DA",
-                height: "44px",
-                width: { sm: "auto", xs: "187px" },
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 1,
-                fontSize: { lg: 16, md: 15, xs: 12 },
-                padding: {
-                  sm: "10px 16px  !important",
-                  xs: "5px 5px !important",
-                },
-              }}
-            >
-              Customer Preview
-            </Button>
             <Button
               fullWidth
               variant="contained"
@@ -825,7 +814,9 @@ const ProjectInfoComponent = ({
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                         Add Notes:
                       </Typography>
