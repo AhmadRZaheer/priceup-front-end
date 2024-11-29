@@ -23,7 +23,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 export default function ProjectInvoices() {
-  const routePrefix = `${backendURL}/projects`;
+  const routePrefix = `${backendURL}/invoices`;
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -46,7 +46,7 @@ export default function ProjectInvoices() {
   };
 
   const { data: stats, refetch: refetchStats } = useFetchSingleDocument(
-    `${routePrefix}/allStats`
+    `${routePrefix}/stats`
   );
 
   const handleChange = (e) => {

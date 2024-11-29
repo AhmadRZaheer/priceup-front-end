@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   useCreateDocument,
   useFetchAllDocuments,
@@ -24,6 +24,11 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
+import { generateInvoiceItemsFromEstimates } from "@/utilities/estimates";
+import { useSelector } from "react-redux";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getListData } from "@/redux/estimateCalculations";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -41,21 +46,25 @@ const ProjectInvoiceComponent = ({
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
+  const companySettings = useSelector((state) => state.location);
+  const WinelistData = useSelector(getWineCellarsHardware);
+  const MirrorsHardwareList = useSelector(getMirrorsHardware);
+  const ShowerHardwareList = useSelector(getListData);
 
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
   const { mutate: createInvoice, isSuccess, isLoading } = useCreateDocument();
   const formik = useFormik({
     initialValues: {
-      customer:  customerID || "",
+      customer: customerID || "",
       project: projectID || "",
       dueDate: null,
-      notes:''
+      notes: "",
     },
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      handleCraete(values);  
+      handleCraete(values);
     },
   });
 
@@ -74,6 +83,42 @@ const ProjectInvoiceComponent = ({
     `${backendURL}/projects/by-customer/${formik.values.customer}`
   );
 
+  const {
+    data: estimatesList,
+    isFetched: estimateListFetched,
+    isFetching: estimateListFetching,
+    refetch: refetchEstimateList,
+  } = useFetchAllDocuments(
+    `${backendURL}/projects/all-estimate/${formik.values.project}`
+  );
+
+  useEffect(() => {
+    if (formik.values.project) {
+      refetchEstimateList();
+    }
+  }, [formik.values.project]);
+
+  const hardwaresList = {
+    showers: ShowerHardwareList,
+    mirrors: MirrorsHardwareList,
+    wineCellars: WinelistData,
+  };
+  console.log(
+    estimatesList,
+    formik.values.project,
+    "estimatesListestimatesListestimatesListestimatesList"
+  );
+  const EstimateListData = useMemo(() => {
+    if (estimatesList?.length > 0) {
+      const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
+        estimatesList,
+        hardwaresList,
+        companySettings
+      );
+      return EstimateDeatilsData;
+    }
+  }, [formik.values.project, estimatesList]);
+
   useEffect(() => {
     refetch();
     if (formik.values.customer) {
@@ -81,25 +126,59 @@ const ProjectInvoiceComponent = ({
     }
   }, [formik.values.customer]);
 
-  const handleCraete = (values)=>{
-    const customer = customerList?.find((data) => data?._id === values.customer);
-    const source = projectsList?.projects?.find((data) => data?._id === values.project);
+  console.log(
+    EstimateListData,
+    "EstimateListDataEstimateListDataEstimateListDataEstimateListData"
+  );
+
+  const handleCraete = (values) => {
+    const customer = customerList?.find(
+      (data) => data?._id === values.customer
+    );
+    const { name, email, address, phone } = customer;
+
+    const source = projectsList?.projects?.find(
+      (data) => data?._id === values.project
+    );
+    const sourceObject = {
+      projectName: source.name,
+      city: source.addressData.city,
+      country: source.addressData.country,
+      postalCode: source.addressData.postalCode,
+      street: source.addressData.street,
+      state: source.addressData.state,
+      companyName : source.companyData.name,
+      companyAddress : source.companyData.address,
+    };
+    const customerObject = {
+      name,
+      email,
+      address,
+      phone,
+    };
+    const totalSum = EstimateListData?.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.pricing.totalPrice;
+    }, 0);
+    console.log(totalSum, EstimateListData, "weuygwuhsjdcifwefbdvichjbne");
     const data = {
       customer_id: values.customer,
       source_id: values.project,
       dueDate: values.dueDate,
-      notes:values.notes,
-      customer,
-      source
+      notes: values.notes,
+      customer:customerObject,
+      source: sourceObject,
+      items: EstimateListData.length > 0 ? EstimateListData : [],
+      subTotal: totalSum,
+      grandTotal: totalSum,
     };
     createInvoice({ data, apiRoute: `${backendURL}/invoices/save` });
-  }
+  };
 
-  useEffect(()=>{
-    if(isSuccess){
-      navigate('/invoices')
+  useEffect(() => {
+    if (isSuccess) {
+      navigate("/invoices");
     }
-  },[isSuccess])
+  }, [isSuccess]);
 
   const handleCopyPreview = (value) => {
     navigator.clipboard
@@ -338,8 +417,8 @@ const ProjectInvoiceComponent = ({
                         onChange={formik.handleChange}
                         fullWidth
                       >
-                        {(projectsListFetched &&
-                          projectsList?.projects?.length > 0) ?
+                        {projectsListFetched &&
+                        projectsList?.projects?.length > 0 ? (
                           projectsList?.projects?.map((project) => (
                             <MenuItem
                               key={project._id}
@@ -348,9 +427,12 @@ const ProjectInvoiceComponent = ({
                             >
                               {project.name}
                             </MenuItem>
-                          )) : 
-                          <Typography sx={{textAlign:'center'}}>No Project Found!</Typography>
-                          }
+                          ))
+                        ) : (
+                          <Typography sx={{ textAlign: "center" }}>
+                            No Project Found!
+                          </Typography>
+                        )}
                         {projectsListFetching && (
                           <Box sx={{ textAlign: "center" }}>
                             <CircularProgress
@@ -414,45 +496,45 @@ const ProjectInvoiceComponent = ({
                       />
                     </Box>
                   </Box>
-                </Box>                
-              </Box>
-              <Box sx={{ width: { sm: "50%", xs: "100%" } ,pt:1}}>
-                    <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                        Add Notes:
-                      </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          paddingY: { sm: 0, xs: 1 },
-                          width: "100%",
-                        }}
-                      >
-                        <TextareaAutosize
-                          style={{
-                            padding: "10px",
-                            borderColor: "#cccc",
-                            borderRadius: "5px",
-                          }}
-                          className="custom-textfield"
-                          color="neutral"
-                          // cols={isMobile ? 38 : 50}
-                          minRows={5}
-                          maxRows={19}
-                          id="notes"
-                          name="notes"
-                          placeholder="Enter Additional Notes"
-                          size="large"
-                          variant="outlined"
-                          sx={{ padding: "10px", resize: "vertical" }}
-                          value={formik.values.notes}
-                          onChange={formik.handleChange}
-                        />
-                      </Box>
-                    </Box>
                 </Box>
+              </Box>
+              <Box sx={{ width: { sm: "50%", xs: "100%" }, pt: 1 }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                  <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                    Add Notes:
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 1,
+                      paddingY: { sm: 0, xs: 1 },
+                      width: "100%",
+                    }}
+                  >
+                    <TextareaAutosize
+                      style={{
+                        padding: "10px",
+                        borderColor: "#cccc",
+                        borderRadius: "5px",
+                      }}
+                      className="custom-textfield"
+                      color="neutral"
+                      // cols={isMobile ? 38 : 50}
+                      minRows={5}
+                      maxRows={19}
+                      id="notes"
+                      name="notes"
+                      placeholder="Enter Additional Notes"
+                      size="large"
+                      variant="outlined"
+                      sx={{ padding: "10px", resize: "vertical" }}
+                      value={formik.values.notes}
+                      onChange={formik.handleChange}
+                    />
+                  </Box>
+                </Box>
+              </Box>
               {/** Section 2 */}
               <Box
                 sx={{
@@ -477,7 +559,8 @@ const ProjectInvoiceComponent = ({
                     disabled={
                       formik.values.customer === "" ||
                       formik.values.project === "" ||
-                      formik.values.dueDate === null || isLoading
+                      formik.values.dueDate === null ||
+                      isLoading
                         ? true
                         : false
                     }
@@ -486,10 +569,7 @@ const ProjectInvoiceComponent = ({
                     {isLoading ? (
                       <CircularProgress
                         sx={{
-                          color:
-                            isLoading
-                              ? "white"
-                              : "#8477da",
+                          color: isLoading ? "white" : "#8477da",
                         }}
                         size={24}
                       />

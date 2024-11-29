@@ -831,7 +831,7 @@ export const generateObjForMirrorPDFRuntime = (
   };
 };
 
-export const generateInvoiceItemsFromEstimates = async (
+export const generateInvoiceItemsFromEstimates = (
   estimatesList,
   hardwaresList,
   companySettings
@@ -884,6 +884,9 @@ const generateInvoiceItemForShowers = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
+  summaryObject.name= estimate.name;
+  summaryObject.label= estimate.label;
+  summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
@@ -1271,6 +1274,10 @@ const generateInvoiceItemForMirrors = async (
   const measurementString = renderMeasurementSidesOfMirror(
     estimate.config?.measurements
   );
+  
+  summaryObject.name= estimate.name;
+  summaryObject.label= estimate.label;
+  summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.layout = "Mirror";
   summaryObject.sqftArea = estimate.config?.sqftArea;
@@ -1411,6 +1418,10 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config.measurements,
     estimate.config.layout_id
   );
+  
+  summaryObject.name= estimate.name;
+  summaryObject.label= estimate.label;
+  summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";

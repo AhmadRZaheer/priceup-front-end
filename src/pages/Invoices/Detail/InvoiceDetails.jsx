@@ -160,14 +160,14 @@ function InvoiceDetails() {
           <Typography sx={{ fontWeight: 500 }}>
             Company Name:{" "}
             <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.companyData?.name}
+              {data?.source?.companyName}
             </Box>
           </Typography>
           {/* <Typography>License: {companyInfo.license}</Typography> */}
           <Typography sx={{ fontWeight: 500 }}>
             Company Address:
             <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.companyData?.address}
+              {data?.source?.companyAddress}
             </Box>
           </Typography>
           {/* <Typography>{companyInfo.phone}</Typography>
@@ -182,20 +182,40 @@ function InvoiceDetails() {
           <Typography sx={{ fontWeight: 500 }}>
             Project Name:{" "}
             <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.name}
+              {data?.source?.projectName}
             </Box>
           </Typography>
           <Typography sx={{ fontWeight: 500 }}>
             Customer Name:{" "}
             <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.customerData?.name}
+              {data?.source?.customer?.name}
             </Box>
           </Typography>
-          {data?.source?.customerData?.address !== "" ? (
+          {data?.customer?.address !== "" ? (
             <Typography sx={{ fontWeight: 500 }}>
               Billing Address:{" "}
               <Box sx={{ fontWeight: 600 }} component="span">
-                {data?.source?.customerData?.address}
+                {data?.customer?.address}
+              </Box>
+            </Typography>
+          ) : (
+            ""
+          )}
+          {data?.customer?.email !== "" ? (
+            <Typography sx={{ fontWeight: 500 }}>
+              Customer Email:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.customer?.email}
+              </Box>
+            </Typography>
+          ) : (
+            ""
+          )}
+          {data?.customer?.phone !== "" ? (
+            <Typography sx={{ fontWeight: 500 }}>
+              Customer Phone:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.customer?.phone}
               </Box>
             </Typography>
           ) : (
