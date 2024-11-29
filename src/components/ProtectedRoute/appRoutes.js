@@ -66,7 +66,6 @@ import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
 import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
 import CreateLandingInvoice from "../ProjectInvoices/CreateLandingInvoice";
 
-
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
   const decodedToken = useMemo(() => {
@@ -98,14 +97,13 @@ const AppRoutes = () => {
         }
       />
       {isAdmin(decodedToken) ||
-        (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
+      (isCustomAdmin(decodedToken) && decodedToken?.company_id?.length) ? (
         <Route path="/">
           <Route index element={<Overview />} />
           <Route path="projects/">
             <Route index element={<Projects />} />
             <Route path="create" element={<ProjectCreate />} />
             <Route path=":id" element={<ProjectDetail />} />
-            <Route path=":id/preview-invoice" element={<CustomerInvoicePreview />} />
           </Route>
           <Route path="/estimates/">
             <Route index element={<Estimates />} />
@@ -119,6 +117,10 @@ const AppRoutes = () => {
             <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
             <Route path="new-invoice" element={<CreateNewInvoice />} />
+            <Route
+              path=":id/customer-preview"
+              element={<CustomerInvoicePreview />}
+            />
             <Route path=":id" element={<ProjectInvoiceDetail />} />
           </Route>
           <Route path="/customers/">
@@ -213,9 +215,9 @@ const AppRoutes = () => {
       )}
       {/** Notification */}
       {isAdmin(decodedToken) ||
-        isCustomAdmin(decodedToken) ||
-        isStaff(decodedToken) ||
-        isSuperAdmin(decodedToken) ? (
+      isCustomAdmin(decodedToken) ||
+      isStaff(decodedToken) ||
+      isSuperAdmin(decodedToken) ? (
         <Route path="/notification" element={<Notification />} />
       ) : (
         ""
@@ -223,8 +225,11 @@ const AppRoutes = () => {
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
-      <Route path="/custom-landing/:id" element={<CustomLandingPage />} />
-      <Route path="/custom-landing-invoice" element={<CreateLandingInvoice islanding={true} />} />
+      <Route path="/customer-invoice-preview/:id" element={<CustomLandingPage />} />
+      <Route
+        path="/custom-landing-invoice"
+        element={<CreateLandingInvoice islanding={true} />}
+      />
     </Routes>
   );
 };

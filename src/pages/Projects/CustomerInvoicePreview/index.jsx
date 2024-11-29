@@ -12,24 +12,34 @@ import { backendURL, getDecryptedToken } from "@/utilities/common";
 import {
   useCreateDocument,
   useFetchAllDocuments,
+  useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
 import CustomizeLandingPage from "@/components/CustomizeLandingPage";
+import { SaveOutlined } from "@mui/icons-material";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const customer_id = queryParams.get("customer_id");
+  // const location = useLocation();
+  // const queryParams = new URLSearchParams(location.search);
+  // const customer_id = queryParams.get("customer_id");
+  // const {
+  //   data: selectedData,
+  //   refetch: refetchData,
+  //   isFetching,
+  //   isFetched,
+  // } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
+
   const {
     data: selectedData,
     refetch: refetchData,
-    isFetching,
     isFetched,
-  } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
+    isFetching,
+  } = useFetchSingleDocument(`${backendURL}/invoices/${id}`);
+
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const selectedImages = useSelector(getSelectedImages);
+  // const dispatch = useDispatch();
+  // const selectedImages = useSelector(getSelectedImages);
   const { mutate: generatePage, isLoading, isSuccess } = useCreateDocument();
 
   const currentDate = new Date();
@@ -42,7 +52,7 @@ const CustomerInvoicePreview = () => {
     const data = {
       company_id: projectId,
       project_id: id,
-      customer_id,
+      // customer_id,
     };
     generatePage({ data, apiRoute: `${backendURL}/projects/generate-preview` });
   };
@@ -54,7 +64,15 @@ const CustomerInvoicePreview = () => {
   return (
     <CommonLayout>
       <Box className="econtent-wrapper">
-        <Box sx={{ position: "fixed", width: "-webkit-fill-available",mr:'21px',top:'82px', zIndex: 10000 }}>
+        <Box
+          sx={{
+            position: "fixed",
+            width: "-webkit-fill-available",
+            mr: "21px",
+            top: "82px",
+            zIndex: 10000,
+          }}
+        >
           <Box
             sx={{
               backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
@@ -63,11 +81,11 @@ const CustomerInvoicePreview = () => {
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
-              marginTop: { sm: 0, xs: 5 },             
+              marginTop: { sm: 0, xs: 5 },
               py: 1.5,
             }}
           >
-            <Box sx={{ display: "flex",alignItems:'center' }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <NavLink
                 to={id ? `/projects/${id}` : "/projects"}
                 style={{ display: "flex", alignSelf: "center" }}
@@ -75,7 +93,7 @@ const CustomerInvoicePreview = () => {
                 <Box
                   sx={{
                     color: "black",
-                    display:'flex'
+                    display: "flex",
                   }}
                 >
                   <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
@@ -127,8 +145,8 @@ const CustomerInvoicePreview = () => {
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               ) : (
                 <>
-                  <EngineeringIcon sx={{ pr: 1 }} />
-                  Generate
+                  <SaveOutlined sx={{ pr: 1 }} />
+                  Save
                 </>
               )}
             </Button>

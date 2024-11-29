@@ -17,19 +17,26 @@ import {
   MenuItem,
   TextField,
   CircularProgress,
+  Tooltip,
 } from "@mui/material";
-import { HelpOutline as HelpOutlineIcon } from "@mui/icons-material";
+import {
+  Add,
+  ContentCopy,
+  DoneOutlined,
+  HelpOutline as HelpOutlineIcon,
+} from "@mui/icons-material";
 import {
   useEditDocument,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL } from "@/utilities/common";
-import { useParams } from "react-router-dom";
+import { backendURL, frontendURL } from "@/utilities/common";
+import { useNavigate, useParams } from "react-router-dom";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import CheckOutlinedIcon from "@mui/icons-material/CheckOutlined";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import VisibilityIcon from "@mui/icons-material/Visibility";
+import { showSnackbar } from "@/redux/snackBarSlice";
 
 export default function InvoicePage() {
   return <InvoiceDetails />;
@@ -37,13 +44,10 @@ export default function InvoicePage() {
 
 function InvoiceDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { data, refetch, isSuccess } = useFetchSingleDocument(
     `${backendURL}/invoices/${id}`
   );
-  useEffect(() => {
-    refetch();
-  }, []);
-
   const {
     mutate: editInvoiceDetails,
     isLoading: editLoading,
@@ -55,6 +59,8 @@ function InvoiceDetails() {
   const [editInvoiceDetail, setEditInvoiceDetail] = useState(true);
   const [dueDate, setDueDate] = useState(dayjs(data?.dueDate));
   const [isEdit, setIsEdit] = useState(false);
+  const [copyLink, setCopyLink] = useState(false);
+
   useEffect(() => {
     setIsEdit(false);
   }, [editSuccess]);
@@ -67,28 +73,44 @@ function InvoiceDetails() {
     setIsEdit(true);
   };
   const handleNotesChange = (event) => {
-    setNotes(event.target.value); // Update the state with the textarea value
-    setIsEdit(true);
+    setNotes(event.target.value);
   };
 
   const handleUpdateInvoice = () => {
-    // Prepare the data to be updated
     const updateData = {
-      dueDate: dueDate, // Convert Day.js object to ISO format
+      dueDate: dueDate,
       status: status,
       notes: notes,
     };
-    // Call the editInvoiceDetails function with the API route and data
+
     editInvoiceDetails({
       data: updateData,
-      apiRoute: `${backendURL}/invoices/${id}`, // Ensure `id` and `backendURL` are available
+      apiRoute: `${backendURL}/invoices/${id}`,
     });
   };
+
+  const handleCopyPreview = (value) => {
+    navigator.clipboard
+      .writeText(value ?? "")
+      .then(() => {
+        setCopyLink(true);
+        showSnackbar({
+          message: "Link Copied",
+          severity: "info",
+        });
+      })
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
+
   useEffect(() => {
     setDueDate(dayjs(data?.dueDate));
     setStatus(data?.status);
     setNotes(data?.notes);
   }, [isSuccess]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   return (
     <Card sx={{ pb: 4 }}>
@@ -131,14 +153,58 @@ function InvoiceDetails() {
           ) : (
             ""
           )}
-
-          <Button
-            variant="text"
-            sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
-            startIcon={<VisibilityIcon />}
-          >
-            Preview as Customer
-          </Button>
+          {data?.customerPreview?.link?.length ? (
+            <Box>
+              <div className="subscribe-box">
+                <input
+                  type="email"
+                  className="email-input"
+                  placeholder="Customer Preview Link"
+                  value={`${frontendURL}/customer-invoice-preview/${data?._id}`}
+                  disabled
+                />
+                <Tooltip
+                  placement="top"
+                  title={copyLink ? "Copied" : "Copy Customer Preview Link"}
+                >
+                  <button
+                    className="subscribe-btn"
+                    onClick={() =>
+                      handleCopyPreview(
+                        `${frontendURL}/customer-invoice-preview/${data?._id}`
+                      )
+                    }
+                  >
+                    {copyLink ? (
+                      <DoneOutlined sx={{ fontSize: "19px" }} />
+                    ) : (
+                      <ContentCopy sx={{ fontSize: "19px" }} />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
+            </Box>
+          ) : (
+            ""
+          )}
+          {data?.customerPreview?.link ? (
+            <Button
+              variant="text"
+              sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
+              startIcon={<VisibilityIcon />}
+            >
+              Preview as Customer
+            </Button>
+          ) : (
+            <Button
+              variant="text"
+              onClick={() => navigate(`customer-preview`)}
+              sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
+              startIcon={<Add />}
+            >
+              Generate Customer Preview
+            </Button>
+          )}
         </div>
       </Box>
       {/* <hr style={{ border: "1px solid rgb(209, 212, 219)" }} /> */}
@@ -449,27 +515,36 @@ function InvoiceDetails() {
               <TableRow>
                 <TableCell>Category</TableCell>
                 <TableCell>Labor Cost</TableCell>
-                <TableCell>Material Costs</TableCell>
-                <TableCell>Other Costs</TableCell>
-                <TableCell align="right">Total</TableCell>
+                <TableCell>Glass Cost</TableCell>
+                <TableCell>Glass Addon Cost</TableCell>
+                <TableCell>Fabrication Cost</TableCell>
+                <TableCell>Hardware Cost</TableCell>
+                <TableCell align="right">Item Total</TableCell>
                 {/* <TableCell align="center"></TableCell> */}
               </TableRow>
             </TableHead>
             <TableBody>
               {data?.items?.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell>{item?.category}</TableCell>
-                  <TableCell>${item.laborCost || 0}</TableCell>
-                  <TableCell>${item.materialCosts || 0}</TableCell>
-                  <TableCell>${item.otherCosts || 0}</TableCell>
-                  <TableCell align="right">
-                    ${item?.cost?.toFixed(2) || 0}
+                  <TableCell  sx={{textTransform: "capitalize"}}>{item?.category}</TableCell>
+                  <TableCell>
+                    ${item.pricing?.laborPrice?.toFixed(2) || 0}
                   </TableCell>
-                  {/* <TableCell align="center">
-                    <IconButton>
-                      <MoreVertIcon />
-                    </IconButton>
-                  </TableCell> */}
+                  <TableCell>
+                    ${item.pricing?.glassPrice?.toFixed(2) || 0}
+                  </TableCell>
+                  <TableCell>
+                    ${item.pricing?.glassAddonPrice?.toFixed(2) || 0}
+                  </TableCell>
+                  <TableCell>
+                    ${item.pricing?.fabricationPrice?.toFixed(2) || 0}
+                  </TableCell>
+                  <TableCell>
+                    ${item.pricing?.hardwarePrice?.toFixed(2) || 0}
+                  </TableCell>
+                  <TableCell align="right">
+                    ${item.pricing?.totalPrice?.toFixed(2) || 0}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -543,7 +618,7 @@ function InvoiceDetails() {
               <Typography>${data?.grandTotal?.toLocaleString()}</Typography>
             </div>
           </div>
-        </div>
+        </div>2
       </Box>
     </Card>
   );

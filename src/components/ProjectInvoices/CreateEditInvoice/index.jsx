@@ -141,14 +141,14 @@ const ProjectInvoiceComponent = ({
       (data) => data?._id === values.project
     );
     const sourceObject = {
-      projectName: source.name,
-      city: source.addressData.city,
-      country: source.addressData.country,
-      postalCode: source.addressData.postalCode,
-      street: source.addressData.street,
-      state: source.addressData.state,
-      companyName : source.companyData.name,
-      companyAddress : source.companyData.address,
+      projectName: source?.name,
+      city: source?.addressData?.city ?? "",
+      country: source?.addressData?.country ?? "",
+      postalCode: source?.addressData?.postalCode ?? "",
+      street: source?.addressData?.street ?? "",
+      state: source?.addressData?.state ?? "",
+      companyName: source?.companyData?.name ?? "",
+      companyAddress: source?.companyData?.address ?? "",
     };
     const customerObject = {
       name,
@@ -165,7 +165,7 @@ const ProjectInvoiceComponent = ({
       source_id: values.project,
       dueDate: values.dueDate,
       notes: values.notes,
-      customer:customerObject,
+      customer: customerObject,
       source: sourceObject,
       items: EstimateListData.length > 0 ? EstimateListData : [],
       subTotal: totalSum,

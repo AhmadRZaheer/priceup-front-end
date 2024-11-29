@@ -129,15 +129,12 @@ export default function ProjectInvoices() {
           }}
         >
           <Grid container spacing={2}>
-            {[
-              { title: "Paid", text: stats?.pending, variant: "blue" },
-              { title: "Unpaid", text: stats?.approved, variant: "green" },
-            ].map((item) => (
+            {stats?.map((item) => (
               <Grid item lg={3} md={6} sm={6} xs={6}>
                 <WidgetCard
-                  text={item.text}
-                  title={item.title}
-                  varient={item.variant}
+                  text={item?.count}
+                  title={item?.status}
+                  varient={item?.status === "Paid" ? "blue" : "green"}
                 />
               </Grid>
             ))}

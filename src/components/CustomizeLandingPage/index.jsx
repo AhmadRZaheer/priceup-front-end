@@ -561,147 +561,147 @@ const CustomizeLandingPage = ({
   isFetched,
   isFetching,
 }) => {
-  const { id } = useParams();
-  const wineCellarHardwareList = useSelector(getWineCellarsHardware);
-  const mirrorsHardwareList = useSelector(getMirrorsHardware);
-  const showersHardwareList = useSelector(getListData);
-  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
-  const showersLocationSettings = useSelector(getLocationShowerSettings);
-  const pdfSettings = useSelector(getLocationPdfSettings);
-  const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
+  // const { id } = useParams();
+  // const wineCellarHardwareList = useSelector(getWineCellarsHardware);
+  // const mirrorsHardwareList = useSelector(getMirrorsHardware);
+  // const showersHardwareList = useSelector(getListData);
+  // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  // const showersLocationSettings = useSelector(getLocationShowerSettings);
+  // const pdfSettings = useSelector(getLocationPdfSettings);
+  // const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
-  const generatePDF = (data) => {
-    console.log("Call this function", data);
-    if (data?.category === EstimateCategory.SHOWERS) {      
-      const formattedData = generateObjectForPDFPreview(
-        showersHardwareList,
-        data,
-        showersLocationSettings?.miscPricing
-      );
-      const pricing = calculateTotal(
-        formattedData,
-        formattedData?.sqftArea,
-        showersLocationSettings
-      );      
-      const measurementString = renderMeasurementSides(
-        quoteState.EDIT,
-        formattedData?.measurements,
-        formattedData?.layout_id
-      );
-      const id = data?._id;
-      return {
-        ...formattedData,
-        measurements: measurementString,
-        pricing,
-        pdfSettings,
-        id,
-      };
-    } else if (data?.category === EstimateCategory.MIRRORS) {
-      const formattedData = generateObjectForMirrorPDFPreview(
-        mirrorsHardwareList,
-        data,
-        mirrorsLocationSettings?.miscPricing
-      );
-      console.log(formattedData?.measurements, "data");
-      const pricingMirror = mirrorTotal(
-        formattedData,
-        formattedData?.sqftArea,
-        mirrorsLocationSettings,
-        formattedData.measurements
-      );
+  // const generatePDF = (data) => {
+  //   // console.log("Call this function", data);
+  //   if (data?.category === EstimateCategory.SHOWERS) {      
+  //     const formattedData = generateObjectForPDFPreview(
+  //       showersHardwareList,
+  //       data,
+  //       showersLocationSettings?.miscPricing
+  //     );
+  //     const pricing = calculateTotal(
+  //       formattedData,
+  //       formattedData?.sqftArea,
+  //       showersLocationSettings
+  //     );      
+  //     const measurementString = renderMeasurementSides(
+  //       quoteState.EDIT,
+  //       formattedData?.measurements,
+  //       formattedData?.layout_id
+  //     );
+  //     const id = data?._id;
+  //     return {
+  //       ...formattedData,
+  //       measurements: measurementString,
+  //       pricing,
+  //       pdfSettings,
+  //       id,
+  //     };
+  //   } else if (data?.category === EstimateCategory.MIRRORS) {
+  //     const formattedData = generateObjectForMirrorPDFPreview(
+  //       mirrorsHardwareList,
+  //       data,
+  //       mirrorsLocationSettings?.miscPricing
+  //     );
+  //     console.log(formattedData?.measurements, "data");
+  //     const pricingMirror = mirrorTotal(
+  //       formattedData,
+  //       formattedData?.sqftArea,
+  //       mirrorsLocationSettings,
+  //       formattedData.measurements
+  //     );
 
-      const pricing = {
-        glassPrice: pricingMirror.glass,
-        fabricationPrice: pricingMirror.fabrication,
-        laborPrice: pricingMirror.labor,
-        additionalFieldPrice: pricingMirror.additionalFields,
-        cost: pricingMirror.cost,
-        total: pricingMirror.total,
-        profit: pricingMirror.profitPercentage,
-      };
-      const measurementString = mirrorRenderSides(formattedData?.measurements);
-      console.log(measurementString, "string ");
-      const id = data?._id;
-      return {
-        ...formattedData,
-        measurements: measurementString,
-        pricing,
-        id,
-        pdfSettings,
-      };
-    } else if (data?.category === EstimateCategory.WINECELLARS) {
-      const formattedData = generateObjectForPDFPreview(
-        wineCellarHardwareList,
-        data,
-        wineCellarLocationSettings?.miscPricing
-      );
-      const pricing = calculateTotal(
-        formattedData,
-        formattedData?.sqftArea,
-        wineCellarLocationSettings
-      );
-      const measurementString = renderMeasurementSides(
-        quoteState.EDIT,
-        formattedData?.measurements,
-        formattedData?.layout_id
-      );
+  //     const pricing = {
+  //       glassPrice: pricingMirror.glass,
+  //       fabricationPrice: pricingMirror.fabrication,
+  //       laborPrice: pricingMirror.labor,
+  //       additionalFieldPrice: pricingMirror.additionalFields,
+  //       cost: pricingMirror.cost,
+  //       total: pricingMirror.total,
+  //       profit: pricingMirror.profitPercentage,
+  //     };
+  //     const measurementString = mirrorRenderSides(formattedData?.measurements);
+  //     console.log(measurementString, "string ");
+  //     const id = data?._id;
+  //     return {
+  //       ...formattedData,
+  //       measurements: measurementString,
+  //       pricing,
+  //       id,
+  //       pdfSettings,
+  //     };
+  //   } else if (data?.category === EstimateCategory.WINECELLARS) {
+  //     const formattedData = generateObjectForPDFPreview(
+  //       wineCellarHardwareList,
+  //       data,
+  //       wineCellarLocationSettings?.miscPricing
+  //     );
+  //     const pricing = calculateTotal(
+  //       formattedData,
+  //       formattedData?.sqftArea,
+  //       wineCellarLocationSettings
+  //     );
+  //     const measurementString = renderMeasurementSides(
+  //       quoteState.EDIT,
+  //       formattedData?.measurements,
+  //       formattedData?.layout_id
+  //     );
 
-      const { doorWeight, panelWeight, returnWeight } =
-        calculateAreaAndPerimeter(
-          data.config.measurements,
-          data?.settings?.variant,
-          data?.config?.glassType?.thickness,
-          { doorQuantity: data.config.doorQuantity }
-        );
+  //     const { doorWeight, panelWeight, returnWeight } =
+  //       calculateAreaAndPerimeter(
+  //         data.config.measurements,
+  //         data?.settings?.variant,
+  //         data?.config?.glassType?.thickness,
+  //         { doorQuantity: data.config.doorQuantity }
+  //       );
 
-      const id = data?._id;
-      return {
-        ...formattedData,
-        measurements: measurementString,
-        pricing,
-        id,
-        doorWeight,
-        panelWeight,
-        returnWeight,
-        pdfSettings,
-      };
-    } else {
-      console.log("Not Selected Catetory Found!");
-    }
-  };
+  //     const id = data?._id;
+  //     return {
+  //       ...formattedData,
+  //       measurements: measurementString,
+  //       pricing,
+  //       id,
+  //       doorWeight,
+  //       panelWeight,
+  //       returnWeight,
+  //       pdfSettings,
+  //     };
+  //   } else {
+  //     console.log("Not Selected Catetory Found!");
+  //   }
+  // };
 
-  const [estimatePdfs, setEstimatePdfs] = useState([]);
+  // const [estimatePdfs, setEstimatePdfs] = useState([]);
   useEffect(() => {
     refetchData();
   }, []);
 
   console.log(selectedData, "selectedData");
 
-  useEffect(() => {
-    const generatedPdfs = [];
-    if (isFetched) {
-      selectedData?.forEach((data, index) => {
-        const singleEstimatePdf = generatePDF(data);
-        if (singleEstimatePdf) {
-          generatedPdfs.push(singleEstimatePdf);
-        }
-      });
-      setEstimatePdfs(generatedPdfs);
-    }
-  }, [
-    selectedData,
-    wineCellarHardwareList,
-    mirrorsHardwareList,
-    showersHardwareList,
-    wineCellarLocationSettings,
-    mirrorsLocationSettings,
-    showersLocationSettings,
-    pdfSettings,
-  ]);
-  console.log(estimatePdfs, "estimatePdfsestimatePdfs");
+  // useEffect(() => {
+  //   const generatedPdfs = [];
+  //   if (isFetched) {
+  //     selectedData?.forEach((data, index) => {
+  //       const singleEstimatePdf = generatePDF(data);
+  //       if (singleEstimatePdf) {
+  //         generatedPdfs.push(singleEstimatePdf);
+  //       }
+  //     });
+  //     setEstimatePdfs(generatedPdfs);
+  //   }
+  // }, [
+  //   selectedData,
+  //   wineCellarHardwareList,
+  //   mirrorsHardwareList,
+  //   showersHardwareList,
+  //   wineCellarLocationSettings,
+  //   mirrorsLocationSettings,
+  //   showersLocationSettings,
+  //   pdfSettings,
+  // ]);
+  // console.log(estimatePdfs, "estimatePdfsestimatePdfs");
   const decodedToken = getDecryptedToken();
-  const [estimatePdf, setEstimatePdf] = useState([]);
+  // const [estimatePdf, setEstimatePdf] = useState([]);
   const fileInputRef = useRef(null);
   const dispatch = useDispatch();
   const selectedImages = useSelector(getSelectedImages);
@@ -733,11 +733,11 @@ const CustomizeLandingPage = ({
     dispatch(removeImage(index));
   };
 
-  const authUser =
-    decodedToken?.role === userRoles.ADMIN ||
-    decodedToken?.role === userRoles.CUSTOM_ADMIN;
+  // const authUser =
+  //   decodedToken?.role === userRoles.ADMIN ||
+  //   decodedToken?.role === userRoles.CUSTOM_ADMIN;
 
-  const { mutate: statusChange, isSuccess, isLoading } = useCreateDocument();
+  // const { mutate: statusChange, isSuccess, isLoading } = useCreateDocument();
 
   const handleChangeStatus = (value) => {
     console.log(value);
@@ -745,13 +745,13 @@ const CustomizeLandingPage = ({
       project_id: selectedData[0]?.project_id,
       status: value,
     };
-    statusChange({ data, apiRoute: `${backendURL}/form-request-update` });
+    // statusChange({ data, apiRoute: `${backendURL}/form-request-update` });
   };
-  useEffect(() => {
-    if (isSuccess) {
-      setInvoiceStatusBtn(false);
-    }
-  }, [isSuccess]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setInvoiceStatusBtn(false);
+  //   }
+  // }, [isSuccess]);
 
   return (
     <>
@@ -982,7 +982,7 @@ const CustomizeLandingPage = ({
             >
               Quotation Pdfs
             </Typography>
-            {!authUser && invoiceStatusBtn && (
+            {/* {!authUser && invoiceStatusBtn && (
               <Box sx={{ display: "flex", gap: 2 }}>
                 <Button
                   disabled={isLoading}
@@ -1009,7 +1009,7 @@ const CustomizeLandingPage = ({
                   "Disapproved"
                 ) : (
                   <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-                )} */}
+                )}
                 </Button>
                 <Button
                   disabled={isLoading}
@@ -1036,10 +1036,10 @@ const CustomizeLandingPage = ({
                   <CircularProgress size={24} sx={{ color: "#8477DA" }} />
                 ) : (
                   "Approved"
-                )} */}
+                )} 
                 </Button>
               </Box>
-            )}
+            )} */}
           </Box>
           <Swiper
             modules={[Navigation]}
@@ -1062,10 +1062,10 @@ const CustomizeLandingPage = ({
             }}
           >
             {isFetched ? (
-              estimatePdfs.length > 0 &&
-              estimatePdfs.map((data, index) => (
+              selectedData?.items?.length > 0 &&
+              selectedData?.items?.map((data, index) => (
                 <SwiperSlide>
-                  <PDFViewer width={"100%"} height="1200px">
+                  {/* <PDFViewer width={"100%"} height="1200px">
                     <PDFFile
                       controls={{
                         ...controls,
@@ -1073,7 +1073,7 @@ const CustomizeLandingPage = ({
                       data={{ quote: data, location: pdfLocationData }}
                       key={`pdfFile${index}`}
                     />
-                  </PDFViewer>
+                  </PDFViewer> */}
                 </SwiperSlide>
               ))
             ) : (
