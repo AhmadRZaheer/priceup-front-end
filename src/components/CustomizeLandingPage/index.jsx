@@ -195,10 +195,8 @@ const CustomizeLandingPage = ({
 
   const summarySections = (data, quoteNumber) => {
     if (data?.category === EstimateCategory.SHOWERS) {
-      console.log("sd");
       return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
     } else if (data?.category === EstimateCategory.MIRRORS) {
-      console.log("sd");
       return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
     } else if (data?.category === EstimateCategory.WINECELLARS) {
       return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
@@ -207,8 +205,6 @@ const CustomizeLandingPage = ({
       return;
     }
   };
-
-  console.log(selectedData, "selectedDataselectedDataselectedDataselectedData");
 
   // useEffect(() => {
   //   const generatedPdfs = [];
@@ -496,13 +492,14 @@ const CustomizeLandingPage = ({
           </Swiper>
         </Box> */}
 
-        <Box sx={{ px: 4 }}>
+        <Box>
           <Box
             sx={{
               pt: 5,
               pb: 2,
               display: "flex",
               justifyContent: "space-between",
+              px: 4,
             }}
           >
             <Typography
@@ -512,7 +509,7 @@ const CustomizeLandingPage = ({
                 lineHeight: "54px",
               }}
             >
-              Yours quotations ({selectedData?.items?.length || 0})
+              Your quotations ({selectedData?.items?.length || 0})
             </Typography>
             {/* {!authUser && invoiceStatusBtn && (
               <Box sx={{ display: "flex", gap: 2 }}>
@@ -574,6 +571,7 @@ const CustomizeLandingPage = ({
             )} */}
           </Box>
           <Swiper
+            autoHeight={true}
             modules={[Navigation]}
             navigation
             spaceBetween={10}
@@ -591,6 +589,7 @@ const CustomizeLandingPage = ({
             style={{
               "--swiper-navigation-color": "#000",
               "--swiper-navigation-size": "35px",
+              paddingBottom:'10px'
             }}
           >
             {isFetched ? (
@@ -599,7 +598,7 @@ const CustomizeLandingPage = ({
                 const selectedSummary = summarySections(data, index + 1);
                 return (
                   <SwiperSlide>
-                    {selectedSummary}
+                    <Box sx={{ px: 4 }}>{selectedSummary}</Box>
                     {/* <PDFViewer width={"100%"} height="1200px">
                     <PDFFile
                       controls={{
@@ -619,7 +618,9 @@ const CustomizeLandingPage = ({
         </Box>
       </Container>
       <Container maxWidth="xl" sx={{ pb: 4 }}>
-        <BodySectionHTML />
+        <Box sx={{ px: 4 }}>
+          <BodySectionHTML />
+        </Box>
       </Container>
       <Box sx={{ bgcolor: "#1E1B2F", py: 5, mt: 5 }}>
         <Container maxWidth="xl">

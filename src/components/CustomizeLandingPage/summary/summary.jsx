@@ -1,15 +1,13 @@
 import { EstimateCategory } from "@/utilities/constants";
-import { Box, Divider, Grid, Typography,Stack } from "@mui/material";
+import { Box, Divider, Grid, Typography, Stack } from "@mui/material";
 import React from "react";
 
-const ShowerSummary = ({data,quoteNumber}) => {
+const ShowerSummary = ({ data, quoteNumber }) => {
   return (
     <Box
-    //   className={disable_com ? "box_disaled" : ""}
       sx={{
         width: "100%",
-        //   margin: { sm: "", xs: "auto" },
-        paddingBottom: { sm: 0, xs: "80px" },
+        paddingBottom: { sm: 0, xs: "80px" },        
       }}
     >
       <Box
@@ -18,6 +16,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
           overflow: "hidden",
           border: "1px solid #D0D5DD",
           backgroundColor: "white",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
         }}
       >
         <Box
@@ -37,7 +36,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
               fontFamily: '"Roboto", sans-serif !important',
             }}
           >
-         Quote {quoteNumber}
+            Quote {quoteNumber}
           </Typography>
         </Box>
         <Divider sx={{ borderColor: "#D4DBDF" }} />
@@ -56,7 +55,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
           </Grid>
         </Box>
         <Divider sx={{ borderColor: "#D4DBDF" }} />
-        <Box sx={{ px: 3, py: 2 }}>         
+        <Box sx={{ px: 3, py: '15px' }}>
           <Grid container spacing={2}>
             <Grid item md={4}>
               <Stack gap={2}>
@@ -77,7 +76,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
                     {data?.layout}
                   </Typography>
                 </Box>
-                {data?.doorWidth? (
+                {data?.doorWidth ? (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Door Width:
@@ -98,13 +97,13 @@ const ShowerSummary = ({data,quoteNumber}) => {
                   </Typography>
                 </Box>
                 {/* {![undefined].includes(selectedData?.settings?.variant) && ( */}
-                  {/* <Box>
+                {/* <Box>
                     <Typography className="text-xs-ragular-bold">
                       Door Weight:
                     </Typography>
                     <Typography className="text-xs-ragular"> */}
-                      {/* {doorWeight} */}
-                    {/* </Typography>
+                {/* {doorWeight} */}
+                {/* </Typography>
                   </Box> */}
                 {/* )} */}
                 {/* {![
@@ -112,29 +111,29 @@ const ShowerSummary = ({data,quoteNumber}) => {
                   layoutVariants.DOUBLEBARN,
                   layoutVariants.DOUBLEDOOR,
                 ].includes(selectedData?.settings?.variant) && ( */}
-                  {/* <Box>
+                {/* <Box>
                     <Typography className="text-xs-ragular-bold">
                       Panel Weight:
                     </Typography>
                     <Typography className="text-xs-ragular"> */}
-                      {/* {panelWeight} */}
-                    {/* </Typography>
+                {/* {panelWeight} */}
+                {/* </Typography>
                   </Box> */}
-                  <Box sx={{ width: "60%" }}>
-                    <Divider sx={{ borderColor: "#D4DBDF" }} />
-                    <Box
-                      sx={{
-                        mt: 1,
-                      }}
-                    >
-                      <Typography className="text-xs-ragular-bold">
-                        Total Price:
-                      </Typography>
-                      <Typography className="text-xs-ragular">
-                        ${data?.pricing?.totalPrice?.toFixed(2) || 0}
-                      </Typography>
-                    </Box>
+                <Box sx={{ width: "60%" }}>
+                  <Divider sx={{ borderColor: "#D4DBDF" }} />
+                  <Box
+                    sx={{
+                      mt: 1,
+                    }}
+                  >
+                    <Typography className="text-xs-ragular-bold">
+                      Total Price:
+                    </Typography>
+                    <Typography className="text-xs-ragular">
+                      ${data?.pricing?.totalPrice?.toFixed(2) || 0}
+                    </Typography>
                   </Box>
+                </Box>
                 {/* )} */}
               </Stack>
             </Grid>
@@ -155,43 +154,39 @@ const ShowerSummary = ({data,quoteNumber}) => {
                       {data?.hardwareFinish}
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.handle?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Handles:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.handle?.type} (
-                      {data?.handle?.count})
+                      {data?.handle?.type} ({data?.handle?.count})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.hinge?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Hinges:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.hinge?.type} (
-                      {data?.hinge?.count})
+                      {data?.hinge?.type} ({data?.hinge?.count})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.doorLock?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Door Lock:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.doorLock?.type} (
-                      {data?.doorLock?.count})
+                      {data?.doorLock?.type} ({data?.doorLock?.count})
                     </Typography>
                   </Box>
-                 )} 
+                )}
 
-                {data?.mountingChannel !== ""
-                 ? (
+                {data?.mountingChannel !== "" && data?.mountingChannel !== null ? (
                   <>
                     {data?.mountingChannel && (
                       <Box>
@@ -202,7 +197,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
                           {data?.mountingChannel}
                         </Typography>
                       </Box>
-                     )}{" "} 
+                    )}{" "}
                   </>
                 ) : (
                   <>
@@ -212,47 +207,41 @@ const ShowerSummary = ({data,quoteNumber}) => {
                         <Typography className="text-xs-ragular-bold">
                           WallClamps:{" "}
                         </Typography>
-                        {data?.mountingClamps?.wallClamp?.map(
-                          (row) => (
-                            <Typography className="text-xs-ragular">
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                         )} 
+                        {data?.mountingClamps?.wallClamp?.map((row) => (
+                          <Typography className="text-xs-ragular">
+                            {row.type} ({row.count}){" "}
+                          </Typography>
+                        ))}
                       </Box>
-                     ) : (
+                    ) : (
                       ""
-                    )} 
+                    )}
                     {data?.mountingClamps?.sleeveOver?.length ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Sleeve Over:{" "}
                         </Typography>
-                        {data?.mountingClamps?.sleeveOver?.map(
-                          (row) => (
-                            <Typography className="text-xs-ragular">
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                        )}
+                        {data?.mountingClamps?.sleeveOver?.map((row) => (
+                          <Typography className="text-xs-ragular">
+                            {row.type} ({row.count}){" "}
+                          </Typography>
+                        ))}
                       </Box>
-                     ) : (
+                    ) : (
                       ""
                     )}
-                    {data?.mountingClamps?.glassToGlass?.length ? ( 
+                    {data?.mountingClamps?.glassToGlass?.length ? (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass To Glass:{" "}
                         </Typography>
-                        {data?.mountingClamps?.glassToGlass?.map(
-                          (row) => (
-                            <Typography className="text-xs-ragular">
-                              {row.item.name} ({row.count}){" "}
-                            </Typography>
-                          )
-                        )}
+                        {data?.mountingClamps?.glassToGlass?.map((row) => (
+                          <Typography className="text-xs-ragular">
+                            {row.type} ({row.count}){" "}
+                          </Typography>
+                        ))}
                       </Box>
-                 ) : (
+                    ) : (
                       ""
                     )}{" "}
                   </>
@@ -262,71 +251,63 @@ const ShowerSummary = ({data,quoteNumber}) => {
                     <Typography className="text-xs-ragular-bold">
                       Corner WallClamp:{" "}
                     </Typography>
-                    {data?.cornerClamps?.wallClamp?.map(
-                      (row) => (
-                        <Typography className="text-xs-ragular">
-                          {row.item.name} ({row.count}){" "}
-                        </Typography>
-                      )
-                    )}
+                    {data?.cornerClamps?.wallClamp?.map((row) => (
+                      <Typography className="text-xs-ragular">
+                        {row.type} ({row.count}){" "}
+                      </Typography>
+                    ))}
                   </Box>
-                 ) : (
+                ) : (
                   ""
-                )} 
+                )}
                 {data?.cornerClamps?.sleeveOver?.length ? (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Corner Sleeve Over:{" "}
                     </Typography>
-                    {data?.cornerClamps?.sleeveOver?.map(
-                      (row) => (
-                        <Typography className="text-xs-ragular">
-                          {row.item.name} ({row.count}){" "}
-                        </Typography>
-                      )
-                    )}
+                    {data?.cornerClamps?.sleeveOver?.map((row) => (
+                      <Typography className="text-xs-ragular">
+                        {row.type} ({row.count}){" "}
+                      </Typography>
+                    ))}
                   </Box>
-             ) : (
+                ) : (
                   ""
-                )} 
+                )}
                 {data?.cornerClamps?.glassToGlass?.length ? (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Corner Glass To Glass:{" "}
                     </Typography>
-                    {data?.cornerClamps?.glassToGlass?.map(
-                      (row) => (
-                        <Typography className="text-xs-ragular">
-                          {row.item.name} ({row.count}){" "}
-                        </Typography>
-                      )
-                    )}
+                    {data?.cornerClamps?.glassToGlass?.map((row) => (
+                      <Typography className="text-xs-ragular">
+                        {row.type} ({row.count}){" "}
+                      </Typography>
+                    ))}
                   </Box>
-                 ) : (
+                ) : (
                   ""
-                )} 
+                )}
                 {data?.glassType?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Glass Type:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.glassType?.type} (
-                      {data?.glassType?.thickness})
+                      {data?.glassType?.type} ({data?.glassType?.thickness})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.edgeWork?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Edge Work:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.edgeWork?.type} (
-                      {data?.edgeWork?.thickness})
+                      {data?.edgeWork?.type} ({data?.edgeWork?.thickness})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.slidingDoorSystem?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
@@ -337,7 +318,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
                       {data?.slidingDoorSystem?.count})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.transom && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
@@ -345,34 +326,35 @@ const ShowerSummary = ({data,quoteNumber}) => {
                     </Typography>
                     <Typography className="text-xs-ragular"></Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.header?.type && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Header:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      {data?.header?.type} (
-                      {data?.header?.count})
+                      {data?.header?.type} ({data?.header?.count})
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 {data?.glassAddons?.length ? (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
                       Glass Addons:
                     </Typography>
                     {data?.glassAddons?.map((item) => (
-                       <Typography className="text-xs-ragular">{`${item} `}</Typography> 
-                     ))}    
-                                    </Box>
-                 ) : ( 
+                      <Typography className="text-xs-ragular">{`${item} `}</Typography>
+                    ))}
+                  </Box>
+                ) : (
                   ""
-             )}
+                )}
                 {data?.hardwareAddons?.length > 0 && (
                   <Box>
                     <Typography className="text-xs-ragular-bold">
-                    {data?.category === EstimateCategory?.MIRRORS ?  'Hardwares:' : 'Add ons:'}
+                      {data?.category === EstimateCategory?.MIRRORS
+                        ? "Hardwares:"
+                        : "Add ons:"}
                     </Typography>
                     <Typography className="text-xs-ragular">
                       {data?.hardwareAddons?.map(
@@ -380,7 +362,7 @@ const ShowerSummary = ({data,quoteNumber}) => {
                       )}{" "}
                     </Typography>
                   </Box>
-                 )} 
+                )}
                 <Box
                   sx={{
                     display: "flex",

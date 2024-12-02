@@ -235,7 +235,6 @@ export default function ProjectInvoices() {
                         </Typography>
                       );
                     }
-
                     return (
                       <StatusChip
                         variant={selected}

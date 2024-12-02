@@ -29,6 +29,7 @@ import { useSelector } from "react-redux";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getListData } from "@/redux/estimateCalculations";
+import dayjs from "dayjs";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -53,7 +54,11 @@ const ProjectInvoiceComponent = ({
 
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
-  const { mutateAsync: createInvoice, isSuccess, isLoading } = useCreateDocument();
+  const {
+    mutateAsync: createInvoice,
+    isSuccess,
+    isLoading,
+  } = useCreateDocument();
   const formik = useFormik({
     initialValues: {
       customer: customerID || "",
@@ -103,11 +108,6 @@ const ProjectInvoiceComponent = ({
     mirrors: MirrorsHardwareList,
     wineCellars: WinelistData,
   };
-  console.log(
-    estimatesList,
-    formik.values.project,
-    "estimatesListestimatesListestimatesListestimatesList"
-  );
   const EstimateListData = useMemo(() => {
     if (estimatesList?.length > 0) {
       const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
@@ -125,11 +125,6 @@ const ProjectInvoiceComponent = ({
       refetchProjectsList();
     }
   }, [formik.values.customer]);
-
-  console.log(
-    EstimateListData,
-    "EstimateListDataEstimateListDataEstimateListDataEstimateListData"
-  );
 
   const handleCraete = async (values) => {
     const customer = customerList?.find(
@@ -159,7 +154,6 @@ const ProjectInvoiceComponent = ({
     const totalSum = EstimateListData?.reduce((accumulator, currentItem) => {
       return accumulator + currentItem.pricing.totalPrice;
     }, 0);
-    console.log(totalSum, EstimateListData, "weuygwuhsjdcifwefbdvichjbne");
     const data = {
       customer_id: values.customer,
       source_id: values.project,
@@ -172,13 +166,14 @@ const ProjectInvoiceComponent = ({
       grandTotal: totalSum,
     };
     try {
-      const response  = await createInvoice({ data, apiRoute: `${backendURL}/invoices/save` });
+      const response = await createInvoice({
+        data,
+        apiRoute: `${backendURL}/invoices/save`,
+      });
       navigate(`/invoices/${response?._id}`);
-      console.log(response,'dfdfdfdf')
     } catch (error) {
       console.log(error);
     }
-    
   };
 
   // useEffect(() => {
@@ -476,6 +471,7 @@ const ProjectInvoiceComponent = ({
                         inputFormat="MM/DD/YYYY"
                         className="custom-textfield"
                         value={formik.values.dueDate}
+                        minDate={dayjs()} 
                         onChange={(newDate) =>
                           formik.setFieldValue("dueDate", newDate)
                         }
@@ -535,7 +531,7 @@ const ProjectInvoiceComponent = ({
                       placeholder="Enter Additional Notes"
                       size="large"
                       variant="outlined"
-                      sx={{ padding: "10px",  }}
+                      sx={{ padding: "10px" }}
                       value={formik.values.notes}
                       onChange={formik.handleChange}
                     />
@@ -574,12 +570,7 @@ const ProjectInvoiceComponent = ({
                     variant="contained"
                   >
                     {isLoading ? (
-                      <CircularProgress
-                        sx={{
-                          color: isLoading ? "white" : "#8477da",
-                        }}
-                        size={24}
-                      />
+                      <CircularProgress sx={{ color: "#8477da" }} size={24} />
                     ) : projectState === "create" ? (
                       "Save Invoice"
                     ) : (

@@ -89,6 +89,12 @@ function InvoiceDetails() {
     });
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setCopyLink(false);
+    }, 70000);
+  }, [copyLink]);
+
   const handleCopyPreview = (value) => {
     navigator.clipboard
       .writeText(value ?? "")
@@ -157,7 +163,7 @@ function InvoiceDetails() {
             <Box>
               <div className="subscribe-box">
                 <input
-                  type="email"
+                  type="text"
                   className="email-input"
                   placeholder="Customer Preview Link"
                   value={`${frontendURL}/customer-invoice-preview/${data?._id}`}
@@ -189,7 +195,7 @@ function InvoiceDetails() {
           )}
           {data?.customerPreview?.link ? (
             <Button
-            onClick={() => navigate(`customer-preview`)}
+              onClick={() => navigate(`customer-preview`)}
               variant="text"
               sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
               startIcon={<VisibilityIcon />}
@@ -465,6 +471,7 @@ function InvoiceDetails() {
                         inputFormat="MM/DD/YYYY"
                         className="custom-textfield"
                         value={dueDate}
+                        minDate={dayjs(data?.dueDate) || dayjs()}
                         onChange={handleDateChange}
                         sx={{
                           width: "152px",
@@ -527,7 +534,9 @@ function InvoiceDetails() {
             <TableBody>
               {data?.items?.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell  sx={{textTransform: "capitalize"}}>{item?.category}</TableCell>
+                  <TableCell sx={{ textTransform: "capitalize" }}>
+                    {item?.category}
+                  </TableCell>
                   <TableCell>
                     ${item.pricing?.laborPrice?.toFixed(2) || 0}
                   </TableCell>
