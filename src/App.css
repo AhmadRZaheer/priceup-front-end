@@ -459,7 +459,7 @@ input {
 
 /* Styling for the email input with space for button */
 .email-input {
-  /* width: 100%; */
+  width: auto !important;
   padding: 12px 46px 12px 12px; /* Right padding for button space */
   font-size: 14px;
   border-radius: 8px;
@@ -484,4 +484,5 @@ input {
   font-size: 14px;
   cursor: pointer;
   font-family: 'Muli', sans-serif;
+  margin-top: 0px !important;
 }

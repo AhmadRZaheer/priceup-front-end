@@ -3,6 +3,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  InputAdornment,
   MenuItem,
   Select,
   TextareaAutosize,
@@ -30,6 +31,10 @@ import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getListData } from "@/redux/estimateCalculations";
 import dayjs from "dayjs";
+import CustomInputField from "@/components/ui-components/CustomInput";
+import { Close } from "@mui/icons-material";
+import CustomerSelect from "./CustomerSelect";
+import ProjectSelect from "./ProjectSelect";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -51,6 +56,8 @@ const ProjectInvoiceComponent = ({
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
   const ShowerHardwareList = useSelector(getListData);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
@@ -61,8 +68,8 @@ const ProjectInvoiceComponent = ({
   } = useCreateDocument();
   const formik = useFormik({
     initialValues: {
-      customer: customerID || "",
-      project: projectID || "",
+      customer: selectedCustomer?.name || "",
+      project: selectedProject?.name || "",
       dueDate: null,
       notes: "",
     },
@@ -85,7 +92,7 @@ const ProjectInvoiceComponent = ({
     isFetching: projectsListFetching,
     refetch: refetchProjectsList,
   } = useFetchAllDocuments(
-    `${backendURL}/projects/by-customer/${formik.values.customer}`
+    `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
   );
 
   const {
@@ -94,14 +101,14 @@ const ProjectInvoiceComponent = ({
     isFetching: estimateListFetching,
     refetch: refetchEstimateList,
   } = useFetchAllDocuments(
-    `${backendURL}/projects/all-estimate/${formik.values.project}`
+    `${backendURL}/projects/all-estimate/${selectedProject?._id}`
   );
 
   useEffect(() => {
-    if (formik.values.project) {
+    if (selectedProject) {
       refetchEstimateList();
     }
-  }, [formik.values.project]);
+  }, [selectedProject]);
 
   const hardwaresList = {
     showers: ShowerHardwareList,
@@ -121,19 +128,20 @@ const ProjectInvoiceComponent = ({
 
   useEffect(() => {
     refetch();
-    if (formik.values.customer) {
+    if (selectedCustomer?.name) {
       refetchProjectsList();
     }
   }, [formik.values.customer]);
 
   const handleCraete = async (values) => {
+    console.log(values);
     const customer = customerList?.find(
-      (data) => data?._id === values.customer
+      (data) => data?._id === selectedCustomer?._id
     );
     const { name, email, address, phone } = customer;
 
     const source = projectsList?.projects?.find(
-      (data) => data?._id === values.project
+      (data) => data?._id === selectedProject?._id
     );
     const sourceObject = {
       projectName: source?.name,
@@ -155,8 +163,8 @@ const ProjectInvoiceComponent = ({
       return accumulator + currentItem.pricing.totalPrice;
     }, 0);
     const data = {
-      customer_id: values.customer,
-      source_id: values.project,
+      customer_id: selectedCustomer?._id,
+      source_id: selectedProject?._id,
       dueDate: values.dueDate,
       notes: values.notes,
       customer: customerObject,
@@ -176,6 +184,16 @@ const ProjectInvoiceComponent = ({
     }
   };
 
+  useEffect(() => {
+    if (customerID && projectID) {
+      const customer = customerList?.find((data) => data?._id === customerID);
+      const source = projectsList?.projects?.find(
+        (data) => data?._id === projectID
+      );
+      setSelectedCustomer(customer);
+      setSelectedProject(source);
+    }
+  }, [customerID, projectID, customerList, projectsList]);
   // useEffect(() => {
   //   if (isSuccess) {
   //     navigate("/invoices");
@@ -189,6 +207,41 @@ const ProjectInvoiceComponent = ({
       .catch((err) => console.error("Failed to copy text: ", err));
   };
 
+  const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
+  const handleCustomerSelect = () => {
+    setOpenCustomerSelectModal(true);
+  };
+
+  const handleCustomerUnSelect = (event) => {
+    event.stopPropagation();
+    setSelectedCustomer(null);
+    formik.setFieldValue("customer", "");
+    setSelectedProject(null);
+    formik.setFieldValue("address", "");
+  };
+
+  const handleCustomerChange = (customer) => {
+    console.log(customer);
+    setSelectedCustomer(customer);
+    setSelectedProject(null);
+    formik.setFieldValue("address", "");
+    setOpenCustomerSelectModal(false);
+  };
+
+  const [openProjectSelectModal, setOpenProjectSelectModal] = useState(false);
+
+  const handleProjectChange = (address) => {
+    setSelectedProject(address);
+    setOpenProjectSelectModal(false);
+  };
+  const handleProjectUnSelect = (event) => {
+    event.stopPropagation();
+    setSelectedProject(null);
+    formik.setFieldValue("project", "");
+  };
+  const handleProjectSelect = () => {
+    setOpenProjectSelectModal(true);
+  };
   return (
     <Box
       sx={{
@@ -347,7 +400,7 @@ const ProjectInvoiceComponent = ({
                         Select Customer:{" "}
                       </label>
                     </Box>
-                    <FormControl
+                    {/* <FormControl
                       size="small"
                       className="custom-textfield"
                       fullWidth
@@ -381,7 +434,43 @@ const ProjectInvoiceComponent = ({
                           </Box>
                         )}
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
+
+                    <CustomInputField
+                      id="customer"
+                      name="customer"
+                      // label="Select a Customer"
+                      size="small"
+                      variant="outlined"
+                      onClick={handleCustomerSelect}
+                      InputProps={{
+                        endAdornment: selectedCustomer ? (
+                          <InputAdornment
+                            position="end"
+                            sx={{ cursor: "pointer" }}
+                            onClick={(event) => {
+                              handleCustomerUnSelect(event);
+                            }}
+                          >
+                            <Close sx={{}} />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        ),
+                        readOnly: true,
+                        style: {
+                          color: "black",
+                          borderRadius: 4,
+                          backgroundColor: "white",
+                        },
+                      }}
+                      sx={{
+                        color: { sm: "black", xs: "white" },
+                        width: "100%",
+                      }}
+                      value={formik.values?.customer}
+                      onChange={() => {}}
+                    />
                   </Box>
                 </Box>
                 <Box
@@ -403,7 +492,7 @@ const ProjectInvoiceComponent = ({
                         Select Project:{" "}
                       </label>
                     </Box>
-                    <FormControl
+                    {/* <FormControl
                       size="small"
                       className="custom-textfield"
                       fullWidth
@@ -444,7 +533,42 @@ const ProjectInvoiceComponent = ({
                           </Box>
                         )}
                       </Select>
-                    </FormControl>
+                    </FormControl> */}
+                    <CustomInputField
+                      disabled={!selectedCustomer}
+                      id="address"
+                      name="address"
+                      // label="Select an Address"
+                      size="small"
+                      variant="outlined"
+                      onClick={handleProjectSelect}
+                      InputProps={{
+                        endAdornment: selectedProject ? (
+                          <InputAdornment
+                            position="end"
+                            sx={{ cursor: "pointer" }}
+                            onClick={(event) => {
+                              handleProjectUnSelect(event);
+                            }}
+                          >
+                            <Close sx={{}} />
+                          </InputAdornment>
+                        ) : (
+                          ""
+                        ),
+                        readOnly: true,
+                        style: {
+                          color: "black",
+                          borderRadius: 4,
+                          backgroundColor: "white",
+                        },
+                      }}
+                      sx={{
+                        color: { sm: "black", xs: "white" },
+                        width: "100%",
+                      }}
+                      value={formik.values.project}
+                    />
                   </Box>
                 </Box>
                 <Box
@@ -471,7 +595,7 @@ const ProjectInvoiceComponent = ({
                         inputFormat="MM/DD/YYYY"
                         className="custom-textfield"
                         value={formik.values.dueDate}
-                        minDate={dayjs()} 
+                        minDate={dayjs()}
                         onChange={(newDate) =>
                           formik.setFieldValue("dueDate", newDate)
                         }
@@ -699,6 +823,19 @@ const ProjectInvoiceComponent = ({
           )}
         </Box>
       </Box>
+      <CustomerSelect
+        open={openCustomerSelectModal}
+        handleClose={() => setOpenCustomerSelectModal(false)}
+        selectedCustomer={selectedCustomer}
+        setSelectedCustomer={handleCustomerChange}
+      />
+      <ProjectSelect
+        open={openProjectSelectModal}
+        handleClose={() => setOpenProjectSelectModal(false)}
+        selectedAddress={selectedProject}
+        setSelectedProject={handleProjectChange}
+        selectedCustomer={selectedCustomer}
+      />
     </Box>
   );
 };

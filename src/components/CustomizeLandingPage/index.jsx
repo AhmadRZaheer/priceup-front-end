@@ -63,6 +63,8 @@ import {
 import ShowerSummary from "./summary/summary";
 import BodySectionHTML from "./TermsAndConditions";
 // import CustomEditor from "./summary/CustomEditor";
+import {loadStripe} from '@stripe/stripe-js';
+import Payment from "../StripePayment";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -293,6 +295,15 @@ const CustomizeLandingPage = ({
   //   }
   // }, [isSuccess]);
 
+  const [stripePromise, setStripePromise] = useState(null);
+  useEffect(() => {
+    setStripePromise(
+      loadStripe(
+        "pk_test_51PbsdGRujwjTz5jAngiBVuLGHvo6F3ALHulFXgBb9VCl2sY9oX6mQSLYv7ryU8nCqwo2XUCKBGoN2DnKBE7nFhOZ0047xQUUoC"
+      )
+    );
+  }, []);
+
   return (
     <>
       <Box sx={{ bgcolor: "black", width: "100%" }}>
@@ -353,14 +364,14 @@ const CustomizeLandingPage = ({
               We make it easy to estimate, invoice, and organize glass customers
               and their projects all from your phone.
             </Typography>
-            <Box sx={{ display: "flex", gap: 2, pt: 2 }}>
+            {/* <Box sx={{ display: "flex", gap: 2, pt: 2 }}>
               <Button
                 // disabled={isLoading}
                 onClick={() => handleChangeStatus("Paid")}
                 fullWidth
                 variant="contained"
                 sx={{
-                  backgroundColor: isLoading ? '#d8cece' : "#8477DA",
+                  backgroundColor: isLoading ? "#d8cece" : "#8477DA",
                   height: "44px",
                   width: { sm: "auto", xs: "187px" },
                   "&:hover": { backgroundColor: "#8477DA" },
@@ -384,8 +395,8 @@ const CustomizeLandingPage = ({
                 onClick={() => handleChangeStatus("Voided")}
                 fullWidth
                 variant="contained"
-                sx={{ 
-                  backgroundColor: isLoading ? '#d8cece' : "#E22A2D",
+                sx={{
+                  backgroundColor: isLoading ? "#d8cece" : "#E22A2D",
                   height: "44px",
                   width: { sm: "auto", xs: "187px" },
                   "&:hover": { backgroundColor: "#E22A2D" },
@@ -405,10 +416,10 @@ const CustomizeLandingPage = ({
                   "Disapproved"
                 )}
               </Button>
-            </Box>
+            </Box> */}
           </Box>
           {/* right side */}
-          <Box
+          {/* <Box
             sx={{
               position: { md: "absolute", xs: "static" },
               right: { lg: 200, md: 60 },
@@ -416,13 +427,17 @@ const CustomizeLandingPage = ({
               textAlign: { md: "end", xs: "center" },
               width: "100%",
               pointerEvents: "none",
+              height:'560px'
             }}
           >
-            <img src={right_headerimage} alt="" height="560" />
-          </Box>
+            <Payment stripePromise={stripePromise} /> */}
+            {/* <img src={right_headerimage} alt="" height="560" /> */}
+          {/* </Box> */}
+          <Payment stripePromise={stripePromise} />
         </Box>
       </Box>
       <Container maxWidth="xl" sx={{ pb: 4 }}>
+      {/* <Payment stripePromise={stripePromise} /> */}
         {/* <Box
           sx={{
             display: "flex",
