@@ -1098,7 +1098,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <Typography
-          className={params.row.status === 'Paid' ? "status-active" : "status-inActive"}
+          className={params.row.status === 'Paid' ? "status-active" : params.row.status === 'Voided' ? 'status-voided' : "status-inActive"}
         >
           {params.row.status}
         </Typography>

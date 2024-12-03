@@ -448,6 +448,12 @@ function InvoiceDetails() {
                         >
                           Unpaid
                         </MenuItem>
+                        <MenuItem
+                          value={"Voided"}
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          Voided
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   )}
@@ -640,7 +646,7 @@ function InvoiceDetails() {
               }}
             >
               <Typography>Invoice Total:</Typography>
-              <Typography>${data?.grandTotal?.toLocaleString()}</Typography>
+              <Typography sx={{pr:2}}>${data?.grandTotal?.toLocaleString()}</Typography>
             </div>
           </div>
         </div>

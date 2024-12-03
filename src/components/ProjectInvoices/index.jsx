@@ -128,7 +128,22 @@ export default function ProjectInvoices() {
             px: { sm: 0, xs: 1 },
           }}
         >
-          <Grid container spacing={2}>
+           <Grid container spacing={2}>
+            {[
+              { title: "Paid", text: stats?.paid, variant: "green" },
+              { title: "Unpaid", text: stats?.unpaid, variant: "blue" },
+              { title: "Voided", text: stats?.voided, variant: "red" },
+            ]?.map((item) => (
+              <Grid item lg={3} md={6} sm={6} xs={6}>
+                <WidgetCard
+                  text={item?.text}
+                  title={item?.title}
+                  varient={item?.variant}
+                />
+              </Grid>
+            ))}
+          </Grid>
+          {/* <Grid container spacing={2}>
             {stats?.map((item) => (
               <Grid item lg={3} md={6} sm={6} xs={6}>
                 <WidgetCard
@@ -138,7 +153,7 @@ export default function ProjectInvoices() {
                 />
               </Grid>
             ))}
-          </Grid>
+          </Grid> */}
         </Box>
         <Box
           sx={{

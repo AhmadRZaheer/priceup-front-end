@@ -1322,8 +1322,17 @@ const generateInvoiceItemForMirrors = async (
     const price =
       (edgeWork?.options?.find(
         (glass) => glass.thickness === estimate.config?.edgeWork?.thickness
-      )?.cost || 0) * estimate.config?.sqftArea;
-    edgeWorkPrice = price;
+      )?.cost || 0);
+      estimate.config?.measurements.forEach((value) => {
+        const count = value.count;
+        const width = value.width;
+        const height = value.height;
+        for (let i = 0; i < count; i++) {
+          const value = price * (width * 2 + height * 2) * 1;
+          edgeWorkPrice += value;
+        }
+      });
+    // edgeWorkPrice = price;
   }
   // glassAddons
   let glassAddonsNameArray = [];
@@ -1373,7 +1382,11 @@ const generateInvoiceItemForMirrors = async (
     (estimate.config?.tripleOutletCutout ?? 0) *
       (companySettings?.tripleOutletCutoutMultiplier ?? 0) +
     (estimate.config.quadOutletCutout ?? 0) *
-      (companySettings?.quadOutletCutoutMultiplier ?? 0);
+      (companySettings?.quadOutletCutoutMultiplier ?? 0) ;
+
+    fabricationPrice +=  edgeWorkPrice;
+
+    console.log(fabricationPrice,edgeWorkPrice,'fabricationPricefabricationPrice',edgeWork)
 
   const laborPrice =
     estimate.config?.people *
