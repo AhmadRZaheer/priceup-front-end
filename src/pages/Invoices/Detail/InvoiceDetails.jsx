@@ -448,6 +448,12 @@ function InvoiceDetails() {
                         >
                           Unpaid
                         </MenuItem>
+                        <MenuItem
+                          value={"Voided"}
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          Voided
+                        </MenuItem>
                       </Select>
                     </FormControl>
                   )}
