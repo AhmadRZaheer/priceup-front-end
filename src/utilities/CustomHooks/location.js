@@ -12,7 +12,6 @@ export const Location = () => {
   const { data, refetch, error } = useFetchSingleDocument(
     `${backendURL}/companies/${decryptedToken?.company_id}`
   );
-console.log(data,'sdsdsdsdsdsdsdsd')
   useEffect(() => {
     if (data) {
       dispatch(setLocationInfo(data));

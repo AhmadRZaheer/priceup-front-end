@@ -1,46 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import { EstimatesColumns, InvoiceDetailColumns, InvoiceItemColumns } from "@/utilities/DataGridColumns";
-import {
-  Box,
-  Button,
-//   CircularProgress,
-//   IconButton,
-//   InputAdornment,
-//   TextField,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
+import { InvoiceDetailColumns } from "@/utilities/DataGridColumns";
+import { Box, Button, Typography, useMediaQuery } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
 import Pagination from "@/components/Pagination";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useDeleteEstimates } from "@/utilities/ApiHooks/estimate";
-import { EstimateCategory, quoteState } from "@/utilities/constants";
-import {
-  backendURL,
-//   calculateAreaAndPerimeter,
-  calculateTotal,
-} from "@/utilities/common";
-import {
-  // Add,
-  Edit,
-  // Search
-} from "@mui/icons-material";
-// import { resetEstimateState, setEstimateCategory, setEstimateState } from "@/redux/estimateSlice";
-import {
-  getListData,
-  //   resetState,
-  //   setShowerProjectId,
-} from "@/redux/estimateCalculations";
-import { useDispatch, useSelector } from "react-redux";
+import { EstimateCategory } from "@/utilities/constants";
+import { backendURL } from "@/utilities/common";
+import { Edit } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import DefaultImage from "@/components/ui-components/defaultImage";
-import {
-  generateObjectForPDFPreview,
-  renderMeasurementSides,
-  setStateForShowerEstimate,
-} from "@/utilities/estimates";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
+import { setStateForShowerEstimate } from "@/utilities/estimates";
 import { debounce } from "lodash";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
 const { useFetchAllDocuments } = require("@/utilities/ApiHooks/common");
@@ -57,9 +29,6 @@ const ShowerEstimatesList = ({
   const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const showersHardwareList = useSelector(getListData);
-  const showersLocationSettings = useSelector(getLocationShowerSettings);
-  const pdfSettings = useSelector(getLocationPdfSettings);
   const useStyles = makeStyles({
     overflowText: {
       maxWidth: "115px",
@@ -95,46 +64,13 @@ const ShowerEstimatesList = ({
   const [deleteRecord, setDeleteRecord] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const handleOpenDeleteModal = (id) => {
-    setDeleteRecord(id);
-    setDeleteModalOpen(true);
-  };
   const handleDeleteEstimate = () => {
     deleteEstimates(deleteRecord);
     setDeleteModalOpen(false);
   };
-  const handlePreviewPDFClick = (item) => {
-    const formattedData = generateObjectForPDFPreview(
-      showersHardwareList,
-      item,
-      showersLocationSettings?.miscPricing
-    );
-    const pricing = calculateTotal(
-      formattedData,
-      formattedData?.sqftArea,
-      showersLocationSettings
-    );
-    const measurementString = renderMeasurementSides(
-      quoteState.EDIT,
-      formattedData?.measurements,
-      formattedData?.layout_id
-    );
-    localStorage.setItem(
-      "pdf-estimate",
-      JSON.stringify({
-        ...formattedData,
-        measurements: measurementString,
-        pricing,
-        pdfSettings,
-      })
-    );
-    navigate(`/estimates/${item?._id}/pdf-preview`);
-  };
-
   const handleIconButtonClick = (item) => {
     setStateForShowerEstimate(item, dispatch, navigate);
   };
-
   const filteredData = useMemo(() => {
     if (estimatesList && estimatesList?.estimates?.length) {
       return estimatesList?.estimates;
@@ -157,21 +93,12 @@ const ShowerEstimatesList = ({
 
   const debouncedRefetch = useCallback(
     debounce(() => {
-      // Always refetch when page is 1, else reset page to 1 to trigger refetch
-      // if (page !== 1) {
-      //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
-      // } else {
-        refetchEstimatesList(); // If already on page 1, just refetch directly
-      // }
+      refetchEstimatesList(); // If already on page 1, just refetch directly
     }, 700),
     [refetchEstimatesList] // Ensure refetchEstimatesList is included in dependencies
   );
 
   useEffect(() => {
-    // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
-    // if (statusValue || dateValue || searchValue) {
-    //   setPage(1);
-    // }
     if (searchValue) {
       debouncedRefetch();
       return () => {
@@ -192,10 +119,8 @@ const ShowerEstimatesList = ({
     // Reset page to 1 if filters (statusValue, dateValue, or searchValue) change
     if (statusValue || dateValue || searchValue) {
       setPage(1);
-    }   
-  }, [
-    statusValue,dateValue,searchValue,deletedSuccessfully,projectId,
-  ]);
+    }
+  }, [statusValue, dateValue, searchValue, deletedSuccessfully, projectId]);
 
   useEffect(() => {
     if (isFetched) {
@@ -225,7 +150,6 @@ const ShowerEstimatesList = ({
             background: "#FFFF",
             pb: isMobile ? 3 : 0,
             borderRadius: "8px",
-            // borderTop:'0.5px solid #d4dbdf'
           }}
         >
           {isMobile ? (

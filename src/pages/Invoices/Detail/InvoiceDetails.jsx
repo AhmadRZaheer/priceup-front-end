@@ -89,6 +89,12 @@ function InvoiceDetails() {
     });
   };
 
+  useEffect(() => {
+    setTimeout(() => {
+      setCopyLink(false);
+    }, 70000);
+  }, [copyLink]);
+
   const handleCopyPreview = (value) => {
     navigator.clipboard
       .writeText(value ?? "")
@@ -157,7 +163,7 @@ function InvoiceDetails() {
             <Box>
               <div className="subscribe-box">
                 <input
-                  type="email"
+                  type="text"
                   className="email-input"
                   placeholder="Customer Preview Link"
                   value={`${frontendURL}/customer-invoice-preview/${data?._id}`}
@@ -189,7 +195,7 @@ function InvoiceDetails() {
           )}
           {data?.customerPreview?.link ? (
             <Button
-            onClick={() => navigate(`customer-preview`)}
+              onClick={() => navigate(`customer-preview`)}
               variant="text"
               sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
               startIcon={<VisibilityIcon />}
@@ -231,12 +237,14 @@ function InvoiceDetails() {
             </Box>
           </Typography>
           {/* <Typography>License: {companyInfo.license}</Typography> */}
-          <Typography sx={{ fontWeight: 500 }}>
-            Company Address:
-            <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.companyAddress}
-            </Box>
-          </Typography>
+          {data?.source?.companyAddress && (
+            <Typography sx={{ fontWeight: 500 }}>
+              Company Address:
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.source?.companyAddress}
+              </Box>
+            </Typography>
+          )}
           {/* <Typography>{companyInfo.phone}</Typography>
           <Typography>{companyInfo.email}</Typography>
           <Typography>{companyInfo.website}</Typography> */}
@@ -252,12 +260,14 @@ function InvoiceDetails() {
               {data?.source?.projectName}
             </Box>
           </Typography>
-          <Typography sx={{ fontWeight: 500 }}>
-            Customer Name:{" "}
-            <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.customer?.name}
-            </Box>
-          </Typography>
+          {data?.customer?.name && (
+            <Typography sx={{ fontWeight: 500 }}>
+              Customer Name:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.customer?.name}
+              </Box>
+            </Typography>
+          )}
           {data?.customer?.address !== "" ? (
             <Typography sx={{ fontWeight: 500 }}>
               Billing Address:{" "}
@@ -283,6 +293,17 @@ function InvoiceDetails() {
               Customer Phone:{" "}
               <Box sx={{ fontWeight: 600 }} component="span">
                 {data?.customer?.phone}
+              </Box>
+            </Typography>
+          ) : (
+            ""
+          )}
+          {data?.source?.country !== "" ? (
+            <Typography sx={{ fontWeight: 500 }}>
+              Project Address:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.source?.city},{data?.source?.state}{" "}
+                {data?.source?.postalCode}
               </Box>
             </Typography>
           ) : (
@@ -465,6 +486,7 @@ function InvoiceDetails() {
                         inputFormat="MM/DD/YYYY"
                         className="custom-textfield"
                         value={dueDate}
+                        minDate={dayjs(data?.dueDate) || dayjs()}
                         onChange={handleDateChange}
                         sx={{
                           width: "152px",
@@ -527,7 +549,9 @@ function InvoiceDetails() {
             <TableBody>
               {data?.items?.map((item, index) => (
                 <TableRow key={index}>
-                  <TableCell  sx={{textTransform: "capitalize"}}>{item?.category}</TableCell>
+                  <TableCell sx={{ textTransform: "capitalize" }}>
+                    {item?.category}
+                  </TableCell>
                   <TableCell>
                     ${item.pricing?.laborPrice?.toFixed(2) || 0}
                   </TableCell>

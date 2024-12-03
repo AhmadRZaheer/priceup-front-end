@@ -54,7 +54,6 @@ export default function ProjectInvoiceList({
     refetch: refetchProjectInvoices,
   } = useFetchAllDocuments(fetchProjectInvoicesUrl);
 
-  console.log(projectInvoices,'projectInvoicesprojectInvoices')
   const {
     mutate: deleteProject,
     isSuccess: deletedSuccessfully,
