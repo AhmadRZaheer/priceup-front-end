@@ -61,6 +61,7 @@ import {
 } from "@/utilities/ApiHooks/common";
 import ShowerSummary from "./summary/summary";
 import BodySectionHTML from "./TermsAndConditions";
+// import CustomEditor from "./summary/CustomEditor";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -618,6 +619,7 @@ const CustomizeLandingPage = ({
         </Box>
       </Container>
       <Container maxWidth="xl" sx={{ pb: 4 }}>
+        {/* <CustomEditor /> */}
         <Box sx={{ px: 4 }}>
           <BodySectionHTML />
         </Box>

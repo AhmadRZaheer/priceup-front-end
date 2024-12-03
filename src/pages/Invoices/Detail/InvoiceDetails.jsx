@@ -237,12 +237,14 @@ function InvoiceDetails() {
             </Box>
           </Typography>
           {/* <Typography>License: {companyInfo.license}</Typography> */}
-          <Typography sx={{ fontWeight: 500 }}>
-            Company Address:
-            <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.companyAddress}
-            </Box>
-          </Typography>
+          {data?.source?.companyAddress && (
+            <Typography sx={{ fontWeight: 500 }}>
+              Company Address:
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.source?.companyAddress}
+              </Box>
+            </Typography>
+          )}
           {/* <Typography>{companyInfo.phone}</Typography>
           <Typography>{companyInfo.email}</Typography>
           <Typography>{companyInfo.website}</Typography> */}
@@ -258,12 +260,14 @@ function InvoiceDetails() {
               {data?.source?.projectName}
             </Box>
           </Typography>
-          <Typography sx={{ fontWeight: 500 }}>
-            Customer Name:{" "}
-            <Box sx={{ fontWeight: 600 }} component="span">
-              {data?.source?.customer?.name}
-            </Box>
-          </Typography>
+          {data?.customer?.name && (
+            <Typography sx={{ fontWeight: 500 }}>
+              Customer Name:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.customer?.name}
+              </Box>
+            </Typography>
+          )}
           {data?.customer?.address !== "" ? (
             <Typography sx={{ fontWeight: 500 }}>
               Billing Address:{" "}
@@ -289,6 +293,17 @@ function InvoiceDetails() {
               Customer Phone:{" "}
               <Box sx={{ fontWeight: 600 }} component="span">
                 {data?.customer?.phone}
+              </Box>
+            </Typography>
+          ) : (
+            ""
+          )}
+          {data?.source?.country !== "" ? (
+            <Typography sx={{ fontWeight: 500 }}>
+              Project Address:{" "}
+              <Box sx={{ fontWeight: 600 }} component="span">
+                {data?.source?.city},{data?.source?.state}{" "}
+                {data?.source?.postalCode}
               </Box>
             </Typography>
           ) : (
