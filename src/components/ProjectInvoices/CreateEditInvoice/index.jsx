@@ -602,7 +602,7 @@ const ProjectInvoiceComponent = ({
                         sx={{
                           width: "100%",
                           "& .MuiInputBase-root": {
-                            height: 40,
+                            height: 39,
                             backgroundColor: "white",
                           },
                           "& .MuiInputBase-input": {
@@ -625,40 +625,52 @@ const ProjectInvoiceComponent = ({
                   </Box>
                 </Box>
               </Box>
-              <Box sx={{ width: { sm: "50%", xs: "100%" }, pt: 1 }}>
-                <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-                  <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                    Add Notes:
-                  </Typography>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: 2,
+                  aligItems: "baseline",
+                  width: "100%",
+                }}
+              >
+                <Box sx={{ width: { sm: "51.1%", xs: "100%" }, pt: 1 }}>
                   <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                      paddingY: { sm: 0, xs: 1 },
-                      width: "100%",
-                    }}
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                   >
-                    <TextareaAutosize
-                      style={{
-                        padding: "10px",
-                        borderColor: "#cccc",
-                        borderRadius: "5px",
+                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                      Add Notes:
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        paddingY: { sm: 0, xs: 1 },
+                        width: "100%",
                       }}
-                      className="custom-textfield"
-                      color="neutral"
-                      // cols={isMobile ? 38 : 50}
-                      minRows={5}
-                      maxRows={19}
-                      id="notes"
-                      name="notes"
-                      placeholder="Enter Additional Notes"
-                      size="large"
-                      variant="outlined"
-                      sx={{ padding: "10px" }}
-                      value={formik.values.notes}
-                      onChange={formik.handleChange}
-                    />
+                    >
+                      <TextareaAutosize
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        // cols={isMobile ? 38 : 50}
+                        minRows={5}
+                        maxRows={19}
+                        id="notes"
+                        name="notes"
+                        placeholder="Enter Additional Notes"
+                        size="large"
+                        variant="outlined"
+                        sx={{ padding: "10px" }}
+                        value={formik.values.notes}
+                        onChange={formik.handleChange}
+                      />
+                    </Box>
                   </Box>
                 </Box>
               </Box>

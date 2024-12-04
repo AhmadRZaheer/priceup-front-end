@@ -63,7 +63,7 @@ import {
 import ShowerSummary from "./summary/summary";
 import BodySectionHTML from "./TermsAndConditions";
 // import CustomEditor from "./summary/CustomEditor";
-import {loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from "@stripe/stripe-js";
 import Payment from "../StripePayment";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
@@ -338,7 +338,7 @@ const CustomizeLandingPage = ({
             flexDirection: { md: "row", xs: "column" },
             gap: 10,
             position: "relative",
-            justifyContent:'space-between'
+            justifyContent: "space-around",
           }}
         >
           {/* left side */}
@@ -432,15 +432,54 @@ const CustomizeLandingPage = ({
             }}
           >
             <Payment stripePromise={stripePromise} /> */}
-            {/* <img src={right_headerimage} alt="" height="560" /> */}
+          {/* <img src={right_headerimage} alt="" height="560" /> */}
           {/* </Box> */}
-          <Box sx={{pr:4}}>
-          <Payment stripePromise={stripePromise} />
+          <Box sx={{ alignSelf: "center" }}>
+            {selectedData?.status === "Unpaid" ? (
+              <Payment
+                stripePromise={stripePromise}
+                refetchData={refetchData}
+              />
+            ) : (
+              <Box sx={{ maxWidth: 375 }}>
+                <Typography
+                  sx={{
+                    fontSize: { sm: "24px", xs: "32px" },
+                    fontWeight: 500,
+                    color: "white",
+                    lineHeight: { md: "48px", xs: "32px" },
+                  }}
+                >
+                  Thank you for using our service!
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: { lg: "18px", md: "16px", xs: "14px" },
+                    fontWeight: "light",
+                    color: "white",
+                  }}
+                >
+                  The current status of your invoice is{" "}
+                  <strong>{selectedData?.status}</strong>.
+                </Typography>
+                <Typography
+                  pt={1}
+                  sx={{
+                    fontSize: { lg: "18px", md: "16px", xs: "14px" },
+                    fontWeight: "light",
+                    color: "white",
+                  }}
+                >
+                  We appreciate your effort and will keep you updated on any
+                  further developments.
+                </Typography>
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
       <Container maxWidth="xl" sx={{ pb: 4 }}>
-      {/* <Payment stripePromise={stripePromise} /> */}
+        {/* <Payment stripePromise={stripePromise} /> */}
         {/* <Box
           sx={{
             display: "flex",

@@ -130,9 +130,9 @@ export default function ProjectInvoices() {
         >
            <Grid container spacing={2}>
             {[
-              { title: "Paid", text: stats?.paid, variant: "green" },
-              { title: "Unpaid", text: stats?.unpaid, variant: "blue" },
-              { title: "Voided", text: stats?.voided, variant: "red" },
+              { title: "Paid", text: stats?.statusCounts?.Paid, variant: "green" },
+              { title: "Unpaid", text: stats?.statusCounts?.Unpaid, variant: "blue" },
+              { title: "Voided", text: stats?.statusCounts?.Voided, variant: "red" },
             ]?.map((item) => (
               <Grid item lg={3} md={6} sm={6} xs={6}>
                 <WidgetCard
@@ -258,21 +258,21 @@ export default function ProjectInvoices() {
                     );
                   }}
                 >
-                  <MenuItem value={"pending"}>
+                   <MenuItem value={"Paid"}>
                     <StatusChip
-                      variant={"pending"}
+                      variant={"Paid"}
                       sx={{ padding: 0, px: 2 }}
                     />
                   </MenuItem>
-                  <MenuItem value={"voided"}>
+                  <MenuItem value={"Unpaid"}>
+                    <StatusChip
+                      variant={"Unpaid"}
+                      sx={{ padding: 0, px: 2 }}
+                    />
+                  </MenuItem>
+                  <MenuItem value={"Voided"}>
                     <StatusChip variant={"voided"} sx={{ padding: 0, px: 2 }} />
-                  </MenuItem>
-                  <MenuItem value={"approved"}>
-                    <StatusChip
-                      variant={"approved"}
-                      sx={{ padding: 0, px: 2 }}
-                    />
-                  </MenuItem>
+                  </MenuItem>                 
                 </Select>
               </FormControl>
               <Button
