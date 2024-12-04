@@ -329,7 +329,7 @@ const CustomizeLandingPage = ({
             backgroundImage: { md: `url(${bg_Header})`, xs: "none" },
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
-            pl: { md: 12, xs: 0 },
+            px: { md: 12, xs: 0 },
             pt: { md: 10, xs: 0 },
             pb: { md: 12, xs: 2 },
             mt: 3,
@@ -338,6 +338,7 @@ const CustomizeLandingPage = ({
             flexDirection: { md: "row", xs: "column" },
             gap: 10,
             position: "relative",
+            justifyContent:'space-between'
           }}
         >
           {/* left side */}
@@ -433,7 +434,9 @@ const CustomizeLandingPage = ({
             <Payment stripePromise={stripePromise} /> */}
             {/* <img src={right_headerimage} alt="" height="560" /> */}
           {/* </Box> */}
+          <Box sx={{pr:4}}>
           <Payment stripePromise={stripePromise} />
+          </Box>
         </Box>
       </Box>
       <Container maxWidth="xl" sx={{ pb: 4 }}>
