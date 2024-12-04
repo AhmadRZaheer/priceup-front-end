@@ -6,7 +6,7 @@ import { Box, Container } from "@mui/material";
 import "./style.scss";
 
 function Payment(props) {
-  const { stripePromise } = props;
+  const { stripePromise,refetchData } = props;
   const [clientSecret, setClientSecret] = useState(
     "pi_3QRs8ZRujwjTz5jA0JZcwoov_secret_NrmCC54cC7Gozt16djTnu0abp"
   );
@@ -22,7 +22,7 @@ function Payment(props) {
     <Box sx={{ maxWidth: 345 }}>
       {clientSecret && stripePromise && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
-          <CheckoutForm />
+          <CheckoutForm refetchData={refetchData} />
         </Elements>
       )}
     </Box>
