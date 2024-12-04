@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   IconButton,
+  Grid,
 } from "@mui/material";
 import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
 import { ArrowForward, East, Search } from "@mui/icons-material";
@@ -30,6 +31,9 @@ import icon from "../../Assets/search-icon.svg";
 import { useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import WidgetCard from "../ui-components/widgetCard";
+import { backendURL } from "@/utilities/common";
+import { useFetchAllDocuments } from "@/utilities/ApiHooks/common";
 
 const CustomerTable = () => {
   const navigate = useNavigate();
@@ -43,6 +47,7 @@ const CustomerTable = () => {
     isFetching,
     isFetched,
   } = useFetchDataCustomer(page, itemsPerPage, search);
+
   // const refetchData = useSelector(getDataRefetch);
   const [openQuotesModal, setOpenQuotesModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -51,6 +56,13 @@ const CustomerTable = () => {
   // pagination state:
   // const [inputPage, setInputPage] = useState("");
   // const [isShowInput, setIsShowInput] = useState(false);
+
+  const { data, refetch } = useFetchAllDocuments(
+    `${backendURL}/dashboard-stats`
+  );
+  useEffect(() => {
+    refetch();
+  }, []);
 
   const filteredData = useMemo(() => {
     if (customersList && customersList?.customers?.length) {
@@ -111,13 +123,14 @@ const CustomerTable = () => {
       setIsLoading(false);
     }
   }, [isFetched]);
+
   const actionColumn = [
     {
       field: "Actions",
       align: "left",
       headerClassName: "customHeaderClass",
       flex: 1,
-      sortable:false,
+      sortable: false,
       renderCell: (params) => {
         console.log(params.row, "params.row");
         return (
@@ -155,13 +168,58 @@ const CustomerTable = () => {
       >
         <Box
           sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            pb: 2,
+          }}
+        >
+          <Box>
+            <Typography
+              sx={{
+                fontSize: 24,
+                fontWeight: 600,
+                lineHeight: "32.78px",
+              }}
+            >
+              Customer Management
+            </Typography>
+            <Typography
+              sx={{
+                color: "#212528",
+                fontSize: "16px",
+                fontWeight: 600,
+                lineHeight: "21.86px",
+                opacity: "70%",
+              }}
+            >
+              Manage your Customers.
+            </Typography>
+          </Box>
+        </Box>
+        <Grid container spacing={2}>
+          {[{ title: "Total Customer", text: data?.customerCount ?? 0, variant: "blue" }].map(
+            (item) => (
+              <Grid item lg={4} md={6} sm={6} xs={6}>
+                <WidgetCard
+                  type={2}
+                  text={item.text}
+                  title={item.title}
+                  varient={item.variant}
+                />
+              </Grid>
+            )
+          )}
+        </Grid>
+
+        <Box
+          sx={{
             display: { sm: "flex", xs: "block" },
             justifyContent: "space-between",
             alignItems: "center",
             // width: "99.5%",
             pr: { sm: 0, xs: 1 },
             pl: { sm: 0, xs: 1 },
-            mb: 1,
+            my: 1,
           }}
         >
           <Typography

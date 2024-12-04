@@ -21,6 +21,12 @@ const CustomLineChart = ({ dataType, data }) => {
         zoom: {
           enabled: false,
         },
+        // toolbar: {
+        //   show: true, // Enable or disable the toolbar completely
+        //   tools: {
+        //     download: false, // Disable the download option
+        //   },
+        // },
       },
       dataLabels: {
         enabled: false,

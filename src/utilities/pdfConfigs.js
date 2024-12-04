@@ -85,7 +85,9 @@ export const pricingSection = {
   wineCellars: [
     "hardwarePrice",
     "glassPrice",
+    "glassAddonsPrice",
     "fabricationPrice",
+    "hardwareAddonsPrice",
     "laborPrice",
     "doorLaborPrice",
     "additionalFieldPrice",
@@ -111,7 +113,15 @@ export const fabricationSection = {
     "quadOutletCutout",
     "notch",
   ],
-  wineCellars: ["oneInchHoles", "hingeCut"],
+  wineCellars: [
+    "oneInchHoles",
+    "hingeCut",
+    "clampCut",
+    "notch",
+    "outages",
+    "mitre",
+    "polish",
+  ],
 };
 
 export const summarySection = {
@@ -138,7 +148,17 @@ export const summarySection = {
     "handles",
     "hinges",
     "mountingChannel",
+    "wallClamp",
+    "sleeveOver",
+    "glassToGlass",
+    "cornerWallClamp",
+    "cornerSleeveOver",
+    "cornerGlassToGlass",
     "glassType",
+    "slidingDoorSystem",
+    "header",
+    "glassAddons",
+    "hardwareAddons",
     "doorLock",
   ],
 };

@@ -1308,14 +1308,14 @@ const estimateCalcSlice = createSlice({
     initializeStateForCustomQuote: (state, action) => {
       let notifications = state.notifications;
       let hardwareFinishes = null;
-      // hardwareFinishes = state.listData?.hardwareFinishes?.find(
-      //   (item) => item.slug === "polished-chrome"
-      // );
+      hardwareFinishes = state.listData?.hardwareFinishes?.find(
+        (item) => item.slug === "polished-chrome"
+      );
 
       let glassType = null;
-      // glassType = state.listData?.glassType?.find(
-      //   (item) => item.slug === "clear"
-      // );
+      glassType = state.listData?.glassType?.find(
+        (item) => item.slug === "clear"
+      );
 
       let glassAddons = null;
       glassAddons = state.listData?.glassAddons?.find(

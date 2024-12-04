@@ -739,13 +739,30 @@ export const ProjectsColumns = (dropdownActions) => {
       field: "Location",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 0.9,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
             <Tooltip title={params?.row?.addressData?.name} placement="top">
               <Typography className="projectRowTxt" sx={{ py: 1 }}>
                 {params?.row?.addressData?.name}
+              </Typography>
+            </Tooltip>
+          </>
+        );
+      },
+    },
+    {
+      field: "Source",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Tooltip title={params?.row?.created_source} placement="top">
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
+                {params?.row?.created_source ? params?.row?.created_source: 'Application' }
               </Typography>
             </Tooltip>
           </>
@@ -794,6 +811,298 @@ export const ProjectsColumns = (dropdownActions) => {
       flex: 0.8,
       renderCell: (params) => {
         return <StatusChip variant={params?.row?.status} />;
+      },
+    },
+    {
+      field: "Action",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return <ActionsDropdown item={params?.row} actions={dropdownActions} />;
+      },
+    },
+  ];
+};
+export const ProjectsInvoiceColumns = (dropdownActions) => {
+  return [
+    {
+      field: "Invoice Number",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.invoiceId}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Customer",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1.1,
+      renderCell: (params) => {
+        return (
+          <>
+            {params?.row?.customer ? (
+              <Box
+                className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+              >
+                <div className="customerImg">
+                  <DefaultImage
+                    image={params?.row?.customer?.image}
+                    name={params?.row?.customer?.name}
+                    type={5}
+                  />
+                </div>
+                <Tooltip
+                  title={
+                    <Grid>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customer?.name}
+                      </Typography>
+                      <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+                        {params?.row?.customer?.email}
+                      </Typography>
+                    </Grid>
+                  }
+                  placement="top"
+                >
+                  <div className="new-customerNameTable">
+                    <Box
+                      className="new-userNameTable"
+                      sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+                    >
+                      <Typography
+                        className="new-userNameTable"
+                        sx={{
+                          color: "#000000",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                          lineHeight: "19.12px",
+                        }}
+                      >
+                        {params?.row?.customer?.name}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: 12,
+                          fontWeight: 500,
+                          lineHeight: "16.39px",
+                          p: 0,
+                          mt: -0.4,
+                          color: "#5D6164",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          overflow: "hidden",
+                          width: { lg: "100%", xs: "93px" },
+                        }}
+                      >
+                        {params?.row?.customer?.email}
+                      </Typography>
+                    </Box>
+                  </div>
+                </Tooltip>
+              </Box>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
+          </>
+        );
+      },
+    },
+    // {
+    //   field: "Customer",
+    //   headerClassName: "ProjectsColumnsHeaderClass",
+    //   sortable: false,
+    //   flex: 1.9,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         {params?.row?.customerData ? (
+    //           <Box
+    //             className="project-cellWrap"
+    //             sx={
+    //               {
+    //                 // py: params?.row?.customerData?.email ? 0.3 : 0.6,
+    //               }
+    //             }
+    //           >
+    //             <div className="customerImg">
+    //               <DefaultImage
+    //                 image={params?.row?.customerData?.image}
+    //                 name={params?.row?.customerData?.name}
+    //                 type={5}
+    //               />
+    //             </div>
+    //             <Tooltip
+    //               title={
+    //                 <Grid>
+    //                   <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+    //                     {params?.row?.customerData?.name}
+    //                   </Typography>
+    //                   <Typography sx={{ fontSize: 12, fontWeight: 500 }}>
+    //                     {params?.row?.customerData?.email}
+    //                   </Typography>
+    //                 </Grid>
+    //               }
+    //               placement="top"
+    //             >
+    //               <div className="new-customerNameTable">
+    //                 <Box
+    //                   className="new-userNameTable"
+    //                   sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+    //                 >
+    //                   <Typography
+    //                     className="new-userNameTable"
+    //                     sx={{
+    //                       color: "#000000",
+    //                       textOverflow: "ellipsis",
+    //                       whiteSpace: "nowrap",
+    //                       overflow: "hidden",
+    //                       width: { lg: "100%", xs: "93px" },
+    //                       lineHeight: "19.12px",
+    //                     }}
+    //                   >
+    //                     {params?.row?.customerData?.name}
+    //                   </Typography>
+    //                   <Typography
+    //                     sx={{
+    //                       fontSize: 12,
+    //                       fontWeight: 500,
+    //                       lineHeight: "16.39px",
+    //                       p: 0,
+    //                       mt: -0.4,
+    //                       color: "#5D6164",
+    //                       textOverflow: "ellipsis",
+    //                       whiteSpace: "nowrap",
+    //                       overflow: "hidden",
+    //                       width: { lg: "100%", xs: "93px" },
+    //                     }}
+    //                   >
+    //                     {params?.row?.customerData?.email}
+    //                   </Typography>
+    //                 </Box>
+    //               </div>
+    //             </Tooltip>
+    //           </Box>
+    //         ) : (
+    //           <Box
+    //             sx={{
+    //               width: "100%",
+    //               display: "flex",
+    //               justifyContent: "center",
+    //             }}
+    //           >
+    //             ---
+    //           </Box>
+    //         )}
+
+    //         {/* <Typography sx={{ py: 1, color: "#667085" }}>
+    //           {params?.row?.customerData?.name}
+    //         </Typography> */}
+    //       </>
+    //     );
+    //   },
+    // },
+    {
+      field: "Project Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Tooltip title={params?.row?.source?.name} placement="top">
+              <Typography className="projectRowTxt" sx={{ py: 1 }}>
+                {params?.row?.source?.name}
+              </Typography>
+            </Tooltip>
+          </>
+        );
+      },
+    },
+    // {
+    //   field: "Source",
+    //   headerClassName: "ProjectsColumnsHeaderClass",
+    //   sortable: false,
+    //   flex: 0.8,
+    //   renderCell: (params) => {
+    //     return (
+    //       <>
+    //         <Tooltip title={params?.row?.created_source} placement="top">
+    //           <Typography className="projectRowTxt" sx={{ py: 1 }}>
+    //             {params?.row?.created_source ? params?.row?.created_source: 'Application' }
+    //           </Typography>
+    //         </Tooltip>
+    //       </>
+    //     );
+    //   },
+    // },
+    {
+      field: "Amount",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ width: 200, py: 1 }}>
+              ${params?.row?.grandTotal?.toFixed(2) || 0}
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Due Date",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.9,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ width: 190, py: 1 }}>
+              {new Date(params?.row?.dueDate).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </Typography>
+          </>
+        );
+      },
+    },
+   
+    {
+      field: "Status",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 0.8,
+      renderCell: (params) => {
+        return (
+          <Typography
+          className={params.row.status === 'Paid' ? "status-active" : params.row.status === 'Voided' ? 'status-voided' : "status-inActive"}
+        >
+          {params.row.status}
+        </Typography>
+        );
       },
     },
     {
@@ -907,6 +1216,120 @@ export const LocationColumns = () => {
           <>
             <Typography className="projectRowTxt" sx={{ py: 1 }}>
               {params?.row?.state || "----"}
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
+export const ContactColumns = () => {
+  return [
+    {
+      field: "Name",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.name}
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Phone Number",
+      headerClassName: "ProjectsColumnsHeaderClass",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {params?.row?.phone}
+            </Typography>
+          </>
+        );
+      },
+    },
+  ];
+};
+
+export const InvoiceDetailColumns = () => {
+  return [
+    {
+      field: "Estimaate ID",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <Box>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.name} */} sdsd
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
+      field: "Estimate Category",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Layout",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Date quoted",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
+            </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Estimated total",
+      headerClassName: "ProjectInvoiceColumnsHeader",
+      sortable: false,
+      flex: 1,
+      renderCell: (params) => {
+        return (
+          <>
+            <Typography className="projectRowTxt" sx={{ py: 1 }}>
+              {/* {params?.row?.phone} */}dfdf
             </Typography>
           </>
         );
@@ -1918,6 +2341,59 @@ export const WineMirrorsGlassType = () => {
           <Box
             className="project-cellWrap"
           // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+          >
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">
+              <Box
+                className="new-userNameTable"
+                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
+              >
+                <Typography
+                  className="new-userNameTable"
+                  sx={{
+                    color: "#000000",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    width: { lg: "100%", xs: "93px" },
+                  }}
+                >
+                  {params.row.name}
+                </Typography>
+              </Box>
+            </div>
+          </Box>
+          </Box>
+        );
+      },
+    },
+
+  ];
+};
+export const WineMirrorsGlassAddon = () => {
+  return [
+    {
+      field: "glassAddon",
+      headerName: "Glass Addon",
+      headerClassName: "showerHardwareHeader",
+      flex: 1.3,
+      sortable: false,
+      renderHeader: (params) => (
+        <Box sx={{ pl: '14px' }}>
+          {params.colDef.headerName}
+        </Box>
+      ),
+      renderCell: (params) => {
+        return (
+          <Box  sx={{ pl: '14px', }}>          
+          <Box
+            className="project-cellWrap"
           >
             <div className="customerImg">
               <DefaultImage

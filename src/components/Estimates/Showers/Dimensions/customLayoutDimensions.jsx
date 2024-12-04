@@ -3,7 +3,7 @@ import {
   Box,
   Button,
   Grid,
-  IconButton,  
+  IconButton,
   TextField,
   Typography,
   useMediaQuery,
@@ -214,7 +214,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
     if (isMobile) {
       setStep(1);
     }
-      setOpenPopover(true)
+    setOpenPopover(true);
     // navigate("/estimates/review");
     // dispatch(setNavigation("review"));
     // dispatch(setNavigationDesktop("review"));
@@ -246,7 +246,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
   });
 
   useEffect(() => {
-    if (currentQuoteState === quoteState.CUSTOM && selectedData && listData) {
+    if (currentQuoteState === quoteState.CUSTOM && listData) {
       dispatch(initializeStateForCustomQuote());
     } else if (
       currentQuoteState === quoteState.EDIT &&
@@ -266,7 +266,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
   return (
     <>
       {skeltonState || recordData.estimateFetcing ? (
-         <LayoutMeasurementSkeleton />
+        <LayoutMeasurementSkeleton />
       ) : (
         <>
           <form>
@@ -296,7 +296,10 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                 <Typography sx={{ fontSize: "14px", fontWeight: 700 }}>
                   Layout & Measurement
                 </Typography>
-                <AlertsAndWarnings  openPopoverExternally={openPopover} setOpenPopover={setOpenPopover} />
+                <AlertsAndWarnings
+                  openPopoverExternally={openPopover}
+                  setOpenPopover={setOpenPopover}
+                />
               </Box>
               <Box
                 sx={{
@@ -358,7 +361,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                     mt: { sm: 4, xs: 0 },
                   }}
                 >
-                  <Button
+                  {/* <Button
                     fullWidth
                     onClick={addRow}
                     sx={{
@@ -380,7 +383,7 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                     }}
                   >
                     Add Row
-                  </Button>
+                  </Button> */}
                   <Box
                     sx={{
                       display: "flex",
@@ -684,8 +687,9 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                 >
                   <Box
                     sx={{
-                      width: { md: "160px", xs: "50%" },
-                      display: { md: "block", xs: "none" },
+                      // width: { md: "160px", xs: "50%" },
+                      display: { md: "flex", xs: "none" },
+                      gap: 2,
                     }}
                   >
                     <Button
@@ -707,6 +711,28 @@ export const CustomLayoutDimensions = ({ setStep, recordData }) => {
                     >
                       Reset
                     </Button>
+                      <Button
+                        fullWidth
+                        onClick={addRow}
+                        sx={{
+                          boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.05)",
+                          color: { md: "white", xs: "#344054" },
+                          textTransform: "initial",
+                          border: "1px solid #D0D5DD",
+                          backgroundColor: { md: "transparent", xs: "white" },
+                          height: 42,
+                          fontSize: 16,
+                          fontWeight: 600,
+                          backgroundColor: "#8477da",
+                          minWidth:'105px',
+                          ":hover": {
+                            border: "1px solid #8477DA",
+                            backgroundColor: "#8477da",
+                          },
+                        }}
+                      >
+                        Add Row
+                      </Button>
                   </Box>
                   {/**Buttons */}
                   <Box

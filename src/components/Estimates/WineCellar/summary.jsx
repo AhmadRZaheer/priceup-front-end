@@ -10,8 +10,15 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { layoutVariants,quoteState as quotestate, } from "@/utilities/constants";
-import { generateObjectForPDFRuntime, renderMeasurementSides } from "@/utilities/estimates";
+import {
+  hardwareTypes,
+  layoutVariants,
+  quoteState as quotestate,
+} from "@/utilities/constants";
+import {
+  generateObjectForPDFRuntime,
+  renderMeasurementSides,
+} from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
@@ -24,8 +31,10 @@ import {
   getDoorWeight,
   getDoorWidth,
   getFabricationTotal,
+  getGlassAddonsTotal,
   // getWineGlassAddonsTotal,
-  getGlassTotal,  
+  getGlassTotal,
+  getHardwareAddonsTotal,
   getHardwareTotal,
   getLaborTotal,
   getLayoutArea,
@@ -37,13 +46,27 @@ import {
   getTotal,
   getUserProfitPercentage,
   selectedItem,
+  setContent,
   setUserProfitPercentage,
 } from "@/redux/wineCellarEstimateSlice";
-import { getCustomerDetail, getEstimateCategory, getEstimateState, getProjectId } from "@/redux/estimateSlice";
+import {
+  getCustomerDetail,
+  getEstimateCategory,
+  getEstimateState,
+  getProjectId,
+} from "@/redux/estimateSlice";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { getLocationPdfSettings, getLocationShowerSettings, getLocationWineCellarSettings } from "@/redux/locationSlice";
-import { calculateTotal } from "@/utilities/common";
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+  getLocationWineCellarSettings,
+} from "@/redux/locationSlice";
+import {
+  calculateTotal,
+  getGlassTypeDetailsByThickness,
+} from "@/utilities/common";
 import { useSearchParams } from "react-router-dom";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -75,6 +98,10 @@ const Summary = ({ setStep }) => {
   const wineCallerLocationSettings = useSelector(getLocationWineCellarSettings);
   const pdfSettings = useSelector(getLocationPdfSettings);
   const customerData = useSelector(getCustomerDetail);
+  const WineCellarHardware = useSelector(getWineCellarsHardware);
+  const hardwareAddonsPrice = useSelector(getHardwareAddonsTotal);
+  const glassAddonsPrice = useSelector(getGlassAddonsTotal);
+
   const [Columns, setColumns] = useState([
     { title: "Dimensions", active: true },
     { title: "Summary", active: true },
@@ -88,7 +115,7 @@ const Summary = ({ setStep }) => {
 
   const drawerHandleClick = () => {
     const item = generateObjectForPDFRuntime(
-      { estimateState:quoteState, projectId, selectedCategory,customerData },
+      { estimateState: quoteState, projectId, selectedCategory, customerData },
       wineCallerEstimateState,
       wineCallerLocationSettings
     );
@@ -102,7 +129,12 @@ const Summary = ({ setStep }) => {
       item?.measurements,
       item?.layout_id
     );
-    console.log(item,measurementString,'dfdererererasas',wineCallerEstimateState)
+    console.log(
+      item,
+      measurementString,
+      "dfdererererasas",
+      wineCallerEstimateState
+    );
     const id = quoteState === quotestate.CREATE ? "--" : selectedData._id;
     localStorage.setItem(
       "pdf-estimate",
@@ -153,6 +185,14 @@ const Summary = ({ setStep }) => {
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
   };
+
+  const glassDetails = getGlassTypeDetailsByThickness(
+    wineCallerLocationSettings?.glassTypesForComparison,
+    WineCellarHardware.glassType,
+    selectedContent?.glassType?.thickness,
+    selectedContent?.glassType?.item?._id
+  );
+
   return (
     <>
       <Box
@@ -490,7 +530,7 @@ const Summary = ({ setStep }) => {
                         </>
                       ) : (
                         <>
-                          {/* {" "}
+                          {" "}
                           {selectedContent?.mountingClamps?.wallClamp
                             ?.length ? (
                             <Box>
@@ -524,8 +564,8 @@ const Summary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )} */}
-                          {/* {selectedContent?.mountingClamps?.glassToGlass
+                          )}
+                          {selectedContent?.mountingClamps?.glassToGlass
                             ?.length ? (
                             <Box>
                               <Typography className="text-xs-ragular-bold">
@@ -541,10 +581,10 @@ const Summary = ({ setStep }) => {
                             </Box>
                           ) : (
                             ""
-                          )}{" "} */}
+                          )}{" "}
                         </>
                       )}
-                      {/* {selectedContent?.cornerClamps?.cornerWallClamp
+                      {selectedContent?.cornerClamps?.cornerWallClamp
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -560,8 +600,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.cornerClamps?.cornerSleeveOver
+                      )}
+                      {selectedContent?.cornerClamps?.cornerSleeveOver
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -577,8 +617,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.cornerClamps?.cornerGlassToGlass
+                      )}
+                      {selectedContent?.cornerClamps?.cornerGlassToGlass
                         ?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -594,7 +634,7 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
+                      )}
                       {selectedContent?.glassType?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -606,7 +646,7 @@ const Summary = ({ setStep }) => {
                           </Typography>
                         </Box>
                       )}
-                      {/* {selectedContent?.slidingDoorSystem?.item && (
+                      {selectedContent?.slidingDoorSystem?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Sliding Door System:
@@ -616,7 +656,7 @@ const Summary = ({ setStep }) => {
                             {selectedContent?.slidingDoorSystem?.count})
                           </Typography>
                         </Box>
-                      )} */}
+                      )}
                       {selectedContent?.transom && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
@@ -625,7 +665,7 @@ const Summary = ({ setStep }) => {
                           <Typography className="text-xs-ragular"></Typography>
                         </Box>
                       )}
-                      {/* {selectedContent?.header?.item && (
+                      {selectedContent?.header?.item && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Header:
@@ -635,8 +675,8 @@ const Summary = ({ setStep }) => {
                             {selectedContent?.header?.count})
                           </Typography>
                         </Box>
-                      )} */}
-                      {/* {selectedContent?.glassAddons?.length ? (
+                      )}
+                      {selectedContent?.glassAddons?.length ? (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Glass Addons:
@@ -647,8 +687,8 @@ const Summary = ({ setStep }) => {
                         </Box>
                       ) : (
                         ""
-                      )} */}
-                      {/* {selectedContent?.hardwareAddons?.length > 0 && (
+                      )}
+                      {selectedContent?.hardwareAddons?.length > 0 && (
                         <Box>
                           <Typography className="text-xs-ragular-bold">
                             Add ons:{" "}
@@ -659,7 +699,7 @@ const Summary = ({ setStep }) => {
                             )}{" "}
                           </Typography>
                         </Box>
-                      )} */}
+                      )}
                       <Box
                         sx={{
                           display: "flex",
@@ -682,7 +722,7 @@ const Summary = ({ setStep }) => {
                         }}
                       >
                         <Typography className="text-xs-ragular-bold">
-                        Hours for layout:{" "}
+                          Hours for layout:{" "}
                         </Typography>
                         <Typography className="text-xs-ragular">
                           {selectedContent?.hours}
@@ -696,7 +736,7 @@ const Summary = ({ setStep }) => {
                         }}
                       >
                         <Typography className="text-xs-ragular-bold">
-                        Hours for door:{" "}
+                          Hours for door:{" "}
                         </Typography>
                         <Typography className="text-xs-ragular">
                           {selectedContent?.laborHoursForDoor ?? 0}
@@ -755,14 +795,14 @@ const Summary = ({ setStep }) => {
                           ${glassPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      {/* <Box>
+                      <Box>
                         <Typography className="text-xs-ragular-bold">
                           Glass Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${glassAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box> */}
+                      </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Fabrication Price:
@@ -771,14 +811,14 @@ const Summary = ({ setStep }) => {
                           ${fabricationPrice?.toFixed(2) || 0}
                         </Typography>
                       </Box>
-                      {/* <Box>
+                      <Box>
                         <Typography className="text-xs-ragular-bold">
                           Hardware Addons Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${hardwareAddonsPrice?.toFixed(2) || 0}
                         </Typography>
-                      </Box> */}
+                      </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
                           Layout Labor Price:
@@ -789,7 +829,7 @@ const Summary = ({ setStep }) => {
                       </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
-                         Door Labor Price:
+                          Door Labor Price:
                         </Typography>
                         <Typography className="text-xs-ragular">
                           ${doorLaborPrice?.toFixed(2) || 0}
@@ -904,6 +944,60 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
+          {glassDetails?.length > 0 && glassPrice !== 0  && (
+            <>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "16.41px",
+                  fontFamily: '"Roboto", sans-serif !important',
+                }}
+              >
+                Note:
+              </Typography>
+            {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
+            {glassDetails.map((glass, index) => {
+              const actualPrice =
+                actualCost - glassPrice + sqftArea * glass.price;
+              const price =
+                actualPrice *
+                  (wineCallerLocationSettings?.miscPricing?.pricingFactorStatus
+                    ? wineCallerLocationSettings?.miscPricing?.pricingFactor
+                    : 1) +
+                (laborPrice + doorLaborPrice);
+              // const price = ((totalPrice - glassPrice) + sqftArea*glass.price)
+              return (
+                glass.status && (
+                  <Typography key={index}>
+                    Glass Option '{glass.name}'
+                    {/* with thickness '{glass.thickness}' */} has a price of '$
+                    {price?.toFixed(2) || 0}' {"=>"} Want to
+                    <Box
+                      component="span"
+                      onClick={() =>
+                        dispatch(
+                          setContent({
+                            type: hardwareTypes.GLASSTYPE,
+                            item: glass?.selectedGlass,
+                          })
+                        )
+                      }
+                      sx={{ cursor: "pointer", color: "blue" }}
+                    >
+                      {" "}
+                      apply
+                    </Box>
+                    ?
+                  </Typography>
+                )
+              );
+            })}
+          </Box>
+          </>
+          )}
         </Box>
         {isMobile ? (
           <Box

@@ -11,8 +11,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { showSnackbar } from "@/redux/snackBarSlice";
 import { thicknessTypes } from "@/utilities/constants";
 import MenuItem from "./menuItem";
-import { getContent, setActiveMounting, setContent } from "@/redux/wineCellarEstimateSlice";
+import {
+  getContent,
+  setActiveMounting,
+  setContent,
+} from "@/redux/wineCellarEstimateSlice";
 import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import MenuList from "./menuList";
 
 const ChannelorClamp = ({ menuOptions, title, type }) => {
   const [anchorEl, setAnchorEl] = useState(false);
@@ -20,8 +25,8 @@ const ChannelorClamp = ({ menuOptions, title, type }) => {
   const listData = useSelector(getWineCellarsHardware);
   /** Show channel item on base of active thickness fo glass */
   const activeChannel = useMemo(() => {
-    let active = 'u-channel-3-8';
-    if(listData){
+    let active = null;
+    if (listData) {
       if (selectedContent?.glassType?.thickness === thicknessTypes.ONEBYTWO) {
         active = listData?.mountingChannel?.find(
           (item) => item.slug === "u-channel-1-2"
@@ -33,117 +38,242 @@ const ChannelorClamp = ({ menuOptions, title, type }) => {
           (item) => item.slug === "u-channel-3-8"
         );
       }
-    }   
+    }
     return active;
-  }, [selectedContent?.glassType?.thickness,listData]);
+  }, [selectedContent?.glassType?.thickness, listData]);
   /** end */
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
     if (!["mounting"].includes(type)) {
       dispatch(setContent({ type: type, item: item }));
     } else {
-
+      if (["channel", "clamps"].includes(item.toLowerCase())) {
+        // setCornerActive(false);
+        dispatch(setActiveMounting(item.toLowerCase()));
+      } else {
+        setCornerActive(!cornerActive);
+      }
     }
   };
   const handleChannelSelect = (item) => {
     dispatch(setContent({ type: "channel", item: item }));
   };
-  // const opneClose = () => {
-  //   if (
-  //     selectedContent.hardwareFinishes !== null ||
-  //     ["hardwareFinishes"].includes(type)
-  //   )
-  //     setAnchorEl(!anchorEl);
-  //   else
-  //     dispatch(
-  //       showSnackbar({
-  //         message: "Please select 'hardwareFinishes' first",
-  //         severity: "warning",
-  //       })
-  //     );
-  // };
+  const opneClose = () => {
+    if (
+      selectedContent.hardwareFinishes !== null ||
+      ["hardwareFinishes"].includes(type)
+    )
+      setAnchorEl(!anchorEl);
+    else
+      dispatch(
+        showSnackbar({
+          message: "Please select 'hardwareFinishes' first",
+          severity: "warning",
+        })
+      );
+  };
+
+  const [cornerActive, setCornerActive] = useState(true);
   return (
     <Box>
-      <Box
+       <Box
         sx={{
-          height: "auto",
-          overflowY: "scroll",
-          color: { sm: "#000000", xs: "white" },
           display: "flex",
-          flexDirection: "column",
-          width: "100%",
+          width: "50%",
         }}
       >
-        <Box
+        <Button
+          onClick={opneClose}
+          id="basic-button"
           sx={{
-            display: "flex",
-            borderRadius: 2,
-            width: "fit-content",
-            // border: "2px solid #8477DA",
+            color: {
+              sm: anchorEl ? "#8477DA" : "#000000 !important ",
+              xs: "white",
+            },
+            pl: "0px !important",
+            paddingY: "16px !important",
           }}
         >
-          {["Channel"].map((item, index) => (
+          {anchorEl ? (
+            <ChevronRight
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                transform: "rotate(90deg)",
+                color: anchorEl ? "#8477DA" : "#98A2B3 !important",
+                mr: 2,
+              }}
+            />
+          ) : (
+            <ChevronRight sx={{ color: "#98A2B3", mr: 2 }} />
+          )}
+          <Typography sx={{ fontSize: "14px", fontWeight: 500, fontFamily: '"Roboto", sans-serif !important', }}>
+            {title}
+          </Typography>
+        </Button>
+      </Box>
+      {anchorEl ? (
+        <Box
+          sx={{
+            height: "250px",
+            overflowY: "scroll",
+            color: { sm: "#000000", xs: "white" },
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              borderRadius: 2,
+              width: "fit-content",
+              border: "2px solid #8477DA",
+            }}
+          >
+            {["Channel", "Clamps"].map((item, index) => (
+              <MuiMenuItem
+                sx={{ p: 0.1 }}
+                key={index}
+                onClick={() => handleItemSelect(item)}
+              >
+                <Box
+                  sx={{
+                    width: "200px",
+                    borderTopLeftRadius: index === 0 ? "12px" : "0px",
+                    borderBottomLeftRadius: index === 0 ? "12px" : "0px",
+                    borderTopRightRadius: index === 0 ? "0px" : "12px",
+                    borderBottomRightRadius: index === 0 ? "0px" : "12px",
+                    color:
+                      item.toLowerCase() === selectedContent?.mountingState
+                        ? "white"
+                        : "#101828",
+                    bgcolor:
+                      item.toLowerCase() === selectedContent?.mountingState
+                        ? "#8477DA"
+                        : "",
+                    boxShadow:
+                      "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
+                    padding: "10px",
+                    display: "flex",
+                    gap: 0,
+                    alignItems: "center",
+                    width: { md: "100%", xs: "95%" },
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <img
+                      width={"25px"}
+                      height={"25px"}
+                      src={Logo}
+                      alt="Selected"
+                    />
+                    <Typography>{item}</Typography>
+                  </Box>
+                </Box>
+              </MuiMenuItem>
+            ))}
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignContent: "space-between",
+            }}
+          >
+            {selectedContent.mountingState === "clamps" && (
+              <>
+                <MenuList
+                  menuOptions={listData?.wallClamp}
+                  title={"Wall Clamps"}
+                  type={"wallClamp"}
+                />
+                <MenuList
+                  menuOptions={listData?.sleeveOver}
+                  title={"Sleeve Over"}
+                  type={"sleeveOver"}
+                />
+                <MenuList
+                  menuOptions={listData?.glassToGlass}
+                  title={"Glass to Glass"}
+                  type={"glassToGlass"}
+                />
+              </>
+            )}
+            {selectedContent.mountingState === "channel" && (
+              <Box py={1}>
+                <MenuItem
+                  type={"channel"}
+                  item={activeChannel}
+                  selectedItem={selectedContent.mountingChannel.item}
+                  handleItemSelect={handleChannelSelect}
+                  selectedContent={selectedContent}
+                />
+              </Box>
+            )}
+          </Box>
+          {["Corner Clamps"].map((item, index) => (
             <MuiMenuItem
-              sx={{ p: 0.1 }}
+              sx={{
+                borderRadius: "12px",
+                padding: "5px",
+                width: "fit-content",
+                mt: 1,
+              }}
               key={index}
               onClick={() => handleItemSelect(item)}
             >
               <Box
                 sx={{
-                  width: "200px",
-                  borderRadius:"12px",
-                  
-                  color:
-                    item.toLowerCase() === selectedContent?.mountingState
-                      ? "white"
-                      : "#101828",
-                  bgcolor:
-                    item.toLowerCase() === selectedContent?.mountingState
+                  width: "fit-content",
+                  borderRadius: "12px",
+                  background:
+                    selectedContent?.cornerClamps?.cornerWallClamp?.length ||
+                    selectedContent?.cornerClamps?.cornerSleeveOver?.length ||
+                    selectedContent?.cornerClamps?.cornerGlassToGlass?.length
                       ? "#8477DA"
-                      : "",
+                      : "#cccc",
+                  color: "white",
                   boxShadow:
                     "0px 20px 24px -4px rgba(16, 24, 40, 0.08), 0px 8px 8px -4px rgba(16, 24, 40, 0.03)",
-                  padding: "10px",
+                  p: 2,
                   display: "flex",
-                  gap: 0,
+                  gap: 2,
                   alignItems: "center",
                   width: { md: "100%", xs: "95%" },
                   justifyContent: "space-between",
                 }}
               >
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <img
-                    width={"25px"}
-                    height={"25px"}
-                    src={Logo}
-                    alt="Selected"
-                  />
+                <Box sx={{ display: "flex" }}>                 
                   <Typography>{item}</Typography>
                 </Box>
               </Box>
             </MuiMenuItem>
           ))}
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            alignContent: "space-between",
-          }}
-        >
-          {selectedContent.mountingState === "channel" && (
-            <Box py={1}>
-              <MenuItem
-                type={"channel"}
-                item={activeChannel}
-                selectedItem={selectedContent.mountingChannel.item}
-                handleItemSelect={handleChannelSelect}
-                selectedContent={selectedContent}
+          {cornerActive && (
+            <>
+              <MenuList
+                menuOptions={listData?.cornerWallClamp}
+                title={"Wall Clamps"}
+                type={"cornerWallClamp"}
               />
-            </Box>
+              <MenuList
+                menuOptions={listData?.cornerSleeveOver}
+                title={"Sleeve Over"}
+                type={"cornerSleeveOver"}
+              />
+              <MenuList
+                menuOptions={listData?.cornerGlassToGlass}
+                title={"Glass to Glass"}
+                type={"cornerGlassToGlass"}
+              />
+            </>
           )}
         </Box>
-      </Box>
+      ) : (
+        ""
+      )}
     </Box>
   );
 };

@@ -16,6 +16,7 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Grid,
 } from "@mui/material";
 // import {
 //   useAddLocation,
@@ -41,6 +42,8 @@ import dayjs from "dayjs";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { getAssignedLocationName } from "@/utilities/users";
 import { GenrateColumns, GenrateRows } from "@/utilities/skeltonLoading";
+import WidgetCard from "../ui-components/widgetCard";
+import { useFetchDataEstimateCard } from "@/utilities/ApiHooks/estimateDataCard";
 
 const routePrefix = `${backendURL}/staffs`;
 const itemsPerPage = 10;
@@ -87,6 +90,8 @@ const TeamTable = () => {
   } = useEditDocument();
   const { data: locations, refetch: refetchLocationsList } =
     useFetchAllDocuments(`${backendURL}/companies`);
+  const { data: countData, refetch: countDataRefetch } =
+    useFetchDataEstimateCard();
   // console.log("team", staffsList);
 
   const filteredData = useMemo(() => {
@@ -165,7 +170,7 @@ const TeamTable = () => {
       // if (page !== 1) {
       //   setPage(1); // This will trigger a refetch due to the useEffect watching `page`
       // } else {
-        refetchStaffsList(); // If already on page 1, just refetch directly
+      refetchStaffsList(); // If already on page 1, just refetch directly
       // }
     }, 700),
     [page, refetchStaffsList] // Ensure refetchStaffsList is included in dependencies
@@ -186,11 +191,11 @@ const TeamTable = () => {
     }
   }, [status, selectedDate, search, page, deletedSuccessfully]);
 
-  useEffect(()=>{
+  useEffect(() => {
     if (status || selectedDate || search) {
-          setPage(1);
+      setPage(1);
     }
-  },[status, selectedDate, search, deletedSuccessfully])
+  }, [status, selectedDate, search, deletedSuccessfully]);
 
   useEffect(() => {
     if (isFetched) {
@@ -200,6 +205,7 @@ const TeamTable = () => {
 
   useEffect(() => {
     refetchLocationsList();
+    countDataRefetch();
   }, []);
 
   const actionColumn = [
@@ -316,6 +322,32 @@ const TeamTable = () => {
               Add New User
             </Button>
           </Box>
+        </Box>
+        <Box
+          sx={{
+            width: { sm: "100%", xs: "99%" },
+            // pr: 2,
+            px: { sm: 0, xs: 1 },
+          }}
+        >
+          <Grid container spacing={2}>
+            {[
+              {
+                title: "Total Users",
+                text: countData?.staff ?? 0,
+                variant: "blue",
+              },
+            ].map((item) => (
+              <Grid item lg={4} md={6} sm={6} xs={6}>
+                <WidgetCard
+                  type={2}
+                  text={item.text}
+                  title={item.title}
+                  varient={item.variant}
+                />
+              </Grid>
+            ))}
+          </Grid>
         </Box>
         <Box
           sx={{

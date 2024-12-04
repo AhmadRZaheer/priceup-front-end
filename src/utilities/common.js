@@ -25,6 +25,8 @@ export const getDecryptedToken = () => {
 
 export const backendURL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+export const frontendURL =
+  process.env.REACT_APP_FRONTEND_URL || "http://localhost:3000";
 
 // export const evaluateFormula = (
 //   formulaString,
@@ -58,8 +60,17 @@ export const backendURL =
 //   }
 // };
 
+export const convertDate = (isoDate) => {
+  const date = new Date(isoDate);
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
+};
+
 export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
-  console.log(selectedContent,'selectedContentselectedContent')
   // hardware
   const handlePrice = selectedContent?.handles?.item
     ? (selectedContent?.handles?.item?.finishes?.find(
@@ -84,7 +95,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   let mountingWallClamps = 0;
   selectedContent?.mountingClamps?.wallClamp?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingWallClamps += price ? price * row.count : 0;
@@ -106,21 +117,21 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   let cornerWallClamps = 0;
   selectedContent?.cornerClamps?.cornerWallClamp?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerWallClamps += price ? price * row.count : 0;
   });
   let cornerSleeveOver = 0;
   selectedContent?.cornerClamps?.cornerSleeveOver?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerSleeveOver += price ? price * row.count : 0;
   });
   let cornerGlassToGlass = 0;
   selectedContent?.cornerClamps?.cornerGlassToGlass?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     cornerGlassToGlass += price ? price * row.count : 0;
@@ -143,12 +154,12 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   //   : 0;
   const slidingDoorSystemPrice = selectedContent?.slidingDoorSystem?.item
     ? (selectedContent?.slidingDoorSystem?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.slidingDoorSystem.count
     : 0;
   const headerPrice = selectedContent?.header?.item
     ? (selectedContent?.header?.item?.finishes?.find(
-        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+        (item) => selectedContent?.hardwareFinishes?._id === item.finish_id
       )?.cost || 0) * selectedContent.header.count
     : 0;
 
@@ -1254,3 +1265,26 @@ export const notificationsAvailable = (notifications)=>{
   }
   return response;
 }
+
+export const getGlassTypeDetailsByThickness = (
+  selectedIds,
+  originalArray,
+  selectedThickness,
+  selectedGlassId
+) => {
+  return originalArray
+    ?.filter((glass) => selectedIds?.includes(glass._id)  && glass._id !== selectedGlassId)
+    .map((glass) => {
+      // Find the option with the matching thickness
+      const matchingOption = glass.options.find(
+        (option) => option.thickness === selectedThickness
+      );
+      return {
+        name: glass.name,
+        price: matchingOption ? matchingOption.cost : "N/A",
+        thickness: matchingOption ? matchingOption.thickness : "N/A",
+        status : matchingOption ? matchingOption.status : "N/A",
+        selectedGlass:glass
+      };
+    });
+};

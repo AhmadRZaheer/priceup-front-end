@@ -98,6 +98,9 @@ export default function AddEditWineHardwareModel({
     formData.append("hardware_category_slug", props.hardware_category_slug);
     formData.append("fabrication.hingeCut", props.hingeCut);
     formData.append("fabrication.oneInchHoles", props.oneInchHoles);
+    formData.append("fabrication.clampCut", props.clampCut);
+    formData.append("fabrication.notch", props.notch);
+    formData.append("fabrication.outages", props.outages);
     formData.append("company_id", decodedToken?.company_id);
     addWineHardware({ data: formData, apiRoute: `${routePrefix}/save` });
   };
@@ -110,9 +113,12 @@ export default function AddEditWineHardwareModel({
       "fabrication.oneInchHoles",
       props.hardwareData.oneInchHoles
     );
+    formData.append("fabrication.clampCut", props.hardwareData.clampCut);
+    formData.append("fabrication.notch", props.hardwareData.notch);
+    formData.append("fabrication.outages", props.hardwareData.outages);
     if (props.hardwareData.image) {
       formData.append("image", props.hardwareData.image);
-    }
+    }  
     editWineHardware({
       data: formData,
       apiRoute: `${routePrefix}/${props.id}`,
@@ -130,6 +136,9 @@ export default function AddEditWineHardwareModel({
           name: data?.name,
           oneInchHoles: data?.fabrication?.oneInchHoles,
           hingeCut: data?.fabrication?.hingeCut,
+          clampCut: data?.fabrication?.clampCut || 0,
+          notch: data?.fabrication?.notch || 0,
+          outages: data?.fabrication?.outages || 0,
           image: data?.image,
         }
       : {
@@ -137,6 +146,9 @@ export default function AddEditWineHardwareModel({
           image: "",
           oneInchHoles: 0,
           hingeCut: 0,
+          clampCut: 0,
+          notch: 0,
+          outages: 0,
           hardware_category_slug: categorySlug,
         },
     enableReinitialize: true,
@@ -398,7 +410,26 @@ export default function AddEditWineHardwareModel({
                         placeholder='1" Holes'
                         name="oneInchHoles"
                       />
-
+                      <SingleFieldEdit
+                        label="Clamp Cut Out"
+                        value={formik.values.clampCut}
+                        onChange={(event) => {
+                          const userInput = event.target.value;
+                          if (/^\d*$/.test(userInput)) {
+                            formik.handleChange(event);
+                          }
+                        }}
+                        onBlur={formik.handleBlur}
+                        error={
+                          formik.touched.clampCut &&
+                          Boolean(formik.errors.clampCut)
+                        }
+                        helperText={
+                          formik.touched.clampCut && formik.errors.clampCut
+                        }
+                        placeholder="Clamp Cut Out"
+                        name="clampCut"
+                      />
                       <SingleFieldEdit
                         label="Hinge Cut Out"
                         value={formik.values.hingeCut}
@@ -418,6 +449,43 @@ export default function AddEditWineHardwareModel({
                         }
                         placeholder="Hinge Cut Out"
                         name="hingeCut"
+                      />
+                      <SingleFieldEdit
+                        label="Notch"
+                        value={formik.values.notch}
+                        onChange={(event) => {
+                          const userInput = event.target.value;
+                          if (/^\d*$/.test(userInput)) {
+                            formik.handleChange(event);
+                          }
+                        }}
+                        onBlur={formik.handleBlur}
+                        error={
+                          formik.touched.notch && Boolean(formik.errors.notch)
+                        }
+                        helperText={formik.touched.notch && formik.errors.notch}
+                        placeholder="Notch"
+                        name="notch"
+                      />
+                      <SingleFieldEdit
+                        label="Outages"
+                        value={formik.values.outages}
+                        onChange={(event) => {
+                          const userInput = event.target.value;
+                          if (/^\d*$/.test(userInput)) {
+                            formik.handleChange(event);
+                          }
+                        }}
+                        onBlur={formik.handleBlur}
+                        error={
+                          formik.touched.outages &&
+                          Boolean(formik.errors.outages)
+                        }
+                        helperText={
+                          formik.touched.outages && formik.errors.outages
+                        }
+                        placeholder="Outages"
+                        name="outages"
                       />
                     </Grid>
                   </AccordionDetails>

@@ -126,6 +126,8 @@ export const statusTypes = {
   PENDING: "pending",
   VOIDED: "voided",
   APPROVED: "approved",
+  PAID:'Paid',
+  UNPAID:'Unpaid',
 };
 
 export const inputLength = 6;

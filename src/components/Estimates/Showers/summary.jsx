@@ -38,15 +38,18 @@ import {
   getListData,
   getisCustomizedDoorWidth,
   getLayoutPerimeter,
+  setContent,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import {
   backendURL,
   calculateAreaAndPerimeter,
   calculateTotal,
+  getGlassTypeDetailsByThickness,
 } from "@/utilities/common";
 import CustomImage from "@/Assets/customlayoutimage.svg";
 import {
+  hardwareTypes,
   layoutVariants,
   quoteState as quotestate,
 } from "@/utilities/constants";
@@ -60,7 +63,10 @@ import { KeyboardArrowDownOutlined } from "@mui/icons-material";
 import { useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
-import { getLocationPdfSettings, getLocationShowerSettings } from "@/redux/locationSlice";
+import {
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+} from "@/redux/locationSlice";
 import {
   getCustomerDetail,
   getEstimateCategory,
@@ -206,6 +212,14 @@ const Summary = ({ setStep }) => {
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
   };
+
+  const glassDetails = getGlassTypeDetailsByThickness(
+    showersLocationSettings?.glassTypesForComparison,
+    listData?.glassType,
+    selectedContent?.glassType?.thickness,
+    selectedContent?.glassType?.item?._id
+  );
+
   return (
     <>
       <Box
@@ -929,6 +943,64 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
+          {glassDetails?.length > 0 && glassPrice !== 0  && (
+            <>
+          <Divider sx={{ borderColor: "#D4DBDF" }} />
+          <Box sx={{ px: 3, py: 2 }}>           
+              <Typography
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: 700,
+                  lineHeight: "16.41px",
+                  fontFamily: '"Roboto", sans-serif !important',
+                }}
+              >
+                Note:
+              </Typography>
+            {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
+            {glassPrice !== 0 &&
+              glassDetails.map((glass, index) => {
+                const calc =
+                  (totalPrice - laborPrice) /
+                    showersLocationSettings?.miscPricing?.pricingFactor -
+                  glassPrice;
+                const glassPricing =
+                  (calc + sqftArea * glass.price) *
+                    (showersLocationSettings?.miscPricing?.pricingFactorStatus
+                      ? showersLocationSettings?.miscPricing?.pricingFactor
+                      : 1) +
+                  laborPrice;
+                // const price = ((totalPrice - glassPrice) + (sqftArea*glass.price))
+                return (
+                  glass.status && (
+                    <Typography key={index}>
+                      Glass Option '{glass.name}'
+                      {/* with thickness '{glass.thickness}' */} has a price of
+                      '${glassPricing?.toFixed(2) || 0}' {"=>"} Want to
+                      {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}
+                      <Box
+                        component="span"
+                        onClick={() =>
+                          dispatch(
+                            setContent({
+                              type: hardwareTypes.GLASSTYPE,
+                              item: glass?.selectedGlass,
+                            })
+                          )
+                        }
+                        sx={{ cursor: "pointer", color: "blue" }}
+                      >
+                        {" "}
+                        apply
+                      </Box>
+                      ?
+                    </Typography>
+                  )
+                );
+              })}
+          </Box>
+          </>
+          )}
         </Box>
         {isMobile ? (
           <Box

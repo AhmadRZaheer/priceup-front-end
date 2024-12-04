@@ -113,6 +113,15 @@ input {
   font-size: 14px;
   line-height: 21px;
 }
+.status-voided {
+  color: #d22b2d;
+  background-color: #F6D8D9;
+  border-radius: 70px;
+  padding: 6px 8px 6px 8px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 21px;
+}
 
 .box_disaled {
   background-color: #f0f0f0;
@@ -124,6 +133,14 @@ input {
 
 .ProjectsColumnsHeaderClass {
   background-color: #f3f5f6;
+  color: #000000;
+  font-size: 14px;
+  font-weight: 700 !important;
+  line-height: 21px;
+  font-family: "Roboto", sans-serif !important;
+}
+.ProjectInvoiceColumnsHeader {
+  background-color: #fff;
   color: #000000;
   font-size: 14px;
   font-weight: 700 !important;
@@ -390,4 +407,82 @@ input {
   width:24px;
   display:flex;
   justify-content:center;
+}
+.apexcharts-title-text{
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  line-height: 24.59px !important;
+  font-family: "Manrope", sans-serif !important;
+  fill: #000000 !important;
+}
+.locationManagement{
+  background-color: #FAFCFF !important;
+  color:#5D6164 !important;
+  font-size:16px !important;
+  line-height: 21.89px !important;
+  font-weight: 500 !important;
+  padding-left: 24px !important;
+  border-right: 1px solid #D6DAE3;
+}
+/* Customize Swiper navigation button size and color */
+.swiper-button-next,
+.swiper-button-prev {
+  color: #8477DA !important; /* Set your custom color */
+}
+
+/* Adjust button's position if needed */
+.swiper-button-next {
+  right: 20px !important; /* Move closer to the edge if necessary */
+}
+
+.swiper-button-prev {
+  left: 20px !important; /* Move closer to the edge if necessary */
+}
+
+/* Optional: Change color on hover */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: #8477DA !important;
+  /* background-color: #8477DA; */
+  /* padding: 10px; */
+  /* border-radius: 50%; */
+}
+
+
+/* Subscribe Button */
+/* Container for input and button */
+.subscribe-box {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Styling for the email input with space for button */
+.email-input {
+  width: auto !important;
+  padding: 12px 46px 12px 12px; /* Right padding for button space */
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.1);
+  outline: none;
+  font-family: 'Muli', sans-serif;
+  height: 18px;
+}
+
+/* Styling for the button inside the input */
+.subscribe-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #8477DA;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  padding: 6px 6px 2px 6px;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Muli', sans-serif;
+  margin-top: 0px !important;
 }

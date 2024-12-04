@@ -12,7 +12,17 @@ const StatusChip = ({ variant, sx }) => {
       colorWrapper = "#503000";
       bgColorInner = "#1d85ff";
       break;
+    case statusTypes.UNPAID:
+      bgColorWrapper = "#FCDEC0";
+      colorWrapper = "#503000";
+      bgColorInner = "#1d85ff";
+      break;
     case statusTypes.APPROVED:
+      bgColorWrapper = "#daf4e9";
+      colorWrapper = "#3ac688";
+      bgColorInner = "#3ac688";
+      break;
+    case statusTypes.PAID:
       bgColorWrapper = "#daf4e9";
       colorWrapper = "#3ac688";
       bgColorInner = "#3ac688";

@@ -55,6 +55,8 @@ import {
   setTotal,
   getDoorQuantity,
   setDoorLaborPrice,
+  setGlassAddonsPrice,
+  setHardwareAddonsPrice,
 } from "@/redux/wineCellarEstimateSlice";
 import ChannelOrClamp from "./channelorClamp";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
@@ -86,12 +88,70 @@ export const generateEstimatePayload = (
   let filteredFields = selectedContent.additionalFields.filter(
     (item) => item.label !== "" && item.cost !== 0
   );
+
+  const hardwareAddonsArray = selectedContent?.hardwareAddons?.map((row) => {
+    return {
+      type: row.item._id,
+      count: row.count,
+    };
+  });
+  const wallClampArray = selectedContent?.mountingClamps?.wallClamp?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const sleeveOverArray = selectedContent?.mountingClamps?.sleeveOver?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+
   const additionalFieldsArray = filteredFields.map((row) => {
     return {
       cost: row.cost,
       label: row.label,
     };
   });
+
+  const glassToGlassArray = selectedContent?.mountingClamps?.glassToGlass?.map(
+    (row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    }
+  );
+  const cornerWallClampArray =
+    selectedContent?.cornerClamps?.cornerWallClamp?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerSleeveOverArray =
+    selectedContent?.cornerClamps?.cornerSleeveOver?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const cornerGlassToGlassArray =
+    selectedContent?.cornerClamps?.cornerGlassToGlass?.map((row) => {
+      return {
+        type: row.item._id,
+        count: row.count,
+      };
+    });
+  const glassAddonsArray = selectedContent?.glassAddons?.map(
+    (item) => item?._id
+  );
+
   const estimateConfig = {
     doorWidth: Number(doorWidthredux),
     doorQuantity: Number(doorQuantity),
@@ -110,19 +170,45 @@ export const generateEstimatePayload = (
       type: selectedContent?.hinges?.item?._id,
       count: selectedContent?.hinges?.count,
     },
+    mountingClamps: {
+      wallClamp: [...wallClampArray],
+      sleeveOver: [...sleeveOverArray],
+      glassToGlass: [...glassToGlassArray],
+    },
+    cornerClamps: {
+      wallClamp: [...cornerWallClampArray],
+      sleeveOver: [...cornerSleeveOverArray],
+      glassToGlass: [...cornerGlassToGlassArray],
+    },
     mountingChannel: selectedContent?.mountingChannel?.item?._id || null,
     glassType: {
       type: selectedContent?.glassType?.item?._id,
       thickness: selectedContent?.glassType?.thickness,
     },
+    glassAddons: [...glassAddonsArray],
+    slidingDoorSystem: {
+      type: selectedContent?.slidingDoorSystem?.item?._id,
+      count: selectedContent?.slidingDoorSystem?.count,
+    },
+    header: {
+      type: selectedContent?.header?.item?._id,
+      count: selectedContent?.header?.count,
+    },
     oneInchHoles: selectedContent?.oneInchHoles,
     hingeCut: selectedContent?.hingeCut,
+    clampCut: selectedContent?.clampCut,
+    notch: selectedContent?.notch,
+    outages: selectedContent?.outages,
+    mitre: selectedContent?.mitre,
+    polish: selectedContent?.polish,
     people: selectedContent?.people,
     hours: selectedContent?.hours,
-    laborHoursForDoor:
-      selectedContent?.laborHoursForDoor,
+    laborHoursForDoor: selectedContent?.laborHoursForDoor,
     userProfitPercentage: selectedContent?.userProfitPercentage,
     // towelBarsCount: selectedContent?.sleeveOverCount,
+    hardwareAddons: [...hardwareAddonsArray],
+    sleeveOverCount: selectedContent?.sleeveOverCount,
+    towelBarsCount: selectedContent?.sleeveOverCount,
     measurements: measurementsArray,
     perimeter: perimeter,
     sqftArea: sqftArea,
@@ -136,7 +222,7 @@ const Review = ({ setStep }) => {
   const {
     mutate: mutateEdit,
     isError: ErrorForAddEidt,
-    isLoading:EditEstimateLoading,
+    isLoading: EditEstimateLoading,
     isSuccess: CreatedSuccessfullyEdit,
   } = useEditEstimates();
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -258,6 +344,8 @@ const Review = ({ setStep }) => {
     );
     dispatch(setHardwarePrice(prices.hardwarePrice));
     dispatch(setGlassPrice(prices.glassPrice));
+    dispatch(setHardwareAddonsPrice(prices.hardwareAddonsPrice));
+    dispatch(setGlassAddonsPrice(prices.glassAddonsPrice));
     dispatch(setFabricationPrice(prices.fabricationPrice));
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setDoorLaborPrice(prices.doorLaborPrice));
@@ -299,16 +387,16 @@ const Review = ({ setStep }) => {
   }, []);
 
   const handleChangeLabor = (event, type) => {
-    let rate = 0
-    if(event.target.value === ''){
+    let rate = 0;
+    if (event.target.value === "") {
       rate = 0;
-    }else{
+    } else {
       rate = event.target.value;
     }
     dispatch(
       setInputContent({
         type: type,
-        value: Number(rate) ,
+        value: Number(rate),
       })
     );
   };
@@ -398,7 +486,7 @@ const Review = ({ setStep }) => {
                 display: "flex",
                 width: { sm: "auto", xs: "94%" },
                 paddingBottom: { sm: 0, xs: 0 },
-                maxHeight: 1400,
+                maxHeight: 1530,
                 borderRadius: "8px",
                 justifyContent: "space-between",
                 flexDirection: { sm: "row", xs: "column" },
@@ -503,7 +591,7 @@ const Review = ({ setStep }) => {
                       />
                     </Box>
                   </Box>
-                  {![
+                  {/* {![
                     layoutVariants.DOOR,
                     layoutVariants.DOUBLEDOOR,
                     layoutVariants.DOUBLEBARN,
@@ -525,7 +613,36 @@ const Review = ({ setStep }) => {
                         listData={listData}
                       />
                     </Box>
-                  )}
+                  )} */}
+
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    <Box sx={{ width: "100%", display: "flex" }}>
+                      <Box
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <ChannelOrClamp
+                          menuOptions={listData?.channelOrClamps}
+                          title={"Mounting"}
+                          type={"mounting"}
+                          listData={listData}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+
                   <Box
                     sx={{
                       display: "flex",
@@ -545,6 +662,92 @@ const Review = ({ setStep }) => {
                         type={"glassType"}
                         thickness={selectedContent.glassType.thickness}
                         currentItem={selectedContent?.glassType?.item}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    {console.log(selectedContent,'selectedContexxntselectedContentselectedContentselectedContent')}
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.slidingDoorSystem}
+                        title={"Sliding Door System"}
+                        type={"slidingDoorSystem"}
+                        count={selectedContent.slidingDoorSystem.count}
+                        currentItem={selectedContent?.slidingDoorSystem?.item}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.header}
+                        title={"Header"}
+                        type={"header"}
+                        count={selectedContent.header.count}
+                        currentItem={selectedContent?.header?.item}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.glassAddons}
+                        title={"Glass Addons"}
+                        type={"glassAddons"}
+                        // currentItem={selectedContent?.glassAddons}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      py: "6px",
+                    }}
+                  >
+                    <Box sx={{ width: "100%" }}>
+                      <MenuList
+                        menuOptions={listData?.hardwareAddons}
+                        title={"Hardware Addons"}
+                        type={"hardwareAddons"}
                       />
                     </Box>
                   </Box>
@@ -577,7 +780,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0, max: inputMaxValue, },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
                             height: "38px",
                           },
@@ -598,17 +801,16 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.oneInchHoles}
-                        onChange={(event) =>{
+                        onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
                             dispatch(
                               setInputContent({
                                 type: "oneInchHoles",
                                 value: event.target.value,
                               })
-                            )
+                            );
                           }
-                        }
-                        }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -641,7 +843,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0, max: inputMaxValue, },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
                             height: "38px",
                           },
@@ -661,21 +863,332 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.hingeCut}
-                        onChange={(event) =>{
+                        onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
                             dispatch(
                               setInputContent({
                                 type: "hingeCut",
                                 value: event.target.value,
                               })
-                            )
+                            );
                           }
-                        }
-                        }
+                        }}
                       />
                     </Box>
                   </Box>
 
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      {" "}
+                      Clamp Cut Out
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0 },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.clampCut}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "clampCut",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Notch
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        className="custom-textfield"
+                        type="number"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.notch ?? 0}
+                        onChange={(event) => {
+                          dispatch(
+                            setInputContent({
+                              type: "notch",
+                              value: event.target.value,
+                            })
+                          );
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Outages
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.outages ?? 0}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "outages",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Mitre
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.mitre}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "mitre",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                      borderBottom: {
+                        sm: "2px solid #D0D5DD",
+                        xs: "2px solid #423f57",
+                      },
+                      // paddingLeft: 3,
+                      // paddingBottom: 1,
+                      color: { sm: "#000000  ", xs: "white" },
+                      py: 2,
+                    }}
+                  >
+                    <Typography className="estimate-modifcation">
+                      Polish
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        width: "120px",
+                        padddingY: 4,
+                      }}
+                    >
+                      <TextField
+                        type="number"
+                        className="custom-textfield"
+                        InputProps={{
+                          inputProps: { min: 0, max: inputMaxValue },
+                          style: {
+                            height: "38px",
+                          },
+                        }}
+                        InputLabelProps={{
+                          style: {
+                            color: "rgba(255, 255, 255, 0.5)",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                          "& input[type=number]": {
+                            textAlign: "right",
+                          },
+                        }}
+                        variant="outlined"
+                        size="small"
+                        value={selectedContent.polish}
+                        onChange={(event) => {
+                          if (event.target.value.length <= inputLength) {
+                            dispatch(
+                              setInputContent({
+                                type: "polish",
+                                value: event.target.value,
+                              })
+                            );
+                          }
+                        }}
+                      />
+                    </Box>
+                  </Box>
                   <Box
                     sx={{
                       display: "flex",
@@ -705,7 +1218,7 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0, max: inputMaxValue, },
+                          inputProps: { min: 0, max: inputMaxValue },
                           style: {
                             height: "38px",
                           },
@@ -727,10 +1240,9 @@ const Review = ({ setStep }) => {
                         value={selectedContent.people}
                         onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
-                            handleChangeLabor(event,"people")
+                            handleChangeLabor(event, "people");
                           }
-                        }
-                        }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -763,7 +1275,11 @@ const Review = ({ setStep }) => {
                         type="number"
                         className="custom-textfield"
                         InputProps={{
-                          inputProps: { min: 0, max: inputMaxValue,step:'any' },
+                          inputProps: {
+                            min: 0,
+                            max: inputMaxValue,
+                            step: "any",
+                          },
                           style: {
                             height: "38px",
                           },
@@ -783,12 +1299,11 @@ const Review = ({ setStep }) => {
                         variant="outlined"
                         size="small"
                         value={selectedContent.hours}
-                        onChange={(event) =>  {
+                        onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
-                            handleChangeLabor(event,"hours")
+                            handleChangeLabor(event, "hours");
                           }
-                        }                        
-                        }
+                        }}
                       />
                     </Box>
                   </Box>
@@ -822,7 +1337,11 @@ const Review = ({ setStep }) => {
                         className="custom-textfield-purple-disabled"
                         disabled={true}
                         InputProps={{
-                          inputProps: { min: 0, max: inputMaxValue,step:'any' },
+                          inputProps: {
+                            min: 0,
+                            max: inputMaxValue,
+                            step: "any",
+                          },
                           style: {
                             height: "38px",
                           },
@@ -841,18 +1360,12 @@ const Review = ({ setStep }) => {
                         }}
                         variant="outlined"
                         size="small"
-                        value={
-                          selectedContent.laborHoursForDoor || 0
-                        }
-                        onChange={(event) =>{
+                        value={selectedContent.laborHoursForDoor || 0}
+                        onChange={(event) => {
                           if (event.target.value.length <= inputLength) {
-                            handleChangeLabor(
-                              event,
-                              "laborHoursForDoor"
-                            )
+                            handleChangeLabor(event, "laborHoursForDoor");
                           }
-                        }
-                        }
+                        }}
                         // onChange={(event) =>
                         //   dispatch(
                         //     setInputContent({
@@ -990,7 +1503,8 @@ const Review = ({ setStep }) => {
                     fullWidth
                     disabled={
                       selectedContent?.hardwareFinishes === null ||
-                      projectId === null || EditEstimateLoading
+                      projectId === null ||
+                      EditEstimateLoading
                     }
                     variant="contained"
                     onClick={handleEstimateSubmit}
@@ -1007,7 +1521,11 @@ const Review = ({ setStep }) => {
                       fontWeight: 600,
                     }}
                   >
-                 { EditEstimateLoading ?  <CircularProgress size={24} sx={{ color: "#8477DA" }} /> : 'Save Estimate'}
+                    {EditEstimateLoading ? (
+                      <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                    ) : (
+                      "Save Estimate"
+                    )}
                   </Button>
                 </Box>
               </Box>

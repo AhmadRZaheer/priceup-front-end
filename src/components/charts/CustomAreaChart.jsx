@@ -96,7 +96,7 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-const CustomLineChart = ({ dataType, data }) => {
+const CustomAreaChart = ({ dataType, data }) => {
   const uniqueBarData = Array.from(
     new Map(data.map((item) => [item.x, item])).values()
   );
@@ -114,6 +114,12 @@ const CustomLineChart = ({ dataType, data }) => {
         zoom: {
           enabled: false,
         },
+        //   toolbar: {
+        //   show: true, // Enable or disable the toolbar completely
+        //   tools: {
+        //     download: false, // Disable the download option
+        //   },
+        // },
       },
       dataLabels: {
         enabled: false,
@@ -148,4 +154,4 @@ const CustomLineChart = ({ dataType, data }) => {
   );
 };
 
-export default CustomLineChart;
+export default CustomAreaChart;

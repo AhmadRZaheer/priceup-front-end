@@ -6,7 +6,7 @@ import { getActiveStatus } from "@/utilities/estimatorHelper";
 import { useState } from "react";
 import { hardwareTypes } from "@/utilities/constants";
 import { CheckCircle } from "@mui/icons-material";
-import OptionWithCounter from "../Showers/optionWithCounter";
+import OptionWithCounter from "./optionWithCounter";
 
 const MenuItem = ({
   item,
@@ -24,6 +24,7 @@ const MenuItem = ({
   const status = getActiveStatus(item, activeFinishOrThickness, type);
   const [showToolTip, setShowTooltip] = useState(false);
   const handleItemClick = () => {
+    console.log('qwerty')
     if (status || type === hardwareTypes.GLASSADDONS) {
       handleItemSelect(item);
     }

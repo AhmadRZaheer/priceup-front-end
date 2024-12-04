@@ -169,6 +169,7 @@ const AdminSideBar = () => {
     if (
       [
         "/wine-cellar/glass-types",
+        "/wine-cellar/glass-addons",
         "/wine-cellar/finishes",
         "/wine-cellar/hardwares",
         "/wine-cellar/layouts",
@@ -419,7 +420,11 @@ const AdminSideBar = () => {
               </MenuSigleItem>
               <MenuSigleItem link="/estimates">
                 <DescriptionOutlinedIcon sx={{}} />
-                <span>Old Estimates</span>
+                <span>Estimates</span>
+              </MenuSigleItem>
+              <MenuSigleItem link="/invoices">
+                <DescriptionOutlinedIcon sx={{}} />
+                <span>Invoices</span>
               </MenuSigleItem>
               <MenuSigleItem link="/customers" secondLink='/customers/edit'>
                 <PeopleAltOutlinedIcon sx={{}} />
@@ -675,6 +680,9 @@ const AdminSideBar = () => {
                     </InnerMenuItem>
                     <InnerMenuItem link="/wine-cellar/glass-types">
                       <span>Glass Types</span>
+                    </InnerMenuItem>
+                    <InnerMenuItem link="/wine-cellar/glass-addons">
+                      <span>Glass Addons</span>
                     </InnerMenuItem>
                     <InnerMenuItem link="/wine-cellar/layouts" secondLink='/wine-cellar/layouts/edit'>
                       <span>Layouts</span>

@@ -6,13 +6,13 @@ import {
   FormControl,
   Grid,
   InputAdornment,
-  InputLabel,
   MenuItem,
   Select,
   Tab,
   Tabs,
   TextareaAutosize,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
@@ -23,9 +23,9 @@ import {
   useCreateDocument,
   useEditDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL, getDecryptedToken } from "@/utilities/common";
+import { backendURL, frontendURL, getDecryptedToken } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Add, Close } from "@mui/icons-material";
+import { Add, Close, VisibilityOutlined } from "@mui/icons-material";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import ShowerEstimatesList from "./EstimatesList/showers";
 import MirrorEstimatesList from "./EstimatesList/mirrors";
@@ -38,6 +38,11 @@ import StatusChip from "@/components/common/StatusChip";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import WineCellarEstimatesList from "./EstimatesList/wineCellar";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import { useDispatch } from "react-redux";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
+import CompanySelect from "./CompanyContactSelect";
 
 const validationSchema = yup.object({
   name: yup
@@ -52,9 +57,11 @@ const ProjectInfoComponent = ({
   projectState = "create",
   projectData = null,
 }) => {
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
-  const selectedTab = searchParams.get('category');
-  const tabValue = selectedTab === null ? EstimateCategory.SHOWERS : selectedTab ;
+  const selectedTab = searchParams.get("category");
+  const tabValue =
+    selectedTab === null ? EstimateCategory.SHOWERS : selectedTab;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -83,15 +90,21 @@ const ProjectInfoComponent = ({
   const [selectedAddress, setSelectedAddress] = useState(
     projectData?.addressData || null
   );
+  const [companyContact, setCompanyContact] = useState(
+    projectData?.contactData || null
+  );
   const [projectName, setProjectName] = useState(projectData?.name || "");
   const [projectNotes, setProjectNotes] = useState(projectData?.notes || "");
   const [openCustomerSelectModal, setOpenCustomerSelectModal] = useState(false);
   const [openAddressSelectModal, setOpenAddressSelectModal] = useState(false);
+  const [openCompanySelectModal, setOpenCompanySelectModal] = useState(false);
   const navigate = useNavigate();
-  const [activeTabNumber, setActiveTabNumber] = useState(EstimateCategory.SHOWERS); // 0 for showers, 1 for mirrors
+  const [activeTabNumber, setActiveTabNumber] = useState(
+    EstimateCategory.SHOWERS
+  ); // 0 for showers, 1 for mirrors
   const handleChange = (event, newValue) => {
     console.log(newValue, "sdsdsdsdsd");
-    navigate(`/projects/${projectData?._id}?category=${newValue}`)
+    navigate(`/projects/${projectData?._id}?category=${newValue}`);
     // setActiveTabNumber(newValue);
   };
   // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
@@ -106,6 +119,7 @@ const ProjectInfoComponent = ({
       customer: selectedCustomer?.name || "",
       address: selectedAddress?.name || "",
       notes: projectNotes,
+      companyContact: companyContact?.name || "",
     },
     validationSchema,
     enableReinitialize: true,
@@ -117,8 +131,11 @@ const ProjectInfoComponent = ({
         // address_id:  selectedAddress?._id,
         customer_id: selectedCustomer?._id,
       };
-      if(selectedAddress?._id){
-        data.address_id=  selectedAddress?._id
+      if (selectedAddress?._id) {
+        data.address_id = selectedAddress?._id;
+      }
+      if (companyContact?._id) {
+        data.contact_id = companyContact?._id;
       }
       try {
         if (projectState === "create") {
@@ -158,14 +175,26 @@ const ProjectInfoComponent = ({
   const handleAddressSelect = () => {
     setOpenAddressSelectModal(true);
   };
+  const handleCompanySelect = () => {
+    setOpenCompanySelectModal(true);
+  };
   const handleAddressUnSelect = (event) => {
     event.stopPropagation();
     setSelectedAddress(null);
     formik.setFieldValue("address", "");
   };
+  const handleCompanyUnSelect = (event) => {
+    event.stopPropagation();
+    setCompanyContact(null);
+    formik.setFieldValue("companyContact", "");
+  };
   const handleAddressChange = (address) => {
     setSelectedAddress(address);
     setOpenAddressSelectModal(false);
+  };
+  const handleCompanyChange = (contact) => {
+    setCompanyContact(contact);
+    setOpenCompanySelectModal(false);
   };
 
   const handleDateChange = (newDate) => {
@@ -252,7 +281,61 @@ const ProjectInfoComponent = ({
           </Typography>
         </Box>
         {projectState !== "create" ? (
-          <Box sx={{ alignSelf: "center" }}>
+          <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
+            {projectData?.invoice ? (
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  navigate(`/invoices/${projectData?.invoice?._id}`)
+                }
+                startIcon={<VisibilityOutlined />}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                View Invoice
+              </Button>
+            ) : (
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={() =>
+                  navigate(
+                    `/invoices/create?customer_id=${selectedCustomer?._id}&project_id=${projectData?._id}`
+                  )
+                }
+                startIcon={<Add />}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "auto", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                Create Invoice
+                {/* Customer Preview */}
+              </Button>
+            )}
             <Button
               fullWidth
               variant="contained"
@@ -731,10 +814,12 @@ const ProjectInfoComponent = ({
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Add Notes:
-                    </Typography>
-                    <Box sx={{ display: "flex", gap: 1 }}>
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Add Notes:
+                      </Typography>
                       <Box
                         sx={{
                           display: "flex",
@@ -769,6 +854,78 @@ const ProjectInfoComponent = ({
                             formik.touched.notes && formik.errors.notes
                           }
                         />
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        width: { sm: "50%", xs: "100%" },
+                        // pt: "12px",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box mb={0.6}>
+                          <label htmlFor="name">Company Contact:</label>
+                        </Box>
+                        <CustomInputField
+                          disabled={!selectedCustomer}
+                          id="company"
+                          name="company"
+                          // label="Select an Address"
+                          size="small"
+                          variant="outlined"
+                          onClick={handleCompanySelect}
+                          InputProps={{
+                            endAdornment: companyContact ? (
+                              <InputAdornment
+                                position="end"
+                                sx={{ cursor: "pointer" }}
+                                onClick={(event) => {
+                                  handleCompanyUnSelect(event);
+                                }}
+                              >
+                                <Close sx={{}} />
+                              </InputAdornment>
+                            ) : (
+                              ""
+                            ),
+                            readOnly: true,
+                            style: {
+                              color: "black",
+                              borderRadius: 4,
+                              backgroundColor: "white",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          value={formik.values.companyContact}
+                        />
+                      </Box>
+                      <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {companyContact?.name}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          gap: 0.5,
+                          alignItems: "baseline",
+                          paddingX: 0.5,
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px" }}>
+                          {companyContact?.phone}
+                        </Typography>
                       </Box>
                     </Box>
                   </Box>
@@ -1031,10 +1188,7 @@ const ProjectInfoComponent = ({
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
-            <CustomTabPanel
-              value={tabValue}
-              index={EstimateCategory.SHOWERS}
-            >
+            <CustomTabPanel value={tabValue} index={EstimateCategory.SHOWERS}>
               <ShowerEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1043,10 +1197,7 @@ const ProjectInfoComponent = ({
               />
             </CustomTabPanel>
             {/** Mirrors tab */}
-            <CustomTabPanel
-              value={tabValue}
-              index={EstimateCategory.MIRRORS}
-            >
+            <CustomTabPanel value={tabValue} index={EstimateCategory.MIRRORS}>
               <MirrorEstimatesList
                 projectId={projectData?._id}
                 searchValue={search}
@@ -1080,6 +1231,13 @@ const ProjectInfoComponent = ({
         handleClose={() => setOpenAddressSelectModal(false)}
         selectedAddress={selectedAddress}
         setSelectedAddress={handleAddressChange}
+        selectedCustomer={selectedCustomer}
+      />
+      <CompanySelect
+        open={openCompanySelectModal}
+        handleClose={() => setOpenCompanySelectModal(false)}
+        selectedContact={companyContact}
+        setSelectedContact={handleCompanyChange}
         selectedCustomer={selectedCustomer}
       />
       <ChooseEstimateCategoryModal

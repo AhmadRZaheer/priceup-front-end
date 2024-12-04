@@ -48,11 +48,11 @@ const MenuList = ({
   }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    dispatch(setContent({ type: type, item: item }));
+    dispatch(setContent({ type: type, item: item,listdata:wineCellarHardwaresList }));
     setSelectedItem(item);
   };
   const handleCountSet = (value) => {
-    if (value >= 0 && value <= 100) {
+    if (value >= 0 && value <= 100) {     
       setCountVal(value);
       dispatch(setCounters({ item: selectedItem, type: type, value: value }));
     }

@@ -3,10 +3,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 import {
+  Autocomplete,
   Box,
   Button,
+  Checkbox,
+  Chip,
   CircularProgress,
+  FormControl,
   FormControlLabel,
+  FormGroup,
   Switch,
   Tab,
   Tabs,
@@ -29,9 +34,17 @@ import { getDataRefetch } from "@/redux/staff";
 import CustomTabPanel, { a11yProps } from "@/components/CustomTabPanel";
 import { setLocationSettingsRefetch } from "@/redux/refetch";
 import { inputLength, inputMaxValue } from "@/utilities/constants";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { getListData } from "@/redux/estimateCalculations";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
 
 const CampanySetting = () => {
   const dispatch = useDispatch();
+  const showerGlassList = useSelector(getListData);
+  const mirrorGlassList = useSelector(getMirrorsHardware);
+  const wineCallerGlassList = useSelector(getWineCellarsHardware);
   const { data: settingData, refetch: reFetchDataSetting } =
     useFetchDataSetting();
   const {
@@ -126,6 +139,8 @@ const CampanySetting = () => {
             settingData?.showers?.fabricatingPricing
               ?.polishPricePerThreeByEightInch,
         },
+        glassTypesForComparison:
+          settingData?.showers?.glassTypesForComparison || [],
       },
       mirrors: {
         pricingFactor: settingData?.mirrors?.pricingFactor,
@@ -152,6 +167,8 @@ const CampanySetting = () => {
         // singleDuplexMultiplier: settingData?.mirrors?.singleDuplexMultiplier,
         // doubleDuplexMultiplier: settingData?.mirrors?.doubleDuplexMultiplier,
         // tripleDuplexMultiplier: settingData?.mirrors?.tripleDuplexMultiplier,
+        glassTypesForComparison:
+          settingData?.mirrors?.glassTypesForComparison || [],
       },
       // Wine Caller
       wineCellars: {
@@ -165,25 +182,53 @@ const CampanySetting = () => {
         },
         fabricatingPricing: {
           oneHoleOneByTwoInchGlass:
-            settingData?.wineCellars?.fabricatingPricing
-              ?.oneHoleOneByTwoInchGlass || 0,
+            settingData?.wineCellars?.fabricatingPricing?.oneHoleOneByTwoInchGlass || 0,
           oneHoleThreeByEightInchGlass:
             settingData?.wineCellars?.fabricatingPricing
               ?.oneHoleThreeByEightInchGlass || 0,
-          hingeCutoutOneByTwoInch:
+          clampCutoutOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.clampCutoutOneByTwoInch || 0,
+          clampCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
-              ?.hingeCutoutOneByTwoInch || 0,
+              ?.clampCutoutThreeByEightInch || 0,
+          hingeCutoutOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.hingeCutoutOneByTwoInch || 0,
           hingeCutoutThreeByEightInch:
             settingData?.wineCellars?.fabricatingPricing
               ?.hingeCutoutThreeByEightInch || 0,
+          miterOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.miterOneByTwoInch || 0,
+          miterThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.miterThreeByEightInch || 0,
+          notchOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.notchOneByTwoInch || 0,
+          notchThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.notchThreeByEightInch || 0,
+          outageOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing?.outageOneByTwoInch || 0,
+          outageThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing?.outageThreeByEightInch || 0,
+          polishPricePerOneByTwoInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.polishPricePerOneByTwoInch || 0,
+          polishPricePerThreeByEightInch:
+            settingData?.wineCellars?.fabricatingPricing
+              ?.polishPricePerThreeByEightInch || 0,
         },
+        glassTypesForComparison:
+          settingData?.wineCellars?.glassTypesForComparison || [],
       },
       pdfSettings: {
-        cost: settingData?.pdfSettings?.cost,       
-        hours: settingData?.pdfSettings?.hours,       
-        labor: settingData?.pdfSettings?.labor,       
-        people: settingData?.pdfSettings?.people,       
-        profit: settingData?.pdfSettings?.profit,       
+        cost: settingData?.pdfSettings?.cost,
+        hours: settingData?.pdfSettings?.hours,
+        labor: settingData?.pdfSettings?.labor,
+        people: settingData?.pdfSettings?.people,
+        profit: settingData?.pdfSettings?.profit,
+      },
+      highlevelSettings: {
+        locationReference:
+          settingData?.highlevelSettings?.locationReference ?? "",
+        apiKey: settingData?.highlevelSettings?.apiKey ?? "",
       },
     },
     enableReinitialize: true,
@@ -208,6 +253,28 @@ const CampanySetting = () => {
     editSetting({ data: props, id: settingData._id });
     reFetchDataSetting();
   };
+  const handleCopy = (value) => {
+    navigator.clipboard
+      .writeText(value)
+      .then(() =>
+        dispatch(
+          showSnackbar({ message: "Copied to clipboard ", severity: "success" })
+        )
+      )
+      .catch((err) => console.error("Failed to copy text: ", err));
+  };
+  const optionsData = showerGlassList?.glassType || [];
+  const mirrorGlass = mirrorGlassList?.glassTypes || [];
+  const wineCallerGlass = wineCallerGlassList?.glassType || [];
+
+  const handleChangeGlass = (fieldName, newValue) => {
+    const selectedOptionIds = newValue.map((option) => option._id);
+    formik.setFieldValue(fieldName, {
+      ...formik.values[fieldName],
+      glassTypesForComparison: selectedOptionIds,
+    });
+  };
+
   return (
     <form>
       <Box
@@ -452,6 +519,22 @@ const CampanySetting = () => {
               onClick={() => handleChange(3)}
             >
               Pdf Settings
+            </Button>
+            <Button
+              sx={{
+                height: "36px",
+                color: "black",
+                backgroundColor: value === 4 ? "white" : "transparent",
+                borderRadius: "4px !important",
+                padding: "7px 12px 7px 12px !important",
+                ":hover": {
+                  color: "black",
+                  backgroundColor: "white",
+                },
+              }}
+              onClick={() => handleChange(4)}
+            >
+              High Level Settings
             </Button>
           </Box>
           {/* <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" sx={{
@@ -1016,6 +1099,57 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multiple comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={optionsData}
+                  getOptionLabel={(option) => option.name}
+                  value={optionsData?.filter((option) =>
+                    formik.values.showers.glassTypesForComparison?.includes(
+                      option._id
+                    )
+                  )}
+                  onChange={(event, newValue) =>
+                    handleChangeGlass("showers", newValue)
+                  } // Pass 'showers' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{
+                    width: "400px",
+                    ".MuiOutlinedInput-root": { p: "2px !important" },
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder={
+                        formik.values.showers.glassTypesForComparison?.length >
+                        0
+                          ? ""
+                          : "Select Glass Type"
+                      }
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
           </Box>
         </CustomTabPanel>
         {/** end */}
@@ -1475,6 +1609,57 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multiple comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={mirrorGlass}
+                  getOptionLabel={(option) => option.name}
+                  value={mirrorGlass?.filter((option) =>
+                    formik.values.mirrors.glassTypesForComparison?.includes(
+                      option._id
+                    )
+                  )}
+                  onChange={(event, newValue) =>
+                    handleChangeGlass("mirrors", newValue)
+                  } // Pass 'mirrors' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{
+                    width: "400px",
+                    ".MuiOutlinedInput-root": { p: "2px !important" },
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder={
+                        formik.values.mirrors.glassTypesForComparison?.length >
+                        0
+                          ? ""
+                          : "Select Glass Type"
+                      }
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
             {/* <Box
               sx={{
                 display: "flex",
@@ -1762,6 +1947,64 @@ const CampanySetting = () => {
                 justifyContent: "space-between",
               }}
             >
+              <Typography>Clamp Cutout (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.clampCutoutOneByTwoInch"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.clampCutoutOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Clamp Cutout (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  type="number"
+                  name="wineCellars.fabricatingPricing.clampCutoutThreeByEightInch"
+                  size="small"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.clampCutoutThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
               <Typography>Hinge Cutout (1/2in)</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
@@ -1812,6 +2055,286 @@ const CampanySetting = () => {
                 />
               </Box>
             </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Miter (1/2in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.miterOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.miterOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Miter (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.miterThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.miterThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Notch (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.notchOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.notchOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Notch (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.notchThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.notchThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Outage (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.outageOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.outageOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Outage (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.outageThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.outageThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (1/2in)</Typography>
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.polishPricePerOneByTwoInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.polishPricePerOneByTwoInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Polish Price per Inch (3/8in)</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <CustomInputField
+                  name="wineCellars.fabricatingPricing.polishPricePerThreeByEightInch"
+                  size="small"
+                  type="number"
+                  value={
+                    formik.values?.wineCellars?.fabricatingPricing
+                      ?.polishPricePerThreeByEightInch
+                  }
+                  InputProps={{
+                    inputProps: { min: 0, max: inputMaxValue, step: "any" },
+                  }}
+                  onChange={(e) => {
+                    if (e.target.value.length <= inputLength) {
+                      formik.handleChange(e);
+                    }
+                  }}
+                />
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography>Glass price multiple comparison</Typography>
+
+              <Box sx={{ paddingRight: 19 }}>
+                <Autocomplete
+                  multiple
+                  options={wineCallerGlass}
+                  getOptionLabel={(option) => option.name}
+                  value={wineCallerGlass?.filter((option) =>
+                    formik.values.wineCellars.glassTypesForComparison?.includes(
+                      option._id
+                    )
+                  )}
+                  onChange={(event, newValue) =>
+                    handleChangeGlass("wineCellars", newValue)
+                  } // Pass 'wineCellars' here
+                  renderTags={(value, getTagProps) =>
+                    value.map((option, index) => (
+                      <Chip
+                        key={option._id}
+                        label={option.name}
+                        {...getTagProps({ index })}
+                      />
+                    ))
+                  }
+                  sx={{
+                    width: "400px",
+                    ".MuiOutlinedInput-root": { p: "2px !important" },
+                  }}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      className="custom-textfield"
+                      // label="Select Glass Type"
+                      placeholder={
+                        formik.values.wineCellars.glassTypesForComparison
+                          ?.length > 0
+                          ? ""
+                          : "Select Glass Type"
+                      }
+                    />
+                  )}
+                />
+              </Box>
+            </Box>
           </Box>
         </CustomTabPanel>
         {/** Pdf Setting tab */}
@@ -1827,8 +2350,8 @@ const CampanySetting = () => {
               gap: 2,
             }}
           > */}
-            {/* <Typography variant="h6">Max Door Width</Typography> */}
-            {/* <Box
+          {/* <Typography variant="h6">Max Door Width</Typography> */}
+          {/* <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
@@ -1974,13 +2497,11 @@ const CampanySetting = () => {
             >
               <Typography>People</Typography>
               <Box mr={19}>
-                  <CustomToggle
-                    name="pdfSettings.people"
-                    checked={
-                      formik.values?.pdfSettings?.people || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.people"
+                  checked={formik.values?.pdfSettings?.people || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -1992,13 +2513,11 @@ const CampanySetting = () => {
             >
               <Typography>Hours</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.hours"
-                    checked={
-                      formik.values?.pdfSettings?.hours || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.hours"
+                  checked={formik.values?.pdfSettings?.hours || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2011,13 +2530,11 @@ const CampanySetting = () => {
               <Typography>Labor Price</Typography>
 
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.labor"
-                    checked={
-                      formik.values?.pdfSettings?.labor || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.labor"
+                  checked={formik.values?.pdfSettings?.labor || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2029,13 +2546,11 @@ const CampanySetting = () => {
             >
               <Typography>Profit</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.profit"
-                    checked={
-                      formik.values?.pdfSettings?.profit || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.profit"
+                  checked={formik.values?.pdfSettings?.profit || false}
+                  onChange={formik.handleChange}
+                />
               </Box>
             </Box>
             <Box
@@ -2047,13 +2562,97 @@ const CampanySetting = () => {
             >
               <Typography>Actual Cost</Typography>
               <Box sx={{ paddingRight: 19 }}>
-                  <CustomToggle
-                    name="pdfSettings.cost"
-                    checked={
-                      formik.values?.pdfSettings?.cost || false
-                    }
-                    onChange={formik.handleChange}
-                  />
+                <CustomToggle
+                  name="pdfSettings.cost"
+                  checked={formik.values?.pdfSettings?.cost || false}
+                  onChange={formik.handleChange}
+                />
+              </Box>
+            </Box>
+          </Box>
+        </CustomTabPanel>
+        <CustomTabPanel value={value} index={4}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 3,
+              width: "70%",
+              pt: 2,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>Location Reference</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.locationReference"
+                  value={
+                    formik.values?.highlevelSettings?.locationReference ?? ""
+                  }
+                  placeholder={"Enter Location Reference"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(
+                      formik.values?.highlevelSettings?.locationReference ?? ""
+                    )
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "6px 8px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
+              </Box>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography>API Key</Typography>
+              <Box sx={{ width: "450px", display: "flex", gap: 1 }}>
+                <CustomInputField
+                  fullWidth
+                  type="text"
+                  name="highlevelSettings.apiKey"
+                  value={formik.values?.highlevelSettings?.apiKey ?? ""}
+                  placeholder={"Enter API Key"}
+                  onChange={formik.handleChange}
+                />
+                <Button
+                  onClick={() =>
+                    handleCopy(formik.values?.highlevelSettings?.apiKey ?? "")
+                  }
+                  sx={{
+                    background: "#8477DA",
+                    color: "white",
+                    p: "4px !important",
+                    minWidth: "40px",
+                    ":hover": {
+                      background: "#8477DA",
+                    },
+                  }}
+                >
+                  <ContentCopyIcon />
+                </Button>
               </Box>
             </Box>
           </Box>

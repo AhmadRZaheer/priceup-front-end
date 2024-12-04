@@ -13,6 +13,7 @@ import { backendURL } from "@/utilities/common";
 import { useMemo } from "react";
 import { EstimateCategory } from "@/utilities/constants";
 import GraphSkeleton from "./GraphSkeleton";
+import DataNotFound from "./DataNotFound";
 
 const dateSx = {
   "& .MuiInputBase-root": {
@@ -32,18 +33,8 @@ const dateSx = {
     color: "#000000",
   },
 };
-const barData = [
-  { x: "2019/01/01", y: 400 },
-  { x: "2019/04/01", y: 430 },
-  { x: "2019/07/01", y: 448 },
-  { x: "2019/10/01", y: 470 },
-  { x: "2020/01/01", y: 540 },
-  { x: "2020/04/01", y: 580 },
-];
 
-const pieChartData = [55, 55, 55];
-
-export default function Dashboard() {
+export default function Dashboard({ userData }) {
   const currentDate = dayjs();
   const [graphDate, setGraphDate] = useState({
     start: currentDate.subtract(1, "month"),
@@ -117,7 +108,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Box
+      {/* <Box
         sx={{
           backgroundColor: "#F6F5FF",
           p: { sm: "0px 0px 20px 0px", xs: "70px 0px 20px 10px" },
@@ -132,12 +123,13 @@ export default function Dashboard() {
         >
           Estimates
         </Typography>
-      </Box>
+      </Box> */}
       <Box
         sx={{
           backgroundColor: "#F6F5FF",
           width: "100%",
           height: "auto",
+          pt: 4,
         }}
       >
         <Box
@@ -162,11 +154,11 @@ export default function Dashboard() {
                 text: data?.customerCount,
                 variant: "red",
               },
-              //   {
-              //     title: "Invoice Total",
-              //     text: estimatesStats?.total?.toFixed(2),
-              //     variant: "purple",
-              //   },
+              {
+                title: "Users",
+                text: userData?.staff ?? 0,
+                variant: "purple",
+              },
             ].map((item) => (
               <Grid item lg={3} md={4} xs={6}>
                 <WidgetCard
@@ -288,10 +280,14 @@ export default function Dashboard() {
                   }}
                 >
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomBarChart
-                      dataType="Estimate"
-                      data={graphDataFormatted.estimateBarChart}
-                    />
+                    {graphDataFormatted.estimateBarChart.length > 0 ? (
+                      <CustomBarChart
+                        dataType="Estimate"
+                        data={graphDataFormatted.estimateBarChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Estimate" />
+                    )}
                   </Box>
                   <Box
                     sx={{
@@ -299,26 +295,33 @@ export default function Dashboard() {
                       width: "49%",
                     }}
                   >
-                    <Typography
-                      sx={{
-                        fontFamily: "Helvetica, Arial, sans-serif !important",
-                        fontSize: "14px",
-                        fontWeight: `${800} !important`,
-                        p: 1.3,
-                      }}
-                    >
-                      Estimate
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        height: "100%",
-                        alignItems: "center",
-                      }}
-                    >
-                      <CustomPieChart data={graphDataFormatted.pieChart} />
-                    </Box>
+                    {graphDataFormatted.pieChart.length > 0 ? (
+                      <>
+                        <Typography
+                          sx={{
+                            fontSize: "18px",
+                            fontWeight: 600,
+                            lineHeight: "24.59px",
+                            fontFamily: '"Manrope", sans-serif !important',
+                            p: 1.3,
+                          }}
+                        >
+                          Estimate
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            height: "100%",
+                            alignItems: "center",
+                          }}
+                        >
+                          <CustomPieChart data={graphDataFormatted.pieChart} />
+                        </Box>
+                      </>
+                    ) : (
+                      <DataNotFound title="Estimate" />
+                    )}
                   </Box>
                 </Box>
                 <Box
@@ -329,16 +332,24 @@ export default function Dashboard() {
                   }}
                 >
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomLineChart
-                      dataType="Projects"
-                      data={graphDataFormatted.projectChart}
-                    />
+                    {graphDataFormatted.projectChart.length > 0 ? (
+                      <CustomLineChart
+                        dataType="Projects"
+                        data={graphDataFormatted.projectChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Project" />
+                    )}
                   </Box>
                   <Box sx={{ background: "white", width: "49%", pt: 1 }}>
-                    <CustomAreaChart
-                      dataType="Customers"
-                      data={graphDataFormatted.customerChart}
-                    />
+                    {graphDataFormatted.customerChart.length > 0 ? (
+                      <CustomAreaChart
+                        dataType="Customers"
+                        data={graphDataFormatted.customerChart}
+                      />
+                    ) : (
+                      <DataNotFound title="Customer" />
+                    )}
                   </Box>
                 </Box>
               </>
