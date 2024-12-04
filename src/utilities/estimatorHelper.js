@@ -733,6 +733,27 @@ const getSwitchHingeNotification = (
 ) => {
   const measurementsObject = convertArrayKeysToObject(measurements);
   // console.log('hinges switch',doorWeight > (reduxSelectedItem?.settings?.heavyDutyOption?.height || 80),doorWeight,(reduxSelectedItem?.settings?.heavyDutyOption?.height || 80))
+if(reduxSelectedItem?.settings?.glassType?.thickness === thicknessTypes.ONEBYTWO && selectedContent.glassType?.thickness === thicknessTypes.ONEBYTWO){
+  let hinge = reduxListData?.hinges?.find(
+    (item) =>
+      item._id === reduxSelectedItem?.settings?.heavyDutyOption?.heavyDutyType
+  );
+  if (hinge) {
+    // set Notification
+    const hingesSwitch = {
+      status: false,
+      variant: notificationsVariant.WARNING,
+      message: '',
+    };
+    // Unselect content from slice
+    const hinges = {
+      ...selectedContent.hinges,
+      item: hinge,
+    };
+    return { hingesSwitch, hinges };
+}
+}
+else{
   if (
     // reduxSelectedItem?.settings?.heavyDutyOption?.threshold > 0 &&
     // doorWidth > reduxSelectedItem?.settings?.heavyDutyOption?.threshold
@@ -786,7 +807,7 @@ const getSwitchHingeNotification = (
     }
   }
 };
-
+}
 const getGlassThicknessShiftNotification = (
   selectedContent,
   reduxSelectedItem,
@@ -798,7 +819,7 @@ const getGlassThicknessShiftNotification = (
   ) {
     //set notification
     const glassThicknessSwitch = {
-      status: true,
+      status: reduxSelectedItem?.settings?.glassType?.thickness !== thicknessTypes.ONEBYTWO  ? true : false,
       variant: notificationsVariant.WARNING,
       message: `Glass thickness switched from ${thicknessTypes.THREEBYEIGHT} to ${thicknessTypes.ONEBYTWO}`,
     };

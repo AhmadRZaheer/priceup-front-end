@@ -92,22 +92,52 @@ function InvoiceDetails() {
   useEffect(() => {
     setTimeout(() => {
       setCopyLink(false);
-    }, 70000);
+    }, 50000);
   }, [copyLink]);
-
+  // const handleCopyPreview = (value) => {
+  //   navigator.clipboard
+  //     .writeText(value ?? "")
+  //     .then(() => {
+  //       setCopyLink(true);
+  //       showSnackbar({
+  //         message: "Link Copied",
+  //         severity: "info",
+  //       });
+  //     })
+  //     .catch((err) => console.error("Failed to copy text: ", err));
+  // };
   const handleCopyPreview = (value) => {
-    navigator.clipboard
-      .writeText(value ?? "")
-      .then(() => {
-        setCopyLink(true);
-        showSnackbar({
-          message: "Link Copied",
-          severity: "info",
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      // Modern clipboard API
+      navigator.clipboard
+        .writeText(value ?? "")
+        .then(() => {
+          setCopyLink(true);
+          showSnackbar("Link Copied", "success");
+        })
+        .catch((err) => {
+          console.error("Failed to copy text using clipboard API:", err);
         });
-      })
-      .catch((err) => console.error("Failed to copy text: ", err));
+    } else {
+      // Fallback for older browsers
+      const textarea = document.createElement("textarea");
+      textarea.value = value ?? "";
+      textarea.style.position = "fixed"; // Prevent scrolling
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+  
+      try {
+        document.execCommand("copy");
+        setCopyLink(true);
+        showSnackbar("Link Copied", "success");
+      } catch (err) {
+        console.error("Fallback: Failed to copy text using execCommand:", err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
   };
-
   useEffect(() => {
     setDueDate(dayjs(data?.dueDate));
     setStatus(data?.status);
@@ -159,7 +189,7 @@ function InvoiceDetails() {
           ) : (
             ""
           )}
-          {data?.customerPreview?.link?.length ? (
+          {data?.customerPreview?.link ? (
             <Box>
               <div className="subscribe-box">
                 <input
