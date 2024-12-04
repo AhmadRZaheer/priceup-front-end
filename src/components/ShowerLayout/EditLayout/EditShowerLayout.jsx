@@ -55,7 +55,7 @@ const EditShowerLayout = () => {
     refetch: refetchSingleLayout,
   } = useFetchSingleDocument(`${routePrefix}/${selectedlayoutId}`)
 
-  const { mutate: updateDefault, isSuccess: SuccessForEdit } = useEditDefault();
+  const { mutate: updateDefault, isSuccess: SuccessForEdit,isLoading } = useEditDefault();
 
   const [mounting, setMounting] = useState(null);
 
@@ -395,6 +395,7 @@ const EditShowerLayout = () => {
             </Typography>
             <Box>
               <Button
+               disabled={isLoading}
                 type="submit"
                 variant="contained"
                 sx={{
@@ -410,8 +411,12 @@ const EditShowerLayout = () => {
                   display: "box",
                   "&:hover": { backgroundColor: "#8477DA" },
                 }}
-              >
-                Update
+              >               
+                {isLoading ? (
+                    <CircularProgress size={22} sx={{ color: "#8477DA" }} />
+                  ) : (
+                    "Update"
+                  )}
               </Button>
             </Box>
           </Box>
