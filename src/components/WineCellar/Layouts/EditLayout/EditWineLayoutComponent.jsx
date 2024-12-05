@@ -608,7 +608,6 @@ const EditWineLayoutComponent = () => {
                                 },
                               }}
                             >
-                              <MenuItem value="0">0</MenuItem>
                               <MenuItem key="1/2" value="1/2">
                                 1/2
                               </MenuItem>
@@ -1000,7 +999,7 @@ const EditWineLayoutComponent = () => {
                               className="modificationTitle"
                               sx={{ fontSize: 16 }}
                             >
-                              Sinlgle Door Hours (Per Person)
+                              Hours for Additional doors (Per Person)
                             </Typography>
                             <CustomInputField
                               color={"purple"}

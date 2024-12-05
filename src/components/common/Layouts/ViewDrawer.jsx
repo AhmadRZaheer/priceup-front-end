@@ -378,7 +378,7 @@ const ViewDrawer = ({ open, handleClose, data ,variant }) => {
                 className="cardTitleContainer"
                 sx={{ py: 1, height: "fit-content" }}
               >
-                <Typography className="drawerTitle">Sinlgle Door Hours (Per Person)</Typography>
+                <Typography className="drawerTitle">Hours for Additional doors (Per Person)</Typography>
                 <Typography className="drawerBoldTitle">
                   {`${data.settings?.noOfHoursToCompleteSingleDoor ?? 0}`}
                 </Typography>

@@ -28,9 +28,10 @@ const AlertMessage = ({ title, alertMessage, varient }) => {
       sx={{
         borderLeft: `5px solid ${borderColor}`,
         width: "435px",
-        height: "85px",
+        minHeight: "73px",
         borderRadius: "4px 0px 0px 4px",
         px: "12px",
+        py:'6px',
         overflow: "hidden",
         display: "flex",
         flexDirection: "column",

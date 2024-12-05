@@ -126,7 +126,7 @@ function InvoiceDetails() {
       document.body.appendChild(textarea);
       textarea.focus();
       textarea.select();
-  
+
       try {
         document.execCommand("copy");
         setCopyLink(true);
@@ -589,7 +589,11 @@ function InvoiceDetails() {
                     {item?.category}
                   </TableCell>
                   <TableCell>
-                    ${item.pricing?.laborPrice?.toFixed(2) || 0}
+                    $
+                    {(
+                      (item.pricing?.laborPrice ?? 0) +
+                      (item.pricing?.doorLaborPrice ?? 0)
+                    )?.toFixed(2) || 0}
                   </TableCell>
                   <TableCell>
                     ${item.pricing?.glassPrice?.toFixed(2) || 0}
@@ -676,7 +680,9 @@ function InvoiceDetails() {
               }}
             >
               <Typography>Invoice Total:</Typography>
-              <Typography sx={{pr:2}}>${data?.grandTotal?.toLocaleString()}</Typography>
+              <Typography sx={{ pr: 2 }}>
+                ${data?.grandTotal?.toLocaleString()}
+              </Typography>
             </div>
           </div>
         </div>
