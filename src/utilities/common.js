@@ -813,8 +813,14 @@ export const calculateAreaAndPerimeter = (
       const count = value["count"];
       const width = value["width"];
       const height = value["height"];
-      for (let i = 0; i < count; i++) {
-        const panel = calculatePanel(width, height);
+      let calculatedWidth = 0;
+      let calculatedHeight = 0;
+      for(let i = 0; i < count; i++){
+        calculatedWidth += Number(width ?? 0);
+        calculatedHeight += Number(height ?? 0);
+      }
+      // for (let i = 0; i < count; i++) {
+        const panel = calculatePanel(calculatedWidth, calculatedHeight);
         totalSqft += panel.sqft;
         totalPerimeter += panel.perimeter;
         panelWeight += getWeightByThickness(
@@ -822,12 +828,13 @@ export const calculateAreaAndPerimeter = (
           glassThickness,
           panel.sqft
         );
-      }
+        console.log(panel.perimeter,'perimeter custom')
+      // }
     });
     // const { width, height } = measurements[panelKey];
 
     // }
-
+      console.log(totalPerimeter,'total perimeter custom');
     return {
       areaSqft: Math.round((totalSqft + Number.EPSILON) * 100) / 100,
       perimeter: totalPerimeter,
@@ -861,8 +868,10 @@ export const calculateAreaAndPerimeter = (
     };
     const perimeterPanel = {
       width: panel.width * 2 * panelQuantity,
-      height: panel.height * 2 * panelQuantity,
+      height: panel.height * 2 * 2, // temp write 2 quantity
     };
+    console.log(perimeterDoor,'door inline');
+    console.log(perimeterPanel,'panel inline');
     const perimeter =
       perimeterDoor.width +
       perimeterDoor.height +
@@ -909,7 +918,7 @@ export const calculateAreaAndPerimeter = (
     };
     const perimeterPanel = {
       width: panel.width * 2 * panelQuantity,
-      height: panel.height * 2 * panelQuantity,
+      height: panel.height * 2 * 2, // temp write 2 quantity
     };
     const perimeterReturn = {
       width: layoutReturn.width * 2 * returnQuantity,
@@ -969,7 +978,7 @@ export const calculateAreaAndPerimeter = (
     };
     const perimeterPanel = {
       width: panel.width * 2 * panelQuantity,
-      height: panel.height * 2 * panelQuantity,
+      height: panel.height * 2 * 2, // temp write 2 quantity
     };
     const perimeterReturn1 = {
       width: layoutReturn1.width * 2 * return1Quantity,
@@ -1040,7 +1049,7 @@ export const calculateAreaAndPerimeter = (
     };
     const perimeterPanel = {
       width: panel.width * 2 * panelQuantity,
-      height: panel.height * 2 * panelQuantity,
+      height: panel.height * 2 * 2, // temp write 2 quantity
     };
     const perimeterReturn1 = {
       width: layoutReturn1.width * 2 * return1Quantity,
