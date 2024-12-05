@@ -21,18 +21,18 @@ export default function CheckoutForm({ refetchData }) {
     isLoading: statusLoading,
     isSuccess,
   } = useEditDocument();
-  const [descion, setDescion] = useState('');
+  const [descion, setDescion] = useState("");
   const handleChangeStatus = async (value) => {
     setDescion(value);
     try {
-    await updateInvoiceStatus({
+      await updateInvoiceStatus({
         data: { status: value },
         apiRoute: `${backendURL}/invoices/${id}/customer-preview`,
       });
       refetchData();
     } catch (error) {
       console.log(error);
-    }  
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -71,18 +71,23 @@ export default function CheckoutForm({ refetchData }) {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-      <LinkAuthenticationElement
-        id="link-authentication-element"
-        // Access the email value like so:
-        // onChange={(event) => {
-        //  setEmail(event.value.email);
-        // }}
-        //
-        // Prefill the email field like so:
-        // options={{defaultValues: {email: 'foo@bar.com'}}}
-      />
-      <PaymentElement id="payment-element" />
-      {/* <button disabled={isLoading || !stripe || !elements} id="submit">
+      <Box sx={{ m: "10px" }}>
+        <LinkAuthenticationElement
+          id="link-authentication-element"
+          // Access the email value like so:
+          // onChange={(event) => {
+          //  setEmail(event.value.email);
+          // }}
+          //
+          // Prefill the email field like so:
+          // options={{defaultValues: {email: 'foo@bar.com'}}}
+        />
+      </Box>
+      <Box sx={{ m: "10px" }}>
+        <PaymentElement id="payment-element" />
+      </Box>
+      <Box sx={{ m: "10px" }}>
+        {/* <button disabled={isLoading || !stripe || !elements} id="submit">
           <span id="button-text">
             {isLoading ? (
               <div className="spinner" id="spinner"></div>
@@ -91,60 +96,66 @@ export default function CheckoutForm({ refetchData }) {
             )}
           </span>
         </button> */}
-      <Box
-        sx={{ display: "flex", gap: 1, pt: 2, justifyContent: "space-between" }}
-      >
-        <Button
-          // disabled={isLoading}
-          onClick={() => handleChangeStatus("Paid")}
-          fullWidth
-          variant="contained"
+        <Box
           sx={{
-            backgroundColor: statusLoading ? "#d8cece" : "#8477DA",
-            height: "44px",
-            width: { sm: "100%", xs: "187px" },
-            "&:hover": { backgroundColor: "#8477DA" },
-            color: "white",
-            textTransform: "capitalize",
-            borderRadius: 1,
-            fontSize: { lg: 16, md: 15, xs: 12 },
-            padding: {
-              sm: "10px 16px  !important",
-              xs: "5px 5px !important",
-            },
+            display: "flex",
+            gap: 1,
+            pt: 2,
+            justifyContent: "space-between",
           }}
         >
-          {descion === "Paid" && statusLoading ? (
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-          ) : (
-            "Pay now"
-          )}
-        </Button>
-        <Button
-          onClick={() => handleChangeStatus("Voided")}
-          fullWidth
-          variant="contained"
-          sx={{
-            backgroundColor: statusLoading ? "#d8cece" : "#E22A2D",
-            height: "44px",
-            width: { sm: "100%", xs: "187px" },
-            "&:hover": { backgroundColor: "#E22A2D" },
-            color: "white",
-            textTransform: "capitalize",
-            borderRadius: 1,
-            fontSize: { lg: 16, md: 15, xs: 12 },
-            padding: {
-              sm: "10px 16px  !important",
-              xs: "5px 5px !important",
-            },
-          }}
-        >
-          {descion === "Voided" && statusLoading ? (
-            <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-          ) : (
-            "Disapproved"
-          )}
-        </Button>
+          <Button
+            // disabled={isLoading}
+            onClick={() => handleChangeStatus("Paid")}
+            fullWidth
+            variant="contained"
+            sx={{
+              backgroundColor: statusLoading ? "#d8cece" : "#8477DA",
+              height: "44px",
+              width: { sm: "100%", xs: "187px" },
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 1,
+              fontSize: { lg: 16, md: 15, xs: 12 },
+              padding: {
+                sm: "10px 16px  !important",
+                xs: "5px 5px !important",
+              },
+            }}
+          >
+            {descion === "Paid" && statusLoading ? (
+              <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+            ) : (
+              "Pay now"
+            )}
+          </Button>
+          <Button
+            onClick={() => handleChangeStatus("Voided")}
+            fullWidth
+            variant="contained"
+            sx={{
+              backgroundColor: statusLoading ? "#d8cece" : "#E22A2D",
+              height: "44px",
+              width: { sm: "100%", xs: "187px" },
+              "&:hover": { backgroundColor: "#E22A2D" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 1,
+              fontSize: { lg: 16, md: 15, xs: 12 },
+              padding: {
+                sm: "10px 16px  !important",
+                xs: "5px 5px !important",
+              },
+            }}
+          >
+            {descion === "Voided" && statusLoading ? (
+              <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+            ) : (
+              "Disapproved"
+            )}
+          </Button>
+        </Box>
       </Box>
       {/* Show any error or success messages */}
       {message && <div id="payment-message">{message}</div>}

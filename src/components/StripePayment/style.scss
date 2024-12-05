@@ -10,9 +10,9 @@ main {
     width: 480px;
   }
   
-  form > * {
-    margin: 10px 0;
-  }
+  // form > * {
+    // margin: 10px 0;
+  // }
   
   // button {
   //   background-color: var(--accent-color);
@@ -42,15 +42,15 @@ main {
   //   cursor: none;
   // }
   
-  input, select {
-    display: block;
-    font-size: 1.1em;
-    width: 100%;
-    margin-bottom: 10px;
-  }
+  // input, select {
+  //   display: block;
+  //   font-size: 1.1em;
+  //   width: 100%;
+  //   margin-bottom: 10px;
+  // }
   
   label {
-    display: block;
+    // display: block;
   }
   
   // a {
@@ -62,15 +62,15 @@ main {
     font-size: .6em;
   }
   
-  fieldset, input, select {
-    border: 1px solid #efefef;
-  }
+  // fieldset, input, select {
+  //   border: 1px solid #efefef;
+  // }
   
   #payment-form {
     background-color: #fff;
     border: #F6F9FC solid 1px;
     border-radius: var(--radius);
-    padding: 10px 20px 10px 20px;
+    padding: 10px;
     margin: 20px 0;
     box-shadow: 0 30px 50px -20px rgb(50 50 93 / 25%), 0 30px 60px -30px rgb(0 0 0 / 30%);
   }

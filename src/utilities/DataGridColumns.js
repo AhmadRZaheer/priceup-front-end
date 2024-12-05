@@ -630,7 +630,7 @@ export const ProjectsColumns = (dropdownActions) => {
       field: "Customer",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 1.9,
+      flex: 2,
       renderCell: (params) => {
         return (
           <>
@@ -830,7 +830,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       field: "Invoice Number",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 1,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <Box>
@@ -1025,13 +1025,13 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       field: "Project Name",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 0.8,
+      flex: 1,
       renderCell: (params) => {
         return (
           <>
-            <Tooltip title={params?.row?.source?.name} placement="top">
+            <Tooltip title={params?.row?.source?.projectName} placement="top">
               <Typography className="projectRowTxt" sx={{ py: 1 }}>
-                {params?.row?.source?.name}
+                {params?.row?.source?.projectName}
               </Typography>
             </Tooltip>
           </>
@@ -1074,7 +1074,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       field: "Due Date",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 0.9,
+      flex: 0.8,
       renderCell: (params) => {
         return (
           <>
@@ -1094,7 +1094,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       field: "Status",
       headerClassName: "ProjectsColumnsHeaderClass",
       sortable: false,
-      flex: 0.8,
+      flex: 0.6,
       renderCell: (params) => {
         return (
           <Typography
