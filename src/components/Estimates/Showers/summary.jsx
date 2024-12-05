@@ -943,7 +943,7 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
-          {glassDetails?.length > 0 && glassPrice !== 0  && (
+          {glassDetails?.length > 0  && (
             <>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>           
@@ -958,18 +958,17 @@ const Summary = ({ setStep }) => {
                 Note:
               </Typography>
             {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
-            {glassPrice !== 0 &&
-              glassDetails.map((glass, index) => {
+            {glassDetails.map((glass, index) => {
                 const calc =
                   (totalPrice - laborPrice) /
                     showersLocationSettings?.miscPricing?.pricingFactor -
                   glassPrice;
-                const glassPricing =
+                const glassPricing = sqftArea !== 0 ?
                   (calc + sqftArea * glass.price) *
                     (showersLocationSettings?.miscPricing?.pricingFactorStatus
                       ? showersLocationSettings?.miscPricing?.pricingFactor
                       : 1) +
-                  laborPrice;
+                  laborPrice : 0;
                 // const price = ((totalPrice - glassPrice) + (sqftArea*glass.price))
                 return (
                   glass.status && (

@@ -7,7 +7,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
     <Box
       sx={{
         width: "100%",
-        paddingBottom: { sm: 0, xs: "80px" },        
+        paddingBottom: { sm: 0, xs: "80px" },
       }}
     >
       <Box
@@ -36,7 +36,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
               fontFamily: '"Roboto", sans-serif !important',
             }}
           >
-            Quote {quoteNumber}
+            Quotation {quoteNumber}
           </Typography>
         </Box>
         <Divider sx={{ borderColor: "#D4DBDF" }} />
@@ -55,7 +55,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
           </Grid>
         </Box>
         <Divider sx={{ borderColor: "#D4DBDF" }} />
-        <Box sx={{ px: 3, py: '15px' }}>
+        <Box sx={{ px: 3, py: "15px" }}>
           <Grid container spacing={2}>
             <Grid item md={4}>
               <Stack gap={2}>
@@ -186,7 +186,8 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                   </Box>
                 )}
 
-                {data?.mountingChannel !== "" && data?.mountingChannel !== null ? (
+                {data?.mountingChannel !== "" &&
+                data?.mountingChannel !== null ? (
                   <>
                     {data?.mountingChannel && (
                       <Box>
@@ -385,12 +386,31 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                   }}
                 >
                   <Typography className="text-xs-ragular-bold">
-                    Hours:{" "}
+                    {data?.category === EstimateCategory.WINECELLARS
+                      ? "Hours for layout"
+                      : "Hours"}{" "}
+                    :{" "}
                   </Typography>
                   <Typography className="text-xs-ragular">
                     {data?.hours}
                   </Typography>
                 </Box>
+                {data?.category === EstimateCategory.WINECELLARS && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      textAlign: "baseline",
+                      gap: 0.6,
+                    }}
+                  >
+                    <Typography className="text-xs-ragular-bold">
+                      Hours for door:{" "}
+                    </Typography>
+                    <Typography className="text-xs-ragular">
+                      {data?.laborHoursForDoor}
+                    </Typography>
+                  </Box>
+                )}
               </Stack>
             </Grid>
             <Grid item md={4}>
@@ -443,12 +463,25 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                 </Box> */}
                 <Box>
                   <Typography className="text-xs-ragular-bold">
-                    Labor Price:
+                    {data?.category === EstimateCategory.WINECELLARS
+                      ? "Layout Labor Price"
+                      : "Labor Price"}{" "}
+                    :
                   </Typography>
                   <Typography className="text-xs-ragular">
                     ${data?.pricing?.laborPrice?.toFixed(2) || 0}
                   </Typography>
                 </Box>
+                {data?.category === EstimateCategory.WINECELLARS && (
+                  <Box>
+                    <Typography className="text-xs-ragular-bold">
+                      Door Labor Price:
+                    </Typography>
+                    <Typography className="text-xs-ragular">
+                      ${data?.pricing?.doorLaborPrice?.toFixed(2) || 0}
+                    </Typography>
+                  </Box>
+                )}
               </Stack>
             </Grid>
           </Grid>
