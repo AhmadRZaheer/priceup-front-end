@@ -396,9 +396,8 @@ const ProjectInfoComponent = ({
             background: "#FFFF",
           }}
         >
-          <form onSubmit={formik.handleSubmit}>
+          <form onSubmit={formik.handleSubmit} style={{margin:'0px !important'}}>
             {/** Section 1 */}
-
             <Box
               sx={{
                 display: "flex",
@@ -504,100 +503,8 @@ const ProjectInfoComponent = ({
                         >
                           {creatorName ?? "N/A"}
                         </Typography>
-                        {/* <TextField
-                        disabled="true"
-                        id="creator"
-                        name="creator"
-                        label="Enter Creator Name"
-                        size="small"
-                        variant="outlined"
-                        InputProps={{
-                          style: {
-                            color: "black",
-                            borderRadius: 4,
-                            backgroundColor: "white",
-                          },
-                        }}
-                        sx={{
-                          color: { sm: "black", xs: "white" },
-                          width: "100%",
-                        }}
-                        value={creatorName}
-                      /> */}
                       </Box>
                       {/** Customer Select Block */}
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <Box mb={0.6}>
-                            <label htmlFor="name">Select Customer:</label>
-                            {/* <span style={{ color: "red" }}>*</span> */}
-                          </Box>
-                          <CustomInputField
-                            id="customer"
-                            name="customer"
-                            // label="Select a Customer"
-                            size="small"
-                            variant="outlined"
-                            onClick={handleCustomerSelect}
-                            InputProps={{
-                              endAdornment: selectedCustomer ? (
-                                <InputAdornment
-                                  position="end"
-                                  sx={{ cursor: "pointer" }}
-                                  onClick={(event) => {
-                                    handleCustomerUnSelect(event);
-                                  }}
-                                >
-                                  <Close sx={{}} />
-                                </InputAdornment>
-                              ) : (
-                                ""
-                              ),
-                              readOnly: true,
-                              style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                            }}
-                            value={formik.values.customer}
-                            onChange={() => {}}
-                          />
-                        </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.email}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            paddingX: 0.5,
-                            gap: 0.6,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedCustomer?.address}
-                          </Typography>
-                        </Box>
-                      </Box>
                     </Box>
                     <Box
                       sx={{
@@ -620,7 +527,7 @@ const ProjectInfoComponent = ({
                           {/* <span style={{ color: "red" }}>*</span> */}
                         </Box>
                         <FormControl
-                          sx={{ width: "152px" }}
+                          // sx={{ width: "152px" }}
                           size="small"
                           className="custom-textfield"
                           fullWidth
@@ -687,7 +594,6 @@ const ProjectInfoComponent = ({
                         </Select>
                       </FormControl> */}
                       </Box>
-
                       <Box
                         sx={{
                           display: "flex",
@@ -728,94 +634,15 @@ const ProjectInfoComponent = ({
                       /> */}
                       </Box>
                       {/** Address Select Block */}
-
-                      <Box
-                        sx={{
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        >
-                          <Box mb={0.6}>
-                            <label htmlFor="name">Location:</label>
-                            {/* <span style={{ color: "red" }}>*</span> */}
-                          </Box>
-                          <CustomInputField
-                            disabled={!selectedCustomer}
-                            id="address"
-                            name="address"
-                            // label="Select an Address"
-                            size="small"
-                            variant="outlined"
-                            onClick={handleAddressSelect}
-                            InputProps={{
-                              endAdornment: selectedAddress ? (
-                                <InputAdornment
-                                  position="end"
-                                  sx={{ cursor: "pointer" }}
-                                  onClick={(event) => {
-                                    handleAddressUnSelect(event);
-                                  }}
-                                >
-                                  <Close sx={{}} />
-                                </InputAdornment>
-                              ) : (
-                                ""
-                              ),
-                              readOnly: true,
-                              style: {
-                                color: "black",
-                                borderRadius: 4,
-                                backgroundColor: "white",
-                              },
-                            }}
-                            sx={{
-                              color: { sm: "black", xs: "white" },
-                              width: "100%",
-                            }}
-                            value={formik.values.address}
-                          />
-                        </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.street}
-                          </Typography>
-                        </Box>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 0.5,
-                            alignItems: "baseline",
-                            paddingX: 0.5,
-                          }}
-                        >
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.state},
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.city}
-                          </Typography>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.postalCode}
-                          </Typography>
-                        </Box>
-                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
-                          <Typography sx={{ fontSize: "14px" }}>
-                            {selectedAddress?.country}
-                          </Typography>
-                        </Box>
-                      </Box>
                     </Box>
                   </Box>
                   <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
                     <Box
-                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "4.5px",
+                      }}
                     >
                       <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
                         Add Notes:
@@ -856,13 +683,45 @@ const ProjectInfoComponent = ({
                         />
                       </Box>
                     </Box>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                // flexWrap: "wrap",
+                gap: 2,
+                aligItems: "baseline",
+                width: "100%",
+              }}
+            >
+              <Box sx={{ width: { lg: "80%", md: "100%" }, }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { sm: "row", xs: "column" },
+                    gap: 4,
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      width: { sm: "50%", xs: "100%" },
+                      justifyContent: "space-between",
+                      gap: 4,
+                      flexDirection: { sm: "row", xs: "column" },
+                    }}
+                  >
                     <Box
                       sx={{
                         display: "flex",
+                        gap: 2,
                         flexDirection: "column",
-                        gap: 1,
                         width: { sm: "50%", xs: "100%" },
-                        // pt: "12px",
                       }}
                     >
                       <Box
@@ -872,23 +731,23 @@ const ProjectInfoComponent = ({
                         }}
                       >
                         <Box mb={0.6}>
-                          <label htmlFor="name">Company Contact:</label>
+                          <label htmlFor="name">Select Customer:</label>
+                          {/* <span style={{ color: "red" }}>*</span> */}
                         </Box>
                         <CustomInputField
-                          disabled={!selectedCustomer}
-                          id="company"
-                          name="company"
-                          // label="Select an Address"
+                          id="customer"
+                          name="customer"
+                          // label="Select a Customer"
                           size="small"
                           variant="outlined"
-                          onClick={handleCompanySelect}
+                          onClick={handleCustomerSelect}
                           InputProps={{
-                            endAdornment: companyContact ? (
+                            endAdornment: selectedCustomer ? (
                               <InputAdornment
                                 position="end"
                                 sx={{ cursor: "pointer" }}
                                 onClick={(event) => {
-                                  handleCompanyUnSelect(event);
+                                  handleCustomerUnSelect(event);
                                 }}
                               >
                                 <Close sx={{}} />
@@ -907,9 +766,180 @@ const ProjectInfoComponent = ({
                             color: { sm: "black", xs: "white" },
                             width: "100%",
                           }}
-                          value={formik.values.companyContact}
+                          value={formik.values.customer}
+                          onChange={() => {}}
                         />
                       </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.6 }}>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedCustomer?.email}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            paddingX: 0.5,
+                            gap: 0.6,
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedCustomer?.address}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      {/** Customer Select Block */}
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        flexDirection: "column",
+                        width: { sm: "50%", xs: "100%" },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box mb={0.6}>
+                          <label htmlFor="name">Location:</label>
+                          {/* <span style={{ color: "red" }}>*</span> */}
+                        </Box>
+                        <CustomInputField
+                          disabled={!selectedCustomer}
+                          id="address"
+                          name="address"
+                          // label="Select an Address"
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAddressSelect}
+                          InputProps={{
+                            endAdornment: selectedAddress ? (
+                              <InputAdornment
+                                position="end"
+                                sx={{ cursor: "pointer" }}
+                                onClick={(event) => {
+                                  handleAddressUnSelect(event);
+                                }}
+                              >
+                                <Close sx={{}} />
+                              </InputAdornment>
+                            ) : (
+                              ""
+                            ),
+                            readOnly: true,
+                            style: {
+                              color: "black",
+                              borderRadius: 4,
+                              backgroundColor: "white",
+                            },
+                          }}
+                          sx={{
+                            color: { sm: "black", xs: "white" },
+                            width: "100%",
+                          }}
+                          value={formik.values.address}
+                        />
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.street}
+                          </Typography>
+                        </Box>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 0.5,
+                            alignItems: "baseline",
+                            paddingX: 0.5,
+                          }}
+                        >
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.state},
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.city}
+                          </Typography>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.postalCode}
+                          </Typography>
+                        </Box>
+                        <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
+                          <Typography sx={{ fontSize: "14px" }}>
+                            {selectedAddress?.country}
+                          </Typography>
+                        </Box>
+                      </Box>
+                      {/** Address Select Block */}
+                    </Box>
+                  </Box>
+                  <Box sx={{ width: { sm: "25%", xs: "50%" } }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box mb={0.6}>
+                        <label htmlFor="name">Company Contact:</label>
+                      </Box>
+                      <CustomInputField
+                        disabled={!selectedCustomer}
+                        id="company"
+                        name="company"
+                        // label="Select an Address"
+                        size="small"
+                        variant="outlined"
+                        onClick={handleCompanySelect}
+                        InputProps={{
+                          endAdornment: companyContact ? (
+                            <InputAdornment
+                              position="end"
+                              sx={{ cursor: "pointer" }}
+                              onClick={(event) => {
+                                handleCompanyUnSelect(event);
+                              }}
+                            >
+                              <Close sx={{}} />
+                            </InputAdornment>
+                          ) : (
+                            ""
+                          ),
+                          readOnly: true,
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            backgroundColor: "white",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={formik.values.companyContact}
+                      />
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
                       <Box sx={{ display: "flex", paddingX: 0.5, gap: 0.5 }}>
                         <Typography sx={{ fontSize: "14px" }}>
                           {companyContact?.name}
@@ -932,6 +962,7 @@ const ProjectInfoComponent = ({
                 </Box>
               </Box>
             </Box>
+
             {/** Section 2 */}
             <Box
               sx={{
@@ -972,7 +1003,7 @@ const ProjectInfoComponent = ({
                     <CircularProgress
                       sx={{
                         color:
-                          updateLoading || createLoading ? "white" : "#8477da",
+                          updateLoading || createLoading ? "#8477da":"white" ,
                       }}
                       size={24}
                     />

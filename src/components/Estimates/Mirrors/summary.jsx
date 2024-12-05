@@ -657,7 +657,7 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
-          {glassDetails?.length > 0 && pricing.glass !== 0  && (
+          {glassDetails?.length > 0  && (
             <>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
@@ -678,19 +678,18 @@ const Summary = ({ setStep }) => {
               </Typography>
             )} */}
 
-            {selectedContent?.glassType?.item?.name &&
-              glassDetails.map((glass, index) => {
+            {glassDetails.map((glass, index) => {
                 const actualPrice =
                   pricing.cost - pricing.glass + sqftArea * glass.price;
-                const price =
+                const price = sqftArea !== 0 ?
                   actualPrice * (mirrorsLocationSettings?.pricingFactorStatus ? mirrorsLocationSettings?.pricingFactor : 1) +
-                  pricing.labor;
+                  pricing.labor : 0;
                 // const price = ((pricing.total - pricing.glass) + sqftArea*glass.price)
                 return (
                   glass.status && (
                     <Typography key={index}>
-                      Glass Option '{glass?.name || "Unknown"}' has a price of '
-                      {price?.toFixed(2) || "0.00"}' {"=>"} Want to
+                      Glass Option '{glass?.name || "Unknown"}' has a price of 
+                      '${price?.toFixed(2) || "0.00"}' {"=>"} Want to
                       <Box
                         component="span"
                         onClick={() =>

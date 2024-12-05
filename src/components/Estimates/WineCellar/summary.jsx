@@ -192,7 +192,6 @@ const Summary = ({ setStep }) => {
     selectedContent?.glassType?.thickness,
     selectedContent?.glassType?.item?._id
   );
-
   return (
     <>
       <Box
@@ -944,7 +943,7 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
-          {glassDetails?.length > 0 && glassPrice !== 0  && (
+          {glassDetails?.length > 0  && (
             <>
           <Divider sx={{ borderColor: "#D4DBDF" }} />
           <Box sx={{ px: 3, py: 2 }}>
@@ -961,13 +960,13 @@ const Summary = ({ setStep }) => {
             {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
             {glassDetails.map((glass, index) => {
               const actualPrice =
-                actualCost - glassPrice + sqftArea * glass.price;
-              const price =
+                (actualCost ?? 0) - (glassPrice) + sqftArea * (glass.price ?? 0);
+              const price = sqftArea !== 0 ?
                 actualPrice *
                   (wineCallerLocationSettings?.miscPricing?.pricingFactorStatus
                     ? wineCallerLocationSettings?.miscPricing?.pricingFactor
                     : 1) +
-                (laborPrice + doorLaborPrice);
+                (laborPrice + doorLaborPrice) : 0;
               // const price = ((totalPrice - glassPrice) + sqftArea*glass.price)
               return (
                 glass.status && (

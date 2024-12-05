@@ -1454,6 +1454,7 @@ const generateInvoiceItemForWineCellars = async (
   summaryObject.polish = estimate.config.polish;
   summaryObject.people = estimate.config.people;
   summaryObject.hours = estimate.config.hours;
+  summaryObject.laborHoursForDoor = estimate.config.laborHoursForDoor;
   summaryObject.additionalFields = estimate.config.additionalFields;
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
@@ -1802,12 +1803,16 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
+  const doorLaborPrice =
+    estimate.config?.people *
+    estimate.config?.laborHoursForDoor *
+    (companySettings?.miscPricing?.hourlyRate ?? 0);
   let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
-    laborPrice;
+    laborPrice + doorLaborPrice;
   if (estimate.config?.additionalFields?.length > 0) {
     totalPrice += estimate.config.additionalFields.reduce(
       (acc, item) =>
@@ -1827,6 +1832,7 @@ const generateInvoiceItemForWineCellars = async (
     glassPrice,
     glassAddonPrice,
     laborPrice,
+    doorLaborPrice,
     totalPrice,
   };
   return summaryObject;
