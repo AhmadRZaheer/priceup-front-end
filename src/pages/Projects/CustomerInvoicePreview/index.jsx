@@ -114,7 +114,7 @@ const CustomerInvoicePreview = () => {
                   fontWeight: 600,
                 }}
               >
-                Customer Preview
+                Quoted Landing Page
               </Box>
             </Box>
             <Typography

@@ -17,36 +17,36 @@ import AdminSidebar from "@/components/CustomAdmin_SideBar/adminSideBar";
 import SuperSidebar from "@/components/SuperSidebar/superSidebar";
 import CommonLayout from "@/components/CommonLayout";
 
-const getSidebarAccordingToUserRole = (decodedToken) => {
-  if (!decodedToken) {
-    return <></>;
-  }
+// const getSidebarAccordingToUserRole = (decodedToken) => {
+//   if (!decodedToken) {
+//     return <></>;
+//   }
 
-  const { company_id } = decodedToken;
+//   const { company_id } = decodedToken;
 
-  if (
-    isAdmin(decodedToken) ||
-    (isCustomAdmin(decodedToken) && company_id?.length)
-  ) {
-    return <Sidebar />; // for admin and custom admin where company id exists
-  }
-  if (isStaff(decodedToken)) {
-    if (company_id === "") {
-      return <StaffLocationsSidebar />; // staff sidebar where company id is empty
-    }
-    if (company_id?.length) {
-      return <MobileBar />; // staff sidebar where company id exists
-    }
-  }
-  if (isCustomAdmin(decodedToken) && company_id === "") {
-    return <AdminSidebar />; // custom admin sidebar where company id is empty
-  }
-  if (isSuperAdmin(decodedToken)) {
-    return <SuperSidebar />; // super admin sidebar
-  }
+//   if (
+//     isAdmin(decodedToken) ||
+//     (isCustomAdmin(decodedToken) && company_id?.length)
+//   ) {
+//     return <Sidebar />; // for admin and custom admin where company id exists
+//   }
+//   if (isStaff(decodedToken)) {
+//     if (company_id === "") {
+//       return <StaffLocationsSidebar />; // staff sidebar where company id is empty
+//     }
+//     if (company_id?.length) {
+//       return <MobileBar />; // staff sidebar where company id exists
+//     }
+//   }
+//   if (isCustomAdmin(decodedToken) && company_id === "") {
+//     return <AdminSidebar />; // custom admin sidebar where company id is empty
+//   }
+//   if (isSuperAdmin(decodedToken)) {
+//     return <SuperSidebar />; // super admin sidebar
+//   }
 
-  return <></>;
-};
+//   return <></>;
+// };
 
 const Notification = () => {
   const decodedToken = getDecryptedToken();

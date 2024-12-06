@@ -227,19 +227,19 @@ function InvoiceDetails() {
             <Button
               onClick={() => navigate(`customer-preview`)}
               variant="text"
-              sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
+              sx={{ color: "#978CC8",  }}
               startIcon={<VisibilityIcon />}
             >
-              Preview as Customer
+              View Qouted Landing Page
             </Button>
           ) : (
             <Button
               variant="text"
               onClick={() => navigate(`customer-preview`)}
-              sx={{ color: "#978CC8", textTransform: "uppercase !important" }}
+              sx={{ color: "#978CC8", }}
               startIcon={<Add />}
             >
-              Generate Customer Preview
+              Generate Qouted Landing Page
             </Button>
           )}
         </div>
@@ -414,7 +414,7 @@ function InvoiceDetails() {
             </Box>
             <Box>
               <Typography variant="h6" gutterBottom>
-                Invoice Details{" "}
+                Quote Details{" "}
                 {editInvoiceDetail ? (
                   <BorderColorOutlinedIcon
                     fontSize="20px"

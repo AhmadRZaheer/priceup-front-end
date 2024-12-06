@@ -5,7 +5,6 @@ import Modal from "@mui/material/Modal";
 import { Button, Chip } from "@mui/material";
 import {
   useFetchAdminLocation,
-  useFetchDataAdmin,
 } from "../../utilities/ApiHooks/superAdmin";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
