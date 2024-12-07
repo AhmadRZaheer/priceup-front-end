@@ -268,7 +268,7 @@ const ProjectInvoiceComponent = ({
               gap: 1,
             }}
           >
-            Invoice Creation
+            Create Quote Page
           </Typography>
           <Typography
             sx={{
@@ -279,7 +279,7 @@ const ProjectInvoiceComponent = ({
               opacity: "70%",
             }}
           >
-            Create your Invoices.
+            Create new quote page.
           </Typography>
         </Box>
         {projectState !== "create" ? (
@@ -688,7 +688,7 @@ const ProjectInvoiceComponent = ({
                   <Button
                     type="submit"
                     sx={{
-                      width: "150px",
+                      // width: "150px",
                       textTransform: "initial",
                       backgroundColor: "#8477da",
                       "&:hover": {
@@ -708,7 +708,7 @@ const ProjectInvoiceComponent = ({
                     {isLoading ? (
                       <CircularProgress sx={{ color: "#8477da" }} size={24} />
                     ) : projectState === "create" ? (
-                      "Save Invoice"
+                      "Save Quote Page"
                     ) : (
                       "Save Changes"
                     )}

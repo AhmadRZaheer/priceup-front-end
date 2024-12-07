@@ -101,7 +101,7 @@ export default function ProjectInvoices() {
             sx={{
               backgroundColor: "#8477DA",
               height: "44px",
-              width: { sm: "219px", xs: "197px" },
+              // width: { sm: "219px", xs: "197px" },
               "&:hover": { backgroundColor: "#8477DA" },
               color: "white",
               textTransform: "capitalize",
@@ -110,8 +110,8 @@ export default function ProjectInvoices() {
               padding: { sm: "10px 16px", xs: "5px 8px" },
             }}
           >
-            <Add sx={{ mr: { sm: 1.2, xs: 0.8 }, color: "#FFFFFF" }} />
-            Create New Invoice
+            <Add sx={{ mr: { sm: 1, xs: 0.8 }, color: "#FFFFFF" }} />
+            Create Quote Page
           </Button>
         </Box>
       </Box>

@@ -305,7 +305,7 @@ const ProjectInfoComponent = ({
                   },
                 }}
               >
-                View Invoice
+                View Quote Page
               </Button>
             ) : (
               <Button
@@ -332,7 +332,7 @@ const ProjectInfoComponent = ({
                   },
                 }}
               >
-                Create Invoice
+                Create Quote Page
                 {/* Customer Preview */}
               </Button>
             )}

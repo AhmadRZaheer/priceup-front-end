@@ -21,7 +21,7 @@ export default function BasicAccordion() {
         </AccordionSummary>
         <AccordionDetails>
           <Box>
-            <ChipsArray />
+            {/* <ChipsArray /> */}
           </Box>
         </AccordionDetails>
       </Accordion>
