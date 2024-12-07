@@ -4,7 +4,7 @@ import {
   Typography,
 } from "@mui/material";
 import { backendURL } from "../../utilities/common";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const NameAcronyms = ({ name, width, height, borderRadius = "100%", type }) => {
   let firstNameInitial = "";
@@ -60,6 +60,11 @@ const DefaultImage = ({ image, name, type = 1,style }) => {
     type === 1 || type === 3 ? 40 : type === 5 ? 31 : type === 6 ? 72 : 50;
 
   const open = Boolean(anchorEl);
+  useEffect(()=>{
+    if(image && imageError === true){
+      setImageError(false);
+    }
+  },[image])
   return (
     <>
       <Box
