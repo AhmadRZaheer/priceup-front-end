@@ -813,14 +813,14 @@ export const calculateAreaAndPerimeter = (
       const count = value["count"];
       const width = value["width"];
       const height = value["height"];
-      let calculatedWidth = 0;
-      let calculatedHeight = 0;
-      for(let i = 0; i < count; i++){
-        calculatedWidth += Number(width ?? 0);
-        calculatedHeight += Number(height ?? 0);
-      }
-      // for (let i = 0; i < count; i++) {
-        const panel = calculatePanel(calculatedWidth, calculatedHeight);
+      // let calculatedWidth = 0;
+      // let calculatedHeight = 0;
+      // for(let i = 0; i < count; i++){
+      //   calculatedWidth += Number(width ?? 0);
+      //   calculatedHeight += Number(height ?? 0);
+      // }
+      for (let i = 0; i < count; i++) {
+        const panel = calculatePanel(width, height);
         totalSqft += panel.sqft;
         totalPerimeter += panel.perimeter;
         panelWeight += getWeightByThickness(
@@ -829,7 +829,7 @@ export const calculateAreaAndPerimeter = (
           panel.sqft
         );
         console.log(panel.perimeter,'perimeter custom')
-      // }
+      }
     });
     // const { width, height } = measurements[panelKey];
 
