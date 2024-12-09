@@ -35,6 +35,9 @@ import CustomInputField from "@/components/ui-components/CustomInput";
 import { Close } from "@mui/icons-material";
 import CustomerSelect from "./CustomerSelect";
 import ProjectSelect from "./ProjectSelect";
+import { EstimateCategory } from "@/utilities/constants";
+import DefaultIcon from "@/Assets/columns.svg";
+import EstimateDataList from "./EstimateTable";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -58,7 +61,7 @@ const ProjectInvoiceComponent = ({
   const ShowerHardwareList = useSelector(getListData);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
-
+  const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
   const [copyLink, setCopyLink] = useState(false);
   const navigate = useNavigate();
   const {
@@ -116,15 +119,15 @@ const ProjectInvoiceComponent = ({
     wineCellars: WinelistData,
   };
   const EstimateListData = useMemo(() => {
-    if (estimatesList?.length > 0) {
+    if (selectedEstimateRows?.length > 0) {
       const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-        estimatesList,
+        selectedEstimateRows,
         hardwaresList,
         companySettings
       );
       return EstimateDeatilsData;
     }
-  }, [formik.values.project, estimatesList]);
+  }, [selectedEstimateRows]);
 
   useEffect(() => {
     refetch();
@@ -161,7 +164,7 @@ const ProjectInvoiceComponent = ({
     };
     const totalSum = EstimateListData?.reduce((accumulator, currentItem) => {
       return accumulator + currentItem.pricing.totalPrice;
-    }, 0);
+    }, 0);    
     const data = {
       customer_id: selectedCustomer?._id,
       source_id: selectedProject?._id,
@@ -178,7 +181,7 @@ const ProjectInvoiceComponent = ({
         data,
         apiRoute: `${backendURL}/invoices/save`,
       });
-      navigate(`/invoices/${response?._id}`);
+      navigate(`/invoices/${response?._id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
@@ -639,7 +642,7 @@ const ProjectInvoiceComponent = ({
                     sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                   >
                     <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Add Notes:
+                      Description:
                     </Typography>
                     <Box
                       sx={{
@@ -674,6 +677,10 @@ const ProjectInvoiceComponent = ({
                   </Box>
                 </Box>
               </Box>
+              {/** Estimate Table */}
+              <Box sx={{py:3}}>
+                <EstimateDataList projectId={selectedProject?._id} setSelectedEstimateRows={setSelectedEstimateRows} selectedEstimateRows={selectedEstimateRows} />
+              </Box>
               {/** Section 2 */}
               <Box
                 sx={{
@@ -699,6 +706,7 @@ const ProjectInvoiceComponent = ({
                       formik.values.customer === "" ||
                       formik.values.project === "" ||
                       formik.values.dueDate === null ||
+                      selectedEstimateRows.length < 1 ||
                       isLoading
                         ? true
                         : false

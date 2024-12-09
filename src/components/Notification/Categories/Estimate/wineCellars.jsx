@@ -43,7 +43,7 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
   const sqftArea = data.config?.sqftArea;
   const showEditButtonForEstimate =
     showEditButtonForEstimateStatus(decryptedToken);
-  return (
+   return (
     <Box sx={{ py: 4, pl: 14, pr: "60px" }}>
       <Stack direction="row" sx={{ justifyContent: "space-between" }}>
         <Stack direction="column">
@@ -52,7 +52,9 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
             <Box className="heading-txt">Square Foot</Box>&nbsp;: {sqftArea}
           </Typography>
           <Typography className="summaryData">
-            <Box className="heading-txt">Total Price</Box>&nbsp; : {data.cost?.toFixed(2)}</Typography>
+            <Box className="heading-txt">Total Price</Box>&nbsp; :{" "}
+            {data.cost?.toFixed(2)}
+          </Typography>
         </Stack>
         {showEditButtonForEstimate ? (
           <Button
@@ -97,14 +99,14 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
             {data.resourceInfoWithFullObjects?.hinges?.count})
           </Typography>
         )}
-        {["channel"].includes(data.config?.mountingState) &&
+        {/* {["channel"].includes(data.config?.mountingState) &&
           data.resourceInfoWithFullObjects?.mountingChannel && (
             <Typography className="summaryData">
               <Box className="heading-txt">Channel</Box>&nbsp; :{" "}
               {data.resourceInfoWithFullObjects?.mountingChannel?.name}
             </Typography>
-          )}
-        {/* {["channel"].includes(data.config?.mountingState) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='heading-txt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
+          )} */}
+        {["channel"].includes(data.config?.mountingState) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='heading-txt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
                     <>
                         {data.resourceInfoWithFullObjects?.wallClamp?.length ? <Typography className="summaryData"><Box className='heading-txt'>WallClamps</Box>&nbsp; : {data.resourceInfoWithFullObjects?.wallClamp?.map(
                             (row) => (
@@ -150,8 +152,8 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
                                     {row.item.name} ({row.count}),{" "}
                                 </span>
                             )
-                )}</Typography> : ''} */}
-        {/* {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item && (
+                )}</Typography> : ''} 
+         {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item && (
           <Typography className="summaryData">
             <Box className="heading-txt">Sliding Door System</Box>&nbsp; :{" "}
             {data.resourceInfoWithFullObjects?.slidingDoorSystem?.item?.name} (
@@ -164,7 +166,7 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
             {data.resourceInfoWithFullObjects?.header?.item?.name} (
             {data.resourceInfoWithFullObjects?.header?.count})
           </Typography>
-        )} */}
+        )}
         {data.resourceInfoWithFullObjects?.glassType?.item && (
           <Typography className="summaryData">
             <Box className="heading-txt">Glass Type</Box>&nbsp; :{" "}
@@ -173,29 +175,31 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
           </Typography>
         )}
         {data.resourceInfoWithFullObjects?.doorLock?.item && (
-        <Typography className="summaryData">
-        <Box className="heading-txt">Door Lock</Box>&nbsp; :{" "}
-        {data.resourceInfoWithFullObjects?.doorLock?.item?.name} (
-        {data.resourceInfoWithFullObjects?.doorLock?.count})
-      </Typography>
+          <Typography className="summaryData">
+            <Box className="heading-txt">Door Lock</Box>&nbsp; :{" "}
+            {data.resourceInfoWithFullObjects?.doorLock?.item?.name} (
+            {data.resourceInfoWithFullObjects?.doorLock?.count})
+          </Typography>
         )}
-        {/* <Typography className="summaryData">
+         <Typography className="summaryData">
           <Box className="heading-txt">1" Holes</Box>&nbsp; :{" "}
           {data.config?.oneInchHoles}
-        </Typography> */}
-        {/* <Typography className="summaryData">
+        </Typography> 
+        <Typography className="summaryData">
           <Box className="heading-txt">Hinge Cut Out</Box>&nbsp; :{" "}
           {data.config?.hingeCut}
-        </Typography> */}
+        </Typography>
         <Typography className="summaryData">
           <Box className="heading-txt">People</Box>&nbsp; :{" "}
           {data.config?.people}
         </Typography>
         <Typography className="summaryData">
-          <Box className="heading-txt">Hours for layout</Box>&nbsp; : {data.config?.hours}
+          <Box className="heading-txt">Hours for layout</Box>&nbsp; :{" "}
+          {data.config?.hours}
         </Typography>
         <Typography className="summaryData">
-          <Box className="heading-txt">Hours for door:</Box>&nbsp; : {data.config?.laborHoursForDoor ?? 0}
+          <Box className="heading-txt">Hours for door</Box>&nbsp; :{" "}
+          {data.config?.laborHoursForDoor ?? 0}
         </Typography>
         <Typography className="twTxt" sx={{ py: 1 }}>
           Additional Fields

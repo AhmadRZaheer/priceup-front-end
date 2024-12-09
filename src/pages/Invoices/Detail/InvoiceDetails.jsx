@@ -230,7 +230,7 @@ function InvoiceDetails() {
               sx={{ color: "#978CC8",  }}
               startIcon={<VisibilityIcon />}
             >
-              View Qouted Landing Page
+              View Quoted Landing Page
             </Button>
           ) : (
             <Button
@@ -239,7 +239,7 @@ function InvoiceDetails() {
               sx={{ color: "#978CC8", }}
               startIcon={<Add />}
             >
-              Generate Qouted Landing Page
+              Generate Quoted Landing Page
             </Button>
           )}
         </div>
@@ -363,7 +363,7 @@ function InvoiceDetails() {
           >
             <Box>
               <Typography variant="h6" gutterBottom>
-                Introduction {/* <IconButton sx={{p:0.5}}> */}
+                Description {/* <IconButton sx={{p:0.5}}> */}
                 {editNotes ? (
                   <BorderColorOutlinedIcon
                     fontSize="20px"

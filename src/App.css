@@ -486,3 +486,6 @@ input {
   font-family: 'Muli', sans-serif;
   margin-top: 0px !important;
 }
+.MuiDataGrid-columnHeaderTitleContainer{
+  background: #F3F5F6;
+}
