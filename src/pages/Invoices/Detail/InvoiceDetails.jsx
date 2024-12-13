@@ -196,7 +196,7 @@ function InvoiceDetails() {
                   type="text"
                   className="email-input"
                   placeholder="Customer Preview Link"
-                  value={`${frontendURL}/customer-invoice-preview/${data?._id}`}
+                  value={`${frontendURL}/customer-landing-page-preview/${data?._id}`}
                   disabled
                 />
                 <Tooltip
@@ -207,7 +207,7 @@ function InvoiceDetails() {
                     className="subscribe-btn"
                     onClick={() =>
                       handleCopyPreview(
-                        `${frontendURL}/customer-invoice-preview/${data?._id}`
+                        `${frontendURL}/customer-landing-page-preview/${data?._id}`
                       )
                     }
                   >

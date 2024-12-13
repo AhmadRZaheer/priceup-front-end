@@ -12,7 +12,7 @@ const columns = [
   {
     field: "Creator",
     sortable: false,
-    flex: 2.1,
+    flex: 1.8,
     headerClassName: "customHeaderClass",
     renderCell: (params) => {
       return (
@@ -94,7 +94,7 @@ const columns = [
     field: "Customer",
     sortable: false,
     headerClassName: "customHeaderClass",
-    flex: 2,
+    flex: 1.9,
     renderCell: (params) => {
       return (
         <>
@@ -194,7 +194,7 @@ const columns = [
     field: "Layout",
     headerClassName: "customHeaderClass",
     sortable: false,
-    flex: 1,
+    flex: 1.5,
     renderCell: (params) => {
       const layoutName =
         params?.row?.category === EstimateCategory.MIRRORS
@@ -222,7 +222,7 @@ export default function EstimateDataList({
   setSelectedEstimateRows,
   selectedEstimateRows,
 }) {
-  const url = `${backendURL}/estimates/by-project/${projectId}`;
+  const url = `${backendURL}/projects/all-estimate/${projectId}`;
   const {
     data: estimatesList,
     isFetched,
@@ -240,7 +240,7 @@ export default function EstimateDataList({
   const handleSelectionChange = (selectedRowIds) => {
     // Find the full objects of the selected rows
     const selectedData =
-      estimatesList?.estimates?.filter((row) =>
+      estimatesList?.filter((row) =>
         selectedRowIds.includes(row._id)
       ) || [];
     setSelectedEstimateRows(selectedData);
@@ -249,17 +249,18 @@ export default function EstimateDataList({
 
   const [page, setPage] = React.useState(1);
   const itemsPerPage = 10;
+  console.log(selectedEstimateRows,'selectedEstimateRows')
 
   return (
     <>
       <Typography sx={{ fontSize: 24, fontWeight: "bold", pb: 2 }}>
         Estimates
       </Typography>
-      {selectedEstimateRows.length > 0 ? (
+      {estimatesList?.length > 0 ? (
         <Paper sx={{ width: "100%" }}>
           <DataGrid
             getRowId={(row) => row._id}
-            rows={isFetched && estimatesList?.estimates}
+            rows={isFetched && estimatesList}
             columns={columns}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
@@ -270,14 +271,14 @@ export default function EstimateDataList({
             disableColumnMenu
             onRowSelectionModelChange={handleSelectionChange} // Pass handler here
           />
-          <Pagination
+          {/* <Pagination
             totalRecords={
               estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
             }
             itemsPerPage={itemsPerPage}
             page={page}
             setPage={setPage}
-          />
+          /> */}
         </Paper>
       ) : (
         <Box

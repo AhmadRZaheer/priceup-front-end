@@ -79,6 +79,7 @@ const ProjectInvoiceComponent = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      console.log(values,'asaaaaaaaaaaaaa')
       handleCraete(values);
     },
   });
@@ -137,7 +138,6 @@ const ProjectInvoiceComponent = ({
   }, [formik.values.customer]);
 
   const handleCraete = async (values) => {
-    console.log(values);
     const customer = customerList?.find(
       (data) => data?._id === selectedCustomer?._id
     );
@@ -164,24 +164,34 @@ const ProjectInvoiceComponent = ({
     };
     const totalSum = EstimateListData?.reduce((accumulator, currentItem) => {
       return accumulator + currentItem.pricing.totalPrice;
-    }, 0);    
+    }, 0);
+    const currentDate = values.dueDate;
+    const updatedDate = currentDate.add(15, "day");
+    // ISO format mein convert karein
+    // const formattedDate = currentDate.toISOString();
+    const customerPayLoad = {
+      link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
+      expiresAt: updatedDate,
+    };
     const data = {
       customer_id: selectedCustomer?._id,
-      source_id: selectedProject?._id,
-      dueDate: values.dueDate,
-      notes: values.notes,
+      project_id: selectedProject?._id,
+      customerPreview: customerPayLoad,
+      description: values.notes,
       customer: customerObject,
-      source: sourceObject,
-      items: EstimateListData?.length > 0 ? EstimateListData : [],
-      subTotal: totalSum,
-      grandTotal: totalSum,
+      project: sourceObject,
+      estimates: EstimateListData?.length > 0 ? EstimateListData : [],
+      company: {},
+      content: {},
+      // subTotal: totalSum,
+      // grandTotal: totalSum,
     };
     try {
       const response = await createInvoice({
         data,
-        apiRoute: `${backendURL}/invoices/save`,
+        apiRoute: `${backendURL}/projects/landing-page-preview`,
       });
-      navigate(`/invoices/${response?._id}/customer-preview`);
+      navigate(`/invoices/${response?.project_id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
@@ -251,159 +261,229 @@ const ProjectInvoiceComponent = ({
         background: "transparent",
         padding: { sm: 0, xs: "60px 8px 8px 8px" },
         width: { sm: "auto", xs: "auto", margin: "0px auto" },
+        overflowX:'hidden'
       }}
     >
-      <Box
-        sx={{
-          p: { sm: "0px 0px 20px 0px", xs: "20px 0px 20px 0px" },
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
-        <Box>
-          <Typography
-            sx={{
-              fontSize: { lg: 24, md: 20 },
-              fontWeight: 600,
-              color: "#000000",
-              display: "flex",
-              lineHeight: "32.78px",
-              gap: 1,
-            }}
-          >
-            Create Quote Page
-          </Typography>
-          <Typography
-            sx={{
-              color: "#212528",
-              fontSize: { lg: 16, md: 14 },
-              fontWeight: 600,
-              lineHeight: "21.86px",
-              opacity: "70%",
-            }}
-          >
-            Create new quote page.
-          </Typography>
-        </Box>
-        {projectState !== "create" ? (
-          <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
-            {projectData?.invoicePreview?._id ? (
-              <Box>
-                <div className="subscribe-box">
-                  <input
-                    type="email"
-                    className="email-input"
-                    placeholder="Customer Preview Link"
-                    value={`${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`}
-                    disabled
-                  />
-                  <Tooltip
-                    placement="top"
-                    title={copyLink ? "Copied" : "Copy Customer Preview Link"}
-                  >
-                    <button
-                      className="subscribe-btn"
-                      onClick={() =>
-                        handleCopyPreview(
-                          `${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`
-                        )
-                      }
-                    >
-                      {copyLink ? (
-                        <DoneOutlinedIcon sx={{ fontSize: "19px" }} />
-                      ) : (
-                        <ContentCopyIcon sx={{ fontSize: "19px" }} />
-                      )}
-                    </button>
-                  </Tooltip>
-                </div>
-              </Box>
-            ) : (
-              ""
-            )}
-            <Button
-              fullWidth
-              variant="contained"
-              onClick={() => navigate(`/invoices/new-invoice`)}
-              sx={{
-                backgroundColor: "#8477DA",
-                height: "44px",
-                width: { sm: "auto", xs: "187px" },
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 1,
-                fontSize: { lg: 16, md: 15, xs: 12 },
-                padding: {
-                  sm: "10px 16px  !important",
-                  xs: "5px 5px !important",
-                },
-              }}
-            >
-              Edit Invoice
-            </Button>
-          </Box>
-        ) : (
-          ""
-        )}
-      </Box>
       <Box>
         <Box
-          sx={{
-            width: { md: "auto", xs: "100%" },
-            background: "#F3F5F6",
-            border: "1px solid #D4DBDF",
-            padding: { md: 2, xs: 1 },
-            borderRadius: "4px 4px 0px 0px",
-          }}
-        >
-          <Typography
-            sx={{
-              fontSize: "14px",
-              fontWeight: 600,
-              lineHeight: "21px",
-              color: "#000000",
-            }}
-          >
-            {projectState === "edit" ? "Summary" : "Invoice Details"}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            background: "#FFFF",
-          }}
+          sx={
+            {
+              // background: "#FFFF",
+            }
+          }
         >
           {projectState !== "edit" && (
-            <form onSubmit={formik.handleSubmit} style={{ padding: "16px" }}>
+            <form onSubmit={formik.handleSubmit} style={{}}>
               <Box
                 sx={{
+                  p: { sm: "0px 0px 20px 0px", xs: "20px 0px 20px 0px" },
                   display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
-                  aligItems: "baseline",
-                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: { lg: 24, md: 20 },
+                      fontWeight: 600,
+                      color: "#000000",
+                      display: "flex",
+                      lineHeight: "32.78px",
+                      gap: 1,
+                    }}
+                  >
+                    Create Quote Page
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: "#212528",
+                      fontSize: { lg: 16, md: 14 },
+                      fontWeight: 600,
+                      lineHeight: "21.86px",
+                      opacity: "70%",
+                    }}
+                  >
+                    Create new quote page.
+                  </Typography>
+                </Box>
+                {projectState !== "create" ? (
+                  <Box sx={{ alignSelf: "center", display: "flex", gap: 2 }}>
+                    {projectData?.invoicePreview?._id ? (
+                      <Box>
+                        <div className="subscribe-box">
+                          <input
+                            type="email"
+                            className="email-input"
+                            placeholder="Customer Preview Link"
+                            value={`${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`}
+                            disabled
+                          />
+                          <Tooltip
+                            placement="top"
+                            title={
+                              copyLink ? "Copied" : "Copy Customer Preview Link"
+                            }
+                          >
+                            <button
+                              className="subscribe-btn"
+                              onClick={() =>
+                                handleCopyPreview(
+                                  `${frontendURL}/custom-landing/${projectData?.invoicePreview?._id}`
+                                )
+                              }
+                            >
+                              {copyLink ? (
+                                <DoneOutlinedIcon sx={{ fontSize: "19px" }} />
+                              ) : (
+                                <ContentCopyIcon sx={{ fontSize: "19px" }} />
+                              )}
+                            </button>
+                          </Tooltip>
+                        </div>
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={() => navigate(`/invoices/new-invoice`)}
+                      sx={{
+                        backgroundColor: "#8477DA",
+                        height: "44px",
+                        width: { sm: "auto", xs: "187px" },
+                        "&:hover": { backgroundColor: "#8477DA" },
+                        color: "white",
+                        textTransform: "capitalize",
+                        borderRadius: 1,
+                        fontSize: { lg: 16, md: 15, xs: 12 },
+                        padding: {
+                          sm: "10px 16px  !important",
+                          xs: "5px 5px !important",
+                        },
+                      }}
+                    >
+                      Edit Invoice
+                    </Button>
+                  </Box>
+                ) : (
+                  ""
+                )}
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  <Button
+                    fullWidth
+                    target="_blank"
+                    variant="contained"
+                    onClick={() =>
+                      window.open(
+                        `/invoices/${projectID}/customer-preview`,
+                        "_blank"
+                      )
+                    }
+                    sx={{
+                      backgroundColor: "#8477DA",
+                      height: "44px",
+                      width: { sm: "auto", xs: "187px" },
+                      "&:hover": { backgroundColor: "#8477DA" },
+                      color: "white",
+                      textTransform: "capitalize",
+                      borderRadius: 1,
+                      fontSize: { lg: 16, md: 15, xs: 12 },
+                      padding: {
+                        sm: "10px 16px  !important",
+                        xs: "5px 5px !important",
+                      },
+                    }}
+                  >
+                    View Preview Page
+                  </Button>
+                  <Button
+                    type="submit"
+                    sx={{
+                      // width: "150px",
+                      textTransform: "initial",
+                      backgroundColor: "#8477da",
+                      height: "44px",
+                      "&:hover": {
+                        backgroundColor: "#8477da",
+                      },
+                    }}
+                    disabled={
+                      formik.values.customer === "" ||
+                      formik.values.project === "" ||
+                      formik.values.dueDate === null ||
+                      selectedEstimateRows.length < 1 ||
+                      isLoading
+                        ? true
+                        : false
+                    }
+                    variant="contained"
+                  >
+                    {isLoading ? (
+                      <CircularProgress sx={{ color: "#8477da" }} size={24} />
+                    ) : projectState === "create" ? (
+                      "Save Quote Page"
+                    ) : (
+                      "Save Changes"
+                    )}
+                  </Button>
+                </Box>
+              </Box>
+              <Box
+                sx={{
+                  background: "#FFFF",
                 }}
               >
                 <Box
                   sx={{
+                    width: { md: "auto", xs: "100%" },
+                    background: "#F3F5F6",
+                    border: "1px solid #D4DBDF",
+                    padding: { md: 2, xs: 1 },
+                    borderRadius: "4px 4px 0px 0px",
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: "14px",
+                      fontWeight: 600,
+                      lineHeight: "21px",
+                      color: "#000000",
+                    }}
+                  >
+                    {projectState === "edit" ? "Summary" : "Invoice Details"}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
                     display: "flex",
+                    flexDirection: "row",
                     gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
+                    aligItems: "baseline",
+                    width: "100%",
+                    padding: "16px",
                   }}
                 >
                   <Box
                     sx={{
                       display: "flex",
+                      gap: 2,
                       flexDirection: "column",
+                      width: { sm: "25%", xs: "100%" },
                     }}
                   >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Select Customer:{" "}
-                      </label>
-                    </Box>
-                    {/* <FormControl
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box paddingBottom={0.6}>
+                        <label className="label-text" htmlFor="status">
+                          Select Customer:{" "}
+                        </label>
+                      </Box>
+                      {/* <FormControl
                       size="small"
                       className="custom-textfield"
                       fullWidth
@@ -439,63 +519,63 @@ const ProjectInvoiceComponent = ({
                       </Select>
                     </FormControl> */}
 
-                    <CustomInputField
-                      id="customer"
-                      name="customer"
-                      // label="Select a Customer"
-                      size="small"
-                      variant="outlined"
-                      onClick={handleCustomerSelect}
-                      InputProps={{
-                        endAdornment: selectedCustomer ? (
-                          <InputAdornment
-                            position="end"
-                            sx={{ cursor: "pointer" }}
-                            onClick={(event) => {
-                              handleCustomerUnSelect(event);
-                            }}
-                          >
-                            <Close sx={{}} />
-                          </InputAdornment>
-                        ) : (
-                          ""
-                        ),
-                        readOnly: true,
-                        style: {
-                          color: "black",
-                          borderRadius: 4,
-                          backgroundColor: "white",
-                        },
-                      }}
-                      sx={{
-                        color: { sm: "black", xs: "white" },
-                        width: "100%",
-                      }}
-                      value={formik.values?.customer}
-                      onChange={() => {}}
-                    />
+                      <CustomInputField
+                        id="customer"
+                        name="customer"
+                        // label="Select a Customer"
+                        size="small"
+                        variant="outlined"
+                        onClick={handleCustomerSelect}
+                        InputProps={{
+                          endAdornment: selectedCustomer ? (
+                            <InputAdornment
+                              position="end"
+                              sx={{ cursor: "pointer" }}
+                              onClick={(event) => {
+                                handleCustomerUnSelect(event);
+                              }}
+                            >
+                              <Close sx={{}} />
+                            </InputAdornment>
+                          ) : (
+                            ""
+                          ),
+                          readOnly: true,
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            backgroundColor: "white",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={formik.values?.customer}
+                        onChange={() => {}}
+                      />
+                    </Box>
                   </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
-                  }}
-                >
                   <Box
                     sx={{
                       display: "flex",
+                      gap: 2,
                       flexDirection: "column",
+                      width: { sm: "25%", xs: "100%" },
                     }}
                   >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Select Project:{" "}
-                      </label>
-                    </Box>
-                    {/* <FormControl
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                      }}
+                    >
+                      <Box paddingBottom={0.6}>
+                        <label className="label-text" htmlFor="status">
+                          Select Project:{" "}
+                        </label>
+                      </Box>
+                      {/* <FormControl
                       size="small"
                       className="custom-textfield"
                       fullWidth
@@ -537,152 +617,159 @@ const ProjectInvoiceComponent = ({
                         )}
                       </Select>
                     </FormControl> */}
-                    <CustomInputField
-                      disabled={!selectedCustomer}
-                      id="address"
-                      name="address"
-                      // label="Select an Address"
-                      size="small"
-                      variant="outlined"
-                      onClick={handleProjectSelect}
-                      InputProps={{
-                        endAdornment: selectedProject ? (
-                          <InputAdornment
-                            position="end"
-                            sx={{ cursor: "pointer" }}
-                            onClick={(event) => {
-                              handleProjectUnSelect(event);
-                            }}
-                          >
-                            <Close sx={{}} />
-                          </InputAdornment>
-                        ) : (
-                          ""
-                        ),
-                        readOnly: true,
-                        style: {
-                          color: "black",
-                          borderRadius: 4,
-                          backgroundColor: "white",
-                        },
-                      }}
+                      <CustomInputField
+                        disabled={!selectedCustomer}
+                        id="address"
+                        name="address"
+                        // label="Select an Address"
+                        size="small"
+                        variant="outlined"
+                        onClick={handleProjectSelect}
+                        InputProps={{
+                          endAdornment: selectedProject ? (
+                            <InputAdornment
+                              position="end"
+                              sx={{ cursor: "pointer" }}
+                              onClick={(event) => {
+                                handleProjectUnSelect(event);
+                              }}
+                            >
+                              <Close sx={{}} />
+                            </InputAdornment>
+                          ) : (
+                            ""
+                          ),
+                          readOnly: true,
+                          style: {
+                            color: "black",
+                            borderRadius: 4,
+                            backgroundColor: "white",
+                          },
+                        }}
+                        sx={{
+                          color: { sm: "black", xs: "white" },
+                          width: "100%",
+                        }}
+                        value={formik.values.project}
+                      />
+                    </Box>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      flexDirection: "column",
+                      width: { sm: "25%", xs: "100%" },
+                    }}
+                  >
+                    <Box
                       sx={{
-                        color: { sm: "black", xs: "white" },
-                        width: "100%",
+                        display: "flex",
+                        flexDirection: "column",
                       }}
-                      value={formik.values.project}
-                    />
+                    >
+                      <Box paddingBottom={0.6}>
+                        <label className="label-text" htmlFor="status">
+                          Due Date:{" "}
+                        </label>
+                      </Box>
+                      <Box>
+                        <DesktopDatePicker
+                          inputFormat="MM/DD/YYYY"
+                          className="custom-textfield"
+                          value={formik.values.dueDate}
+                          minDate={dayjs()}
+                          onChange={(newDate) =>
+                            formik.setFieldValue("dueDate", newDate)
+                          }
+                          sx={{
+                            width: "100%",
+                            "& .MuiInputBase-root": {
+                              height: 39,
+                              backgroundColor: "white",
+                            },
+                            "& .MuiInputBase-input": {
+                              fontSize: "0.875rem",
+                              padding: "8px 14px",
+                            },
+                            "& .MuiInputLabel-root": {
+                              fontSize: "14px",
+                              fontWeight: 400,
+                              fontFamily: '"Roboto",sans-serif !important',
+                              top: "-5px",
+                              color: "#000000",
+                            },
+                          }}
+                          renderInput={(params) => (
+                            <TextField fullWidth {...params} size="small" />
+                          )}
+                        />
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
                 <Box
                   sx={{
                     display: "flex",
+                    flexDirection: "row",
                     gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
+                    aligItems: "baseline",
+                    width: "100%",
+                    padding: "16px",
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Due Date:{" "}
-                      </label>
-                    </Box>
-                    <Box>
-                      <DesktopDatePicker
-                        inputFormat="MM/DD/YYYY"
-                        className="custom-textfield"
-                        value={formik.values.dueDate}
-                        minDate={dayjs()}
-                        onChange={(newDate) =>
-                          formik.setFieldValue("dueDate", newDate)
-                        }
-                        sx={{
-                          width: "100%",
-                          "& .MuiInputBase-root": {
-                            height: 39,
-                            backgroundColor: "white",
-                          },
-                          "& .MuiInputBase-input": {
-                            fontSize: "0.875rem",
-                            padding: "8px 14px",
-                          },
-                          "& .MuiInputLabel-root": {
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            fontFamily: '"Roboto",sans-serif !important',
-                            top: "-5px",
-                            color: "#000000",
-                          },
-                        }}
-                        renderInput={(params) => (
-                          <TextField fullWidth {...params} size="small" />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
-                  aligItems: "baseline",
-                  width: "100%",
-                }}
-              >
-                <Box sx={{ width: { sm: "51.1%", xs: "100%" }, pt: 1 }}>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Description:
-                    </Typography>
+                  <Box sx={{ width: { sm: "51.1%", xs: "100%" }, pt: 1 }}>
                     <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        paddingY: { sm: 0, xs: 1 },
-                        width: "100%",
-                      }}
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                     >
-                      <TextareaAutosize
-                        style={{
-                          padding: "10px",
-                          borderColor: "#cccc",
-                          borderRadius: "5px",
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Description:
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                          paddingY: { sm: 0, xs: 1 },
+                          width: "100%",
                         }}
-                        className="custom-textfield"
-                        color="neutral"
-                        // cols={isMobile ? 38 : 50}
-                        minRows={5}
-                        maxRows={19}
-                        id="notes"
-                        name="notes"
-                        placeholder="Enter Additional Notes"
-                        size="large"
-                        variant="outlined"
-                        sx={{ padding: "10px" }}
-                        value={formik.values.notes}
-                        onChange={formik.handleChange}
-                      />
+                      >
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          // cols={isMobile ? 38 : 50}
+                          minRows={5}
+                          maxRows={19}
+                          id="notes"
+                          name="notes"
+                          placeholder="Enter Additional Notes"
+                          size="large"
+                          variant="outlined"
+                          sx={{ padding: "10px" }}
+                          value={formik.values.notes}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
                     </Box>
                   </Box>
                 </Box>
+                {/** Estimate Table */}
+                <Box sx={{ py: 3, px: "16px" }}>
+                  <EstimateDataList
+                    projectId={selectedProject?._id}
+                    setSelectedEstimateRows={setSelectedEstimateRows}
+                    selectedEstimateRows={selectedEstimateRows}
+                  />
+                </Box>
               </Box>
-              {/** Estimate Table */}
-              <Box sx={{py:3}}>
-                <EstimateDataList projectId={selectedProject?._id} setSelectedEstimateRows={setSelectedEstimateRows} selectedEstimateRows={selectedEstimateRows} />
-              </Box>
+
               {/** Section 2 */}
-              <Box
+              {/* <Box
                 sx={{
                   display: "flex",
                   justifyContent: "space-between",
@@ -722,7 +809,7 @@ const ProjectInvoiceComponent = ({
                     )}
                   </Button>
                 </Box>
-              </Box>
+              </Box> */}
             </form>
           )}
           {projectState === "edit" && (

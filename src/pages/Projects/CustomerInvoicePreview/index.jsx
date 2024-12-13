@@ -35,20 +35,20 @@ const CustomerInvoicePreview = () => {
     refetch: refetchData,
     isFetched,
     isFetching,
-  } = useFetchSingleDocument(`${backendURL}/invoices/${id}`);
+  } = useFetchSingleDocument(`${backendURL}/projects/landing-page-preview/${id}`);
 
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   // const selectedImages = useSelector(getSelectedImages);
-  const { mutate: generatePage, isLoading, isSuccess } = useEditDocument();
+  const { mutateAsync: generatePage, isLoading, isSuccess } = useEditDocument();
 
   const currentDate = new Date();
   currentDate.setDate(currentDate.getDate() + 15);
   const options = { year: "numeric", month: "long", day: "numeric" };
   const futureDate = currentDate.toLocaleDateString(undefined, options);
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const projectId = decodedToken?.company_id;
     // Aaj ki date lein
     const currentDate = new Date();
@@ -58,10 +58,17 @@ const CustomerInvoicePreview = () => {
     const formattedDate = currentDate.toISOString();
 
     const customerPayLoad = {
-      link: `${frontendURL}/customer-invoice-preview/${id}`,
+      link: `${frontendURL}/customer-landing-page-preview/${id}`,
       expiresAt: formattedDate,
-    };    
-    generatePage({ data:{customerPreview:customerPayLoad}, apiRoute: `${backendURL}/invoices/${id}` });
+    }; 
+    try {
+    const response = await generatePage({ data:{customerPreview:customerPayLoad,content:{}}, apiRoute: `${backendURL}/projects/landing-page-preview/${id}` });
+      if(response){
+        navigate(`/projects/${response.project_id}`);
+      }
+    } catch (error) {
+      console.error(error)
+    }   
   };
   useEffect(() => {
     if (isSuccess) {
@@ -94,7 +101,7 @@ const CustomerInvoicePreview = () => {
           >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <NavLink
-                to={id ? `/invoices/${id}` : "/invoices"}
+                to={id ? `/projects/${id}` : "/projects"}
                 style={{ display: "flex", alignSelf: "center" }}
               >
                 <Box
@@ -159,7 +166,7 @@ const CustomerInvoicePreview = () => {
             </Button>
           </Box>
         </Box>
-        <Box sx={{ mt: "60px" }}>
+        <Box sx={{ mt: "60px",overflowX:'hidden',background:'white' }}>
           <CustomizeLandingPage
             selectedData={selectedData}
             refetchData={refetchData}

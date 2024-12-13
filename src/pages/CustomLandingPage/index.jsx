@@ -25,7 +25,7 @@ const CustomLandingPage = () => {
     refetch: refetchData,
     isFetching,
     isFetched,
-  } = useFetchSingleDocument(`${backendURL}/invoices/${id}/customer-preview`);
+  } = useFetchSingleDocument(`${backendURL}/invoices/${id}/customer-preview`)
 
   useEffect(() => {
     if (id) {

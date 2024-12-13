@@ -223,7 +223,7 @@ const AppRoutes = () => {
         ""
       )}
       
-      <Route path="/customer-invoice-preview/:id" element={<CustomLandingPage />} />
+      <Route path="/customer-landing-page-preview/:id" element={<CustomLandingPage />} />
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />
