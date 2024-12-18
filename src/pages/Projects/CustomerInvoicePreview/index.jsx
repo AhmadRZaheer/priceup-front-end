@@ -1,7 +1,7 @@
 import CommonLayout from "@/components/CommonLayout";
 import CustomLandingPage from "@/pages/CustomLandingPage";
 import { Box, Button, CircularProgress, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate, useParams } from "react-router-dom";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import EngineeringIcon from "@mui/icons-material/Engineering";
@@ -35,7 +35,9 @@ const CustomerInvoicePreview = () => {
     refetch: refetchData,
     isFetched,
     isFetching,
-  } = useFetchSingleDocument(`${backendURL}/projects/landing-page-preview/${id}`);
+  } = useFetchSingleDocument(
+    `${backendURL}/projects/landing-page-preview/${id}`
+  );
 
   const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
@@ -60,15 +62,18 @@ const CustomerInvoicePreview = () => {
     const customerPayLoad = {
       link: `${frontendURL}/customer-landing-page-preview/${id}`,
       expiresAt: formattedDate,
-    }; 
+    };
     try {
-    const response = await generatePage({ data:{customerPreview:customerPayLoad,content:{}}, apiRoute: `${backendURL}/projects/landing-page-preview/${id}` });
-      if(response){
+      const response = await generatePage({
+        data: { customerPreview: customerPayLoad, content: {} },
+        apiRoute: `${backendURL}/projects/landing-page-preview/${id}`,
+      });
+      if (response) {
         navigate(`/projects/${response.project_id}`);
       }
     } catch (error) {
-      console.error(error)
-    }   
+      console.error(error);
+    }
   };
   useEffect(() => {
     if (isSuccess) {
@@ -76,106 +81,116 @@ const CustomerInvoicePreview = () => {
     }
   }, [isSuccess]);
   return (
-    <CommonLayout>
-      <Box className="econtent-wrapper">
+    // <CommonLayout>
+    <Box className="econtent-wrapper">
+      <Box
+        sx={{
+          position: "fixed",
+          width: "-webkit-fill-available",
+          // mr: "21px",
+          // top: "82px",
+          zIndex: 10000,
+        }}
+      >
         <Box
           sx={{
-            position: "fixed",
-            width: "-webkit-fill-available",
-            mr: "21px",
-            top: "82px",
-            zIndex: 10000,
+            backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
+            borderBottomRightRadius: { xs: "16px", sm: "0px" },
+            borderBottomLeftRadius: { xs: "16px", sm: "0px" },
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: { sm: 0, xs: 5 },
+            py: 1.5,
           }}
         >
-          <Box
-            sx={{
-              backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
-              borderBottomRightRadius: { xs: "16px", sm: "0px" },
-              borderBottomLeftRadius: { xs: "16px", sm: "0px" },
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginTop: { sm: 0, xs: 5 },
-              py: 1.5,
-            }}
-          >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <NavLink
-                to={id ? `/projects/${id}` : "/projects"}
-                style={{ display: "flex", alignSelf: "center" }}
-              >
-                <Box
-                  sx={{
-                    color: "black",
-                    display: "flex",
-                  }}
-                >
-                  <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
-                </Box>
-              </NavLink>
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <NavLink
+              to={
+                selectedData?.project_id
+                  ? `/projects/${selectedData?.project_id}`
+                  : "/projects"
+              }
+              style={{ display: "flex", alignSelf: "center" }}
+            >
               <Box
                 sx={{
-                  color: { sm: "black", xs: "white" },
-                  fontSize: { xs: "20px", sm: "20px" },
-                  textAlign: { xs: "start", sm: "center" },
-                  fontWeight: 600,
+                  color: "black",
+                  display: "flex",
                 }}
               >
-                Quoted Landing Page
+                <KeyboardArrowLeftIcon sx={{ fontSize: "35px" }} />
               </Box>
-            </Box>
-            <Typography
+            </NavLink>
+            <Box
               sx={{
-                color: "#212528",
-                fontSize: "16px",
+                color: { sm: "black", xs: "white" },
+                fontSize: { xs: "20px", sm: "20px" },
+                textAlign: { xs: "start", sm: "center" },
                 fontWeight: 600,
-                lineHeight: "21.86px",
               }}
             >
-              This well generate a preview link for customer which will be valid
-              till {futureDate}.
-            </Typography>
-            <Button
-              disabled={isLoading}
-              onClick={handleClick}
-              fullWidth
-              variant="contained"
-              sx={{
-                backgroundColor: "#8477DA",
-                height: "44px",
-                width: { sm: "auto", xs: "187px" },
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 1,
-                fontSize: { lg: 16, md: 15, xs: 12 },
-                padding: {
-                  sm: "10px 16px  !important",
-                  xs: "5px 5px !important",
-                },
-              }}
-            >
-              {isLoading ? (
-                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-              ) : (
-                <>
-                  <SaveOutlined sx={{ pr: 1 }} />
-                  Save
-                </>
-              )}
-            </Button>
+              Quoted Landing Page
+            </Box>
           </Box>
-        </Box>
-        <Box sx={{ mt: "60px",overflowX:'hidden',background:'white' }}>
-          <CustomizeLandingPage
-            selectedData={selectedData}
-            refetchData={refetchData}
-            isFetched={isFetched}
-            isFetching={isFetching}
-          />
+          <Typography
+            sx={{
+              color: "#212528",
+              fontSize: "16px",
+              fontWeight: 600,
+              lineHeight: "21.86px",
+            }}
+          >
+            This well generate a preview link for customer which will be valid
+            till {futureDate}.
+          </Typography>
+          <Button
+            disabled={isLoading}
+            onClick={handleClick}
+            fullWidth
+            variant="contained"
+            sx={{
+              backgroundColor: "#8477DA",
+              height: "44px",
+              width: { sm: "auto", xs: "187px" },
+              "&:hover": { backgroundColor: "#8477DA" },
+              color: "white",
+              textTransform: "capitalize",
+              borderRadius: 1,
+              fontSize: { lg: 16, md: 15, xs: 12 },
+              padding: {
+                sm: "10px 16px  !important",
+                xs: "5px 5px !important",
+              },
+            }}
+          >
+            {isLoading ? (
+              <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+            ) : (
+              <>
+                <SaveOutlined sx={{ pr: 1 }} />
+                Save
+              </>
+            )}
+          </Button>
         </Box>
       </Box>
-    </CommonLayout>
+      <Box
+        sx={{
+          // mt: "60px",
+          overflowX: "hidden",
+          background: "white",
+        }}
+      >
+        <CustomizeLandingPage
+          selectedData={selectedData}
+          refetchData={refetchData}
+          isFetched={isFetched}
+          isFetching={isFetching}
+        />
+      </Box>
+    </Box>
+    // </CommonLayout>
   );
 };
 

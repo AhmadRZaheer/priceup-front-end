@@ -33,6 +33,7 @@ import {
   updateMeasurements,
 } from "@/redux/estimateCalculations";
 import { calculateAreaAndPerimeter } from "./common";
+import CustomImage from "../Assets/customlayoutimage.svg";
 import { renderMeasurementSides as renderMeasurementSidesOfMirror } from "@/utilities/mirrorEstimates";
 export const generateNotificationsForCurrentItem = (
   estimateState,
@@ -885,12 +886,14 @@ const generateInvoiceItemForShowers = async (
     estimate.config.layout_id
   );
   summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.image = estimate?.settings?.image ?? null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.perimeter = estimate.config?.perimeter;
   summaryObject.oneInchHoles = estimate.config.oneInchHoles;
@@ -1281,11 +1284,13 @@ const generateInvoiceItemForMirrors = async (
     estimate.config?.measurements
   );
   summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.layout = "Mirror";
+  summaryObject.image = null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.simpleHoles = estimate.config.simpleHoles;
   summaryObject.lightHoles = estimate.config.lightHoles;
@@ -1442,12 +1447,14 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config.layout_id
   );
   summaryObject.estimate_id= estimate._id;
+  summaryObject.config= estimate;
   summaryObject.name= estimate.name;
   summaryObject.label= estimate.label;
   summaryObject.category= estimate.category;
   summaryObject.measurements = measurementString;
   summaryObject.doorWidth = estimate.config.doorWidth;
   summaryObject.layout = estimate?.settings?.name ?? "Custom shower";
+  summaryObject.image = estimate?.settings?.image ?? null;
   summaryObject.sqftArea = estimate.config?.sqftArea;
   summaryObject.perimeter = estimate.config?.perimeter;
   summaryObject.oneInchHoles = estimate.config.oneInchHoles;

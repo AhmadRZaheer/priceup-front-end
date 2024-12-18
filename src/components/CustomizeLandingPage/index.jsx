@@ -96,6 +96,14 @@ const controls = {
   viewAdditionalFields: true,
 };
 
+const pdfLocationData = {
+  name: "GCS Glass & Mirror",
+  street: "20634 N. 28th Street, Suite 150",
+  state: "Phoenix",
+  zipCode: "AZ 85050",
+  website: "www.gcs.glass",
+};
+
 const CustomizeLandingPage = ({
   selectedData,
   refetchData,
@@ -526,7 +534,7 @@ const CustomizeLandingPage = ({
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  David Gallegos
+                  {selectedData?.customer?.name}
                 </Typography>
                 <Typography
                   sx={{
@@ -536,7 +544,8 @@ const CustomizeLandingPage = ({
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  2212 Sumac Drive, Little Elm, Texas, 75068, United States
+                  {selectedData?.customer?.address}
+                  {/* 2212 Sumac Drive, Little Elm, Texas, 75068, United States */}
                 </Typography>
               </Box>
             </Box>
@@ -1018,7 +1027,7 @@ const CustomizeLandingPage = ({
                       controls={{
                         ...controls,
                       }}
-                      data={{ quote: data, location: pdfLocationData }}
+                      data={{ quote: data?.config, location: pdfLocationData }}
                       key={`pdfFile${index}`}
                     />
                   </PDFViewer> 
@@ -1504,7 +1513,7 @@ const CustomizeLandingPage = ({
           )}
         </Box>
       </Container> */}
-      <SigntureSection />
+      <SigntureSection refetchData={refetchData} />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
           sx={{

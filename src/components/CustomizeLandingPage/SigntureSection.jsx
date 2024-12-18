@@ -9,10 +9,16 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import CustomInputField from "../ui-components/CustomInput";
+import SignatureCanvas from "react-signature-canvas";
+import PaymentModel from "./PaymentModel";
 
-const SigntureSection = () => {
+const SigntureSection = ({ refetchData }) => {
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const handleOpenEditModal = () => setOpenEditModal(true);
+  const handleCloseEditModal = () => setOpenEditModal(false);
+
   const MAX_FILE_SIZE = 1 * 1024 * 1024;
   const fileInputRef = useRef(null);
   const handleUploadClick = () => {
@@ -44,8 +50,34 @@ const SigntureSection = () => {
       }
     }
   };
+
+  const signaturePadRef = useRef(null);
+  const [signatureURL, setSignatureURL] = useState(null);
+  const [isPadOpen, setIsPadOpen] = useState(false);
+
+  const handleAddSignature = () => {
+    // Get the trimmed canvas URL
+    const url = signaturePadRef.current
+      .getTrimmedCanvas()
+      .toDataURL("image/png");
+    setSignatureURL(url);
+    setIsPadOpen(true);
+  };
+  const handleClearSignature = () => {
+    signaturePadRef.current.clear();
+    setSignatureURL(null); // Reset the signature URL
+    setIsPadOpen(false);
+  };
+
   return (
-    <Box sx={{ background: "#000000", pb: 3,pt:4,borderTop:'5px solid #F95500' }}>
+    <Box
+      sx={{
+        background: "#000000",
+        pb: 3,
+        pt: 4,
+        borderTop: "5px solid #F95500",
+      }}
+    >
       <Container maxWidth="lg">
         <Typography
           sx={{
@@ -75,7 +107,7 @@ const SigntureSection = () => {
                       lineHeight: "26px",
                     }}
                   >
-                    Media Upload
+                    Write Signature
                   </Typography>
                   <Typography
                     sx={{
@@ -85,7 +117,7 @@ const SigntureSection = () => {
                       fontSize: "14px",
                     }}
                   >
-                    Upload your E-Signature here:
+                    Write your E-Signature here:
                   </Typography>
                 </Box>
                 <Box sx={{ alignContent: "center" }}>
@@ -93,7 +125,70 @@ const SigntureSection = () => {
                 </Box>
               </Box>
 
-              <Box sx={{ pt: 2 }}>
+              <Box sx={{ pt: 1 }}>
+                <SignatureCanvas
+                  ref={signaturePadRef}
+                  penColor="darkblue"
+                  canvasProps={{
+                    height: 170,
+                    className: "signature-canvas",
+                    style: {
+                      border: "1px solid #E3E8EF",
+                      width: "-webkit-fill-available",
+                    },
+                  }}
+                />
+                <Stack
+                  sx={{ marginTop: "5px" }}
+                  direction={"row"}
+                  justifyContent={"space-between"}
+                >
+                  <Button
+                    variant="outlined"
+                    onClick={handleClearSignature}
+                    sx={{
+                      border: "1px solid #8477DA",
+                      mr: 1,
+                      height: "38px",
+                      color: "#8477DA",
+                    }}
+                  >
+                    Clear
+                  </Button>
+                  <Button
+                    onClick={handleAddSignature}
+                    variant="contained"
+                    sx={{
+                      background: "#8477DA",
+                      height: "38px",
+                      ":hover": {
+                        background: "#8477DA",
+                      },
+                    }}
+                  >
+                    Signature
+                  </Button>
+                </Stack>
+              </Box>
+              {signatureURL && (
+                <Box sx={{ pt: 2 }}>
+                  <img
+                    src={signatureURL}
+                    alt="Signature"
+                    width="100%"
+                    height={150}
+                    style={{
+                      objectFit: "contain",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      border: "1px solid #E3E8EF",
+                      borderRadius: "4px",
+                    }}
+                  />
+                </Box>
+              )}
+
+              {/* <Box sx={{ pt: 2 }}>
                 <ButtonBase
                   onClick={handleUploadClick}
                   sx={{
@@ -160,11 +255,18 @@ const SigntureSection = () => {
                   accept="image/*"
                   capture={false}
                 />
-              </Box>
-              <Typography sx={{ py: 2, color: "#6D6D6D", lineHeight: "20px",  fontSize: "14px",
-                        fontFamily: '"Inter" !important', }}>
+              </Box> */}
+              {/* <Typography
+                sx={{
+                  py: 2,
+                  color: "#6D6D6D",
+                  lineHeight: "20px",
+                  fontSize: "14px",
+                  fontFamily: '"Inter" !important',
+                }}
+              >
                 Only support .jpg, .png and .svg and zip files
-              </Typography>
+              </Typography> */}
               <Divider sx={{ color: "#6D6D6D" }}>OR</Divider>
               <Box
                 sx={{
@@ -205,9 +307,9 @@ const SigntureSection = () => {
                           aria-label="toggle password visibility"
                           // onClick={handleClickShowPassword}
                           sx={{
-                            fontWeight:`${600} !important`,
-                            fontSize:'12px !important',
-                            lineHeight:'18px !important',
+                            fontWeight: `${600} !important`,
+                            fontSize: "12px !important",
+                            lineHeight: "18px !important",
                             height: "35px",
                             borderRadius: "8px !important",
                             color: "#6D6D6D",
@@ -270,10 +372,64 @@ const SigntureSection = () => {
               >
                 Download PDF Now
               </Button>
+              <Stack
+                sx={{ pt: 3, width: "285px" }}
+                direction={"row"}
+                gap={1.5}
+                justifyContent={"space-between"}
+              >
+                <Button
+                fullWidth
+                  variant="contained"
+                  onClick={handleOpenEditModal}
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    height: "44px",
+                    width: { sm: "100%", xs: "187px" },
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 1,
+                    fontSize: { lg: 16, md: 15, xs: 12 },
+                    padding: {
+                      sm: "10px 16px  !important",
+                      xs: "5px 5px !important",
+                    },
+                  }}
+                >
+                  Pay Now
+                </Button>
+                <Button
+                fullWidth
+                  // onClick={handleAddSignature}
+                  variant="contained"
+                  sx={{
+                    backgroundColor: "#8477DA",
+                    height: "44px",
+                    width: { sm: "100%", xs: "187px" },
+                    "&:hover": { backgroundColor: "#8477DA" },
+                    color: "white",
+                    textTransform: "capitalize",
+                    borderRadius: 1,
+                    fontSize: { lg: 16, md: 15, xs: 12 },
+                    padding: {
+                      sm: "10px 16px  !important",
+                      xs: "5px 5px !important",
+                    },
+                  }}
+                >
+                  Pay Later
+                </Button>
+              </Stack>
             </Box>
           </Box>
         </Box>
       </Container>
+      <PaymentModel
+        open={openEditModal}
+        handleClose={handleCloseEditModal}
+        refetchData={refetchData}
+      />
     </Box>
   );
 };
