@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   CircularProgress,
+  Grid,
   TextareaAutosize,
   TextField,
   Typography,
@@ -11,6 +12,7 @@ import * as yup from "yup";
 import { useEffect, useMemo, useState } from "react";
 import {
   useCreateDocument,
+  useEditDocument,
   useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
@@ -25,11 +27,17 @@ import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { getListData } from "@/redux/estimateCalculations";
 import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
+import { Close, Delete } from "@mui/icons-material";
+import { IconButton } from "@material-ui/core";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
   customer: yup.string().required("Customer is required"),
   dueDate: yup.string().required("Due Date is required"),
+  section1: yup.object({
+    text1: yup.string().optional(),
+    text2: yup.string().optional(),
+  }),
 });
 
 const EditQuoteInvoice = () => {
@@ -44,6 +52,8 @@ const EditQuoteInvoice = () => {
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [selectedProject, setSelectedProject] = useState(null);
   const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
+  const [imagesArray, setImagesArray] = useState();
+
   const navigate = useNavigate();
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
@@ -51,21 +61,21 @@ const EditQuoteInvoice = () => {
 
   useEffect(() => {
     if (selectedItemId) {
-        refetchSingleItem();
+      refetchSingleItem();
     }
   }, [selectedItemId]);
 
-  const {
-    mutateAsync: createInvoice,
-    isSuccess,
-    isLoading,
-  } = useCreateDocument();
+  const { mutateAsync: EditInvoice, isSuccess, isLoading } = useEditDocument();
   const formik = useFormik({
     initialValues: {
-      customer: selectedCustomer?.name || "",
-      project: selectedProject?.name || "",
-      dueDate:  dayjs(singleItemData?.customerPreview?.expiresAt) || null,
+      customer: singleItemData?.customer?.name || "",
+      project: singleItemData?.project?.projectName || "",
+      dueDate: dayjs(singleItemData?.customerPreview?.expiresAt) || null,
       notes: singleItemData?.description || "",
+      section1: {
+        text1: singleItemData?.content?.section1?.text1 || "",
+        text2: singleItemData?.content?.section1?.text2 || "",
+      },
     },
     validationSchema,
     enableReinitialize: true,
@@ -75,117 +85,174 @@ const EditQuoteInvoice = () => {
     },
   });
 
-  const {
-    data: customerList,
-    refetch,
-    isFetching,
-    isFetched,
-  } = useFetchDataCustomer();
-  const {
-    data: projectsList,
-    isFetched: projectsListFetched,
-    isFetching: projectsListFetching,
-    refetch: refetchProjectsList,
-  } = useFetchAllDocuments(
-    `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
-  );
+  // const {
+  //   data: customerList,
+  //   refetch,
+  //   isFetching,
+  //   isFetched,
+  // } = useFetchDataCustomer();
+  // const {
+  //   data: projectsList,
+  //   isFetched: projectsListFetched,
+  //   isFetching: projectsListFetching,
+  //   refetch: refetchProjectsList,
+  // } = useFetchAllDocuments(
+  //   `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
+  // );
 
-  const hardwaresList = {
-    showers: ShowerHardwareList,
-    mirrors: MirrorsHardwareList,
-    wineCellars: WinelistData,
-  };
-  const EstimateListData = useMemo(() => {
-    if (selectedEstimateRows?.length > 0) {
-      const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-        selectedEstimateRows,
-        hardwaresList,
-        companySettings
-      );
-      return EstimateDeatilsData;
-    }
-  }, [selectedEstimateRows]);
+  const { mutate: uploadImageLogo, data: uploadedImageLogo } =
+    useEditDocument();
+  const {
+    mutate: uploadImageBackgroundImage,
+    data: uploadedImageBackgroundImage,
+  } = useEditDocument();
 
-  useEffect(() => {
-    refetch();
-    if (selectedCustomer?.name) {
-      refetchProjectsList();
-    }
-  }, [formik.values.customer]);
+  // const hardwaresList = {
+  //   showers: ShowerHardwareList,
+  //   mirrors: MirrorsHardwareList,
+  //   wineCellars: WinelistData,
+  // };
+  // const EstimateListData = useMemo(() => {
+  //   if (selectedEstimateRows?.length > 0) {
+  //     const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
+  //       selectedEstimateRows,
+  //       hardwaresList,
+  //       companySettings
+  //     );
+  //     return EstimateDeatilsData;
+  //   }
+  // }, [selectedEstimateRows]);
+
+  // useEffect(() => {
+  //   refetch();
+  //   if (selectedCustomer?.name) {
+  //     refetchProjectsList();
+  //   }
+  // }, [formik.values.customer]);
 
   const handleCraete = async (values) => {
-    const customer = customerList?.find(
-      (data) => data?._id === selectedCustomer?._id
-    );
-    const { name, email, address, phone } = customer;
+    console.log(values, "submited");
+    // const customer = customerList?.find(
+    //   (data) => data?._id === selectedCustomer?._id
+    // );
+    // const { name, email, address, phone } = customer;
 
-    const source = projectsList?.projects?.find(
-      (data) => data?._id === selectedProject?._id
-    );
-    const sourceObject = {
-      projectName: source?.name,
-      city: source?.addressData?.city ?? "",
-      country: source?.addressData?.country ?? "",
-      postalCode: source?.addressData?.postalCode ?? "",
-      street: source?.addressData?.street ?? "",
-      state: source?.addressData?.state ?? "",
-      companyName: source?.companyData?.name ?? "",
-      companyAddress: source?.companyData?.address ?? "",
-    };
-    const customerObject = {
-      name,
-      email,
-      address,
-      phone,
-    };
+    // const source = projectsList?.projects?.find(
+    //   (data) => data?._id === selectedProject?._id
+    // );
+    // const sourceObject = singleItemData?.project;
+    // const customerObject = singleItemData?.customer;
 
-    const currentDate = values.dueDate;
-    const updatedDate = currentDate.add(15, "day");
-    // ISO format mein convert karein
-    // const formattedDate = currentDate.toISOString();
-    const customerPayLoad = {
-      link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
-      expiresAt: updatedDate,
-    };
-    const compantDetail = {
-      name: companySettings?.name,
-      image: companySettings.image,
-      address: companySettings?.address,
-    };
+    // const currentDate = values.dueDate;
+    // const updatedDate = currentDate.add(15, "day");
+    // // ISO format mein convert karein
+    // // const formattedDate = currentDate.toISOString();
+    // const customerPayLoad = {
+    //   link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
+    //   expiresAt: updatedDate,
+    // };
+    // const compantDetail = {
+    //   name: companySettings?.name,
+    //   image: companySettings.image,
+    //   address: companySettings?.address,
+    // };
     const data = {
-      customer_id: selectedCustomer?._id,
-      project_id: selectedProject?._id,
-      customerPreview: customerPayLoad,
+      customerPreview: {
+        ...singleItemData?.customerPreview,
+        expiresAt: values.dueDate,
+      },
       description: values.notes,
-      customer: customerObject,
-      project: sourceObject,
-      estimates: EstimateListData?.length > 0 ? EstimateListData : [],
-      company: compantDetail,
-      content: {},
+      content: {
+        ...singleItemData?.content,
+        section1: {
+          ...singleItemData?.content?.section1,
+          text1: values.section1?.text1,
+          text2: values.section1?.text2,
+        },
+      },
     };
     try {
-      const response = await createInvoice({
-        data,
-        apiRoute: `${backendURL}/projects/landing-page-preview`,
+      const response = await EditInvoice({
+        data: data,
+        apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       });
-      navigate(`/invoices/${response?.project_id}/customer-preview`);
+    refetchSingleItem();
+      // navigate(`/invoices/${response?.project_id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
   };
+ console.log(singleItemData,'data')
+  const handleImageUploadLogo = async (event, key) => {
+    const image = event.target.files[0];
 
-  useEffect(() => {
-    if (customerID && projectID) {
-      const customer = customerList?.find((data) => data?._id === customerID);
-      const source = projectsList?.projects?.find(
-        (data) => data?._id === projectID
-      );
-      setSelectedCustomer(customer);
-      setSelectedProject(source);
+    const formData = new FormData();
+    if (image) {
+      formData.append("image", image);
     }
-  }, [customerID, projectID, customerList, projectsList]);
+    formData.append("key", key);
 
+    await EditInvoice({
+      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+      data: formData,
+    });
+    refetchSingleItem();
+  };
 
+  const handleImageUploadBackgroundImage = async (event, key) => {
+    const image = event.target.files[0];
+
+    const formData = new FormData();
+    if (image) {
+      formData.append("image", image);
+    }
+    formData.append("key", key);
+
+   await EditInvoice({
+      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+      data: formData,
+    });
+    refetchSingleItem();
+  };
+
+  const handleUploadEstimatesImage = async (event,key) => {
+    const image = event.target.files[0]; // Get the selected files
+    const formData = new FormData();
+    if (image) {
+      formData.append("image", image);
+    }
+    formData.append("key", key);
+
+   await EditInvoice({
+      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+      data: formData,
+    });
+    refetchSingleItem();
+    // setImagesArray(imageURL);
+  };
+  const handleDeleteImageFromEstimate = async (gallery,removeGalleryImage,key) => {
+    const galleryFiltered = gallery?.filter((item)=>item !== removeGalleryImage);
+    await EditInvoice({
+      apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
+      data: {
+        key,
+        gallery:galleryFiltered ?? [],
+        removeGalleryImage
+      },
+    });
+    refetchSingleItem();
+  }
+
+  // useEffect(() => {
+  //   if (customerID && projectID) {
+  //     const customer = customerList?.find((data) => data?._id === customerID);
+  //     const source = projectsList?.projects?.find(
+  //       (data) => data?._id === projectID
+  //     );
+  //     setSelectedCustomer(customer);
+  //     setSelectedProject(source);
+  //   }
+  // }, [customerID, projectID, customerList, projectsList]);
   return (
     <Box
       sx={{
@@ -216,7 +283,7 @@ const EditQuoteInvoice = () => {
                     gap: 1,
                   }}
                 >
-                  Edit Quote Page 
+                  Edit Quote Page
                 </Typography>
                 <Typography
                   sx={{
@@ -273,7 +340,6 @@ const EditQuoteInvoice = () => {
                     formik.values.customer === "" ||
                     formik.values.project === "" ||
                     formik.values.dueDate === null ||
-                    selectedEstimateRows.length < 1 ||
                     isLoading
                       ? true
                       : false
@@ -368,7 +434,7 @@ const EditQuoteInvoice = () => {
                     </Box>
 
                     <Typography>
-                    {singleItemData?.project?.projectName}
+                      {singleItemData?.project?.projectName}
                     </Typography>
                   </Box>
                 </Box>
@@ -480,9 +546,252 @@ const EditQuoteInvoice = () => {
                 <EditEstimateTable
                   projectId={singleItemData?.project_id}
                   setSelectedEstimateRows={setSelectedEstimateRows}
-                  selectedEstimateRows={selectedEstimateRows}
+                  selectedEstimateRows={[]}
                   selectedEstimates={singleItemData?.estimates}
                 />
+              </Box>
+
+              <Box>
+                {/* section 1 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Section 1
+                  </Typography>
+
+                  <Box sx={{ display: "flex", gap: 2, mt: 2, width: "70%" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                        width: "50%",
+                      }}
+                    >
+                      <Typography>Text 1</Typography>
+                      <TextareaAutosize
+                        style={{ width: "100%" }}
+                        name="section1.text1"
+                        value={formik.values.section1.text1 || ""}
+                        onChange={formik.handleChange}
+                        minRows={10}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 0.2,
+                        width: "50%",
+                      }}
+                    >
+                      <Typography>Text 2</Typography>
+                      <TextareaAutosize
+                        style={{ width: "100%" }}
+                        name="section1.text2"
+                        value={formik.values.section1.text2 || ""}
+                        onChange={formik.handleChange}
+                        minRows={10}
+                      />
+                    </Box>
+                  </Box>
+
+                  <Box
+                    sx={{ display: "flex", justifyContent: "center", py: 3 }}
+                  >
+                    {/* section logo */}
+
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 400,
+                          height: 340,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 3,
+                        }}
+                      >
+                        {singleItemData?.content?.section1?.logo ||
+                        uploadedImageLogo?.content?.section1?.logo ? (
+                          <Box>
+                            <img
+                              src={`${backendURL}/${
+                                singleItemData?.content?.section1?.logo ??
+                                uploadedImageLogo?.content?.section1?.logo
+                              }`}
+                              width={400}
+                              height={340}
+                              alt="section image logo"
+                            />
+                          </Box>
+                        ) : (
+                          <Typography>no Image Uploaded</Typography>
+                        )}
+                      </Box>
+
+                      <Button
+                        variant="contained"
+                        component="label"
+                        sx={{
+                          background: "#8477DA",
+                          ":hover": {
+                            background: "#8477DA",
+                          },
+                        }}
+                      >
+                        Upload logo
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          hidden
+                          onChange={(e) =>
+                            handleImageUploadLogo(e, "content.section1.logo")
+                          }
+                        />
+                      </Button>
+                    </Box>
+                    {/* section background image */}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 400,
+                          height: 340,
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          padding: 3,
+                        }}
+                      >
+                        {singleItemData?.content?.section1?.backgroundImage ||
+                        uploadedImageBackgroundImage?.content?.section1
+                          ?.backgroundImage ? (
+                          <Box>
+                            <img
+                              src={`${backendURL}/${
+                                singleItemData?.content?.section1
+                                  ?.backgroundImage ??
+                                uploadedImageBackgroundImage?.content?.section1
+                                  ?.backgroundImage
+                              }`}
+                              width={400}
+                              height={340}
+                              alt="section image backgroundImage"
+                            />
+                          </Box>
+                        ) : (
+                          <Typography>no Image Uploaded</Typography>
+                        )}
+                      </Box>
+
+                      <Button
+                        variant="contained"
+                        component="label"
+                        sx={{
+                          background: "#8477DA",
+                          ":hover": {
+                            background: "#8477DA",
+                          },
+                        }}
+                      >
+                        Upload background image
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          hidden
+                          onChange={(e) =>
+                            handleImageUploadBackgroundImage(
+                              e,
+                              "content.section1.backgroundImage"
+                            )
+                          }
+                        />
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 2 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Section 2
+                  </Typography>
+
+                  <Typography fontWeight={"bold"}>Estimates Images</Typography>
+
+                  {singleItemData?.estimates?.map((item,index) => 
+                    <Box
+                      key={item._id}
+                      sx={{ display: "flex", flexDirection: "column", gap: 2, border:'1px solid #ccc' }}
+                    >
+                      <Typography>
+                        {item?.category + "-" + item?.layout}
+                      </Typography>
+                      <Grid container sx={{ width: "100%", display:"flex",flexWrap:'wrap',gap:'10px'}}>
+                        {item?.gallery?.map((_image) => (
+                          <Box
+                            sx={{
+                              width: "300px",
+                              height: "300px",
+                              display: "flex",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              padding: 3,
+                              position:'relative'
+                            }}
+                          >
+                            <IconButton style={{position:'absolute',right:'10px',top:'20px',color:'red'}} onClick={()=>handleDeleteImageFromEstimate(item?.gallery,_image,`estimates.${index}.gallery`)}><Delete  /></IconButton>
+                            <img
+                              style={{width:'100%',height:'100%'}}
+                              // src=""
+                              src={`${backendURL}/${_image}`}
+                              // width={400}
+                              // height={340}
+                              alt="section image backgroundImage"
+                            />
+                          </Box>
+                        ))}
+                      </Grid>
+
+                      <Button
+                        variant="contained"
+                        component="label"
+                        sx={{
+                          background: "#8477DA",
+                          ":hover": {
+                            background: "#8477DA",
+                          },
+                        }}
+                      >
+                        Upload image
+                        <input
+                          type="file"
+                          accept="image/*"
+                          // multiple
+                          hidden
+                          onChange={(e) => handleUploadEstimatesImage(e,`estimates.${index}.gallery`)}
+                        />
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
               </Box>
             </Box>
           </form>

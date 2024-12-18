@@ -220,68 +220,67 @@ export default function EditEstimateTable({
   projectId,
   setSelectedEstimateRows,
   selectedEstimateRows,
-  selectedEstimates
+  selectedEstimates,
 }) {
-  const url = `${backendURL}/projects/pending-estimates-for-landing-page-preview/${projectId}`;
-  const {
-    data: estimatesList,
-    isFetched,
-    isFetching: estimatesListFetching,
-    refetch: refetchEstimatesList,
-  } = useFetchAllDocuments(url);
+  // const url = `${backendURL}/projects/pending-estimates-for-landing-page-preview/${projectId}`;
+  // const {
+  //   data: estimatesList,
+  //   isFetched,
+  //   isFetching: estimatesListFetching,
+  //   refetch: refetchEstimatesList,
+  // } = useFetchAllDocuments(url);
 
-  React.useEffect(() => {
-    if (projectId) {
-      refetchEstimatesList();
-    }
-  }, [projectId]);
+  // React.useEffect(() => {
+  //   if (projectId) {
+  //     refetchEstimatesList();
+  //   }
+  // }, [projectId]);
 
-  const combinedItems = estimatesList.concat(selectedEstimates);
-  console.log(combinedItems,'wrewweewerewrerere',estimatesList,selectedEstimates);
+  // const combinedItems = estimatesList.concat(selectedEstimates);
+  // console.log(combinedItems,'wrewweewerewrerere',estimatesList,selectedEstimates);
 
-//   // Handle row selection
-//   const handleSelectionChange = (selectedRowIds) => {
-//     // Find the full objects of the selected rows
-//     const selectedData =
-//       estimatesList?.filter((row) =>
-//         selectedRowIds.includes(row._id)
-//       ) || [];
-//     setSelectedEstimateRows(selectedData);
-//     console.log("Selected row data:", selectedData); // Log the full object
-//   };
-
+  //   // Handle row selection
+  //   const handleSelectionChange = (selectedRowIds) => {
+  //     // Find the full objects of the selected rows
+  //     const selectedData =
+  //       estimatesList?.filter((row) =>
+  //         selectedRowIds.includes(row._id)
+  //       ) || [];
+  //     setSelectedEstimateRows(selectedData);
+  //     console.log("Selected row data:", selectedData); // Log the full object
+  //   };
 
   // State to manage selected rows
-  const [selectedRowIds, setSelectedRowIds] = React.useState([]);
+  // const [selectedRowIds, setSelectedRowIds] = React.useState([]);
 
-  React.useEffect(() => {
-    if (estimatesList?.length > 0) {
-      // Select the first row by default
-      setSelectedRowIds([estimatesList[0]._id]);
-      setSelectedEstimateRows([estimatesList[0]]);
-    }
-  }, [estimatesList]);
+  // React.useEffect(() => {
+  //   if (selectedEstimates?.length > 0) {
+  //     // Select the first row by default
+  //     setSelectedRowIds([selectedEstimates[0]._id]);
+  //     setSelectedEstimateRows([estimatesList[0]]);
+  //   }
+  // }, [estimatesList]);
 
   // Handle row selection
-  const handleSelectionChange = (newSelectedRowIds) => {
-    // Find the full objects of the selected rows
-    const selectedData =
-      estimatesList?.filter((row) => newSelectedRowIds.includes(row._id)) || [];
-    setSelectedRowIds(newSelectedRowIds); // Update selected IDs
-    setSelectedEstimateRows(selectedData);
-    console.log("Selected row data:", selectedData); // Log the full object
-  };
+  // const handleSelectionChange = (newSelectedRowIds) => {
+  //   // Find the full objects of the selected rows
+  //   // const selectedData =
+  //   //   estimatesList?.filter((row) => newSelectedRowIds.includes(row._id)) || [];
+  //   setSelectedRowIds(newSelectedRowIds); // Update selected IDs
+  //   setSelectedEstimateRows(selectedData);
+  //   console.log("Selected row data:", selectedData); // Log the full object
+  // };
 
   return (
     <>
       <Typography sx={{ fontSize: 24, fontWeight: "bold", pb: 2 }}>
         Estimates
       </Typography>
-      {estimatesList?.length > 0 ? (
+      {selectedEstimates?.length > 0 ? (
         <Paper sx={{ width: "100%" }}>
           <DataGrid
             getRowId={(row) => row.estimate_id}
-            rows={isFetched && selectedEstimates}
+            rows={selectedEstimates}
             columns={columns}
             // initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
