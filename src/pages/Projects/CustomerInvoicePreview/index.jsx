@@ -80,6 +80,10 @@ const CustomerInvoicePreview = () => {
       navigate(`/invoices/${id}`);
     }
   }, [isSuccess]);
+  
+  useEffect(() => {
+    refetchData();
+  }, []);
   return (
     // <CommonLayout>
     <Box className="econtent-wrapper">
@@ -94,7 +98,10 @@ const CustomerInvoicePreview = () => {
       >
         <Box
           sx={{
-            backgroundColor: { xs: "#100D24", sm: "#F6F5FF" },
+            backgroundColor: {
+              xs: "rgba(247, 247, 247, 0.5)",
+              sm: "rgba(247, 247, 247, 0.5)",
+            },
             borderBottomRightRadius: { xs: "16px", sm: "0px" },
             borderBottomLeftRadius: { xs: "16px", sm: "0px" },
             display: "flex",
@@ -169,7 +176,7 @@ const CustomerInvoicePreview = () => {
             ) : (
               <>
                 <SaveOutlined sx={{ pr: 1 }} />
-                Save
+                Publish
               </>
             )}
           </Button>
@@ -182,12 +189,25 @@ const CustomerInvoicePreview = () => {
           background: "white",
         }}
       >
-        <CustomizeLandingPage
-          selectedData={selectedData}
-          refetchData={refetchData}
-          isFetched={isFetched}
-          isFetching={isFetching}
-        />
+        {!isFetching && isFetched ? (
+          <CustomizeLandingPage
+            selectedData={selectedData}
+            refetchData={refetchData}
+            isFetched={isFetched}
+            isFetching={isFetching}
+          />
+        ) : (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "90vh",
+            }}
+          >
+            <CircularProgress size={24} />
+          </Box>
+        )}
       </Box>
     </Box>
     // </CommonLayout>

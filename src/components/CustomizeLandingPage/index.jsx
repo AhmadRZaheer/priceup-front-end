@@ -244,9 +244,9 @@ const CustomizeLandingPage = ({
   // };
 
   // const [estimatePdfs, setEstimatePdfs] = useState([]);
-  useEffect(() => {
-    refetchData();
-  }, []);
+  // useEffect(() => {
+  //   refetchData();
+  // }, []);
 
   const summarySections = (data, quoteNumber) => {
     if (data?.category === EstimateCategory.SHOWERS) {
@@ -407,13 +407,20 @@ const CustomizeLandingPage = ({
         >
           <img src={GCSLogo} alt="logo nav bar" style={{ height: "100px" }} />
         </Box> */}
-        <HeaderSection />
+        <HeaderSection selectedData={selectedData} />
 
         <Box
           sx={{
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
-            backgroundImage: { md: `url(${bgHeaderImage})`, xs: "none" },
+            backgroundImage: {
+              md: `url(${
+                selectedData?.content?.section1?.backgroundImage
+                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+                  : bgHeaderImage
+              })`,
+              xs: "none",
+            },
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             // px: { md: 12, xs: 0 },
@@ -479,14 +486,15 @@ const CustomizeLandingPage = ({
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  Your GCS Estimate Presentation
+                  {selectedData?.content?.section1?.text1 ??
+                    "Your GCS Estimate Presentation"}
                 </Typography>
                 <Typography
                   sx={{ pr: 2, textAlign: "start" }}
                   className="subHeaderText"
                 >
-                  Turning your Vision into reality– Get a Precise Estimate for
-                  Your Next Project Today!
+                  {selectedData?.content?.section1?.text2 ??
+                    "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!"}
                 </Typography>
               </Box>
             </Box>

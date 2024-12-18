@@ -877,7 +877,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                   <SwiperSlide key={index}>
                     <Card sx={{}}>
                       <img
-                        src={`${backendURL}/{data}`}
+                        src={`${backendURL}/${data}`}
                         alt="not"
                         style={{ height: "400px", width: "300px" }}
                       />

@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import GCSLogo from "@/Assets/GCS-logo.png";
 import "./style.scss";
+import { backendURL } from "@/utilities/common";
 
-const HeaderSection = () => {
+const HeaderSection = ({selectedData}) => {
   return (
     <>
       <Box
@@ -19,7 +20,7 @@ const HeaderSection = () => {
           component="a"
           href="https://gcsglassandmirror.com/"
         >
-          <img src={GCSLogo} alt="logo nav bar" style={{ height: "100px" }} />
+          <img src={selectedData?.content?.section1?.logo? `${backendURL}/${selectedData?.content?.section1?.logo}` : GCSLogo} alt="logo nav bar" style={{ height: "100px" }} />
         </Box>
         <Container
           maxWidth="xl"
