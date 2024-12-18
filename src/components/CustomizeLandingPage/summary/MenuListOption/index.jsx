@@ -52,6 +52,7 @@ const MenuList = ({
   }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
+    console.log(item , 'wedfdsdfssdfds')
     dispatch(setContent({ type: type, item: item }));
     setSelectedItem(item);
   };
@@ -72,7 +73,12 @@ const MenuList = ({
     ) {
       setAnchorEl(!anchorEl);
     } else {
-      setAnchorEl(!anchorEl);
+        dispatch(
+            showSnackbar({
+              message: "This option is not available yet!",
+              severity: "warning",
+            })
+          );
     }
   };
   return (

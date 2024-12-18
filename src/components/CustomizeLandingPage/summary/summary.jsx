@@ -7,9 +7,11 @@ import {
   Stack,
   Container,
   Card,
+  Button,
 } from "@mui/material";
 import React, { useState } from "react";
 import Bulb from "../../../Assets/CustomerLandingImages/blubImg.png";
+import CustomImage from "../../../Assets/customlayoutimage.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -18,12 +20,17 @@ import MultipleImageUpload from "../MultipleImageUpload";
 import { useSelector } from "react-redux";
 import { getListData } from "@/redux/estimateCalculations";
 import MenuList from "./MenuListOption";
+import { backendURL } from "@/utilities/common";
 
 const arr = [1, 2];
 
 const ShowerSummary = ({ data, quoteNumber }) => {
+  console.log(data, "asdfghsdfghasdf");
   const listData = useSelector(getListData);
   const [images, setImages] = useState([]);
+  const imageData =
+    data?.image !== null ? `${backendURL}/${data?.image}` : null;
+  const [selectedGlassType, setSelectedGlassType] = useState();
   return (
     <>
       <Box
@@ -215,7 +222,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                 }}
               >
                 <img
-                  src="http://3.219.213.248:5000/images/layouts/layout_5.png"
+                  src={imageData ?? CustomImage}
                   alt="not"
                   style={{ height: "320px" }}
                 />
@@ -267,10 +274,10 @@ const ShowerSummary = ({ data, quoteNumber }) => {
             <Box sx={{ backgroundColor: "#F3F5F6", px: 3, py: 2 }}>
               <Grid container>
                 {/* {Columns[0].active && ( */}
-                <Grid item md={8} className="text-xs-samibold">
+                <Grid item md={7} className="text-xs-samibold">
                   Dimensions
                 </Grid>
-                <Grid item md={4} className="text-xs-samibold">
+                <Grid item md={5} className="text-xs-samibold">
                   Summary
                 </Grid>
                 {/* <Grid item md={4} className="text-xs-samibold">
@@ -281,7 +288,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
             <Divider sx={{ borderColor: "#D4DBDF" }} />
             <Box sx={{ px: 3, py: "15px" }}>
               <Grid container spacing={2}>
-                <Grid item md={8}>
+                <Grid item md={7}>
                   <Stack gap={2}>
                     <Typography
                       className="text-xs-samibold"
@@ -371,7 +378,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                     {/* )} */}
                   </Stack>
                 </Grid>
-                <Grid item md={4}>
+                <Grid item md={5}>
                   <Stack gap={2}>
                     <Typography
                       className="text-xs-samibold"
@@ -385,7 +392,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Finish:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.hardwareFinish}
+                          {data?.hardwareFinish?.name}
                         </Typography>
                       </Box>
                     )}
@@ -395,7 +402,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Handles:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.handle?.type} ({data?.handle?.count})
+                          {data?.handle?.name} ({data?.handle?.count})
                         </Typography>
                       </Box>
                     )}
@@ -405,7 +412,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Hinges:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.hinge?.type} ({data?.hinge?.count})
+                          {data?.hinge?.name} ({data?.hinge?.count})
                         </Typography>
                       </Box>
                     )}
@@ -415,7 +422,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Door Lock:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.doorLock?.type} ({data?.doorLock?.count})
+                          {data?.doorLock?.name} ({data?.doorLock?.count})
                         </Typography>
                       </Box>
                     )}
@@ -429,7 +436,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                               Channel:
                             </Typography>
                             <Typography className="text-xs-ragular">
-                              {data?.mountingChannel}
+                              {data?.mountingChannel?.name}
                             </Typography>
                           </Box>
                         )}{" "}
@@ -444,7 +451,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                             </Typography>
                             {data?.mountingClamps?.wallClamp?.map((row) => (
                               <Typography className="text-xs-ragular">
-                                {row.type} ({row.count}){" "}
+                                {row.name} ({row.count}){" "}
                               </Typography>
                             ))}
                           </Box>
@@ -458,7 +465,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                             </Typography>
                             {data?.mountingClamps?.sleeveOver?.map((row) => (
                               <Typography className="text-xs-ragular">
-                                {row.type} ({row.count}){" "}
+                                {row.name} ({row.count}){" "}
                               </Typography>
                             ))}
                           </Box>
@@ -472,7 +479,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                             </Typography>
                             {data?.mountingClamps?.glassToGlass?.map((row) => (
                               <Typography className="text-xs-ragular">
-                                {row.type} ({row.count}){" "}
+                                {row.name} ({row.count}){" "}
                               </Typography>
                             ))}
                           </Box>
@@ -488,7 +495,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                         </Typography>
                         {data?.cornerClamps?.wallClamp?.map((row) => (
                           <Typography className="text-xs-ragular">
-                            {row.type} ({row.count}){" "}
+                            {row.name} ({row.count}){" "}
                           </Typography>
                         ))}
                       </Box>
@@ -502,7 +509,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                         </Typography>
                         {data?.cornerClamps?.sleeveOver?.map((row) => (
                           <Typography className="text-xs-ragular">
-                            {row.type} ({row.count}){" "}
+                            {row.name} ({row.count}){" "}
                           </Typography>
                         ))}
                       </Box>
@@ -516,7 +523,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                         </Typography>
                         {data?.cornerClamps?.glassToGlass?.map((row) => (
                           <Typography className="text-xs-ragular">
-                            {row.type} ({row.count}){" "}
+                            {row.name} ({row.count}){" "}
                           </Typography>
                         ))}
                       </Box>
@@ -529,7 +536,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Glass Type:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.glassType?.type} ({data?.glassType?.thickness})
+                          {data?.glassType?.name} ({data?.glassType?.thickness})
                         </Typography>
                       </Box>
                     )}
@@ -539,7 +546,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Edge Work:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.edgeWork?.type} ({data?.edgeWork?.thickness})
+                          {data?.edgeWork?.name} ({data?.edgeWork?.thickness})
                         </Typography>
                       </Box>
                     )}
@@ -549,7 +556,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Sliding Door System:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.slidingDoorSystem?.type} (
+                          {data?.slidingDoorSystem?.name} (
                           {data?.slidingDoorSystem?.count})
                         </Typography>
                       </Box>
@@ -568,7 +575,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Header:
                         </Typography>
                         <Typography className="text-xs-ragular">
-                          {data?.header?.type} ({data?.header?.count})
+                          {data?.header?.name} ({data?.header?.count})
                         </Typography>
                       </Box>
                     )}
@@ -578,7 +585,9 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                           Glass Addons:
                         </Typography>
                         {data?.glassAddons?.map((item) => (
-                          <Typography className="text-xs-ragular">{`${item} `}</Typography>
+                          <Typography className="text-xs-ragular">
+                            {`${item?.name}`},
+                          </Typography>
                         ))}
                       </Box>
                     ) : (
@@ -593,7 +602,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                         </Typography>
                         <Typography className="text-xs-ragular">
                           {data?.hardwareAddons?.map(
-                            (row) => ` ${row?.type} (${row?.count}),`
+                            (row) => ` ${row?.name} (${row?.count}),`
                           )}{" "}
                         </Typography>
                       </Box>
@@ -721,6 +730,29 @@ const ShowerSummary = ({ data, quoteNumber }) => {
               </Grid>
             </Box>
           </Box>
+          <Box sx={{ pt: 2 }}>
+            <Button
+              fullWidth
+              variant="contained"
+              // onClick={handleOpenEditModal}
+              sx={{
+                backgroundColor: "#8477DA",
+                height: "44px",
+                width: { sm: "100%", xs: "187px" },
+                "&:hover": { backgroundColor: "#8477DA" },
+                color: "white",
+                textTransform: "capitalize",
+                borderRadius: 1,
+                fontSize: { lg: 16, md: 15, xs: 12 },
+                padding: {
+                  sm: "10px 16px  !important",
+                  xs: "5px 5px !important",
+                },
+              }}
+            >
+              I approve
+            </Button>
+          </Box>
         </Box>
         <Box sx={{ width: "50%", pt: 4 }}>
           <Typography
@@ -737,7 +769,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
             </Box>{" "}
             Modifications from our experts:
           </Typography>
-          <Box sx={{pt:2}}>
+          <Box sx={{ pt: 2 }}>
             <Box
               sx={{
                 display: "flex",
@@ -797,7 +829,7 @@ const ShowerSummary = ({ data, quoteNumber }) => {
           </Box>
         </Box>
       </Box>
-      {images.length > 0 ? (
+      {data?.gallery?.length > 0 ? (
         <Box>
           <Box sx={{ display: "flex", py: 4, justifyContent: "center" }}>
             <img src={Bulb} alt="not" style={{ height: "50px" }} />
@@ -840,12 +872,12 @@ const ShowerSummary = ({ data, quoteNumber }) => {
                 // height: "500px", // Add height for the swiper container
               }}
             >
-              {images.length > 0 ? (
-                images.map((data, index) => (
+              {data?.gallery?.length > 0 ? (
+                data?.gallery.map((data, index) => (
                   <SwiperSlide key={index}>
                     <Card sx={{}}>
                       <img
-                        src={data}
+                        src={`${backendURL}/{data}`}
                         alt="not"
                         style={{ height: "400px", width: "300px" }}
                       />
@@ -868,9 +900,10 @@ const ShowerSummary = ({ data, quoteNumber }) => {
           </Container>
         </Box>
       ) : (
-        <Box sx={{ pt: 4 }}>
-          <MultipleImageUpload images={images} setImages={setImages} />
-        </Box>
+        ""
+        // <Box sx={{ pt: 4 }}>
+        //   <MultipleImageUpload images={images} setImages={setImages} />
+        // </Box>
       )}
     </>
   );

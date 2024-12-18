@@ -194,7 +194,8 @@ const ProjectInvoiceComponent = ({
         data,
         apiRoute: `${backendURL}/projects/landing-page-preview`,
       });
-      navigate(`/invoices/${response?.project_id}/customer-preview`);
+      console.log(response)
+      navigate(`/invoices/${response?._id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
