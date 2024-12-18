@@ -73,7 +73,12 @@ const MenuList = ({
     ) {
       setAnchorEl(!anchorEl);
     } else {
-      setAnchorEl(!anchorEl);
+        dispatch(
+            showSnackbar({
+              message: "This option is not available yet!",
+              severity: "warning",
+            })
+          );
     }
   };
   return (

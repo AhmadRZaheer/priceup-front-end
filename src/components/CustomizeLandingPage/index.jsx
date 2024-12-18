@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material";
 import "./style.scss";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import LogoNavBar from "../../Assets/purplelogo.svg";
 import Img from "../../Assets/example.jpg";
 import right_headerimage from "../../Assets/header-right-image.svg";
@@ -360,6 +360,27 @@ const CustomizeLandingPage = ({
   const handleChangeAccordian = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
+  const estimateTotal = useMemo(() => {
+    const totalShowers = selectedData?.estimates?.filter(
+      (data, index) => data?.category === EstimateCategory.SHOWERS
+    );
+    const totalMirrors = selectedData?.estimates?.filter(
+      (data, index) => data?.category === EstimateCategory.MIRRORS
+    );
+    const totalWineCellar = selectedData?.estimates?.filter(
+      (data, index) => data?.category === EstimateCategory.WINECELLARS
+    );
+    const total = selectedData?.estimates?.length;
+    return {
+      totalShowers: totalShowers?.length ?? 0,
+      totalMirrors: totalMirrors?.length ?? 0,
+      totalWineCellar: totalWineCellar?.length ?? 0,
+      total: total ?? 0,
+    };
+  }, [selectedData?.estimates]);
+
+  console.log(estimateTotal, "sdgasdfgasdfgestimateTotal");
 
   return (
     <>
@@ -917,7 +938,7 @@ const CustomizeLandingPage = ({
                   color: "white",
                 }}
               >
-                Hi David, we have{" "}
+                Hi {selectedData?.customer?.name}, we have{" "}
                 <Box component="span" sx={{ color: "#F95500" }}>
                   {" "}
                   {selectedData?.estimates?.length || 0} estimates
@@ -1059,6 +1080,7 @@ const CustomizeLandingPage = ({
                           color: "white",
                           border: "1px solid #D6D6D6",
                           boxShadow: "none",
+                          mt: 2,
                         }}
                       >
                         <AccordionSummary
@@ -1080,8 +1102,16 @@ const CustomizeLandingPage = ({
                               width: "100%",
                             }}
                           >
-                            <Typography sx={{ fontWeight: 700 }}>
-                              {data?.layout} Layout - Estimate
+                            <Typography
+                              sx={{
+                                fontWeight: 700,
+                                textTransform: "capitalize",
+                              }}
+                            >
+                              {data?.category} Estimate -{" "}
+                              {data?.layout === "Mirror"
+                                ? "Custom"
+                                : data?.layout}
                             </Typography>
                             {/* <Typography sx={{ fontWeight: 700 }}>
                             ${(data?.pricing?.totalPrice).toFixed(2)}
@@ -1104,7 +1134,7 @@ const CustomizeLandingPage = ({
                             : "Custom"}{" "}
                           Layout - Estimate
                         </Typography> */}
-                 
+
                             {/* <Box
                               sx={{
                                 display: "flex",
@@ -1223,7 +1253,7 @@ const CustomizeLandingPage = ({
                                 />
                               </Box>
                             </Box> */}
-                         
+
                             <Box>
                               <Box>{selectedSummary}</Box>
                             </Box>
@@ -1239,6 +1269,91 @@ const CustomizeLandingPage = ({
                 <CircularProgress size={24} sx={{ color: "#8477DA" }} />
               )}
             </Box>
+            <Box sx={{ pt: 2 }}>
+              <Typography
+                sx={{
+                  fontFamily: '"Poppins" !important',
+                  fontSize: "28px",
+                  fontWeight: 600,
+                  lineHeight: "62px",
+                  color: "white",
+                }}
+              >
+                Total number of estimates are
+                <Box component="span" sx={{ color: "#F95500" }}>
+                  {" "}
+                  {selectedData?.estimates?.length || 0}
+                </Box>{" "}
+              </Typography>
+              {estimateTotal?.totalShowers > 0 && (
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    lineHeight: "62px",
+                    color: "white",
+                  }}
+                >
+                  Shower estimates ={" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalShowers}
+                  </Box>
+                </Typography>
+              )}
+
+              {estimateTotal?.totalMirrors > 0 && (
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    lineHeight: "62px",
+                    color: "white",
+                  }}
+                >
+                  Mirror estimates ={" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalMirrors}
+                  </Box>
+                </Typography>
+              )}
+
+              {estimateTotal?.totalWineCellar > 0 && (
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    lineHeight: "62px",
+                    color: "white",
+                  }}
+                >
+                  WineCellar estimates ={" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalWineCellar}
+                  </Box>
+                </Typography>
+              )}
+
+              <Typography
+                sx={{
+                  fontFamily: '"Poppins" !important',
+                  fontSize: "28px",
+                  fontWeight: 600,
+                  lineHeight: "62px",
+                  color: "white",
+                }}
+              >
+                Total Price is{" "}
+                <Box
+                  component="span"
+                  sx={{ color: "#F95500", fontSize: "34px !important" }}
+                >
+                  $ {totalSum?.toFixed(2)}
+                </Box>
+              </Typography>
+            </Box>
           </Box>
         </Container>
       </Box>
@@ -1248,8 +1363,8 @@ const CustomizeLandingPage = ({
       <LimitationsSection />
       <ClaimSection />
       <ManainanceSection />
-      <AggremantCondition />
       <UpgradeOPtions />
+      <AggremantCondition />
 
       {/* <Container maxWidth="xl" sx={{ pb: 4 }}> */}
       {/* <CustomEditor /> */}
