@@ -162,9 +162,7 @@ const ProjectInvoiceComponent = ({
       address,
       phone,
     };
-    const totalSum = EstimateListData?.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.pricing.totalPrice;
-    }, 0);
+   
     const currentDate = values.dueDate;
     const updatedDate = currentDate.add(15, "day");
     // ISO format mein convert karein
@@ -173,6 +171,11 @@ const ProjectInvoiceComponent = ({
       link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
       expiresAt: updatedDate,
     };
+    const compantDetail= {
+      name: companySettings?.name,
+      image:companySettings.image,
+      address:companySettings?.address
+    }
     const data = {
       customer_id: selectedCustomer?._id,
       project_id: selectedProject?._id,
@@ -181,7 +184,7 @@ const ProjectInvoiceComponent = ({
       customer: customerObject,
       project: sourceObject,
       estimates: EstimateListData?.length > 0 ? EstimateListData : [],
-      company: {},
+      company: compantDetail,
       content: {},
       // subTotal: totalSum,
       // grandTotal: totalSum,
@@ -370,7 +373,7 @@ const ProjectInvoiceComponent = ({
                   ""
                 )}
                 <Box sx={{ display: "flex", gap: 2 }}>
-                  <Button
+                  {/* <Button
                     fullWidth
                     target="_blank"
                     variant="contained"
@@ -396,7 +399,7 @@ const ProjectInvoiceComponent = ({
                     }}
                   >
                     View Preview Page
-                  </Button>
+                  </Button> */}
                   <Button
                     type="submit"
                     sx={{

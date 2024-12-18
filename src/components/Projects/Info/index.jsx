@@ -1364,6 +1364,7 @@ const ProjectInfoComponent = ({
       <PreviewLinkList
         open={openLandingList}
         handleClose={() => setOpenLandingList(false)}
+        projectId={projectData?._id}
       />
       <AddressSelect
         open={openAddressSelectModal}

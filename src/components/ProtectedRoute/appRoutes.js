@@ -65,6 +65,8 @@ import ProjectInvoiceCreate from "@/pages/Invoices/Create";
 import ProjectInvoiceDetail from "@/pages/Invoices/Detail";
 import CreateNewInvoice from "@/pages/Invoices/CreateNewInvoice";
 import CreateLandingInvoice from "../ProjectInvoices/CreateLandingInvoice";
+import EditQuoteInvoice from "../ProjectInvoices/CreateEditInvoice/EditQuotePage";
+import ProjectInvoiceEdit from "@/pages/Invoices/Edit";
 
 const AppRoutes = () => {
   const token = localStorage.getItem("token");
@@ -116,6 +118,7 @@ const AppRoutes = () => {
           <Route path="/invoices/">
             <Route index element={<Invoices />} />
             <Route path="create" element={<ProjectInvoiceCreate />} />
+            <Route path="edit" element={<ProjectInvoiceEdit />} />
             <Route path="new-invoice" element={<CreateNewInvoice />} />
             <Route
               path=":id/customer-preview"

@@ -6,7 +6,6 @@ import { backendURL } from "@/utilities/common";
 import { Box, Grid, Tooltip, Typography } from "@mui/material";
 import DefaultImage from "@/components/ui-components/defaultImage";
 import { EstimateCategory } from "@/utilities/constants";
-import Pagination from "@/components/Pagination";
 
 const columns = [
   {
@@ -217,10 +216,11 @@ const columns = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function EstimateDataList({
+export default function EditEstimateTable({
   projectId,
   setSelectedEstimateRows,
   selectedEstimateRows,
+  selectedEstimates
 }) {
   const url = `${backendURL}/projects/pending-estimates-for-landing-page-preview/${projectId}`;
   const {
@@ -236,20 +236,41 @@ export default function EstimateDataList({
     }
   }, [projectId]);
 
+  const combinedItems = estimatesList.concat(selectedEstimates);
+  console.log(combinedItems,'wrewweewerewrerere',estimatesList,selectedEstimates);
+
+//   // Handle row selection
+//   const handleSelectionChange = (selectedRowIds) => {
+//     // Find the full objects of the selected rows
+//     const selectedData =
+//       estimatesList?.filter((row) =>
+//         selectedRowIds.includes(row._id)
+//       ) || [];
+//     setSelectedEstimateRows(selectedData);
+//     console.log("Selected row data:", selectedData); // Log the full object
+//   };
+
+
+  // State to manage selected rows
+  const [selectedRowIds, setSelectedRowIds] = React.useState([]);
+
+  React.useEffect(() => {
+    if (estimatesList?.length > 0) {
+      // Select the first row by default
+      setSelectedRowIds([estimatesList[0]._id]);
+      setSelectedEstimateRows([estimatesList[0]]);
+    }
+  }, [estimatesList]);
+
   // Handle row selection
-  const handleSelectionChange = (selectedRowIds) => {
+  const handleSelectionChange = (newSelectedRowIds) => {
     // Find the full objects of the selected rows
     const selectedData =
-      estimatesList?.filter((row) =>
-        selectedRowIds.includes(row._id)
-      ) || [];
+      estimatesList?.filter((row) => newSelectedRowIds.includes(row._id)) || [];
+    setSelectedRowIds(newSelectedRowIds); // Update selected IDs
     setSelectedEstimateRows(selectedData);
     console.log("Selected row data:", selectedData); // Log the full object
   };
-
-  const [page, setPage] = React.useState(1);
-  const itemsPerPage = 10;
-  console.log(selectedEstimateRows,'selectedEstimateRows')
 
   return (
     <>
@@ -259,26 +280,19 @@ export default function EstimateDataList({
       {estimatesList?.length > 0 ? (
         <Paper sx={{ width: "100%" }}>
           <DataGrid
-            getRowId={(row) => row._id}
-            rows={isFetched && estimatesList}
+            getRowId={(row) => row.estimate_id}
+            rows={isFetched && selectedEstimates}
             columns={columns}
-            initialState={{ pagination: { paginationModel } }}
+            // initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[5, 10]}
-            checkboxSelection
+            // checkboxSelection
             rowHeight={70}
             sx={{ border: 0 }}
             hideFooter
             disableColumnMenu
-            onRowSelectionModelChange={handleSelectionChange} // Pass handler here
+            // rowSelectionModel={selectedRowIds} // Pass the selected row IDs here
+            // onRowSelectionModelChange={handleSelectionChange}
           />
-          {/* <Pagination
-            totalRecords={
-              estimatesList?.totalRecords ? estimatesList?.totalRecords : 0
-            }
-            itemsPerPage={itemsPerPage}
-            page={page}
-            setPage={setPage}
-          /> */}
         </Paper>
       ) : (
         <Box
@@ -288,7 +302,6 @@ export default function EstimateDataList({
             overflow: "hidden",
             border: "1px solid #D0D5DD",
             m: "auto",
-            //   boxShadow:1
           }}
         >
           <Typography

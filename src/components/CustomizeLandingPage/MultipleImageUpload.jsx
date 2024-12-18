@@ -67,17 +67,7 @@ const MultipleImageUpload = ({ images, setImages }) => {
           ))}
         </Grid>
       ) : (
-        <Box
-          sx={{
-            height: "200px",
-            alignItems: "center",
-            display: "grid",
-            textAlign: "center",
-            width: "100%",
-          }}
-        >
-          <Typography sx={{fontSize:'20px'}}>N0 Image Selected!</Typography>
-        </Box>
+       ''
       )}
       <Typography sx={{ mb: 2, fontSize: "12px" }}>
         Upload and Preview Multiple Images
