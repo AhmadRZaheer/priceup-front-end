@@ -1247,7 +1247,7 @@ const generateInvoiceItemForShowers = async (
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
   let totalPrice =
-    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +
@@ -1838,7 +1838,7 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config?.laborHoursForDoor *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
   let totalPrice =
-    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
+    (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
         ? companySettings?.miscPricing?.pricingFactor
         : 1) +

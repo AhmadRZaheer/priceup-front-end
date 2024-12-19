@@ -13,8 +13,28 @@ import React, { useRef, useState } from "react";
 import CustomInputField from "../ui-components/CustomInput";
 import SignatureCanvas from "react-signature-canvas";
 import PaymentModel from "./PaymentModel";
+import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
+import LandingPDFFile from "../PDFFile/LandingPagePdf";
 
-const SigntureSection = ({ refetchData }) => {
+const controls = {
+  viewPricingSubCategory: true,
+  viewGrossProfit: true,
+  viewSummary: true,
+  viewLayoutImage: true,
+  viewFabrication: true,
+  viewAdditionalFields: true,
+};
+
+const pdfLocationData = {
+  name: "GCS Glass & Mirror",
+  street: "20634 N. 28th Street, Suite 150",
+  state: "Phoenix",
+  zipCode: "AZ 85050",
+  website: "www.gcs.glass",
+};
+
+const SigntureSection = ({ refetchData,estimatePdfs }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
@@ -67,6 +87,22 @@ const SigntureSection = ({ refetchData }) => {
     signaturePadRef.current.clear();
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
+  };
+
+  const generatePDFDocument = async () => {
+    const doc = (estimatePdfs?.length > 0 &&
+      <LandingPDFFile
+        controls={{
+          ...controls,
+        }}
+        data={{ quote: estimatePdfs, location: pdfLocationData }}
+        key={`pdfFile${1}`}
+      />
+    )
+    const blobPdf = await pdf(doc);
+    blobPdf.updateContainer(doc);
+    const result = await blobPdf.toBlob();
+    saveAs(result, "Priceup");
   };
 
   return (
@@ -354,6 +390,7 @@ const SigntureSection = ({ refetchData }) => {
                 Your Estimate PDF is ready to download!{" "}
               </Typography>
               <Button
+              onClick={() => generatePDFDocument()}
                 variant="contained"
                 sx={{
                   fontFamily: '"Inter" !important',

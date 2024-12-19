@@ -1,9 +1,14 @@
 import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import "./style.scss";
 
 const AggremantCondition = () => {
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = (event) => {
+    setChecked(event.target.checked);
+  };
+
   return (
     <Box sx={{ background: "#000000", py: 6 }}>
       <Container maxWidth="lg">
@@ -187,7 +192,8 @@ const AggremantCondition = () => {
             <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
               <Box>
                 <Checkbox
-                  {...label}
+                  checked={checked} 
+                  onChange={handleChange} 
                   sx={{
                     color: "#E0E0E0",
                     "&.Mui-checked": {
@@ -207,6 +213,7 @@ const AggremantCondition = () => {
                 Cancel
               </Button>
               <Button
+              disabled={!checked}
                 variant="contained"
                 sx={{
                   backgroundColor: "#F95500",
