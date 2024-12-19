@@ -115,13 +115,9 @@ const CustomizeLandingPage = ({
 }) => {
   console.log(selectedData, 'data?.config')
   const { id } = useParams();
-  const totalSum = selectedData?.estimates?.reduce(
-    (accumulator, currentItem) => {
-      return accumulator + currentItem.pricing.totalPrice;
-    },
-    0
-  );
+
   const signaturePadRef = useRef(null);
+  const [totalSum, SetTotalSum] = useState(0);
   const [signatureURL, setSignatureURL] = useState(null);
   const [isPadOpen, setIsPadOpen] = useState(false);
   const [images, setImages] = useState([]);
@@ -375,6 +371,24 @@ const CustomizeLandingPage = ({
     };
   }, [selectedData?.estimates]);
 
+  useEffect(() => {
+    if (selectedData) {
+      const sum = selectedData?.estimates?.reduce(
+        (accumulator, currentItem) => {
+          return accumulator + currentItem.pricing.totalPrice;
+        },
+        0
+      );
+      SetTotalSum(sum);
+    }
+  }, [selectedData]);
+
+  const reCalculateTotal = (priceToMinus, priceToAdd) => {
+    let sum = totalSum - priceToMinus;
+    sum = sum + priceToAdd;
+    SetTotalSum(sum);
+  }
+
   console.log(estimateTotal, "sdgasdfgasdfgestimateTotal");
 
 
@@ -427,8 +441,8 @@ const CustomizeLandingPage = ({
             // m: "auto",
             backgroundImage: {
               md: `url(${selectedData?.content?.section1?.backgroundImage
-                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
-                  : bgHeaderImage
+                ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+                : bgHeaderImage
                 })`,
               xs: "none",
             },
@@ -1289,7 +1303,11 @@ const CustomizeLandingPage = ({
                             <Box>
                               <Box>
                                 {/* {selectedSummary} */}
-                                <ShowerSummary data={data} hardwaresList={data?.category === EstimateCategory.SHOWERS ? showerHardwaresList : data?.category === EstimateCategory.MIRRORS ? {...mirrorHardwaresList,glassType:mirrorHardwaresList?.glassTypes ?? []} : wineCellarHardwaresList} />
+                                <ShowerSummary data={data}
+                                  reCalculateTotal={reCalculateTotal}
+                                  locationSettings={data?.category === EstimateCategory.SHOWERS ? showersLocationSettings : data?.category === EstimateCategory.MIRRORS ? mirrorsLocationSettings : wineCellarLocationSettings}
+                                  hardwaresList={data?.category === EstimateCategory.SHOWERS ? showerHardwaresList : data?.category === EstimateCategory.MIRRORS ? { ...mirrorHardwaresList, glassType: mirrorHardwaresList?.glassTypes ?? [] } : wineCellarHardwaresList}
+                                />
                               </Box>
                             </Box>
                           </Box>
