@@ -147,7 +147,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                       >
                         <TableCell>{data.noOfEstimate}</TableCell>
                         <TableCell align="center">
-                          ${data.totalAmount}
+                          ${(data.totalAmount).toFixed(2)}
                         </TableCell>
                         <TableCell align="center">
                           {new Date(row?.createdAt).toDateString()}

@@ -176,13 +176,12 @@ const EditQuoteInvoice = () => {
         data: data,
         apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       });
-    refetchSingleItem();
+      refetchSingleItem();
       // navigate(`/invoices/${response?.project_id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
   };
- console.log(singleItemData,'data')
   const handleImageUploadLogo = async (event, key) => {
     const image = event.target.files[0];
 
@@ -208,14 +207,14 @@ const EditQuoteInvoice = () => {
     }
     formData.append("key", key);
 
-   await EditInvoice({
+    await EditInvoice({
       apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       data: formData,
     });
     refetchSingleItem();
   };
 
-  const handleUploadEstimatesImage = async (event,key) => {
+  const handleUploadEstimatesImage = async (event, key) => {
     const image = event.target.files[0]; // Get the selected files
     const formData = new FormData();
     if (image) {
@@ -223,25 +222,31 @@ const EditQuoteInvoice = () => {
     }
     formData.append("key", key);
 
-   await EditInvoice({
+    await EditInvoice({
       apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       data: formData,
     });
     refetchSingleItem();
     // setImagesArray(imageURL);
   };
-  const handleDeleteImageFromEstimate = async (gallery,removeGalleryImage,key) => {
-    const galleryFiltered = gallery?.filter((item)=>item !== removeGalleryImage);
+  const handleDeleteImageFromEstimate = async (
+    gallery,
+    removeGalleryImage,
+    key
+  ) => {
+    const galleryFiltered = gallery?.filter(
+      (item) => item !== removeGalleryImage
+    );
     await EditInvoice({
       apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       data: {
         key,
-        gallery:galleryFiltered ?? [],
-        removeGalleryImage
+        gallery: galleryFiltered ?? [],
+        removeGalleryImage,
       },
     });
     refetchSingleItem();
-  }
+  };
 
   // useEffect(() => {
   //   if (customerID && projectID) {
@@ -567,13 +572,27 @@ const EditQuoteInvoice = () => {
                         width: "50%",
                       }}
                     >
-                      <Typography>Text 1</Typography>
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 1
+                      </Typography>
                       <TextareaAutosize
-                        style={{ width: "100%" }}
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                          // width: "100%",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={5}
+                        maxRows={19}
                         name="section1.text1"
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
                         value={formik.values.section1.text1 || ""}
                         onChange={formik.handleChange}
-                        minRows={10}
+                        // minRows={10}
                       />
                     </Box>
 
@@ -585,13 +604,26 @@ const EditQuoteInvoice = () => {
                         width: "50%",
                       }}
                     >
-                      <Typography>Text 2</Typography>
+                      <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                        Text 2
+                      </Typography>
                       <TextareaAutosize
-                        style={{ width: "100%" }}
+                        style={{
+                          padding: "10px",
+                          borderColor: "#cccc",
+                          borderRadius: "5px",
+                          // width: "100%",
+                        }}
+                        className="custom-textfield"
+                        color="neutral"
+                        minRows={5}
+                        maxRows={19}
+                        placeholder="Enter Text"
+                        size="large"
+                        variant="outlined"
                         name="section1.text2"
                         value={formik.values.section1.text2 || ""}
                         onChange={formik.handleChange}
-                        minRows={10}
                       />
                     </Box>
                   </Box>
@@ -734,17 +766,39 @@ const EditQuoteInvoice = () => {
                     Section 2
                   </Typography>
 
-                  <Typography fontWeight={"bold"}>Estimates Images</Typography>
+                  <Typography fontWeight={"bold"} sx={{ pt: 1, pb: 2 }}>
+                    Estimates Images
+                  </Typography>
 
-                  {singleItemData?.estimates?.map((item,index) => 
+                  {singleItemData?.estimates?.map((item, index) => (
                     <Box
                       key={item._id}
-                      sx={{ display: "flex", flexDirection: "column", gap: 2, border:'1px solid #ccc' }}
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1,
+                        border: "1px solid #ccc",
+                      }}
                     >
-                      <Typography>
-                        {item?.category + "-" + item?.layout}
+                      <Typography
+                        sx={{
+                          px: 3,
+                          pt: 2,
+                          textTransform: "capitalize",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {item?.category + "-" + item?.layout} - Estimate
                       </Typography>
-                      <Grid container sx={{ width: "100%", display:"flex",flexWrap:'wrap',gap:'10px'}}>
+                      <Grid
+                        container
+                        sx={{
+                          width: "100%",
+                          display: "flex",
+                          flexWrap: "wrap",
+                          gap: "10px",
+                        }}
+                      >
                         {item?.gallery?.map((_image) => (
                           <Box
                             sx={{
@@ -753,13 +807,31 @@ const EditQuoteInvoice = () => {
                               display: "flex",
                               justifyContent: "center",
                               alignItems: "center",
-                              padding: 3,
-                              position:'relative'
+                              px: 3,
+                              py: 1.5,
+                              position: "relative",
                             }}
                           >
-                            <IconButton style={{position:'absolute',right:'10px',top:'20px',color:'red'}} onClick={()=>handleDeleteImageFromEstimate(item?.gallery,_image,`estimates.${index}.gallery`)}><Delete  /></IconButton>
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                right: "18px",
+                                top: "3px",
+                                color: "red",
+                                cursor: "pointer",
+                              }}
+                              onClick={() =>
+                                handleDeleteImageFromEstimate(
+                                  item?.gallery,
+                                  _image,
+                                  `estimates.${index}.gallery`
+                                )
+                              }
+                            >
+                              <Delete />
+                            </Box>
                             <img
-                              style={{width:'100%',height:'100%'}}
+                              style={{ width: "100%", height: "100%" }}
                               // src=""
                               src={`${backendURL}/${_image}`}
                               // width={400}
@@ -769,28 +841,34 @@ const EditQuoteInvoice = () => {
                           </Box>
                         ))}
                       </Grid>
-
-                      <Button
-                        variant="contained"
-                        component="label"
-                        sx={{
-                          background: "#8477DA",
-                          ":hover": {
+                      <Box sx={{px:3,pb:2,textAlign:'center'}}>
+                        <Button
+                          variant="contained"
+                          component="label"
+                          sx={{
                             background: "#8477DA",
-                          },
-                        }}
-                      >
-                        Upload image
-                        <input
-                          type="file"
-                          accept="image/*"
-                          // multiple
-                          hidden
-                          onChange={(e) => handleUploadEstimatesImage(e,`estimates.${index}.gallery`)}
-                        />
-                      </Button>
+                            ":hover": {
+                              background: "#8477DA",
+                            },
+                          }}
+                        >
+                          Upload image
+                          <input
+                            type="file"
+                            accept="image/*"
+                            // multiple
+                            hidden
+                            onChange={(e) =>
+                              handleUploadEstimatesImage(
+                                e,
+                                `estimates.${index}.gallery`
+                              )
+                            }
+                          />
+                        </Button>
+                      </Box>
                     </Box>
-                  )}
+                  ))}
                 </Box>
               </Box>
             </Box>

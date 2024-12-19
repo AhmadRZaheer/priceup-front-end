@@ -13,6 +13,7 @@ const MenuItem = ({
   type,
   selectedItem,
   selectedContent,
+  handleChange
 }) => {
   const activeFinishOrThickness =
     type === hardwareTypes.GLASSTYPE
@@ -44,11 +45,11 @@ const MenuItem = ({
   const isSelected =
     type === "hardwareAddons"
       ? selectedContent?.hardwareAddons.some(
-          (row) => row?.item?._id === item?._id
+          (row) => row?.type === item?._id
         )
       : type === "glassAddons"
       ? selectedContent?.glassAddons.some(
-          (selectedItem) => selectedItem?._id === item?._id
+          (selectedItem) => selectedItem?.type === item?._id
         )
       : type === "wallClamp"
       ? selectedContent?.mountingClamps?.wallClamp.some(
@@ -76,8 +77,10 @@ const MenuItem = ({
         )
       : ["handles", "hinges", "slidingDoorSystem", "header"].includes(type)
       ? item === selectedItem
-      : // status && item === selectedItem
-        item === selectedItem;
+      : ["glassType"].includes(type) 
+      ? item?._id === selectedItem?.type
+      : item === selectedItem;
+        console.log(isSelected,'sssss',selectedContent)
   return (
     <Tooltip
       title={
@@ -141,15 +144,16 @@ const MenuItem = ({
           <Box>
             {type === "hardwareAddons" ? (
               <OptionWithCounter
-                status={status}
+                status={true}
                 key={`${type}-${item.slug}`}
                 item={item}
                 type={type}
                 counter={
                   selectedContent?.hardwareAddons?.find(
-                    (row) => row?.item?.slug === item.slug
+                    (row) => row?.type === item?._id
                   )?.count
                 }
+                handleChange={handleChange}
               />
             ) : ["wallClamp", "sleeveOver", "glassToGlass"].includes(type) ? (
               <OptionWithCounter
@@ -162,6 +166,7 @@ const MenuItem = ({
                     (row) => row?.item?.slug === item?.slug
                   )?.count
                 }
+                handleChange={handleChange}
               />
             ) : [
                 "cornerWallClamp",
@@ -178,6 +183,7 @@ const MenuItem = ({
                     (row) => row?.item?.slug === item?.slug
                   )?.count
                 }
+                handleChange={handleChange}
               />
             ) : (
               isSelected && (

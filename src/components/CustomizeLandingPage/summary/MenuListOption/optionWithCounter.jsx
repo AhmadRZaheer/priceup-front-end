@@ -4,14 +4,15 @@ import { useDispatch } from "react-redux";
 import { setCounters } from "@/redux/estimateCalculations";
 import { useState } from "react";
 
-const OptionWithCounter = ({ counter = 0, type, item, status }) => {
+const OptionWithCounter = ({ counter = 0, type, item, status, handleChange }) => {
     const disaptch = useDispatch();
     const [count, setCount] = useState(counter);
     const handleCountSet = (newVal, event) => {
         event.stopPropagation();
         if (newVal >= 0 && newVal <=100 && status) {
             setCount(newVal)
-            disaptch(setCounters({ item: item, type: type, value: newVal }));
+            // disaptch(setCounters({ item: item, type: type, value: newVal }));
+            handleChange(type,{item,counter:newVal})
         }
     }
     return (<Box

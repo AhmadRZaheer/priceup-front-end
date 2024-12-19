@@ -34,8 +34,10 @@ const MenuList = ({
   count,
   thickness,
   currentItem,
+  selectedContent,
+  handleChange, 
 }) => {
-  const selectedContent = useSelector(getContent);
+  // const selectedContent = useSelector(getContent);
   const [anchorEl, setAnchorEl] = useState(false);
   const [countVal, setCountVal] = useState(0);
   const [thicknessVal, setThicknessVal] = useState("1/2");
@@ -52,9 +54,11 @@ const MenuList = ({
   }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    console.log(item , 'wedfdsdfssdfds')
-    dispatch(setContent({ type: type, item: item }));
-    setSelectedItem(item);
+    console.log(item, "wedfdsdfssdfds");
+    handleChange(type,item);
+    // dispatch(setContent({ type: type, item: item }));
+    // setSelectedGlassType(item); // Call the function only if it's valid    
+    setSelectedItem({type:item?._id,name:item?.name,thickness:item?.thickness});
   };
   const handleCountSet = (value) => {
     if (value >= 0 && value <= 100) {
@@ -68,17 +72,12 @@ const MenuList = ({
   };
   const opneClose = () => {
     if (
-      selectedContent.hardwareFinishes ||
+      selectedContent?.hardwareFinish?.type ||
       ["hardwareFinishes"].includes(type)
     ) {
       setAnchorEl(!anchorEl);
     } else {
-        dispatch(
-            showSnackbar({
-              message: "This option is not available yet!",
-              severity: "warning",
-            })
-          );
+      setAnchorEl(!anchorEl);
     }
   };
   return (
@@ -105,7 +104,7 @@ const MenuList = ({
             },
             paddingLeft: "0px !important",
             paddingY: "12px !important",
-            px:2,
+            px: 2,
             display: "flex",
             alignItems: "center",
             cursor: "pointer",
@@ -267,6 +266,7 @@ const MenuList = ({
                 selectedItem={selectedItem}
                 handleItemSelect={handleItemSelect}
                 selectedContent={selectedContent}
+                handleChange={handleChange}
               />
             ))
           )}

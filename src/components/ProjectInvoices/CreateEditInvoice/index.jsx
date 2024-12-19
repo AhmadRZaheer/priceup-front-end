@@ -79,7 +79,6 @@ const ProjectInvoiceComponent = ({
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log(values,'asaaaaaaaaaaaaa')
       handleCraete(values);
     },
   });
@@ -162,7 +161,7 @@ const ProjectInvoiceComponent = ({
       address,
       phone,
     };
-   
+
     const currentDate = values.dueDate;
     const updatedDate = currentDate.add(15, "day");
     // ISO format mein convert karein
@@ -171,11 +170,11 @@ const ProjectInvoiceComponent = ({
       link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
       expiresAt: updatedDate,
     };
-    const compantDetail= {
+    const compantDetail = {
       name: companySettings?.name,
-      image:companySettings.image,
-      address:companySettings?.address
-    }
+      image: companySettings.image,
+      address: companySettings?.address,
+    };
     const data = {
       customer_id: selectedCustomer?._id,
       project_id: selectedProject?._id,
@@ -194,8 +193,8 @@ const ProjectInvoiceComponent = ({
         data,
         apiRoute: `${backendURL}/projects/landing-page-preview`,
       });
-      console.log(response)
-      navigate(`/invoices/${response?._id}/customer-preview`);
+      console.log(response);
+      navigate(`/invoices/edit/?item_id=${response?._id}`);
     } catch (error) {
       console.log(error);
     }
@@ -265,7 +264,7 @@ const ProjectInvoiceComponent = ({
         background: "transparent",
         padding: { sm: 0, xs: "60px 8px 8px 8px" },
         width: { sm: "auto", xs: "auto", margin: "0px auto" },
-        overflowX:'hidden'
+        overflowX: "hidden",
       }}
     >
       <Box>
@@ -484,7 +483,7 @@ const ProjectInvoiceComponent = ({
                     >
                       <Box paddingBottom={0.6}>
                         <label className="label-text" htmlFor="status">
-                          Select Customer:{" "}
+                          Customer:{" "}
                         </label>
                       </Box>
                       {/* <FormControl
@@ -523,7 +522,13 @@ const ProjectInvoiceComponent = ({
                       </Select>
                     </FormControl> */}
 
-                      <CustomInputField
+                      <Typography>{selectedCustomer?.name}</Typography>
+                      <Typography>{selectedCustomer?.email}</Typography>
+                      <Typography>
+                        {selectedCustomer?.address}
+                      </Typography>
+
+                      {/* <CustomInputField
                         id="customer"
                         name="customer"
                         // label="Select a Customer"
@@ -557,7 +562,7 @@ const ProjectInvoiceComponent = ({
                         }}
                         value={formik.values?.customer}
                         onChange={() => {}}
-                      />
+                      /> */}
                     </Box>
                   </Box>
                   <Box
@@ -576,7 +581,7 @@ const ProjectInvoiceComponent = ({
                     >
                       <Box paddingBottom={0.6}>
                         <label className="label-text" htmlFor="status">
-                          Select Project:{" "}
+                          Project:{" "}
                         </label>
                       </Box>
                       {/* <FormControl
@@ -621,7 +626,12 @@ const ProjectInvoiceComponent = ({
                         )}
                       </Select>
                     </FormControl> */}
-                      <CustomInputField
+                    
+                    <Typography>
+                      {selectedProject?.name}
+                    </Typography>
+
+                      {/* <CustomInputField
                         disabled={!selectedCustomer}
                         id="address"
                         name="address"
@@ -655,7 +665,7 @@ const ProjectInvoiceComponent = ({
                           width: "100%",
                         }}
                         value={formik.values.project}
-                      />
+                      /> */}
                     </Box>
                   </Box>
                   <Box
@@ -722,7 +732,7 @@ const ProjectInvoiceComponent = ({
                     padding: "16px",
                   }}
                 >
-                  <Box sx={{ width: { sm: "51.1%", xs: "100%" }, pt: 1 }}>
+                  <Box sx={{ width: { sm: "51.1%", xs: "100%" }, }}>
                     <Box
                       sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                     >

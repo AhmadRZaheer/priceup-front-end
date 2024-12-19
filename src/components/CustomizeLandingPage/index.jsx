@@ -121,6 +121,9 @@ const CustomizeLandingPage = ({
   const [signatureURL, setSignatureURL] = useState(null);
   const [isPadOpen, setIsPadOpen] = useState(false);
   const [images, setImages] = useState([]);
+  const showerHardwaresList = useSelector(getListData);
+  const mirrorHardwaresList = useSelector(getMirrorsHardware);
+  const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
   const handleAddSignature = () => {
     // Get the trimmed canvas URL
     const url = signaturePadRef.current
@@ -248,18 +251,6 @@ const CustomizeLandingPage = ({
   //   refetchData();
   // }, []);
 
-  const summarySections = (data, quoteNumber) => {
-    if (data?.category === EstimateCategory.SHOWERS) {
-      return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
-    } else if (data?.category === EstimateCategory.MIRRORS) {
-      return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
-    } else if (data?.category === EstimateCategory.WINECELLARS) {
-      return <ShowerSummary data={data} quoteNumber={quoteNumber} />;
-    } else {
-      console.log("category no found");
-      return;
-    }
-  };
 
   const {
     mutate: updateInvoiceStatus,
@@ -1072,7 +1063,7 @@ const CustomizeLandingPage = ({
               {isFetched ? (
                 selectedData?.estimates?.length > 0 ? (
                   selectedData?.estimates?.map((data, index) => {
-                    const selectedSummary = summarySections(data, index + 1);
+                    // const selectedSummary = summarySections(data, index + 1);
                     return (
                       <Accordion
                         key={index}
@@ -1263,7 +1254,10 @@ const CustomizeLandingPage = ({
                             </Box> */}
 
                             <Box>
-                              <Box>{selectedSummary}</Box>
+                              <Box>
+                                {/* {selectedSummary} */}
+                                <ShowerSummary data={data} hardwaresList={data?.category === EstimateCategory.SHOWERS ? showerHardwaresList : data?.category === EstimateCategory.MIRRORS ? {...mirrorHardwaresList,glassType:mirrorHardwaresList?.glassTypes ?? []} : wineCellarHardwaresList} />
+                              </Box>
                             </Box>
                           </Box>
                         </AccordionDetails>
