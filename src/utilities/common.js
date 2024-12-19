@@ -102,14 +102,14 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
   });
   let mountingsleeveOver = 0;
   selectedContent?.mountingClamps?.sleeveOver?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingsleeveOver += price ? price * row.count : 0;
   });
   let mountingglassToGlass = 0;
   selectedContent?.mountingClamps?.glassToGlass?.forEach((row) => {
-    const price = row.item.finishes?.find(
+    const price = row?.item?.finishes?.find(
       (item) => selectedContent.hardwareFinishes?._id === item.finish_id
     )?.cost;
     mountingglassToGlass += price ? price * row.count : 0;

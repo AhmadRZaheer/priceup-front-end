@@ -85,6 +85,9 @@ import ClaimSection from "./ClaimSection";
 import UpgradeOPtions from "./UpgradeOptions";
 import AggremantCondition from "./AggremantCondition";
 import SigntureSection from "./SigntureSection";
+import LandingPDFFile from "../PDFFile/LandingPagePdf";
+import { pdf } from "@react-pdf/renderer";
+import { saveAs } from "file-saver";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -110,6 +113,7 @@ const CustomizeLandingPage = ({
   isFetched,
   isFetching,
 }) => {
+  console.log(selectedData, 'data?.config')
   const { id } = useParams();
   const totalSum = selectedData?.estimates?.reduce(
     (accumulator, currentItem) => {
@@ -134,116 +138,116 @@ const CustomizeLandingPage = ({
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
   };
-  // const wineCellarHardwareList = useSelector(getWineCellarsHardware);
-  // const mirrorsHardwareList = useSelector(getMirrorsHardware);
-  // const showersHardwareList = useSelector(getListData);
-  // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-  // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
-  // const showersLocationSettings = useSelector(getLocationShowerSettings);
-  // const pdfSettings = useSelector(getLocationPdfSettings);
+  const wineCellarHardwareList = useSelector(getWineCellarsHardware);
+  const mirrorsHardwareList = useSelector(getMirrorsHardware);
+  const showersHardwareList = useSelector(getListData);
+  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
   // const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
-  // const generatePDF = (data) => {
-  //   // console.log("Call this function", data);
-  //   if (data?.category === EstimateCategory.SHOWERS) {
-  //     const formattedData = generateObjectForPDFPreview(
-  //       showersHardwareList,
-  //       data,
-  //       showersLocationSettings?.miscPricing
-  //     );
-  //     const pricing = calculateTotal(
-  //       formattedData,
-  //       formattedData?.sqftArea,
-  //       showersLocationSettings
-  //     );
-  //     const measurementString = renderMeasurementSides(
-  //       quoteState.EDIT,
-  //       formattedData?.measurements,
-  //       formattedData?.layout_id
-  //     );
-  //     const id = data?._id;
-  //     return {
-  //       ...formattedData,
-  //       measurements: measurementString,
-  //       pricing,
-  //       pdfSettings,
-  //       id,
-  //     };
-  //   } else if (data?.category === EstimateCategory.MIRRORS) {
-  //     const formattedData = generateObjectForMirrorPDFPreview(
-  //       mirrorsHardwareList,
-  //       data,
-  //       mirrorsLocationSettings?.miscPricing
-  //     );
-  //     console.log(formattedData?.measurements, "data");
-  //     const pricingMirror = mirrorTotal(
-  //       formattedData,
-  //       formattedData?.sqftArea,
-  //       mirrorsLocationSettings,
-  //       formattedData.measurements
-  //     );
+  const generatePDF = (data) => {
+    // console.log("Call this function", data);
+    if (data?.category === EstimateCategory.SHOWERS) {
+      const formattedData = generateObjectForPDFPreview(
+        showersHardwareList,
+        data,
+        showersLocationSettings?.miscPricing
+      );
+      const pricing = calculateTotal(
+        formattedData,
+        formattedData?.sqftArea,
+        showersLocationSettings
+      );
+      const measurementString = renderMeasurementSides(
+        quoteState.EDIT,
+        formattedData?.measurements,
+        formattedData?.layout_id
+      );
+      const id = data?._id;
+      return {
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        pdfSettings,
+        id,
+      };
+    } else if (data?.category === EstimateCategory.MIRRORS) {
+      const formattedData = generateObjectForMirrorPDFPreview(
+        mirrorsHardwareList,
+        data,
+        mirrorsLocationSettings?.miscPricing
+      );
+      console.log(formattedData?.measurements, "data");
+      const pricingMirror = mirrorTotal(
+        formattedData,
+        formattedData?.sqftArea,
+        mirrorsLocationSettings,
+        formattedData.measurements
+      );
 
-  //     const pricing = {
-  //       glassPrice: pricingMirror.glass,
-  //       fabricationPrice: pricingMirror.fabrication,
-  //       laborPrice: pricingMirror.labor,
-  //       additionalFieldPrice: pricingMirror.additionalFields,
-  //       cost: pricingMirror.cost,
-  //       total: pricingMirror.total,
-  //       profit: pricingMirror.profitPercentage,
-  //     };
-  //     const measurementString = mirrorRenderSides(formattedData?.measurements);
-  //     console.log(measurementString, "string ");
-  //     const id = data?._id;
-  //     return {
-  //       ...formattedData,
-  //       measurements: measurementString,
-  //       pricing,
-  //       id,
-  //       pdfSettings,
-  //     };
-  //   } else if (data?.category === EstimateCategory.WINECELLARS) {
-  //     const formattedData = generateObjectForPDFPreview(
-  //       wineCellarHardwareList,
-  //       data,
-  //       wineCellarLocationSettings?.miscPricing
-  //     );
-  //     const pricing = calculateTotal(
-  //       formattedData,
-  //       formattedData?.sqftArea,
-  //       wineCellarLocationSettings
-  //     );
-  //     const measurementString = renderMeasurementSides(
-  //       quoteState.EDIT,
-  //       formattedData?.measurements,
-  //       formattedData?.layout_id
-  //     );
+      const pricing = {
+        glassPrice: pricingMirror.glass,
+        fabricationPrice: pricingMirror.fabrication,
+        laborPrice: pricingMirror.labor,
+        additionalFieldPrice: pricingMirror.additionalFields,
+        cost: pricingMirror.cost,
+        total: pricingMirror.total,
+        profit: pricingMirror.profitPercentage,
+      };
+      const measurementString = mirrorRenderSides(formattedData?.measurements);
+      console.log(measurementString, "string ");
+      const id = data?._id;
+      return {
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        id,
+        pdfSettings,
+      };
+    } else if (data?.category === EstimateCategory.WINECELLARS) {
+      const formattedData = generateObjectForPDFPreview(
+        wineCellarHardwareList,
+        data,
+        wineCellarLocationSettings?.miscPricing
+      );
+      const pricing = calculateTotal(
+        formattedData,
+        formattedData?.sqftArea,
+        wineCellarLocationSettings
+      );
+      const measurementString = renderMeasurementSides(
+        quoteState.EDIT,
+        formattedData?.measurements,
+        formattedData?.layout_id
+      );
 
-  //     const { doorWeight, panelWeight, returnWeight } =
-  //       calculateAreaAndPerimeter(
-  //         data.config.measurements,
-  //         data?.settings?.variant,
-  //         data?.config?.glassType?.thickness,
-  //         { doorQuantity: data.config.doorQuantity }
-  //       );
+      const { doorWeight, panelWeight, returnWeight } =
+        calculateAreaAndPerimeter(
+          data.config.measurements,
+          data?.settings?.variant,
+          data?.config?.glassType?.thickness,
+          { doorQuantity: data.config.doorQuantity }
+        );
 
-  //     const id = data?._id;
-  //     return {
-  //       ...formattedData,
-  //       measurements: measurementString,
-  //       pricing,
-  //       id,
-  //       doorWeight,
-  //       panelWeight,
-  //       returnWeight,
-  //       pdfSettings,
-  //     };
-  //   } else {
-  //     console.log("Not Selected Catetory Found!");
-  //   }
-  // };
+      const id = data?._id;
+      return {
+        ...formattedData,
+        measurements: measurementString,
+        pricing,
+        id,
+        doorWeight,
+        panelWeight,
+        returnWeight,
+        pdfSettings,
+      };
+    } else {
+      console.log("Not Selected Catetory Found!");
+    }
+  };
 
-  // const [estimatePdfs, setEstimatePdfs] = useState([]);
+  const [estimatePdfs, setEstimatePdfs] = useState([]);
   // useEffect(() => {
   //   refetchData();
   // }, []);
@@ -267,28 +271,28 @@ const CustomizeLandingPage = ({
     isSuccess,
   } = useEditDocument();
 
-  // useEffect(() => {
-  //   const generatedPdfs = [];
-  //   if (isFetched) {
-  //     selectedData?.forEach((data, index) => {
-  //       const singleEstimatePdf = generatePDF(data);
-  //       if (singleEstimatePdf) {
-  //         generatedPdfs.push(singleEstimatePdf);
-  //       }
-  //     });
-  //     setEstimatePdfs(generatedPdfs);
-  //   }
-  // }, [
-  //   selectedData,
-  //   wineCellarHardwareList,
-  //   mirrorsHardwareList,
-  //   showersHardwareList,
-  //   wineCellarLocationSettings,
-  //   mirrorsLocationSettings,
-  //   showersLocationSettings,
-  //   pdfSettings,
-  // ]);
-  // console.log(estimatePdfs, "estimatePdfsestimatePdfs");
+  useEffect(() => {
+    const generatedPdfs = [];
+    if (isFetched) {
+      selectedData?.estimates?.forEach((data, index) => {
+        const singleEstimatePdf = generatePDF(data?.config);
+        if (singleEstimatePdf) {
+          generatedPdfs.push(singleEstimatePdf);
+        }
+      });
+      setEstimatePdfs(generatedPdfs);
+    }
+  }, [
+    selectedData,
+    wineCellarHardwareList,
+    mirrorsHardwareList,
+    showersHardwareList,
+    wineCellarLocationSettings,
+    mirrorsLocationSettings,
+    showersLocationSettings,
+    pdfSettings,
+  ]);
+  console.log(estimatePdfs, "estimatePdfsestimatePdfs");
   const decodedToken = getDecryptedToken();
   // const [estimatePdf, setEstimatePdf] = useState([]);
   const fileInputRef = useRef(null);
@@ -382,6 +386,23 @@ const CustomizeLandingPage = ({
 
   console.log(estimateTotal, "sdgasdfgasdfgestimateTotal");
 
+
+  const generatePDFDocument = async () => {
+    const doc = (estimatePdfs?.length > 0 &&
+      <LandingPDFFile
+        controls={{
+          ...controls,
+        }}
+        data={{ quote: estimatePdfs, location: pdfLocationData }}
+        key={`pdfFile${1}`}
+      />
+    )
+    const blobPdf = await pdf(doc);
+    blobPdf.updateContainer(doc);
+    const result = await blobPdf.toBlob();
+    saveAs(result, "Priceup");
+  };
+
   return (
     <>
       <Box sx={{ bgcolor: "black", width: "100%" }}>
@@ -414,11 +435,10 @@ const CustomizeLandingPage = ({
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
             backgroundImage: {
-              md: `url(${
-                selectedData?.content?.section1?.backgroundImage
+              md: `url(${selectedData?.content?.section1?.backgroundImage
                   ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
                   : bgHeaderImage
-              })`,
+                })`,
               xs: "none",
             },
             backgroundRepeat: "no-repeat",
@@ -1046,7 +1066,7 @@ const CustomizeLandingPage = ({
           >
             {isFetched ? (
               selectedData?.estimates?.length > 0 &&
-              selectedData?.estimates?.map((data, index) => {
+              estimatePdfs?.map((data, index) => {
                 const selectedSummary = summarySections(data, index + 1);
                 return (
                   <SwiperSlide>
@@ -1056,7 +1076,7 @@ const CustomizeLandingPage = ({
                       controls={{
                         ...controls,
                       }}
-                      data={{ quote: data?.config, location: pdfLocationData }}
+                      data={{ quote: data, location: pdfLocationData,pdfs:estimatePdfs }}
                       key={`pdfFile${index}`}
                     />
                   </PDFViewer> 
@@ -1067,6 +1087,19 @@ const CustomizeLandingPage = ({
               <CircularProgress size={24} sx={{ color: "#8477DA" }} />
             )}
           </Swiper> */}
+
+            {/* {console.log(estimatePdfs?.length, estimatePdfs, 'sdfgsdfger2345')}
+            {estimatePdfs?.length > 0 && <PDFViewer width={"100%"} height="1200px">
+              <LandingPDFFile
+                controls={{
+                  ...controls,
+                }}
+                data={{ quote: estimatePdfs, location: pdfLocationData }}
+                key={`pdfFile${1}`}
+              />
+            </PDFViewer>}
+
+            <Button variant="contained" onClick={() => generatePDFDocument()}> Download PDF</Button> */}
 
             <Box sx={{ pt: 2 }}>
               {isFetched ? (
@@ -1636,7 +1669,7 @@ const CustomizeLandingPage = ({
           )}
         </Box>
       </Container> */}
-      <SigntureSection refetchData={refetchData} />
+      <SigntureSection refetchData={refetchData} estimatePdfs={estimatePdfs} />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
           sx={{
