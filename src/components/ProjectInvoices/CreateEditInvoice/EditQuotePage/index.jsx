@@ -560,7 +560,7 @@ const EditQuoteInvoice = () => {
                 {/* section 1 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
-                    Section 1
+                   Section 1
                   </Typography>
 
                   <Box sx={{ display: "flex", gap: 2, mt: 2, width: "70%" }}>
@@ -645,7 +645,7 @@ const EditQuoteInvoice = () => {
                       <Box
                         sx={{
                           width: 400,
-                          height: 340,
+                          // height: 340,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -666,7 +666,7 @@ const EditQuoteInvoice = () => {
                             />
                           </Box>
                         ) : (
-                          <Typography>no Image Uploaded</Typography>
+                          <Typography>No Image Uploaded</Typography>
                         )}
                       </Box>
 
@@ -705,7 +705,7 @@ const EditQuoteInvoice = () => {
                       <Box
                         sx={{
                           width: 400,
-                          height: 340,
+                          // height: 340,
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -729,7 +729,7 @@ const EditQuoteInvoice = () => {
                             />
                           </Box>
                         ) : (
-                          <Typography>no Image Uploaded</Typography>
+                          <Typography>No Image Uploaded</Typography>
                         )}
                       </Box>
 
@@ -766,7 +766,7 @@ const EditQuoteInvoice = () => {
                     Section 2
                   </Typography>
 
-                  <Typography fontWeight={"bold"} sx={{ pt: 1, pb: 2 }}>
+                  <Typography fontWeight={"bold"} sx={{ pt: 1, }}>
                     Estimates Images
                   </Typography>
 
@@ -778,6 +778,7 @@ const EditQuoteInvoice = () => {
                         flexDirection: "column",
                         gap: 1,
                         border: "1px solid #ccc",
+                        mt:2
                       }}
                     >
                       <Typography
@@ -799,7 +800,9 @@ const EditQuoteInvoice = () => {
                           gap: "10px",
                         }}
                       >
-                        {item?.gallery?.map((_image) => (
+                        {console.log(item?.gallery,'item?.gallerydfgh')}
+                        {(item?.gallery !== undefined)  ?
+                        item?.gallery?.map((_image) => (
                           <Box
                             sx={{
                               width: "300px",
@@ -839,7 +842,11 @@ const EditQuoteInvoice = () => {
                               alt="section image backgroundImage"
                             />
                           </Box>
-                        ))}
+                        )) : 
+                        <Typography sx={{height:'150px',textAlign :'center',width:'100%',alignContent: 'center'}}>
+                          No Image Selected!
+                        </Typography>
+                        }
                       </Grid>
                       <Box sx={{px:3,pb:2,textAlign:'center'}}>
                         <Button
