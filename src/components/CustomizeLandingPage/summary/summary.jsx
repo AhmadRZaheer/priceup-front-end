@@ -27,9 +27,7 @@ import { getHardwareSpecificFabrication as getWineCellarHardwareSpecificFabricat
 
 const arr = [1, 2];
 
-const ShowerSummary = ({ data, hardwaresList }) => {
-  const showersLocationSettings = useSelector(getLocationShowerSettings);
-  const selectedContent = useSelector(getContent);
+const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal }) => {
   console.log(data, "asdfghsdfghasdf");
   // const hardwaresList = useSelector(getListData);
   const [images, setImages] = useState([]);
@@ -37,15 +35,15 @@ const ShowerSummary = ({ data, hardwaresList }) => {
     data?.image !== null ? `${backendURL}/${data?.image}` : null;
 
   const [selectedHardware, setSelectedHardware] = useState(data);
-  const [fabricationsCount,setFabricationsCount] = useState({
-      oneInchHoles: 0,
-      hingeCut: 0,
-      clampCut: 0,
-      notch: 0,
-      outages: 0,
+  const [fabricationsCount, setFabricationsCount] = useState({
+    oneInchHoles: 0,
+    hingeCut: 0,
+    clampCut: 0,
+    notch: 0,
+    outages: 0,
   });
-  useEffect(()=>{
-    if(data){
+  useEffect(() => {
+    if (data) {
       let fabrication = {
         oneInchHoles: 0,
         hingeCut: 0,
@@ -53,182 +51,166 @@ const ShowerSummary = ({ data, hardwaresList }) => {
         notch: 0,
         outages: 0,
       }
-    data?.hardwareAddons?.forEach((item)=>{
-      const record = hardwaresList?.hardwareAddons?.find((_item)=>_item._id === item.type);
-      if(record){
-        if(data?.category === EstimateCategory.SHOWERS){
-         fabrication.oneInchHoles +=  record.oneInchHoles ?? 0;
-         fabrication.hingeCut +=  record.hingeCut ?? 0;
-         fabrication.clampCut +=  record.clampCut ?? 0;
-         fabrication.notch +=  record.notch ?? 0;
-         fabrication.outages +=  record.outages ?? 0;
-        }else if(data?.category === EstimateCategory.WINECELLARS){
-          fabrication.oneInchHoles +=  record?.fabrication?.oneInchHoles ?? 0;
-          fabrication.hingeCut +=  record?.fabrication?.hingeCut ?? 0;
-          fabrication.clampCut +=  record?.fabrication?.clampCut ?? 0;
-          fabrication.notch +=  record?.fabrication?.notch ?? 0;
-          fabrication.outages +=  record?.fabrication?.outages ?? 0;
+      data?.hardwareAddons?.forEach((item) => {
+        const record = hardwaresList?.hardwareAddons?.find((_item) => _item._id === item.type);
+        if (record) {
+          if (data?.category === EstimateCategory.SHOWERS) {
+            fabrication.oneInchHoles += record.oneInchHoles ?? 0;
+            fabrication.hingeCut += record.hingeCut ?? 0;
+            fabrication.clampCut += record.clampCut ?? 0;
+            fabrication.notch += record.notch ?? 0;
+            fabrication.outages += record.outages ?? 0;
+          } else if (data?.category === EstimateCategory.WINECELLARS) {
+            fabrication.oneInchHoles += record?.fabrication?.oneInchHoles ?? 0;
+            fabrication.hingeCut += record?.fabrication?.hingeCut ?? 0;
+            fabrication.clampCut += record?.fabrication?.clampCut ?? 0;
+            fabrication.notch += record?.fabrication?.notch ?? 0;
+            fabrication.outages += record?.fabrication?.outages ?? 0;
+          }
         }
-      }
-    })
-    setFabricationsCount(fabrication)
-  }
-  },[data]);
-  const [selectedGlassType,setSelectedGlassType] = useState('');
-
+      })
+      setFabricationsCount(fabrication)
+    }
+  }, [data]);
+  const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
   const handleChangeHardware = (type, value) => {
-     if(type === 'glassType'){
+    const pricingFactor = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactor : locationSettings?.miscPricing?.pricingFactor;
+    const pricingFactorStatus = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactorStatus : locationSettings?.miscPricing?.pricingFactorStatus;
+    if (type === 'glassType') {
+      const oldGlassPrice = getCostByThickness(
+        selectedHardware?.glassType,
+        selectedHardware?.glassType?.thickness
+      );
+      const newGlassPrice = getCostByThickness(
+        { type: value?._id, name: value?.name, thickness: selectedHardware?.glassType?.thickness },
+        selectedHardware?.glassType?.thickness
+      );
+      console.log(oldGlassPrice, 'old price', newGlassPrice, 'new price', pricingFactor, pricingFactorStatus);
+      const calc =
+        (totalPrice - data?.pricing?.laborPrice) /
+        (pricingFactorStatus ? pricingFactor : 1) -
+        (oldGlassPrice * data?.sqftArea);
+      const glassPricing = data?.sqftArea !== 0 ?
+        (calc + data?.sqftArea * newGlassPrice) *
+        (pricingFactorStatus
+          ? pricingFactor
+          : 1) +
+        data?.pricing?.laborPrice : 0;
+      reCalculateTotal(totalPrice, glassPricing);
+      setTotalPrice(glassPricing);
       setSelectedHardware((prev) => ({
         ...prev,
-        glassType: {type:value?._id,name:value?.name,thickness:selectedHardware?.glassType?.thickness},
+        glassType: { type: value?._id, name: value?.name, thickness: selectedHardware?.glassType?.thickness },
       }));
-      console.log(value,'glassType');
-     }else if(type === 'glassAddons'){
-      const itemFound = hardwaresList.glassAddons?.find((item)=>item._id === value?._id);
+      console.log(value, 'glassType');
+    } else if (type === 'glassAddons') {
+      const itemFound = hardwaresList.glassAddons?.find((item) => item._id === value?._id);
       if (itemFound?.slug === "no-treatment") {
         setSelectedHardware((prev) => ({
           ...prev,
-          glassAddons: [{type:itemFound?._id,name:itemFound?.name}],
+          glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
         }));
       } else {
-       
+
         if (itemFound && selectedHardware?.glassAddons?.some(item => item.type === itemFound?._id)) {
-          const arrayFilter = selectedHardware?.glassAddons?.filter((item)=>item.type !== itemFound?._id);
-        console.log(itemFound,'item found',arrayFilter)
-          if(arrayFilter?.length > 0){
+          const arrayFilter = selectedHardware?.glassAddons?.filter((item) => item.type !== itemFound?._id);
+          console.log(itemFound, 'item found', arrayFilter)
+          if (arrayFilter?.length > 0) {
             setSelectedHardware((prev) => ({
               ...prev,
               glassAddons: arrayFilter,
             }));
           }
-          else{ // set no-treatment
+          else { // set no-treatment
             const noTreatment = hardwaresList?.glassAddons?.find(
               (row) => row.slug === "no-treatment"
             );
-            if(noTreatment){
+            if (noTreatment) {
               setSelectedHardware((prev) => ({
                 ...prev,
-                glassAddons: [{type:noTreatment?._id,name:noTreatment?.name}],
+                glassAddons: [{ type: noTreatment?._id, name: noTreatment?.name }],
               }));
             }
-            
+
           }
         } else {
           const noTreatment = hardwaresList?.glassAddons?.find(
             (row) => row.slug === "no-treatment"
           );
-          const arrayOld = selectedHardware?.glassAddons?.filter((item)=>item.type !== noTreatment?._id);
-          arrayOld.push({type:value?._id,name:value?.name});
+          const arrayOld = selectedHardware?.glassAddons?.filter((item) => item.type !== noTreatment?._id);
+          arrayOld.push({ type: value?._id, name: value?.name });
           setSelectedHardware((prev) => ({
             ...prev,
             glassAddons: arrayOld,
           }));
         }
-       
+
       }
-      console.log(value,'glassAddons');
-     }else if(type === 'hardwareAddons'){
+      console.log(value, 'glassAddons');
+    } else if (type === 'hardwareAddons') {
       const fabricationCounter = data?.category === EstimateCategory.SHOWERS ? getShowersHardwareSpecificFabrication : getWineCellarHardwareSpecificFabrication
       const itemExistIndex = selectedHardware?.hardwareAddons?.findIndex(item => item.type === value?.item?._id)
-      if(itemExistIndex !== -1){
-        if(value.counter > 0) {
-            const array = selectedHardware?.hardwareAddons;
-            const hardwareFabrication = fabricationCounter(
-              type,
-              fabricationsCount,
-              {item:value?.item,count:array[itemExistIndex].count},
-              {item:value?.item,count:value.counter}
-            );
-            array[itemExistIndex].count = value.counter;
-            setFabricationsCount(hardwareFabrication);
-            setSelectedHardware((prev) => ({
-              ...prev,
-              hardwareAddons: array,
-            }));
-        }else{
+      if (itemExistIndex !== -1) {
+        if (value.counter > 0) {
+          const array = selectedHardware?.hardwareAddons;
           const hardwareFabrication = fabricationCounter(
             type,
             fabricationsCount,
-            {item:value?.item,count:selectedHardware?.hardwareAddons[itemExistIndex].count},
+            { item: value?.item, count: array[itemExistIndex].count },
+            { item: value?.item, count: value.counter }
+          );
+          array[itemExistIndex].count = value.counter;
+          setFabricationsCount(hardwareFabrication);
+          setSelectedHardware((prev) => ({
+            ...prev,
+            hardwareAddons: array,
+          }));
+        } else {
+          const hardwareFabrication = fabricationCounter(
+            type,
+            fabricationsCount,
+            { item: value?.item, count: selectedHardware?.hardwareAddons[itemExistIndex].count },
             null
           );
           setFabricationsCount(hardwareFabrication);
-          const array = selectedHardware?.hardwareAddons?.filter((_item)=>_item.type !==  value?.item?._id);
+          const array = selectedHardware?.hardwareAddons?.filter((_item) => _item.type !== value?.item?._id);
           setSelectedHardware((prev) => ({
             ...prev,
             hardwareAddons: array,
           }));
         }
-      }else{
+      } else {
         const hardwareFabrication = fabricationCounter(
           type,
           fabricationsCount,
           null,
-          {item:value?.item,count:value.counter},
+          { item: value?.item, count: value.counter },
         );
         setFabricationsCount(hardwareFabrication);
         const array = selectedHardware?.hardwareAddons;
-        array.push({type:value?.item?._id,name:value?.item?.name,count:value.counter});
+        array.push({ type: value?.item?._id, name: value?.item?.name, count: value.counter });
         setSelectedHardware((prev) => ({
           ...prev,
           hardwareAddons: array,
         }));
       }
-      console.log(value,'hardwareAddons')
-     }
-  }
-
-  function getCostByThickness(data, selectedThickness) {
-    const option = data?.options?.find(
-      (opt) => opt.thickness === selectedThickness
-    );
-    if (option) {
-      return {
-        name: data.name, // Include the name from the parent object
-        cost: option.cost,
-      };
+      console.log(value, 'hardwareAddons')
     }
-    return null; // Return null if no matching thickness is found
   }
 
-  const glassAddonsList = useMemo(() => {
-    const result = selectedContent.glassAddons
-      .map((item) =>
-        item.options.map((option) => ({
-          name: item.name,
-          cost: option.cost,
-        }))
-      )
-      .flat();
-    return result ? result : [];
-  }, [selectedContent.glassAddons]);
-
-  const glassPrice = useMemo(() => {
-    const price = getCostByThickness(
-      selectedGlassType,
-      data?.glassType?.thickness
+  function getCostByThickness(item) {
+    const glassType = hardwaresList?.glassType.find(
+      (_item) => _item?._id === item.type
     );
-    const calc =
-      (data?.pricing?.totalPrice - data?.pricing?.laborPrice) /
-        showersLocationSettings?.miscPricing?.pricingFactor -
-      data?.pricing?.glassPrice;
-
-    const totalAmount =
-      (calc + price?.cost * data?.sqftArea) *
-        (showersLocationSettings?.miscPricing?.pricingFactorStatus
-          ? showersLocationSettings?.miscPricing?.pricingFactor
-          : 1) +
-      data?.pricing?.laborPrice;
-
-    return {
-      cost: price?.cost * data?.sqftArea,
-      name: price?.name,
-      totalAmount,
-    };
-  }, [selectedGlassType]);
+    if (glassType) {
+      const option = glassType.options.find((_item) => _item.thickness === item.thickness);
+      return option?.cost ?? 0;
+    }
+    return 0; // Return null if no matching thickness is found
+  }
 
   // console.log(glassAddonsList, "glassPriceglassPrice");
-  console.log(data?.category,'category',selectedHardware)
+  console.log(data?.category, 'category', totalPrice)
   return (
     <>
       <Box
@@ -369,11 +351,11 @@ const ShowerSummary = ({ data, hardwaresList }) => {
                       Total Price:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      $
-                      {isNaN(glassPrice?.totalAmount) ||
+                      $ {(totalPrice ?? 0)?.toFixed(2)}
+                      {/* {isNaN(glassPrice?.totalAmount) ||
                       glassPrice?.totalAmount === null
                         ? (data?.pricing?.totalPrice ?? 0).toFixed(2)
-                        : (glassPrice?.totalAmount ?? 0).toFixed(2)}
+                        : (glassPrice?.totalAmount ?? 0).toFixed(2)} */}
                     </Typography>
                   </Box>
                 </Box>
@@ -573,11 +555,11 @@ const ShowerSummary = ({ data, hardwaresList }) => {
                             pt: 1,
                           }}
                         >
-                          $
-                          {isNaN(glassPrice?.totalAmount) ||
-                          glassPrice?.totalAmount === null
+                          $ {(totalPrice ?? 0)?.toFixed(2)}
+                          {/* {isNaN(glassPrice?.totalAmount) ||
+                            glassPrice?.totalAmount === null
                             ? (data?.pricing?.totalPrice ?? 0).toFixed(2)
-                            : (glassPrice?.totalAmount ?? 0).toFixed(2)}
+                            : (glassPrice?.totalAmount ?? 0).toFixed(2)} */}
                         </Typography>
                       </Box>
                     </Box>
@@ -634,7 +616,7 @@ const ShowerSummary = ({ data, hardwaresList }) => {
                     )}
 
                     {data?.mountingChannel !== "" &&
-                    data?.mountingChannel !== null ? (
+                      data?.mountingChannel !== null ? (
                       <>
                         {data?.mountingChannel && (
                           <Box>
@@ -794,7 +776,7 @@ const ShowerSummary = ({ data, hardwaresList }) => {
                         {(selectedHardware?.glassAddons
                         )?.map((item, index) => (
                           <Typography key={index} className="text-xs-ragular">
-                            {item?.name},                         
+                            {item?.name},
                           </Typography>
                         ))}
                       </Box>
@@ -995,11 +977,11 @@ const ShowerSummary = ({ data, hardwaresList }) => {
                   type={"glassAddons"}
                   selectedContent={selectedHardware}
                   handleChange={handleChangeHardware}
-                  // selectedContent={}
+                // selectedContent={}
                 />
               </Box>
             </Box>
-            {[EstimateCategory.SHOWERS,EstimateCategory.WINECELLARS].includes(data?.category) && <Box
+            {[EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(data?.category) && <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
