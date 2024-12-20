@@ -5,7 +5,7 @@ import GCSLogo from "@/Assets/GCS-logo.png";
 import "./style.scss";
 import { backendURL } from "@/utilities/common";
 
-const HeaderSection = ({selectedData}) => {
+const HeaderSection = ({ selectedData,authUser }) => {
   return (
     <>
       <Box
@@ -19,8 +19,17 @@ const HeaderSection = ({selectedData}) => {
           className="gcs-logo"
           component="a"
           href="https://gcsglassandmirror.com/"
+          sx={{top: authUser ? '68px' : '0px'}}
         >
-          <img src={selectedData?.content?.section1?.logo? `${backendURL}/${selectedData?.content?.section1?.logo}` : GCSLogo} alt="logo nav bar" style={{ height: "100px" }} />
+          <img
+            src={
+              selectedData?.content?.section1?.logo
+                ? `${backendURL}/${selectedData?.content?.section1?.logo}`
+                : GCSLogo
+            }
+            alt="logo nav bar"
+            style={{ height: "100px", borderBottomRightRadius: "65px" }}
+          />
         </Box>
         <Container
           maxWidth="xl"

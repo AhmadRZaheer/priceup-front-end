@@ -317,9 +317,9 @@ const CustomizeLandingPage = ({
     dispatch(removeImage(index));
   };
 
-  // const authUser =
-  //   decodedToken?.role === userRoles.ADMIN ||
-  //   decodedToken?.role === userRoles.CUSTOM_ADMIN;
+  const authUser =
+    decodedToken?.role === userRoles.ADMIN ||
+    decodedToken?.role === userRoles.CUSTOM_ADMIN;
 
   // const { mutate: statusChange, isSuccess, isLoading } = useCreateDocument();
   const [descion, setDescion] = useState();
@@ -419,7 +419,7 @@ const CustomizeLandingPage = ({
         >
           <img src={GCSLogo} alt="logo nav bar" style={{ height: "100px" }} />
         </Box> */}
-        <HeaderSection selectedData={selectedData} />
+        <HeaderSection selectedData={selectedData} authUser={authUser} />
 
         <Box
           sx={{

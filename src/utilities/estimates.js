@@ -839,6 +839,7 @@ export const generateInvoiceItemsFromEstimates = (
 ) => {
   let items = [];
   estimatesList.forEach(async (estimate) => {
+    console.log(estimate,'wqwqwddwdwertw');
     switch (estimate.category) {
       case EstimateCategory.SHOWERS:
         const showerResp = await generateInvoiceItemForShowers(

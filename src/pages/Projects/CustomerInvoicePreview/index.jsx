@@ -17,9 +17,11 @@ import {
 } from "@/utilities/ApiHooks/common";
 import CustomizeLandingPage from "@/components/CustomizeLandingPage";
 import { SaveOutlined } from "@mui/icons-material";
+import { userRoles } from "@/utilities/constants";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
+  const decodedToken = getDecryptedToken();
   // const location = useLocation();
   // const queryParams = new URLSearchParams(location.search);
   // const customer_id = queryParams.get("customer_id");
@@ -29,7 +31,9 @@ const CustomerInvoicePreview = () => {
   //   isFetching,
   //   isFetched,
   // } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
-
+ const authUser =
+    decodedToken?.role === userRoles.ADMIN ||
+    decodedToken?.role === userRoles.CUSTOM_ADMIN;
   const {
     data: selectedData,
     refetch: refetchData,
@@ -38,8 +42,6 @@ const CustomerInvoicePreview = () => {
   } = useFetchSingleDocument(
     `${backendURL}/projects/landing-page-preview/${id}`
   );
-
-  const decodedToken = getDecryptedToken();
   const navigate = useNavigate();
   // const dispatch = useDispatch();
   // const selectedImages = useSelector(getSelectedImages);
@@ -99,8 +101,8 @@ const CustomerInvoicePreview = () => {
         <Box
           sx={{
             backgroundColor: {
-              xs: "rgba(247, 247, 247, 0.5)",
-              sm: "rgba(247, 247, 247, 0.5)",
+              xs: "white",
+              sm: "white",
             },
             borderBottomRightRadius: { xs: "16px", sm: "0px" },
             borderBottomLeftRadius: { xs: "16px", sm: "0px" },
@@ -109,6 +111,7 @@ const CustomerInvoicePreview = () => {
             justifyContent: "space-between",
             marginTop: { sm: 0, xs: 5 },
             py: 1.5,
+            pr:2
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -185,8 +188,9 @@ const CustomerInvoicePreview = () => {
       <Box
         sx={{
           // mt: "60px",
-          overflowX: "hidden",
+          overflowX: "hidden", 
           background: "white",
+          pt: authUser? '68px' :'0px',
         }}
       >
         {!isFetching && isFetched ? (
