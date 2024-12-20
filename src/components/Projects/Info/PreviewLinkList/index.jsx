@@ -1,4 +1,4 @@
-import { Close } from "@mui/icons-material";
+import { Close, ContentCopy, DoneOutlined } from "@mui/icons-material";
 import DeleteIcon from "@/Assets/Delete-Icon.svg";
 import EditIcon from "@/Assets/d.svg";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
@@ -10,8 +10,9 @@ import { backendURL } from "@/utilities/common";
 import DeleteModal from "@/components/Modal/deleteModal";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-const {
+import { showSnackbar } from "@/redux/snackBarSlice";
+import { useDispatch } from "react-redux";
+import {
   Box,
   Typography,
   Modal,
@@ -21,7 +22,8 @@ const {
   TableCell,
   TableBody,
   TableHead,
-} = require("@mui/material");
+  Tooltip,
+} from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -36,9 +38,12 @@ const style = {
 };
 
 const PreviewLinkList = ({ open, handleClose, projectId }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleteRecord, setDeleteRecord] = useState(null);
+  const [copyLinkStates, setCopyLinkStates] = useState({});
+
   const routePrefix = `${backendURL}/projects`;
   const {
     data: listExistingData,
@@ -47,7 +52,6 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
   } = useFetchAllDocuments(
     `${routePrefix}/all-landing-page-preview/${projectId}`
   );
-  console.log(listExistingData, "listExistingData");
 
   const {
     mutate: deleteListItem,
@@ -59,7 +63,6 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
     listRefetch();
     if (deleteSuccess) {
       setDeleteModalOpen(false);
-      // handleClose();
     }
   }, [deleteSuccess]);
 
@@ -73,13 +76,13 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
     setDeleteRecord(id);
     setDeleteModalOpen(true);
   };
+
   const handleEditItem = (id) => {
     navigate(`/invoices/edit?item_id=${id}`);
   };
 
   const singleListData = (data) => {
     const noOfEstimate = data?.estimates?.length;
-
     const totalAmount = data?.estimates?.reduce((accumulator, currentItem) => {
       return accumulator + currentItem.pricing.totalPrice;
     }, 0);
@@ -88,6 +91,46 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
       totalAmount,
     };
   };
+
+  const handleCopyPreview = (value, id) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(value ?? "")
+        .then(() => {
+          setCopyLinkStates((prev) => ({ ...prev, [id]: true }));
+          dispatch(
+            showSnackbar({ message: "Link Copied", severity: "success" })
+          );
+          setTimeout(() => {
+            setCopyLinkStates((prev) => ({ ...prev, [id]: false }));
+          }, 6000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy text using clipboard API:", err);
+        });
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = value ?? "";
+      textarea.style.position = "fixed";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+
+      try {
+        document.execCommand("copy");
+        setCopyLinkStates((prev) => ({ ...prev, [id]: true }));
+        dispatch(showSnackbar({ message: "Link Copied", severity: "success" }));
+        setTimeout(() => {
+          setCopyLinkStates((prev) => ({ ...prev, [id]: false }));
+        }, 6000);
+      } catch (err) {
+        console.error("Fallback: Failed to copy text using execCommand:", err);
+      } finally {
+        document.body.removeChild(textarea);
+      }
+    }
+  };
+
   return (
     <>
       <Modal
@@ -117,15 +160,9 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
               <Close />
             </IconButton>
           </Box>
-          <Box
-            sx={{
-              mt: 3,
-              maxHeight: "70vh", // Limit height
-              overflowY: "auto", // Enable scrolling
-            }}
-          >
+          <Box sx={{ mt: 3, maxHeight: "70vh", overflowY: "auto" }}>
             {listExistingData?.length > 0 ? (
-              <Table sx={{}} aria-label="simple table">
+              <Table aria-label="simple table">
                 <TableHead sx={{ backgroundColor: "#F3F5F6" }}>
                   <TableRow>
                     <TableCell>No. of Estimates</TableCell>
@@ -147,7 +184,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                       >
                         <TableCell>{data.noOfEstimate}</TableCell>
                         <TableCell align="center">
-                          ${(data.totalAmount).toFixed(2)}
+                          ${data.totalAmount.toFixed(2)}
                         </TableCell>
                         <TableCell align="center">
                           {new Date(row?.createdAt).toDateString()}
@@ -161,6 +198,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                           align="right"
                           sx={{ display: "flex", gap: 1.5 }}
                         >
+                          <Tooltip placement="top" title="View">
                           <IconButton
                             sx={{ width: 20, height: 20 }}
                             onClick={() =>
@@ -172,6 +210,9 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                           >
                             <RemoveRedEyeIcon />
                           </IconButton>
+                          </Tooltip>
+                       
+                          <Tooltip placement="top" title="Delete">
                           <IconButton
                             sx={{ width: 20, height: 20 }}
                             onClick={() => handleOpenDeleteModal(row?._id)}
@@ -182,16 +223,44 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                               style={{ width: "20px", height: "20px" }}
                             />
                           </IconButton>
-                          <IconButton
-                            sx={{ width: 20, height: 20 }}
-                            onClick={() => handleEditItem(row?._id)}
+                          </Tooltip>
+                          <Tooltip placement="top" title="Edit">
+                            <IconButton
+                              sx={{ width: 20, height: 20 }}
+                              onClick={() => handleEditItem(row?._id)}
+                            >
+                              <img
+                                src={EditIcon}
+                                alt="delete icon"
+                                style={{ width: "20px", height: "20px" }}
+                              />
+                            </IconButton>
+                          </Tooltip>
+
+                          <Tooltip
+                            placement="top"
+                            title={
+                              copyLinkStates[row?._id]
+                                ? "Copied"
+                                : "Copy Customer Preview Link"
+                            }
                           >
-                            <img
-                              src={EditIcon}
-                              alt="delete icon"
-                              style={{ width: "20px", height: "20px" }}
-                            />
-                          </IconButton>
+                            <IconButton
+                              sx={{ width: 20, height: 20 }}
+                              onClick={() =>
+                                handleCopyPreview(
+                                  row?.customerPreview?.link,
+                                  row?._id
+                                )
+                              }
+                            >
+                              {copyLinkStates[row?._id] ? (
+                                <DoneOutlined sx={{ fontSize: "20px" }} />
+                              ) : (
+                                <ContentCopy sx={{ fontSize: "20px" }} />
+                              )}
+                            </IconButton>
+                          </Tooltip>
                         </TableCell>
                       </TableRow>
                     );
@@ -216,9 +285,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
       <DeleteModal
         open={deleteModalOpen}
         text={"List Item"}
-        close={() => {
-          setDeleteModalOpen(false);
-        }}
+        close={() => setDeleteModalOpen(false)}
         isLoading={deleteListItemLoading}
         handleDelete={handleDeleteItem}
       />

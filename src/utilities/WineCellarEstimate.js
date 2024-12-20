@@ -59,7 +59,7 @@ export const generateWIneObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    const record = listData?.glassAddons?.find((addon) => addon._id === item);
     return record;
   });
 

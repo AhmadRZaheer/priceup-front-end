@@ -167,7 +167,7 @@ const ProjectInvoiceComponent = ({
     // ISO format mein convert karein
     // const formattedDate = currentDate.toISOString();
     const customerPayLoad = {
-      link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
+      link: '',
       expiresAt: updatedDate,
     };
     const compantDetail = {

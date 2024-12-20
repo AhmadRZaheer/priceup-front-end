@@ -3,7 +3,10 @@ import { setListData } from "@/redux/estimateCalculations";
 import { setLocationInfo } from "@/redux/locationSlice";
 import { setMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
 import { setWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { useFetchAllDocuments, useFetchSingleDocument } from "@/utilities/ApiHooks/common";
+import {
+  useFetchAllDocuments,
+  useFetchSingleDocument,
+} from "@/utilities/ApiHooks/common";
 import { backendURL, frontendURL } from "@/utilities/common";
 import {
   Box,
@@ -12,7 +15,7 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
@@ -25,14 +28,44 @@ const CustomLandingPage = () => {
     refetch: refetchData,
     isFetching,
     isFetched,
-  } = useFetchSingleDocument(`${backendURL}/invoices/${id}/customer-preview`)
+  } = useFetchSingleDocument(`${backendURL}/landing-page-preview/${id}`);
+  const {
+    data:hardwareData,
+    refetch: refetchhardwareData,
+    isFetching: fetchingHardwareData,
+    isFetched: fetchedHardwareData,
+  } = useFetchSingleDocument(
+    `${backendURL}/landing-page-preview-additional-hardware/${data?.company_id}`
+  );
 
   useEffect(() => {
     if (id) {
       refetchData();
     }
   }, [id]);
+  useEffect(() => {
+    if (data) {
+      refetchhardwareData();
+    }
+  }, [data]);
 
+  const hardwareAndSettings = useMemo(() => {
+    return {
+      showerHardware: hardwareData?.showersHardware,
+      mirrorHardware: hardwareData?.mirrorsHardware ?? {},
+      wineCellarHardware: hardwareData?.wineCellarsHardware ?? {},
+      wineCallerSetting: hardwareData?.locationSettings?.wineCellars ?? {},
+      mirrorSetting: hardwareData?.locationSettings?.mirrors ?? {},
+      showerSetting: hardwareData?.locationSettings?.showers ?? {},
+      pdfSetting: hardwareData?.locationSettings?.pdfSettings ?? {},
+    };
+  }, [hardwareData]);
+
+  console.log(
+    data,
+    "datadatadatadatadatadatadatadatadatadatadata",
+    hardwareData
+  );
   // useEffect(() => {
   //   if (data?.location) {
   //     dispatch(setLocationInfo(data?.location));
@@ -52,7 +85,7 @@ const CustomLandingPage = () => {
   //   data?.showersHardware,
   //   data?.wineCellarsHardware,
   // ]);
-  
+
   const handleBack = () => {
     window.location.href = `${frontendURL}:3005`;
   };
@@ -126,6 +159,13 @@ const CustomLandingPage = () => {
         refetchData={refetchData}
         isFetched={isFetched}
         isFetching={isFetching}
+        showerHardwaresList={hardwareAndSettings?.showerHardware}
+        mirrorHardwaresList={hardwareAndSettings?.mirrorHardware}
+        wineCellarHardwaresList={hardwareAndSettings?.wineCellarHardware}
+        wineCellarLocationSettings={hardwareAndSettings?.wineCallerSetting}
+        mirrorsLocationSettings={hardwareAndSettings?.mirrorSetting}
+        showersLocationSettings={hardwareAndSettings?.showerSetting}
+        pdfSettings={hardwareAndSettings?.pdfSetting}
       />
     </Box>
   );

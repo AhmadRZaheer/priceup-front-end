@@ -1,4 +1,4 @@
-import { Close, CloudUploadOutlined } from "@mui/icons-material";
+import { Close, CloudUploadOutlined, Info } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -7,15 +7,19 @@ import {
   Divider,
   InputAdornment,
   Stack,
+  Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import CustomInputField from "../ui-components/CustomInput";
 import SignatureCanvas from "react-signature-canvas";
 import PaymentModel from "./PaymentModel";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import LandingPDFFile from "../PDFFile/LandingPagePdf";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { backendURL, base64ToFile } from "@/utilities/common";
+import { useParams } from "react-router-dom";
 
 const controls = {
   viewPricingSubCategory: true,
@@ -34,7 +38,13 @@ const pdfLocationData = {
   website: "www.gcs.glass",
 };
 
-const SigntureSection = ({ refetchData,estimatePdfs }) => {
+const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
+  const { id } = useParams();
+  const {
+    mutateAsync: customerDecision,
+    isLoading,
+    isSuccess,
+  } = useEditDocument();
   const [openEditModal, setOpenEditModal] = useState(false);
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
@@ -90,20 +100,44 @@ const SigntureSection = ({ refetchData,estimatePdfs }) => {
   };
 
   const generatePDFDocument = async () => {
-    const doc = (estimatePdfs?.length > 0 &&
+    const doc = estimatePdfs?.length > 0 && (
       <LandingPDFFile
         controls={{
           ...controls,
         }}
         data={{ quote: estimatePdfs, location: pdfLocationData }}
         key={`pdfFile${1}`}
+        signature={signatureURL}
       />
-    )
+    );
     const blobPdf = await pdf(doc);
     blobPdf.updateContainer(doc);
     const result = await blobPdf.toBlob();
     saveAs(result, "Priceup");
   };
+
+  
+  const handleProjectApproved = async () => {
+    const formData = new FormData();
+    formData.append("status", "approve");
+    const imageSignature = base64ToFile(signatureURL,`${Date.now()}.png`);
+    formData.append("signature", imageSignature);
+    await customerDecision({
+      data: formData,
+      apiRoute: `${backendURL}/landing-page-preview/${id}`,
+    });
+    refetchData();
+  };
+  const estimateStatus = useMemo(() => {
+    let status = true;
+    data?.estimates?.forEach((item) => {
+      if (item?.status !== "approve") {
+        status = false;
+        return;
+      }
+    });
+    return status;
+  }, [data]);
 
   return (
     <Box
@@ -160,53 +194,71 @@ const SigntureSection = ({ refetchData,estimatePdfs }) => {
                   <Close sx={{ height: "24px", width: "24px" }} />
                 </Box>
               </Box>
-
-              <Box sx={{ pt: 1 }}>
-                <SignatureCanvas
-                  ref={signaturePadRef}
-                  penColor="darkblue"
-                  canvasProps={{
-                    height: 170,
-                    className: "signature-canvas",
-                    style: {
+              {data?.status === "approve" ? (
+                <Box sx={{ pt: 2 }}>
+                  <img
+                    src={`${backendURL}/${data?.signature}`}
+                    alt="Signature"
+                    width="100%"
+                    height={150}
+                    style={{
+                      objectFit: "contain",
+                      maxWidth: "100%",
+                      maxHeight: "100%",
                       border: "1px solid #E3E8EF",
-                      width: "-webkit-fill-available",
-                    },
-                  }}
-                />
-                <Stack
-                  sx={{ marginTop: "5px" }}
-                  direction={"row"}
-                  justifyContent={"space-between"}
-                >
-                  <Button
-                    variant="outlined"
-                    onClick={handleClearSignature}
-                    sx={{
-                      border: "1px solid #8477DA",
-                      mr: 1,
-                      height: "38px",
-                      color: "#8477DA",
+                      borderRadius: "4px",
                     }}
-                  >
-                    Clear
-                  </Button>
-                  <Button
-                    onClick={handleAddSignature}
-                    variant="contained"
-                    sx={{
-                      background: "#8477DA",
-                      height: "38px",
-                      ":hover": {
-                        background: "#8477DA",
+                  />
+                </Box>
+              ) : (
+                <Box sx={{ pt: 1 }}>
+                  <SignatureCanvas
+                    ref={signaturePadRef}
+                    penColor="darkblue"
+                    canvasProps={{
+                      height: 170,
+                      className: "signature-canvas",
+                      style: {
+                        border: "1px solid #E3E8EF",
+                        width: "-webkit-fill-available",
                       },
                     }}
+                  />
+                  <Stack
+                    sx={{ marginTop: "5px" }}
+                    direction={"row"}
+                    justifyContent={"space-between"}
                   >
-                    Save
-                  </Button>
-                </Stack>
-              </Box>
-              {signatureURL && (
+                    <Button
+                      variant="outlined"
+                      onClick={handleClearSignature}
+                      sx={{
+                        border: "1px solid #8477DA",
+                        mr: 1,
+                        height: "38px",
+                        color: "#8477DA",
+                      }}
+                    >
+                      Clear
+                    </Button>
+                    <Button
+                      onClick={handleAddSignature}
+                      variant="contained"
+                      sx={{
+                        background: "#8477DA",
+                        height: "38px",
+                        ":hover": {
+                          background: "#8477DA",
+                        },
+                      }}
+                    >
+                      Save
+                    </Button>
+                  </Stack>
+                </Box>
+              )}
+
+              {signatureURL && data?.status !== 'approve' && (
                 <Box sx={{ pt: 2 }}>
                   <img
                     src={signatureURL}
@@ -377,87 +429,147 @@ const SigntureSection = ({ refetchData,estimatePdfs }) => {
             }}
           >
             <Box sx={{ width: "70%" }}>
-              <Typography
-                sx={{
-                  fontFamily: '"Poppins" !important',
-                  fontSize: "32px",
-                  color: "white",
-                  fontWeight: "700",
-                  lineHeight: "39.94px",
-                  pb: 3,
-                }}
-              >
-                Your Estimate PDF is ready to download!{" "}
-              </Typography>
-              <Button
-              onClick={() => generatePDFDocument()}
-                variant="contained"
-                sx={{
-                  fontFamily: '"Inter" !important',
-                  height: "62px",
-                  width: "285px",
-                  borderRadius: "12px",
-                  fontSize: "24px",
-                  fontWeight: 700,
-                  backgroundColor: "#F95500",
-                  color: "#0B0B0B",
-                  lineHeight: "26px",
-                  "&:hover": {
-                    backgroundColor: "#F95500",
-                  },
-                }}
-              >
-                Download PDF Now
-              </Button>
-              <Stack
-                sx={{ pt: 3, width: "285px" }}
-                direction={"row"}
-                gap={1.5}
-                justifyContent={"space-between"}
-              >
-                <Button
-                fullWidth
-                  variant="contained"
-                  onClick={handleOpenEditModal}
+              {data?.status === "approve" ? (
+                <Typography
                   sx={{
-                    backgroundColor: "#8477DA",
-                    height: "44px",
-                    width: { sm: "100%", xs: "187px" },
-                    "&:hover": { backgroundColor: "#8477DA" },
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "22px",
                     color: "white",
-                    textTransform: "capitalize",
-                    borderRadius: 1,
-                    fontSize: { lg: 16, md: 15, xs: 12 },
-                    padding: {
-                      sm: "10px 16px  !important",
-                      xs: "5px 5px !important",
-                    },
+                    fontWeight: 600,
                   }}
                 >
-                  Pay Now
-                </Button>
-                <Button
-                fullWidth
-                  // onClick={handleAddSignature}
-                  variant="contained"
-                  sx={{
-                    backgroundColor: "#8477DA",
-                    height: "44px",
-                    width: { sm: "100%", xs: "187px" },
-                    "&:hover": { backgroundColor: "#8477DA" },
-                    color: "white",
-                    textTransform: "capitalize",
-                    borderRadius: 1,
-                    fontSize: { lg: 16, md: 15, xs: 12 },
-                    padding: {
-                      sm: "10px 16px  !important",
-                      xs: "5px 5px !important",
-                    },
-                  }}
-                >
-                  Pay Later
-                </Button>
-              </Stack>
+                  You have approved this project.
+                </Typography>
+              ) : (
+                <Box>
+                  <Typography sx={{ color: "white" }}>
+                    <Info sx={{ fontSize: "16px", pt: 0.2 }} /> You must approve
+                    all estimate and provide your signature to continue...
+                  </Typography>
+                  <Button
+                    disabled={signatureURL === null || !estimateStatus}
+                    onClick={handleProjectApproved}
+                    variant="contained"
+                    sx={{
+                      fontFamily: '"Inter" !important',
+                      height: "62px",
+                      width: "285px",
+                      borderRadius: "12px",
+                      fontSize: "24px",
+                      fontWeight: 700,
+                      backgroundColor: "#8477DA",
+                      color: "white",
+                      lineHeight: "26px",
+                      "&:hover": {
+                        backgroundColor: "#8477DA",
+                      },
+                      "&.Mui-disabled": {
+                        background: "#8477DA",
+                      },
+                      mt: 1,
+                    }}
+                  >
+                    Approve project
+                  </Button>
+                </Box>
+              )}
+              {data?.status === "approve" && (
+                <Box>
+                  <Typography
+                    sx={{
+                      fontFamily: '"Poppins" !important',
+                      fontSize: "32px",
+                      color: "white",
+                      fontWeight: 700,
+                      lineHeight: "39.94px",
+                      py: 3,
+                    }}
+                  >
+                    Your Estimate PDF is ready to download!{" "}
+                  </Typography>
+                  <Tooltip
+                    title={
+                      signatureURL === null ? "Please signature first!" : ""
+                    }
+                    placement="top"
+                  >
+                    <Button
+                      // disabled={signatureURL === null}
+                      onClick={() => generatePDFDocument()}
+                      variant="contained"
+                      sx={{
+                        fontFamily: '"Inter" !important',
+                        height: "62px",
+                        width: "285px",
+                        borderRadius: "12px",
+                        fontSize: "24px",
+                        fontWeight: 700,
+                        backgroundColor: "#F95500",
+                        color: "#0B0B0B",
+                        lineHeight: "26px",
+                        "&:hover": {
+                          backgroundColor: "#F95500",
+                        },
+                        "&.Mui-disabled": {
+                          background: "#F95500",
+                        },
+                      }}
+                    >
+                      Download PDF Now
+                    </Button>
+                  </Tooltip>
+
+                  <Stack
+                    sx={{ pt: 3, width: "285px" }}
+                    direction={"row"}
+                    gap={1.5}
+                    justifyContent={"space-between"}
+                  >
+                    <Button
+                      fullWidth
+                      variant="contained"
+                      onClick={handleOpenEditModal}
+                      sx={{
+                        backgroundColor: "#8477DA",
+                        height: "44px",
+                        width: { sm: "100%", xs: "187px" },
+                        "&:hover": { backgroundColor: "#8477DA" },
+                        color: "white",
+                        textTransform: "capitalize",
+                        borderRadius: 1,
+                        fontSize: { lg: 16, md: 15, xs: 12 },
+                        padding: {
+                          sm: "10px 16px  !important",
+                          xs: "5px 5px !important",
+                        },
+                      }}
+                    >
+                      Pay Now
+                    </Button>
+                    <Button
+                      fullWidth
+                      // onClick={handleAddSignature}
+                      variant="contained"
+                      sx={{
+                        backgroundColor: "#8477DA",
+                        height: "44px",
+                        width: { sm: "100%", xs: "187px" },
+                        "&:hover": { backgroundColor: "#8477DA" },
+                        color: "white",
+                        textTransform: "capitalize",
+                        borderRadius: 1,
+                        fontSize: { lg: 16, md: 15, xs: 12 },
+                        padding: {
+                          sm: "10px 16px  !important",
+                          xs: "5px 5px !important",
+                        },
+                      }}
+                    >
+                      Pay Later
+                    </Button>
+                  </Stack>
+                </Box>
+              )}
             </Box>
           </Box>
         </Box>

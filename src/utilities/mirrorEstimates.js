@@ -548,13 +548,13 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    const record = listData?.glassAddons?.find((addon) => addon._id === item);
     return record;
   });
 
   let hardwares = [];
   hardwares = estimateData?.config?.hardwares?.map((row) => {
-    const record = listData?.hardwares.find(
+    const record = listData?.hardwares?.find(
       (addon) => addon?._id === row?.type
     );
     return { item: record, count: row?.count };

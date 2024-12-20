@@ -88,6 +88,7 @@ import SigntureSection from "./SigntureSection";
 import LandingPDFFile from "../PDFFile/LandingPagePdf";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
+import SingleAccordian from "./SingleAccordian";
 
 const MAX_FILE_SIZE = 1 * 1024 * 1024;
 const controls = {
@@ -112,8 +113,25 @@ const CustomizeLandingPage = ({
   refetchData,
   isFetched,
   isFetching,
+  showerHardwaresList,
+  mirrorHardwaresList,
+  wineCellarHardwaresList,
+  wineCellarLocationSettings,
+  mirrorsLocationSettings,
+  showersLocationSettings,
+  pdfSettings,
 }) => {
-  console.log(selectedData, 'data?.config')
+  console.log(
+    selectedData,
+    "selectedDataselectedData",
+    showerHardwaresList,
+    mirrorHardwaresList,
+    wineCellarHardwaresList,
+    wineCellarLocationSettings,
+    mirrorsLocationSettings,
+    showersLocationSettings,
+    pdfSettings
+  );
   const { id } = useParams();
 
   const signaturePadRef = useRef(null);
@@ -121,9 +139,9 @@ const CustomizeLandingPage = ({
   const [signatureURL, setSignatureURL] = useState(null);
   const [isPadOpen, setIsPadOpen] = useState(false);
   const [images, setImages] = useState([]);
-  const showerHardwaresList = useSelector(getListData);
-  const mirrorHardwaresList = useSelector(getMirrorsHardware);
-  const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
+  // const showerHardwaresList = useSelector(getListData);
+  // const mirrorHardwaresList = useSelector(getMirrorsHardware);
+  // const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
   const handleAddSignature = () => {
     // Get the trimmed canvas URL
     const url = signaturePadRef.current
@@ -137,20 +155,17 @@ const CustomizeLandingPage = ({
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
   };
-  const wineCellarHardwareList = useSelector(getWineCellarsHardware);
-  const mirrorsHardwareList = useSelector(getMirrorsHardware);
-  const showersHardwareList = useSelector(getListData);
-  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
-  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
-  const showersLocationSettings = useSelector(getLocationShowerSettings);
-  const pdfSettings = useSelector(getLocationPdfSettings);
+  // const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  // const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  // const showersLocationSettings = useSelector(getLocationShowerSettings);
+  // const pdfSettings = useSelector(getLocationPdfSettings);
   // const [invoiceStatusBtn, setInvoiceStatusBtn] = useState(true);
 
   const generatePDF = (data) => {
     // console.log("Call this function", data);
     if (data?.category === EstimateCategory.SHOWERS) {
       const formattedData = generateObjectForPDFPreview(
-        showersHardwareList,
+        showerHardwaresList,
         data,
         showersLocationSettings?.miscPricing
       );
@@ -174,7 +189,7 @@ const CustomizeLandingPage = ({
       };
     } else if (data?.category === EstimateCategory.MIRRORS) {
       const formattedData = generateObjectForMirrorPDFPreview(
-        mirrorsHardwareList,
+        mirrorHardwaresList,
         data,
         mirrorsLocationSettings?.miscPricing
       );
@@ -207,7 +222,7 @@ const CustomizeLandingPage = ({
       };
     } else if (data?.category === EstimateCategory.WINECELLARS) {
       const formattedData = generateObjectForPDFPreview(
-        wineCellarHardwareList,
+        wineCellarHardwaresList,
         data,
         wineCellarLocationSettings?.miscPricing
       );
@@ -251,7 +266,6 @@ const CustomizeLandingPage = ({
   //   refetchData();
   // }, []);
 
-
   const {
     mutate: updateInvoiceStatus,
     isLoading,
@@ -271,9 +285,9 @@ const CustomizeLandingPage = ({
     }
   }, [
     selectedData,
-    wineCellarHardwareList,
-    mirrorsHardwareList,
-    showersHardwareList,
+    wineCellarHardwaresList,
+    mirrorHardwaresList,
+    showerHardwaresList,
     wineCellarLocationSettings,
     mirrorsLocationSettings,
     showersLocationSettings,
@@ -364,9 +378,9 @@ const CustomizeLandingPage = ({
     );
     const total = selectedData?.estimates?.length;
     return {
-      totalShowers: totalShowers?.length ?? 0,
-      totalMirrors: totalMirrors?.length ?? 0,
-      totalWineCellar: totalWineCellar?.length ?? 0,
+      totalShowers: totalShowers ?? [],
+      totalMirrors: totalMirrors ?? [],
+      totalWineCellar: totalWineCellar ?? [],
       total: total ?? 0,
     };
   }, [selectedData?.estimates]);
@@ -387,13 +401,12 @@ const CustomizeLandingPage = ({
     let sum = totalSum - priceToMinus;
     sum = sum + priceToAdd;
     SetTotalSum(sum);
-  }
+  };
 
   console.log(estimateTotal, "sdgasdfgasdfgestimateTotal");
 
-
   const generatePDFDocument = async () => {
-    const doc = (estimatePdfs?.length > 0 &&
+    const doc = estimatePdfs?.length > 0 && (
       <LandingPDFFile
         controls={{
           ...controls,
@@ -401,7 +414,7 @@ const CustomizeLandingPage = ({
         data={{ quote: estimatePdfs, location: pdfLocationData }}
         key={`pdfFile${1}`}
       />
-    )
+    );
     const blobPdf = await pdf(doc);
     blobPdf.updateContainer(doc);
     const result = await blobPdf.toBlob();
@@ -440,10 +453,11 @@ const CustomizeLandingPage = ({
             // width: { md: "89%", xs: "90%" },
             // m: "auto",
             backgroundImage: {
-              md: `url(${selectedData?.content?.section1?.backgroundImage
-                ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
-                : bgHeaderImage
-                })`,
+              md: `url(${
+                selectedData?.content?.section1?.backgroundImage
+                  ? `${backendURL}/${selectedData?.content?.section1?.backgroundImage}`
+                  : bgHeaderImage
+              })`,
               xs: "none",
             },
             backgroundRepeat: "no-repeat",
@@ -1106,224 +1120,147 @@ const CustomizeLandingPage = ({
 
             <Button variant="contained" onClick={() => generatePDFDocument()}> Download PDF</Button> */}
 
-            <Box sx={{ pt: 2 }}>
-              {isFetched ? (
-                selectedData?.estimates?.length > 0 ? (
-                  selectedData?.estimates?.map((data, index) => {
-                    // const selectedSummary = summarySections(data, index + 1);
-                    return (
-                      <Accordion
-                        key={index}
-                        expanded={expanded === `panel${index + 1}`}
-                        onChange={handleChangeAccordian(`panel${index + 1}`)}
-                        // expanded={expanded === index} // Control expansion state
-                        // onChange={handleAccordionChange(index)} // Update state on toggle
-                        sx={{
-                          borderRadius: "10px !important",
-                          py: "3px",
-                          px: "4px",
-                          background: "#000000",
-                          color: "white",
-                          border: "1px solid #D6D6D6",
-                          boxShadow: "none",
-                          mt: 2,
-                        }}
-                      >
-                        <AccordionSummary
-                          expandIcon={
-                            expanded === `panel${index + 1}` ? (
-                              <Remove sx={{ color: "white" }} />
-                            ) : (
-                              <Add sx={{ color: "white" }} />
-                            )
+            {estimateTotal?.totalShowers?.length > 0 && (
+              <>
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    color: "white",
+                  }}
+                >
+                  Shower estimates:{" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalShowers?.length}
+                  </Box>
+                </Typography>
+                <Box sx={{ color: "white" }}>
+                  {isFetched ? (
+                    estimateTotal?.totalShowers?.length > 0 &&
+                    estimateTotal?.totalShowers?.map((data, index) => {
+                      return (
+                        <SingleAccordian
+                          refetchData={refetchData}
+                          index={index}
+                          expanded={expanded}
+                          handleChangeAccordian={handleChangeAccordian}
+                          data={data}
+                          reCalculateTotal={reCalculateTotal}
+                          showersLocationSettings={showersLocationSettings}
+                          mirrorsLocationSettings={mirrorsLocationSettings}
+                          wineCellarLocationSettings={
+                            wineCellarLocationSettings
                           }
-                          aria-controls={`panel${index + 1}-content`}
-                          id={`panel${index + 1}-header`}
-                        >
-                          <Box
-                            sx={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              width: "100%",
-                            }}
-                          >
-                            <Typography
-                              sx={{
-                                fontWeight: 700,
-                                textTransform: "capitalize",
-                              }}
-                            >
-                              {data?.category} Estimate -{" "}
-                              {data?.layout === "Mirror"
-                                ? "Custom"
-                                : data?.layout}
-                            </Typography>
-                            {/* <Typography sx={{ fontWeight: 700 }}>
-                            ${(data?.pricing?.totalPrice).toFixed(2)}
-                          </Typography> */}
-                          </Box>
-                        </AccordionSummary>
-                        <AccordionDetails sx={{ borderBottom: "1ps solid " }}>
-                          <Box>
-                            {/* <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            mb: 2,
-                          }}
-                        >
-                          {data?.quote?.settings?.name
-                            ? data?.quote?.settings?.name
-                            : data?.quote?.category === EstimateCategory.MIRRORS
-                            ? "Mirror"
-                            : "Custom"}{" "}
-                          Layout - Estimate
-                        </Typography> */}
+                          showerHardwaresList={showerHardwaresList}
+                          mirrorHardwaresList={mirrorHardwaresList}
+                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          category={EstimateCategory.SHOWERS}
+                        />
+                      );
+                    })
+                  ) : (
+                    <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                  )}
+                </Box>
+              </>
+            )}
+            {estimateTotal?.totalMirrors?.length > 0 && (
+              <>
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    color: "white",
+                    pt: 2,
+                  }}
+                >
+                  Mirrors estimates:{" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalMirrors?.length}
+                  </Box>
+                </Typography>
+                <Box sx={{ color: "white" }}>
+                  {isFetched ? (
+                    estimateTotal?.totalMirrors?.length > 0 &&
+                    estimateTotal?.totalMirrors?.map((data, index) => {
+                      return (
+                        <SingleAccordian
+                          refetchData={refetchData}
+                          index={index}
+                          expanded={expanded}
+                          handleChangeAccordian={handleChangeAccordian}
+                          data={data}
+                          reCalculateTotal={reCalculateTotal}
+                          showersLocationSettings={showersLocationSettings}
+                          mirrorsLocationSettings={mirrorsLocationSettings}
+                          wineCellarLocationSettings={
+                            wineCellarLocationSettings
+                          }
+                          showerHardwaresList={showerHardwaresList}
+                          mirrorHardwaresList={mirrorHardwaresList}
+                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          category={EstimateCategory.MIRRORS}
+                        />
+                      );
+                    })
+                  ) : (
+                    <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                  )}
+                </Box>
+              </>
+            )}
+            {estimateTotal?.totalWineCellar?.length > 0 && (
+              <>
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "28px",
+                    fontWeight: 600,
+                    // lineHeight: "62px",
+                    color: "white",
+                    pt: 2,
+                  }}
+                >
+                  WineCellar estimates:{" "}
+                  <Box component="span" sx={{ color: "#F95500" }}>
+                    {estimateTotal?.totalWineCellar?.length}
+                  </Box>
+                </Typography>
+                <Box sx={{ color: "white" }}>
+                  {isFetched ? (
+                    estimateTotal?.totalWineCellar?.length > 0 &&
+                    estimateTotal?.totalWineCellar?.map((data, index) => {
+                      return (
+                        <SingleAccordian
+                          refetchData={refetchData}
+                          index={index}
+                          expanded={expanded}
+                          handleChangeAccordian={handleChangeAccordian}
+                          data={data}
+                          reCalculateTotal={reCalculateTotal}
+                          showersLocationSettings={showersLocationSettings}
+                          mirrorsLocationSettings={mirrorsLocationSettings}
+                          wineCellarLocationSettings={
+                            wineCellarLocationSettings
+                          }
+                          showerHardwaresList={showerHardwaresList}
+                          mirrorHardwaresList={mirrorHardwaresList}
+                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          category={EstimateCategory.WINECELLARS}
+                        />
+                      );
+                    })
+                  ) : (
+                    <CircularProgress size={24} sx={{ color: "#8477DA" }} />
+                  )}
+                </Box>
+              </>
+            )}
 
-                            {/* <Box
-                              sx={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                gap: 2,
-                                width: "100%",
-                              }}
-                            >
-                              <Box
-                                sx={{
-                                  width: "50%",
-                                  background: "white",
-                                  color: "black",
-                                  borderRadius: 1,
-                                  p: 2,
-                                  boxShadow: 2,
-                                }}
-                              >
-                                <Box
-                                  sx={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                    gap: 4,
-                                    width: "100%",
-                                  }}
-                                >
-                                  <Box
-                                    sx={{
-                                      width: "50%",
-                                    }}
-                                  >
-                                    <Typography
-                                      sx={{
-                                        fontSize: "18px",
-                                        fontWeight: "bold",
-                                        mb: 1.5,
-                                      }}
-                                    >
-                                      Layout Dimensions:
-                                    </Typography>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <Typography sx={{ fontWeight: "bold" }}>
-                                        Dimensions:
-                                      </Typography>
-                                      <Typography>
-                                        {data?.quote?.measurements}33
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <Typography sx={{ fontWeight: "bold" }}>
-                                        Square Foot:
-                                      </Typography>
-                                      <Typography>
-                                        {data?.quote?.sqftArea ?? 0}
-                                      </Typography>
-                                    </Box>
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "space-between",
-                                      }}
-                                    >
-                                      <Typography sx={{ fontWeight: "bold" }}>
-                                        Total:
-                                      </Typography>
-                                      <Typography>
-                                        $
-                                        {data?.quote?.cost?.toFixed(2) ||
-                                          "0.00"}
-                                      </Typography>
-                                    </Box>
-                                  </Box>
-                                  <Box
-                                    sx={{
-                                      width: "50%",
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        py: 1,
-                                      }}
-                                    >
-                                      <img
-                                        src="http://3.219.213.248:5000/images/layouts/layout_5.png"
-                                        alt="not"
-                                        style={{ height: "320px" }}
-                                      />
-                                    </Box>
-                                  </Box>
-                                </Box>
-                              </Box>
-                              <Box
-                                sx={{
-                                  width: "50%",
-                                  background: "white",
-                                  borderRadius: 1,
-                                  p: 2,
-                                  boxShadow: 2,
-                                }}
-                              >
-                                <MultipleImageUpload
-                                  images={images}
-                                  setImages={setImages}
-                                />
-                              </Box>
-                            </Box> */}
-
-                            <Box>
-                              <Box>
-                                {/* {selectedSummary} */}
-                                <ShowerSummary data={data}
-                                  reCalculateTotal={reCalculateTotal}
-                                  locationSettings={data?.category === EstimateCategory.SHOWERS ? showersLocationSettings : data?.category === EstimateCategory.MIRRORS ? mirrorsLocationSettings : wineCellarLocationSettings}
-                                  hardwaresList={data?.category === EstimateCategory.SHOWERS ? showerHardwaresList : data?.category === EstimateCategory.MIRRORS ? { ...mirrorHardwaresList, glassType: mirrorHardwaresList?.glassTypes ?? [] } : wineCellarHardwaresList}
-                                />
-                              </Box>
-                            </Box>
-                          </Box>
-                        </AccordionDetails>
-                      </Accordion>
-                    );
-                  })
-                ) : (
-                  <div>No estimates available</div>
-                )
-              ) : (
-                <CircularProgress size={24} sx={{ color: "#8477DA" }} />
-              )}
-            </Box>
             <Box sx={{ pt: 2 }}>
-              <Typography
+              {/* <Typography
                 sx={{
                   fontFamily: '"Poppins" !important',
                   fontSize: "28px",
@@ -1337,8 +1274,8 @@ const CustomizeLandingPage = ({
                   {" "}
                   {selectedData?.estimates?.length || 0}
                 </Box>{" "}
-              </Typography>
-              {estimateTotal?.totalShowers > 0 && (
+              </Typography> */}
+              {/* {estimateTotal?.totalShowers?.length > 0 && (
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
@@ -1350,12 +1287,12 @@ const CustomizeLandingPage = ({
                 >
                   Shower estimates ={" "}
                   <Box component="span" sx={{ color: "#F95500" }}>
-                    {estimateTotal?.totalShowers}
+                    {estimateTotal?.totalShowers?.length}
                   </Box>
                 </Typography>
               )}
 
-              {estimateTotal?.totalMirrors > 0 && (
+              {estimateTotal?.totalMirrors?.length > 0 && (
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
@@ -1367,12 +1304,12 @@ const CustomizeLandingPage = ({
                 >
                   Mirror estimates ={" "}
                   <Box component="span" sx={{ color: "#F95500" }}>
-                    {estimateTotal?.totalMirrors}
+                    {estimateTotal?.totalMirrors?.length}
                   </Box>
                 </Typography>
               )}
 
-              {estimateTotal?.totalWineCellar > 0 && (
+              {estimateTotal?.totalWineCellar?.length > 0 && (
                 <Typography
                   sx={{
                     fontFamily: '"Poppins" !important',
@@ -1384,10 +1321,10 @@ const CustomizeLandingPage = ({
                 >
                   WineCellar estimates ={" "}
                   <Box component="span" sx={{ color: "#F95500" }}>
-                    {estimateTotal?.totalWineCellar}
+                    {estimateTotal?.totalWineCellar?.length}
                   </Box>
                 </Typography>
-              )}
+              )} */}
 
               <Typography
                 sx={{
@@ -1396,6 +1333,7 @@ const CustomizeLandingPage = ({
                   fontWeight: 600,
                   lineHeight: "62px",
                   color: "white",
+                  textAlign: "end",
                 }}
               >
                 Total Price is{" "}
@@ -1417,7 +1355,7 @@ const CustomizeLandingPage = ({
       <ClaimSection />
       <ManainanceSection />
       <UpgradeOPtions />
-      <AggremantCondition />
+      <AggremantCondition data={selectedData} />
 
       {/* <Container maxWidth="xl" sx={{ pb: 4 }}> */}
       {/* <CustomEditor /> */}
@@ -1681,7 +1619,7 @@ const CustomizeLandingPage = ({
           )}
         </Box>
       </Container> */}
-      <SigntureSection refetchData={refetchData} estimatePdfs={estimatePdfs} />
+      <SigntureSection data={selectedData} refetchData={refetchData} estimatePdfs={estimatePdfs} />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
           sx={{
@@ -1702,7 +1640,7 @@ const CustomizeLandingPage = ({
               pb: 2,
             }}
           >
-            © 2024 | All rights reserved.
+            © {new Date().getFullYear()} | All rights reserved.
           </Typography>
         </Box>
       </Box>

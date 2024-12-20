@@ -75,7 +75,7 @@ const commaFn = (index, arrLength) => (index < arrLength - 1 ? ", " : "");
 
 // Create Document Component
 
-const LandingPDFFile = ({ controls, data }) => {
+const LandingPDFFile = ({ controls, data,signature }) => {
   const [loading, setLoading] = useState(true);
   return (
     <Document
@@ -476,6 +476,11 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>}
                </View>
               </View>
+             {signature && <View style={{paddingTop:'20px',display:'flex',justifyContent:'end',width:'100%'}}>
+              <Image style={styles.logo2} src={signature} alt="logo" />
+              <Text style={{paddingTop:'6px'}}>Signature</Text>
+              </View>} 
+              
               {/** Pagination */}
               <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
               <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (

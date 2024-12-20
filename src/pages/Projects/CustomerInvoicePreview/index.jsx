@@ -18,10 +18,27 @@ import {
 import CustomizeLandingPage from "@/components/CustomizeLandingPage";
 import { SaveOutlined } from "@mui/icons-material";
 import { userRoles } from "@/utilities/constants";
+import { getListData } from "@/redux/estimateCalculations";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import {
+  getLocationMirrorSettings,
+  getLocationPdfSettings,
+  getLocationShowerSettings,
+  getLocationWineCellarSettings,
+} from "@/redux/locationSlice";
 
 const CustomerInvoicePreview = () => {
   const { id } = useParams();
   const decodedToken = getDecryptedToken();
+  const showerHardwaresList = useSelector(getListData);
+  const mirrorHardwaresList = useSelector(getMirrorsHardware);
+  const wineCellarHardwaresList = useSelector(getWineCellarsHardware);
+  const wineCellarLocationSettings = useSelector(getLocationWineCellarSettings);
+  const mirrorsLocationSettings = useSelector(getLocationMirrorSettings);
+  const showersLocationSettings = useSelector(getLocationShowerSettings);
+  const pdfSettings = useSelector(getLocationPdfSettings);
+
   // const location = useLocation();
   // const queryParams = new URLSearchParams(location.search);
   // const customer_id = queryParams.get("customer_id");
@@ -31,7 +48,7 @@ const CustomerInvoicePreview = () => {
   //   isFetching,
   //   isFetched,
   // } = useFetchAllDocuments(`${backendURL}/projects/all-estimate/${id}`);
- const authUser =
+  const authUser =
     decodedToken?.role === userRoles.ADMIN ||
     decodedToken?.role === userRoles.CUSTOM_ADMIN;
   const {
@@ -62,12 +79,13 @@ const CustomerInvoicePreview = () => {
     const formattedDate = currentDate.toISOString();
 
     const customerPayLoad = {
-      link: `${frontendURL}/customer-landing-page-preview/${id}`,
-      expiresAt: formattedDate,
+      ...selectedData?.customerPreview ,
+      link: `${frontendURL}/customer-landing-page-preview/${id}`           
     };
+
     try {
       const response = await generatePage({
-        data: { customerPreview: customerPayLoad, content: {} },
+        data: { customerPreview: customerPayLoad },
         apiRoute: `${backendURL}/projects/landing-page-preview/${id}`,
       });
       if (response) {
@@ -82,10 +100,12 @@ const CustomerInvoicePreview = () => {
       navigate(`/invoices/${id}`);
     }
   }, [isSuccess]);
-  
+
   useEffect(() => {
     refetchData();
   }, []);
+
+  console.log(selectedData,'selectedDataselectedDataselectedDataselectedDataselectedDataselectedData')
   return (
     // <CommonLayout>
     <Box className="econtent-wrapper">
@@ -111,7 +131,7 @@ const CustomerInvoicePreview = () => {
             justifyContent: "space-between",
             marginTop: { sm: 0, xs: 5 },
             py: 1.5,
-            pr:2
+            pr: 2,
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -188,9 +208,9 @@ const CustomerInvoicePreview = () => {
       <Box
         sx={{
           // mt: "60px",
-          overflowX: "hidden", 
+          overflowX: "hidden",
           background: "white",
-          pt: authUser? '68px' :'0px',
+          pt: authUser ? "68px" : "0px",
         }}
       >
         {!isFetching && isFetched ? (
@@ -199,6 +219,13 @@ const CustomerInvoicePreview = () => {
             refetchData={refetchData}
             isFetched={isFetched}
             isFetching={isFetching}
+            showerHardwaresList={showerHardwaresList}
+            mirrorHardwaresList={mirrorHardwaresList}
+            wineCellarHardwaresList={wineCellarHardwaresList}
+            wineCellarLocationSettings={wineCellarLocationSettings}
+            mirrorsLocationSettings={mirrorsLocationSettings}
+            showersLocationSettings={showersLocationSettings}
+            pdfSettings={pdfSettings}
           />
         ) : (
           <Box

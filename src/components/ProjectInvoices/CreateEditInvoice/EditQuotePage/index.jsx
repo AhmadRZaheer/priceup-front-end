@@ -29,6 +29,8 @@ import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
 import { Close, Delete } from "@mui/icons-material";
 import { IconButton } from "@material-ui/core";
+import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
+import GCSLogo from "@/Assets/GCS-logo.png";
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -73,8 +75,8 @@ const EditQuoteInvoice = () => {
       dueDate: dayjs(singleItemData?.customerPreview?.expiresAt) || null,
       notes: singleItemData?.description || "",
       section1: {
-        text1: singleItemData?.content?.section1?.text1 || "",
-        text2: singleItemData?.content?.section1?.text2 || "",
+        text1: singleItemData?.content?.section1?.text1 || "Your GCS Estimate Presentation",
+        text2: singleItemData?.content?.section1?.text2 || "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
       },
     },
     validationSchema,
@@ -629,7 +631,7 @@ const EditQuoteInvoice = () => {
                   </Box>
 
                   <Box
-                    sx={{ display: "flex", justifyContent: "center", py: 3 }}
+                    sx={{ display: "flex", justifyContent: "space-around", py: 3 }}
                   >
                     {/* section logo */}
 
@@ -666,11 +668,19 @@ const EditQuoteInvoice = () => {
                             />
                           </Box>
                         ) : (
-                          <Typography>No Image Uploaded</Typography>
+                          <Box>
+                            <img
+                              src={GCSLogo}
+                              width={400}
+                              height={340}
+                              alt="section image logo"
+                            />
+                          </Box>
                         )}
                       </Box>
 
                       <Button
+                      disabled={isLoading}
                         variant="contained"
                         component="label"
                         sx={{
@@ -729,11 +739,19 @@ const EditQuoteInvoice = () => {
                             />
                           </Box>
                         ) : (
-                          <Typography>No Image Uploaded</Typography>
+                          <Box>
+                          <img
+                            src={bgHeaderImage}
+                            width={400}
+                            height={340}
+                            alt="section image logo"
+                          />
+                        </Box>
                         )}
                       </Box>
 
                       <Button
+                       disabled={isLoading}
                         variant="contained"
                         component="label"
                         sx={{

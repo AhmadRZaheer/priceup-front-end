@@ -455,7 +455,7 @@ export const generateObjectForPDFPreview = (
 
   let glassAddons = [];
   glassAddons = estimateData?.config?.glassAddons?.map((item) => {
-    const record = listData?.glassAddons.find((addon) => addon._id === item);
+    const record = listData?.glassAddons?.find((addon) => addon._id === item);
     return record;
   });
 
@@ -910,6 +910,7 @@ const generateInvoiceItemForShowers = async (
   summaryObject.additionalFields = estimate.config.additionalFields;
   summaryObject.creatorData = estimate.creatorData;
   summaryObject.customerData = estimate.customerData;
+  summaryObject.status = 'pending';
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes
@@ -1312,6 +1313,7 @@ const generateInvoiceItemForMirrors = async (
   summaryObject.additionalFields = estimate.config.additionalFields;
   summaryObject.creatorData = estimate.creatorData;
   summaryObject.customerData = estimate.customerData;
+  summaryObject.status = 'pending';
 
   // glass Type
   const glassType = hardwaresList.glassTypes.find(
@@ -1481,6 +1483,7 @@ const generateInvoiceItemForWineCellars = async (
   summaryObject.additionalFields = estimate.config.additionalFields;
   summaryObject.creatorData = estimate.creatorData;
   summaryObject.customerData = estimate.customerData;
+  summaryObject.status = 'pending';
   // hardware finish
   const hardwareFinish = hardwaresList.hardwareFinishes.find(
     (item) => item._id === estimate.config.hardwareFinishes

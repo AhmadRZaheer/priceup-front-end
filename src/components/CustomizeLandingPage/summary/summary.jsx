@@ -8,6 +8,7 @@ import {
   Container,
   Card,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import React, { useEffect, useMemo, useState } from "react";
 import Bulb from "../../../Assets/CustomerLandingImages/blubImg.png";
@@ -24,12 +25,24 @@ import { backendURL } from "@/utilities/common";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { getHardwareSpecificFabrication as getShowersHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
 import { getHardwareSpecificFabrication as getWineCellarHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
+import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { useParams } from "react-router-dom";
 
 const arr = [1, 2];
 
-const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal }) => {
-  console.log(data, "asdfghsdfghasdf");
+const ShowerSummary = ({
+  refetchData,
+  totalPrice,
+  setTotalPrice,
+  data,
+  hardwaresList,
+  locationSettings,
+  reCalculateTotal,
+}) => {
+  const { id } = useParams();
+  console.log(id, "asdfghsdfghasdf");
   // const hardwaresList = useSelector(getListData);
+  const { mutate: customerDecision, isLoading, isSuccess } = useEditDocument();
   const [images, setImages] = useState([]);
   const imageData =
     data?.image !== null ? `${backendURL}/${data?.image}` : null;
@@ -50,9 +63,11 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
         clampCut: 0,
         notch: 0,
         outages: 0,
-      }
+      };
       data?.hardwareAddons?.forEach((item) => {
-        const record = hardwaresList?.hardwareAddons?.find((_item) => _item._id === item.type);
+        const record = hardwaresList?.hardwareAddons?.find(
+          (_item) => _item._id === item.type
+        );
         if (record) {
           if (data?.category === EstimateCategory.SHOWERS) {
             fabrication.oneInchHoles += record.oneInchHoles ?? 0;
@@ -68,14 +83,16 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
             fabrication.outages += record?.fabrication?.outages ?? 0;
           }
         }
-      })
-      setFabricationsCount(fabrication)
+      });
+      setFabricationsCount(fabrication);
     }
   }, [data]);
-  const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
+  // const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
+
   const handleChangeHardware = (type, value) => {
     const pricingFactor = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactor : locationSettings?.miscPricing?.pricingFactor;
     const pricingFactorStatus = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactorStatus : locationSettings?.miscPricing?.pricingFactorStatus;
+    const laborPrice = data?.category === EstimateCategory.WINECELLARS ? (data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)) : data?.pricing?.laborPrice;
     if (type === 'glassType') {
       const oldGlassPrice = getCostByThickness(
         selectedHardware?.glassType,
@@ -87,7 +104,7 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
       );
       console.log(oldGlassPrice, 'old price', newGlassPrice, 'new price', pricingFactor, pricingFactorStatus);
       const calc =
-        (totalPrice - data?.pricing?.laborPrice) /
+        (totalPrice - laborPrice) /
         (pricingFactorStatus ? pricingFactor : 1) -
         (oldGlassPrice * data?.sqftArea);
       const glassPricing = data?.sqftArea !== 0 ?
@@ -95,7 +112,7 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
         (pricingFactorStatus
           ? pricingFactor
           : 1) +
-        data?.pricing?.laborPrice : 0;
+        laborPrice : 0;
       reCalculateTotal(totalPrice, glassPricing);
       setTotalPrice(glassPricing);
       setSelectedHardware((prev) => ({
@@ -105,7 +122,14 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
       console.log(value, 'glassType');
     } else if (type === 'glassAddons') {
       const itemFound = hardwaresList.glassAddons?.find((item) => item._id === value?._id);
+      const actualCost =
+        (totalPrice - laborPrice) /
+        (pricingFactorStatus ? pricingFactor : 1);
       if (itemFound?.slug === "no-treatment") {
+        const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
+        const remainingCost = actualCost - priceToRemove;
+        const newGeneratedTotal = remainingCost * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+        setTotalPrice(newGeneratedTotal);
         setSelectedHardware((prev) => ({
           ...prev,
           glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
@@ -114,8 +138,13 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
 
         if (itemFound && selectedHardware?.glassAddons?.some(item => item.type === itemFound?._id)) {
           const arrayFilter = selectedHardware?.glassAddons?.filter((item) => item.type !== itemFound?._id);
-          console.log(itemFound, 'item found', arrayFilter)
+          const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
           if (arrayFilter?.length > 0) {
+            const remainingCost = actualCost - priceToRemove;
+            const priceToAdd = getGlassAddonsCost(arrayFilter);
+            const remainingCost2 = remainingCost + priceToAdd;
+            const newGeneratedTotal = remainingCost2 * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+            setTotalPrice(newGeneratedTotal);
             setSelectedHardware((prev) => ({
               ...prev,
               glassAddons: arrayFilter,
@@ -126,6 +155,9 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
               (row) => row.slug === "no-treatment"
             );
             if (noTreatment) {
+              const remainingCost = actualCost - priceToRemove;
+              const newGeneratedTotal = remainingCost * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+              setTotalPrice(newGeneratedTotal);
               setSelectedHardware((prev) => ({
                 ...prev,
                 glassAddons: [{ type: noTreatment?._id, name: noTreatment?.name }],
@@ -139,6 +171,12 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
           );
           const arrayOld = selectedHardware?.glassAddons?.filter((item) => item.type !== noTreatment?._id);
           arrayOld.push({ type: value?._id, name: value?.name });
+          const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
+          const remainingCost = actualCost - priceToRemove;
+          const priceToAdd = getGlassAddonsCost(arrayOld);
+          const remainingCost2 = remainingCost + priceToAdd;
+          const newGeneratedTotal = remainingCost2 * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+          setTotalPrice(newGeneratedTotal);
           setSelectedHardware((prev) => ({
             ...prev,
             glassAddons: arrayOld,
@@ -197,8 +235,7 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
       console.log(value, 'hardwareAddons')
     }
   }
-
-  function getCostByThickness(item) {
+  const getCostByThickness = (item) => {
     const glassType = hardwaresList?.glassType.find(
       (_item) => _item?._id === item.type
     );
@@ -208,9 +245,40 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
     }
     return 0; // Return null if no matching thickness is found
   }
+  const getGlassAddonsCost = (items) => {
+    let glassAddonsPrice = 0;
+    items?.forEach((_item) => {
+      const fullItem = hardwaresList?.glassAddons?.find((glassAddon) => glassAddon?._id === _item.type);
+      let price = 0;
+      if (fullItem?.options?.length) {
+        price = fullItem?.options[0]?.cost || 0;
+      }
+      glassAddonsPrice = glassAddonsPrice + price * data?.sqftArea;
+    });
+    return glassAddonsPrice;
+  }
+
+  const handleApprove = () => {
+    customerDecision({
+      data: {
+        approveEstimate: {
+          ...selectedHardware,
+          pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
+          status: "approve",
+        },
+      },
+      apiRoute: `${backendURL}/landing-page-preview/${id}`,
+    });
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      refetchData();
+    }
+  }, [isSuccess]);
 
   // console.log(glassAddonsList, "glassPriceglassPrice");
-  console.log(data?.category, 'category', totalPrice)
+  console.log(data?.category, "category", totalPrice);
   return (
     <>
       <Box
@@ -616,7 +684,7 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
                     )}
 
                     {data?.mountingChannel !== "" &&
-                      data?.mountingChannel !== null ? (
+                    data?.mountingChannel !== null ? (
                       <>
                         {data?.mountingChannel && (
                           <Box>
@@ -773,8 +841,7 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
                         <Typography className="text-xs-ragular-bold">
                           Glass Addons:
                         </Typography>
-                        {(selectedHardware?.glassAddons
-                        )?.map((item, index) => (
+                        {selectedHardware?.glassAddons?.map((item, index) => (
                           <Typography key={index} className="text-xs-ragular">
                             {item?.name},
                           </Typography>
@@ -920,29 +987,37 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
               </Grid>
             </Box>
           </Box>
-          <Box sx={{ pt: 2 }}>
-            <Button
-              fullWidth
-              variant="contained"
-              // onClick={handleOpenEditModal}
-              sx={{
-                backgroundColor: "#8477DA",
-                height: "44px",
-                width: { sm: "100%", xs: "187px" },
-                "&:hover": { backgroundColor: "#8477DA" },
-                color: "white",
-                textTransform: "capitalize",
-                borderRadius: 1,
-                fontSize: { lg: 16, md: 15, xs: 12 },
-                padding: {
-                  sm: "10px 16px  !important",
-                  xs: "5px 5px !important",
-                },
-              }}
-            >
-              I approve
-            </Button>
-          </Box>
+          {data?.status !== "approve" && (
+            <Box sx={{ pt: 2 }}>
+              <Button
+                fullWidth
+                variant="contained"
+                onClick={handleApprove}
+                sx={{
+                  backgroundColor: "#8477DA",
+                  height: "44px",
+                  width: { sm: "100%", xs: "187px" },
+                  "&:hover": { backgroundColor: "#8477DA" },
+                  color: "white",
+                  textTransform: "capitalize",
+                  borderRadius: 1,
+                  fontSize: { lg: 16, md: 15, xs: 12 },
+                  padding: {
+                    sm: "10px 16px  !important",
+                    xs: "5px 5px !important",
+                  },
+                }}
+              >
+                {isLoading ? (
+                  <CircularProgress
+                    sx={{ fontSize: "24px", color: "#F95500" }}
+                  />
+                ) : (
+                  "I approve"
+                )}
+              </Button>
+            </Box>
+          )}
         </Box>
         <Box sx={{ width: "50%", pt: 4 }}>
           <Typography
@@ -969,7 +1044,13 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
               }}
             >
               <Box
-                sx={{ width: "80%", background: "white", borderRadius: "11px" }}
+                sx={{
+                  width: "80%",
+                  background: "white",
+                  borderRadius: "11px",
+                  pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                  opacity: data?.status === "approve" ? 0.5 : 1,
+                }}
               >
                 <MenuList
                   menuOptions={hardwaresList?.glassAddons}
@@ -977,30 +1058,40 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
                   type={"glassAddons"}
                   selectedContent={selectedHardware}
                   handleChange={handleChangeHardware}
-                // selectedContent={}
+                  // selectedContent={}
                 />
               </Box>
             </Box>
-            {[EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(data?.category) && <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                py: "6px",
-              }}
-            >
+            {[EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(
+              data?.category
+            ) && (
               <Box
-                sx={{ width: "80%", background: "white", borderRadius: "11px" }}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  py: "6px",
+                }}
               >
-                <MenuList
-                  menuOptions={hardwaresList?.hardwareAddons}
-                  title={"Hardware Addons"}
-                  type={"hardwareAddons"}
-                  selectedContent={selectedHardware}
-                  handleChange={handleChangeHardware}
-                />
+                <Box
+                  sx={{
+                    width: "80%",
+                    background: "white",
+                    borderRadius: "11px",
+                    pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                    opacity: data?.status === "approve" ? 0.5 : 1,
+                  }}
+                >
+                  <MenuList
+                    menuOptions={hardwaresList?.hardwareAddons}
+                    title={"Hardware Addons"}
+                    type={"hardwareAddons"}
+                    selectedContent={selectedHardware}
+                    handleChange={handleChangeHardware}
+                  />
+                </Box>
               </Box>
-            </Box>}
+            )}
             <Box
               sx={{
                 display: "flex",
@@ -1010,7 +1101,13 @@ const ShowerSummary = ({ data, hardwaresList, locationSettings, reCalculateTotal
               }}
             >
               <Box
-                sx={{ width: "80%", background: "white", borderRadius: "11px" }}
+                sx={{
+                  width: "80%",
+                  background: "white",
+                  borderRadius: "11px",
+                  pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                  opacity: data?.status === "approve" ? 0.5 : 1,
+                }}
               >
                 <MenuList
                   menuOptions={hardwaresList?.glassType}

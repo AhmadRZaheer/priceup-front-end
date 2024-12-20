@@ -28,7 +28,7 @@ const HeaderSection = ({ selectedData,authUser }) => {
                 : GCSLogo
             }
             alt="logo nav bar"
-            style={{ height: "100px", borderBottomRightRadius: "65px" }}
+            style={{ height: "100px", borderRadius: "50%" }}
           />
         </Box>
         <Container

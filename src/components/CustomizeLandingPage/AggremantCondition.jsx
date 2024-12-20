@@ -2,8 +2,9 @@ import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
 import React, { useState } from "react";
 import "./style.scss";
 
-const AggremantCondition = () => {
+const AggremantCondition = ({data}) => {
   const [checked, setChecked] = useState(false);
+  const [accept, setAccept] = useState(false);
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -181,52 +182,55 @@ const AggremantCondition = () => {
               respect to such use.
             </Typography>
           </Box>
-          <Box
-            sx={{
-              pt: 3,
-              pb: 2,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-              <Box>
-                <Checkbox
-                  checked={checked} 
-                  onChange={handleChange} 
-                  sx={{
-                    color: "#E0E0E0",
-                    "&.Mui-checked": {
-                      color: "#F95500",
-                    },
-                    p: "0px !important",
-                  }}
-                />
+          {accept || data?.status === 'approve' ? (
+            <Typography className="contionHead" sx={{  pt: 3,
+              pb: 2,color:'#f95500',textAlign :'center'}}>  Terms and Conditions Accepted</Typography>
+          ) : (
+            <Box
+              sx={{
+                pt: 3,
+                pb: 2,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Box>
+                  <Checkbox
+                    checked={checked}
+                    onChange={handleChange}
+                    sx={{
+                      color: "#E0E0E0",
+                      "&.Mui-checked": {
+                        color: "#F95500",
+                      },
+                      p: "0px !important",
+                    }}
+                  />
+                </Box>
+                <Typography className="acceptTxt">
+                  I confirm that I have read and accept the terms and conditions
+                  and privacy policy.
+                </Typography>
               </Box>
-              <Typography className="acceptTxt">
-                I confirm that I have read and accept the terms and conditions
-                and privacy policy.
-              </Typography>
-            </Box>
-            <Box sx={{ display: "flex", gap: 2.5 }}>
-              <Button variant="text" sx={{ color: "#F95500" }}>
-                Cancel
-              </Button>
-              <Button
-              disabled={!checked}
-                variant="contained"
-                sx={{
-                  backgroundColor: "#F95500",
-                  "&:hover": {
+              <Box sx={{ display: "flex", gap: 2.5 }}>
+                <Button
+                  disabled={!checked}
+                  onClick={() => setAccept(true)}
+                  variant="contained"
+                  sx={{
                     backgroundColor: "#F95500",
-                  },
-                  width: "152px",
-                }}
-              >
-                Accept
-              </Button>
+                    "&:hover": {
+                      backgroundColor: "#F95500",
+                    },
+                    width: "152px",
+                  }}
+                >
+                  Accept
+                </Button>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Box>
       </Container>
     </Box>
