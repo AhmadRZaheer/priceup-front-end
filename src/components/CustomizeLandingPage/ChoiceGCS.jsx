@@ -7,7 +7,7 @@ import EyeIcon from "../../Assets/CustomerLandingImages/Eye-Icon.png";
 import PersonHeart from "../../Assets/CustomerLandingImages/Person-with-Heart-Icon.png";
 import StopWatch from "../../Assets/CustomerLandingImages/Stopwatch-Icon.png";
 
-const ChoiceGCS = () => {
+const ChoiceGCS = ({ data }) => {
   return (
     <>
       <Container maxWidth="lg" sx={{ pb: 2.5, pt: 3.5 }}>
@@ -23,20 +23,14 @@ const ChoiceGCS = () => {
       </Container>
       <Box
         sx={{
-          // width: { md: "89%", xs: "90%" },
-          // m: "auto",
           backgroundImage: { md: `url(${bgHeaderImage})`, xs: "none" },
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
-          // px: { md: 12, xs: 0 },
-          //   pt: { md: 10, xs: 0 },
           pb: { md: 5, xs: 2 },
           mt: 2,
           display: "flex",
           flexDirection: { md: "row", xs: "column" },
-          //   gap: 10,
           position: "relative",
-          // justifyContent: "space-around",
           height: "555px",
         }}
       >
@@ -80,7 +74,8 @@ const ChoiceGCS = () => {
                     lineHeight: "30px",
                   }}
                 >
-                  Lasting Impressions
+                  {data?.content?.section3?.card1?.text1 ??
+                    "Lasting Impressions"}
                 </Typography>
                 <Typography
                   sx={{
@@ -89,8 +84,8 @@ const ChoiceGCS = () => {
                     lineHeight: "30px",
                   }}
                 >
-                  Replacing just the glass in your shower will give your
-                  bathroom a million-dollar look.
+                  {data?.content?.section3?.card1?.text2 ??
+                    "Replacing just the glass in your shower will give your bathroom a million-dollar look."}
                 </Typography>
               </Box>
 
@@ -125,7 +120,7 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  Customer Care
+                  {data?.content?.section3?.card2?.text1 ?? "Customer Care"}
                 </Typography>
                 <Typography
                   sx={{
@@ -134,8 +129,8 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  When you work with us, it’s an experience you will love from
-                  the initial contact to the final install.
+                  {data?.content?.section3?.card2?.text2 ??
+                    "When you work with us, it’s an experience you will love from the initial contact to the final install."}
                 </Typography>
               </Box>
 
@@ -169,7 +164,7 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  Fast Response
+                  {data?.content?.section3?.card3?.text1 ?? "Fast Response"}
                 </Typography>
                 <Typography
                   sx={{
@@ -178,8 +173,8 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  Schedule today and let us help you design and install your
-                  next project.
+                  {data?.content?.section3?.card3?.text2 ??
+                    "Schedule today and let us help you design and install your next project."}
                 </Typography>
               </Box>
 
@@ -213,7 +208,7 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  High Clarity
+                  {data?.content?.section3?.card4?.text1 ?? "High Clarity"}
                 </Typography>
                 <Typography
                   sx={{
@@ -222,8 +217,8 @@ const ChoiceGCS = () => {
                     fontFamily: '"Poppins" !important',
                   }}
                 >
-                  Don’t forget to ask about our starphire ultra-clear glass. It
-                  will change your life.
+                  {data?.content?.section3?.card4?.text2 ??
+                    "Don’t forget to ask about our starphire ultra-clear glass. It will change your life."}
                 </Typography>
               </Box>
             </Box>

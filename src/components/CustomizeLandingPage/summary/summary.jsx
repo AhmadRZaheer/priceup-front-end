@@ -90,104 +90,166 @@ const ShowerSummary = ({
   // const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
 
   const handleChangeHardware = (type, value) => {
-    const pricingFactor = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactor : locationSettings?.miscPricing?.pricingFactor;
-    const pricingFactorStatus = data?.category === EstimateCategory.MIRRORS ? locationSettings?.pricingFactorStatus : locationSettings?.miscPricing?.pricingFactorStatus;
-    const laborPrice = data?.category === EstimateCategory.WINECELLARS ? (data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)) : data?.pricing?.laborPrice;
-    if (type === 'glassType') {
+    const pricingFactor =
+      data?.category === EstimateCategory.MIRRORS
+        ? locationSettings?.pricingFactor
+        : locationSettings?.miscPricing?.pricingFactor;
+    const pricingFactorStatus =
+      data?.category === EstimateCategory.MIRRORS
+        ? locationSettings?.pricingFactorStatus
+        : locationSettings?.miscPricing?.pricingFactorStatus;
+    const laborPrice =
+      data?.category === EstimateCategory.WINECELLARS
+        ? data?.pricing?.laborPrice + (data?.pricing?.doorLaborPrice ?? 0)
+        : data?.pricing?.laborPrice;
+    if (type === "glassType") {
       const oldGlassPrice = getCostByThickness(
         selectedHardware?.glassType,
         selectedHardware?.glassType?.thickness
       );
       const newGlassPrice = getCostByThickness(
-        { type: value?._id, name: value?.name, thickness: selectedHardware?.glassType?.thickness },
+        {
+          type: value?._id,
+          name: value?.name,
+          thickness: selectedHardware?.glassType?.thickness,
+        },
         selectedHardware?.glassType?.thickness
       );
-      console.log(oldGlassPrice, 'old price', newGlassPrice, 'new price', pricingFactor, pricingFactorStatus);
+      console.log(
+        oldGlassPrice,
+        "old price",
+        newGlassPrice,
+        "new price",
+        pricingFactor,
+        pricingFactorStatus
+      );
       const calc =
-        (totalPrice - laborPrice) /
-        (pricingFactorStatus ? pricingFactor : 1) -
-        (oldGlassPrice * data?.sqftArea);
-      const glassPricing = data?.sqftArea !== 0 ?
-        (calc + data?.sqftArea * newGlassPrice) *
-        (pricingFactorStatus
-          ? pricingFactor
-          : 1) +
-        laborPrice : 0;
+        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1) -
+        oldGlassPrice * data?.sqftArea;
+      const glassPricing =
+        data?.sqftArea !== 0
+          ? (calc + data?.sqftArea * newGlassPrice) *
+              (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice
+          : 0;
       reCalculateTotal(totalPrice, glassPricing);
       setTotalPrice(glassPricing);
       setSelectedHardware((prev) => ({
         ...prev,
-        glassType: { type: value?._id, name: value?.name, thickness: selectedHardware?.glassType?.thickness },
+        glassType: {
+          type: value?._id,
+          name: value?.name,
+          thickness: selectedHardware?.glassType?.thickness,
+        },
       }));
-      console.log(value, 'glassType');
-    } else if (type === 'glassAddons') {
-      const itemFound = hardwaresList.glassAddons?.find((item) => item._id === value?._id);
+      console.log(value, "glassType");
+    } else if (type === "glassAddons") {
+      const itemFound = hardwaresList.glassAddons?.find(
+        (item) => item._id === value?._id
+      );
       const actualCost =
-        (totalPrice - laborPrice) /
-        (pricingFactorStatus ? pricingFactor : 1);
+        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
       if (itemFound?.slug === "no-treatment") {
         const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
         const remainingCost = actualCost - priceToRemove;
-        const newGeneratedTotal = remainingCost * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+        const newGeneratedTotal =
+          remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
+          laborPrice;
+        reCalculateTotal(totalPrice, newGeneratedTotal);
         setTotalPrice(newGeneratedTotal);
         setSelectedHardware((prev) => ({
           ...prev,
           glassAddons: [{ type: itemFound?._id, name: itemFound?.name }],
         }));
       } else {
-
-        if (itemFound && selectedHardware?.glassAddons?.some(item => item.type === itemFound?._id)) {
-          const arrayFilter = selectedHardware?.glassAddons?.filter((item) => item.type !== itemFound?._id);
-          const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
+        if (
+          itemFound &&
+          selectedHardware?.glassAddons?.some(
+            (item) => item.type === itemFound?._id
+          )
+        ) {
+          const arrayFilter = selectedHardware?.glassAddons?.filter(
+            (item) => item.type !== itemFound?._id
+          );
+          const priceToRemove = getGlassAddonsCost(
+            selectedHardware?.glassAddons
+          );
           if (arrayFilter?.length > 0) {
             const remainingCost = actualCost - priceToRemove;
             const priceToAdd = getGlassAddonsCost(arrayFilter);
             const remainingCost2 = remainingCost + priceToAdd;
-            const newGeneratedTotal = remainingCost2 * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+            const newGeneratedTotal =
+              remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+              laborPrice;
+            reCalculateTotal(totalPrice, newGeneratedTotal);
             setTotalPrice(newGeneratedTotal);
             setSelectedHardware((prev) => ({
               ...prev,
               glassAddons: arrayFilter,
             }));
-          }
-          else { // set no-treatment
+          } else {
+            // set no-treatment
             const noTreatment = hardwaresList?.glassAddons?.find(
               (row) => row.slug === "no-treatment"
             );
             if (noTreatment) {
               const remainingCost = actualCost - priceToRemove;
-              const newGeneratedTotal = remainingCost * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+              const newGeneratedTotal =
+                remainingCost * (pricingFactorStatus ? pricingFactor : 1) +
+                laborPrice;
+              reCalculateTotal(totalPrice, newGeneratedTotal);
               setTotalPrice(newGeneratedTotal);
               setSelectedHardware((prev) => ({
                 ...prev,
-                glassAddons: [{ type: noTreatment?._id, name: noTreatment?.name }],
+                glassAddons: [
+                  { type: noTreatment?._id, name: noTreatment?.name },
+                ],
               }));
             }
-
           }
         } else {
           const noTreatment = hardwaresList?.glassAddons?.find(
             (row) => row.slug === "no-treatment"
           );
-          const arrayOld = selectedHardware?.glassAddons?.filter((item) => item.type !== noTreatment?._id);
+          const arrayOld = selectedHardware?.glassAddons?.filter(
+            (item) => item.type !== noTreatment?._id
+          );
           arrayOld.push({ type: value?._id, name: value?.name });
-          const priceToRemove = getGlassAddonsCost(selectedHardware?.glassAddons);
+          const priceToRemove = getGlassAddonsCost(
+            selectedHardware?.glassAddons
+          );
           const remainingCost = actualCost - priceToRemove;
           const priceToAdd = getGlassAddonsCost(arrayOld);
           const remainingCost2 = remainingCost + priceToAdd;
-          const newGeneratedTotal = remainingCost2 * ((pricingFactorStatus ? pricingFactor : 1)) + laborPrice;
+          const newGeneratedTotal =
+            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          reCalculateTotal(totalPrice, newGeneratedTotal);
           setTotalPrice(newGeneratedTotal);
           setSelectedHardware((prev) => ({
             ...prev,
             glassAddons: arrayOld,
           }));
         }
-
       }
-      console.log(value, 'glassAddons');
-    } else if (type === 'hardwareAddons') {
-      const fabricationCounter = data?.category === EstimateCategory.SHOWERS ? getShowersHardwareSpecificFabrication : getWineCellarHardwareSpecificFabrication
-      const itemExistIndex = selectedHardware?.hardwareAddons?.findIndex(item => item.type === value?.item?._id)
+      console.log(value, "glassAddons");
+    } else if (type === "hardwareAddons") {
+      const fabricationCounter =
+        data?.category === EstimateCategory.SHOWERS
+          ? getShowersHardwareSpecificFabrication
+          : getWineCellarHardwareSpecificFabrication;
+
+      const itemExistIndex = selectedHardware?.hardwareAddons?.findIndex(
+        (item) => item.type === value?.item?._id
+      );
+      const actualCost =
+        (totalPrice - laborPrice) / (pricingFactorStatus ? pricingFactor : 1);
+      const addonsPriceToRemove = getHardwareAddonsCost(
+        selectedHardware?.hardwareAddons
+      );
+      const fabricationPriceToRemove = getFabricationsCost(fabricationsCount);
+      const remainingCost =
+        actualCost - (addonsPriceToRemove - fabricationPriceToRemove);
       if (itemExistIndex !== -1) {
         if (value.counter > 0) {
           const array = selectedHardware?.hardwareAddons;
@@ -198,6 +260,16 @@ const ShowerSummary = ({
             { item: value?.item, count: value.counter }
           );
           array[itemExistIndex].count = value.counter;
+          const addonsPriceToAdd = getHardwareAddonsCost(array);
+          const fabricationPriceToAdd =
+            getFabricationsCost(hardwareFabrication);
+          const remainingCost2 =
+            remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+          const newGeneratedTotal =
+            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          reCalculateTotal(totalPrice, newGeneratedTotal);
+          setTotalPrice(newGeneratedTotal);
           setFabricationsCount(hardwareFabrication);
           setSelectedHardware((prev) => ({
             ...prev,
@@ -207,11 +279,26 @@ const ShowerSummary = ({
           const hardwareFabrication = fabricationCounter(
             type,
             fabricationsCount,
-            { item: value?.item, count: selectedHardware?.hardwareAddons[itemExistIndex].count },
+            {
+              item: value?.item,
+              count: selectedHardware?.hardwareAddons[itemExistIndex].count,
+            },
             null
           );
+          const array = selectedHardware?.hardwareAddons?.filter(
+            (_item) => _item.type !== value?.item?._id
+          );
+          const addonsPriceToAdd = getHardwareAddonsCost(array);
+          const fabricationPriceToAdd =
+            getFabricationsCost(hardwareFabrication);
+          const remainingCost2 =
+            remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+          const newGeneratedTotal =
+            remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+            laborPrice;
+          reCalculateTotal(totalPrice, newGeneratedTotal);
+          setTotalPrice(newGeneratedTotal);
           setFabricationsCount(hardwareFabrication);
-          const array = selectedHardware?.hardwareAddons?.filter((_item) => _item.type !== value?.item?._id);
           setSelectedHardware((prev) => ({
             ...prev,
             hardwareAddons: array,
@@ -222,33 +309,50 @@ const ShowerSummary = ({
           type,
           fabricationsCount,
           null,
-          { item: value?.item, count: value.counter },
+          { item: value?.item, count: value.counter }
         );
-        setFabricationsCount(hardwareFabrication);
         const array = selectedHardware?.hardwareAddons;
-        array.push({ type: value?.item?._id, name: value?.item?.name, count: value.counter });
+        array.push({
+          type: value?.item?._id,
+          name: value?.item?.name,
+          count: value.counter,
+        });
+        const addonsPriceToAdd = getHardwareAddonsCost(array);
+        const fabricationPriceToAdd = getFabricationsCost(hardwareFabrication);
+        const remainingCost2 =
+          remainingCost + (addonsPriceToAdd + fabricationPriceToAdd);
+        const newGeneratedTotal =
+          remainingCost2 * (pricingFactorStatus ? pricingFactor : 1) +
+          laborPrice;
+        reCalculateTotal(totalPrice, newGeneratedTotal);
+        setTotalPrice(newGeneratedTotal);
+        setFabricationsCount(hardwareFabrication);
         setSelectedHardware((prev) => ({
           ...prev,
           hardwareAddons: array,
         }));
       }
-      console.log(value, 'hardwareAddons')
+      console.log(value, "hardwareAddons");
     }
-  }
+  };
   const getCostByThickness = (item) => {
     const glassType = hardwaresList?.glassType.find(
       (_item) => _item?._id === item.type
     );
     if (glassType) {
-      const option = glassType.options.find((_item) => _item.thickness === item.thickness);
+      const option = glassType.options.find(
+        (_item) => _item.thickness === item.thickness
+      );
       return option?.cost ?? 0;
     }
     return 0; // Return null if no matching thickness is found
-  }
+  };
   const getGlassAddonsCost = (items) => {
     let glassAddonsPrice = 0;
     items?.forEach((_item) => {
-      const fullItem = hardwaresList?.glassAddons?.find((glassAddon) => glassAddon?._id === _item.type);
+      const fullItem = hardwaresList?.glassAddons?.find(
+        (glassAddon) => glassAddon?._id === _item.type
+      );
       let price = 0;
       if (fullItem?.options?.length) {
         price = fullItem?.options[0]?.cost || 0;
@@ -256,16 +360,100 @@ const ShowerSummary = ({
       glassAddonsPrice = glassAddonsPrice + price * data?.sqftArea;
     });
     return glassAddonsPrice;
-  }
+  };
+  const getHardwareAddonsCost = (items) => {
+    let hardwareAddonsPrice = 0;
+    items?.forEach((row) => {
+      const fullItem = hardwaresList?.hardwareAddons?.find(
+        (_hardwareAddon) => _hardwareAddon?._id === row.type
+      );
+      let price = 0;
+      if (fullItem) {
+        price =
+          fullItem?.finishes?.find(
+            (finish) =>
+              finish?.finish_id === selectedHardware?.hardwareFinish?.type
+          )?.cost || 0;
+      }
+      hardwareAddonsPrice = hardwareAddonsPrice + price * row?.count;
+    });
+    return hardwareAddonsPrice;
+  };
+  const getFabricationsCost = (selectedFabrication) => {
+    let fabricationPrice = 0;
+    if (selectedHardware?.glassType?.thickness === "1/2") {
+      fabricationPrice =
+        Number(selectedFabrication?.oneInchHoles ?? 0) *
+          (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
+            0) +
+        Number(selectedFabrication?.hingeCut ?? 0) *
+          (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+        Number(selectedFabrication?.clampCut ?? 0) *
+          (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+        Number(selectedFabrication?.notch ?? 0) *
+          (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+        Number(selectedFabrication?.outages ?? 0) *
+          (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+        Number(selectedFabrication?.mitre ?? 0) *
+          (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+        Number(selectedFabrication?.polish ?? 0) *
+          (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
+            0);
+    } else if (selectedHardware?.glassType?.thickness === "3/8") {
+      fabricationPrice =
+        Number(selectedFabrication?.oneInchHoles ?? 0) *
+          (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+            0) +
+        Number(selectedFabrication?.hingeCut ?? 0) *
+          (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+            0) +
+        Number(selectedFabrication?.clampCut ?? 0) *
+          (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+            0) +
+        Number(selectedFabrication?.notch ?? 0) *
+          (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+        Number(selectedFabrication?.outages ?? 0) *
+          (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+        Number(selectedFabrication?.mitre ?? 0) *
+          (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+        Number(selectedFabrication?.polish ?? 0) *
+          (locationSettings?.fabricatingPricing
+            ?.polishPricePerThreeByEightInch ?? 0);
+    }
+    return fabricationPrice;
+  };
 
   const handleApprove = () => {
+    console.log(selectedHardware, "selectedHardwareselectedHardware");
+
+    let Estimatedata = {
+      ...selectedHardware,
+      pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
+      status: "approve",
+    };
+    Estimatedata.config.cost = totalPrice;
+    Estimatedata.config.config.glassType = {
+      type: selectedHardware.glassType.type,
+      thickness: selectedHardware.glassType.thickness,
+    };
+    let selectedGlassAddons = [];
+    selectedHardware.glassAddons.forEach((item) =>
+      selectedGlassAddons.push(item.type)
+    );
+    Estimatedata.config.config.glassAddons = selectedGlassAddons;
+
+    if (data?.category !== EstimateCategory.MIRRORS) {
+      let selectedHardwareAddons = [];
+      selectedHardware.hardwareAddons.forEach((item) =>
+        selectedHardwareAddons.push({ type: item.type, count: item.count })
+      );
+      Estimatedata.config.config.hardwareAddons = selectedHardwareAddons;
+    }
+
+    console.log(Estimatedata,'EstimatedataEstimatedata')
     customerDecision({
       data: {
-        approveEstimate: {
-          ...selectedHardware,
-          pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
-          status: "approve",
-        },
+        approveEstimate:Estimatedata,
       },
       apiRoute: `${backendURL}/landing-page-preview/${id}`,
     });
@@ -611,16 +799,21 @@ const ShowerSummary = ({
                       >
                         <Typography
                           className="text-xs-ragular-bold"
-                          sx={{ color: "#8477DA", fontSize: "20px !important" }}
+                          sx={{
+                            color: "#F95500",
+                            fontSize: "20px !important",
+                            fontWeight: "bold !important",
+                          }}
                         >
                           Total Price:
                         </Typography>
                         <Typography
                           className="text-xs-ragular"
                           sx={{
-                            color: "#8477DA",
+                            color: "#F95500",
                             fontSize: "20px !important",
                             pt: 1,
+                            fontWeight: "bold !important",
                           }}
                         >
                           $ {(totalPrice ?? 0)?.toFixed(2)}
@@ -994,11 +1187,11 @@ const ShowerSummary = ({
                 variant="contained"
                 onClick={handleApprove}
                 sx={{
-                  backgroundColor: "#8477DA",
+                  backgroundColor: "#F95500",
+                  color: "#0B0B0B",
                   height: "44px",
                   width: { sm: "100%", xs: "187px" },
-                  "&:hover": { backgroundColor: "#8477DA" },
-                  color: "white",
+                  "&:hover": { backgroundColor: "#F95500" },
                   textTransform: "capitalize",
                   borderRadius: 1,
                   fontSize: { lg: 16, md: 15, xs: 12 },
@@ -1009,9 +1202,7 @@ const ShowerSummary = ({
                 }}
               >
                 {isLoading ? (
-                  <CircularProgress
-                    sx={{ fontSize: "24px", color: "#F95500" }}
-                  />
+                  <CircularProgress size={24} sx={{ color: "white" }} />
                 ) : (
                   "I approve"
                 )}

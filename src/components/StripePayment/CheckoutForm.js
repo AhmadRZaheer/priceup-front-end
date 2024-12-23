@@ -136,11 +136,12 @@ export default function CheckoutForm({ refetchData, handleClose }) {
             fullWidth
             variant="contained"
             sx={{
-              backgroundColor: statusLoading ? "#d8cece" : "#8477DA",
+              fontWeight: "bold !important",
+              backgroundColor: statusLoading ? "#d8cece" : "#F95500",
               height: "44px",
               width: { sm: "100%", xs: "187px" },
-              "&:hover": { backgroundColor: "#8477DA" },
-              color: "white",
+              "&:hover": { backgroundColor: "#F95500" },
+              color: "#0B0B0B",
               textTransform: "capitalize",
               borderRadius: 1,
               fontSize: { lg: 16, md: 15, xs: 12 },

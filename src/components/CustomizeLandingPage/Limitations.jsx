@@ -6,10 +6,9 @@ import {
   Container,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import LimitationImg from "../../Assets/CustomerLandingImages/LimitationImg.svg";
-import { ArrowDownward } from "@mui/icons-material";
-import { ExpandMore, Add, Remove } from "@mui/icons-material";
+import { Add, Remove } from "@mui/icons-material";
 import "./style.scss";
 
 const accordionData = [
@@ -39,12 +38,18 @@ const accordionData = [
   },
 ];
 
-const LimitationsSection = () => {
+const LimitationsSection = ({ data }) => {
   const [expanded, setExpanded] = useState("panel1");
+
+  const FAQSData = useMemo(() => {
+    const Faqs = data?.content?.section5 ?? accordionData;
+    return Faqs;
+  }, [data]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
+
   return (
     <Container maxWidth="lg" sx={{ pt: 8, pb: 2 }}>
       <Typography
@@ -78,7 +83,7 @@ const LimitationsSection = () => {
         sx={{ display: "flex", FlexDirection: "column", width: "100%", gap: 4 }}
       >
         <Box sx={{ width: "50%" }}>
-          {accordionData.map((data, index) => (
+          {FAQSData?.map((data, index) => (
             <Box key={index} sx={{ mb: 2 }}>
               <Accordion
                 expanded={expanded === `panel${index + 1}`}

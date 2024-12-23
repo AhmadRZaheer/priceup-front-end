@@ -12,22 +12,28 @@ import ShowerSummary from "./summary/summary";
 import { EstimateCategory } from "@/utilities/constants";
 
 const SingleAccordian = ({
-    refetchData,
+  refetchData,
   index,
   expanded,
   handleChangeAccordian,
   data,
   reCalculateTotal,
-  showersLocationSettings,
-  mirrorsLocationSettings,
-  wineCellarLocationSettings,
-  showerHardwaresList,
-  mirrorHardwaresList,
-  wineCellarHardwaresList,
+  locationSettings,
+  // showersLocationSettings,
+  // mirrorsLocationSettings,
+  // wineCellarLocationSettings,
+  hardwareList,
+  // showerHardwaresList,
+  // mirrorHardwaresList,
+  // wineCellarHardwaresList,
   category,
 }) => {
   const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
-  const chipColor = data?.status ? data?.status === "pending" ? "#F95500" : "#0FE90D" :'#F95500';
+  const chipColor = data?.status
+    ? data?.status === "pending"
+      ? "#F95500"
+      : "#0FE90D"
+    : "#F95500";
 
   return (
     <Accordion
@@ -92,28 +98,30 @@ const SingleAccordian = ({
           <Box>
             <Box>
               <ShowerSummary
-              refetchData={refetchData}
+                refetchData={refetchData}
                 totalPrice={totalPrice}
                 setTotalPrice={setTotalPrice}
                 data={data}
                 reCalculateTotal={reCalculateTotal}
-                locationSettings={
-                  data?.category === EstimateCategory.SHOWERS
-                    ? showersLocationSettings
-                    : data?.category === EstimateCategory.MIRRORS
-                    ? mirrorsLocationSettings
-                    : wineCellarLocationSettings
-                }
-                hardwaresList={
-                  data?.category === EstimateCategory.SHOWERS
-                    ? showerHardwaresList
-                    : data?.category === EstimateCategory.MIRRORS
-                    ? {
-                        ...mirrorHardwaresList,
-                        glassType: mirrorHardwaresList?.glassTypes ?? [],
-                      }
-                    : wineCellarHardwaresList
-                }
+                locationSettings={locationSettings}
+                // locationSettings={
+                //   data?.category === EstimateCategory.SHOWERS
+                //     ? showersLocationSettings
+                //     : data?.category === EstimateCategory.MIRRORS
+                //     ? mirrorsLocationSettings
+                //     : wineCellarLocationSettings
+                // }
+                hardwaresList={hardwareList}
+                // hardwaresList={
+                //   data?.category === EstimateCategory.SHOWERS
+                //     ? showerHardwaresList
+                //     : data?.category === EstimateCategory.MIRRORS
+                //     ? {
+                //         ...mirrorHardwaresList,
+                //         glassType: mirrorHardwaresList?.glassTypes ?? [],
+                //       }
+                //     : wineCellarHardwaresList
+                // }
               />
             </Box>
           </Box>

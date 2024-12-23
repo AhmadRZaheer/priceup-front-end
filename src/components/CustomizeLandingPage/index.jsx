@@ -403,8 +403,6 @@ const CustomizeLandingPage = ({
     SetTotalSum(sum);
   };
 
-  console.log(estimateTotal, "sdgasdfgasdfgestimateTotal");
-
   const generatePDFDocument = async () => {
     const doc = estimatePdfs?.length > 0 && (
       <LandingPDFFile
@@ -1147,14 +1145,16 @@ const CustomizeLandingPage = ({
                           handleChangeAccordian={handleChangeAccordian}
                           data={data}
                           reCalculateTotal={reCalculateTotal}
-                          showersLocationSettings={showersLocationSettings}
-                          mirrorsLocationSettings={mirrorsLocationSettings}
-                          wineCellarLocationSettings={
-                            wineCellarLocationSettings
-                          }
-                          showerHardwaresList={showerHardwaresList}
-                          mirrorHardwaresList={mirrorHardwaresList}
-                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          locationSettings={showersLocationSettings}
+                          // showersLocationSettings={showersLocationSettings}
+                          // mirrorsLocationSettings={mirrorsLocationSettings}
+                          // wineCellarLocationSettings={
+                          //   wineCellarLocationSettings
+                          // }
+                          hardwareList={showerHardwaresList}
+                          // showerHardwaresList={showerHardwaresList}
+                          // mirrorHardwaresList={mirrorHardwaresList}
+                          // wineCellarHardwaresList={wineCellarHardwaresList}
                           category={EstimateCategory.SHOWERS}
                         />
                       );
@@ -1193,14 +1193,19 @@ const CustomizeLandingPage = ({
                           handleChangeAccordian={handleChangeAccordian}
                           data={data}
                           reCalculateTotal={reCalculateTotal}
-                          showersLocationSettings={showersLocationSettings}
-                          mirrorsLocationSettings={mirrorsLocationSettings}
-                          wineCellarLocationSettings={
-                            wineCellarLocationSettings
-                          }
-                          showerHardwaresList={showerHardwaresList}
-                          mirrorHardwaresList={mirrorHardwaresList}
-                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          locationSettings={mirrorsLocationSettings}
+                          // showersLocationSettings={showersLocationSettings}
+                          // mirrorsLocationSettings={mirrorsLocationSettings}
+                          // wineCellarLocationSettings={
+                          //   wineCellarLocationSettings
+                          // }
+                          hardwareList={{
+                            ...mirrorHardwaresList,
+                            glassType: mirrorHardwaresList?.glassTypes ?? [],
+                          }}
+                          // showerHardwaresList={showerHardwaresList}
+                          // mirrorHardwaresList={mirrorHardwaresList}
+                          // wineCellarHardwaresList={wineCellarHardwaresList}
                           category={EstimateCategory.MIRRORS}
                         />
                       );
@@ -1240,14 +1245,16 @@ const CustomizeLandingPage = ({
                           handleChangeAccordian={handleChangeAccordian}
                           data={data}
                           reCalculateTotal={reCalculateTotal}
-                          showersLocationSettings={showersLocationSettings}
-                          mirrorsLocationSettings={mirrorsLocationSettings}
-                          wineCellarLocationSettings={
-                            wineCellarLocationSettings
-                          }
-                          showerHardwaresList={showerHardwaresList}
-                          mirrorHardwaresList={mirrorHardwaresList}
-                          wineCellarHardwaresList={wineCellarHardwaresList}
+                          locationSettings={wineCellarLocationSettings}
+                          // showersLocationSettings={showersLocationSettings}
+                          // mirrorsLocationSettings={mirrorsLocationSettings}
+                          // wineCellarLocationSettings={
+                          //   wineCellarLocationSettings
+                          // }
+                          hardwareList={wineCellarHardwaresList}
+                          // showerHardwaresList={showerHardwaresList}
+                          // mirrorHardwaresList={mirrorHardwaresList}
+                          // wineCellarHardwaresList={wineCellarHardwaresList}
                           category={EstimateCategory.WINECELLARS}
                         />
                       );
@@ -1348,12 +1355,12 @@ const CustomizeLandingPage = ({
           </Box>
         </Container>
       </Box>
-      <ChoiceGCS />
+      <ChoiceGCS data={selectedData}  />
       {/* <ServiceSection /> */}
       <WarrantySection />
-      <LimitationsSection />
+      <LimitationsSection data={selectedData} />
       <ClaimSection />
-      <ManainanceSection />
+      <ManainanceSection data={selectedData} />
       <UpgradeOPtions />
       <AggremantCondition data={selectedData} />
 
@@ -1619,7 +1626,11 @@ const CustomizeLandingPage = ({
           )}
         </Box>
       </Container> */}
-      <SigntureSection data={selectedData} refetchData={refetchData} estimatePdfs={estimatePdfs} />
+      <SigntureSection
+        data={selectedData}
+        refetchData={refetchData}
+        estimatePdfs={estimatePdfs}
+      />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
           sx={{

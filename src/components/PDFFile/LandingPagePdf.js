@@ -476,11 +476,15 @@ const LandingPDFFile = ({ controls, data,signature }) => {
                 </View>}
                </View>
               </View>
-             {signature && <View style={{paddingTop:'20px',display:'flex',justifyContent:'end',width:'100%'}}>
-              <Image style={styles.logo2} src={signature} alt="logo" />
-              <Text style={{paddingTop:'6px'}}>Signature</Text>
-              </View>} 
-              
+             {data?.estimateData?.signature || data?.estimateData?.customerName  &&
+            <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
+             <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
+             {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
+             {data?.estimateData?.customerName && <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>{data?.estimateData?.customerName}</Text>} 
+              <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>Signature</Text>
+            </View>
+          </View>         
+              }               
               {/** Pagination */}
               <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
               <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (

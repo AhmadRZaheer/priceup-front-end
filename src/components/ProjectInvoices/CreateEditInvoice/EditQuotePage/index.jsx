@@ -9,28 +9,47 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import * as yup from "yup";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  useCreateDocument,
   useEditDocument,
-  useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
-import { backendURL, frontendURL } from "@/utilities/common";
+import { backendURL } from "@/utilities/common";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
-import { useFetchDataCustomer } from "@/utilities/ApiHooks/customer";
-import { generateInvoiceItemsFromEstimates } from "@/utilities/estimates";
-import { useSelector } from "react-redux";
-import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
-import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
-import { getListData } from "@/redux/estimateCalculations";
 import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
-import { Close, Delete } from "@mui/icons-material";
-import { IconButton } from "@material-ui/core";
+import { Delete } from "@mui/icons-material";
 import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
 import GCSLogo from "@/Assets/GCS-logo.png";
+import FAQSection from "./FAQSection";
+
+const accordionDefaultData = [
+  {
+    title: "Products Not Purchased Through GCS Glass & Mirror",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Damage After Installation",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Tile Cracks During Installation",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Frameless Shower Limitations",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Natural Wear and Tear",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+  {
+    title: "Third-Party Coatings",
+    desc: "GCS does not cover glass or hardware breakage, surface scratches, or scuffs after installation or removal from the building.",
+  },
+];
 
 const validationSchema = yup.object({
   project: yup.string().required("Project is required"),
@@ -45,27 +64,23 @@ const validationSchema = yup.object({
 const EditQuoteInvoice = () => {
   const [searchParams] = useSearchParams();
   const selectedItemId = searchParams.get("item_id");
-  const customerID = searchParams.get("customer_id");
-  const projectID = searchParams.get("project_id");
-  const companySettings = useSelector((state) => state.location);
-  const WinelistData = useSelector(getWineCellarsHardware);
-  const MirrorsHardwareList = useSelector(getMirrorsHardware);
-  const ShowerHardwareList = useSelector(getListData);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [selectedEstimateRows, setSelectedEstimateRows] = useState([]);
-  const [imagesArray, setImagesArray] = useState();
-
-  const navigate = useNavigate();
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
+  const [accordionData, setAccordionData] = useState(
+    singleItemData?.content?.section5 ?? accordionDefaultData
+  );
 
   useEffect(() => {
     if (selectedItemId) {
       refetchSingleItem();
     }
   }, [selectedItemId]);
+  useEffect(() => {
+    if (singleItemData) {
+      setAccordionData(singleItemData?.content?.section5 ?? accordionDefaultData);
+    }
+  }, [singleItemData]);
 
   const { mutateAsync: EditInvoice, isSuccess, isLoading } = useEditDocument();
   const formik = useFormik({
@@ -75,8 +90,69 @@ const EditQuoteInvoice = () => {
       dueDate: dayjs(singleItemData?.customerPreview?.expiresAt) || null,
       notes: singleItemData?.description || "",
       section1: {
-        text1: singleItemData?.content?.section1?.text1 || "Your GCS Estimate Presentation",
-        text2: singleItemData?.content?.section1?.text2 || "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
+        text1:
+          singleItemData?.content?.section1?.text1 ||
+          "Your GCS Estimate Presentation",
+        text2:
+          singleItemData?.content?.section1?.text2 ||
+          "Turning your Vision into reality– Get a Precise Estimate for Your Next Project Today!",
+      },
+      section3: {
+        card1: {
+          text1:
+            singleItemData?.content?.section3?.card1?.text1 ||
+            "Lasting Impressions",
+          text2:
+            singleItemData?.content?.section3?.card1?.text2 ||
+            "Replacing just the glass in your shower will give your bathroom a million-dollar look.",
+        },
+        card2: {
+          text1:
+            singleItemData?.content?.section3?.card2?.text1 || "Customer Care",
+          text2:
+            singleItemData?.content?.section3?.card2?.text2 ||
+            "When you work with us, it’s an experience you will love from the initial contact to the final install.",
+        },
+        card3: {
+          text1:
+            singleItemData?.content?.section3?.card3?.text1 || "Fast Response",
+          text2:
+            singleItemData?.content?.section3?.card3?.text2 ||
+            "Schedule today and let us help you design and install your next project.",
+        },
+        card4: {
+          text1:
+            singleItemData?.content?.section3?.card4?.text1 || "High Clarity",
+          text2:
+            singleItemData?.content?.section3?.card4?.text2 ||
+            "Don’t forget to ask about our starphire ultra-clear glass. It will change your life.",
+        },
+      },
+      section7: {
+        card1: {
+          text1:
+            singleItemData?.content?.section7?.card1?.text1 ||
+            "WAIT BEFORE FIRST USE",
+          text2:
+            singleItemData?.content?.section7?.card1?.text2 ||
+            "If silicone was used on your project, give your silicone at least 24 hours to completely dry before first use",
+        },
+        card2: {
+          text1:
+            singleItemData?.content?.section7?.card2?.text1 ||
+            "DAILY MAINTENANCE",
+          text2:
+            singleItemData?.content?.section7?.card2?.text2 ||
+            "Crack your door after use or keep a squeegee handy to dry the inside of the shower to help with mold/mildew buildup. If your bathroom has a vent fan, use it when showering to keep the area as dry as possible. Wipe away moisture from your mirrors to maximize the life of the silver backing",
+        },
+        card3: {
+          text1:
+            singleItemData?.content?.section7?.card3?.text1 ||
+            "ROUTINE CLEANING",
+          text2:
+            singleItemData?.content?.section7?.card3?.text2 ||
+            "Never use aggressive cleaning materials (razorblades, steel wool, abrasives, etc.) to clean glass. Always use non-ammonia glass cleaner and/or alcohol to clean glass. Never use products containing hydrofluoric acid, fluorine, chlorine, or ammonia derivatives. They can damage the surface of the glass. Always clean the full surface of the glass. Spot cleaning might create halos. Never try to remove impurities with a dry or dirty cloth, as this may cause scratches or scuffs on the glass surface.",
+        },
       },
     },
     validationSchema,
@@ -87,21 +163,6 @@ const EditQuoteInvoice = () => {
     },
   });
 
-  // const {
-  //   data: customerList,
-  //   refetch,
-  //   isFetching,
-  //   isFetched,
-  // } = useFetchDataCustomer();
-  // const {
-  //   data: projectsList,
-  //   isFetched: projectsListFetched,
-  //   isFetching: projectsListFetching,
-  //   refetch: refetchProjectsList,
-  // } = useFetchAllDocuments(
-  //   `${backendURL}/projects/by-customer/${selectedCustomer?._id}`
-  // );
-
   const { mutate: uploadImageLogo, data: uploadedImageLogo } =
     useEditDocument();
   const {
@@ -109,55 +170,9 @@ const EditQuoteInvoice = () => {
     data: uploadedImageBackgroundImage,
   } = useEditDocument();
 
-  // const hardwaresList = {
-  //   showers: ShowerHardwareList,
-  //   mirrors: MirrorsHardwareList,
-  //   wineCellars: WinelistData,
-  // };
-  // const EstimateListData = useMemo(() => {
-  //   if (selectedEstimateRows?.length > 0) {
-  //     const EstimateDeatilsData = generateInvoiceItemsFromEstimates(
-  //       selectedEstimateRows,
-  //       hardwaresList,
-  //       companySettings
-  //     );
-  //     return EstimateDeatilsData;
-  //   }
-  // }, [selectedEstimateRows]);
-
-  // useEffect(() => {
-  //   refetch();
-  //   if (selectedCustomer?.name) {
-  //     refetchProjectsList();
-  //   }
-  // }, [formik.values.customer]);
-
   const handleCraete = async (values) => {
     console.log(values, "submited");
-    // const customer = customerList?.find(
-    //   (data) => data?._id === selectedCustomer?._id
-    // );
-    // const { name, email, address, phone } = customer;
 
-    // const source = projectsList?.projects?.find(
-    //   (data) => data?._id === selectedProject?._id
-    // );
-    // const sourceObject = singleItemData?.project;
-    // const customerObject = singleItemData?.customer;
-
-    // const currentDate = values.dueDate;
-    // const updatedDate = currentDate.add(15, "day");
-    // // ISO format mein convert karein
-    // // const formattedDate = currentDate.toISOString();
-    // const customerPayLoad = {
-    //   link: `${frontendURL}/customer-landing-page-preview/${selectedProject?._id}`,
-    //   expiresAt: updatedDate,
-    // };
-    // const compantDetail = {
-    //   name: companySettings?.name,
-    //   image: companySettings.image,
-    //   address: companySettings?.address,
-    // };
     const data = {
       customerPreview: {
         ...singleItemData?.customerPreview,
@@ -171,6 +186,41 @@ const EditQuoteInvoice = () => {
           text1: values.section1?.text1,
           text2: values.section1?.text2,
         },
+        section3: {
+          ...singleItemData?.content?.section3,
+          card1: {
+            text1: values.section3?.card1?.text1,
+            text2: values.section3?.card1?.text2,
+          },
+          card2: {
+            text1: values.section3?.card2?.text1,
+            text2: values.section3?.card2?.text2,
+          },
+          card3: {
+            text1: values.section3?.card3?.text1,
+            text2: values.section3?.card3?.text2,
+          },
+          card4: {
+            text1: values.section3?.card4?.text1,
+            text2: values.section3?.card4?.text2,
+          },
+        },
+        section7: {
+          ...singleItemData?.content?.section7,
+          card1: {
+            text1: values.section7?.card1?.text1,
+            text2: values.section7?.card1?.text2,
+          },
+          card2: {
+            text1: values.section7?.card2?.text1,
+            text2: values.section7?.card2?.text2,
+          },
+          card3: {
+            text1: values.section7?.card3?.text1,
+            text2: values.section7?.card3?.text2,
+          },
+        },
+        section5: accordionData,
       },
     };
     try {
@@ -179,7 +229,6 @@ const EditQuoteInvoice = () => {
         apiRoute: `${backendURL}/projects/landing-page-preview/${selectedItemId}`,
       });
       refetchSingleItem();
-      // navigate(`/invoices/${response?.project_id}/customer-preview`);
     } catch (error) {
       console.log(error);
     }
@@ -229,7 +278,6 @@ const EditQuoteInvoice = () => {
       data: formData,
     });
     refetchSingleItem();
-    // setImagesArray(imageURL);
   };
   const handleDeleteImageFromEstimate = async (
     gallery,
@@ -250,16 +298,6 @@ const EditQuoteInvoice = () => {
     refetchSingleItem();
   };
 
-  // useEffect(() => {
-  //   if (customerID && projectID) {
-  //     const customer = customerList?.find((data) => data?._id === customerID);
-  //     const source = projectsList?.projects?.find(
-  //       (data) => data?._id === projectID
-  //     );
-  //     setSelectedCustomer(customer);
-  //     setSelectedProject(source);
-  //   }
-  // }, [customerID, projectID, customerList, projectsList]);
   return (
     <Box
       sx={{
@@ -533,8 +571,8 @@ const EditQuoteInvoice = () => {
                         }}
                         className="custom-textfield"
                         color="neutral"
-                        minRows={5}
-                        maxRows={19}
+                        minRows={3}
+                        maxRows={4}
                         id="notes"
                         name="notes"
                         placeholder="Enter Additional Notes"
@@ -552,7 +590,6 @@ const EditQuoteInvoice = () => {
               <Box sx={{ py: 3, px: "16px" }}>
                 <EditEstimateTable
                   projectId={singleItemData?.project_id}
-                  setSelectedEstimateRows={setSelectedEstimateRows}
                   selectedEstimateRows={[]}
                   selectedEstimates={singleItemData?.estimates}
                 />
@@ -562,7 +599,7 @@ const EditQuoteInvoice = () => {
                 {/* section 1 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
-                   Section 1
+                    Hero Section
                   </Typography>
 
                   <Box sx={{ display: "flex", gap: 2, mt: 2, width: "70%" }}>
@@ -582,19 +619,17 @@ const EditQuoteInvoice = () => {
                           padding: "10px",
                           borderColor: "#cccc",
                           borderRadius: "5px",
-                          // width: "100%",
                         }}
                         className="custom-textfield"
                         color="neutral"
-                        minRows={5}
-                        maxRows={19}
+                        minRows={3}
+                        maxRows={4}
                         name="section1.text1"
                         placeholder="Enter Text"
                         size="large"
                         variant="outlined"
                         value={formik.values.section1.text1 || ""}
                         onChange={formik.handleChange}
-                        // minRows={10}
                       />
                     </Box>
 
@@ -614,12 +649,11 @@ const EditQuoteInvoice = () => {
                           padding: "10px",
                           borderColor: "#cccc",
                           borderRadius: "5px",
-                          // width: "100%",
                         }}
                         className="custom-textfield"
                         color="neutral"
-                        minRows={5}
-                        maxRows={19}
+                        minRows={3}
+                        maxRows={4}
                         placeholder="Enter Text"
                         size="large"
                         variant="outlined"
@@ -631,7 +665,11 @@ const EditQuoteInvoice = () => {
                   </Box>
 
                   <Box
-                    sx={{ display: "flex", justifyContent: "space-around", py: 3 }}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-around",
+                      py: 3,
+                    }}
                   >
                     {/* section logo */}
 
@@ -647,7 +685,7 @@ const EditQuoteInvoice = () => {
                       <Box
                         sx={{
                           width: 400,
-                          // height: 340,
+
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -680,7 +718,7 @@ const EditQuoteInvoice = () => {
                       </Box>
 
                       <Button
-                      disabled={isLoading}
+                        disabled={isLoading}
                         variant="contained"
                         component="label"
                         sx={{
@@ -715,7 +753,7 @@ const EditQuoteInvoice = () => {
                       <Box
                         sx={{
                           width: 400,
-                          // height: 340,
+
                           display: "flex",
                           justifyContent: "center",
                           alignItems: "center",
@@ -740,18 +778,18 @@ const EditQuoteInvoice = () => {
                           </Box>
                         ) : (
                           <Box>
-                          <img
-                            src={bgHeaderImage}
-                            width={400}
-                            height={340}
-                            alt="section image logo"
-                          />
-                        </Box>
+                            <img
+                              src={bgHeaderImage}
+                              width={400}
+                              height={340}
+                              alt="section image logo"
+                            />
+                          </Box>
                         )}
                       </Box>
 
                       <Button
-                       disabled={isLoading}
+                        disabled={isLoading}
                         variant="contained"
                         component="label"
                         sx={{
@@ -781,10 +819,10 @@ const EditQuoteInvoice = () => {
                 {/* section 2 */}
                 <Box sx={{ p: 2 }}>
                   <Typography variant="h5" fontWeight={"bold"}>
-                    Section 2
+                    Dynamic Estimates
                   </Typography>
 
-                  <Typography fontWeight={"bold"} sx={{ pt: 1, }}>
+                  <Typography fontWeight={"bold"} sx={{ pt: 1 }}>
                     Estimates Images
                   </Typography>
 
@@ -796,7 +834,7 @@ const EditQuoteInvoice = () => {
                         flexDirection: "column",
                         gap: 1,
                         border: "1px solid #ccc",
-                        mt:2
+                        mt: 2,
                       }}
                     >
                       <Typography
@@ -818,55 +856,60 @@ const EditQuoteInvoice = () => {
                           gap: "10px",
                         }}
                       >
-                        {console.log(item?.gallery,'item?.gallerydfgh')}
-                        {(item?.gallery !== undefined)  ?
-                        item?.gallery?.map((_image) => (
-                          <Box
-                            sx={{
-                              width: "300px",
-                              height: "300px",
-                              display: "flex",
-                              justifyContent: "center",
-                              alignItems: "center",
-                              px: 3,
-                              py: 1.5,
-                              position: "relative",
-                            }}
-                          >
+                        {console.log(item?.gallery, "item?.gallerydfgh")}
+                        {item?.gallery !== undefined ? (
+                          item?.gallery?.map((_image) => (
                             <Box
                               sx={{
-                                position: "absolute",
-                                right: "18px",
-                                top: "3px",
-                                color: "red",
-                                cursor: "pointer",
+                                width: "300px",
+                                height: "300px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                px: 3,
+                                py: 1.5,
+                                position: "relative",
                               }}
-                              onClick={() =>
-                                handleDeleteImageFromEstimate(
-                                  item?.gallery,
-                                  _image,
-                                  `estimates.${index}.gallery`
-                                )
-                              }
                             >
-                              <Delete />
+                              <Box
+                                sx={{
+                                  position: "absolute",
+                                  right: "18px",
+                                  top: "3px",
+                                  color: "red",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  handleDeleteImageFromEstimate(
+                                    item?.gallery,
+                                    _image,
+                                    `estimates.${index}.gallery`
+                                  )
+                                }
+                              >
+                                <Delete />
+                              </Box>
+                              <img
+                                style={{ width: "100%", height: "100%" }}
+                                src={`${backendURL}/${_image}`}
+                                alt="section image backgroundImage"
+                              />
                             </Box>
-                            <img
-                              style={{ width: "100%", height: "100%" }}
-                              // src=""
-                              src={`${backendURL}/${_image}`}
-                              // width={400}
-                              // height={340}
-                              alt="section image backgroundImage"
-                            />
-                          </Box>
-                        )) : 
-                        <Typography sx={{height:'150px',textAlign :'center',width:'100%',alignContent: 'center'}}>
-                          No Image Selected!
-                        </Typography>
-                        }
+                          ))
+                        ) : (
+                          <Typography
+                            sx={{
+                              height: "150px",
+                              textAlign: "center",
+                              width: "100%",
+                              alignContent: "center",
+                            }}
+                          >
+                            No Image Selected!
+                          </Typography>
+                        )}
                       </Grid>
-                      <Box sx={{px:3,pb:2,textAlign:'center'}}>
+                      <Box sx={{ px: 3, pb: 2, textAlign: "center" }}>
                         <Button
                           variant="contained"
                           component="label"
@@ -881,7 +924,6 @@ const EditQuoteInvoice = () => {
                           <input
                             type="file"
                             accept="image/*"
-                            // multiple
                             hidden
                             onChange={(e) =>
                               handleUploadEstimatesImage(
@@ -894,6 +936,564 @@ const EditQuoteInvoice = () => {
                       </Box>
                     </Box>
                   ))}
+                </Box>
+                {/* section 3 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Info Cards
+                  </Typography>
+                  <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 1 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card1.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section3.card1.text2"
+                          maxLength={138}
+                          value={formik.values.section3.card1.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>{" "}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 2 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card2.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card2.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section3.card2.text2"
+                          maxLength={138}
+                          value={formik.values.section3.card2.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 3 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card3.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card3.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section3.card3.text2"
+                          maxLength={138}
+                          value={formik.values.section3.card3.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 4 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section3.card4.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={20}
+                          value={formik.values.section3.card4.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section3.card4.text2"
+                          maxLength={138}
+                          value={formik.values.section3.card4.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                {/* section 4 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    FAQs
+                  </Typography>
+                  <FAQSection
+                    accordionData={accordionData}
+                    setAccordionData={setAccordionData}
+                  />
+                </Box>
+                {/* section 7 */}
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="h5" fontWeight={"bold"}>
+                    Maintenance Cards
+                  </Typography>
+                  <Box sx={{ border: "1px solid #ccc", mt: 2, px: 3, pt: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 1 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section7.card1.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={23}
+                          value={formik.values.section7.card1.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section7.card1.text2"
+                          maxLength={139}
+                          value={formik.values.section7.card1.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>{" "}
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 2 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section7.card2.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={23}
+                          value={formik.values.section7.card2.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section7.card2.text2"
+                          maxLength={258}
+                          value={formik.values.section7.card2.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        pb: 2,
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        fontWeight={"bold"}
+                        sx={{ alignContent: "center" }}
+                      >
+                        Card 3 :{" "}
+                      </Typography>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 1
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          name="section7.card3.text1"
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          maxLength={23}
+                          value={formik.values.section7.card3.text1 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 0.2,
+                          width: "30%",
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Text 2
+                        </Typography>
+                        <TextareaAutosize
+                          style={{
+                            padding: "10px",
+                            borderColor: "#cccc",
+                            borderRadius: "5px",
+                          }}
+                          className="custom-textfield"
+                          color="neutral"
+                          minRows={3}
+                          maxRows={4}
+                          placeholder="Enter Text"
+                          size="large"
+                          variant="outlined"
+                          name="section7.card3.text2"
+                          maxLength={500}
+                          value={formik.values.section7.card3.text2 || ""}
+                          onChange={formik.handleChange}
+                        />
+                      </Box>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             </Box>
