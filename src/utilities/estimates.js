@@ -672,7 +672,8 @@ export const setStateForShowerEstimate = (
   item,
   dispatch,
   navigate,
-  flag = true
+  flag = true,
+  redirect = false
 ) => {
   // if (item?.category === EstimateCategory.SHOWERS) {
   dispatch(resetNotifications());
@@ -705,9 +706,15 @@ export const setStateForShowerEstimate = (
   }
   // navigate(`/estimates/dimensions`);
   if (flag) {
-    navigate(
-      `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
-    );
+    if(redirect){
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}&redirectTab=all`
+      );
+    }else{
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.SHOWERS}&projectId=${item?.project_id}&quoteState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
+      );
+    }
   }
   // }
 };

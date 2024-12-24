@@ -93,43 +93,50 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
   };
 
   const handleCopyPreview = (value, id) => {
+    const textToCopy = value ?? ""; // Ensure value is not null or undefined
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard
-        .writeText(value ?? "")
+        .writeText(textToCopy)
         .then(() => {
           setCopyLinkStates((prev) => ({ ...prev, [id]: true }));
-          dispatch(
-            showSnackbar({ message: "Link Copied", severity: "success" })
-          );
+          dispatch(showSnackbar({ message: "Link Copied", severity: "success" }));
           setTimeout(() => {
             setCopyLinkStates((prev) => ({ ...prev, [id]: false }));
           }, 6000);
         })
         .catch((err) => {
-          console.error("Failed to copy text using clipboard API:", err);
+          // Clipboard API failed
+          console.error("Clipboard API failed:", err);
+          dispatch(showSnackbar({ message: "Failed to copy link", severity: "error" }));
         });
     } else {
-      const textarea = document.createElement("textarea");
-      textarea.value = value ?? "";
-      textarea.style.position = "fixed";
-      document.body.appendChild(textarea);
-      textarea.focus();
-      textarea.select();
-
-      try {
-        document.execCommand("copy");
-        setCopyLinkStates((prev) => ({ ...prev, [id]: true }));
-        dispatch(showSnackbar({ message: "Link Copied", severity: "success" }));
-        setTimeout(() => {
-          setCopyLinkStates((prev) => ({ ...prev, [id]: false }));
-        }, 6000);
-      } catch (err) {
-        console.error("Fallback: Failed to copy text using execCommand:", err);
-      } finally {
-        document.body.removeChild(textarea);
-      }
+      // Fallback for older browsers
+      // const textarea = document.createElement("textarea");
+      // textarea.value = textToCopy;
+      // textarea.style.position = "fixed"; // Prevent scrolling issues
+      // textarea.style.opacity = "0"; // Invisible element
+      // document.body.appendChild(textarea);
+      // textarea.select();
+      alert(`Unsecure Connection:\nPlease copy the below url \n${textToCopy}`);  
+      // try {
+      //   if (document.execCommand("copy")) {
+      //     // Successfully copied using execCommand
+      //     setCopyLinkStates((prev) => ({ ...prev, [id]: true }));
+      //     dispatch(showSnackbar({ message: "Link Copied", severity: "success" }));
+      //     setTimeout(() => {
+      //       setCopyLinkStates((prev) => ({ ...prev, [id]: false }));
+      //     }, 6000);
+      //   } else {
+      //     throw new Error("execCommand failed");
+      //   }
+      // } catch (err) {
+      //   console.error("Fallback: Failed to copy using execCommand:", err);
+      //   dispatch(showSnackbar({ message: "Failed to copy link", severity: "error" }));
+      // } finally {
+      //   document.body.removeChild(textarea); // Clean up the DOM
+      // }
     }
-  };
+  };  
 
   return (
     <>
@@ -199,30 +206,30 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                           sx={{ display: "flex", gap: 1.5 }}
                         >
                           <Tooltip placement="top" title="View">
-                          <IconButton
-                            sx={{ width: 20, height: 20 }}
-                            onClick={() =>
-                              window.open(
-                                `/invoices/${row?._id}/customer-preview`,
-                                "_blank"
-                              )
-                            }
-                          >
-                            <RemoveRedEyeIcon />
-                          </IconButton>
+                            <IconButton
+                              sx={{ width: 20, height: 20 }}
+                              onClick={() =>
+                                window.open(
+                                  `/invoices/${row?._id}/customer-preview`,
+                                  "_blank"
+                                )
+                              }
+                            >
+                              <RemoveRedEyeIcon />
+                            </IconButton>
                           </Tooltip>
-                       
+
                           <Tooltip placement="top" title="Delete">
-                          <IconButton
-                            sx={{ width: 20, height: 20 }}
-                            onClick={() => handleOpenDeleteModal(row?._id)}
-                          >
-                            <img
-                              src={DeleteIcon}
-                              alt="delete icon"
-                              style={{ width: "20px", height: "20px" }}
-                            />
-                          </IconButton>
+                            <IconButton
+                              sx={{ width: 20, height: 20 }}
+                              onClick={() => handleOpenDeleteModal(row?._id)}
+                            >
+                              <img
+                                src={DeleteIcon}
+                                alt="delete icon"
+                                style={{ width: "20px", height: "20px" }}
+                              />
+                            </IconButton>
                           </Tooltip>
                           <Tooltip placement="top" title="Edit">
                             <IconButton
@@ -237,30 +244,32 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                             </IconButton>
                           </Tooltip>
 
-                          <Tooltip
-                            placement="top"
-                            title={
-                              copyLinkStates[row?._id]
-                                ? "Copied"
-                                : "Copy Customer Preview Link"
-                            }
-                          >
-                            <IconButton
-                              sx={{ width: 20, height: 20 }}
-                              onClick={() =>
-                                handleCopyPreview(
-                                  row?.customerPreview?.link,
-                                  row?._id
-                                )
+                          {row?.customerPreview?.link && (
+                            <Tooltip
+                              placement="top"
+                              title={
+                                copyLinkStates[row?._id]
+                                  ? "Copied"
+                                  : "Copy Customer Preview Link"
                               }
                             >
-                              {copyLinkStates[row?._id] ? (
-                                <DoneOutlined sx={{ fontSize: "20px" }} />
-                              ) : (
-                                <ContentCopy sx={{ fontSize: "20px" }} />
-                              )}
-                            </IconButton>
-                          </Tooltip>
+                              <IconButton
+                                sx={{ width: 20, height: 20 }}
+                                onClick={() =>
+                                  handleCopyPreview(
+                                    row?.customerPreview?.link,
+                                    row?._id
+                                  )
+                                }
+                              >
+                                {copyLinkStates[row?._id] ? (
+                                  <DoneOutlined sx={{ fontSize: "20px" }} />
+                                ) : (
+                                  <ContentCopy sx={{ fontSize: "20px" }} />
+                                )}
+                              </IconButton>
+                            </Tooltip>
+                          )}
                         </TableCell>
                       </TableRow>
                     );

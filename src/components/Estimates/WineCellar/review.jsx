@@ -247,6 +247,7 @@ const Review = ({ setStep }) => {
   const addedFields = useSelector(getAdditionalFields);
   const isCustomizedDoorWidth = useSelector(getisCustomDoorWidth);
   const category = searchParams.get("category");
+  const redirectTab = searchParams.get("redirectTab");
 
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -303,7 +304,11 @@ const Review = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}?category=${category}`);
+      if (redirectTab && redirectTab === "all") {
+        navigate(`/projects/${projectId}`);
+      } else {
+        navigate(`/projects/${projectId}?category=${category}`);
+      }
     } else {
       navigate("/estimates");
     }
@@ -677,7 +682,6 @@ const Review = ({ setStep }) => {
                       py: "6px",
                     }}
                   >
-                    {console.log(selectedContent,'selectedContexxntselectedContentselectedContentselectedContent')}
                     <Box sx={{ width: "100%" }}>
                       <MenuList
                         menuOptions={listData?.slidingDoorSystem}

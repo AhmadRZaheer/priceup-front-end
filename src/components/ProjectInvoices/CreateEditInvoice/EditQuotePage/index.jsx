@@ -5,6 +5,7 @@ import {
   Grid,
   TextareaAutosize,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
@@ -19,10 +20,12 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 import EditEstimateTable from "./EditEstimateTable";
-import { Delete } from "@mui/icons-material";
+import { ContentCopy, Delete, DoneOutlined } from "@mui/icons-material";
 import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
 import GCSLogo from "@/Assets/GCS-logo.png";
 import FAQSection from "./FAQSection";
+import { showSnackbar } from "@/redux/snackBarSlice";
+import { useDispatch } from "react-redux";
 
 const accordionDefaultData = [
   {
@@ -62,6 +65,7 @@ const validationSchema = yup.object({
 });
 
 const EditQuoteInvoice = () => {
+  const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const selectedItemId = searchParams.get("item_id");
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
@@ -70,6 +74,50 @@ const EditQuoteInvoice = () => {
   const [accordionData, setAccordionData] = useState(
     singleItemData?.content?.section5 ?? accordionDefaultData
   );
+  const [copyLink, setCopyLink] = useState(false);
+  const handleCopyPreview = (value) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      // Modern clipboard API
+      navigator.clipboard
+        .writeText(value ?? "")
+        .then(() => {
+          setCopyLink(true);
+          dispatch(
+            showSnackbar({ message: "Link Copied", severity: "success" })
+          );
+          setTimeout(() => {
+            setCopyLink(false);
+          }, 6000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy text using clipboard API:", err);
+        });
+    } else {
+      alert(`Unsecure Connection:\nPlease copy the below url \n${value ?? ""}`);  
+      // Fallback for older browsers
+      // const textarea = document.createElement("textarea");
+      // textarea.value = value ?? "";
+      // textarea.style.position = "fixed"; // Prevent scrolling
+      // document.body.appendChild(textarea);
+      // textarea.focus();
+      // textarea.select();
+
+      // try {
+      //   document.execCommand("copy");
+      //   setCopyLink(true);
+      //   dispatch(
+      //     showSnackbar({ message: "Link Copied", severity: "success" })
+      //   );
+      //   setTimeout(() => {
+      //     setCopyLink(false);
+      //   }, 6000);
+      // } catch (err) {
+      //   console.error("Fallback: Failed to copy text using execCommand:", err);
+      // } finally {
+      //   document.body.removeChild(textarea);
+      // }
+    }
+  };
 
   useEffect(() => {
     if (selectedItemId) {
@@ -78,7 +126,9 @@ const EditQuoteInvoice = () => {
   }, [selectedItemId]);
   useEffect(() => {
     if (singleItemData) {
-      setAccordionData(singleItemData?.content?.section5 ?? accordionDefaultData);
+      setAccordionData(
+        singleItemData?.content?.section5 ?? accordionDefaultData
+      );
     }
   }, [singleItemData]);
 
@@ -344,6 +394,42 @@ const EditQuoteInvoice = () => {
               </Box>
 
               <Box sx={{ display: "flex", gap: 2 }}>
+                {singleItemData?.customerPreview?.link &&
+                  singleItemData?.customerPreview?.link?.length && (
+                    <Box>
+                      <div className="subscribe-box">
+                        <input
+                          type="text"
+                          className="email-input"
+                          placeholder="Customer Preview Link"
+                          value={singleItemData?.customerPreview?.link}
+                          disabled
+                        />
+                        <Tooltip
+                          placement="top"
+                          title={
+                            copyLink ? "Copied" : "Copy Customer Preview Link"
+                          }
+                        >
+                          <button
+                            type="button"
+                            className="subscribe-btn"
+                            onClick={() =>
+                              handleCopyPreview(
+                                singleItemData?.customerPreview?.link
+                              )
+                            }
+                          >
+                            {copyLink ? (
+                              <DoneOutlined sx={{ fontSize: "19px" }} />
+                            ) : (
+                              <ContentCopy sx={{ fontSize: "19px" }} />
+                            )}
+                          </button>
+                        </Tooltip>
+                      </div>
+                    </Box>
+                  )}
                 <Button
                   fullWidth
                   target="_blank"

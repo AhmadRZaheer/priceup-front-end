@@ -4,7 +4,7 @@ import { Box, IconButton, Typography } from "@mui/material";
 import CustomToggle from "../../components/ui-components/Toggle";
 import { Close } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 const location = {
   name: "GCS Glass & Mirror",
@@ -15,6 +15,8 @@ const location = {
 };
 
 const PDFPreview = ({ handleClickClose }) => {
+  const [searchParams] = useSearchParams();
+  const redirectTab = searchParams.get("redirectTab");
   const [viewPricingSubCategory, setViewPricingSubCategory] = useState(true);
   const [viewGrossProfit, setViewGrossProfit] = useState(true);
   const [viewSummary, setViewSummary] = useState(true);
@@ -31,7 +33,11 @@ const PDFPreview = ({ handleClickClose }) => {
       handleClickClose();
     } else {
       if (quote?.projectId) {
-        navigate(`/projects/${quote?.projectId}?category=${quote?.category}`);
+        if(redirectTab && redirectTab === 'all'){
+          navigate(`/projects/${quote?.projectId}`);
+        }else{
+          navigate(`/projects/${quote?.projectId}?category=${quote?.category}`);
+        }        
       } else {
         navigate("/estimates");
       }

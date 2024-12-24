@@ -151,6 +151,7 @@ export const MirrorReview = ({ setStep }) => {
   const pricing = useSelector(getPricing);
   const addedFields = useSelector(getAdditionalFields);
   const category = searchParams.get("category");
+  const redirectTab = searchParams.get("redirectTab");
   const disable_com = Object.entries(measurements)?.length > 0 ? false : true;
   // const handleToggleShift = (type, value) => {
   //     console.log(value, 'val');
@@ -196,7 +197,11 @@ export const MirrorReview = ({ setStep }) => {
 
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}?category=${category}`);
+      if(redirectTab && redirectTab==='all'){
+        navigate(`/projects/${projectId}`);
+      }else{
+        navigate(`/projects/${projectId}?category=${category}`);
+      }
     } else {
       navigate("/estimates");
     }

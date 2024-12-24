@@ -299,7 +299,7 @@ export const calculateTotal = (
   };
 };
 
-export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
+export const setStateForMirrorEstimate = (item, dispatch, navigate,redirect = false) => {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.MIRRORS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -308,9 +308,15 @@ export const setStateForMirrorEstimate = (item, dispatch, navigate) => {
   dispatch(setMirrorProjectId(item?.project_id));
   dispatch(setEstimateMeasurements(item.config.measurements));
   // console.log("mirror edit", item);
-  navigate(
-    `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}`
-  );
+  if(redirect){
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&redirectTab=all`
+    );
+  }else{
+    navigate(
+      `/estimates/dimensions?category=${EstimateCategory.MIRRORS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}`
+    );
+  }  
 };
 
 export const getActiveStatus = (

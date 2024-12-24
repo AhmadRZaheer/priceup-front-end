@@ -240,6 +240,7 @@ export const ShowerReview = ({ setStep }) => {
   const addedFields = useSelector(getAdditionalFields);
   const isCustomizedDoorWidth = useSelector(getisCustomizedDoorWidth);
   const category = searchParams.get("category");
+  const redirectTab = searchParams.get("redirectTab");
   const { enqueueSnackbar } = useSnackbar();
   const selectedItemVariant = useMemo(() => {
     return selectedData?.settings?.variant;
@@ -303,10 +304,13 @@ export const ShowerReview = ({ setStep }) => {
       })
     );
   };
-
   const handleCancel = () => {
     if (projectId) {
-      navigate(`/projects/${projectId}`);
+      if(redirectTab && redirectTab === 'all'){
+        navigate(`/projects/${projectId}`);
+      }else{
+        navigate(`/projects/${projectId}?category=${category}`);
+      }
     } else {
       navigate("/estimates");
     }
