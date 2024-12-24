@@ -50,6 +50,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneOutlinedIcon from "@mui/icons-material/DoneOutlined";
 import CompanySelect from "./CompanyContactSelect";
 import PreviewLinkList from "./PreviewLinkList";
+import AllEstimatesList from "./EstimatesList/allEstimatesList";
 
 const validationSchema = yup.object({
   name: yup
@@ -68,7 +69,7 @@ const ProjectInfoComponent = ({
   const [searchParams] = useSearchParams();
   const selectedTab = searchParams.get("category");
   const tabValue =
-    selectedTab === null ? EstimateCategory.SHOWERS : selectedTab;
+    selectedTab === null ? 'All' : selectedTab;
   const decryptedToken = getDecryptedToken();
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(null);
@@ -117,8 +118,11 @@ const ProjectInfoComponent = ({
   };
 
   const handleChange = (event, newValue) => {
-    console.log(newValue, "sdsdsdsdsd");
-    navigate(`/projects/${projectData?._id}?category=${newValue}`);
+    if(newValue === 'All'){
+      navigate(`/projects/${projectData?._id}`); 
+    }else{
+      navigate(`/projects/${projectData?._id}?category=${newValue}`);
+    }
     // setActiveTabNumber(newValue);
   };
   // const [activeTabNumber, setActiveTabNumber] = useState(Number(localStorage.getItem("activeTab")) || 0);
@@ -1279,7 +1283,7 @@ const ProjectInfoComponent = ({
                   border: "1px solid #D0D5DD",
                   borderRadius: "6px",
                   background: "#F3F5F6",
-                  width: "252.5px",
+                  width: "fit-content",
                   minHeight: "40px",
                   height: "40px",
                   p: "2px",
@@ -1297,6 +1301,13 @@ const ProjectInfoComponent = ({
                   },
                 }}
               >
+                <Tab
+                  className="categoryTab"
+                  label="All"
+                  value={'All'}
+                  sx={{ minWidth: "70px" }}
+                  {...a11yProps('All')}
+                />
                 <Tab
                   className="categoryTab"
                   label="Showers"
@@ -1323,6 +1334,14 @@ const ProjectInfoComponent = ({
             {/** end */}
             {/** Showers tab */}
             <Divider sx={{ borderColor: "#D4DBDF" }} />
+            <CustomTabPanel value={tabValue} index={'All'}>
+              <AllEstimatesList
+                projectId={projectData?._id}
+                searchValue={search}
+                statusValue={status}
+                dateValue={selectedDate}
+              />
+            </CustomTabPanel>
             <CustomTabPanel value={tabValue} index={EstimateCategory.SHOWERS}>
               <ShowerEstimatesList
                 projectId={projectData?._id}

@@ -235,7 +235,7 @@ export const generateWIneObjectForPDFPreview = (
   return estimateInfoObject;
 };
 
-export const setStateForWineCellarEstimate = (item, dispatch, navigate) => {
+export const setStateForWineCellarEstimate = (item, dispatch, navigate,redirect = false) => {
   dispatch(resetNotifications());
   dispatch(setEstimateCategory(EstimateCategory.WINECELLARS));
   dispatch(setEstimateState(quoteState.EDIT));
@@ -269,7 +269,16 @@ export const setStateForWineCellarEstimate = (item, dispatch, navigate) => {
   }
   if(navigate){
     // navigate("/estimates/dimensions");
-    navigate(`/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`)
+    if(redirect){
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}&redirectTab=all`
+      );
+    }else{
+      navigate(
+        `/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`
+      );
+    }
+    // navigate(`/estimates/dimensions?category=${EstimateCategory.WINECELLARS}&projectId=${item?.project_id}&estimateState=${quoteState.EDIT}&estimateId=${item?._id}&layoutId=${item?.config?.layout_id}`)
   }
 };
 
