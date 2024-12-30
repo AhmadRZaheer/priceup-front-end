@@ -1,5 +1,10 @@
 import { parseJwt } from "@/components/ProtectedRoute/authVerify";
-import { layoutVariants, thicknessTypes, weightMultiplier } from "./constants";
+import {
+  EstimateCategory,
+  layoutVariants,
+  thicknessTypes,
+  weightMultiplier,
+} from "./constants";
 
 export const generateId = () => {
   return Date.now() + "";
@@ -17,11 +22,11 @@ export function createSlug(string) {
 
 export const getDecryptedToken = () => {
   const token = localStorage.getItem("token");
-  if(token){
-   return parseJwt(token);
+  if (token) {
+    return parseJwt(token);
   }
   return null;
-}
+};
 
 export const backendURL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -62,11 +67,11 @@ export const frontendURL =
 
 export const convertDate = (isoDate) => {
   const date = new Date(isoDate);
-  return new Intl.DateTimeFormat('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  return new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
   }).format(date);
 };
 
@@ -83,10 +88,10 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       )?.cost || 0) * selectedContent.hinges.count
     : 0;
   const doorLockPrice = selectedContent?.doorLock?.item
-  ? (selectedContent?.doorLock?.item?.finishes?.find(
-      (item) => selectedContent.hardwareFinishes?._id === item.finish_id
-    )?.cost || 0) * selectedContent.doorLock.count
-  : 0;
+    ? (selectedContent?.doorLock?.item?.finishes?.find(
+        (item) => selectedContent.hardwareFinishes?._id === item.finish_id
+      )?.cost || 0) * selectedContent.doorLock.count
+    : 0;
   const mountingChannel = selectedContent?.mountingChannel.item
     ? selectedContent?.mountingChannel?.item?.finishes?.find(
         (item) => selectedContent.hardwareFinishes?._id === item.finish_id
@@ -209,7 +214,8 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
       Number(selectedContent?.mitre ?? 0) *
         (estimatesData?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
       Number(selectedContent?.polish ?? 0) *
-        (estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch ?? 0);
+        (estimatesData?.fabricatingPricing?.polishPricePerThreeByEightInch ??
+          0);
   }
 
   //hardware Addons
@@ -263,19 +269,25 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
 
   //labor price
   let doorLaborPrice = 0;
-  if(typeof selectedContent?.laborHoursForDoor === 'number' &&  selectedContent?.laborHoursForDoor > 0 ){
-    doorLaborPrice =(selectedContent?.people * selectedContent?.laborHoursForDoor)*(estimatesData?.miscPricing?.hourlyRate);
+  if (
+    typeof selectedContent?.laborHoursForDoor === "number" &&
+    selectedContent?.laborHoursForDoor > 0
+  ) {
+    doorLaborPrice =
+      selectedContent?.people *
+      selectedContent?.laborHoursForDoor *
+      estimatesData?.miscPricing?.hourlyRate;
   }
   const laborPrice =
-   ( selectedContent?.people *
-    selectedContent?.hours) *
+    selectedContent?.people *
+    selectedContent?.hours *
     (estimatesData?.miscPricing?.hourlyRate ?? 0);
-  
+
   //additionalField price
   let additionalFieldPrice = 0;
   selectedContent?.additionalFields?.forEach((item) => {
     additionalFieldPrice += Number(
-      item.cost 
+      item.cost
       // *
       //   (estimatesData?.miscPricing?.pricingFactorStatus
       //     ? estimatesData?.miscPricing?.pricingFactor
@@ -292,7 +304,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
         ? estimatesData?.miscPricing?.pricingFactor
         : 1) +
     (laborPrice + doorLaborPrice);
-    // + additionalFieldPrice;
+  // + additionalFieldPrice;
   // additonal fields sum
   if (selectedContent?.additionalFields?.length > 0) {
     total += selectedContent.additionalFields.reduce(
@@ -348,7 +360,7 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     additionalFieldPrice: additionalFieldPrice,
     total: total,
     cost: cost,
-    profit:total > 0 ?  ((total - cost) * 100) / total : 0,
+    profit: total > 0 ? ((total - cost) * 100) / total : 0,
   };
 };
 
@@ -376,8 +388,8 @@ export const convertArrayKeysToObject = (array) => {
   const result = array.reduce((obj, item) => {
     obj[item.key] = item.value;
     return obj;
-}, {});
-return result;
+  }, {});
+  return result;
 };
 
 export const calculateAreaAndPerimeter = (
@@ -386,7 +398,7 @@ export const calculateAreaAndPerimeter = (
   glassThickness = thicknessTypes.THREEBYEIGHT,
   layoutConfigs = null
 ) => {
-  console.log(measurementSides,variant,glassThickness,'dfdfdeercsf')
+  console.log(measurementSides, variant, glassThickness, "dfdfdeercsf");
   let measurements =
     variant !== layoutVariants.CUSTOM
       ? convertArrayKeysToObject(measurementSides)
@@ -828,22 +840,21 @@ export const calculateAreaAndPerimeter = (
           glassThickness,
           panel.sqft
         );
-        console.log(panel.perimeter,'perimeter custom')
+        console.log(panel.perimeter, "perimeter custom");
       }
     });
     // const { width, height } = measurements[panelKey];
 
     // }
-      console.log(totalPerimeter,'total perimeter custom');
+    console.log(totalPerimeter, "total perimeter custom");
     return {
       areaSqft: Math.round((totalSqft + Number.EPSILON) * 100) / 100,
       perimeter: totalPerimeter,
       panelWeight: panelWeight,
     };
-  } 
-  
-  else if (variant === layoutVariants.INLINE) {
-    const doorQuantity = measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
+  } else if (variant === layoutVariants.INLINE) {
+    const doorQuantity =
+      measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a,
@@ -851,16 +862,15 @@ export const calculateAreaAndPerimeter = (
     const doorSqft = ((door.width * door.height) / 144) * doorQuantity;
     const panelQuantity = measurements?.b > 28 ? 1 : 0;
     const panel = {
-      width: measurements?.b - (door.width * doorQuantity),
+      width: measurements?.b - door.width * doorQuantity,
       height: panelQuantity === 0 ? 0 : measurements?.a,
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
     const areaSqft = Math.round((doorSqft + panelSqft) * 100) / 100;
-    const weight = getWeightByThickness(
-      layoutVariants.INLINE,
-      glassThickness,
-      { door: doorSqft, panel: panelSqft }
-    );
+    const weight = getWeightByThickness(layoutVariants.INLINE, glassThickness, {
+      door: doorSqft,
+      panel: panelSqft,
+    });
 
     const perimeterDoor = {
       width: door.width * 2 * doorQuantity,
@@ -870,8 +880,8 @@ export const calculateAreaAndPerimeter = (
       width: panel.width * 2 * panelQuantity,
       height: panel.height * 2 * 2, // temp write 2 quantity
     };
-    console.log(perimeterDoor,'door inline');
-    console.log(perimeterPanel,'panel inline');
+    console.log(perimeterDoor, "door inline");
+    console.log(perimeterPanel, "panel inline");
     const perimeter =
       perimeterDoor.width +
       perimeterDoor.height +
@@ -883,9 +893,9 @@ export const calculateAreaAndPerimeter = (
       panelWidth: panel.width,
       ...weight,
     };
-  }
-  else if (variant === layoutVariants.NINTYDEGREE) {
-    const doorQuantity = measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
+  } else if (variant === layoutVariants.NINTYDEGREE) {
+    const doorQuantity =
+      measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a,
@@ -893,7 +903,7 @@ export const calculateAreaAndPerimeter = (
     const doorSqft = ((door.width * door.height) / 144) * doorQuantity;
     const panelQuantity = measurements?.b > 28 ? 1 : 0;
     const panel = {
-      width:measurements?.b - (door.width * doorQuantity),
+      width: measurements?.b - door.width * doorQuantity,
       height: panelQuantity === 0 ? 0 : measurements?.a,
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
@@ -936,9 +946,9 @@ export const calculateAreaAndPerimeter = (
       panelWidth: panel.width,
       ...weight,
     };
-  }
-  else if (variant === layoutVariants.THREESIDEDGLASS) {
-    const doorQuantity = measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
+  } else if (variant === layoutVariants.THREESIDEDGLASS) {
+    const doorQuantity =
+      measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a,
@@ -946,7 +956,7 @@ export const calculateAreaAndPerimeter = (
     const doorSqft = ((door.width * door.height) / 144) * doorQuantity;
     const panelQuantity = measurements?.b > 28 ? 1 : 0;
     const panel = {
-      width:measurements?.b - (door.width * doorQuantity),
+      width: measurements?.b - door.width * doorQuantity,
       height: panelQuantity === 0 ? 0 : measurements?.a,
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
@@ -965,7 +975,8 @@ export const calculateAreaAndPerimeter = (
     const return2Sqft =
       ((layoutReturn2.width * layoutReturn2.height) / 144) * return2Quantity;
     const areaSqft =
-      Math.round((doorSqft + panelSqft + return1Sqft + return2Sqft) * 100) / 100;
+      Math.round((doorSqft + panelSqft + return1Sqft + return2Sqft) * 100) /
+      100;
     const weight = getWeightByThickness(
       layoutVariants.NINTYDEGREE,
       glassThickness,
@@ -1001,9 +1012,9 @@ export const calculateAreaAndPerimeter = (
       panelWidth: panel.width,
       ...weight,
     };
-  }
-  else if (variant === layoutVariants.GLASSCUBE) {
-    const doorQuantity = measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
+  } else if (variant === layoutVariants.GLASSCUBE) {
+    const doorQuantity =
+      measurements?.b === 0 ? 0 : layoutConfigs?.doorQuantity;
     const door = {
       width: measurements?.b > 28 ? 28 : measurements?.b,
       height: doorQuantity === 0 ? 0 : measurements?.a,
@@ -1011,7 +1022,7 @@ export const calculateAreaAndPerimeter = (
     const doorSqft = ((door.width * door.height) / 144) * doorQuantity;
     const panelQuantity = measurements?.b > 28 ? 1 : 0;
     const panel = {
-      width:measurements?.b - (door.width * doorQuantity),
+      width: measurements?.b - door.width * doorQuantity,
       height: panelQuantity === 0 ? 0 : measurements?.a,
     };
     const panelSqft = ((panel.width * panel.height) / 144) * panelQuantity;
@@ -1032,15 +1043,25 @@ export const calculateAreaAndPerimeter = (
     const backWallGlassQuantity = measurements?.b === 0 ? 0 : 1;
     const backWallGlass = {
       width: measurements?.b === 0 ? 0 : measurements?.b,
-      height: measurements?.a === 0 ? 0 : measurements?.a
-    }
-    const backWallGlassSqft = ((backWallGlass.width * backWallGlass.height) / 144) * backWallGlassQuantity;
+      height: measurements?.a === 0 ? 0 : measurements?.a,
+    };
+    const backWallGlassSqft =
+      ((backWallGlass.width * backWallGlass.height) / 144) *
+      backWallGlassQuantity;
     const areaSqft =
-      Math.round((doorSqft + panelSqft + return1Sqft + return2Sqft + backWallGlassSqft) * 100) / 100;
+      Math.round(
+        (doorSqft + panelSqft + return1Sqft + return2Sqft + backWallGlassSqft) *
+          100
+      ) / 100;
     const weight = getWeightByThickness(
       layoutVariants.GLASSCUBE,
       glassThickness,
-      { door: doorSqft, panel: panelSqft, return: return1Sqft + return2Sqft, backWallGlass: backWallGlassSqft }
+      {
+        door: doorSqft,
+        panel: panelSqft,
+        return: return1Sqft + return2Sqft,
+        backWallGlass: backWallGlassSqft,
+      }
     );
 
     const perimeterDoor = {
@@ -1077,8 +1098,7 @@ export const calculateAreaAndPerimeter = (
       panelWidth: panel.width,
       ...weight,
     };
-  }
-  else {
+  } else {
     return 0;
   }
 };
@@ -1210,7 +1230,9 @@ export const getWeightByThickness = (variant, glassThickness, sqft) => {
       doorWeight = Number((weightMultiplier * sqft.door)?.toFixed(2));
       panelWeight = Number((weightMultiplier * sqft.panel)?.toFixed(2));
       returnWeight = Number((weightMultiplier * sqft.return)?.toFixed(2));
-      backWallGlassWeight = Number((weightMultiplier * sqft.backWallGlass)?.toFixed(2));
+      backWallGlassWeight = Number(
+        (weightMultiplier * sqft.backWallGlass)?.toFixed(2)
+      );
       return { doorWeight, panelWeight, returnWeight, backWallGlassWeight };
     /** end */
     default:
@@ -1233,47 +1255,47 @@ export const getLocaleDateTimeFromMongoTimestamp = (timestamp) => {
 
   // Define options for date and time formatting
   const options = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: true // Use 12-hour clock format
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    hour12: true, // Use 12-hour clock format
   };
 
   // Format the date and time
-  return date.toLocaleString('en-US', options);
-}
-export const notificationsAvailable = (notifications)=>{
+  return date.toLocaleString("en-US", options);
+};
+export const notificationsAvailable = (notifications) => {
   let response = { status: false, count: 0 };
   for (const [key, value] of Object.entries(notifications)) {
-      if (
-          [
-              "glassAddonsNotAvailable",
-              "hardwareAddonsNotAvailable",
-              "wallClampNotAvailable",
-              "sleeveOverNotAvailable",
-              "glassToGlassNotAvailable",
-              "cornerWallClampNotAvailable",
-              "cornerSleeveOverNotAvailable",
-              "cornerGlassToGlassNotAvailable",
-          ].includes(key)
-      ) {
-          for (const item of value) {
-              if (item.status) {
-                  response.status = true;
-                  response.count += 1;
-              }
-          }
-      } else {
-          if (value.status) {
-              response.status = true;
-              response.count += 1;
-          }
+    if (
+      [
+        "glassAddonsNotAvailable",
+        "hardwareAddonsNotAvailable",
+        "wallClampNotAvailable",
+        "sleeveOverNotAvailable",
+        "glassToGlassNotAvailable",
+        "cornerWallClampNotAvailable",
+        "cornerSleeveOverNotAvailable",
+        "cornerGlassToGlassNotAvailable",
+      ].includes(key)
+    ) {
+      for (const item of value) {
+        if (item.status) {
+          response.status = true;
+          response.count += 1;
+        }
       }
+    } else {
+      if (value.status) {
+        response.status = true;
+        response.count += 1;
+      }
+    }
   }
   return response;
-}
+};
 
 export const getGlassTypeDetailsByThickness = (
   selectedIds,
@@ -1282,7 +1304,10 @@ export const getGlassTypeDetailsByThickness = (
   selectedGlassId
 ) => {
   return originalArray
-    ?.filter((glass) => selectedIds?.includes(glass._id)  && glass._id !== selectedGlassId)
+    ?.filter(
+      (glass) =>
+        selectedIds?.includes(glass._id) && glass._id !== selectedGlassId
+    )
     .map((glass) => {
       // Find the option with the matching thickness
       const matchingOption = glass.options.find(
@@ -1292,8 +1317,8 @@ export const getGlassTypeDetailsByThickness = (
         name: glass.name,
         price: matchingOption ? matchingOption.cost : "N/A",
         thickness: matchingOption ? matchingOption.thickness : "N/A",
-        status : matchingOption ? matchingOption.status : "N/A",
-        selectedGlass:glass
+        status: matchingOption ? matchingOption.status : "N/A",
+        selectedGlass: glass,
       };
     });
 };
@@ -1309,4 +1334,31 @@ export const base64ToFile = (base64String, filename) => {
     u8arr[n] = bstr.charCodeAt(n);
   }
   return new File([u8arr], filename, { type: mime });
+};
+
+// Total of estimate with category
+export const estimateTotalWithCategory = (estimatelist) => {
+  const totalShowers = estimatelist?.filter(
+    (data, index) => data?.category === EstimateCategory.SHOWERS
+  );
+  const totalMirrors = estimatelist?.filter(
+    (data, index) => data?.category === EstimateCategory.MIRRORS
+  );
+  const totalWineCellar = estimatelist?.filter(
+    (data, index) => data?.category === EstimateCategory.WINECELLARS
+  );
+  const totalEstimate = estimatelist?.length;
+  const totalPrice = estimatelist?.reduce(
+    (accumulator, currentItem) => {
+      return accumulator + currentItem.pricing.total;
+    },
+    0
+  );
+  return {
+    totalShowers: totalShowers ?? [],
+    totalMirrors: totalMirrors ?? [],
+    totalWineCellar: totalWineCellar ?? [],
+    totalEstimate: totalEstimate ?? 0,
+    totalPrice: totalPrice ?? 0,
+  };
 };
