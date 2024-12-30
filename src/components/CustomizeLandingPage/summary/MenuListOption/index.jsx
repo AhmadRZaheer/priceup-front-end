@@ -36,9 +36,10 @@ const MenuList = ({
   currentItem,
   selectedContent,
   handleChange, 
+  locationSettings,
 }) => {
   // const selectedContent = useSelector(getContent);
-  const [anchorEl, setAnchorEl] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(true);
   const [countVal, setCountVal] = useState(0);
   const [thicknessVal, setThicknessVal] = useState("1/2");
   const [selectedItem, setSelectedItem] = useState(null);
@@ -54,7 +55,6 @@ const MenuList = ({
   }, [currentItem]);
   const dispatch = useDispatch();
   const handleItemSelect = (item) => {
-    console.log(item, "wedfdsdfssdfds");
     handleChange(type,item);
     // dispatch(setContent({ type: type, item: item }));
     // setSelectedGlassType(item); // Call the function only if it's valid    
@@ -95,7 +95,7 @@ const MenuList = ({
         }}
       >
         <Box
-          onClick={opneClose}
+          // onClick={opneClose}
           // id="basic-button"
           sx={{
             color: {
@@ -103,14 +103,14 @@ const MenuList = ({
               xs: "black",
             },
             paddingLeft: "0px !important",
-            paddingY: "12px !important",
+            pt: "6px !important",
             px: 2,
             display: "flex",
             alignItems: "center",
-            cursor: "pointer",
+            // cursor: "pointer",
           }}
         >
-          {anchorEl ? (
+          {/* {anchorEl ? (
             <ChevronRight
               sx={{
                 display: "flex",
@@ -122,11 +122,11 @@ const MenuList = ({
             />
           ) : (
             <ChevronRight sx={{ color: "black !important", mr: 2 }} />
-          )}
+          )} */}
           <Typography
             sx={{
-              fontSize: "24px",
-              lineHeight: "36px",
+              fontSize: "22px",
+              lineHeight: "28px",
               fontWeight: 500,
               fontFamily: '"Poppins" !important',
             }}
@@ -231,7 +231,7 @@ const MenuList = ({
       {anchorEl ? (
         <Box
           sx={{
-            maxHeight: "250px",
+            maxHeight: "220px",
             // minHeight: "80px",
             overflowY: "scroll",
             color: { sm: "#000000", xs: "white" },
@@ -239,7 +239,8 @@ const MenuList = ({
             border: "1px solid #D4DBDF",
             borderRadius: "8px",
             padding: "6px",
-            m: "6px",
+            mx: "6px",
+            mb: "6px",
             display: "flex",
             flexDirection: "column",
             gap: "6px",
@@ -263,10 +264,12 @@ const MenuList = ({
               <MenuItem
                 type={type}
                 item={item}
+                thickness={thickness}
                 selectedItem={selectedItem}
                 handleItemSelect={handleItemSelect}
                 selectedContent={selectedContent}
                 handleChange={handleChange}
+                locationSettings={locationSettings}
               />
             ))
           )}
