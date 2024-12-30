@@ -120,7 +120,6 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
             estimateData: data,
           }}
           key={`pdfFile${1}`}
-          signature={signatureURL}
         />
       );
       const blobPdf = await pdf(doc);
@@ -628,7 +627,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                       }}
                     >
                       {loading ? (
-                        <CircularProgress size={24} sx={{ color: "white" }} />
+                        <CircularProgress size={24} sx={{ color: "black" }} />
                       ) : (
                         "Download PDF Now"
                       )}

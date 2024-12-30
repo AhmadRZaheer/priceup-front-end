@@ -55,6 +55,101 @@ const ShowerSummary = ({
     notch: 0,
     outages: 0,
   });
+  const factorPrice =
+    data?.category === EstimateCategory.MIRRORS
+      ? locationSettings?.pricingFactorStatus
+        ? locationSettings?.pricingFactor
+        : 1
+      : locationSettings?.miscPricing?.pricingFactorStatus
+      ? locationSettings?.miscPricing?.pricingFactor
+      : 1;
+
+  const glasstypeList = useMemo(() => {
+    const glassTypedata = hardwaresList?.glassType?.map((item) => {
+      const price = item?.options?.find(
+        (option) => option.thickness === selectedHardware?.glassType?.thickness
+      )?.cost;
+      const itemPrice = (selectedHardware?.sqftArea * price ?? 0) * factorPrice;
+      const costDifference =
+        hardwaresList?.glassType
+          ?.filter((item) => item._id === selectedHardware?.glassType?.type)
+          ?.map((item) =>
+            item.options.find(
+              (option) =>
+                option.thickness === selectedHardware?.glassType?.thickness
+            )
+          )
+          ?.find((option) => option)?.cost || 0;
+
+      const totalDiference =
+        itemPrice -
+        (selectedHardware?.sqftArea * costDifference ?? 0) * factorPrice;
+      return {
+        ...item,
+        description: (
+          <span>
+            {item?._id === selectedHardware?.glassType?.type ? (
+              item?.name
+            ) : (
+              <>
+                {item?.name} cost{" "}
+                <b style={{ color: totalDiference > 0 ? "#28A745" : "red" }}>
+                  {totalDiference > 0 ? "+" : "-"}{" "}
+                  {Math.abs(totalDiference ?? 0).toFixed(2)}
+                </b>
+              </>
+            )}
+          </span>
+        ),
+      };
+    });
+    return glassTypedata;
+  }, [selectedHardware, hardwaresList?.glassType]);
+
+  const glassAddonsList = useMemo(() => {
+    const glassAddonsData = hardwaresList?.glassAddons?.map((item) => {
+      const price = item?.options?.[0]?.cost;
+      const costDifference =
+        selectedHardware?.glassAddons
+          .map((item) => {
+            const matchedItem = hardwaresList?.glassAddons.find(
+              (firstItem) => firstItem._id === item.type
+            );
+            if (matchedItem && matchedItem.options.length > 0) {
+              return matchedItem.options[0].cost; 
+            }
+            return null;
+          })
+          .filter((cost) => cost !== null) ?? []; 
+      const priceToDiffer = costDifference?.reduce((acc, arr) => acc + arr, 0);
+
+      const itemPrice =
+        (selectedHardware?.sqftArea *
+          (item?.slug !== "no-treatment" ? price : priceToDiffer * -1) ?? 0) *
+        factorPrice;
+      return {
+        ...item,
+        description: (
+          <span>
+            {selectedHardware?.glassAddons?.some(
+              (hardware) => hardware.type === item._id
+            ) ? (
+              item?.name
+            ) : (
+              <>
+                {item?.name} cost{" "}
+                <b style={{ color: itemPrice > 0 ? "#28A745" : "red" }}>
+                  {itemPrice > 0 ? "+" : "-"}{" "}
+                  {Math.abs(itemPrice ?? 0).toFixed(2)}
+                </b>
+              </>
+            )}
+          </span>
+        ),
+      };
+    });
+    return glassAddonsData;
+  }, [selectedHardware, hardwaresList?.glassAddons]);
   useEffect(() => {
     if (data) {
       let fabrication = {
@@ -450,10 +545,9 @@ const ShowerSummary = ({
       Estimatedata.config.config.hardwareAddons = selectedHardwareAddons;
     }
 
-    console.log(Estimatedata,'EstimatedataEstimatedata')
     customerDecision({
       data: {
-        approveEstimate:Estimatedata,
+        approveEstimate: Estimatedata,
       },
       apiRoute: `${backendURL}/landing-page-preview/${id}`,
     });
@@ -1210,7 +1304,7 @@ const ShowerSummary = ({
             </Box>
           )}
         </Box>
-        <Box sx={{ width: "50%", pt: 4 }}>
+        <Box sx={{ width: "50%", pt: 0 }}>
           <Typography
             sx={{
               fontFamily: '"Poppins" !important',
@@ -1220,10 +1314,10 @@ const ShowerSummary = ({
               width: "80%",
             }}
           >
-            <Box component="span" sx={{ color: "#F95500" }}>
+            {/* <Box component="span" sx={{ color: "#F95500" }}>
               Recommended
-            </Box>{" "}
-            Modifications from our experts:
+            </Box>{" "} */}
+            Available Upgrades:
           </Typography>
           <Box sx={{ pt: 2 }}>
             <Box
@@ -1244,7 +1338,7 @@ const ShowerSummary = ({
                 }}
               >
                 <MenuList
-                  menuOptions={hardwaresList?.glassAddons}
+                  menuOptions={glassAddonsList ?? []}
                   title={"Glass Addons"}
                   type={"glassAddons"}
                   selectedContent={selectedHardware}
@@ -1301,12 +1395,13 @@ const ShowerSummary = ({
                 }}
               >
                 <MenuList
-                  menuOptions={hardwaresList?.glassType}
+                  menuOptions={glasstypeList ?? []}
                   title={"Glass type"}
                   type={"glassType"}
                   thickness={selectedHardware?.glassType?.thickness}
                   currentItem={selectedHardware?.glassType}
                   selectedContent={selectedHardware}
+                  locationSettings={locationSettings}
                   handleChange={handleChangeHardware}
                 />
               </Box>
