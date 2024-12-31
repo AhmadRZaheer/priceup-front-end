@@ -2,6 +2,7 @@ import {
   Autocomplete,
   Box,
   Button,
+  Card,
   Chip,
   CircularProgress,
   Grid,
@@ -15,6 +16,7 @@ import * as yup from "yup";
 import { useEffect, useState } from "react";
 import {
   useEditDocument,
+  useFetchAllDocuments,
   useFetchSingleDocument,
 } from "@/utilities/ApiHooks/common";
 import { backendURL } from "@/utilities/common";
@@ -76,6 +78,9 @@ const EditQuoteInvoice = () => {
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
+  const { data: logsData, refetch: logsRefetch, isFetching: logsFetching } = useFetchAllDocuments(
+    `${backendURL}/logs?resource_id=${selectedItemId}`
+  );
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
   const ShowerHardwareList = useSelector(getListData);
@@ -141,6 +146,12 @@ const EditQuoteInvoice = () => {
     }
   }, [singleItemData]);
 
+  useEffect(() => {
+    logsRefetch();
+  }, []);
+
+  console.log(logsData, "logsDatalogsDatalogsData");
+
   const { mutateAsync: EditInvoice, isSuccess, isLoading } = useEditDocument();
   const formik = useFormik({
     initialValues: {
@@ -150,18 +161,27 @@ const EditQuoteInvoice = () => {
       notes: singleItemData?.description || "",
       additionalUpgrades: {
         shower: {
-          glassTypes: singleItemData?.additionalUpgrades?.shower?.glassTypes ?? [],
-          glassAddons: singleItemData?.additionalUpgrades?.shower?.glassAddons ?? [],
-          hardwareAddons: singleItemData?.additionalUpgrades?.shower?.hardwareAddons ?? [],
+          glassTypes:
+            singleItemData?.additionalUpgrades?.shower?.glassTypes ?? [],
+          glassAddons:
+            singleItemData?.additionalUpgrades?.shower?.glassAddons ?? [],
+          hardwareAddons:
+            singleItemData?.additionalUpgrades?.shower?.hardwareAddons ?? [],
         },
         mirror: {
-          glassTypes: singleItemData?.additionalUpgrades?.mirror?.glassTypes ?? [],
-          glassAddons: singleItemData?.additionalUpgrades?.mirror?.glassAddons ?? [],
+          glassTypes:
+            singleItemData?.additionalUpgrades?.mirror?.glassTypes ?? [],
+          glassAddons:
+            singleItemData?.additionalUpgrades?.mirror?.glassAddons ?? [],
         },
         wineCellar: {
-          glassTypes: singleItemData?.additionalUpgrades?.wineCellar?.glassTypes ?? [],
-          glassAddons: singleItemData?.additionalUpgrades?.wineCellar?.glassAddons ?? [],
-          hardwareAddons: singleItemData?.additionalUpgrades?.wineCellar?.hardwareAddons ?? [],
+          glassTypes:
+            singleItemData?.additionalUpgrades?.wineCellar?.glassTypes ?? [],
+          glassAddons:
+            singleItemData?.additionalUpgrades?.wineCellar?.glassAddons ?? [],
+          hardwareAddons:
+            singleItemData?.additionalUpgrades?.wineCellar?.hardwareAddons ??
+            [],
         },
       },
       section1: {
@@ -254,7 +274,7 @@ const EditQuoteInvoice = () => {
         expiresAt: values.dueDate,
       },
       description: values.notes,
-      additionalUpgrades:values.additionalUpgrades,
+      additionalUpgrades: values.additionalUpgrades,
       content: {
         ...singleItemData?.content,
         section1: {
@@ -495,9 +515,9 @@ const EditQuoteInvoice = () => {
                   }}
                   disabled={
                     formik.values.customer === "" ||
-                    formik.values.project === "" ||
-                    formik.values.dueDate === null ||
-                    isLoading
+                      formik.values.project === "" ||
+                      formik.values.dueDate === null ||
+                      isLoading
                       ? true
                       : false
                   }
@@ -539,163 +559,209 @@ const EditQuoteInvoice = () => {
               <Box
                 sx={{
                   display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
-                  aligItems: "baseline",
+                  justifyContent: "space-between",
                   width: "100%",
-                  padding: "16px",
+                  maxHeight: '300px'
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
-                  }}
-                >
+                <Box sx={{ width: "64%" }}>
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
+                      flexDirection: "row",
+                      gap: 2,
+                      aligItems: "baseline",
+                      width: "100%",
+                      padding: "16px",
                     }}
                   >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Customer:{" "}
-                      </label>
-                    </Box>
-                    <Typography>{singleItemData?.customer?.name}</Typography>
-                    <Typography>{singleItemData?.customer?.email}</Typography>
-                    <Typography>{singleItemData?.customer?.address}</Typography>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Project:{" "}
-                      </label>
-                    </Box>
-
-                    <Typography>
-                      {singleItemData?.project?.projectName}
-                    </Typography>
-                  </Box>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 2,
-                    flexDirection: "column",
-                    width: { sm: "25%", xs: "100%" },
-                  }}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                    }}
-                  >
-                    <Box paddingBottom={0.6}>
-                      <label className="label-text" htmlFor="status">
-                        Due Date:{" "}
-                      </label>
-                    </Box>
-                    <Box>
-                      <DesktopDatePicker
-                        inputFormat="MM/DD/YYYY"
-                        className="custom-textfield"
-                        value={formik.values.dueDate}
-                        minDate={dayjs()}
-                        onChange={(newDate) =>
-                          formik.setFieldValue("dueDate", newDate)
-                        }
-                        sx={{
-                          width: "100%",
-                          "& .MuiInputBase-root": {
-                            height: 39,
-                            backgroundColor: "white",
-                          },
-                          "& .MuiInputBase-input": {
-                            fontSize: "0.875rem",
-                            padding: "8px 14px",
-                          },
-                          "& .MuiInputLabel-root": {
-                            fontSize: "14px",
-                            fontWeight: 400,
-                            fontFamily: '"Roboto",sans-serif !important',
-                            top: "-5px",
-                            color: "#000000",
-                          },
-                        }}
-                        renderInput={(params) => (
-                          <TextField fullWidth {...params} size="small" />
-                        )}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  gap: 2,
-                  aligItems: "baseline",
-                  width: "100%",
-                  padding: "16px",
-                }}
-              >
-                <Box sx={{ width: { sm: "51.1%", xs: "100%" }, pt: 1 }}>
-                  <Box
-                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
-                  >
-                    <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
-                      Description:
-                    </Typography>
                     <Box
                       sx={{
                         display: "flex",
+                        gap: 2,
                         flexDirection: "column",
-                        gap: 1,
-                        paddingY: { sm: 0, xs: 1 },
-                        width: "100%",
+                        width: { sm: "50%", xs: "100%" },
                       }}
                     >
-                      <TextareaAutosize
-                        style={{
-                          padding: "10px",
-                          borderColor: "#cccc",
-                          borderRadius: "5px",
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
                         }}
-                        className="custom-textfield"
-                        color="neutral"
-                        minRows={3}
-                        maxRows={4}
-                        id="notes"
-                        name="notes"
-                        placeholder="Enter Additional Notes"
-                        size="large"
-                        variant="outlined"
-                        sx={{ padding: "10px" }}
-                        value={formik.values.notes}
-                        onChange={formik.handleChange}
-                      />
+                      >
+                        <Box paddingBottom={0.6}>
+                          <label className="label-text" htmlFor="status">
+                            Customer:{" "}
+                          </label>
+                        </Box>
+                        <Typography>
+                          {singleItemData?.customer?.name}
+                        </Typography>
+                        <Typography>
+                          {singleItemData?.customer?.email}
+                        </Typography>
+                        <Typography>
+                          {singleItemData?.customer?.address}
+                        </Typography>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        flexDirection: "column",
+                        width: { sm: "50%", xs: "100%" },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                        }}
+                      >
+                        <Box paddingBottom={0.6}>
+                          <label className="label-text" htmlFor="status">
+                            Project:{" "}
+                          </label>
+                        </Box>
+
+                        <Typography>
+                          {singleItemData?.project?.projectName}
+                        </Typography>
+                      </Box>
                     </Box>
                   </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                      gap: 2,
+                      aligItems: "baseline",
+                      width: "98%",
+                      padding: "16px",
+                    }}
+                  >
+                    <Box sx={{ width: { sm: "50%", xs: "100%" } }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Description:
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            paddingY: { sm: 0, xs: 1 },
+                            width: "100%",
+                          }}
+                        >
+                          <TextareaAutosize
+                            style={{
+                              padding: "10px",
+                              borderColor: "#cccc",
+                              borderRadius: "5px",
+                            }}
+                            className="custom-textfield"
+                            color="neutral"
+                            minRows={3}
+                            maxRows={4}
+                            id="notes"
+                            name="notes"
+                            placeholder="Enter Additional Notes"
+                            size="large"
+                            variant="outlined"
+                            sx={{ padding: "10px" }}
+                            value={formik.values.notes}
+                            onChange={formik.handleChange}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 2,
+                        flexDirection: "column",
+                        width: { sm: "50%", xs: "100%" },
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                        }}
+                      >
+                        <Typography sx={{ fontSize: "14px", fontWeight: 500 }}>
+                          Due Date:
+                        </Typography>
+                        <Box>
+                          <DesktopDatePicker
+                            inputFormat="MM/DD/YYYY"
+                            className="custom-textfield"
+                            value={formik.values.dueDate}
+                            minDate={dayjs()}
+                            onChange={(newDate) =>
+                              formik.setFieldValue("dueDate", newDate)
+                            }
+                            sx={{
+                              width: "100%",
+                              "& .MuiInputBase-root": {
+                                height: 39,
+                                backgroundColor: "white",
+                              },
+                              "& .MuiInputBase-input": {
+                                fontSize: "0.875rem",
+                                padding: "8px 14px",
+                              },
+                              "& .MuiInputLabel-root": {
+                                fontSize: "14px",
+                                fontWeight: 400,
+                                fontFamily: '"Roboto",sans-serif !important',
+                                top: "-5px",
+                                color: "#000000",
+                              },
+                            }}
+                            renderInput={(params) => (
+                              <TextField fullWidth {...params} size="small" />
+                            )}
+                          />
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                </Box>
+                <Box sx={{ width: "35%", borderLeft: '1px solid #D4DBDF', mt: 2, }}>
+                  <Card sx={{ mx: 2, p: 2, }}>
+                    <Typography sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}>Activity Logs</Typography>
+                    <Box sx={{ maxHeight: '210px', overflow: 'auto' }}>
+                      {logsFetching ?
+                        <Box sx={{ height: '200px', alignContent: 'center', textAlign: 'center' }}>
+                          <CircularProgress size={30} sx={{ color: "#8477DA" }} />
+                        </Box>
+                        :
+                        logsData.length > 0 ?
+                          logsData?.map((data, index) => (
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                              <Box sx={{
+                                height: '10px',
+                                width: '10px',
+                                borderRadius: '4.94px',
+                                background: '#8477DA',
+                                alignSelf: 'center',
+                              }}></Box>
+                              <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1 }} key={index}>{data?.title}</Typography>
+                            </Box>
+                          )) : <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1, height: '200px', alignContent: 'center', textAlign: 'center' }}>No Activity Log Found!</Typography>}
+                    </Box>
+
+                  </Card>
                 </Box>
               </Box>
               {/** Estimate Table */}
@@ -761,7 +827,11 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={ShowerHardwareList?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
+                        options={
+                          ShowerHardwareList?.glassAddons.filter(
+                            (item) => item?.slug !== "no-treatment"
+                          ) ?? []
+                        }
                         getOptionLabel={(glassAddon) => glassAddon.name}
                         value={ShowerHardwareList?.glassAddons?.filter(
                           (glassAddon) =>
@@ -988,7 +1058,11 @@ const EditQuoteInvoice = () => {
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={WinelistData?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
+                        options={
+                          WinelistData?.glassAddons.filter(
+                            (item) => item?.slug !== "no-treatment"
+                          ) ?? []
+                        }
                         getOptionLabel={(glassAddon) => glassAddon.name}
                         value={WinelistData?.glassAddons?.filter((glassAddon) =>
                           formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
@@ -1174,13 +1248,12 @@ const EditQuoteInvoice = () => {
                         }}
                       >
                         {singleItemData?.content?.section1?.logo ||
-                        uploadedImageLogo?.content?.section1?.logo ? (
+                          uploadedImageLogo?.content?.section1?.logo ? (
                           <Box>
                             <img
-                              src={`${backendURL}/${
-                                singleItemData?.content?.section1?.logo ??
+                              src={`${backendURL}/${singleItemData?.content?.section1?.logo ??
                                 uploadedImageLogo?.content?.section1?.logo
-                              }`}
+                                }`}
                               width={400}
                               height={340}
                               alt="section image logo"
@@ -1242,16 +1315,15 @@ const EditQuoteInvoice = () => {
                         }}
                       >
                         {singleItemData?.content?.section1?.backgroundImage ||
-                        uploadedImageBackgroundImage?.content?.section1
-                          ?.backgroundImage ? (
+                          uploadedImageBackgroundImage?.content?.section1
+                            ?.backgroundImage ? (
                           <Box>
                             <img
-                              src={`${backendURL}/${
-                                singleItemData?.content?.section1
-                                  ?.backgroundImage ??
+                              src={`${backendURL}/${singleItemData?.content?.section1
+                                ?.backgroundImage ??
                                 uploadedImageBackgroundImage?.content?.section1
                                   ?.backgroundImage
-                              }`}
+                                }`}
                               width={400}
                               height={340}
                               alt="section image backgroundImage"

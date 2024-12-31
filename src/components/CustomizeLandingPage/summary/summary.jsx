@@ -1,4 +1,4 @@
-import { EstimateCategory } from "@/utilities/constants";
+import { EstimateCategory, logActions } from "@/utilities/constants";
 import {
   Box,
   Divider,
@@ -25,7 +25,7 @@ import { backendURL } from "@/utilities/common";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { getHardwareSpecificFabrication as getShowersHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
 import { getHardwareSpecificFabrication as getWineCellarHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
+import { useCreateDocument, useEditDocument } from "@/utilities/ApiHooks/common";
 import { useParams } from "react-router-dom";
 
 const arr = [1, 2];
@@ -41,9 +41,17 @@ const ShowerSummary = ({
   reCalculateTotal,
 }) => {
   const { id } = useParams();
-  console.log(id, "asdfghsdfghasdf");
+  console.log(data, "asdfghsdfghasdf");
+  const newDate = new Date();
+  const formattedDate = newDate.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
   // const hardwaresList = useSelector(getListData);
   const { mutate: customerDecision, isLoading, isSuccess } = useEditDocument();
+  const { mutate: activityLog } = useCreateDocument();
   const [images, setImages] = useState([]);
   const imageData =
     data?.image !== null ? `${backendURL}/${data?.image}` : null;
@@ -62,28 +70,28 @@ const ShowerSummary = ({
         ? locationSettings?.pricingFactor
         : 1
       : locationSettings?.miscPricing?.pricingFactorStatus
-      ? locationSettings?.miscPricing?.pricingFactor
-      : 1;
+        ? locationSettings?.miscPricing?.pricingFactor
+        : 1;
 
-  
+
 
   const glasstypeList = useMemo(() => {
     const upgradeGlassList = hardwaresList?.glassType
-    .filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
-    .filter((obj) =>
-      obj.options.some(
-        (option) =>
-          option.thickness === selectedHardware?.glassType?.thickness &&
-          option.status === true
-      )
-    );
+      ?.filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
+      ?.filter((obj) =>
+        obj.options.some(
+          (option) =>
+            option.thickness === selectedHardware?.glassType?.thickness &&
+            option.status === true
+        )
+      );
     const glassTypedata = upgradeGlassList?.map((item) => {
       const price = item?.options?.find(
         (option) => option.thickness === selectedHardware?.glassType?.thickness
       )?.cost;
       const itemPrice = (selectedHardware?.sqftArea * price ?? 0) * factorPrice;
       const costDifference =
-      upgradeGlassList
+        upgradeGlassList
           ?.filter((item) => item._id === selectedHardware?.glassType?.type)
           ?.map((item) =>
             item.options.find(
@@ -116,21 +124,21 @@ const ShowerSummary = ({
       };
     });
     return glassTypedata;
-  }, [selectedHardware, hardwaresList?.glassType,UpgradeOPtions]);
+  }, [selectedHardware, hardwaresList?.glassType, UpgradeOPtions]);
 
-  
+
   // console.log(upgradeGlassList,'upgradeGlassList1234',UpgradeOPtions?.glassAddons)
 
-  const glassAddonsList = useMemo(() => {   
+  const glassAddonsList = useMemo(() => {
     const upgradeGlassAddonsList = hardwaresList?.glassAddons
-    .filter((obj) => UpgradeOPtions?.glassAddons?.includes(obj._id))
-    .filter((obj) =>
-      obj.options.some(
-        (option) =>
-          option.status === true
-      )
-    );
-    if(data?.category !== EstimateCategory.MIRRORS){
+      ?.filter((obj) => UpgradeOPtions?.glassAddons?.includes(obj._id))
+      ?.filter((obj) =>
+        obj.options.some(
+          (option) =>
+            option.status === true
+        )
+      );
+    if (data?.category !== EstimateCategory.MIRRORS) {
       const noTreatment = hardwaresList?.glassAddons?.find((item) => item?.slug === 'no-treatment');
       if(noTreatment)
       upgradeGlassAddonsList.push(noTreatment);
@@ -177,7 +185,7 @@ const ShowerSummary = ({
       };
     });
     return glassAddonsData;
-  }, [selectedHardware, hardwaresList?.glassAddons,UpgradeOPtions]);
+  }, [selectedHardware, hardwaresList?.glassAddons, UpgradeOPtions]);
 
   useEffect(() => {
     if (data) {
@@ -259,8 +267,8 @@ const ShowerSummary = ({
       const glassPricing =
         data?.sqftArea !== 0
           ? (calc + data?.sqftArea * newGlassPrice) *
-              (pricingFactorStatus ? pricingFactor : 1) +
-            laborPrice
+          (pricingFactorStatus ? pricingFactor : 1) +
+          laborPrice
           : 0;
       reCalculateTotal(totalPrice, glassPricing);
       setTotalPrice(glassPricing);
@@ -515,56 +523,59 @@ const ShowerSummary = ({
     if (selectedHardware?.glassType?.thickness === "1/2") {
       fabricationPrice =
         Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
-            0) +
+        (locationSettings?.fabricatingPricing?.oneHoleOneByTwoInchGlass ??
+          0) +
         Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.hingeCutoutOneByTwoInch ?? 0) +
         Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.clampCutoutOneByTwoInch ?? 0) +
         Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.notchOneByTwoInch ?? 0) +
         Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.outageOneByTwoInch ?? 0) +
         Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.miterOneByTwoInch ?? 0) +
         Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
-            0);
+        (locationSettings?.fabricatingPricing?.polishPricePerOneByTwoInch ??
+          0);
     } else if (selectedHardware?.glassType?.thickness === "3/8") {
       fabricationPrice =
         Number(selectedFabrication?.oneInchHoles ?? 0) *
-          (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
-            0) +
+        (locationSettings?.fabricatingPricing?.oneHoleThreeByEightInchGlass ??
+          0) +
         Number(selectedFabrication?.hingeCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
-            0) +
+        (locationSettings?.fabricatingPricing?.hingeCutoutThreeByEightInch ??
+          0) +
         Number(selectedFabrication?.clampCut ?? 0) *
-          (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
-            0) +
+        (locationSettings?.fabricatingPricing?.clampCutoutThreeByEightInch ??
+          0) +
         Number(selectedFabrication?.notch ?? 0) *
-          (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.notchThreeByEightInch ?? 0) +
         Number(selectedFabrication?.outages ?? 0) *
-          (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.outageThreeByEightInch ?? 0) +
         Number(selectedFabrication?.mitre ?? 0) *
-          (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
+        (locationSettings?.fabricatingPricing?.miterThreeByEightInch ?? 0) +
         Number(selectedFabrication?.polish ?? 0) *
-          (locationSettings?.fabricatingPricing
-            ?.polishPricePerThreeByEightInch ?? 0);
+        (locationSettings?.fabricatingPricing
+          ?.polishPricePerThreeByEightInch ?? 0);
     }
     return fabricationPrice;
   };
 
   const handleApprove = () => {
+    console.log(selectedHardware, 'selectedHardwareselectedHardware2222')
     let Estimatedata = {
       ...selectedHardware,
       pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
       status: "approve",
     };
     Estimatedata.config.cost = totalPrice;
-    Estimatedata.config.config.glassType = {
-      type: selectedHardware.glassType.type,
-      thickness: selectedHardware.glassType.thickness,
-    };
+    if (selectedHardware?.glassType) {
+      Estimatedata.config.config.glassType = {
+        type: selectedHardware.glassType.type,
+        thickness: selectedHardware.glassType.thickness,
+      };
+    }
     let selectedGlassAddons = [];
     selectedHardware.glassAddons.forEach((item) =>
       selectedGlassAddons.push(item.type)
@@ -585,6 +596,20 @@ const ShowerSummary = ({
       },
       apiRoute: `${backendURL}/landing-page-preview/${id}`,
     });
+
+    const logData = {
+      title: `${data?.customerData?.name} Approve an estimate ${formattedDate}`,
+      performer_id: data?.customerData?._id,
+      performer_name: data?.customerData?.name,
+      action: logActions.APPROVEESTIMATE,
+      resource_id: id,
+      company_id: data?.customerData?.company_id,
+    };
+    activityLog({
+      data: logData,
+      apiRoute: `${backendURL}/logs/save`,
+    });
+
   };
 
   useEffect(() => {
@@ -595,14 +620,14 @@ const ShowerSummary = ({
 
   const hardwareAddonsList = useMemo(() => {
     const upgradeHardwareAddonList = hardwaresList?.hardwareAddons
-    .filter((obj) => UpgradeOPtions?.hardwareAddons?.includes(obj._id))
-    .filter((obj) =>
-      obj.finishes.some(
-        (option) =>
-          option.finish_id === selectedHardware?.hardwareFinish?.type &&
-          option.status === true
-      )
-    );
+      ?.filter((obj) => UpgradeOPtions?.hardwareAddons?.includes(obj._id))
+      ?.filter((obj) =>
+        obj.finishes.some(
+          (option) =>
+            option.finish_id === selectedHardware?.hardwareFinish?.type &&
+            option.status === true
+        )
+      );
     const glassAddonsData = upgradeHardwareAddonList?.map((item) => {
       const price = item?.finishes?.find(
         (option) => option.finish_id === selectedHardware?.hardwareFinish?.type
@@ -1053,7 +1078,7 @@ const ShowerSummary = ({
                     )}
 
                     {data?.mountingChannel !== "" &&
-                    data?.mountingChannel !== null ? (
+                      data?.mountingChannel !== null ? (
                       <>
                         {data?.mountingChannel && (
                           <Box>
@@ -1392,7 +1417,7 @@ const ShowerSummary = ({
           )}
         </Box>
         <Box sx={{ width: "50%", pt: 0 }}>
-          <Typography
+          {(glassAddonsList?.length > (data?.category !== EstimateCategory.MIRRORS ? 1 : 0)) || hardwareAddonsList?.length > 0 || glasstypeList?.length > 0 && (<Typography
             sx={{
               fontFamily: '"Poppins" !important',
               fontSize: "32px",
@@ -1405,38 +1430,11 @@ const ShowerSummary = ({
               Recommended
             </Box>{" "} */}
             Available Upgrades:
-          </Typography>
+          </Typography>)}
+
+
           <Box sx={{ pt: 2 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                py: "6px",
-              }}
-            >
-              <Box
-                sx={{
-                  width: "80%",
-                  background: "white",
-                  borderRadius: "11px",
-                  pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
-                  opacity: data?.status === "approve" ? 0.5 : 1,
-                }}
-              >
-                <MenuList
-                  menuOptions={glassAddonsList ?? []}
-                  title={"Glass Addons"}
-                  type={"glassAddons"}
-                  selectedContent={selectedHardware}
-                  handleChange={handleChangeHardware}
-                  // selectedContent={}
-                />
-              </Box>
-            </Box>
-            {[EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(
-              data?.category
-            ) && (
+            {(glassAddonsList?.length > (data?.category !== EstimateCategory.MIRRORS ? 1 : 0)) &&
               <Box
                 sx={{
                   display: "flex",
@@ -1455,44 +1453,77 @@ const ShowerSummary = ({
                   }}
                 >
                   <MenuList
-                    menuOptions={hardwareAddonsList}
-                    title={"Hardware Addons"}
-                    type={"hardwareAddons"}
+                    menuOptions={glassAddonsList ?? []}
+                    title={"Glass Addons"}
+                    type={"glassAddons"}
                     selectedContent={selectedHardware}
                     handleChange={handleChangeHardware}
+                  // selectedContent={}
                   />
                 </Box>
               </Box>
-            )}
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                py: "6px",
-              }}
-            >
+            }
+            {([EstimateCategory.SHOWERS, EstimateCategory.WINECELLARS].includes(
+              data?.category
+            ) && hardwareAddonsList?.length > 0) && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    py: "6px",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "80%",
+                      background: "white",
+                      borderRadius: "11px",
+                      pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                      opacity: data?.status === "approve" ? 0.5 : 1,
+                    }}
+                  >
+                    <MenuList
+                      menuOptions={hardwareAddonsList ?? []}
+                      title={"Hardware Addons"}
+                      type={"hardwareAddons"}
+                      selectedContent={selectedHardware}
+                      handleChange={handleChangeHardware}
+                    />
+                  </Box>
+                </Box>
+              )}
+            {glasstypeList?.length > 0 &&
               <Box
                 sx={{
-                  width: "80%",
-                  background: "white",
-                  borderRadius: "11px",
-                  pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
-                  opacity: data?.status === "approve" ? 0.5 : 1,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  py: "6px",
                 }}
               >
-                <MenuList
-                  menuOptions={glasstypeList ?? []}
-                  title={"Glass type"}
-                  type={"glassType"}
-                  thickness={selectedHardware?.glassType?.thickness}
-                  currentItem={selectedHardware?.glassType}
-                  selectedContent={selectedHardware}
-                  locationSettings={locationSettings}
-                  handleChange={handleChangeHardware}
-                />
-              </Box>
-            </Box>
+                <Box
+                  sx={{
+                    width: "80%",
+                    background: "white",
+                    borderRadius: "11px",
+                    pointerEvents: data?.status === "approve" ? "none" : "auto", // Disable interaction
+                    opacity: data?.status === "approve" ? 0.5 : 1,
+                  }}
+                >
+                  <MenuList
+                    menuOptions={glasstypeList ?? []}
+                    title={"Glass type"}
+                    type={"glassType"}
+                    thickness={selectedHardware?.glassType?.thickness}
+                    currentItem={selectedHardware?.glassType}
+                    selectedContent={selectedHardware}
+                    locationSettings={locationSettings}
+                    handleChange={handleChangeHardware}
+                  />
+                </Box>
+              </Box>}
+
           </Box>
         </Box>
       </Box>
