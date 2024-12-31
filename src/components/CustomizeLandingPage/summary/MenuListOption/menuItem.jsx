@@ -131,12 +131,16 @@ const MenuItem = ({
             alignItems: "center",
             width: { sm: "100%", xs: "95%" },
             justifyContent: "space-between",
-            backgroundColor: status
-              ? isSelected
-                ? "#F95500"
-                : "white"
-              : "#f3f5f6",
-            color: status ? (isSelected ? "white" : "#5D6164") : "#BABABA",
+            backgroundColor: 
+            // status ? 
+              isSelected
+                ? "rgba(249, 85, 0, 0.06)"
+                : "white",
+              // : "#f3f5f6",
+            color: 
+            // status ?
+             (isSelected ? "black" : "#5D6164") 
+            //  : "#BABABA",
           }}
         >
           <Box sx={{ display: "flex", gap: 2 }}>
@@ -168,6 +172,7 @@ const MenuItem = ({
                   )?.count
                 }
                 handleChange={handleChange}
+                isSelected={isSelected}
               />
             ) : ["wallClamp", "sleeveOver", "glassToGlass"].includes(type) ? (
               <OptionWithCounter
@@ -203,7 +208,7 @@ const MenuItem = ({
               isSelected && (
                 <CheckCircle
                   sx={{
-                    color: "rgb(254, 254, 254)",
+                    color: "#F95500",
                     width: "21px",
                     height: "21px",
                     mb: "-3.9px",

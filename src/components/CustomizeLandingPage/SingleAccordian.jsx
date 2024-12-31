@@ -19,6 +19,7 @@ const SingleAccordian = ({
   data,
   reCalculateTotal,
   locationSettings,
+  UpgradeOPtions,
   // showersLocationSettings,
   // mirrorsLocationSettings,
   // wineCellarLocationSettings,
@@ -104,6 +105,7 @@ const SingleAccordian = ({
                 data={data}
                 reCalculateTotal={reCalculateTotal}
                 locationSettings={locationSettings}
+                UpgradeOPtions={UpgradeOPtions}
                 // locationSettings={
                 //   data?.category === EstimateCategory.SHOWERS
                 //     ? showersLocationSettings

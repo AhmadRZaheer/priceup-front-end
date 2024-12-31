@@ -37,6 +37,7 @@ const ShowerSummary = ({
   data,
   hardwaresList,
   locationSettings,
+  UpgradeOPtions,
   reCalculateTotal,
 }) => {
   const { id } = useParams();
@@ -64,14 +65,25 @@ const ShowerSummary = ({
       ? locationSettings?.miscPricing?.pricingFactor
       : 1;
 
+  
+
   const glasstypeList = useMemo(() => {
-    const glassTypedata = hardwaresList?.glassType?.map((item) => {
+    const upgradeGlassList = hardwaresList?.glassType
+    .filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
+    .filter((obj) =>
+      obj.options.some(
+        (option) =>
+          option.thickness === selectedHardware?.glassType?.thickness &&
+          option.status === true
+      )
+    );
+    const glassTypedata = upgradeGlassList?.map((item) => {
       const price = item?.options?.find(
         (option) => option.thickness === selectedHardware?.glassType?.thickness
       )?.cost;
       const itemPrice = (selectedHardware?.sqftArea * price ?? 0) * factorPrice;
       const costDifference =
-        hardwaresList?.glassType
+      upgradeGlassList
           ?.filter((item) => item._id === selectedHardware?.glassType?.type)
           ?.map((item) =>
             item.options.find(
@@ -104,23 +116,34 @@ const ShowerSummary = ({
       };
     });
     return glassTypedata;
-  }, [selectedHardware, hardwaresList?.glassType]);
+  }, [selectedHardware, hardwaresList?.glassType,UpgradeOPtions]);
 
-  const glassAddonsList = useMemo(() => {
-    const glassAddonsData = hardwaresList?.glassAddons?.map((item) => {
+  
+  // console.log(upgradeGlassList,'upgradeGlassList1234',UpgradeOPtions?.glassAddons)
+
+  const glassAddonsList = useMemo(() => {   
+    const upgradeGlassAddonsList = hardwaresList?.glassAddons
+    .filter((obj) => UpgradeOPtions?.glassAddons?.includes(obj._id))
+    .filter((obj) =>
+      obj.options.some(
+        (option) =>
+          option.status === true
+      )
+    );
+    const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
       const costDifference =
         selectedHardware?.glassAddons
           .map((item) => {
-            const matchedItem = hardwaresList?.glassAddons.find(
+            const matchedItem = upgradeGlassAddonsList.find(
               (firstItem) => firstItem._id === item.type
             );
             if (matchedItem && matchedItem.options.length > 0) {
-              return matchedItem.options[0].cost; 
+              return matchedItem.options[0].cost;
             }
             return null;
           })
-          .filter((cost) => cost !== null) ?? []; 
+          .filter((cost) => cost !== null) ?? [];
       const priceToDiffer = costDifference?.reduce((acc, arr) => acc + arr, 0);
 
       const itemPrice =
@@ -149,7 +172,8 @@ const ShowerSummary = ({
       };
     });
     return glassAddonsData;
-  }, [selectedHardware, hardwaresList?.glassAddons]);
+  }, [selectedHardware, hardwaresList?.glassAddons,UpgradeOPtions]);
+
   useEffect(() => {
     if (data) {
       let fabrication = {
@@ -163,19 +187,25 @@ const ShowerSummary = ({
         const record = hardwaresList?.hardwareAddons?.find(
           (_item) => _item._id === item.type
         );
-        if (record) {
+        if (record && record._id === item.type) {
           if (data?.category === EstimateCategory.SHOWERS) {
-            fabrication.oneInchHoles += record.oneInchHoles ?? 0;
-            fabrication.hingeCut += record.hingeCut ?? 0;
-            fabrication.clampCut += record.clampCut ?? 0;
-            fabrication.notch += record.notch ?? 0;
+            fabrication.oneInchHoles +=
+              record.oneInchHoles * (item.count ?? 0) ?? 0;
+            fabrication.hingeCut += record.hingeCut * (item.count ?? 0) ?? 0;
+            fabrication.clampCut += record.clampCut * (item.count ?? 0) ?? 0;
+            fabrication.notch += record.notch * (item.count ?? 0) ?? 0;
             fabrication.outages += record.outages ?? 0;
           } else if (data?.category === EstimateCategory.WINECELLARS) {
-            fabrication.oneInchHoles += record?.fabrication?.oneInchHoles ?? 0;
-            fabrication.hingeCut += record?.fabrication?.hingeCut ?? 0;
-            fabrication.clampCut += record?.fabrication?.clampCut ?? 0;
-            fabrication.notch += record?.fabrication?.notch ?? 0;
-            fabrication.outages += record?.fabrication?.outages ?? 0;
+            fabrication.oneInchHoles +=
+              record?.fabrication?.oneInchHoles * (item.count ?? 0) ?? 0;
+            fabrication.hingeCut +=
+              record?.fabrication?.hingeCut * (item.count ?? 0) ?? 0;
+            fabrication.clampCut +=
+              record?.fabrication?.clampCut * (item.count ?? 0) ?? 0;
+            fabrication.notch +=
+              record?.fabrication?.notch * (item.count ?? 0) ?? 0;
+            fabrication.outages +=
+              record?.fabrication?.outages * (item.count ?? 0) ?? 0;
           }
         }
       });
@@ -344,7 +374,7 @@ const ShowerSummary = ({
       );
       const fabricationPriceToRemove = getFabricationsCost(fabricationsCount);
       const remainingCost =
-        actualCost - (addonsPriceToRemove - fabricationPriceToRemove);
+        actualCost - (addonsPriceToRemove + fabricationPriceToRemove);
       if (itemExistIndex !== -1) {
         if (value.counter > 0) {
           const array = selectedHardware?.hardwareAddons;
@@ -474,6 +504,7 @@ const ShowerSummary = ({
     });
     return hardwareAddonsPrice;
   };
+
   const getFabricationsCost = (selectedFabrication) => {
     let fabricationPrice = 0;
     if (selectedHardware?.glassType?.thickness === "1/2") {
@@ -519,8 +550,6 @@ const ShowerSummary = ({
   };
 
   const handleApprove = () => {
-    console.log(selectedHardware, "selectedHardwareselectedHardware");
-
     let Estimatedata = {
       ...selectedHardware,
       pricing: { ...selectedHardware.pricing, totalPrice: totalPrice },
@@ -559,8 +588,60 @@ const ShowerSummary = ({
     }
   }, [isSuccess]);
 
+
+  const upgradeGlassList = hardwaresList?.hardwareAddons
+  .filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
+  .filter((obj) =>
+    obj.finishes.some(
+      (option) =>
+        option.finish_id === selectedHardware?.hardwareFinish?.type &&
+        option.status === true
+    )
+  );
+  console.log(upgradeGlassList,'upgradeGlassList1234',UpgradeOPtions,hardwaresList?.hardwareAddons, selectedHardware?.hardwareFinish?.type )
+
+  const hardwareAddonsList = useMemo(() => {
+
+    const glassAddonsData = hardwaresList?.hardwareAddons?.map((item) => {
+      const price = item?.finishes?.find(
+        (option) => option.finish_id === selectedHardware?.hardwareFinish?.type
+      )?.cost;
+
+      let fabricationsCount = {};
+      if (data?.category === EstimateCategory.SHOWERS) {
+        fabricationsCount.oneInchHoles = item?.oneInchHoles || 0;
+        fabricationsCount.hingeCut = item?.hingeCut || 0;
+        fabricationsCount.clampCut = item?.clampCut || 0;
+        fabricationsCount.notch = item?.notch || 0;
+        fabricationsCount.outages = item?.outages || 0;
+      } else if (data?.category === EstimateCategory.WINECELLARS) {
+        fabricationsCount = item?.fabrication;
+      }
+      const fabricationPrice = getFabricationsCost(fabricationsCount);
+      const itemPrice = (price + fabricationPrice) * factorPrice;
+
+      return {
+        ...item,
+        description: (
+          <span>
+            {item?.name} cost{" "}
+            <b style={{ color: "#28A745" }}>
+              {"+"} {Math.abs(itemPrice ?? 0).toFixed(2)}
+            </b>
+          </span>
+        ),
+      };
+    });
+    return glassAddonsData;
+  }, [selectedHardware, hardwaresList?.glassAddons]);
+
   // console.log(glassAddonsList, "glassPriceglassPrice");
   console.log(data?.category, "category", totalPrice);
+  console.log(
+    hardwaresList?.hardwareAddons,
+    "hardwaresList?.hardwareAddons",
+    selectedHardware
+  );
   return (
     <>
       <Box
@@ -1137,6 +1218,11 @@ const ShowerSummary = ({
                     ) : (
                       ""
                     )}
+                    {console.log(
+                      selectedHardware?.hardwareAddons?.length,
+                      selectedHardware?.hardwareAddons,
+                      "selectedHardware?.hardwareAddons?.length"
+                    )}
                     {selectedHardware?.hardwareAddons?.length > 0 && (
                       <Box>
                         <Typography className="text-xs-ragular-bold">
@@ -1368,7 +1454,7 @@ const ShowerSummary = ({
                   }}
                 >
                   <MenuList
-                    menuOptions={hardwaresList?.hardwareAddons}
+                    menuOptions={hardwareAddonsList}
                     title={"Hardware Addons"}
                     type={"hardwareAddons"}
                     selectedContent={selectedHardware}
