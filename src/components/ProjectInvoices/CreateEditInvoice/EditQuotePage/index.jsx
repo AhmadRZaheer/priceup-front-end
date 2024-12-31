@@ -1,6 +1,8 @@
 import {
+  Autocomplete,
   Box,
   Button,
+  Chip,
   CircularProgress,
   Grid,
   TextareaAutosize,
@@ -25,7 +27,10 @@ import bgHeaderImage from "@/Assets/CustomerLandingImages/BannerHeadImg.png";
 import GCSLogo from "@/Assets/GCS-logo.png";
 import FAQSection from "./FAQSection";
 import { showSnackbar } from "@/redux/snackBarSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { getWineCellarsHardware } from "@/redux/wineCellarsHardwareSlice";
+import { getMirrorsHardware } from "@/redux/mirrorsHardwareSlice";
+import { getListData } from "@/redux/estimateCalculations";
 
 const accordionDefaultData = [
   {
@@ -71,6 +76,10 @@ const EditQuoteInvoice = () => {
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
+  const WinelistData = useSelector(getWineCellarsHardware);
+  const MirrorsHardwareList = useSelector(getMirrorsHardware);
+  const ShowerHardwareList = useSelector(getListData);
+
   const [accordionData, setAccordionData] = useState(
     singleItemData?.content?.section5 ?? accordionDefaultData
   );
@@ -93,7 +102,7 @@ const EditQuoteInvoice = () => {
           console.error("Failed to copy text using clipboard API:", err);
         });
     } else {
-      alert(`Unsecure Connection:\nPlease copy the below url \n${value ?? ""}`);  
+      alert(`Unsecure Connection:\nPlease copy the below url \n${value ?? ""}`);
       // Fallback for older browsers
       // const textarea = document.createElement("textarea");
       // textarea.value = value ?? "";
@@ -139,6 +148,22 @@ const EditQuoteInvoice = () => {
       project: singleItemData?.project?.projectName || "",
       dueDate: dayjs(singleItemData?.customerPreview?.expiresAt) || null,
       notes: singleItemData?.description || "",
+      additionalUpgrades: {
+        shower: {
+          glassTypes: singleItemData?.additionalUpgrades?.shower?.glassTypes ?? [],
+          glassAddons: singleItemData?.additionalUpgrades?.shower?.glassAddons ?? [],
+          hardwareAddons: singleItemData?.additionalUpgrades?.shower?.hardwareAddons ?? [],
+        },
+        mirror: {
+          glassTypes: singleItemData?.additionalUpgrades?.mirror?.glassTypes ?? [],
+          glassAddons: singleItemData?.additionalUpgrades?.mirror?.glassAddons ?? [],
+        },
+        wineCellar: {
+          glassTypes: singleItemData?.additionalUpgrades?.wineCellar?.glassTypes ?? [],
+          glassAddons: singleItemData?.additionalUpgrades?.wineCellar?.glassAddons ?? [],
+          hardwareAddons: singleItemData?.additionalUpgrades?.wineCellar?.hardwareAddons ?? [],
+        },
+      },
       section1: {
         text1:
           singleItemData?.content?.section1?.text1 ||
@@ -221,7 +246,7 @@ const EditQuoteInvoice = () => {
   } = useEditDocument();
 
   const handleCraete = async (values) => {
-    console.log(values, "submited");
+    console.log(values, "submitedsubmitedsubmited");
 
     const data = {
       customerPreview: {
@@ -229,6 +254,7 @@ const EditQuoteInvoice = () => {
         expiresAt: values.dueDate,
       },
       description: values.notes,
+      additionalUpgrades:values.additionalUpgrades,
       content: {
         ...singleItemData?.content,
         section1: {
@@ -679,6 +705,375 @@ const EditQuoteInvoice = () => {
                   selectedEstimateRows={[]}
                   selectedEstimates={singleItemData?.estimates}
                 />
+              </Box>
+
+              <Box sx={{ py: 3, px: "16px" }}>
+                <Typography sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}>
+                  Choose upgrades for each category
+                </Typography>
+                <Box sx={{ display: "flex", width: "100%", gap: 2 }}>
+                  <Box sx={{ width: "33.3%" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>Shower</Typography>
+                    <Box sx={{ pt: 1 }}>
+                      <Autocomplete
+                        multiple
+                        options={ShowerHardwareList?.glassType ?? []}
+                        getOptionLabel={(glassType) => glassType.name}
+                        value={ShowerHardwareList?.glassType?.filter(
+                          (glassType) =>
+                            formik.values.additionalUpgrades.shower.glassTypes?.includes(
+                              glassType._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.shower.glassTypes",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.shower.glassTypes
+                                ?.length > 0
+                                ? ""
+                                : "Select Glass Type"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                    <Box sx={{ pt: 2 }}>
+                      <Autocomplete
+                        multiple
+                        options={ShowerHardwareList?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
+                        getOptionLabel={(glassAddon) => glassAddon.name}
+                        value={ShowerHardwareList?.glassAddons?.filter(
+                          (glassAddon) =>
+                            formik.values.additionalUpgrades.shower.glassAddons?.includes(
+                              glassAddon._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.shower.glassAddons",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.shower
+                                .glassAddons?.length > 0
+                                ? ""
+                                : "Select Glass Addon"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                    <Box sx={{ pt: 2 }}>
+                      <Autocomplete
+                        multiple
+                        options={ShowerHardwareList?.hardwareAddons ?? []}
+                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
+                        value={ShowerHardwareList?.hardwareAddons?.filter(
+                          (hardwareAddon) =>
+                            formik.values.additionalUpgrades.shower.hardwareAddons?.includes(
+                              hardwareAddon._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.shower.hardwareAddons",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.shower
+                                .hardwareAddons?.length > 0
+                                ? ""
+                                : "Select Hardware Addon"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                  <Box sx={{ width: "33.3%" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>Mirror</Typography>
+                    <Box sx={{ pt: 1 }}>
+                      <Autocomplete
+                        multiple
+                        options={MirrorsHardwareList?.glassTypes ?? []}
+                        getOptionLabel={(glassType) => glassType.name}
+                        value={MirrorsHardwareList?.glassTypes?.filter(
+                          (glassType) =>
+                            formik.values.additionalUpgrades.mirror.glassTypes?.includes(
+                              glassType._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.mirror.glassTypes",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.mirror.glassTypes
+                                ?.length > 0
+                                ? ""
+                                : "Select Glass Type"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                    <Box sx={{ pt: 2 }}>
+                      <Autocomplete
+                        multiple
+                        options={MirrorsHardwareList?.glassAddons ?? []}
+                        getOptionLabel={(glassAddon) => glassAddon.name}
+                        value={MirrorsHardwareList?.glassAddons?.filter(
+                          (glassAddon) =>
+                            formik.values.additionalUpgrades.mirror.glassAddons?.includes(
+                              glassAddon._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.mirror.glassAddons",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.mirror
+                                .glassAddons?.length > 0
+                                ? ""
+                                : "Select Glass Addon"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                  <Box sx={{ width: "33.3%" }}>
+                    <Typography sx={{ fontWeight: "bold" }}>
+                      WineCaller
+                    </Typography>
+                    <Box sx={{ pt: 1 }}>
+                      <Autocomplete
+                        multiple
+                        options={WinelistData?.glassType ?? []}
+                        getOptionLabel={(glassType) => glassType.name}
+                        value={WinelistData?.glassType?.filter((glassType) =>
+                          formik.values.additionalUpgrades.wineCellar.glassTypes?.includes(
+                            glassType._id
+                          )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.wineCellar.glassTypes",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.wineCellar
+                                .glassTypes?.length > 0
+                                ? ""
+                                : "Select Glass Type"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                    <Box sx={{ pt: 2 }}>
+                      <Autocomplete
+                        multiple
+                        options={WinelistData?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
+                        getOptionLabel={(glassAddon) => glassAddon.name}
+                        value={WinelistData?.glassAddons?.filter((glassAddon) =>
+                          formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(
+                            glassAddon._id
+                          )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.wineCellar.glassAddons",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.wineCellar
+                                .glassAddons?.length > 0
+                                ? ""
+                                : "Select Glass Addon"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                    <Box sx={{ pt: 2 }}>
+                      <Autocomplete
+                        multiple
+                        options={WinelistData?.hardwareAddons ?? []}
+                        getOptionLabel={(hardwareAddon) => hardwareAddon.name}
+                        value={WinelistData?.hardwareAddons?.filter(
+                          (hardwareAddon) =>
+                            formik.values.additionalUpgrades.wineCellar.hardwareAddons?.includes(
+                              hardwareAddon._id
+                            )
+                        )}
+                        onChange={(event, newValue) => {
+                          formik.setFieldValue(
+                            "additionalUpgrades.wineCellar.hardwareAddons",
+                            newValue.map((item) => item._id) // Update Formik with only the `_id` of selected items
+                          );
+                        }}
+                        renderTags={(value, getTagProps) =>
+                          value.map((option, index) => (
+                            <Chip
+                              key={option._id}
+                              label={option.name}
+                              {...getTagProps({ index })}
+                            />
+                          ))
+                        }
+                        sx={{
+                          width: "100%",
+                          ".MuiOutlinedInput-root": { p: "2px !important" },
+                        }}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            className="custom-textfield"
+                            placeholder={
+                              formik.values.additionalUpgrades.wineCellar
+                                .hardwareAddons?.length > 0
+                                ? ""
+                                : "Select Hardware Addon"
+                            }
+                          />
+                        )}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
               </Box>
 
               <Box>

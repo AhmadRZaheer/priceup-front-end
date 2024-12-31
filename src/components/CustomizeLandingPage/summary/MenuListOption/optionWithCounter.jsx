@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { setCounters } from "@/redux/estimateCalculations";
 import { useState } from "react";
 
-const OptionWithCounter = ({ counter = 0, type, item, status, handleChange }) => {
+const OptionWithCounter = ({ counter = 0, type, item, status, handleChange ,isSelected}) => {
     const disaptch = useDispatch();
     const [count, setCount] = useState(counter);
     const handleCountSet = (newVal, event) => {
@@ -29,14 +29,14 @@ const OptionWithCounter = ({ counter = 0, type, item, status, handleChange }) =>
             onClick={(event) =>
                 handleCountSet(count + 1, event)
             }
-            sx={{ color: "#5D6164" }}
+            sx={{ color: isSelected ? "#000000" : "#5D6164" }}
         />
-        <Typography className='counter-txt'>{count}</Typography>
+        <Typography className='counter-txt' sx={{ color: isSelected ? "black" : "black" }}>{count}</Typography>
         <RemoveCircleOutline
             onClick={(event) =>
                 handleCountSet(count - 1, event)
             }
-            sx={{ color: "#5D6164" }}
+            sx={{ color: isSelected ? "black" : "#5D6164"}}
         />
     </Box>)
 }
