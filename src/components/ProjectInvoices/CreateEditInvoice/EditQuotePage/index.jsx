@@ -78,8 +78,8 @@ const EditQuoteInvoice = () => {
   const apiPath = `${backendURL}/projects/landing-page-preview/${selectedItemId}`;
   const { data: singleItemData, refetch: refetchSingleItem } =
     useFetchSingleDocument(apiPath);
-  const { data: logsData, refetch: logsRefetch } = useFetchAllDocuments(
-    `${backendURL}/logs?reference_id=${selectedItemId}`
+  const { data: logsData, refetch: logsRefetch, isFetching: logsFetching } = useFetchAllDocuments(
+    `${backendURL}/logs?resource_id=${selectedItemId}`
   );
   const WinelistData = useSelector(getWineCellarsHardware);
   const MirrorsHardwareList = useSelector(getMirrorsHardware);
@@ -515,9 +515,9 @@ const EditQuoteInvoice = () => {
                   }}
                   disabled={
                     formik.values.customer === "" ||
-                    formik.values.project === "" ||
-                    formik.values.dueDate === null ||
-                    isLoading
+                      formik.values.project === "" ||
+                      formik.values.dueDate === null ||
+                      isLoading
                       ? true
                       : false
                   }
@@ -561,9 +561,10 @@ const EditQuoteInvoice = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   width: "100%",
+                  maxHeight: '300px'
                 }}
               >
-                <Box sx={{ width: "48%" }}>
+                <Box sx={{ width: "64%" }}>
                   <Box
                     sx={{
                       display: "flex",
@@ -736,13 +737,30 @@ const EditQuoteInvoice = () => {
                     </Box>
                   </Box>
                 </Box>
-                <Box sx={{ width: "50%", borderLeft: "1px solid red" }}>
-                  <Card sx={{mt:2,mx:2,p:2}}>
-                    <Typography>Activity Logs</Typography>
-                    {logsData &&
-                      logsData?.map((data, index) => (
-                        <Typography key={index}>{data?.title}</Typography>
-                      ))}
+                <Box sx={{ width: "35%", borderLeft: '1px solid #D4DBDF', mt: 2, }}>
+                  <Card sx={{ mx: 2, p: 2, }}>
+                    <Typography sx={{ fontSize: 21, fontWeight: "bold", pb: 1 }}>Activity Logs</Typography>
+                    <Box sx={{ maxHeight: '210px', overflow: 'auto' }}>
+                      {logsFetching ?
+                        <Box sx={{ height: '200px', alignContent: 'center', textAlign: 'center' }}>
+                          <CircularProgress size={30} sx={{ color: "#8477DA" }} />
+                        </Box>
+                        :
+                        logsData.length > 0 ?
+                          logsData?.map((data, index) => (
+                            <Box sx={{ display: 'flex', gap: 1 }}>
+                              <Box sx={{
+                                height: '10px',
+                                width: '10px',
+                                borderRadius: '4.94px',
+                                background: '#8477DA',
+                                alignSelf: 'center',
+                              }}></Box>
+                              <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1 }} key={index}>{data?.title}</Typography>
+                            </Box>
+                          )) : <Typography sx={{ fontSize: 18, fontWeight: "bold", pb: 1, height: '200px', alignContent: 'center', textAlign: 'center' }}>No Activity Log Found!</Typography>}
+                    </Box>
+
                   </Card>
                 </Box>
               </Box>
@@ -1230,13 +1248,12 @@ const EditQuoteInvoice = () => {
                         }}
                       >
                         {singleItemData?.content?.section1?.logo ||
-                        uploadedImageLogo?.content?.section1?.logo ? (
+                          uploadedImageLogo?.content?.section1?.logo ? (
                           <Box>
                             <img
-                              src={`${backendURL}/${
-                                singleItemData?.content?.section1?.logo ??
+                              src={`${backendURL}/${singleItemData?.content?.section1?.logo ??
                                 uploadedImageLogo?.content?.section1?.logo
-                              }`}
+                                }`}
                               width={400}
                               height={340}
                               alt="section image logo"
@@ -1298,16 +1315,15 @@ const EditQuoteInvoice = () => {
                         }}
                       >
                         {singleItemData?.content?.section1?.backgroundImage ||
-                        uploadedImageBackgroundImage?.content?.section1
-                          ?.backgroundImage ? (
+                          uploadedImageBackgroundImage?.content?.section1
+                            ?.backgroundImage ? (
                           <Box>
                             <img
-                              src={`${backendURL}/${
-                                singleItemData?.content?.section1
-                                  ?.backgroundImage ??
+                              src={`${backendURL}/${singleItemData?.content?.section1
+                                ?.backgroundImage ??
                                 uploadedImageBackgroundImage?.content?.section1
                                   ?.backgroundImage
-                              }`}
+                                }`}
                               width={400}
                               height={340}
                               alt="section image backgroundImage"
