@@ -121,6 +121,11 @@ export const projectStatus = {
   VOIDED: "voided",
   APPROVED: "approved",
 };
+export const logActions = {
+  DOWNLOADPDF: "Download Pdf",
+  APPROVEESTIMATE: "Approve Estimate",
+  APPROVEPROJECT: "Approve Project",
+};
 
 export const statusTypes = {
   PENDING: "pending",

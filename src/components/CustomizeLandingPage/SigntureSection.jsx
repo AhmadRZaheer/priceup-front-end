@@ -17,9 +17,13 @@ import PaymentModel from "./PaymentModel";
 import { pdf } from "@react-pdf/renderer";
 import { saveAs } from "file-saver";
 import LandingPDFFile from "../PDFFile/LandingPagePdf";
-import { useEditDocument } from "@/utilities/ApiHooks/common";
+import {
+  useCreateDocument,
+  useEditDocument,
+} from "@/utilities/ApiHooks/common";
 import { backendURL, base64ToFile } from "@/utilities/common";
 import { useParams } from "react-router-dom";
+import { logActions } from "@/utilities/constants";
 
 const controls = {
   viewPricingSubCategory: true,
@@ -39,12 +43,21 @@ const pdfLocationData = {
 };
 
 const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
+  const newDate = new Date();
+  const formattedDate = newDate.toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
   const { id } = useParams();
   const {
     mutateAsync: customerDecision,
     isLoading,
     isSuccess,
   } = useEditDocument();
+  const { mutate: activityLog, isLoading: activityLogLoading } =
+    useCreateDocument();
   const [openEditModal, setOpenEditModal] = useState(false);
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
@@ -126,6 +139,19 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
       blobPdf.updateContainer(doc);
       const result = await blobPdf.toBlob();
       saveAs(result, "Priceup");
+
+      const logData = {
+        title: `${data?.customer?.name} Downloaded Pdf at ${formattedDate}`,
+        performer_id: data?.customer_id,
+        performer_name: data?.customer?.name,
+        action: logActions.DOWNLOADPDF,
+        resource_id: id,
+        company_id: data?.company_id,
+      };
+      activityLog({
+        data: logData,
+        apiRoute: `${backendURL}/logs/save`,
+      });
     } catch (error) {
       console.error("Error generating PDF:", error);
     } finally {
@@ -563,7 +589,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                         textTransform: "capitalize",
                         borderRadius: 1,
                         fontSize: { lg: 16, md: 15, xs: 12 },
-                        fontWeight:'bold !important',
+                        fontWeight: "bold !important",
                         padding: {
                           sm: "10px 16px  !important",
                           xs: "5px 5px !important",
@@ -585,7 +611,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                         textTransform: "capitalize",
                         borderRadius: 1,
                         fontSize: { lg: 16, md: 15, xs: 12 },
-                        fontWeight:'bold !important',
+                        fontWeight: "bold !important",
                         padding: {
                           sm: "10px 16px  !important",
                           xs: "5px 5px !important",
@@ -615,11 +641,11 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                         // backgroundColor: "#F95500",
                         color: "#F95500",
                         lineHeight: "26px",
-                        borderColor:'#F95500',
+                        borderColor: "#F95500",
                         "&:hover": {
                           backgroundColor: "#F95500",
                           color: "#0B0B0B",
-                          borderColor:'#F95500',
+                          borderColor: "#F95500",
                         },
                         "&.Mui-disabled": {
                           background: "#F95500",

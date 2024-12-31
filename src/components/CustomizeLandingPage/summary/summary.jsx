@@ -132,7 +132,9 @@ const ShowerSummary = ({
     );
     if(data?.category !== EstimateCategory.MIRRORS){
       const noTreatment = hardwaresList?.glassAddons?.find((item) => item?.slug === 'no-treatment');
-      upgradeGlassAddonsList.push(noTreatment);
+      if(noTreatment){
+        upgradeGlassAddonsList.push(noTreatment);
+      }
     }
     const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
