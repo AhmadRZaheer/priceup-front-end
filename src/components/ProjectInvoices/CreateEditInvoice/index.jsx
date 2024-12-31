@@ -981,7 +981,7 @@ const ProjectInvoiceComponent = ({
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={ShowerHardwareList?.glassAddons ?? []}
+                        options={ShowerHardwareList?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
                         getOptionLabel={(glassAddon) => glassAddon.name}
                         value={ShowerHardwareList?.glassAddons?.filter(
                           (glassAddon) =>
@@ -1206,7 +1206,7 @@ const ProjectInvoiceComponent = ({
                     <Box sx={{ pt: 2 }}>
                       <Autocomplete
                         multiple
-                        options={WinelistData?.glassAddons ?? []}
+                        options={WinelistData?.glassAddons.filter((item)=> item?.slug !== 'no-treatment') ?? []}
                         getOptionLabel={(glassAddon) => glassAddon.name}
                         value={WinelistData?.glassAddons?.filter((glassAddon) =>
                           formik.values.additionalUpgrades.wineCellar.glassAddons?.includes(

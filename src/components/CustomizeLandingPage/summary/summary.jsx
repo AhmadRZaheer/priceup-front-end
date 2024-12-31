@@ -107,7 +107,7 @@ const ShowerSummary = ({
                 {item?.name} cost{" "}
                 <b style={{ color: totalDiference > 0 ? "#28A745" : "red" }}>
                   {totalDiference > 0 ? "+" : "-"}{" "}
-                  {Math.abs(totalDiference ?? 0).toFixed(2)}
+                  ${Math.abs(totalDiference ?? 0).toFixed(2)}
                 </b>
               </>
             )}
@@ -130,6 +130,10 @@ const ShowerSummary = ({
           option.status === true
       )
     );
+    if(data?.category !== EstimateCategory.MIRRORS){
+      const noTreatment = hardwaresList?.glassAddons?.find((item) => item?.slug === 'no-treatment');
+      upgradeGlassAddonsList.push(noTreatment);
+    }
     const glassAddonsData = upgradeGlassAddonsList?.map((item) => {
       const price = item?.options?.[0]?.cost;
       const costDifference =
@@ -163,7 +167,7 @@ const ShowerSummary = ({
                 {item?.name} cost{" "}
                 <b style={{ color: itemPrice > 0 ? "#28A745" : "red" }}>
                   {itemPrice > 0 ? "+" : "-"}{" "}
-                  {Math.abs(itemPrice ?? 0).toFixed(2)}
+                  ${Math.abs(itemPrice ?? 0).toFixed(2)}
                 </b>
               </>
             )}
@@ -588,21 +592,17 @@ const ShowerSummary = ({
     }
   }, [isSuccess]);
 
-
-  const upgradeGlassList = hardwaresList?.hardwareAddons
-  .filter((obj) => UpgradeOPtions?.glassTypes?.includes(obj._id))
-  .filter((obj) =>
-    obj.finishes.some(
-      (option) =>
-        option.finish_id === selectedHardware?.hardwareFinish?.type &&
-        option.status === true
-    )
-  );
-  console.log(upgradeGlassList,'upgradeGlassList1234',UpgradeOPtions,hardwaresList?.hardwareAddons, selectedHardware?.hardwareFinish?.type )
-
   const hardwareAddonsList = useMemo(() => {
-
-    const glassAddonsData = hardwaresList?.hardwareAddons?.map((item) => {
+    const upgradeHardwareAddonList = hardwaresList?.hardwareAddons
+    .filter((obj) => UpgradeOPtions?.hardwareAddons?.includes(obj._id))
+    .filter((obj) =>
+      obj.finishes.some(
+        (option) =>
+          option.finish_id === selectedHardware?.hardwareFinish?.type &&
+          option.status === true
+      )
+    );
+    const glassAddonsData = upgradeHardwareAddonList?.map((item) => {
       const price = item?.finishes?.find(
         (option) => option.finish_id === selectedHardware?.hardwareFinish?.type
       )?.cost;
@@ -626,7 +626,7 @@ const ShowerSummary = ({
           <span>
             {item?.name} cost{" "}
             <b style={{ color: "#28A745" }}>
-              {"+"} {Math.abs(itemPrice ?? 0).toFixed(2)}
+              {"+"} ${Math.abs(itemPrice ?? 0).toFixed(2)}
             </b>
           </span>
         ),
