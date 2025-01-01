@@ -166,14 +166,14 @@ const LandingPDFFile = ({ controls, data }) => {
             return (
              <>
               {/** Section 3 */}
-              <View style={{borderTop:'1px sloid #ccc',paddingTop:'10px'}}>
+              <View style={{borderTop: index === 0 ? '1px sloid #ccc': 'none',paddingTop:'10px'}}>
               <View wrap={false}>
               <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>Shower Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                 <View style={{width:'357px'}} wrap>
                    {dimensionsSection[item?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
                     <Text style={{fontSize:'14px'}}>Dimensions:</Text>
-                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{item?.measurements}</Text>
+                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right',paddingLeft:'14px',width:'90%'}} wrap>{item?.measurements}</Text>
                    </View>}
                    {dimensionsSection[item?.category]?.includes(pdfFields.DOORWIDTH) && item?.doorWidth && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Door Width:</Text>
@@ -231,7 +231,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 {/* <Text style={{fontSize:'18px'}}>Total: ${item?.cost?.toFixed(2) || 0}</Text> */}
                </View>
                </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
                 {controls?.viewPricingSubCategory &&
                  <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Pricing Sub Categories:</Text>
@@ -292,7 +292,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>
                 }
                </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
              
                 {controls?.viewSummary && 
                 <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
@@ -394,8 +394,8 @@ const LandingPDFFile = ({ controls, data }) => {
                   )}
                   {summarySection[item?.category]?.includes(pdfFields.HARDWARES) && item?.hardwares?.length ? (
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:'14px'}}>Hardwares:</Text>
-                    <Text style={{fontSize:'12px'}}>
+                    <Text style={{fontSize:'14px',flexShrink: 0}}>Hardwares:</Text>
+                    <Text style={{fontSize:'12px',flexGrow: 1, wordWrap: 'break-word', whiteSpace: 'pre-wrap',width:'79%',paddingLeft:'12px'}}>
                     {item?.hardwares?.map((record,index) => (`${record?.item?.name} - (${record?.count})${commaFn(index, item?.hardwares?.length)}`))}
                     </Text>
                   </View>
@@ -534,7 +534,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 <View style={{width:'357px'}} wrap>
                    {dimensionsSection[item?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
                     <Text style={{fontSize:'14px'}}>Dimensions:</Text>
-                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{item?.measurements}</Text>
+                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right',paddingLeft:'14px',width:'90%'}} wrap>{item?.measurements}</Text>
                    </View>}
                    {dimensionsSection[item?.category]?.includes(pdfFields.DOORWIDTH) && item?.doorWidth && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Door Width:</Text>
@@ -564,7 +564,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 {controls?.viewLayoutImage && <Image style={styles.logo2} src={ item?.layout_id ? `${backendURL}/${item?.settings?.image}` : CustomImage} alt="logo" />}
                </View>
               </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
                 {controls?.viewPricingSubCategory &&
                  <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Pricing Sub Categories:</Text>
@@ -625,7 +625,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>
                 }
                </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
              
                 {controls?.viewSummary && 
                 <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
@@ -727,8 +727,8 @@ const LandingPDFFile = ({ controls, data }) => {
                   )}
                   {summarySection[item?.category]?.includes(pdfFields.HARDWARES) && item?.hardwares?.length ? (
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:'14px'}}>Hardwares:</Text>
-                    <Text style={{fontSize:'12px'}}>
+                    <Text style={{fontSize:'14px',flexShrink: 0}}>Hardwares:</Text>
+                    <Text style={{fontSize:'12px',flexGrow: 1, wordWrap: 'break-word', whiteSpace: 'pre-wrap',width:'79%',paddingLeft:'12px'}}>
                     {item?.hardwares?.map((record,index) => (`${record?.item?.name} - (${record?.count})${commaFn(index, item?.hardwares?.length)}`))}
                     </Text>
                   </View>
@@ -862,12 +862,12 @@ const LandingPDFFile = ({ controls, data }) => {
               {/** Section 3 */}
               <View style={{paddingTop:'10px'}}>
               <View  wrap={false} >
-              <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>WIneCaller Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
+              <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>WineCaller Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                 <View style={{width:'357px'}} wrap>
                    {dimensionsSection[item?.category]?.includes(pdfFields.MEASUREMENTS) && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}} wrap>
                     <Text style={{fontSize:'14px'}}>Dimensions:</Text>
-                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right'}} wrap>{item?.measurements}</Text>
+                    <Text style={{fontSize:'12px',wordWrap: "break-word",textAlign:'right',paddingLeft:'14px',width:'90%'}} wrap>{item?.measurements}</Text>
                    </View>}
                    {dimensionsSection[item?.category]?.includes(pdfFields.DOORWIDTH) && item?.doorWidth && <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Door Width:</Text>
@@ -897,7 +897,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 {controls?.viewLayoutImage && <Image style={styles.logo2} src={ item?.layout_id ? `${backendURL}/${item?.settings?.image}` : CustomImage} alt="logo" />}
                </View>
                </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px', alignItems: 'stretch',gap:'10px'}}>
                 {controls?.viewPricingSubCategory &&
                  <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display: 'flex', flexDirection: 'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Pricing Sub Categories:</Text>
@@ -958,7 +958,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>
                 }
                </View>
-               <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'flex-start',gap:'10px'}}>
              
                 {controls?.viewSummary && 
                 <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px'}}>
@@ -1060,8 +1060,8 @@ const LandingPDFFile = ({ controls, data }) => {
                   )}
                   {summarySection[item?.category]?.includes(pdfFields.HARDWARES) && item?.hardwares?.length ? (
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-                    <Text style={{fontSize:'14px'}}>Hardwares:</Text>
-                    <Text style={{fontSize:'12px'}}>
+                    <Text style={{fontSize:'14px',flexShrink: 0}}>Hardwares:</Text>
+                    <Text style={{fontSize:'12px',flexGrow: 1, wordWrap: 'break-word', whiteSpace: 'pre-wrap',width:'79%',paddingLeft:'12px'}}>
                     {item?.hardwares?.map((record,index) => (`${record?.item?.name} - (${record?.count})${commaFn(index, item?.hardwares?.length)}`))}
                     </Text>
                   </View>
