@@ -172,6 +172,20 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
       apiRoute: `${backendURL}/landing-page-preview/${id}`,
     });
     refetchData();
+
+    const logData = {
+      title: `${data?.customer?.name} approved this project at ${formattedDate}`,
+      performer_id: data?.customer_id,
+      performer_name: data?.customer?.name,
+      action: logActions.DOWNLOADPDF,
+      resource_id: id,
+      company_id: data?.company_id,
+    };
+    activityLog({
+      data: logData,
+      apiRoute: `${backendURL}/logs/save`,
+    });
+
   };
   const estimateStatus = useMemo(() => {
     let status = true;
