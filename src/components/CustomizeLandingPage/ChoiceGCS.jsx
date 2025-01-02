@@ -49,6 +49,8 @@ const ChoiceGCS = ({ data }) => {
                   width: "25%",
                   background: "rgba(237,237,237,1)",
                   p: "20px",
+                  backdropFilter: " blur(5.599999904632568px)",
+                  boxShadow: "0px 4px 2.1px 0px rgba(0, 0, 0, 0.12)",
                 }}
               >
                 <Box

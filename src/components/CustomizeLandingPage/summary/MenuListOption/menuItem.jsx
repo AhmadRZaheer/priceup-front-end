@@ -27,7 +27,7 @@ const MenuItem = ({
   
   const activeFinishOrThickness =
     type === hardwareTypes.GLASSTYPE
-      ? selectedContent.glassType.thickness
+      ? selectedContent?.glassType?.thickness 
       : type === hardwareTypes.GLASSADDONS
       ? null
       : selectedContent?.hardwareFinishes;

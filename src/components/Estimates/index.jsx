@@ -29,6 +29,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
+import './Mirrors/AlertsAndWarnings/alertAnimation.scss'
 
 const dateSx = {
   "& .MuiInputBase-root": {
@@ -122,8 +123,8 @@ export default function Estimates() {
           }}
         >
           <Swiper
-            modules={[Navigation]}
-            navigation
+            // modules={[Navigation]}
+            // navigation
             spaceBetween={10}
             slidesPerView={1} // Adjust slides per view according to your needs
             breakpoints={{
@@ -132,7 +133,7 @@ export default function Estimates() {
                 spaceBetween: 20,
               },
               1024: {
-                slidesPerView: 4,
+                slidesPerView: 4.1,
                 spaceBetween: 20,
               },
             }}

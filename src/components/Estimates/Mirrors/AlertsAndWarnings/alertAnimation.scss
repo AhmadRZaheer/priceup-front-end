@@ -65,3 +65,28 @@
 .btn-animated::after {
     animation: hoverEffectAfter 2s ease-in-out infinite;
 }
+
+
+/* Customize Swiper navigation button size and color */
+ .swiper-button-next,
+.swiper-button-prev {
+  color: white !important; 
+  background-color: #8477DA !important;
+  padding: 8px;
+}
+/*
+.swiper-button-next {
+  right: 20px !important; 
+}
+
+.swiper-button-prev {
+  left: 20px !important; 
+} */
+
+/* Optional: Change color on hover */
+ .swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: white !important;
+  background-color: #8477DA;
+  padding: 8px;
+} 

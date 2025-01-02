@@ -103,7 +103,8 @@ const MenuList = ({
               xs: "black",
             },
             paddingLeft: "0px !important",
-            pt: "6px !important",
+            pt: "2px !important",
+            pb: "1px !important",
             px: 2,
             display: "flex",
             alignItems: "center",
@@ -125,8 +126,8 @@ const MenuList = ({
           )} */}
           <Typography
             sx={{
-              fontSize: "22px",
-              lineHeight: "28px",
+              fontSize: "24px",
+              lineHeight: "36px",
               fontWeight: 500,
               fontFamily: '"Poppins" !important',
             }}

@@ -2,9 +2,9 @@ import { Box, Button, Checkbox, Container, Typography } from "@mui/material";
 import React, { useState } from "react";
 import "./style.scss";
 
-const AggremantCondition = ({data}) => {
+const AggremantCondition = ({data,acceptTerms, setAcceptTerms}) => {
   const [checked, setChecked] = useState(false);
-  const [accept, setAccept] = useState(false);
+  
 
   const handleChange = (event) => {
     setChecked(event.target.checked);
@@ -14,7 +14,7 @@ const AggremantCondition = ({data}) => {
     <Box sx={{ background: "#000000", py: 6 }}>
       <Container maxWidth="lg">
         <Box
-          sx={{ background: "#FFFFFF", pt: 3, borderRadius: 2, pr: 3, pl: 6 }}
+          sx={{ background: "#FFFFFF", pt: 3, borderRadius: '15px', pr: 3, pl: 6 }}
         >
           <Typography className="contionHead">Terms and Conditions</Typography>
           <Typography className="contionSubHead" sx={{ pt: 1.3 }}>
@@ -182,7 +182,7 @@ const AggremantCondition = ({data}) => {
               respect to such use.
             </Typography>
           </Box>
-          {accept || data?.status === 'approve' ? (
+          {acceptTerms || data?.status === 'approve' ? (
             <Typography className="contionHead" sx={{  pt: 3,
               pb: 2,color:'#f95500',textAlign :'center'}}>  Terms and Conditions Accepted</Typography>
           ) : (
@@ -216,7 +216,7 @@ const AggremantCondition = ({data}) => {
               <Box sx={{ display: "flex", gap: 2.5 }}>
                 <Button
                   disabled={!checked}
-                  onClick={() => setAccept(true)}
+                  onClick={() => setAcceptTerms(true)}
                   variant="contained"
                   sx={{
                     backgroundColor: "#F95500",

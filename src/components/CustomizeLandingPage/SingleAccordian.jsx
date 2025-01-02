@@ -9,6 +9,10 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import ShowerSummary from "./summary/summary";
+import ShowerImg from "@/Assets/CustomerLandingImages/shower.png";
+import MirrorImg from "@/Assets/CustomerLandingImages/mirror.png";
+import WineCallerImg from "@/Assets/CustomerLandingImages/wineCaller.png";
+import { backendURL } from "@/utilities/common";
 import { EstimateCategory } from "@/utilities/constants";
 
 const SingleAccordian = ({
@@ -35,6 +39,12 @@ const SingleAccordian = ({
       ? "#F95500"
       : "#0FE90D"
     : "#F95500";
+  const imageData =
+    data?.category === EstimateCategory.SHOWERS
+      ? ShowerImg
+      : data?.category === EstimateCategory.WINECELLARS
+      ? WineCallerImg
+      : MirrorImg;
 
   return (
     <Accordion
@@ -43,7 +53,7 @@ const SingleAccordian = ({
       onChange={handleChangeAccordian(`panel${category}${index + 1}`)}
       sx={{
         borderRadius: "10px !important",
-        py: "3px",
+        // py: "3px",
         px: "4px",
         background: "#000000",
         color: "white",
@@ -62,6 +72,7 @@ const SingleAccordian = ({
         }
         aria-controls={`panel${category}${index + 1}-content`}
         id={`panel${category}${index + 1}-header`}
+        sx={{ height: "71px" }}
       >
         <Box
           sx={{
@@ -71,22 +82,25 @@ const SingleAccordian = ({
             width: "100%",
           }}
         >
-          <Typography
-            sx={{
-              fontWeight: 700,
-              textTransform: "capitalize",
-            }}
-          >
-            {data?.category} Estimate -{" "}
-            {data?.layout === "Mirror" ? "Custom" : data?.layout}
-            <Chip
-              label={data?.status ? data?.status : "Pending"}
-              variant="outlined"
-              sx={{ color: chipColor, borderColor: chipColor, ml: 2 }}
-            />
-          </Typography>
-
-          <Typography sx={{ fontWeight: 700, pr: 1 }}>
+          <Box sx={{ display: "flex", gap: "20px" }}>
+            <img src={imageData} alt="not" style={{ height: "32px" }} />
+            <Typography
+              sx={{
+                fontWeight: 700,
+                textTransform: "capitalize",
+                fontSize: "20px",
+              }}
+            >
+              {data?.category} Estimate -{" "}
+              {data?.layout === "Mirror" ? "Custom" : data?.layout}
+              <Chip
+                label={data?.status ? data?.status : "Pending"}
+                variant="outlined"
+                sx={{ color: chipColor, borderColor: chipColor, ml: 2 }}
+              />
+            </Typography>
+          </Box>
+          <Typography sx={{ fontWeight: 700, pr: 1,fontSize: "20px", }}>
             Price :{" "}
             <Box component="span" sx={{ color: "#F95500" }}>
               ${totalPrice.toFixed(2)}

@@ -21,6 +21,23 @@
 .swiper-button-prev {
   left: 0 !important;
 }
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: white !important; /* Set your custom color */
+  background-color: #F95500 !important;
+  padding: 8px;
+}
+
+/* Optional: Change color on hover */
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  color: white !important;
+  background-color: #F95500;
+  padding: 8px;
+  /* border-radius: 50%; */
+}
 .gcs-logo {
   // top: 0px;
   left: 0px;

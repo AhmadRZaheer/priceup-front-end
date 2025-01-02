@@ -171,7 +171,7 @@ const CustomerInvoicePreview = () => {
               lineHeight: "21.86px",
             }}
           >
-            This well generate a preview link for customer which will be valid
+            This will generate a preview link for customer which will be valid
             till {futureDate}.
           </Typography>
           <Button
