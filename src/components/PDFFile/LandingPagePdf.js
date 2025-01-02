@@ -166,7 +166,7 @@ const LandingPDFFile = ({ controls, data }) => {
             return (
              <>
               {/** Section 3 */}
-              <View style={{borderTop: index === 0 ? '1px sloid #ccc': 'none',paddingTop:'10px'}}>
+              <View style={{borderTop: index === 0 ? '1px sloid #ccc': 'none'}}>
               <View wrap={false}>
               <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>Shower Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
@@ -433,7 +433,7 @@ const LandingPDFFile = ({ controls, data }) => {
                         
                 </View>}
                </View>
-               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px',paddingBottom: '30px'}}>
                {controls?.viewFabrication && 
                <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
@@ -505,15 +505,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>}
                </View>
               </View>
-             {data?.estimateData?.signature || data?.estimateData?.customerName  &&
-            <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
-             <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
-             {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
-             {data?.estimateData?.customerName && <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>{data?.estimateData?.customerName}</Text>} 
-              <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>Signature</Text>
-            </View>
-          </View>         
-              }               
+                          
               {/** Pagination */}
               <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
               <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (
@@ -527,7 +519,7 @@ const LandingPDFFile = ({ controls, data }) => {
             return (
              <>
               {/** Section 3 */}
-              <View style={{paddingTop:'10px'}}>
+              <View>
               <View wrap={false}>
                <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>Mirror Estimate - Custom</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
@@ -766,7 +758,7 @@ const LandingPDFFile = ({ controls, data }) => {
                         
                 </View>}
                </View>
-               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px',paddingBottom: '30px'}}>
                {controls?.viewFabrication && 
                <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
@@ -837,16 +829,7 @@ const LandingPDFFile = ({ controls, data }) => {
                   )}
                 </View>}
                </View>
-              </View>
-             {data?.estimateData?.signature || data?.estimateData?.customerName  &&
-            <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
-             <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
-             {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
-             {data?.estimateData?.customerName && <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>{data?.estimateData?.customerName}</Text>} 
-              <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>Signature</Text>
-            </View>
-          </View>         
-              }               
+              </View>           
               {/** Pagination */}
               <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
               <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (
@@ -860,7 +843,7 @@ const LandingPDFFile = ({ controls, data }) => {
             return (
              <>
               {/** Section 3 */}
-              <View style={{paddingTop:'10px'}}>
+              <View >
               <View  wrap={false} >
               <Text style={{fontSize:'18px',fontWeight:'extrabold', flexShrink: 1,flexWrap: 'wrap',width:'100%',textAlign:'center',marginBottom:'10px'}}>WineCaller Estimate - {item?.settings?.name ? item?.settings?.name : item?.category === EstimateCategory.MIRRORS ? 'Mirror' : 'Custom'}</Text>
                <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
@@ -1099,7 +1082,7 @@ const LandingPDFFile = ({ controls, data }) => {
                         
                 </View>}
                </View>
-               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px'}}>
+               <View wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'space-between',marginTop:'10px',alignItems:'stretch',gap:'10px',paddingBottom: '30px'}}>
                {controls?.viewFabrication && 
                <View style={{border:'1.5px solid #ccc',flexGrow:1,borderRadius:'5px',padding:'5px 10px',display:'flex',flexDirection:'column'}}>
                 <Text style={{fontSize:'18px',fontWeight:'extrabold',marginBottom:'2px'}}>Fabrication:</Text>
@@ -1171,15 +1154,7 @@ const LandingPDFFile = ({ controls, data }) => {
                 </View>}
                </View>
               </View>
-             {data?.estimateData?.signature || data?.estimateData?.customerName  &&
-            <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
-             <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
-             {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
-             {data?.estimateData?.customerName && <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>{data?.estimateData?.customerName}</Text>} 
-              <Text style={{ paddingTop: '6px', borderTop: '1px solid #ccc',textAlign:'center' }}>Signature</Text>
-            </View>
-          </View>         
-              }               
+                           
               {/** Pagination */}
               <View style={{borderTop:'1px solid #ccc',position:'absolute',bottom:'10px',left:'20px',right:'20px',padding:'5px'}} fixed>
               <Text style={{fontSize:'13px'}} render={({ pageNumber, totalPages }) => (
@@ -1189,6 +1164,16 @@ const LandingPDFFile = ({ controls, data }) => {
               </>
             );
           })}
+
+          {(data?.estimateData?.signature || data?.estimateData?.name)  &&
+            <View  wrap={false} style={{display:'flex',flexDirection:'row',justifyContent:'flex-end', width: '100%' }}>
+             <View style={{ paddingTop: '10px', width: '150px', height: '150px' }}>
+             {data?.estimateData?.signature && <Image style={styles.logo2} textAlign='center' src={`${backendURL}/${data?.estimateData?.signature}`} alt="logo" />} 
+             {data?.estimateData?.name && <Text style={{ marginTop: '6px',textAlign:'center' }}>{data?.estimateData?.name ?? ''}</Text>} 
+              <Text style={{ marginTop: '6px', borderTop: '1px solid #ccc',textAlign:'center',fontSize: 12,paddingTop:'4px' }}>Signature</Text>
+            </View>
+          </View>         
+              } 
           </Page>
         </>
       )}

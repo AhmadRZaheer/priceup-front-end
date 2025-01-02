@@ -219,7 +219,7 @@ const Summary = ({ setStep }) => {
     selectedContent?.glassType?.thickness,
     selectedContent?.glassType?.item?._id
   );
-
+  console.log(glassDetails, "glassDetailsglassDetailsglassDetails");
   return (
     <>
       <Box
@@ -943,62 +943,83 @@ const Summary = ({ setStep }) => {
               </Grid>
             )}
           </Box>
-          {glassDetails?.length > 0  && (
+          {glassDetails?.length > 0 && (
             <>
-          <Divider sx={{ borderColor: "#D4DBDF" }} />
-          <Box sx={{ px: 3, py: 2 }}>           
-              <Typography
-                sx={{
-                  fontSize: "14px",
-                  fontWeight: 700,
-                  lineHeight: "16.41px",
-                  fontFamily: '"Roboto", sans-serif !important',
-                }}
-              >
-                Note:
-              </Typography>
-            {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
-            {glassDetails.map((glass, index) => {
-                const calc =
-                  (totalPrice - laborPrice) /
-                    showersLocationSettings?.miscPricing?.pricingFactor -
-                  glassPrice;
-                const glassPricing = sqftArea !== 0 ?
-                  (calc + sqftArea * glass.price) *
+              <Divider sx={{ borderColor: "#D4DBDF" }} />
+              <Box sx={{ px: 3, py: 2 }}>
+                <Typography
+                  sx={{
+                    fontSize: "14px",
+                    fontWeight: 700,
+                    lineHeight: "16.41px",
+                    fontFamily: '"Roboto", sans-serif !important',
+                  }}
+                >
+                  Note:
+                </Typography>
+                {/* <Typography>Selected glass type '{selectedContent?.glassType?.item?.name}' price is '${glassPrice?.toFixed(2) || 0}'.</Typography> */}
+                {glassDetails.map((glass, index) => {
+                  // const calc =
+                  //   (totalPrice - laborPrice) /
+                  //     showersLocationSettings?.miscPricing?.pricingFactor -
+                  //   glassPrice;
+                  // const glassPricing = sqftArea !== 0 ?
+                  //   (calc + sqftArea * glass.price) *
+                  //     (showersLocationSettings?.miscPricing?.pricingFactorStatus
+                  //       ? showersLocationSettings?.miscPricing?.pricingFactor
+                  //       : 1) +
+                  //   laborPrice : 0;
+
+                  const price =
+                    (sqftArea * glass.price - glassPrice) *
                     (showersLocationSettings?.miscPricing?.pricingFactorStatus
                       ? showersLocationSettings?.miscPricing?.pricingFactor
-                      : 1) +
-                  laborPrice : 0;
-                // const price = ((totalPrice - glassPrice) + (sqftArea*glass.price))
-                return (
-                  glass.status && (
-                    <Typography key={index}>
-                      Glass Option '{glass.name}'
-                      {/* with thickness '{glass.thickness}' */} has a price of
-                      '${glassPricing?.toFixed(2) || 0}' {"=>"} Want to
-                      {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}
-                      <Box
-                        component="span"
-                        onClick={() =>
-                          dispatch(
-                            setContent({
-                              type: hardwareTypes.GLASSTYPE,
-                              item: glass?.selectedGlass,
-                            })
-                          )
-                        }
-                        sx={{ cursor: "pointer", color: "blue" }}
-                      >
-                        {" "}
-                        apply
-                      </Box>
-                      ?
-                    </Typography>
-                  )
-                );
-              })}
-          </Box>
-          </>
+                      : 1);
+                  const priceStatus = price >= 0 ? true : false;
+
+                  return (
+                    glass.status && (
+                      <Typography key={index}>
+                        Glass Option{" "}
+                        <Box component="span" sx={{ fontWeight: "bold" }}>
+                          {glass.name}
+                        </Box>{" "}
+                        {/* with thickness '{glass.thickness}' has a price of */}
+                        cost{" "}
+                        <Box
+                          component="span"
+                          sx={{
+                            color: priceStatus ? "#28A745" : "red",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {priceStatus ? "+" : "-"}$
+                          {Math.abs(price?.toFixed(2)) || 0}
+                        </Box>{" "}
+                        {"=>"} Want to
+                        {/* '${(sqftArea*glass.price)?.toFixed(2) || 0}' */}
+                        <Box
+                          component="span"
+                          onClick={() =>
+                            dispatch(
+                              setContent({
+                                type: hardwareTypes.GLASSTYPE,
+                                item: glass?.selectedGlass,
+                              })
+                            )
+                          }
+                          sx={{ cursor: "pointer", color: "blue" }}
+                        >
+                          {" "}
+                          apply
+                        </Box>
+                        ?
+                      </Typography>
+                    )
+                  );
+                })}
+              </Box>
+            </>
           )}
         </Box>
         {isMobile ? (

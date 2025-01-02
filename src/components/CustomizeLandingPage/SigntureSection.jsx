@@ -42,7 +42,7 @@ const pdfLocationData = {
   website: "www.gcs.glass",
 };
 
-const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
+const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
   const newDate = new Date();
   const formattedDate = newDate.toLocaleDateString("en-US", {
     weekday: "short",
@@ -61,7 +61,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const handleOpenEditModal = () => setOpenEditModal(true);
   const handleCloseEditModal = () => setOpenEditModal(false);
-  const [customerName, setCustomerName] = useState("");
+  const [customerName, setCustomerName] = useState(data?.name ?? "");
 
   const handleNameChange = (event) => {
     setCustomerName(event.target.value);
@@ -118,7 +118,6 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
   };
 
   const [loading, setLoading] = useState(false);
-
   const generatePDFDocument = async () => {
     try {
       setLoading(true);
@@ -162,7 +161,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
   const handleProjectApproved = async () => {
     const formData = new FormData();
     formData.append("status", "approve");
-    formData.append("customerName", customerName);
+    formData.append("name", customerName);
     if (signatureURL) {
       const imageSignature = base64ToFile(signatureURL, `${Date.now()}.png`);
       formData.append("signature", imageSignature);
@@ -185,7 +184,6 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
       data: logData,
       apiRoute: `${backendURL}/logs/save`,
     });
-
   };
   const estimateStatus = useMemo(() => {
     let status = true;
@@ -459,9 +457,10 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                     fontFamily: '"Inter" !important',
                   }}
                 >
-                  Type in your name
+                  {data?.name ? "Your Name" : "Type in your name"}
                 </Typography>
                 <CustomInputField
+                  disabled={data?.name ? true : false}
                   id="name"
                   name="name"
                   size="small"
@@ -538,7 +537,8 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                   <Button
                     disabled={
                       (signatureURL === null && customerName === "") ||
-                      !estimateStatus
+                      !estimateStatus ||
+                      !acceptTerms
                     }
                     onClick={handleProjectApproved}
                     variant="contained"
@@ -569,112 +569,113 @@ const SigntureSection = ({ data, refetchData, estimatePdfs }) => {
                   </Button>
                 </Box>
               )}
-              {data?.status === "approve" && (
-                <Box>
-                  <Typography
+              {/* {data?.status === "approve" && ( */}
+              <Box>
+                <Typography
+                  sx={{
+                    fontFamily: '"Poppins" !important',
+                    fontSize: "32px",
+                    color: "white",
+                    fontWeight: 700,
+                    lineHeight: "39.94px",
+                    py: 3,
+                  }}
+                >
+                  Your Estimate PDF is ready to download!{" "}
+                </Typography>
+
+                <Stack
+                  sx={{ pb: 2.5, width: "285px" }}
+                  direction={"row"}
+                  gap={1.5}
+                  justifyContent={"space-between"}
+                >
+                  <Button
+                    fullWidth
+                    disabled={!estimateStatus}
+                    variant="contained"
+                    onClick={handleOpenEditModal}
                     sx={{
-                      fontFamily: '"Poppins" !important',
-                      fontSize: "32px",
-                      color: "white",
-                      fontWeight: 700,
-                      lineHeight: "39.94px",
-                      py: 3,
+                      backgroundColor: "#F95500",
+                      color: "#0B0B0B",
+                      height: "44px",
+                      width: { sm: "100%", xs: "187px" },
+                      "&:hover": { backgroundColor: "#F95500" },
+                      "&.Mui-disabled": {
+                        background: "#F95500",
+                      },
+                      textTransform: "capitalize",
+                      borderRadius: 1,
+                      fontSize: { lg: 16, md: 15, xs: 12 },
+                      fontWeight: "bold !important",
+                      padding: {
+                        sm: "10px 16px  !important",
+                        xs: "5px 5px !important",
+                      },
                     }}
                   >
-                    Your Estimate PDF is ready to download!{" "}
-                  </Typography>
-
-                  <Stack
-                    sx={{ pb: 2.5, width: "285px" }}
-                    direction={"row"}
-                    gap={1.5}
-                    justifyContent={"space-between"}
+                    Pay Now
+                  </Button>
+                  <Button
+                    fullWidth
+                    // onClick={handleAddSignature}
+                    disabled={!estimateStatus}
+                    variant="contained"
+                    sx={{
+                      backgroundColor: "#F95500",
+                      color: "#0B0B0B",
+                      height: "44px",
+                      width: { sm: "100%", xs: "187px" },
+                      "&:hover": { backgroundColor: "#F95500" },
+                      "&.Mui-disabled": {
+                        background: "#F95500",
+                      },
+                      textTransform: "capitalize",
+                      borderRadius: 1,
+                      fontSize: { lg: 16, md: 15, xs: 12 },
+                      fontWeight: "bold !important",
+                      padding: {
+                        sm: "10px 16px  !important",
+                        xs: "5px 5px !important",
+                      },
+                    }}
                   >
-                    <Button
-                      fullWidth
-                      variant="contained"
-                      onClick={handleOpenEditModal}
-                      sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
-                        height: "44px",
-                        width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
-                        textTransform: "capitalize",
-                        borderRadius: 1,
-                        fontSize: { lg: 16, md: 15, xs: 12 },
-                        fontWeight: "bold !important",
-                        padding: {
-                          sm: "10px 16px  !important",
-                          xs: "5px 5px !important",
-                        },
-                      }}
-                    >
-                      Pay Now
-                    </Button>
-                    <Button
-                      fullWidth
-                      // onClick={handleAddSignature}
-                      variant="contained"
-                      sx={{
-                        backgroundColor: "#F95500",
-                        color: "#0B0B0B",
-                        height: "44px",
-                        width: { sm: "100%", xs: "187px" },
-                        "&:hover": { backgroundColor: "#F95500" },
-                        textTransform: "capitalize",
-                        borderRadius: 1,
-                        fontSize: { lg: 16, md: 15, xs: 12 },
-                        fontWeight: "bold !important",
-                        padding: {
-                          sm: "10px 16px  !important",
-                          xs: "5px 5px !important",
-                        },
-                      }}
-                    >
-                      Pay Later
-                    </Button>
-                  </Stack>
-                  <Tooltip
-                    title={
-                      data?.signature === null ? "Please signature first!" : ""
-                    }
-                    placement="top"
-                  >
-                    <Button
-                      disabled={loading} // Disable button when loading
-                      onClick={() => generatePDFDocument()}
-                      variant="outlined"
-                      sx={{
-                        fontFamily: '"Inter" !important',
-                        height: "62px",
-                        width: "285px",
-                        borderRadius: "12px",
-                        fontSize: "24px",
-                        fontWeight: 700,
-                        // backgroundColor: "#F95500",
-                        color: "#F95500",
-                        lineHeight: "26px",
-                        borderColor: "#F95500",
-                        "&:hover": {
-                          backgroundColor: "#F95500",
-                          color: "#0B0B0B",
-                          borderColor: "#F95500",
-                        },
-                        "&.Mui-disabled": {
-                          background: "#F95500",
-                        },
-                      }}
-                    >
-                      {loading ? (
-                        <CircularProgress size={24} sx={{ color: "black" }} />
-                      ) : (
-                        "Download PDF Now"
-                      )}
-                    </Button>
-                  </Tooltip>
-                </Box>
-              )}
+                    Pay Later
+                  </Button>
+                </Stack>
+                <Button
+                  disabled={loading || !estimateStatus} // Disable button when loading
+                  onClick={() => generatePDFDocument()}
+                  variant="outlined"
+                  sx={{
+                    fontFamily: '"Inter" !important',
+                    height: "62px",
+                    width: "285px",
+                    borderRadius: "12px",
+                    fontSize: "24px",
+                    fontWeight: 700,
+                    // backgroundColor: "#F95500",
+                    color: "#F95500",
+                    lineHeight: "26px",
+                    borderColor: "#F95500",
+                    "&:hover": {
+                      backgroundColor: "#F95500",
+                      color: "#0B0B0B",
+                      borderColor: "#F95500",
+                    },
+                    "&.Mui-disabled": {
+                      background: "#F95500",
+                    },
+                  }}
+                >
+                  {loading ? (
+                    <CircularProgress size={24} sx={{ color: "black" }} />
+                  ) : (
+                    "Download PDF Now"
+                  )}
+                </Button>
+              </Box>
+              {/* )} */}
             </Box>
           </Box>
         </Box>

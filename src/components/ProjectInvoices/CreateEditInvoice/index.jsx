@@ -459,7 +459,7 @@ const ProjectInvoiceComponent = ({
                       opacity: "70%",
                     }}
                   >
-                    Create new quote page.
+                    Create new quote.
                   </Typography>
                 </Box>
                 {projectState !== "create" ? (

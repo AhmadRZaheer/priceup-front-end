@@ -121,19 +121,8 @@ const CustomizeLandingPage = ({
   showersLocationSettings,
   pdfSettings,
 }) => {
-  console.log(
-    selectedData,
-    "selectedDataselectedData",
-    showerHardwaresList,
-    mirrorHardwaresList,
-    wineCellarHardwaresList,
-    wineCellarLocationSettings,
-    mirrorsLocationSettings,
-    showersLocationSettings,
-    pdfSettings
-  );
   const { id } = useParams();
-
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const signaturePadRef = useRef(null);
   const [totalSum, SetTotalSum] = useState(0);
   const [signatureURL, setSignatureURL] = useState(null);
@@ -462,7 +451,7 @@ const CustomizeLandingPage = ({
             backgroundSize: "cover",
             // px: { md: 12, xs: 0 },
             pt: { md: "50px", xs: 0 },
-            pb: { md: 12, xs: 2 },
+            pb: { md: 12.5, xs: 2 },
             // mt: 3,
             display: "block",
             // flexDirection: { md: "row", xs: "column" },
@@ -475,7 +464,7 @@ const CustomizeLandingPage = ({
           <Box>
             <Box
               className="content-center"
-              sx={{ height: "55vh", justifyContent: "end !important", mb: 3 }}
+              sx={{ height: "55vh", justifyContent: "end !important", mb: '39px' }}
             >
               {/* <Typography
                 variant="h1"
@@ -1146,7 +1135,9 @@ const CustomizeLandingPage = ({
                           data={data}
                           reCalculateTotal={reCalculateTotal}
                           locationSettings={showersLocationSettings}
-                          UpgradeOPtions ={selectedData?.additionalUpgrades?.shower}
+                          UpgradeOPtions={
+                            selectedData?.additionalUpgrades?.shower
+                          }
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1195,7 +1186,9 @@ const CustomizeLandingPage = ({
                           data={data}
                           reCalculateTotal={reCalculateTotal}
                           locationSettings={mirrorsLocationSettings}
-                          UpgradeOPtions ={selectedData?.additionalUpgrades?.mirror}
+                          UpgradeOPtions={
+                            selectedData?.additionalUpgrades?.mirror
+                          }
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1248,7 +1241,9 @@ const CustomizeLandingPage = ({
                           data={data}
                           reCalculateTotal={reCalculateTotal}
                           locationSettings={wineCellarLocationSettings}
-                          UpgradeOPtions ={selectedData?.additionalUpgrades?.wineCellar}
+                          UpgradeOPtions={
+                            selectedData?.additionalUpgrades?.wineCellar
+                          }
                           // showersLocationSettings={showersLocationSettings}
                           // mirrorsLocationSettings={mirrorsLocationSettings}
                           // wineCellarLocationSettings={
@@ -1358,14 +1353,18 @@ const CustomizeLandingPage = ({
           </Box>
         </Container>
       </Box>
-      <ChoiceGCS data={selectedData}  />
+      <ChoiceGCS data={selectedData} />
       {/* <ServiceSection /> */}
       <WarrantySection />
       <LimitationsSection data={selectedData} />
       <ClaimSection />
       <ManainanceSection data={selectedData} />
       <UpgradeOPtions />
-      <AggremantCondition data={selectedData} />
+      <AggremantCondition
+        data={selectedData}
+        acceptTerms={acceptTerms}
+        setAcceptTerms={setAcceptTerms}
+      />
 
       {/* <Container maxWidth="xl" sx={{ pb: 4 }}> */}
       {/* <CustomEditor /> */}
@@ -1633,6 +1632,7 @@ const CustomizeLandingPage = ({
         data={selectedData}
         refetchData={refetchData}
         estimatePdfs={estimatePdfs}
+        acceptTerms={acceptTerms}
       />
       <Box sx={{ bgcolor: "#000000", width: "100%" }}>
         <Box
