@@ -350,7 +350,10 @@ const ShowerSummary = ({
           const priceToRemove = getGlassAddonsCost(
             selectedHardware?.glassAddons
           );
-          if (arrayFilter?.length > 0 || data?.category === EstimateCategory.MIRRORS) {
+          if (
+            arrayFilter?.length > 0 ||
+            data?.category === EstimateCategory.MIRRORS
+          ) {
             const remainingCost = actualCost - priceToRemove;
             const priceToAdd = getGlassAddonsCost(arrayFilter);
             const remainingCost2 = remainingCost + priceToAdd;
@@ -1455,28 +1458,28 @@ const ShowerSummary = ({
             </Box>
           )}
         </Box>
-        <Box sx={{ width: "50%", pt: 0 }}>
-          {glassAddonsList?.length >
+        <Box sx={{ width: "50%", pt: 1 }}>
+          {(glassAddonsList?.length >
             (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) ||
             hardwareAddonsList?.length > 0 ||
-            (glasstypeList?.length > 0 && (
-              <Typography
-                sx={{
-                  fontFamily: '"Poppins" !important',
-                  fontSize: "32px",
-                  fontWeight: 600,
-                  lineHeight: "35px",
-                  width: "80%",
-                }}
-              >
-                {/* <Box component="span" sx={{ color: "#F95500" }}>
+            glasstypeList?.length > 0) && (
+            <Typography
+              sx={{
+                fontFamily: '"Poppins" !important',
+                fontSize: "32px",
+                fontWeight: 600,
+                lineHeight: "35px",
+                width: "80%",
+              }}
+            >
+              {/* <Box component="span" sx={{ color: "#F95500" }}>
               Recommended
             </Box>{" "} */}
-                Available Upgrades:
-              </Typography>
-            ))}
+              Available Upgrades:
+            </Typography>
+          )}
 
-          <Box sx={{ pt: 2 }}>
+          <Box sx={{ pt: 1 }}>
             {glassAddonsList?.length >
               (data?.category !== EstimateCategory.MIRRORS ? 1 : 0) && (
               <Box

@@ -129,7 +129,7 @@ const CustomerInvoicePreview = () => {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            marginTop: { sm: 0, xs: 5 },
+            marginTop: { sm: 0, xs: 0 },
             py: 1.5,
             pr: 2,
           }}
@@ -154,7 +154,7 @@ const CustomerInvoicePreview = () => {
             </NavLink>
             <Box
               sx={{
-                color: { sm: "black", xs: "white" },
+                color:  "black",
                 fontSize: { xs: "20px", sm: "20px" },
                 textAlign: { xs: "start", sm: "center" },
                 fontWeight: 600,
