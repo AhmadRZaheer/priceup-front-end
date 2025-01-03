@@ -286,6 +286,20 @@ export const calculateTotal = (
     totalPrice =
       ((cost * 100) / (selectedContent.modifiedProfitPercentage - 100)) * -1;
   }
+  let discountTotal = totalPrice;
+  if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.unit === "$"
+  ) {
+    discountTotal = totalPrice - selectedContent.discount.value;
+  } else if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.value < 100 &&
+    selectedContent?.discount?.unit === "%"
+  ) {
+    const discountAmount = (totalPrice * selectedContent.discount.value) / 100;
+    discountTotal = totalPrice -  discountAmount;
+  }
 
   return {
     glass: glassPrice,
@@ -295,7 +309,8 @@ export const calculateTotal = (
     misc: misc,
     cost: cost,
     total: totalPrice,
-    profitPercentage: totalPrice > 0 ?  ((totalPrice - cost) * 100) / totalPrice : 0,
+    discountTotal:discountTotal,
+    profitPercentage: discountTotal > 0 ?  ((discountTotal - cost) * 100) / discountTotal : 0,
   };
 };
 
@@ -603,6 +618,7 @@ export const generateObjectForPDFPreview = (
     label: estimateData?.config?.label,
     layout_id: estimateData?.config?.layout_id,
     measurements: estimateData?.config?.measurements,
+    discount:estimateData?.config?.discount,
     pricingFactor: mirrorMiscPricing?.pricingFactorStatus
       ? mirrorMiscPricing?.pricingFactor
       : 1,

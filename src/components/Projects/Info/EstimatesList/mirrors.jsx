@@ -150,6 +150,7 @@ const MirrorEstimatesList = ({
     "Layout",
     "Date quoted",
     "Estimate total",
+    "Discount",
     "Status",
     "Actions",
   ]);

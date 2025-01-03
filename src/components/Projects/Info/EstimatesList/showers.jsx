@@ -150,6 +150,7 @@ const ShowerEstimatesList = ({
     "Layout",
     "Date quoted",
     "Estimate total",
+    "Discount",
     "Status",
     "Actions",
   ]);

@@ -40,6 +40,7 @@ import {
   getisCustomizedDoorWidth,
   setAdditionalFieldsPrice,
   getProjectId,
+  setEstimateDiscountTotal,
 } from "@/redux/estimateCalculations";
 import { useEditEstimates } from "@/utilities/ApiHooks/estimate";
 import Summary from "./summary_dep";
@@ -197,6 +198,10 @@ export const generateEstimatePayload = (
     people: selectedContent?.people,
     hours: selectedContent?.hours,
     userProfitPercentage: selectedContent?.userProfitPercentage,
+    discount : {
+      value:selectedContent?.discount?.value ?? 0,
+      unit:selectedContent?.discount?.unit ?? 0,
+    },
     // cost: Number(estimatesTotal),
     hardwareAddons: [...hardwareAddonsArray],
     sleeveOverCount: selectedContent?.sleeveOverCount,
@@ -357,6 +362,7 @@ export const ShowerReview = ({ setStep }) => {
     dispatch(setLaborPrice(prices.laborPrice));
     dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
     dispatch(setTotal(prices.total));
+    dispatch(setEstimateDiscountTotal(prices.discountTotal));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
   }, [selectedContent]);

@@ -39,6 +39,11 @@ import {
   getisCustomizedDoorWidth,
   getLayoutPerimeter,
   setContent,
+  setEstimateDiscount,
+  getEstimateDiscount,
+  getEstimateDiscountUnit,
+  setEstimateDiscountUnit,
+  getEstimateDiscountTotal,
 } from "@/redux/estimateCalculations";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -60,7 +65,7 @@ import {
 } from "@/utilities/estimates";
 import GrayEyeIcon from "@/Assets/eye-gray-icon.svg";
 import { KeyboardArrowDownOutlined } from "@mui/icons-material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomToggle from "@/components/ui-components/Toggle";
 import PDFPreviewDrawer from "@/pages/PDFPreview/PDFDrawer";
 import {
@@ -74,6 +79,8 @@ import {
   getProjectId,
 } from "@/redux/estimateSlice";
 import { useSearchParams } from "react-router-dom";
+import ChangeCircleOutlinedIcon from "@mui/icons-material/ChangeCircleOutlined";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const Summary = ({ setStep }) => {
   const [searchParams] = useSearchParams();
@@ -87,6 +94,9 @@ const Summary = ({ setStep }) => {
   const laborPrice = useSelector(getLaborTotal);
   const additionalFieldsPrice = useSelector(getAdditionalFieldsTotal);
   const userProfitPercentage = useSelector(getUserProfitPercentage);
+  const estimateDiscount = useSelector(getEstimateDiscount);
+  const estimateDiscountTotal = useSelector(getEstimateDiscountTotal);
+  const estimateDiscountUnit = useSelector(getEstimateDiscountUnit);
   const doorWidth = useSelector(getDoorWidth);
   const doorWeight = useSelector(getDoorWeight);
   const panelWeight = useSelector(getPanelWeight);
@@ -124,8 +134,21 @@ const Summary = ({ setStep }) => {
     { title: "Gross Profit Margin", active: true },
   ]);
 
+  // useEffect(() => {
+  //   if (estimateDiscount > 0 && estimateDiscountUnit === "$") {
+  //     setDiscountAmount(totalPrice - estimateDiscount);
+  //   } else if (
+  //     estimateDiscount > 0 &&
+  //     estimateDiscount < 100 &&
+  //     estimateDiscountUnit === "%"
+  //   ) {
+  //     const discountAmount = (totalPrice * estimateDiscount) / 100;
+  //     setDiscountAmount(totalPrice - discountAmount);
+  //   }
+  // }, [estimateDiscount, estimateDiscountUnit, totalPrice]);
+
   //drawerHandleClick
-  const drawerHandleClick = () => {
+  const drawerHandleClick = () => {   
     const item = generateObjectForPDFRuntime(
       {
         estimateState,
@@ -209,8 +232,24 @@ const Summary = ({ setStep }) => {
       dispatch(setUserProfitPercentage(Number(event.target.value)));
     }
   };
+  const handleSetDiscount = (event) => {
+    if (
+      Number(event.target.value) <
+      (estimateDiscountUnit === "%" ? 100 : totalPrice)
+    ) {
+      dispatch(setEstimateDiscount(Number(event.target.value)));
+    }
+  };
+  const handleUnitChange = () => {
+    const data = estimateDiscountUnit === "%" ? "$" : "%";
+    dispatch(setEstimateDiscountUnit(data));
+    dispatch(setEstimateDiscount(0));
+  };
   const resetUserProfit = () => {
     dispatch(setUserProfitPercentage(0));
+  };
+  const resetDiscount = () => {
+    dispatch(setEstimateDiscount(0));
   };
 
   const glassDetails = getGlassTypeDetailsByThickness(
@@ -483,9 +522,22 @@ const Summary = ({ setStep }) => {
                             <Typography className="text-xs-ragular-bold">
                               Total Price:
                             </Typography>
-                            <Typography className="text-xs-ragular">
+                            <Typography
+                              className="text-xs-ragular"
+                              sx={{
+                                textDecoration:
+                                  estimateDiscountTotal !== totalPrice
+                                    ? "line-through"
+                                    : "auto",
+                              }}
+                            >
                               ${totalPrice?.toFixed(2) || 0}
                             </Typography>
+                            {estimateDiscountTotal !== totalPrice && (
+                              <Typography className="text-xs-ragular">
+                                ${estimateDiscountTotal?.toFixed(2) || 0}
+                              </Typography>
+                            )}
                           </Box>
                         </Box>
                       )}
@@ -858,9 +910,22 @@ const Summary = ({ setStep }) => {
                         <Typography className="text-xs-ragular-bold">
                           Gross Total:
                         </Typography>
-                        <Typography className="text-xs-ragular">
+                        <Typography
+                          className="text-xs-ragular"
+                          sx={{
+                            textDecoration:
+                              estimateDiscountTotal !== totalPrice
+                                ? "line-through"
+                                : "auto",
+                          }}
+                        >
                           ${totalPrice?.toFixed(2) || 0}
                         </Typography>
+                        {estimateDiscountTotal !== totalPrice && (
+                          <Typography className="text-xs-ragular">
+                            ${estimateDiscountTotal?.toFixed(2) || 0}
+                          </Typography>
+                        )}
                       </Box>
                       <Box>
                         <Typography className="text-xs-ragular-bold">
@@ -887,11 +952,12 @@ const Summary = ({ setStep }) => {
                           display: "flex",
                           alignItems: "center",
                           gap: 1,
-                          width: "93px",
+                          // width: "93px",
                           padddingY: 4,
                         }}
                       >
                         <TextField
+                          fullWidth
                           className="custom-textfield-purple"
                           sx={{
                             "& input": {
@@ -923,7 +989,121 @@ const Summary = ({ setStep }) => {
                         variant="contained"
                         onClick={resetUserProfit}
                         sx={{
-                          width: "77px",
+                          width: "97px",
+                          backgroundColor: "#8477da",
+                          gap: 0.6,
+                          "&:hover": {
+                            backgroundColor: "#8477da",
+                          },
+                          ":disabled": {
+                            bgcolor: "#c2c2c2",
+                          },
+                        }}
+                      >
+                        <RestartAltIcon /> Reset
+                      </Button>
+                      {/* <Box sx={{ gap: 2 }}> */}
+                      <Typography className="text-xs-samibold">
+                        Discount:
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: "100%",
+                        }}
+                      >
+                        <Box sx={{ display: "flex" }}>
+                          {" "}
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1,
+                              width: "100%",
+                              padddingY: 4,
+                            }}
+                          >
+                            <TextField
+                              fullWidth
+                              className="custom-textfield-purple"
+                              sx={{
+                                "& .MuiOutlinedInput-root": {
+                                  borderRadius: "0px !important",
+                                },
+                                "& input": {
+                                  padding: "10px 0px 10px 10px !important",
+                                },
+                              }}
+                              type="number"
+                              InputProps={{
+                                style: {
+                                  color: "black",
+                                  paddingRight: "10px !important",
+                                  borderRadius: "0px !important",
+                                },
+                                inputProps: {
+                                  min: 0,
+                                  max:
+                                    estimateDiscountUnit === "%" ? 100 : 999999,
+                                },
+                                endAdornment: estimateDiscountUnit === "%" && (
+                                  <> %</>
+                                ),
+                                startAdornment: estimateDiscountUnit !==
+                                  "%" && <>$</>,
+                              }}
+                              variant="outlined"
+                              size="small"
+                              value={
+                                estimateDiscount > 0 ? estimateDiscount : ""
+                              }
+                              onChange={(event) => handleSetDiscount(event)}
+                            />
+                          </Box>
+                          <Button
+                            variant="outlined"
+                            sx={{
+                              borderColor: "#8477DA",
+                              background: "#F6F5FF",
+                              color: "#8477DA",
+                              p: "0px 0px !important",
+                              minWidth: "32px",
+                              borderRadius: "0px 4px 4px 0px !important",
+                              ":hover": {
+                                background: "#F6F5FF",
+                                // color: "white",
+                                borderColor: "#8477DA",
+                              },
+                            }}
+                            onClick={handleUnitChange}
+                          >
+                            <ChangeCircleOutlinedIcon />
+                          </Button>
+                        </Box>
+                        {/* <Button
+                          variant="outlined"
+                          sx={{
+                            borderColor: "#8477DA",
+                            color: "#8477DA",
+                            p: "6px 8px !important",
+                            minWidth: "40px",
+                            ":hover": {
+                              borderColor: "#8477DA",
+                            },
+                          }}
+                        >
+                          <RestartAltIcon />
+                        </Button> */}
+                      </Box>
+
+                      <Button
+                        disabled={
+                          estimateDiscount === 0 || estimateDiscount === ""
+                        }
+                        variant="contained"
+                        onClick={resetDiscount}
+                        sx={{
+                          width: "97px",
+                          gap: 0.6,
                           backgroundColor: "#8477da",
                           "&:hover": {
                             backgroundColor: "#8477da",
@@ -933,8 +1113,9 @@ const Summary = ({ setStep }) => {
                           },
                         }}
                       >
-                        Reset
+                        <RestartAltIcon /> Reset
                       </Button>
+                      {/* </Box> */}
                       <Divider sx={{ borderColor: "#D4DBDF" }} />
                       <PDFPreviewDrawer handleClick={drawerHandleClick} />
                     </Stack>

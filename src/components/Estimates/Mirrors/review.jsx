@@ -34,6 +34,7 @@ import {
   getSelectedContent,
   getSqftArea,
   resetNotifications,
+  setEstimateDiscountTotal,
   setInputContent,
   setPricing,
   setSelectedContent,
@@ -115,6 +116,10 @@ export const generateEstimatePayload = (
     // doubleDuplex: selectedContent.doubleDuplex,
     // tripleDuplex: selectedContent.tripleDuplex,
     modifiedProfitPercentage: selectedContent.modifiedProfitPercentage,
+    discount : {
+      value:selectedContent?.discount?.value ?? 0,
+      unit:selectedContent?.discount?.unit ?? 0,
+    },
     additionalFields: [...additionalFieldsArray],
     people: selectedContent.people,
     hours: selectedContent.hours,
@@ -235,6 +240,7 @@ export const MirrorReview = ({ setStep }) => {
       measurements
     );
     dispatch(setPricing(prices));
+    dispatch(setEstimateDiscountTotal(prices?.discountTotal));
   }, [selectedContent]);
 
   useEffect(() => {

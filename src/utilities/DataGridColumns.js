@@ -21,14 +21,14 @@ export const EstimatesColumns = (
       field: "Creator",
       headerClassName: "customHeaderClass",
       sortable: false,
-      flex: 2.1,
+      flex: 2,
       renderCell: (params) => {
         return (
           <>
             {params?.row?.creatorData ? (
               <Box
                 className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
@@ -261,13 +261,13 @@ export const EstimatesColumns = (
       sortable: false,
       flex: 1,
       renderCell: (params) => {
-        const layoutName = params?.row?.category === EstimateCategory.MIRRORS ? 'Mirror'  : params?.row?.settings?.name ?? "Custom";
+        const layoutName =
+          params?.row?.category === EstimateCategory.MIRRORS
+            ? "Mirror"
+            : params?.row?.settings?.name ?? "Custom";
         return (
           <>
-            <Tooltip
-              placement="top-start"
-              title={layoutName}
-            >
+            <Tooltip placement="top-start" title={layoutName}>
               <Typography
                 sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
               >
@@ -305,6 +305,38 @@ export const EstimatesColumns = (
             <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
               ${params?.row?.cost?.toFixed(2) || 0}
             </Typography>
+          </>
+        );
+      },
+    },
+    {
+      field: "Discount",
+      headerClassName: "customHeaderClass",
+      sortable: false,
+      flex: 0.7,
+      renderCell: (params) => {
+        console.log(params?.row, "params?.row");
+        return (
+          <>
+            {params?.row?.config?.discount?.value &&
+            params?.row?.config?.discount?.value > 0 ? (
+              <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+                {params?.row?.config?.discount?.unit === "$" && "$"}
+                {params?.row?.config?.discount?.value ?? 0}
+                {params?.row?.config?.discount?.unit === "%" && "%"}
+              </Typography>
+            ) : (
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  pl:0.4
+                  // justifyContent: "center",
+                }}
+              >
+                ---
+              </Box>
+            )}
           </>
         );
       },
@@ -522,7 +554,7 @@ export const ProjectsColumns = (dropdownActions) => {
             {params?.row?.creatorData ? (
               <Box
                 className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
@@ -762,7 +794,9 @@ export const ProjectsColumns = (dropdownActions) => {
           <>
             <Tooltip title={params?.row?.created_source} placement="top">
               <Typography className="projectRowTxt" sx={{ py: 1 }}>
-                {params?.row?.created_source ? params?.row?.created_source: 'Application' }
+                {params?.row?.created_source
+                  ? params?.row?.created_source
+                  : "Application"}
               </Typography>
             </Tooltip>
           </>
@@ -852,7 +886,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
             {params?.row?.customer ? (
               <Box
                 className="project-cellWrap"
-              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+                // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
               >
                 <div className="customerImg">
                   <DefaultImage
@@ -1089,7 +1123,7 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
         );
       },
     },
-   
+
     {
       field: "Status",
       headerClassName: "ProjectsColumnsHeaderClass",
@@ -1098,10 +1132,16 @@ export const ProjectsInvoiceColumns = (dropdownActions) => {
       renderCell: (params) => {
         return (
           <Typography
-          className={params.row.status === 'Paid' ? "status-active" : params.row.status === 'Voided' ? 'status-voided' : "status-inActive"}
-        >
-          {params.row.status}
-        </Typography>
+            className={
+              params.row.status === "Paid"
+                ? "status-active"
+                : params.row.status === "Voided"
+                ? "status-voided"
+                : "status-inActive"
+            }
+          >
+            {params.row.status}
+          </Typography>
         );
       },
     },
@@ -1409,10 +1449,10 @@ export const teamColumns = [
           <Typography className="new-table-text">
             {params.row.lastQuoted
               ? new Date(params.row.lastQuoted).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
               : "-"}
           </Typography>
         </>
@@ -1600,7 +1640,9 @@ export const CustomerColumns = [
     renderCell: (params) => {
       return (
         <>
-          <Typography className="projectRowTxt">{params.row.email=== "" ? "---" :params.row.email}</Typography>
+          <Typography className="projectRowTxt">
+            {params.row.email === "" ? "---" : params.row.email}
+          </Typography>
         </>
       );
     },
@@ -1631,7 +1673,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.address=== "" ? "---" : params.row.address}
+            {params.row.address === "" ? "---" : params.row.address}
           </Typography>
         </>
       );
@@ -1647,7 +1689,7 @@ export const CustomerColumns = [
       return (
         <>
           <Typography className="projectRowTxt">
-            {params.row.lastQuotedOn=== "" ? "---" :params.row.lastQuotedOn}
+            {params.row.lastQuotedOn === "" ? "---" : params.row.lastQuotedOn}
           </Typography>
         </>
       );
@@ -1859,24 +1901,22 @@ export const userColumnsHardware = [
     sortable: false,
     flex: 6,
     renderHeader: (params) => (
-      <Box sx={{ pl: '14px' }}>
-        {params.colDef.headerName}
-      </Box>
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
     ),
 
     renderCell: (params) => {
       return (
-        <Box sx={{ pl: '14px'}}>
-        <div className="user-cellWrap">
-          <div className="customerImg">
-            <DefaultImage
-              image={params.row.image}
-              name={params.row.name}
-              type={5}
-            />
+        <Box sx={{ pl: "14px" }}>
+          <div className="user-cellWrap">
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">{params.row.name}</div>
           </div>
-          <div className="new-customerNameTable">{params.row.name}</div>
-        </div>
         </Box>
       );
     },
@@ -1890,24 +1930,22 @@ export const WineFinishesColumns = [
     sortable: false,
     flex: 6,
     renderHeader: (params) => (
-      <Box sx={{ pl: '14px' }}>
-        {params.colDef.headerName}
-      </Box>
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
     ),
 
     renderCell: (params) => {
       return (
-        <Box sx={{ pl: '14px'}}>
-        <div className="user-cellWrap">
-          <div className="customerImg">
-            <DefaultImage
-              image={params.row.image}
-              name={params.row.name}
-              type={5}
-            />
+        <Box sx={{ pl: "14px" }}>
+          <div className="user-cellWrap">
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">{params.row.name}</div>
           </div>
-          <div className="new-customerNameTable">{params.row.name}</div>
-        </div>
         </Box>
       );
     },
@@ -1922,29 +1960,26 @@ export const GlassAddonsColumn = [
     sortable: false,
     flex: 3,
     renderHeader: (params) => (
-      <Box sx={{ pl: '14px' }}>
-        {params.colDef.headerName}
-      </Box>
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
     ),
 
     renderCell: (params) => {
       return (
-        <Box sx={{ pl: '14px' }}>
-        <div className="user-cellWrap">
-          <div className="customerImg">
-            <DefaultImage
-              image={params.row.image}
-              name={params.row.name}
-              type={5}
-            />
+        <Box sx={{ pl: "14px" }}>
+          <div className="user-cellWrap">
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">{params.row.name}</div>
           </div>
-          <div className="new-customerNameTable">{params.row.name}</div>
-        </div>
         </Box>
       );
     },
   },
- 
 ];
 export const GlassTypeColumn = [
   {
@@ -1954,29 +1989,27 @@ export const GlassTypeColumn = [
     sortable: false,
     flex: 4,
     renderHeader: (params) => (
-      <Box sx={{ pl: '14px' }}>
-        {params.colDef.headerName}
-      </Box>
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
     ),
 
     renderCell: (params) => {
       return (
-        <Box sx={{ pl: '14px'}}>
-        <div className="user-cellWrap">
-          <div className="customerImg">
-            <DefaultImage
-              image={params.row.image}
-              name={params.row.name}
-              type={5}
-            />
+        <Box sx={{ pl: "14px" }}>
+          <div className="user-cellWrap">
+            <div className="customerImg">
+              <DefaultImage
+                image={params.row.image}
+                name={params.row.name}
+                type={5}
+              />
+            </div>
+            <div className="new-customerNameTable">{params.row.name}</div>
           </div>
-          <div className="new-customerNameTable">{params.row.name}</div>
-        </div>
         </Box>
       );
     },
   },
-]
+];
 
 export const userRowsHardware = [
   {
@@ -2042,54 +2075,66 @@ export const rowsHardwareHandle = [
   },
 ];
 
-export const HardWareColumns =[
-    {
-      field: "name",
-      headerName: "Finish Type",
-      headerClassName: "showerHardwareHeader",
-      flex: 1.6,
-      sortable: false,
-      renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
+export const HardWareColumns = [
+  {
+    field: "name",
+    headerName: "Finish Type",
+    headerClassName: "showerHardwareHeader",
+    flex: 1.6,
+    sortable: false,
+    renderHeader: (params) => (
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
+    ),
+    renderCell: (params) => {
+      return (
+        <Box>
+          <Typography
+            sx={{
+              py: 1,
+              fontSize: "14px",
+              fontWeight: 700,
+              lineHeight: "19.12px",
+              color: "#000000",
+              pl: "14px",
+            }}
+          >
+            {params?.row?.name}
+          </Typography>
         </Box>
-      ),
-      renderCell: (params) => {
-        return (
-          <Box>
-            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '14px' }}>
-              {params?.row?.name}
-            </Typography>
-          </Box>
-        );
-      },
+      );
     },
-
-  ];
-export const WineHardWareColumns =[
-    {
-      field: "name",
-      headerName: "Finish Type",
-      headerClassName: "showerHardwareHeader",
-      flex: 1.6,
-      sortable: false,
-      renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
+  },
+];
+export const WineHardWareColumns = [
+  {
+    field: "name",
+    headerName: "Finish Type",
+    headerClassName: "showerHardwareHeader",
+    flex: 1.6,
+    sortable: false,
+    renderHeader: (params) => (
+      <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
+    ),
+    renderCell: (params) => {
+      return (
+        <Box>
+          <Typography
+            sx={{
+              py: 1,
+              fontSize: "14px",
+              fontWeight: 700,
+              lineHeight: "19.12px",
+              color: "#000000",
+              pl: "14px",
+            }}
+          >
+            {params?.row?.name}
+          </Typography>
         </Box>
-      ),
-      renderCell: (params) => {
-        return (
-          <Box>
-            <Typography sx={{ py: 1, fontSize: '14px', fontWeight: 700, lineHeight: '19.12px', color: "#000000", pl: '14px' }}>
-              {params?.row?.name}
-            </Typography>
-          </Box>
-        );
-      },
+      );
     },
-
-  ];
+  },
+];
 export const MirrorsHardWareColumns = () => {
   return [
     {
@@ -2099,42 +2144,39 @@ export const MirrorsHardWareColumns = () => {
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>
-          <Box
-            className="project-cellWrap" >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box className="project-cellWrap">
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
@@ -2169,49 +2211,46 @@ export const MirrorsGlassAddons = () => {
       flex: 1.6,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>
-          <Box
-            className="project-cellWrap"
-          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-          >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+            >
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
     },
-
   ];
 };
 export const MirrorsEdgeWork = () => {
@@ -2223,49 +2262,46 @@ export const MirrorsEdgeWork = () => {
       flex: 1.2,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>
-          <Box
-            className="project-cellWrap"
-          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-          >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+            >
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
     },
-
   ];
 };
 export const MirrorsGlassType = () => {
@@ -2277,49 +2313,46 @@ export const MirrorsGlassType = () => {
       flex: 1.3,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>          
-          <Box
-            className="project-cellWrap"
-          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-          >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+            >
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
     },
-
   ];
 };
 export const WineMirrorsGlassType = () => {
@@ -2331,49 +2364,46 @@ export const WineMirrorsGlassType = () => {
       flex: 1.3,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>          
-          <Box
-            className="project-cellWrap"
-          // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
-          >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box
+              className="project-cellWrap"
+              // sx={{ pl: 1.2, pr: 2, py: 0.3, }}
+            >
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
     },
-
   ];
 };
 export const WineMirrorsGlassAddon = () => {
@@ -2385,47 +2415,42 @@ export const WineMirrorsGlassAddon = () => {
       flex: 1.3,
       sortable: false,
       renderHeader: (params) => (
-        <Box sx={{ pl: '14px' }}>
-          {params.colDef.headerName}
-        </Box>
+        <Box sx={{ pl: "14px" }}>{params.colDef.headerName}</Box>
       ),
       renderCell: (params) => {
         return (
-          <Box  sx={{ pl: '14px', }}>          
-          <Box
-            className="project-cellWrap"
-          >
-            <div className="customerImg">
-              <DefaultImage
-                image={params.row.image}
-                name={params.row.name}
-                type={5}
-              />
-            </div>
-            <div className="new-customerNameTable">
-              <Box
-                className="new-userNameTable"
-                sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
-              >
-                <Typography
+          <Box sx={{ pl: "14px" }}>
+            <Box className="project-cellWrap">
+              <div className="customerImg">
+                <DefaultImage
+                  image={params.row.image}
+                  name={params.row.name}
+                  type={5}
+                />
+              </div>
+              <div className="new-customerNameTable">
+                <Box
                   className="new-userNameTable"
-                  sx={{
-                    color: "#000000",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    width: { lg: "100%", xs: "93px" },
-                  }}
+                  sx={{ maxWidth: { xl: "100%", xs: "95%" } }}
                 >
-                  {params.row.name}
-                </Typography>
-              </Box>
-            </div>
-          </Box>
+                  <Typography
+                    className="new-userNameTable"
+                    sx={{
+                      color: "#000000",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      width: { lg: "100%", xs: "93px" },
+                    }}
+                  >
+                    {params.row.name}
+                  </Typography>
+                </Box>
+              </div>
+            </Box>
           </Box>
         );
       },
     },
-
   ];
 };

@@ -254,6 +254,7 @@ export default function ExistingTable({ searchValue, statusValue, dateValue }) {
     "Layout",
     "Data quoted",
     "Estimated total",
+    "Discount",
     "Status",
     "Actions",
   ]);

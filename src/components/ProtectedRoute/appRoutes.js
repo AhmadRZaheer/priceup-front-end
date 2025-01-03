@@ -195,6 +195,17 @@ const AppRoutes = () => {
             <Route path="review" element={<EstimateReview />} />
             <Route path=":id/pdf-preview" element={<PDFPreview />} />
           </Route>
+          <Route path="/invoices/">
+            <Route index element={<Invoices />} />
+            <Route path="create" element={<ProjectInvoiceCreate />} />
+            <Route path="edit" element={<ProjectInvoiceEdit />} />
+            <Route path="new-invoice" element={<CreateNewInvoice />} />
+            <Route
+              path=":id/customer-preview"
+              element={<CustomerInvoicePreview />}
+            />
+            <Route path=":id" element={<ProjectInvoiceDetail />} />
+          </Route>
           <Route path="*" element={<Estimates />} />
         </Route>
       ) : isSuperAdmin(decodedToken) ? (
@@ -225,8 +236,11 @@ const AppRoutes = () => {
       ) : (
         ""
       )}
-      
-      <Route path="/customer-landing-page-preview/:id" element={<CustomLandingPage />} />
+
+      <Route
+        path="/customer-landing-page-preview/:id"
+        element={<CustomLandingPage />}
+      />
       {/* <Route path="*" element={<Navigate to={getHomepageURL()} />} /> */}
       <Route path="/*" element={<LandingPage />} />
       <Route path="/estimate-form" element={<EstimateForm />} />

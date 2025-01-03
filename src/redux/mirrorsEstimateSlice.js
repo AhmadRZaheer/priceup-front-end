@@ -1,4 +1,7 @@
-import { mirrorHardwareTypes, notificationsVariant } from "@/utilities/constants";
+import {
+  mirrorHardwareTypes,
+  notificationsVariant,
+} from "@/utilities/constants";
 import { createSlice } from "@reduxjs/toolkit";
 export const getEstimateMeasurements = (state) =>
   state.mirrorsEstimate.measurements;
@@ -14,8 +17,13 @@ export const getAdditionalFields = (state) =>
   state.mirrorsEstimate.content.additionalFields;
 export const getModifiedProfitPercentage = (state) =>
   state.mirrorsEstimate.content.modifiedProfitPercentage;
-export const getNotifications = (state) =>
-  state.mirrorsEstimate.notifications;
+export const getEstimateDiscountValue = (state) =>
+  state.mirrorsEstimate.content.discount.value;
+export const getEstimateDiscountUnit = (state) =>
+  state.mirrorsEstimate.content.discount.unit;
+export const getEstimateDiscountTotal = (state) =>
+  state.mirrorsEstimate.content.discount.total;
+export const getNotifications = (state) => state.mirrorsEstimate.notifications;
 
 const initialState = {
   estimateId: "",
@@ -23,7 +31,7 @@ const initialState = {
   estimateState: "", // 'create' || 'edit'
   sqftArea: 0,
   selectedItem: null,
-  projectId:null,
+  projectId: null,
   pricing: {
     labor: 0,
     glass: 0,
@@ -33,6 +41,7 @@ const initialState = {
     profitPercentage: 0,
     cost: 0,
     total: 0,
+    discountTotal:0,
   },
   notifications: {
     glassTypeNotAvailable: {
@@ -50,6 +59,11 @@ const initialState = {
   },
   content: {
     modifiedProfitPercentage: 0,
+    discount: {
+      value: 0,
+      unit: "%",
+      total: 0,
+    },
     additionalFields: [],
     glassType: {
       item: null,
@@ -108,7 +122,7 @@ const mirrorsEstimateSlice = createSlice({
     setCounters: (state, action) => {
       const { type, value, item } = action.payload;
       if (["hardwares"].includes(type)) {
-      let existing = state.content.hardwares;
+        let existing = state.content.hardwares;
         const foundIndex = existing.findIndex(
           (row) => row?.item?.slug === item.slug
         );
@@ -143,6 +157,18 @@ const mirrorsEstimateSlice = createSlice({
     setModifiedProfitPercentage: (state, action) => {
       const { payload } = action;
       state.content.modifiedProfitPercentage = payload;
+    },
+    setEstimateDiscountValue: (state, action) => {
+      const { payload } = action;
+      state.content.discount.value = payload;
+    },
+    setEstimateDiscountUnit: (state, action) => {
+      const { payload } = action;
+      state.content.discount.unit = payload;
+    },
+    setEstimateDiscountTotal: (state, action) => {
+      const { payload } = action;
+      state.content.discount.total = payload;
     },
     setSelectedContent: (state, action) => {
       const { type, item } = action.payload;
@@ -256,10 +282,14 @@ const mirrorsEstimateSlice = createSlice({
           item: edgeWork,
           thickness: estimateData?.config?.edgeWork?.thickness,
         },
-        glassAddons: glassAddons ? [...glassAddons] : [], 
+        glassAddons: glassAddons ? [...glassAddons] : [],
         hardwares: hardwares ? [...hardwares] : [],
         modifiedProfitPercentage:
           estimateData?.config?.modifiedProfitPercentage,
+          discount : {
+            value:estimateData?.config?.discount?.value ?? 0,
+            unit:estimateData?.config?.discount?.unit ?? '%',
+          },  
         additionalFields: estimateData?.config?.additionalFields,
         // floatingSize: estimateData?.config?.floatingSize ?? null,
         // sandBlasting: estimateData?.config?.sandBlasting,
@@ -300,10 +330,13 @@ export const {
   setSelectedItem,
   initializeStateForEditQuote,
   setModifiedProfitPercentage,
+  setEstimateDiscountValue,
+  setEstimateDiscountUnit,
+  setEstimateDiscountTotal,
   setMultipleNotifications,
   resetNotifications,
   setMirrorProjectId,
-  setCounters
+  setCounters,
 } = mirrorsEstimateSlice.actions;
 
 export default mirrorsEstimateSlice.reducer;
