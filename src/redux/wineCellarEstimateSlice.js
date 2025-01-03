@@ -30,6 +30,12 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
     state.wineCellarsEstimate.additionalFieldsPrice;
   export const getUserProfitPercentage = (state) =>
     state.wineCellarsEstimate.content.userProfitPercentage;
+  export const getEstimateDiscountValue = (state) =>
+    state.wineCellarsEstimate.content.discount.value;
+  export const getEstimateDiscountUnit = (state) =>
+    state.wineCellarsEstimate.content.discount.unit;
+  export const getEstimateDiscountTotal = (state) =>
+    state.wineCellarsEstimate.content.discount.total;
   export const getDoorWeight = (state) => state.wineCellarsEstimate.doorWeight;
   export const getPanelWeight = (state) => state.wineCellarsEstimate.panelWeight;
   export const getReturnWeight = (state) => state.wineCellarsEstimate.returnWeight;
@@ -183,6 +189,11 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       hardwareAddons: [],
       mountingState: "channel",
       userProfitPercentage: 0,
+      discount: {
+        value: 0,
+        unit: "%",
+        total:0,
+      },
     },
   };
   
@@ -216,6 +227,18 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
       },
       setUserProfitPercentage: (state, action) => {
         state.content.userProfitPercentage = action.payload;
+      },
+      setEstimateDiscountValue: (state, action) => {
+        const { payload } = action;
+        state.content.discount.value = payload;
+      },
+      setEstimateDiscountUnit: (state, action) => {
+        const { payload } = action;
+        state.content.discount.unit = payload;
+      },
+      setEstimateDiscountTotal: (state, action) => {
+        const { payload } = action;
+        state.content.discount.total = payload;
       },
       setLayoutArea: (state, action) => {
         state.sqftArea = action.payload;
@@ -1311,6 +1334,10 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
           polish: estimateData?.config?.polish,
           hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
           userProfitPercentage: estimateData?.config?.userProfitPercentage,
+          discount : {
+            value:estimateData?.config?.discount?.value ?? 0,
+            unit:estimateData?.config?.discount?.unit ?? '%',
+          },
           additionalFields: estimateData?.config?.additionalFields,
         };
         state.quoteState = quoteState.EDIT;
@@ -1762,6 +1789,9 @@ import { getHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
     setQuoteState,
     updateMeasurements,
     setUserProfitPercentage,
+    setEstimateDiscountValue,
+    setEstimateDiscountUnit,
+    setEstimateDiscountTotal,
     setLayoutArea,
     setLayoutPerimeter,
     setDoorWeight,

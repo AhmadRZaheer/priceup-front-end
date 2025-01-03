@@ -631,6 +631,7 @@ export const generateObjectForPDFPreview = (
     label: estimateData?.config?.label,
     layout_id: estimateData?.config?.layout_id,
     measurements: estimateData?.config?.measurements,
+    discount:estimateData?.config?.discount,
     pricingFactor: showerMiscPricing?.pricingFactorStatus
       ? showerMiscPricing?.pricingFactor
       : 1,
@@ -800,6 +801,7 @@ export const generateObjectForPDFRuntime = (
     pricingFactor: showersLocationSettings?.miscPricing?.pricingFactor,
     panelWeight: showerState.panelWeight,
     doorWeight: showerState.doorWeight,
+    discount:showerState?.content?.discount,
     returnWeight: showerState.returnWeight,
   };
 };
@@ -835,6 +837,7 @@ export const generateObjForMirrorPDFRuntime = (
     singleOutletCutout: mirrorState?.content?.singleOutletCutout,
     sqftArea: mirrorState?.sqftArea,
     tripleOutletCutout: mirrorState?.content?.tripleOutletCutout,
+    discount:mirrorState?.content?.discount,
     updatedAt: new Date(),
   };
 };

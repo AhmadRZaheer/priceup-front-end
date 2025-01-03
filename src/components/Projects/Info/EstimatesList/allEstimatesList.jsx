@@ -231,6 +231,7 @@ const AllEstimatesList = ({
     "Layout",
     "Date quoted",
     "Estimate total",
+    "Discount",
     "Status",
     "Actions",
   ]);

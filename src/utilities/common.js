@@ -347,6 +347,20 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     //   total = total + price;
     // }
   }
+  let discountTotal = total;
+  if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.unit === "$"
+  ) {
+    discountTotal = total - selectedContent.discount.value;
+  } else if (
+    selectedContent?.discount?.value > 0 &&
+    selectedContent?.discount?.value < 100 &&
+    selectedContent?.discount?.unit === "%"
+  ) {
+    const discountAmount = (total * selectedContent.discount.value) / 100;
+    discountTotal = total - discountAmount;
+  }
 
   return {
     hardwarePrice: hardwareTotals,
@@ -359,8 +373,10 @@ export const calculateTotal = (selectedContent, priceBySqft, estimatesData) => {
     doorLaborPrice: doorLaborPrice,
     additionalFieldPrice: additionalFieldPrice,
     total: total,
+    discountTotal: discountTotal,
     cost: cost,
-    profit: total > 0 ? ((total - cost) * 100) / total : 0,
+    profit:
+      discountTotal > 0 ? ((discountTotal - cost) * 100) / discountTotal : 0,
   };
 };
 
@@ -1348,12 +1364,9 @@ export const estimateTotalWithCategory = (estimatelist) => {
     (data, index) => data?.category === EstimateCategory.WINECELLARS
   );
   const totalEstimate = estimatelist?.length;
-  const totalPrice = estimatelist?.reduce(
-    (accumulator, currentItem) => {
-      return accumulator + currentItem.pricing.total;
-    },
-    0
-  );
+  const totalPrice = estimatelist?.reduce((accumulator, currentItem) => {
+    return accumulator + currentItem.pricing.total;
+  }, 0);
   return {
     totalShowers: totalShowers ?? [],
     totalMirrors: totalMirrors ?? [],
@@ -1361,4 +1374,16 @@ export const estimateTotalWithCategory = (estimatelist) => {
     totalEstimate: totalEstimate ?? 0,
     totalPrice: totalPrice ?? 0,
   };
+};
+
+// Calculate Discount
+export const calculateDiscount = (total, discountValue, discountUnit) => {
+  let discountTotal = total;
+  if (discountValue > 0 && discountUnit === "$") {
+    discountTotal = total - discountValue;
+  } else if (discountValue > 0 && discountValue < 100 && discountUnit === "%") {
+    const discountAmount = (total * discountValue) / 100;
+    discountTotal = total - discountAmount;
+  }
+  return discountTotal;
 };

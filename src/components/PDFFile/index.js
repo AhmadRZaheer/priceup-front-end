@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import GCS_logo from "../../Assets/GCS-logo.png";
 import CustomImage from "../../Assets/customlayoutimage.png";
-import { backendURL } from "../../utilities/common";
+import { backendURL, calculateDiscount } from "../../utilities/common";
 import { renderMeasurementSides } from "../../utilities/estimates";
 import { EstimateCategory, quoteState } from "../../utilities/constants";
 import { dimensionsSection, fabricationSection, pdfFields, pricingSection, summarySection } from "@/utilities/pdfConfigs";
@@ -149,9 +149,20 @@ const PDFFile = ({controls,data}) => {
             <Text style={{fontSize:'14px'}}>Return Weight:</Text>
             <Text style={{fontSize:'12px'}}>{data?.quote?.returnWeight}</Text>
            </View>}
-           {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
-            <Text style={{fontSize:'14px'}}>Total:</Text>
+           {(data?.quote?.discount?.value && data?.quote?.discount?.value > 0 ) && 
+           <>
+           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+            <Text style={{fontSize:'14px'}}>Sub total:</Text>
             <Text style={{fontSize:'12px'}}> ${data?.quote?.cost?.toFixed(2) || 0}</Text>
+           </View>
+           <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',}}>
+            <Text style={{fontSize:'14px'}}>Discount:</Text>
+            <Text style={{fontSize:'12px'}}>{data?.quote?.discount?.unit === '$' && '$'}{data?.quote?.discount?.value || 0}{data?.quote?.discount?.unit === '%' && '%'}</Text>
+           </View>
+           </>}
+           {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderTop:'1px solid #ccc',paddingTop:'6px',marginTop:'3px'}}>
+            <Text style={{fontSize:'14px'}}>Total:</Text>
+            <Text style={{fontSize:'12px'}}> ${calculateDiscount(data?.quote?.cost,data?.quote?.discount?.value,data?.quote?.discount?.unit)?.toFixed(2) || 0}</Text>
            </View>}
                   {/** undefined is used for custom layout  */}
                   {/* {![undefined].includes(data?.quote?.settings?.variant) && (

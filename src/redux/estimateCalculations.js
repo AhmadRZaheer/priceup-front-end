@@ -38,6 +38,12 @@ export const getisCustomizedDoorWidth = (state) =>
   state.estimateCalculations.isCustomizedDoorWidth;
 export const getUserProfitPercentage = (state) =>
   state.estimateCalculations.content.userProfitPercentage;
+export const getEstimateDiscount = (state) =>
+  state.estimateCalculations.content.discount.value;
+export const getEstimateDiscountUnit = (state) =>
+  state.estimateCalculations.content.discount.unit;
+export const getEstimateDiscountTotal = (state) =>
+  state.estimateCalculations.content.discount.total;
 export const getMeasurementSide = (state) =>
   state.estimateCalculations.measurements;
 export const selectedItem = (state) => state.estimateCalculations.selectedItem;
@@ -192,6 +198,11 @@ const initialState = {
     hardwareAddons: [],
     mountingState: "channel",
     userProfitPercentage: 0,
+    discount: {
+      value: 0,
+      unit: "%",
+      total:0,
+    },
   },
   actualCost: 0,
   grossProfit: 0,
@@ -304,9 +315,13 @@ const estimateCalcSlice = createSlice({
           // Generate / remove Channel calculate warning upon selecting or unselecting channel
           state.notifications.calculateChannelWarning = {
             status: selectedSameItem ? false : true,
-            variant:  selectedSameItem ? notificationsVariant.DEFAULT : notificationsVariant.WARNING ,
-            message: selectedSameItem ? '' : 'Current channel price is being calculated according to 1 channel stick',
-          }
+            variant: selectedSameItem
+              ? notificationsVariant.DEFAULT
+              : notificationsVariant.WARNING,
+            message: selectedSameItem
+              ? ""
+              : "Current channel price is being calculated according to 1 channel stick",
+          };
         } else {
           currentHardware = {
             item: state.content?.[type]?.item,
@@ -386,11 +401,11 @@ const estimateCalcSlice = createSlice({
             ...state,
             content: {
               ...state.content,
-              hardwareFinishes:item,
+              hardwareFinishes: item,
             },
           },
           state.content.glassType.thickness
-        );       
+        );
         state.notifications = notificationsResult.notifications;
         state.content = {
           ...state.content,
@@ -592,6 +607,18 @@ const estimateCalcSlice = createSlice({
     setUserProfitPercentage: (state, action) => {
       const { payload } = action;
       state.content.userProfitPercentage = payload;
+    },
+    setEstimateDiscount: (state, action) => {
+      const { payload } = action;
+      state.content.discount.value = payload;
+    },
+    setEstimateDiscountUnit: (state, action) => {
+      const { payload } = action;
+      state.content.discount.unit = payload;
+    },
+    setEstimateDiscountTotal: (state, action) => {
+      const { payload } = action;
+      state.content.discount.total = payload;
     },
     setTotal: (state, action) => {
       const { payload } = action;
@@ -856,8 +883,9 @@ const estimateCalcSlice = createSlice({
             state.notifications.calculateChannelWarning = {
               status: true,
               variant: notificationsVariant.WARNING,
-              message: 'Current channel price is being calculated according to 1 channel stick'       
-            }
+              message:
+                "Current channel price is being calculated according to 1 channel stick",
+            };
 
             // set mounting channel
             state.content = {
@@ -969,8 +997,8 @@ const estimateCalcSlice = createSlice({
           state.notifications.calculateChannelWarning = {
             status: false,
             variant: notificationsVariant.DEFAULT,
-            message: '',
-          }
+            message: "",
+          };
 
           state.content = {
             ...state.content,
@@ -1091,8 +1119,9 @@ const estimateCalcSlice = createSlice({
             state.notifications.calculateChannelWarning = {
               status: true,
               variant: notificationsVariant.WARNING,
-              message: 'Current channel price is being calculated according to 1 channel stick'       
-            }
+              message:
+                "Current channel price is being calculated according to 1 channel stick",
+            };
 
             // set moutning channel
             state.content = {
@@ -1196,8 +1225,8 @@ const estimateCalcSlice = createSlice({
           state.notifications.calculateChannelWarning = {
             status: false,
             variant: notificationsVariant.DEFAULT,
-            message: '',
-          }
+            message: "",
+          };
           /** end */
           state.content = {
             ...state.content,
@@ -1288,8 +1317,8 @@ const estimateCalcSlice = createSlice({
           state.notifications.calculateChannelWarning = {
             status: false,
             variant: notificationsVariant.DEFAULT,
-            message: '',
-          }
+            message: "",
+          };
           state.content = {
             ...state.content,
             mountingChannel: {
@@ -1553,7 +1582,6 @@ const estimateCalcSlice = createSlice({
       };
     },
     initializeStateForEditQuote: (state, action) => {
-      
       const { estimateData, quotesId } = action.payload;
       state.quoteId = quotesId;
 
@@ -1681,13 +1709,14 @@ const estimateCalcSlice = createSlice({
       //   ({ _id, ...rest }) => rest
       // );
 
-      // Generate Channel calculate warning if channel is selected 
-      if(channelItem){
+      // Generate Channel calculate warning if channel is selected
+      if (channelItem) {
         state.notifications.calculateChannelWarning = {
           status: true,
-          variant:  notificationsVariant.WARNING ,
-          message: 'Current channel price is being calculated according to 1 channel stick',
-        }
+          variant: notificationsVariant.WARNING,
+          message:
+            "Current channel price is being calculated according to 1 channel stick",
+        };
       }
       state.content = {
         ...state.content,
@@ -1717,13 +1746,19 @@ const estimateCalcSlice = createSlice({
 
         mountingClamps: {
           wallClamp: wallClampArray ? [...wallClampArray] : [],
-          sleeveOver: sleeveOverArray ? [...sleeveOverArray] :[],
-          glassToGlass: glassToGlassArray? [...glassToGlassArray] :[],
+          sleeveOver: sleeveOverArray ? [...sleeveOverArray] : [],
+          glassToGlass: glassToGlassArray ? [...glassToGlassArray] : [],
         },
         cornerClamps: {
-          cornerWallClamp: cornerWallClampArray ? [...cornerWallClampArray] : [],
-          cornerSleeveOver: cornerSleeveOverArray? [...cornerSleeveOverArray]: [],
-          cornerGlassToGlass: cornerGlassToGlassArray?  [...cornerGlassToGlassArray] : [],
+          cornerWallClamp: cornerWallClampArray
+            ? [...cornerWallClampArray]
+            : [],
+          cornerSleeveOver: cornerSleeveOverArray
+            ? [...cornerSleeveOverArray]
+            : [],
+          cornerGlassToGlass: cornerGlassToGlassArray
+            ? [...cornerGlassToGlassArray]
+            : [],
         },
         mountingChannel: {
           item: channelItem || null,
@@ -1749,6 +1784,10 @@ const estimateCalcSlice = createSlice({
         // towelBarsCount: estimateData?.towelBarsCount,
         hardwareAddons: hardwareAddons ? [...hardwareAddons] : [],
         userProfitPercentage: estimateData?.config?.userProfitPercentage,
+        discount : {
+          value:estimateData?.config?.discount?.value ?? 0,
+          unit:estimateData?.config?.discount?.unit ?? '%',
+        },
         additionalFields: estimateData?.config?.additionalFields,
       };
       state.quoteState = quoteState.EDIT;
@@ -1770,6 +1809,9 @@ export const {
   setMiscPrice,
   setLaborPrice,
   setUserProfitPercentage,
+  setEstimateDiscount,
+  setEstimateDiscountUnit,
+  setEstimateDiscountTotal,
   setLayoutArea,
   setLayoutPerimeter,
   setContent,
@@ -1801,6 +1843,6 @@ export const {
   setHardwareFabricationQuantity,
   setisCustomizedDoorWidth,
   setAdditionalFieldsPrice,
-  setShowerProjectId
+  setShowerProjectId,
 } = estimateCalcSlice.actions;
 export default estimateCalcSlice.reducer;

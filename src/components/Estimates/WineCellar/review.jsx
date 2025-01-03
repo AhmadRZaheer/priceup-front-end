@@ -57,6 +57,7 @@ import {
   setDoorLaborPrice,
   setGlassAddonsPrice,
   setHardwareAddonsPrice,
+  setEstimateDiscountTotal,
 } from "@/redux/wineCellarEstimateSlice";
 import ChannelOrClamp from "./channelorClamp";
 import { getEstimateState, getProjectId } from "@/redux/estimateSlice";
@@ -205,6 +206,10 @@ export const generateEstimatePayload = (
     hours: selectedContent?.hours,
     laborHoursForDoor: selectedContent?.laborHoursForDoor,
     userProfitPercentage: selectedContent?.userProfitPercentage,
+    discount: {
+      value: selectedContent?.discount?.value ?? 0,
+      unit: selectedContent?.discount?.unit ?? 0,
+    },
     // towelBarsCount: selectedContent?.sleeveOverCount,
     hardwareAddons: [...hardwareAddonsArray],
     sleeveOverCount: selectedContent?.sleeveOverCount,
@@ -356,6 +361,7 @@ const Review = ({ setStep }) => {
     dispatch(setDoorLaborPrice(prices.doorLaborPrice));
     dispatch(setAdditionalFieldsPrice(prices.additionalFieldPrice));
     dispatch(setTotal(prices.total));
+    dispatch(setEstimateDiscountTotal(prices.discountTotal));
     dispatch(setCost(prices.cost));
     dispatch(setProfit(prices.profit));
   }, [selectedContent]);
