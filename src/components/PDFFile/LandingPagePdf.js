@@ -9,7 +9,7 @@ import {
 } from "@react-pdf/renderer";
 import GCS_logo from "../../Assets/GCS-logo.png";
 import CustomImage from "../../Assets/customlayoutimage.png";
-import { backendURL, estimateTotalWithCategory } from "../../utilities/common";
+import { backendURL, calculateDiscount, estimateTotalWithCategory } from "../../utilities/common";
 import { EstimateCategory } from "../../utilities/constants";
 import {
   dimensionsSection,
@@ -157,7 +157,7 @@ const LandingPDFFile = ({ controls, data }) => {
                    </View>}
                    {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Total Price:</Text>
-                    <Text style={{fontSize:'12px'}}> ${noOfEstimate?.totalPrice?.toFixed(2) || 0}</Text>
+                    <Text style={{fontSize:'12px'}}>${noOfEstimate?.totalPrice?.toFixed(2) || 0}</Text>
                    </View>}
                 </View>
               </View>
@@ -195,9 +195,20 @@ const LandingPDFFile = ({ controls, data }) => {
                     <Text style={{fontSize:'14px'}}>Return Weight:</Text>
                     <Text style={{fontSize:'12px'}}>{item?.returnWeight}</Text>
                    </View>}
-                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                      {(item?.discount?.value && item?.discount?.value > 0 ) && 
+                              <>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                               <Text style={{fontSize:'14px'}}>Sub total:</Text>
+                               <Text style={{fontSize:'12px'}}>${item?.cost?.toFixed(2) || 0}</Text>
+                              </View>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',}}>
+                               <Text style={{fontSize:'14px'}}>Discount:</Text>
+                               <Text style={{fontSize:'12px'}}>{item?.discount?.unit === '$' && '$'}{item?.discount?.value || 0}{item?.discount?.unit === '%' && '%'}</Text>
+                              </View>
+                              </>}
+                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderTop:'1px solid #ccc',paddingTop:'6px',marginTop:'3px'}}>
                     <Text style={{fontSize:'14px'}}>Total:</Text>
-                    <Text style={{fontSize:'12px'}}> ${item?.cost?.toFixed(2) || 0}</Text>
+                    <Text style={{fontSize:'12px'}}>  ${calculateDiscount(item?.cost,item?.discount?.value,item?.discount?.unit)?.toFixed(2) || 0}</Text>
                    </View>}
                           {/** undefined is used for custom layout  */}
                           {/* {![undefined].includes(item?.settings?.variant) && (
@@ -548,9 +559,20 @@ const LandingPDFFile = ({ controls, data }) => {
                     <Text style={{fontSize:'14px'}}>Return Weight:</Text>
                     <Text style={{fontSize:'12px'}}>{item?.returnWeight}</Text>
                    </View>}
-                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                   {(item?.discount?.value && item?.discount?.value > 0 ) && 
+                              <>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                               <Text style={{fontSize:'14px'}}>Sub total:</Text>
+                               <Text style={{fontSize:'12px'}}>${item?.cost?.toFixed(2) || 0}</Text>
+                              </View>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',}}>
+                               <Text style={{fontSize:'14px'}}>Discount:</Text>
+                               <Text style={{fontSize:'12px'}}>{item?.discount?.unit === '$' && '$'}{item?.discount?.value || 0}{item?.discount?.unit === '%' && '%'}</Text>
+                              </View>
+                              </>}
+                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderTop:'1px solid #ccc',paddingTop:'6px',marginTop:'3px'}}>
                     <Text style={{fontSize:'14px'}}>Total:</Text>
-                    <Text style={{fontSize:'12px'}}> ${item?.cost?.toFixed(2) || 0}</Text>
+                    <Text style={{fontSize:'12px'}}>${calculateDiscount(item?.cost,item?.discount?.value,item?.discount?.unit)?.toFixed(2) || 0}</Text>
                    </View>}
                 </View>
                 {controls?.viewLayoutImage && <Image style={styles.logo2} src={ item?.layout_id ? `${backendURL}/${item?.settings?.image}` : CustomImage} alt="logo" />}
@@ -872,9 +894,20 @@ const LandingPDFFile = ({ controls, data }) => {
                     <Text style={{fontSize:'14px'}}>Return Weight:</Text>
                     <Text style={{fontSize:'12px'}}>{item?.returnWeight}</Text>
                    </View>}
-                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                   {(item?.discount?.value && item?.discount?.value > 0 ) && 
+                              <>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                               <Text style={{fontSize:'14px'}}>Sub total:</Text>
+                               <Text style={{fontSize:'12px'}}>${item?.cost?.toFixed(2) || 0}</Text>
+                              </View>
+                              <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',}}>
+                               <Text style={{fontSize:'14px'}}>Discount:</Text>
+                               <Text style={{fontSize:'12px'}}>{item?.discount?.unit === '$' && '$'}{item?.discount?.value || 0}{item?.discount?.unit === '%' && '%'}</Text>
+                              </View>
+                              </>}
+                   {<View style={{display:'flex',flexDirection:'row',justifyContent:'space-between',borderTop:'1px solid #ccc',paddingTop:'6px',marginTop:'3px'}}>
                     <Text style={{fontSize:'14px'}}>Total:</Text>
-                    <Text style={{fontSize:'12px'}}> ${item?.cost?.toFixed(2) || 0}</Text>
+                    <Text style={{fontSize:'12px'}}>${calculateDiscount(item?.cost,item?.discount?.value,item?.discount?.unit)?.toFixed(2) || 0}</Text>
                    </View>}
                 </View>
                 {controls?.viewLayoutImage && <Image style={styles.logo2} src={ item?.layout_id ? `${backendURL}/${item?.settings?.image}` : CustomImage} alt="logo" />}

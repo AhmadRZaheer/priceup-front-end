@@ -189,12 +189,11 @@ const columns = [
       );
     },
   },
-
   {
     field: "Layout",
     headerClassName: "customHeaderClass",
     sortable: false,
-    flex: 1.5,
+    flex: 1,
     renderCell: (params) => {
       const layoutName =
         params?.row?.category === EstimateCategory.MIRRORS
@@ -209,6 +208,55 @@ const columns = [
               {layoutName}
             </Typography>
           </Tooltip>
+        </>
+      );
+    },
+  },
+  {
+    field: "Estimate Total",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 1.1,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography
+            sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+          >
+            ${params?.row?.cost?.toFixed(2) || 0}
+          </Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Discount",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 0.7,
+    renderCell: (params) => {
+      console.log(params?.row, "params?.row");
+      return (
+        <>
+          {params?.row?.config?.discount?.value &&
+          params?.row?.config?.discount?.value > 0 ? (
+            <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+              {params?.row?.config?.discount?.unit === "$" && "$"}
+              {params?.row?.config?.discount?.value ?? 0}
+              {params?.row?.config?.discount?.unit === "%" && "%"}
+            </Typography>
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                pl: 0.4,
+                // justifyContent: "center",
+              }}
+            >
+              ---
+            </Box>
+          )}
         </>
       );
     },
@@ -240,16 +288,14 @@ export default function EstimateDataList({
   const handleSelectionChange = (selectedRowIds) => {
     // Find the full objects of the selected rows
     const selectedData =
-      estimatesList?.filter((row) =>
-        selectedRowIds.includes(row._id)
-      ) || [];
+      estimatesList?.filter((row) => selectedRowIds.includes(row._id)) || [];
     setSelectedEstimateRows(selectedData);
     console.log("Selected row data:", selectedData); // Log the full object
   };
 
   const [page, setPage] = React.useState(1);
   const itemsPerPage = 10;
-  console.log(selectedEstimateRows,'selectedEstimateRows')
+  console.log(selectedEstimateRows, "selectedEstimateRows");
 
   return (
     <>

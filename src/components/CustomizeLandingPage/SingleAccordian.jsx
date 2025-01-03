@@ -7,12 +7,12 @@ import {
   Chip,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ShowerSummary from "./summary/summary";
 import ShowerImg from "@/Assets/CustomerLandingImages/shower.png";
 import MirrorImg from "@/Assets/CustomerLandingImages/mirror.png";
 import WineCallerImg from "@/Assets/CustomerLandingImages/wineCaller.png";
-import { backendURL } from "@/utilities/common";
+import { backendURL, calculateDiscount } from "@/utilities/common";
 import { EstimateCategory } from "@/utilities/constants";
 
 const SingleAccordian = ({
@@ -33,6 +33,7 @@ const SingleAccordian = ({
   // wineCellarHardwaresList,
   category,
 }) => {
+  console.log(data, "sdfgqwfgqwfwqvd");
   const [totalPrice, setTotalPrice] = useState(data?.pricing?.totalPrice);
   const chipColor = data?.status
     ? data?.status === "pending"
@@ -45,6 +46,17 @@ const SingleAccordian = ({
       : data?.category === EstimateCategory.WINECELLARS
       ? WineCallerImg
       : MirrorImg;
+
+  // useEffect(() => {
+  //   const discountPrice = calculateDiscount(
+  //     data?.pricing?.totalPrice,
+  //     data?.config?.config?.discount.value,
+  //     data?.config?.config?.discount.unit
+  //   );
+  //   setTotalPrice(discountPrice);
+  // }, [data]);
+
+  const discountValue = data?.config?.config?.discount?.value ?? 0;
 
   return (
     <Accordion
@@ -100,11 +112,28 @@ const SingleAccordian = ({
               />
             </Typography>
           </Box>
-          <Typography sx={{ fontWeight: 700, pr: 1,fontSize: "20px", }}>
+          <Typography sx={{ fontWeight: 700, pr: 1, fontSize: "20px" }}>
             Price :{" "}
-            <Box component="span" sx={{ color: "#F95500" }}>
+            <Box
+              component="span"
+              sx={{
+                color: discountValue > 0 ? "#BFBFBD" : "#F95500",
+                textDecoration: discountValue > 0 ? "line-through" : "auto",
+                fontSize: discountValue > 0 ? "17px" :"20px"
+              }}
+            >
               ${totalPrice.toFixed(2)}
-            </Box>
+            </Box>{' '}
+            {discountValue && discountValue > 0 && (
+              <Box component="span" sx={{ color: "#F95500" }}>
+                $
+                {calculateDiscount(
+                  totalPrice,
+                  discountValue,
+                  data?.config?.config?.discount?.unit
+                ).toFixed(2)}
+              </Box>
+            )}
           </Typography>
         </Box>
       </AccordionSummary>
