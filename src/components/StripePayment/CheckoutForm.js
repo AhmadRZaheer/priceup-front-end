@@ -40,17 +40,17 @@ export default function CheckoutForm({ refetchData, handleClose }) {
         severity: "success",
       })
     );
-    handleClose();
     // setDescion(value);
-    // try {
-    //   await updateInvoiceStatus({
-    //     data: { status: value },
-    //     apiRoute: `${backendURL}/invoices/${id}/customer-preview`,
-    //   });
-    //   refetchData();
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      await updateInvoiceStatus({
+        data: { transaction: 'performed' },
+        apiRoute:`${backendURL}/landing-page-preview/${id}`,
+      });
+      handleClose();
+      refetchData();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -151,7 +151,7 @@ export default function CheckoutForm({ refetchData, handleClose }) {
               },
             }}
           >
-            {descion === "Paid" && statusLoading ? (
+            {statusLoading ? (
               <CircularProgress size={24} sx={{ color: "#8477DA" }} />
             ) : (
               "Pay"

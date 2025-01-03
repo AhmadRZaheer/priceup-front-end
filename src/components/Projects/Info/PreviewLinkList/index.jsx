@@ -176,6 +176,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                     <TableCell align="center">Total Amount</TableCell>
                     <TableCell align="center">Date Added</TableCell>
                     <TableCell align="center">Expiry Date</TableCell>
+                    <TableCell align="center">Status</TableCell>
                     <TableCell align="right">Actions</TableCell>
                   </TableRow>
                 </TableHead>
@@ -201,9 +202,16 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                             row?.customerPreview?.expiresAt
                           ).toDateString()}
                         </TableCell>
+                        <TableCell align="center" ><Typography sx={{
+                          textTransform:'capitalize',
+                          backgroundColor: row?.status === 'approve' ? '#daf4e9' : '#FCDEC0',
+                          borderRadius: '70px',
+                          color: row?.status === 'approve' ? '#3ac688' : '#503000',
+                          padding: '6px 8px',
+                          }}>{row?.status ?? '---'}</Typography></TableCell>
                         <TableCell
                           align="right"
-                          sx={{ display: "flex", gap: 1.5 }}
+                          sx={{ display: "flex", gap: 1.5, alignItems:'center' }}
                         >
                           <Tooltip placement="top" title="View">
                             <IconButton
@@ -219,7 +227,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                             </IconButton>
                           </Tooltip>
 
-                          <Tooltip placement="top" title="Delete">
+                          {row?.status !== 'approve' && <Tooltip placement="top" title="Delete">
                             <IconButton
                               sx={{ width: 20, height: 20 }}
                               onClick={() => handleOpenDeleteModal(row?._id)}
@@ -230,7 +238,7 @@ const PreviewLinkList = ({ open, handleClose, projectId }) => {
                                 style={{ width: "20px", height: "20px" }}
                               />
                             </IconButton>
-                          </Tooltip>
+                          </Tooltip>}
                           <Tooltip placement="top" title="Edit">
                             <IconButton
                               sx={{ width: 20, height: 20 }}

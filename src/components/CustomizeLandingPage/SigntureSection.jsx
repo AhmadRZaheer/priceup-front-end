@@ -584,7 +584,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
                   Your Estimate PDF is ready to download!{" "}
                 </Typography>
 
-                <Stack
+                {!data?.invoice_id && <Stack
                   sx={{ pb: 2.5, width: "285px" }}
                   direction={"row"}
                   gap={1.5}
@@ -642,7 +642,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
                   >
                     Pay Later
                   </Button>
-                </Stack>
+                </Stack>}
                 <Button
                   disabled={loading || !estimateStatus} // Disable button when loading
                   onClick={() => generatePDFDocument()}

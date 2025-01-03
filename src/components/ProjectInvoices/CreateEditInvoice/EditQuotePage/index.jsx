@@ -736,6 +736,13 @@ const EditQuoteInvoice = () => {
                       </Box>
                     </Box>
                   </Box>
+                  <Box sx={{display:'flex',alignItems:'center',padding:'16px',gap:'10px'}}><Typography sx={{fontSize:'22px',fontWeight:'600'}}>Payment Status : </Typography><Typography sx={{textTransform:'capitalize',
+                          backgroundColor: singleItemData?.invoice_id ? '#daf4e9' : '#FCDEC0',
+                          borderRadius: '10px',
+                          color: singleItemData?.invoice_id ? '#3ac688' : '#503000',
+                          fontSize:'18px',
+                          fontWeight:500,
+                          padding: '8px 10px',}}>{singleItemData?.invoice_id ? 'Paid' : 'Unpaid'}</Typography> </Box>
                 </Box>
                 <Box sx={{ width: "35%", borderLeft: '1px solid #D4DBDF', mt: 2, }}>
                   <Card sx={{ mx: 2, p: 2, }}>
