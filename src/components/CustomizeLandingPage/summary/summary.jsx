@@ -21,7 +21,7 @@ import MultipleImageUpload from "../MultipleImageUpload";
 import { useSelector } from "react-redux";
 import { getContent, getListData } from "@/redux/estimateCalculations";
 import MenuList from "./MenuListOption";
-import { backendURL } from "@/utilities/common";
+import { backendURL, calculateDiscount } from "@/utilities/common";
 import { getLocationShowerSettings } from "@/redux/locationSlice";
 import { getHardwareSpecificFabrication as getShowersHardwareSpecificFabrication } from "@/utilities/hardwarefabrication";
 import { getHardwareSpecificFabrication as getWineCellarHardwareSpecificFabrication } from "@/utilities/WineCellarEstimate";
@@ -714,6 +714,8 @@ const ShowerSummary = ({
     return glassAddonsData;
   }, [selectedHardware, hardwaresList?.glassAddons]);
 
+  const discountValue = data?.config?.config?.discount?.value ?? 0;
+
   return (
     <>
       <Box
@@ -842,6 +844,39 @@ const ShowerSummary = ({
                 {/* {panelWeight} */}
                 {/* </Typography>
                   </Box> */}
+                {discountValue > 0 && (
+                  <>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography className="text-xs-ragular-bold">
+                        Sub Total:
+                      </Typography>
+                      <Typography className="text-xs-ragular">
+                        $ {(totalPrice ?? 0)?.toFixed(2)}
+                      </Typography>
+                    </Box>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Typography className="text-xs-ragular-bold">
+                        Discount:
+                      </Typography>
+                      <Typography className="text-xs-ragular">
+                        {data?.config?.config?.discount?.unit === "$" && "$"}{" "}
+                        {discountValue}{" "}
+                        {data?.config?.config?.discount?.unit === "%" && "%"}
+                      </Typography>
+                    </Box>
+                  </>
+                )}
+
                 <Box>
                   <Divider sx={{ borderColor: "#D4DBDF" }} />
                   <Box
@@ -855,11 +890,12 @@ const ShowerSummary = ({
                       Total Price:
                     </Typography>
                     <Typography className="text-xs-ragular">
-                      $ {(totalPrice ?? 0)?.toFixed(2)}
-                      {/* {isNaN(glassPrice?.totalAmount) ||
-                      glassPrice?.totalAmount === null
-                        ? (data?.pricing?.totalPrice ?? 0).toFixed(2)
-                        : (glassPrice?.totalAmount ?? 0).toFixed(2)} */}
+                      $
+                      {calculateDiscount(
+                        totalPrice,
+                        discountValue,
+                        data?.config?.config?.discount?.unit
+                      ).toFixed(2)}
                     </Typography>
                   </Box>
                 </Box>
@@ -1058,18 +1094,37 @@ const ShowerSummary = ({
                         <Typography
                           className="text-xs-ragular"
                           sx={{
-                            color: "#F95500",
-                            fontSize: "20px !important",
+                            color: discountValue > 0 ? "#BFBFBD" : "#F95500",
+                            fontSize:
+                              discountValue > 0
+                                ? "17px !important"
+                                : "20px !important",
                             pt: 1,
                             fontWeight: "bold !important",
+                            textDecoration:
+                              discountValue > 0 ? "line-through" : "auto",
                           }}
                         >
                           $ {(totalPrice ?? 0)?.toFixed(2)}
-                          {/* {isNaN(glassPrice?.totalAmount) ||
-                            glassPrice?.totalAmount === null
-                            ? (data?.pricing?.totalPrice ?? 0).toFixed(2)
-                            : (glassPrice?.totalAmount ?? 0).toFixed(2)} */}
                         </Typography>
+                        {discountValue && discountValue > 0 && (
+                          <Typography
+                            className="text-xs-ragular"
+                            sx={{
+                              color: "#F95500",
+                              fontSize: "20px !important",
+                              pt: 1,
+                              fontWeight: "bold !important",
+                            }}
+                          >
+                            $
+                            {calculateDiscount(
+                              totalPrice,
+                              discountValue,
+                              data?.config?.config?.discount?.unit
+                            ).toFixed(2)}
+                          </Typography>
+                        )}
                       </Box>
                     </Box>
                     {/* )} */}

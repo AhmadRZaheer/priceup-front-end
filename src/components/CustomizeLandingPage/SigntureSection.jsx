@@ -116,7 +116,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
   };
-
+  console.log(estimatePdfs,'estimatePdfsestimatePdfsestimatePdfsestimatePdfsestimatePdfs')
   const [loading, setLoading] = useState(false);
   const generatePDFDocument = async () => {
     try {

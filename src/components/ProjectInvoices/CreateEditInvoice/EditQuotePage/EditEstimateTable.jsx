@@ -170,7 +170,6 @@ const columns = [
       );
     },
   },
-
   {
     field: "Estimate Category",
     headerClassName: "customHeaderClass",
@@ -188,17 +187,16 @@ const columns = [
       );
     },
   },
-
   {
     field: "Layout",
     headerClassName: "customHeaderClass",
     sortable: false,
-    flex: 1.5,
+    flex: 1,
     renderCell: (params) => {
       const layoutName =
         params?.row?.category === EstimateCategory.MIRRORS
           ? "Mirror"
-          : params?.row?.settings?.name ?? "Custom";
+          : params?.row?.config?.settings?.name ?? "Custom";
       return (
         <>
           <Tooltip placement="top-start" title={layoutName}>
@@ -208,6 +206,55 @@ const columns = [
               {layoutName}
             </Typography>
           </Tooltip>
+        </>
+      );
+    },
+  },
+  {
+    field: "Estimate Total",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 1.1,
+    renderCell: (params) => {
+      return (
+        <>
+          <Typography
+            sx={{ py: 1, color: "#667085", textTransform: "uppercase" }}
+          >
+            ${params?.row?.pricing?.totalPrice?.toFixed(2) || 0}
+          </Typography>
+        </>
+      );
+    },
+  },
+  {
+    field: "Discount",
+    headerClassName: "customHeaderClass",
+    sortable: false,
+    flex: 0.7,
+    renderCell: (params) => {
+      console.log(params?.row, "params?.row");
+      return (
+        <>
+          {params?.row?.config?.config?.discount?.value &&
+          params?.row?.config?.config?.discount?.value > 0 ? (
+            <Typography sx={{ width: 200, py: 1, color: "#667085" }}>
+              {params?.row?.config?.config?.discount?.unit === "$" && "$"}
+              {params?.row?.config?.config?.discount?.value ?? 0}
+              {params?.row?.config?.config?.discount?.unit === "%" && "%"}
+            </Typography>
+          ) : (
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                pl: 0.4,
+                // justifyContent: "center",
+              }}
+            >
+              ---
+            </Box>
+          )}
         </>
       );
     },

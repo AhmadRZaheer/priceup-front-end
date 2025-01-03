@@ -150,6 +150,8 @@ const ProjectInvoiceComponent = ({
     }
   }, [selectedEstimateRows]);
 
+  console.log(EstimateListData,'EstimateListDataEstimateListDataEstimateListData')
+
   useEffect(() => {
     refetch();
     if (selectedCustomer?.name) {

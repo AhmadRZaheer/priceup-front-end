@@ -1352,6 +1352,18 @@ export const base64ToFile = (base64String, filename) => {
   return new File([u8arr], filename, { type: mime });
 };
 
+// Calculate Discount
+export const calculateDiscount = (total, discountValue, discountUnit) => {
+  let discountTotal = total;
+  if (discountValue > 0 && discountUnit === "$") {
+    discountTotal = total - discountValue;
+  } else if (discountValue > 0 && discountValue < 100 && discountUnit === "%") {
+    const discountAmount = (total * discountValue) / 100;
+    discountTotal = total - discountAmount;
+  }
+  return discountTotal;
+};
+
 // Total of estimate with category
 export const estimateTotalWithCategory = (estimatelist) => {
   const totalShowers = estimatelist?.filter(
@@ -1365,7 +1377,14 @@ export const estimateTotalWithCategory = (estimatelist) => {
   );
   const totalEstimate = estimatelist?.length;
   const totalPrice = estimatelist?.reduce((accumulator, currentItem) => {
-    return accumulator + currentItem.pricing.total;
+    return (
+      accumulator +
+      calculateDiscount(
+        currentItem.pricing.total,
+        currentItem?.discount?.value,
+        currentItem?.discount?.unit
+      )
+    );
   }, 0);
   return {
     totalShowers: totalShowers ?? [],
@@ -1374,16 +1393,4 @@ export const estimateTotalWithCategory = (estimatelist) => {
     totalEstimate: totalEstimate ?? 0,
     totalPrice: totalPrice ?? 0,
   };
-};
-
-// Calculate Discount
-export const calculateDiscount = (total, discountValue, discountUnit) => {
-  let discountTotal = total;
-  if (discountValue > 0 && discountUnit === "$") {
-    discountTotal = total - discountValue;
-  } else if (discountValue > 0 && discountValue < 100 && discountUnit === "%") {
-    const discountAmount = (total * discountValue) / 100;
-    discountTotal = total - discountAmount;
-  }
-  return discountTotal;
 };

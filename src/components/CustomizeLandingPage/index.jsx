@@ -31,6 +31,7 @@ import PDFFile from "../PDFFile";
 import {
   backendURL,
   calculateAreaAndPerimeter,
+  calculateDiscount,
   calculateTotal,
   getDecryptedToken,
 } from "@/utilities/common";
@@ -378,13 +379,21 @@ const CustomizeLandingPage = ({
     if (selectedData) {
       const sum = selectedData?.estimates?.reduce(
         (accumulator, currentItem) => {
-          return accumulator + currentItem.pricing.totalPrice;
+          return (
+            accumulator +
+            calculateDiscount(
+              currentItem.pricing.totalPrice,
+              currentItem?.config?.config?.discount?.value,
+              currentItem?.config?.config?.discount?.unit
+            )
+          );
         },
         0
       );
       SetTotalSum(sum);
     }
   }, [selectedData]);
+  console.log(selectedData?.estimates, "selectedData?.estimates");
 
   const reCalculateTotal = (priceToMinus, priceToAdd) => {
     let sum = totalSum - priceToMinus;
@@ -464,7 +473,11 @@ const CustomizeLandingPage = ({
           <Box>
             <Box
               className="content-center"
-              sx={{ height: "55vh", justifyContent: "end !important", mb: '39px' }}
+              sx={{
+                height: "55vh",
+                justifyContent: "end !important",
+                mb: "39px",
+              }}
             >
               {/* <Typography
                 variant="h1"
