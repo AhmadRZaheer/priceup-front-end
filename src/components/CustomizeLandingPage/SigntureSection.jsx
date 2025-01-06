@@ -44,11 +44,14 @@ const pdfLocationData = {
 
 const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
   const newDate = new Date();
-  const formattedDate = newDate.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+  const formattedDateTime = newDate.toLocaleString("en-US", {
+    weekday: "long", // Full weekday name
+    month: "long",   // Full month name
+    day: "numeric",  // Numeric day
+    year: "numeric", // Full year
+    hour: "numeric", // Hour
+    minute: "2-digit", // Minute
+    hour12: true,    // 12-hour format
   });
   const { id } = useParams();
   const {
@@ -116,7 +119,6 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
     setSignatureURL(null); // Reset the signature URL
     setIsPadOpen(false);
   };
-  console.log(estimatePdfs,'estimatePdfsestimatePdfsestimatePdfsestimatePdfsestimatePdfs')
   const [loading, setLoading] = useState(false);
   const generatePDFDocument = async () => {
     try {
@@ -140,7 +142,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
       saveAs(result, "Priceup");
 
       const logData = {
-        title: `${data?.customer?.name} Downloaded Pdf at ${formattedDate}`,
+        title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
         performer_id: data?.customer_id,
         performer_name: data?.customer?.name,
         action: logActions.DOWNLOADPDF,
@@ -173,7 +175,7 @@ const SigntureSection = ({ data, refetchData, estimatePdfs, acceptTerms }) => {
     refetchData();
 
     const logData = {
-      title: `${data?.customer?.name} approved this project at ${formattedDate}`,
+      title: `${data?.customer?.name} approved this project at ${formattedDateTime}`,
       performer_id: data?.customer_id,
       performer_name: data?.customer?.name,
       action: logActions.DOWNLOADPDF,

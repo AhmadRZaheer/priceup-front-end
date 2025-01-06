@@ -308,8 +308,8 @@ export default function EstimateDataList({
             getRowId={(row) => row._id}
             rows={isFetched && estimatesList}
             columns={columns}
-            initialState={{ pagination: { paginationModel } }}
-            pageSizeOptions={[5, 10]}
+            // initialState={{ pagination: { paginationModel } }}
+            // pageSizeOptions={[5, 10]}
             checkboxSelection
             rowHeight={70}
             sx={{ border: 0 }}

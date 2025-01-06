@@ -57,6 +57,10 @@ const SingleAccordian = ({
   // }, [data]);
 
   const discountValue = data?.config?.config?.discount?.value ?? 0;
+  console.log(
+    data?.config?.config?.discount?.value,
+    "data?.config?.config?.discount?.value"
+  );
 
   return (
     <Accordion
@@ -119,12 +123,12 @@ const SingleAccordian = ({
               sx={{
                 color: discountValue > 0 ? "#BFBFBD" : "#F95500",
                 textDecoration: discountValue > 0 ? "line-through" : "auto",
-                fontSize: discountValue > 0 ? "17px" :"20px"
+                fontSize: discountValue > 0 ? "17px" : "20px",
               }}
             >
               ${totalPrice.toFixed(2)}
-            </Box>{' '}
-            {discountValue && discountValue > 0 && (
+            </Box>{" "}
+            {discountValue > 0 && (
               <Box component="span" sx={{ color: "#F95500" }}>
                 $
                 {calculateDiscount(

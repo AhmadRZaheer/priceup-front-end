@@ -397,7 +397,7 @@ const LandingPDFFile = ({ controls, data }) => {
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
                     <Text style={{fontSize:'12px'}}>
-                    {item?.glassAddons?.map((item,index) => (`${item?.name}${commaFn(index, item?.glassAddons?.length)}`))}
+                    {item?.glassAddons?.map((data,index) => (`${data?.name}${index < (item?.glassAddons?.length - 1) ? ", " : ""}`))}
                     </Text>
                   </View>
                   ) : (
@@ -733,7 +733,7 @@ const LandingPDFFile = ({ controls, data }) => {
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
                     <Text style={{fontSize:'12px'}}>
-                    {item?.glassAddons?.map((item,index) => (`${item?.name}${commaFn(index, item?.glassAddons?.length)}`))}
+                    {item?.glassAddons?.map((data,index) => (`${data?.name}${commaFn(index, item?.glassAddons?.length)}`))}
                     </Text>
                   </View>
                   ) : (
@@ -1068,7 +1068,7 @@ const LandingPDFFile = ({ controls, data }) => {
                   <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
                     <Text style={{fontSize:'14px'}}>Glass Addons:</Text>
                     <Text style={{fontSize:'12px'}}>
-                    {item?.glassAddons?.map((item,index) => (`${item?.name}${commaFn(index, item?.glassAddons?.length)}`))}
+                    {item?.glassAddons?.map((data,index) => (`${data?.name}${commaFn(index, item?.glassAddons?.length)}`))}
                     </Text>
                   </View>
                   ) : (
