@@ -47,11 +47,14 @@ const ShowerSummary = ({
   const { id } = useParams();
   console.log(data, "datadatadata123");
   const newDate = new Date();
-  const formattedDate = newDate.toLocaleDateString("en-US", {
-    weekday: "short",
-    month: "short",
-    day: "numeric",
-    year: "numeric",
+  const formattedDateTime = newDate.toLocaleString("en-US", {
+    weekday: "long", // Full weekday name
+    month: "long",   // Full month name
+    day: "numeric",  // Numeric day
+    year: "numeric", // Full year
+    hour: "numeric", // Hour
+    minute: "2-digit", // Minute
+    hour12: true,    // 12-hour format
   });
   // const hardwaresList = useSelector(getListData);
   const { mutate: customerDecision, isLoading, isSuccess } = useEditDocument();
@@ -636,7 +639,7 @@ const ShowerSummary = ({
     });
 
     const logData = {
-      title: `${data?.customerData?.name} Approve an estimate ${formattedDate}`,
+      title: `${data?.customer?.name} downloaded the PDF on ${formattedDateTime}.`,
       performer_id: data?.customerData?._id,
       performer_name: data?.customerData?.name,
       action: logActions.APPROVEESTIMATE,
@@ -1107,7 +1110,7 @@ const ShowerSummary = ({
                         >
                           $ {(totalPrice ?? 0)?.toFixed(2)}
                         </Typography>
-                        {discountValue && discountValue > 0 && (
+                        {discountValue > 0 && (
                           <Typography
                             className="text-xs-ragular"
                             sx={{

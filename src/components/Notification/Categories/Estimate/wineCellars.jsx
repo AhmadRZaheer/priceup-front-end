@@ -51,6 +51,7 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
           <Typography className="summaryData">
             <Box className="heading-txt">Square Foot</Box>&nbsp;: {sqftArea}
           </Typography>
+          <Typography className="summaryData" ><Box className='heading-txt'>Layout</Box>&nbsp;: {data?.settings?.name}</Typography>
           <Typography className="summaryData">
             <Box className="heading-txt">Total Price</Box>&nbsp; :{" "}
             {data.cost?.toFixed(2)}
@@ -106,7 +107,7 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
               {data.resourceInfoWithFullObjects?.mountingChannel?.name}
             </Typography>
           )} */}
-        {["channel"].includes(data.config?.mountingState) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='heading-txt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
+       {(data.config?.mountingChannel) ? <>{data.resourceInfoWithFullObjects?.mountingChannel && <Typography className="summaryData"><Box className='heading-txt'>Channel</Box>&nbsp; : {data.resourceInfoWithFullObjects?.mountingChannel?.name}</Typography>}</> :
                     <>
                         {data.resourceInfoWithFullObjects?.wallClamp?.length ? <Typography className="summaryData"><Box className='heading-txt'>WallClamps</Box>&nbsp; : {data.resourceInfoWithFullObjects?.wallClamp?.map(
                             (row) => (
@@ -174,6 +175,20 @@ export const WineCellarSummarySection = ({ data, handleEditEstimate }) => {
             {data.resourceInfoWithFullObjects?.glassType?.thickness})
           </Typography>
         )}
+        {data.resourceInfoWithFullObjects?.glassAddons?.length ? <Typography className="summaryData"><Box className='heading-txt'>Glass Addons</Box>&nbsp;:&nbsp;{data.resourceInfoWithFullObjects?.glassAddons?.map(
+                    (row) => (
+                        <span >
+                            {row.name}{", "}
+                        </span>
+                    )
+        )}</Typography> : ''}
+           {data.resourceInfoWithFullObjects?.hardwareAddons?.length ? <Typography className="summaryData"><Box className='heading-txt'>Hardware Addons</Box>&nbsp;:&nbsp; {data.resourceInfoWithFullObjects?.hardwareAddons?.map(
+                            (row) => (
+                                <span >
+                                    {row.item.name} ({row.count}),{" "}
+                                </span>
+                            )
+        )}</Typography> : ''}
         {data.resourceInfoWithFullObjects?.doorLock?.item && (
           <Typography className="summaryData">
             <Box className="heading-txt">Door Lock</Box>&nbsp; :{" "}

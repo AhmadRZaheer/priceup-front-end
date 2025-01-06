@@ -751,7 +751,7 @@ const EditQuoteInvoice = () => {
                             <Box sx={{ display: 'flex', gap: 1 }}>
                               <Box sx={{
                                 height: '10px',
-                                width: '10px',
+                                width: '14px',
                                 borderRadius: '4.94px',
                                 background: '#8477DA',
                                 alignSelf: 'center',
