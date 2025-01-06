@@ -1258,6 +1258,20 @@ const generateInvoiceItemForShowers = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
+     //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    hardwareAddonsPrice +
+    additionalFieldPrice;
   let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
@@ -1277,6 +1291,12 @@ const generateInvoiceItemForShowers = async (
       0
     );
   }
+  if (
+    estimate.config?.userProfitPercentage > 0 &&
+    estimate.config?.userProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
     hardwareAddonsPrice,
@@ -1285,6 +1305,7 @@ const generateInvoiceItemForShowers = async (
     glassAddonPrice,
     laborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };
@@ -1424,6 +1445,19 @@ const generateInvoiceItemForMirrors = async (
     estimate.config?.people *
     estimate.config?.hours *
     (companySettings?.hourlyRate ?? 0);
+        //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    additionalFieldPrice;
   let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice) *
       (companySettings?.pricingFactorStatus
@@ -1443,6 +1477,12 @@ const generateInvoiceItemForMirrors = async (
       0
     );
   }
+  if (
+    estimate.config?.userProfitPercentage > 0 &&
+    estimate.config?.userProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
     fabricationPrice,
@@ -1450,6 +1490,7 @@ const generateInvoiceItemForMirrors = async (
     glassAddonPrice,
     laborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };
@@ -1851,6 +1892,20 @@ const generateInvoiceItemForWineCellars = async (
     estimate.config?.people *
     estimate.config?.laborHoursForDoor *
     (companySettings?.miscPricing?.hourlyRate ?? 0);
+        //additionalField price
+  let additionalFieldPrice = 0;
+  estimate.config?.additionalFields?.forEach((item) => {
+    additionalFieldPrice += Number(
+      item.cost
+    );
+  });
+  const cost =
+  hardwarePrice +
+    fabricationPrice +
+    glassPrice +
+    glassAddonPrice +
+    hardwareAddonsPrice +
+    additionalFieldPrice;
   let totalPrice =
     (hardwarePrice + fabricationPrice + glassPrice + glassAddonPrice + hardwareAddonsPrice) *
       (companySettings?.miscPricing?.pricingFactorStatus
@@ -1870,6 +1925,12 @@ const generateInvoiceItemForWineCellars = async (
       0
     );
   }
+  if (
+    estimate.config?.userProfitPercentage > 0 &&
+    estimate.config?.userProfitPercentage < 100
+  ) {
+    totalPrice = ((cost * 100) / (estimate.config.userProfitPercentage - 100)) * -1;
+  }
   summaryObject.pricing = {
     hardwarePrice,
     hardwareAddonsPrice,
@@ -1879,6 +1940,7 @@ const generateInvoiceItemForWineCellars = async (
     laborPrice,
     doorLaborPrice,
     totalPrice,
+    cost
   };
   return summaryObject;
 };
